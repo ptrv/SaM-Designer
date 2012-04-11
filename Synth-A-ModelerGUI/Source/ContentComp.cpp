@@ -314,7 +314,7 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	result.addDefaultKeypress('2', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::insertResonator:
-    	result.setInfo("Zoom Out", "", CommandCategories::inserting,0);
+    	result.setInfo("Resonator", "", CommandCategories::inserting,0);
     	result.addDefaultKeypress('3', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::insertPort:
@@ -336,7 +336,7 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	break;
 
     case CommandIDs::insertAudioOutput:
-    	result.setInfo("Audiuo Output", "", CommandCategories::inserting,0);
+    	result.setInfo("Audio Output", "", CommandCategories::inserting,0);
     	result.addDefaultKeypress('8', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::insertWaveguide:
