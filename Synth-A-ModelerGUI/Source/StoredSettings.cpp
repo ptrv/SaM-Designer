@@ -39,31 +39,18 @@ void StoredSettings::flush()
     if (props != nullptr)
     {
         props->setValue ("recentFiles", recentFiles.toString());
-
-        props->removeValue ("keyMappings");
-
-//        if (commandManager != nullptr)
-//        {
-//            ScopedPointer <XmlElement> keys (commandManager->getKeyMappings()->createXml (true));
-
-//            if (keys != nullptr)
-//                props->setValue ("keyMappings", (XmlElement*) keys);
-//        }
     }
 
     props = nullptr;
 
-    {
-        // These settings are used in defining the properties file's location.
-        PropertiesFile::Options options;
-        options.applicationName     = "Synth-A-Modeler";
-        options.folderName          = "Synth-A-Modeler";
-        options.filenameSuffix      = "settings";
-        options.osxLibrarySubFolder = "Application Support";
+    // These settings are used in defining the properties file's location.
+    PropertiesFile::Options options;
+    options.applicationName     = "Synth-A-Modeler";
+    options.folderName          = "Synth-A-Modeler";
+    options.filenameSuffix      = "settings";
+    options.osxLibrarySubFolder = "Application Support";
 
-        props = new PropertiesFile (options);
-
-    }
+    props = new PropertiesFile (options);
 
     // recent files...
     recentFiles.restoreFromString (props->getValue ("recentFiles"));
@@ -100,3 +87,47 @@ const StringArray& StoredSettings::getFontNames()
     return fontNames;
 }
 
+String StoredSettings::getCmdPerl() const
+{
+	return props->getValue("cmdperl", "perl");
+}
+void StoredSettings::setCmdPerl(const String& cmdPerl)
+{
+	props->setValue("cmdperl", cmdPerl);
+}
+
+String StoredSettings::getCmdFaust() const
+{
+	return props->getValue("cmdfaust", "faust");
+}
+void StoredSettings::setCmdFaust(const String& cmdFaust)
+{
+	props->setValue("cmdfaust", cmdFaust);
+}
+
+String StoredSettings::getCmdFaust2supercollider() const
+{
+	return props->getValue("cmdfaust2supercollider", "faust2supercollider");
+}
+void StoredSettings::setCmdFaust2supercollider(const String& cmdFaust2supercollider)
+{
+	props->setValue("cmdfaust2supercollider", cmdFaust2supercollider);
+}
+
+String StoredSettings::getCmdFaust2puredata() const
+{
+	return props->getValue("cmdfaust2puredata", "faust2puredata");
+}
+void StoredSettings::setCmdFaust2puredata(const String& cmdFaust2puredata)
+{
+	props->setValue("cmdfaust2puredata", cmdFaust2puredata);
+}
+
+String StoredSettings::getCmdSAM() const
+{
+	return props->getValue("cmdsam", "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx");
+}
+void StoredSettings::setCmdSAM(const String& cmdSAM)
+{
+	props->setValue("cmdsam", cmdSAM);
+}
