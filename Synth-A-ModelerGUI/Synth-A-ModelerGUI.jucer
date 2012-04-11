@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="VkFX9m" name="Synth-A-ModelerGUI" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="de.tu-berlin.SynthAModelerGUI" jucerVersion="3.0.0">
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
+               bigIcon="WodEAp">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-Modeler"
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       defines="UNIT_TESTS=1"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-Modeler"
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
+      </CONFIGURATIONS>
+    </XCODE_MAC>
+    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="../juce/modules" bigIcon="WodEAp">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="Synth-A-Modeler" defines="UNIT_TESTS=1"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="Synth-A-Modeler"/>
+      </CONFIGURATIONS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MAINGROUP id="RyljMx" name="Synth-A-ModelerGUI">
+    <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">
+      <FILE id="MnjVic" name="icons.zip" compile="0" resource="1" file="BinaryData/icons.zip"/>
+      <FILE id="WodEAp" name="synthamodeler_icon.png" compile="0" resource="1"
+            file="BinaryData/synthamodeler_icon.png"/>
+    </GROUP>
+    <GROUP id="{335554E1-26F8-DC02-DBE7-A8EECB870A14}" name="Testsuite">
+      <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
+    </GROUP>
+    <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <FILE id="jWEP2M" name="Application.cpp" compile="1" resource="0" file="Source/Application.cpp"/>
+      <FILE id="avA0th" name="Application.h" compile="0" resource="0" file="Source/Application.h"/>
+      <FILE id="d2Z4xB" name="TextConsole.h" compile="0" resource="0" file="Source/TextConsole.h"/>
+      <FILE id="TvSAqE" name="CommandIDs.h" compile="0" resource="0" file="Source/CommandIDs.h"/>
+      <FILE id="sdQxAd" name="CommonHeaders.h" compile="0" resource="0" file="Source/CommonHeaders.h"/>
+      <FILE id="Pa81ro" name="ContentComp.cpp" compile="1" resource="0" file="Source/ContentComp.cpp"/>
+      <FILE id="oZMDvL" name="ContentComp.h" compile="0" resource="0" file="Source/ContentComp.h"/>
+      <FILE id="wneb90" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="GfQd67" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
+      <FILE id="sx0Rgh" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+      <FILE id="lA59eL" name="StoredSettings.cpp" compile="1" resource="0"
+            file="Source/StoredSettings.cpp"/>
+      <FILE id="Yyvnt5" name="StoredSettings.h" compile="0" resource="0"
+            file="Source/StoredSettings.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
