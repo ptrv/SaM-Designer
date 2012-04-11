@@ -43,6 +43,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/ObjComp_5c080a07.o \
   $(OBJDIR)/MDLFile_298ca8b2.o \
   $(OBJDIR)/DebugWindow_f3bce504.o \
   $(OBJDIR)/OutputCmd_3df0755a.o \
@@ -78,6 +79,11 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+$(OBJDIR)/ObjComp_5c080a07.o: ../../Source/ObjComp.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjComp.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/MDLFile_298ca8b2.o: ../../Source/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)

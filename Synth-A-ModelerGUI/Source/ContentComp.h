@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  23 Jan 2012 1:52:57am
+  Creation date:  11 Apr 2012 5:27:01pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,13 +19,14 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_300E38B3__
-#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_300E38B3__
+#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_8D2D0C33__
+#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_8D2D0C33__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
 #include "DebugWindow.h"
+#include "ObjComp.h"
 //[/Headers]
 
 
@@ -56,15 +57,21 @@ public:
 	void getAllCommands(Array<CommandID>& commands);
 	void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
 	bool perform(const InvocationInfo& info);
-	//[/UserMethods]
-	void paint(Graphics& g);
-	void resized();
+    //[/UserMethods]
 
-	//==============================================================================
+    void paint (Graphics& g);
+    void resized();
+
+
+
+    //==============================================================================
+    juce_UseDebuggingNewOperator
+
 private:
-	//[UserVariables]   -- You can add your own custom variables in this section.
+    //[UserVariables]   -- You can add your own custom variables in this section.
 	MainAppWindow& mainWindow;
 	DebugWindow& debugWindow;
+	ObjComp* objComp;
     //[/UserVariables]
 
     //==============================================================================
@@ -77,4 +84,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_300E38B3__
+#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_8D2D0C33__

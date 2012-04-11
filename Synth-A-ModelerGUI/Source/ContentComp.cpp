@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  23 Jan 2012 1:52:57am
+  Creation date:  11 Apr 2012 5:27:01pm
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -31,7 +31,9 @@
 
 //==============================================================================
 ContentComp::ContentComp (MainAppWindow& mainWindow_, DebugWindow& debugWindow_)
-    : mainWindow(mainWindow_), debugWindow(debugWindow_)
+    : mainWindow(mainWindow_),
+      debugWindow(debugWindow_),
+      objComp(0)
 {
 
     //[UserPreSize]
@@ -39,9 +41,11 @@ ContentComp::ContentComp (MainAppWindow& mainWindow_, DebugWindow& debugWindow_)
 
     setSize (600, 400);
 
+
     //[Constructor] You can add your own custom stuff here..
 //	debugWindow = new DebugWindow();
 //	debugWindow->setVisible(true);
+    addAndMakeVisible (objComp = new ObjComp());
     //[/Constructor]
 }
 
@@ -53,7 +57,7 @@ ContentComp::~ContentComp()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-//	deleteAndZero(debugWindow);
+	deleteAndZero(objComp);
     //[/Destructor]
 }
 
@@ -72,6 +76,9 @@ void ContentComp::paint (Graphics& g)
 void ContentComp::resized()
 {
     //[UserResized] Add your own custom resize handling here..
+//	objComp->setBounds(1, 1, getWidth(), getHeight());
+	if(objComp != nullptr)
+		objComp->setBounds(0, 0, getWidth(), getHeight());
     //[/UserResized]
 }
 
@@ -358,7 +365,7 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	break;
 
     case CommandIDs::showOutputConsole:
-    	result.setInfo("Show compiler output", "", CommandCategories::tools,0);
+    	result.setInfo("Toggle compiler window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
 
@@ -403,6 +410,19 @@ bool ContentComp::perform (const InvocationInfo& info)
 	case StandardApplicationCommandIDs::deselectAll:
 		break;
 
+    case CommandIDs::segmentedConnectors:
+    	break;
+    case CommandIDs::zoomIn:
+    	break;
+    case CommandIDs::zoomOut:
+    	break;
+    case CommandIDs::zoomNormal:
+    	break;
+    case CommandIDs::reverseDirection:
+    	break;
+    case CommandIDs::showLabels:
+    	break;
+
     case CommandIDs::insertMass:
     	break;
     case CommandIDs::insertGround:
@@ -433,6 +453,7 @@ bool ContentComp::perform (const InvocationInfo& info)
 
     case CommandIDs::showOutputConsole:
     	debugWindow.toggleDebugWindow();
+    	mainWindow.toFront(true);
     	break;
 
 	default:
@@ -456,7 +477,8 @@ BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ContentComp" componentName=""
                  parentClasses="public Component, public MenuBarModel, public ApplicationCommandTarget"
-                 constructorParams="MainAppWindow&amp; mainWindow_" variableInitialisers="mainWindow(mainWindow_)"
+                 constructorParams="MainAppWindow&amp; mainWindow_, DebugWindow&amp; debugWindow_"
+                 variableInitialisers="mainWindow(mainWindow_),&#10;debugWindow(debugWindow_),&#10;objComp(0)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff"/>

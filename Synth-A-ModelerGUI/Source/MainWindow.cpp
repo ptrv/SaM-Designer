@@ -20,7 +20,7 @@ MainAppWindow::MainAppWindow()
                       Colours::lightgrey,
                       DocumentWindow::allButtons)
 {
-    setResizable (true, false); // resizability is a property of ResizableWindow
+    setResizable (true, true); // resizability is a property of ResizableWindow
 
     debugWindow = new DebugWindow();
     ContentComp* contentComp = new ContentComp(*this, *debugWindow.get());

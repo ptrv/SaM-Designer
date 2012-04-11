@@ -32,6 +32,8 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <FILE id="vUuImn" name="ObjComp.cpp" compile="1" resource="0" file="Source/ObjComp.cpp"/>
+      <FILE id="lsdGlZ" name="ObjComp.h" compile="0" resource="0" file="Source/ObjComp.h"/>
       <FILE id="pJvZiu" name="MDLFile.cpp" compile="1" resource="0" file="Source/MDLFile.cpp"/>
       <FILE id="ZWoVGF" name="MDLFile.h" compile="0" resource="0" file="Source/MDLFile.h"/>
       <FILE id="X8xXqB" name="DebugWindow.cpp" compile="1" resource="0" file="Source/DebugWindow.cpp"/>
