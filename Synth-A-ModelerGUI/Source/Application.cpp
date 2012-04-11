@@ -67,7 +67,7 @@ const String SynthAModelerApplication::getApplicationVersion()
 
 bool SynthAModelerApplication::moreThanOneInstanceAllowed()
 {
-	return true;
+	return false;
 }
 
 void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
