@@ -11,7 +11,7 @@
 #ifndef __TESTRUNNER_H_53168B6B__
 #define __TESTRUNNER_H_53168B6B__
 
-
+#include "../Source/StoredSettings.h"
 static const char* delimLine = "-----------------------------------------------------------------";
 class TestRunner {
 private:
@@ -63,6 +63,8 @@ public:
         }
         logMsg << delimLine << newLine;
         Logger::writeToLog(logMsg);
+
+        StoredSettings::deleteInstance();
 
     }
 };

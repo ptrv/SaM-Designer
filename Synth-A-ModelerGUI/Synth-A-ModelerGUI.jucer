@@ -29,6 +29,8 @@
             file="BinaryData/synthamodeler_icon.png"/>
     </GROUP>
     <GROUP id="{335554E1-26F8-DC02-DBE7-A8EECB870A14}" name="Testsuite">
+      <FILE id="XMa5Xv" name="OutputCmd_test.h" compile="0" resource="0"
+            file="Testsuite/OutputCmd_test.h"/>
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
