@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+class TextConsole;
 class DebugWindow : public DocumentWindow {
 public:
 	DebugWindow();
@@ -22,7 +23,10 @@ public:
 
 	void toggleDebugWindow();
 
+	void clear();
+
 private:
+	TextConsole* console;
 };
 
 

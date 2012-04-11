@@ -17,12 +17,12 @@ DocumentWindow("Output", Colours::black, DocumentWindow::closeButton, true)
 {
 	setResizable (false, false); // resizability is a property of ResizableWindow
 
-	TextConsole* console = new TextConsole();
+	console = new TextConsole();
 	console->setSize(400,400);
 
 	setContentOwned(console,true);
 
-	setVisible (true);
+	setVisible (false);
 }
 
 DebugWindow::~DebugWindow()
@@ -41,4 +41,10 @@ void DebugWindow::toggleDebugWindow()
 		setVisible(false);
 	else
 		setVisible(true);
+}
+
+void DebugWindow::clear()
+{
+	if(isVisible())
+		console->clear();
 }

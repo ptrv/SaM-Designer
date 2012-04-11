@@ -164,6 +164,7 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
     else if (menuIndex == 4)
     {
     	menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
+    	menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
     }
     else if (menuIndex == 5)
     {
@@ -225,6 +226,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::generateFaust,
                               CommandIDs::generateExternal,
                               CommandIDs::showOutputConsole,
+                              CommandIDs::clearOutputConsole,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -368,6 +370,10 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	result.setInfo("Toggle compiler window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
+    case CommandIDs::clearOutputConsole:
+    	result.setInfo("Clear compiler window", "", CommandCategories::tools,0);
+    	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+    	break;
 
     default:
         break;
@@ -454,6 +460,9 @@ bool ContentComp::perform (const InvocationInfo& info)
     case CommandIDs::showOutputConsole:
     	debugWindow.toggleDebugWindow();
     	mainWindow.toFront(true);
+    	break;
+    case CommandIDs::clearOutputConsole:
+    	debugWindow.clear();
     	break;
 
 	default:
