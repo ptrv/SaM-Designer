@@ -14,6 +14,7 @@
 
 //#include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
+#include "DebugWindow.h"
 
 
 //==============================================================================

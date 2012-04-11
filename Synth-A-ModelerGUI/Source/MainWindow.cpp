@@ -22,7 +22,8 @@ MainAppWindow::MainAppWindow()
 {
     setResizable (true, false); // resizability is a property of ResizableWindow
 
-    ContentComp* contentComp = new ContentComp(*this);
+    debugWindow = new DebugWindow();
+    ContentComp* contentComp = new ContentComp(*this, *debugWindow.get());
 
     commandManager.registerAllCommandsForTarget (contentComp);
     commandManager.registerAllCommandsForTarget (JUCEApplication::getInstance());

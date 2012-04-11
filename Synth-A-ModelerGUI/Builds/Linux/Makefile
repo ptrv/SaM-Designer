@@ -43,6 +43,9 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/MDLFile_298ca8b2.o \
+  $(OBJDIR)/DebugWindow_f3bce504.o \
+  $(OBJDIR)/OutputCmd_3df0755a.o \
   $(OBJDIR)/Application_d2fc77b1.o \
   $(OBJDIR)/ContentComp_8a043989.o \
   $(OBJDIR)/Main_90ebc5c2.o \
@@ -75,6 +78,21 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+$(OBJDIR)/MDLFile_298ca8b2.o: ../../Source/MDLFile.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/DebugWindow_f3bce504.o: ../../Source/DebugWindow.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling DebugWindow.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/OutputCmd_3df0755a.o: ../../Source/OutputCmd.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling OutputCmd.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Application_d2fc77b1.o: ../../Source/Application.cpp
 	-@mkdir -p $(OBJDIR)

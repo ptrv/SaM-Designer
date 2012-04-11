@@ -32,6 +32,12 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <FILE id="pJvZiu" name="MDLFile.cpp" compile="1" resource="0" file="Source/MDLFile.cpp"/>
+      <FILE id="ZWoVGF" name="MDLFile.h" compile="0" resource="0" file="Source/MDLFile.h"/>
+      <FILE id="X8xXqB" name="DebugWindow.cpp" compile="1" resource="0" file="Source/DebugWindow.cpp"/>
+      <FILE id="tgS9IL" name="DebugWindow.h" compile="0" resource="0" file="Source/DebugWindow.h"/>
+      <FILE id="IXdJ52" name="OutputCmd.cpp" compile="1" resource="0" file="Source/OutputCmd.cpp"/>
+      <FILE id="QppwLO" name="OutputCmd.h" compile="0" resource="0" file="Source/OutputCmd.h"/>
       <FILE id="jWEP2M" name="Application.cpp" compile="1" resource="0" file="Source/Application.cpp"/>
       <FILE id="avA0th" name="Application.h" compile="0" resource="0" file="Source/Application.h"/>
       <FILE id="d2Z4xB" name="TextConsole.h" compile="0" resource="0" file="Source/TextConsole.h"/>

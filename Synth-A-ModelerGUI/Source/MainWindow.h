@@ -14,7 +14,7 @@
 #define __MAINWINDOW_H_3C77CBD5__
 
 #include "../JuceLibraryCode/JuceHeader.h"
-
+#include "DebugWindow.h"
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
@@ -32,6 +32,8 @@ public:
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
+
+    ScopedPointer <DebugWindow> debugWindow;
 };
 
 

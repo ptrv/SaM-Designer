@@ -29,14 +29,14 @@ namespace CommandIDs
     static const int reverseDirection       = 0x200052;
     static const int showLabels             = 0x200053;
 
-    static const int insertMass             = 0x200060;
-    static const int insertGround           = 0x200061;
-    static const int insertResonator        = 0x200062;
-    static const int insertPort             = 0x200063;
-    static const int linkLinear             = 0x200064;
-    static const int linkTouch              = 0x200065;
-    static const int linkPluck              = 0x200066;
-    static const int audioOutput            = 0x200067;
+//    static const int insertMass             = 0x200060;
+//    static const int insertGround           = 0x200061;
+//    static const int insertResonator        = 0x200062;
+//    static const int insertPort             = 0x200063;
+//    static const int linkLinear             = 0x200064;
+//    static const int linkTouch              = 0x200065;
+//    static const int linkPluck              = 0x200066;
+//    static const int audioOutput            = 0x200067;
 
     static const int saveProjectAs          = 0x200070;
     static const int openInIDE              = 0x200072;
@@ -52,20 +52,20 @@ namespace CommandIDs
     static const int closeWindow            = 0x201001;
     static const int closeAllDocuments      = 0x201000;
 
-    static const int test                   = 0x202090;
-    static const int toFront                = 0x2020a0;
-    static const int toBack                 = 0x2030a1;
-    static const int showOrHideProperties   = 0x2030b0;
-    static const int showOrHideTree         = 0x2030b1;
-    static const int showOrHideMarkers      = 0x2030b2;
-    static const int toggleSnapping         = 0x2030b3;
+    static const int insertMass				= 0x202090;
+    static const int insertGround			= 0x2020a0;
+    static const int insertResonator        = 0x2030a1;
+    static const int insertPort				= 0x2030b0;
+    static const int insertLink				= 0x2030b1;
+    static const int insertTouch			= 0x2030b2;
+    static const int insertPluck			= 0x2030b3;
+    static const int insertAudioOutput		= 0x2030c0;
+    static const int insertWaveguide		= 0x2030c1;
+    static const int insertTermination		= 0x2030c2;
 
-    static const int makeLineSegment        = 0x2030c0;
-    static const int makeCubicSegment       = 0x2030c1;
-    static const int breakSegment           = 0x2030c2;
-    static const int pointModeCorner        = 0x2030c3;
-    static const int pointModeRounded       = 0x2030c4;
-    static const int pointModeSymmetric     = 0x2030c5;
+    static const int generateFaust			= 0x2030c3;
+    static const int generateExternal		= 0x2030c4;
+//    static const int pointModeSymmetric     = 0x2030c5;
 
     static const int group                  = 0x202170;
     static const int ungroup                = 0x202180;
@@ -100,6 +100,9 @@ namespace CommandCategories
 {
     static const char* const general       = "General";
     static const char* const editing       = "Editing";
+    static const char* const inserting	   = "Inserting";
+    static const char* const generation	   = "Generation";
+    static const char* const tools		   = "Tools";
     static const char* const view          = "View";
     static const char* const windows       = "Windows";
 }

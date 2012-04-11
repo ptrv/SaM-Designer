@@ -30,17 +30,18 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ContentComp::ContentComp (MainAppWindow& mainWindow_)
-    : mainWindow(mainWindow_)
+ContentComp::ContentComp (MainAppWindow& mainWindow_, DebugWindow& debugWindow_)
+    : mainWindow(mainWindow_), debugWindow(debugWindow_)
 {
 
     //[UserPreSize]
-
     //[/UserPreSize]
 
     setSize (600, 400);
 
     //[Constructor] You can add your own custom stuff here..
+//	debugWindow = new DebugWindow();
+//	debugWindow->setVisible(true);
     //[/Constructor]
 }
 
@@ -52,6 +53,7 @@ ContentComp::~ContentComp()
 
 
     //[Destructor]. You can add your own custom destruction code here..
+//	deleteAndZero(debugWindow);
     //[/Destructor]
 }
 
@@ -118,19 +120,43 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::copy);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::paste);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::del);
+        menu.addSeparator();
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::selectAll);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::deselectAll);
-
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
+        menu.addCommandItem (commandManager, CommandIDs::zoomIn);
+        menu.addCommandItem (commandManager, CommandIDs::zoomOut);
+        menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
+        menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::showLabels);
 
     }
     else if (menuIndex == 2)
     {
+    	menu.addCommandItem(commandManager, CommandIDs::insertMass);
+    	menu.addCommandItem(commandManager, CommandIDs::insertGround);
+    	menu.addCommandItem(commandManager, CommandIDs::insertResonator);
+    	menu.addCommandItem(commandManager, CommandIDs::insertPort);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::insertLink);
+    	menu.addCommandItem(commandManager, CommandIDs::insertTouch);
+    	menu.addCommandItem(commandManager, CommandIDs::insertPluck);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::insertAudioOutput);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::insertWaveguide);
+    	menu.addCommandItem(commandManager, CommandIDs::insertTermination);
     }
     else if (menuIndex == 3)
     {
+    	menu.addCommandItem(commandManager, CommandIDs::generateFaust);
+    	menu.addCommandItem(commandManager, CommandIDs::generateExternal);
     }
     else if (menuIndex == 4)
     {
+    	menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
     }
     else if (menuIndex == 5)
     {
@@ -164,7 +190,34 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::open,
                               CommandIDs::closeDocument,
                               CommandIDs::saveDocument,
-                              CommandIDs::saveDocumentAs
+                              CommandIDs::saveDocumentAs,
+                              CommandIDs::undo,
+                              CommandIDs::redo,
+                              StandardApplicationCommandIDs::cut,
+                              StandardApplicationCommandIDs::copy,
+                              StandardApplicationCommandIDs::paste,
+//                              StandardApplicationCommandIDs::del,
+                              StandardApplicationCommandIDs::selectAll,
+                              StandardApplicationCommandIDs::deselectAll,
+                              CommandIDs::segmentedConnectors,
+                              CommandIDs::zoomIn,
+                              CommandIDs::zoomOut,
+                              CommandIDs::zoomNormal,
+                              CommandIDs::reverseDirection,
+                              CommandIDs::showLabels,
+                              CommandIDs::insertMass,
+                              CommandIDs::insertGround,
+                              CommandIDs::insertResonator,
+                              CommandIDs::insertPort,
+                              CommandIDs::insertLink,
+                              CommandIDs::insertTouch,
+                              CommandIDs::insertPluck,
+                              CommandIDs::insertAudioOutput,
+                              CommandIDs::insertWaveguide,
+                              CommandIDs::insertTermination,
+                              CommandIDs::generateFaust,
+                              CommandIDs::generateExternal,
+                              CommandIDs::showOutputConsole,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -196,6 +249,118 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
         result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
+    case CommandIDs::undo:
+    	result.setInfo("Undo", "Undo last edit", CommandCategories::editing,0);
+    	result.addDefaultKeypress('z', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::redo:
+    	result.setInfo("Redo", "Undo last undo", CommandCategories::editing,0);
+    	result.addDefaultKeypress('z', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+    	break;
+
+    case StandardApplicationCommandIDs::cut:
+    	result.setInfo("Cut", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('x', ModifierKeys::commandModifier);
+    	break;
+    case StandardApplicationCommandIDs::copy:
+    	result.setInfo("Copy", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('c', ModifierKeys::commandModifier);
+    	break;
+    case StandardApplicationCommandIDs::paste:
+    	result.setInfo("Paste", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('v', ModifierKeys::commandModifier);
+    	break;
+    case StandardApplicationCommandIDs::selectAll:
+    	result.setInfo("SelectAll", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('a', ModifierKeys::commandModifier);
+    	break;
+    case StandardApplicationCommandIDs::deselectAll:
+    	result.setInfo("DeselectAll", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('d', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::segmentedConnectors:
+    	result.setInfo("Segmeted connectors", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('t', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::zoomIn:
+    	result.setInfo("Zoom In", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('+', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::zoomOut:
+    	result.setInfo("Zoom Out", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('-', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::zoomNormal:
+    	result.setInfo("Zoom Normal", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('=', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::reverseDirection:
+    	result.setInfo("Reverse direction", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('r', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::showLabels:
+    	result.setInfo("Show labels", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+    	break;
+
+
+    case CommandIDs::insertMass:
+    	result.setInfo("Mass", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('1', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertGround:
+    	result.setInfo("Ground", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('2', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertResonator:
+    	result.setInfo("Zoom Out", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('3', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertPort:
+    	result.setInfo("Port", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('4', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::insertLink:
+    	result.setInfo("Linear Link", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('5', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertTouch:
+    	result.setInfo("Touch Link", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('6', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertPluck:
+    	result.setInfo("Pluck Link", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('7', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::insertAudioOutput:
+    	result.setInfo("Audiuo Output", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('8', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertWaveguide:
+    	result.setInfo("Waveguide", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('9', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::insertTermination:
+    	result.setInfo("Termination", "", CommandCategories::inserting,0);
+    	result.addDefaultKeypress('0', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::generateFaust:
+    	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
+    	result.addDefaultKeypress('g', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::generateExternal:
+    	result.setInfo("External Object", "", CommandCategories::generation,0);
+    	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::showOutputConsole:
+    	result.setInfo("Show compiler output", "", CommandCategories::tools,0);
+    	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
+    	break;
 
     default:
         break;
@@ -222,8 +387,55 @@ bool ContentComp::perform (const InvocationInfo& info)
     case CommandIDs::saveDocumentAs:
         return true;
         break;
+    case CommandIDs::undo:
+		break;
+	case CommandIDs::redo:
+		break;
 
-    default:
+	case StandardApplicationCommandIDs::cut:
+		break;
+	case StandardApplicationCommandIDs::copy:
+		break;
+	case StandardApplicationCommandIDs::paste:
+		break;
+	case StandardApplicationCommandIDs::selectAll:
+		break;
+	case StandardApplicationCommandIDs::deselectAll:
+		break;
+
+    case CommandIDs::insertMass:
+    	break;
+    case CommandIDs::insertGround:
+    	break;
+    case CommandIDs::insertResonator:
+    	break;
+    case CommandIDs::insertPort:
+    	break;
+
+    case CommandIDs::insertLink:
+    	break;
+    case CommandIDs::insertTouch:
+    	break;
+    case CommandIDs::insertPluck:
+    	break;
+
+    case CommandIDs::insertAudioOutput:
+    	break;
+    case CommandIDs::insertWaveguide:
+    	break;
+    case CommandIDs::insertTermination:
+    	break;
+
+    case CommandIDs::generateFaust:
+    	break;
+    case CommandIDs::generateExternal:
+    	break;
+
+    case CommandIDs::showOutputConsole:
+    	debugWindow.toggleDebugWindow();
+    	break;
+
+	default:
         return false;
     };
 

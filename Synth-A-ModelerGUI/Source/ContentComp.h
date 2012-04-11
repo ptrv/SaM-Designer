@@ -25,6 +25,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
+#include "DebugWindow.h"
 //[/Headers]
 
 
@@ -43,30 +44,27 @@ class ContentComp  : public Component,
 {
 public:
     //==============================================================================
-    ContentComp (MainAppWindow& mainWindow_);
+    ContentComp (MainAppWindow& mainWindow_, DebugWindow& debugWindow_);
     ~ContentComp();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
     const StringArray getMenuBarNames();
-    const PopupMenu getMenuForIndex (int menuIndex, const String& /*menuName*/);
-    void menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/);
-    ApplicationCommandTarget* getNextCommandTarget();
-    void getAllCommands (Array <CommandID>& commands);
-    void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
-    bool perform (const InvocationInfo& info);
-    //[/UserMethods]
+    const PopupMenu getMenuForIndex (int menuIndex, const String&);
+	void menuItemSelected(int menuItemID, int);
+	ApplicationCommandTarget* getNextCommandTarget();
+	void getAllCommands(Array<CommandID>& commands);
+	void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
+	bool perform(const InvocationInfo& info);
+	//[/UserMethods]
+	void paint(Graphics& g);
+	void resized();
 
-    void paint (Graphics& g);
-    void resized();
-
-
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-
+	//==============================================================================
 private:
-    //[UserVariables]   -- You can add your own custom variables in this section.
-    MainAppWindow& mainWindow;
+	//[UserVariables]   -- You can add your own custom variables in this section.
+	MainAppWindow& mainWindow;
+	DebugWindow& debugWindow;
     //[/UserVariables]
 
     //==============================================================================
