@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  11 Apr 2012 5:27:01pm
+  Creation date:  12 Apr 2012 3:26:55am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -30,9 +30,9 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ContentComp::ContentComp (MainAppWindow& mainWindow_, DebugWindow& debugWindow_)
+ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appController_)
     : mainWindow(mainWindow_),
-      debugWindow(debugWindow_),
+      appController(appController_),
       objComp(0)
 {
 
@@ -67,7 +67,7 @@ void ContentComp::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::white);
+    g.fillAll (Colours::black);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -453,16 +453,17 @@ bool ContentComp::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::generateFaust:
+    	appController.generateFaust();
     	break;
     case CommandIDs::generateExternal:
     	break;
 
     case CommandIDs::showOutputConsole:
-    	debugWindow.toggleDebugWindow();
-    	mainWindow.toFront(true);
+    	appController.debugWindowToggle();
+//    	mainWindow.toFront(true);
     	break;
     case CommandIDs::clearOutputConsole:
-    	debugWindow.clear();
+    	appController.debugWindowClear();
     	break;
 
 	default:
@@ -486,11 +487,11 @@ BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ContentComp" componentName=""
                  parentClasses="public Component, public MenuBarModel, public ApplicationCommandTarget"
-                 constructorParams="MainAppWindow&amp; mainWindow_, DebugWindow&amp; debugWindow_"
-                 variableInitialisers="mainWindow(mainWindow_),&#10;debugWindow(debugWindow_),&#10;objComp(0)"
+                 constructorParams="MainAppWindow&amp; mainWindow_, AppController&amp; appController_"
+                 variableInitialisers="mainWindow(mainWindow_),&#10;appController(appController_),&#10;objComp(0)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="0" initialWidth="600" initialHeight="400">
-  <BACKGROUND backgroundColour="ffffffff"/>
+  <BACKGROUND backgroundColour="ff000000"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

@@ -22,7 +22,7 @@ DocumentWindow("Output", Colours::black, DocumentWindow::closeButton, true)
 
 	setContentOwned(console,true);
 
-	setVisible (false);
+	setVisible (true);
 }
 
 DebugWindow::~DebugWindow()
@@ -47,4 +47,17 @@ void DebugWindow::clear()
 {
 	if(isVisible())
 		console->clear();
+}
+
+void DebugWindow::addText(const String& compilerText)
+{
+	String debugText = "-------------------";
+	debugText << newLine;
+	debugText << "Synth-A-Modeler: ";
+	debugText << Time::getCurrentTime().toString(true,true, true, true);
+	debugText << newLine;
+	debugText << "-------------------";
+	debugText << newLine << newLine;
+	debugText << compilerText;
+	console->addLine(debugText);
 }

@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  11 Apr 2012 5:27:01pm
+  Creation date:  12 Apr 2012 3:26:55am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_8D2D0C33__
-#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_8D2D0C33__
+#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_7E8CF65B__
+#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_7E8CF65B__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
@@ -45,7 +45,7 @@ class ContentComp  : public Component,
 {
 public:
     //==============================================================================
-    ContentComp (MainAppWindow& mainWindow_, DebugWindow& debugWindow_);
+    ContentComp (MainAppWindow& mainWindow_, AppController& appController_);
     ~ContentComp();
 
     //==============================================================================
@@ -70,7 +70,7 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	MainAppWindow& mainWindow;
-	DebugWindow& debugWindow;
+	AppController& appController;
 	ObjComp* objComp;
     //[/UserVariables]
 
@@ -84,4 +84,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_8D2D0C33__
+#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_7E8CF65B__

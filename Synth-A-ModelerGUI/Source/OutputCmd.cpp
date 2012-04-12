@@ -12,7 +12,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "StoredSettings.h"
 
-//const char* samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx";
 OutputCmd::OutputCmd()
 {
 

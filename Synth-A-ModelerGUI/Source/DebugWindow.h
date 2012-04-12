@@ -25,6 +25,8 @@ public:
 
 	void clear();
 
+	void addText(const String& compilerText);
+
 private:
 	TextConsole* console;
 };

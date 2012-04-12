@@ -22,7 +22,7 @@ ObjComp::~ObjComp()
 
 void ObjComp::paint(Graphics& g)
 {
-	g.fillAll (Colours::lightgreen);
+	g.fillAll (Colours::white);
 	g.drawText("This will be the object component", 10, 10 ,
 			getWidth()-20, getHeight()-20, Justification::centred, false);
 

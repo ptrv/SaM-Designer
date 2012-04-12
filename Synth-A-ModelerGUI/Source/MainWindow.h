@@ -15,6 +15,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DebugWindow.h"
+#include "AppController.h"
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow
@@ -34,6 +35,7 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 
     ScopedPointer <DebugWindow> debugWindow;
+    ScopedPointer <AppController> appController;
 };
 
 
