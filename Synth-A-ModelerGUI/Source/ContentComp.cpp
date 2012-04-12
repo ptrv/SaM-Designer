@@ -30,9 +30,12 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appController_)
+ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appController_,
+		MDLController& mdlController_, ObjController& objController_)
     : mainWindow(mainWindow_),
       appController(appController_),
+      mdlController(mdlController_),
+      objController(objController_),
       objComp(0)
 {
 
@@ -386,18 +389,23 @@ bool ContentComp::perform (const InvocationInfo& info)
     switch (info.commandID)
     {
     case CommandIDs::newFile:
+    	mdlController.newFile();
         return true;
         break;
     case CommandIDs::open:
+    	mdlController.open();
         return true;
         break;
     case CommandIDs::closeDocument:
+    	mdlController.close();
         return true;
         break;
     case CommandIDs::saveDocument:
+    	mdlController.save();
         return true;
         break;
     case CommandIDs::saveDocumentAs:
+    	mdlController.saveAs();
         return true;
         break;
     case CommandIDs::undo:
@@ -456,6 +464,7 @@ bool ContentComp::perform (const InvocationInfo& info)
     	appController.generateFaust();
     	break;
     case CommandIDs::generateExternal:
+    	appController.generateExternal();
     	break;
 
     case CommandIDs::showOutputConsole:

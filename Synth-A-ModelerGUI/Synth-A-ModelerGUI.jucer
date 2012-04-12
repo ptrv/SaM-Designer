@@ -34,6 +34,12 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <FILE id="NElun3" name="ObjController.cpp" compile="1" resource="0"
+            file="Source/ObjController.cpp"/>
+      <FILE id="QIUP9X" name="ObjController.h" compile="0" resource="0" file="Source/ObjController.h"/>
+      <FILE id="FIWzbM" name="MDLController.cpp" compile="1" resource="0"
+            file="Source/MDLController.cpp"/>
+      <FILE id="V9BC3e" name="MDLController.h" compile="0" resource="0" file="Source/MDLController.h"/>
       <FILE id="vWuvpY" name="Alerts.cpp" compile="1" resource="0" file="Source/Alerts.cpp"/>
       <FILE id="vgwGHf" name="Alerts.h" compile="0" resource="0" file="Source/Alerts.h"/>
       <FILE id="X6h80E" name="AppController.cpp" compile="1" resource="0"

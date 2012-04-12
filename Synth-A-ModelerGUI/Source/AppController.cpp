@@ -14,7 +14,7 @@
 #include "DebugWindow.h"
 #include "Alerts.h"
 
-AppController::AppController(MainAppWindow* maw_, DebugWindow* dw_)
+AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 : maw(maw_), dw(dw_)
 {
 	outCmd = new OutputCmd();
@@ -52,14 +52,19 @@ void AppController::generateFaust()
 //	}
 }
 
+void AppController::generateExternal()
+{
+
+}
+
 void AppController::debugWindowToggle()
 {
-	dw->toggleDebugWindow();
-	maw->toFront(true);
+	dw.toggleDebugWindow();
+	maw.toFront(true);
 
 }
 
 void AppController::debugWindowClear()
 {
-	dw->clear();
+	dw.clear();
 }

@@ -18,15 +18,16 @@ class MainAppWindow;
 
 class AppController {
 public:
-	AppController(MainAppWindow* maw_, DebugWindow* dw_);
+	AppController(MainAppWindow& maw_, DebugWindow& dw_);
 	~AppController();
 
 	void generateFaust();
+	void generateExternal();
 	void debugWindowToggle();
 	void debugWindowClear();
 private:
-	MainAppWindow* maw;
-	DebugWindow* dw;
+	MainAppWindow& maw;
+	DebugWindow& dw;
 	ScopedPointer<OutputCmd> outCmd;
 };
 

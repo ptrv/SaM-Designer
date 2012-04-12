@@ -43,6 +43,8 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/ObjController_183891d4.o \
+  $(OBJDIR)/MDLController_80166212.o \
   $(OBJDIR)/Alerts_9cdb9ea0.o \
   $(OBJDIR)/AppController_200d0d7e.o \
   $(OBJDIR)/ObjComp_5c080a07.o \
@@ -81,6 +83,16 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+$(OBJDIR)/ObjController_183891d4.o: ../../Source/ObjController.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLController_80166212.o: ../../Source/MDLController.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Alerts_9cdb9ea0.o: ../../Source/Alerts.cpp
 	-@mkdir -p $(OBJDIR)

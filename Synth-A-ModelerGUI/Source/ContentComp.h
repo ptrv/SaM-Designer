@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "DebugWindow.h"
 #include "ObjComp.h"
+#include "MDLController.h"
 //[/Headers]
 
 
@@ -45,7 +46,8 @@ class ContentComp  : public Component,
 {
 public:
     //==============================================================================
-    ContentComp (MainAppWindow& mainWindow_, AppController& appController_);
+    ContentComp (MainAppWindow& mainWindow_, AppController& appController_,
+    		MDLController& mdlController_, ObjController& objController_);
     ~ContentComp();
 
     //==============================================================================
@@ -71,6 +73,8 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	MainAppWindow& mainWindow;
 	AppController& appController;
+	MDLController& mdlController;
+	ObjController& objController;
 	ObjComp* objComp;
     //[/UserVariables]
 
