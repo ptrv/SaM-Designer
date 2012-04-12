@@ -3,7 +3,7 @@
 
     OutputCmd.h
     Created: 11 Apr 2012 3:17:58pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 */

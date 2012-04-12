@@ -3,7 +3,7 @@
 
     AppController.h
     Created: 12 Apr 2012 1:30:25am
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 */

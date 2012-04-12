@@ -3,7 +3,7 @@
 
     MDLController.cpp
     Created: 12 Apr 2012 11:49:49pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 */

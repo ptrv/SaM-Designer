@@ -3,7 +3,7 @@
 
     TextConsole.h
     Created: 4 Feb 2012 5:37:55pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
  */

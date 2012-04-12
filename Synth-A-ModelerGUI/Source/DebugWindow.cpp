@@ -3,7 +3,7 @@
 
     DebugWindow.cpp
     Created: 11 Apr 2012 3:18:15pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 */

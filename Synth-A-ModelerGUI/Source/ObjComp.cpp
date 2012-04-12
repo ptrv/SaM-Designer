@@ -3,7 +3,7 @@
 
     ObjComp.cpp
     Created: 11 Apr 2012 5:10:20pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 */

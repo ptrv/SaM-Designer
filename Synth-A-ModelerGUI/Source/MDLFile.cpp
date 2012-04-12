@@ -3,7 +3,7 @@
 
     MDLFile.cpp
     Created: 11 Apr 2012 3:18:35pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 */
