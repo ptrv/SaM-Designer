@@ -89,7 +89,7 @@ const StringArray& StoredSettings::getFontNames()
 
 String StoredSettings::getCmdPerl() const
 {
-	return props->getValue("cmdperl", "perl");
+	return props->getValue("cmdperl", "/usr/bin/perl");
 }
 void StoredSettings::setCmdPerl(const String& cmdPerl)
 {
@@ -98,7 +98,7 @@ void StoredSettings::setCmdPerl(const String& cmdPerl)
 
 String StoredSettings::getCmdFaust() const
 {
-	return props->getValue("cmdfaust", "faust");
+	return props->getValue("cmdfaust", "/usr/local/bin/faust");
 }
 void StoredSettings::setCmdFaust(const String& cmdFaust)
 {
@@ -107,7 +107,7 @@ void StoredSettings::setCmdFaust(const String& cmdFaust)
 
 String StoredSettings::getCmdFaust2supercollider() const
 {
-	return props->getValue("cmdfaust2supercollider", "faust2supercollider");
+	return props->getValue("cmdfaust2supercollider", "/usr/local/bin/faust2supercollider");
 }
 void StoredSettings::setCmdFaust2supercollider(const String& cmdFaust2supercollider)
 {
@@ -116,7 +116,7 @@ void StoredSettings::setCmdFaust2supercollider(const String& cmdFaust2supercolli
 
 String StoredSettings::getCmdFaust2puredata() const
 {
-	return props->getValue("cmdfaust2puredata", "faust2puredata");
+	return props->getValue("cmdfaust2puredata", "/usr/local/bin/faust2puredata");
 }
 void StoredSettings::setCmdFaust2puredata(const String& cmdFaust2puredata)
 {
@@ -125,7 +125,11 @@ void StoredSettings::setCmdFaust2puredata(const String& cmdFaust2puredata)
 
 String StoredSettings::getCmdSAM() const
 {
-	return props->getValue("cmdsam", "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx");
+	String samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx";
+#if JUCE_MAC
+	samPath = "../"+samPath;
+#endif
+	return props->getValue("cmdsam", samPath);
 }
 void StoredSettings::setCmdSAM(const String& cmdSAM)
 {

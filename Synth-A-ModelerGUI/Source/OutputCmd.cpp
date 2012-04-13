@@ -24,7 +24,11 @@ OutputCmd::~OutputCmd()
 bool OutputCmd::isSynthAModelerCmdAvailable()
 {
 	String cmdSAM = StoredSettings::getInstance()->getCmdSAM();
-	File samCompiler(File::getCurrentWorkingDirectory().getChildFile(cmdSAM));
+	if(! File::isAbsolutePath(cmdSAM))
+	{
+		cmdSAM = File::getCurrentWorkingDirectory().getChildFile(cmdSAM).getFullPathName();
+	}
+	File samCompiler(cmdSAM);
 	if(samCompiler.existsAsFile())
 		return true;
 	else
@@ -33,36 +37,53 @@ bool OutputCmd::isSynthAModelerCmdAvailable()
 
 bool OutputCmd::isCmdAvailable(const String& cmdStr)
 {
+	String cmdStrTmp = cmdStr;
+#if JUCE_LINUX
+	cmdStrTmp = "which "+cmdStr;
+
 	ChildProcess child;
-	const bool ok = child.start (cmdStr)
+	const bool ok = child.start (cmdStrTmp)
 			&& child.readAllProcessOutput().trim().isNotEmpty();
 
 	child.waitForProcessToFinish (60 * 1000);
 	return ok;
+#elif JUCE_MAC
+	if(! File::isAbsolutePath(cmdStr))
+	{
+		cmdSAM = File::getCurrentWorkingDirectory().getChildFile(cmdStr).getFullPathName();
+	}
+	File cmdFile(cmdStr);
+	if(cmdFile.existsAsFile())
+		return true;
+	else
+		return false;
+#else
+	return false;
+#endif
 }
 
 bool OutputCmd::isPerlAvailable()
 {
 	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	return isCmdAvailable("which "+cmdPerl);
+	return isCmdAvailable(cmdPerl);
 }
 
 bool OutputCmd::isFaustAvailable()
 {
 	String cmdFaust = StoredSettings::getInstance()->getCmdFaust();
-	return isCmdAvailable("which "+cmdFaust);
+	return isCmdAvailable(cmdFaust);
 }
 
 bool OutputCmd::isFaust2puredataAvailable()
 {
 	String cmdFaust2puredata = StoredSettings::getInstance()->getCmdFaust2puredata();
-	return isCmdAvailable("which "+cmdFaust2puredata);
+	return isCmdAvailable(cmdFaust2puredata);
 }
 
 bool OutputCmd::isFaust2supercolliderAvailable()
 {
 	String cmdFaust2supercollider = StoredSettings::getInstance()->getCmdFaust2supercollider();
-	return isCmdAvailable("which "+cmdFaust2supercollider);
+	return isCmdAvailable(cmdFaust2supercollider);
 }
 
 const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)

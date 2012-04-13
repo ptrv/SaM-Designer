@@ -11,16 +11,16 @@
 #ifndef __OUTPUTCMD_TEST_H_E0BDB8A1__
 #define __OUTPUTCMD_TEST_H_E0BDB8A1__
 
-
+#include "TestUtils.h"
 class OutputCmdTest : public UnitTest {
 public:
 	OutputCmdTest() : UnitTest("OutputCmdTest") {}
 
 	void runTest()
 	{
-		String inPath = "../../../Testsuite/data/examplelinks.mdl";
-		String expectedPath = "../../../Testsuite/data/examplelinks_expected.dsp";
-		String outPath = "../../../Testsuite/data/examplelinks.dsp";
+		String inPath = String(TESTSUITE_DATA_PATH) + "examplelinks.mdl";
+		String expectedPath = String(TESTSUITE_DATA_PATH) + "examplelinks_expected.dsp";
+		String outPath = String(TESTSUITE_DATA_PATH) + "examplelinks.dsp";
 		OutputCmd cmd;
 		beginTest("isSynthAModelerCmdAvailable");
 		expect(cmd.isSynthAModelerCmdAvailable(), "");
