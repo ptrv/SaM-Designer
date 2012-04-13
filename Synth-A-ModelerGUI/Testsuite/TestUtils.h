@@ -13,10 +13,10 @@
 
 
 #if JUCE_MAC
-static const char* TESTSUITE_DATA_PATH = "../../../../Testsuite/data";
+static const char* TESTSUITE_DATA_PATH = "../../../../Testsuite/data/";
+#else
+static const char* TESTSUITE_DATA_PATH = "../../../Testsuite/data/";
 #endif
-static const char* TESTSUITE_DATA_PATH = "../../../Testsuite/data";
-
 
 
 #endif  // __TESTUTILS_H_D0F1300A__

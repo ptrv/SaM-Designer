@@ -50,9 +50,9 @@ bool OutputCmd::isCmdAvailable(const String& cmdStr)
 #elif JUCE_MAC
 	if(! File::isAbsolutePath(cmdStr))
 	{
-		cmdSAM = File::getCurrentWorkingDirectory().getChildFile(cmdStr).getFullPathName();
+		cmdStrTmp = File::getCurrentWorkingDirectory().getChildFile(cmdStr).getFullPathName();
 	}
-	File cmdFile(cmdStr);
+	File cmdFile(cmdStrTmp);
 	if(cmdFile.existsAsFile())
 		return true;
 	else
