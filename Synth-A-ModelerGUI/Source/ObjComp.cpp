@@ -10,7 +10,8 @@
 
 #include "ObjComp.h"
 
-ObjComp::ObjComp() : Component()
+ObjComp::ObjComp(ObjController& objController_)
+: Component(), objController(objController_)
 {
 	setSize(100,100);
 }

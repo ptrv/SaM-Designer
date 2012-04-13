@@ -12,16 +12,18 @@
 #define __OBJCOMP_H_F3604232__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "ObjController.h"
 
 class ObjComp : public Component {
 public:
-	ObjComp();
+	ObjComp(ObjController& objController_);
 	~ObjComp();
 
 	void paint(Graphics& g);
 //	void resized();
 
 private:
+	ObjController& objController;
 };
 
 

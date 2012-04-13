@@ -48,7 +48,7 @@ ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appControll
     //[Constructor] You can add your own custom stuff here..
 //	debugWindow = new DebugWindow();
 //	debugWindow->setVisible(true);
-    addAndMakeVisible (objComp = new ObjComp());
+    addAndMakeVisible (objComp = new ObjComp(objController));
     //[/Constructor]
 }
 
