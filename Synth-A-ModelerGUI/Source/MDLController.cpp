@@ -23,11 +23,16 @@
 
 */
 
+#include "../JuceLibraryCode/JuceHeader.h"
 #include "MDLController.h"
+#include "MDLFile.h"
+#include "OutputCmd.h"
+#include "CommonHeaders.h"
 
 MDLController::MDLController()
 {
-
+	currentMdl = new MDLFile();
+	outCmd = new OutputCmd();
 }
 
 MDLController::~MDLController()
@@ -37,6 +42,14 @@ MDLController::~MDLController()
 
 void MDLController::newFile()
 {
+	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
+			"*.mdl", false);
+
+	if (fch.browseForFileToOpen())
+	{
+		File result = fch.getResult();
+		bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
+	}
 
 }
 void MDLController::open()
@@ -52,6 +65,38 @@ void MDLController::saveAs()
 
 }
 void MDLController::close()
+{
+
+}
+
+void MDLController::generateFaust()
+{
+	if(! outCmd->isPerlAvailable())
+	{
+		Alerts::missingPerl();
+		return;
+	}
+	if(! outCmd->isSynthAModelerCmdAvailable())
+	{
+		Alerts::missingSAM();
+		return;
+	}
+	if(! outCmd->isFaustAvailable())
+	{
+		Alerts::missingFaust();
+		return;
+	}
+//	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),"*.mdl", false);
+//
+//	if (fch.browseForFileToOpen())
+//	{
+//		File result = fch.getResult();
+//		String compilerText = outCmd->generateFaustCode(result.getFullPathName(), "examplelinks.dsp");
+//		dw->addText(compilerText);
+//	}
+}
+
+void MDLController::generateExternal()
 {
 
 }

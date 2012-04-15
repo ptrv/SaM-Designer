@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Apr 2012 3:26:55am
+  Creation date:  16 Apr 2012 1:46:30am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,15 +19,13 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_7E8CF65B__
-#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_7E8CF65B__
+#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__
+#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
-#include "DebugWindow.h"
 #include "ObjComp.h"
-#include "MDLController.h"
 //[/Headers]
 
 
@@ -35,9 +33,9 @@
 //==============================================================================
 /**
                                                                     //[Comments]
-    An auto-generated component, created by the Jucer.
 
-    Describe your class and how it works here!
+    Main component which holds all menu items and the objects component.
+
                                                                     //[/Comments]
 */
 class ContentComp  : public Component,
@@ -46,8 +44,7 @@ class ContentComp  : public Component,
 {
 public:
     //==============================================================================
-    ContentComp (MainAppWindow& mainWindow_, AppController& appController_,
-    		MDLController& mdlController_, ObjController& objController_);
+    ContentComp (MainAppWindow& mainWindow_, AppController& appController_);
     ~ContentComp();
 
     //==============================================================================
@@ -73,8 +70,6 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 	MainAppWindow& mainWindow;
 	AppController& appController;
-	MDLController& mdlController;
-	ObjController& objController;
 	ObjComp* objComp;
     //[/UserVariables]
 
@@ -88,4 +83,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_7E8CF65B__
+#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__

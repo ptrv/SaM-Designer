@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    BaseObject.h
+    Created: 16 Apr 2012 1:22:04am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,17 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
-
-//#include "../JuceLibraryCode/JuceHeader.h"
-
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+#ifndef __BASEOBJECT_H_F4381D18__
+#define __BASEOBJECT_H_F4381D18__
 
 
+class BaseObject {
+public:
+	BaseObject(){}
+	virtual ~BaseObject(){}
 
-#endif  // __COMMONHEADERS_H_CA475C67__
+private:
+};
+
+
+#endif  // __BASEOBJECT_H_F4381D18__

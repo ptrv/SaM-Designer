@@ -43,6 +43,9 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/LinkObject_1431dce2.o \
+  $(OBJDIR)/MassObject_4f95435c.o \
+  $(OBJDIR)/MDLParser_942e4995.o \
   $(OBJDIR)/ObjController_183891d4.o \
   $(OBJDIR)/MDLController_80166212.o \
   $(OBJDIR)/Alerts_9cdb9ea0.o \
@@ -83,6 +86,21 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+$(OBJDIR)/LinkObject_1431dce2.o: ../../Source/LinkObject.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling LinkObject.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MassObject_4f95435c.o: ../../Source/MassObject.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MassObject.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLParser_942e4995.o: ../../Source/MDLParser.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLParser.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ObjController_183891d4.o: ../../Source/ObjController.cpp
 	-@mkdir -p $(OBJDIR)

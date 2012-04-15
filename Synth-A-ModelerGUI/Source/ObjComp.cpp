@@ -25,8 +25,8 @@
 
 #include "ObjComp.h"
 
-ObjComp::ObjComp(ObjController& objController_)
-: Component(), objController(objController_)
+ObjComp::ObjComp(AppController& appController_)
+: Component(), appController(appController_)
 {
 	setSize(100,100);
 }

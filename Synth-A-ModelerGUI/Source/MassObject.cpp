@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    MassObject.cpp
+    Created: 16 Apr 2012 1:23:24am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,14 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
+#include "MassObject.h"
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+MassObject::MassObject()
+{
 
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+}
 
+MassObject::~MassObject()
+{
 
-
-#endif  // __COMMONHEADERS_H_CA475C67__
+}

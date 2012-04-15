@@ -27,12 +27,11 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
 #include "DebugWindow.h"
-#include "Alerts.h"
+#include "CommonHeaders.h"
 
 AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 : maw(maw_), dw(dw_)
 {
-	outCmd = new OutputCmd();
 }
 
 AppController::~AppController()
@@ -40,37 +39,104 @@ AppController::~AppController()
 
 }
 
-void AppController::generateFaust()
+bool AppController::menuItemWasClicked(CommandID menuId)
 {
-	if(! outCmd->isPerlAvailable())
-	{
-		Alerts::missingPerl();
-		return;
-	}
-	if(! outCmd->isSynthAModelerCmdAvailable())
-	{
-		Alerts::missingSAM();
-		return;
-	}
-	if(! outCmd->isFaustAvailable())
-	{
-		Alerts::missingFaust();
-		return;
-	}
-//	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),"*.mdl", false);
-//
-//	if (fch.browseForFileToOpen())
-//	{
-//		File result = fch.getResult();
-//		String compilerText = outCmd->generateFaustCode(result.getFullPathName(), "examplelinks.dsp");
-//		dw->addText(compilerText);
-//	}
+    switch (menuId)
+    {
+    case CommandIDs::newFile:
+    	mdlController->newFile();
+        return true;
+        break;
+    case CommandIDs::open:
+    	mdlController->open();
+        return true;
+        break;
+    case CommandIDs::closeDocument:
+    	mdlController->close();
+        return true;
+        break;
+    case CommandIDs::saveDocument:
+    	mdlController->save();
+        return true;
+        break;
+    case CommandIDs::saveDocumentAs:
+    	mdlController->saveAs();
+        return true;
+        break;
+    case CommandIDs::undo:
+		break;
+	case CommandIDs::redo:
+		break;
+
+	case StandardApplicationCommandIDs::cut:
+		break;
+	case StandardApplicationCommandIDs::copy:
+		break;
+	case StandardApplicationCommandIDs::paste:
+		break;
+	case StandardApplicationCommandIDs::selectAll:
+		break;
+	case StandardApplicationCommandIDs::deselectAll:
+		break;
+
+    case CommandIDs::segmentedConnectors:
+    	break;
+    case CommandIDs::zoomIn:
+    	break;
+    case CommandIDs::zoomOut:
+    	break;
+    case CommandIDs::zoomNormal:
+    	break;
+    case CommandIDs::reverseDirection:
+    	break;
+    case CommandIDs::showLabels:
+    	break;
+
+    case CommandIDs::insertMass:
+    	break;
+    case CommandIDs::insertGround:
+    	break;
+    case CommandIDs::insertResonator:
+    	break;
+    case CommandIDs::insertPort:
+    	break;
+
+    case CommandIDs::insertLink:
+    	break;
+    case CommandIDs::insertTouch:
+    	break;
+    case CommandIDs::insertPluck:
+    	break;
+
+    case CommandIDs::insertAudioOutput:
+    	break;
+    case CommandIDs::insertWaveguide:
+    	break;
+    case CommandIDs::insertTermination:
+    	break;
+
+    case CommandIDs::generateFaust:
+    	mdlController->generateFaust();
+    	break;
+    case CommandIDs::generateExternal:
+    	mdlController->generateExternal();
+    	break;
+
+    case CommandIDs::showOutputConsole:
+    	debugWindowToggle();
+    	break;
+    case CommandIDs::clearOutputConsole:
+    	debugWindowClear();
+    	break;
+
+	default:
+        return false;
+    };
+
+    return true;
+
 }
 
-void AppController::generateExternal()
-{
-
-}
 
 void AppController::debugWindowToggle()
 {

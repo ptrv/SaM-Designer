@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    LinkObject.cpp
+    Created: 16 Apr 2012 1:23:34am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,14 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
+#include "LinkObject.h"
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+LinkObject::LinkObject()
+{
 
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+}
 
+LinkObject::~LinkObject()
+{
 
-
-#endif  // __COMMONHEADERS_H_CA475C67__
+}

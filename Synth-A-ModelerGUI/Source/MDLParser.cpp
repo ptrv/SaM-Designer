@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    MDLParser.cpp
+    Created: 16 Apr 2012 1:04:09am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,15 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
+#include "MDLParser.h"
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+MDLParser::MDLParser(MDLFile& mdlFile_, const char* mdlPath_)
+: mdlFile(mdlFile_), mdlPath(mdlPath_)
+{
 
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+}
 
-
-
-#endif  // __COMMONHEADERS_H_CA475C67__
+bool MDLParser::parseMDL()
+{
+	return true;
+}

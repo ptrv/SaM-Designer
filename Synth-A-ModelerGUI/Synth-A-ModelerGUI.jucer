@@ -35,6 +35,13 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <FILE id="CqGXQV" name="LinkObject.cpp" compile="1" resource="0" file="Source/LinkObject.cpp"/>
+      <FILE id="FjtR16" name="LinkObject.h" compile="0" resource="0" file="Source/LinkObject.h"/>
+      <FILE id="Xc3q23" name="MassObject.cpp" compile="1" resource="0" file="Source/MassObject.cpp"/>
+      <FILE id="klF2YS" name="MassObject.h" compile="0" resource="0" file="Source/MassObject.h"/>
+      <FILE id="KBUVM3" name="BaseObject.h" compile="0" resource="0" file="Source/BaseObject.h"/>
+      <FILE id="tiwUS6" name="MDLParser.cpp" compile="1" resource="0" file="Source/MDLParser.cpp"/>
+      <FILE id="C2dsFA" name="MDLParser.h" compile="0" resource="0" file="Source/MDLParser.h"/>
       <FILE id="NElun3" name="ObjController.cpp" compile="1" resource="0"
             file="Source/ObjController.cpp"/>
       <FILE id="QIUP9X" name="ObjController.h" compile="0" resource="0" file="Source/ObjController.h"/>

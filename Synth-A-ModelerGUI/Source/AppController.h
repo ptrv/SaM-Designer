@@ -27,7 +27,9 @@
 #define __APPCONTROLLER_H_B0B552E9__
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "OutputCmd.h"
+#include "MDLController.h"
+#include "ObjController.h"
+
 class DebugWindow;
 class MainAppWindow;
 
@@ -36,14 +38,18 @@ public:
 	AppController(MainAppWindow& maw_, DebugWindow& dw_);
 	~AppController();
 
-	void generateFaust();
-	void generateExternal();
+	bool menuItemWasClicked(CommandID menuId);
+
 	void debugWindowToggle();
 	void debugWindowClear();
 private:
 	MainAppWindow& maw;
 	DebugWindow& dw;
-	ScopedPointer<OutputCmd> outCmd;
+
+    ScopedPointer<MDLController> mdlController;
+    ScopedPointer<ObjController> objController;
+
+//	ScopedPointer<OutputCmd> outCmd;
 };
 
 

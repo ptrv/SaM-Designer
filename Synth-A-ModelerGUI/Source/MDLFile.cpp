@@ -23,3 +23,30 @@
 
 */
 
+#include "MDLFile.h"
+#include "MDLParser.h"
+
+MDLFile::MDLFile()
+{
+
+}
+
+MDLFile::~MDLFile()
+{
+
+}
+
+bool MDLFile::openMDL(const char* mdlPath)
+{
+	MDLParser pa(*this, mdlPath);
+	if(pa.parseMDL())
+	{
+		// success
+		return true;
+	}
+	else
+	{
+		// fail
+		return false;
+	}
+}

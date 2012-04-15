@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  12 Apr 2012 3:26:55am
+  Creation date:  16 Apr 2012 1:46:30am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -30,12 +30,9 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appController_,
-		MDLController& mdlController_, ObjController& objController_)
+ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appController_)
     : mainWindow(mainWindow_),
       appController(appController_),
-      mdlController(mdlController_),
-      objController(objController_),
       objComp(0)
 {
 
@@ -48,7 +45,7 @@ ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appControll
     //[Constructor] You can add your own custom stuff here..
 //	debugWindow = new DebugWindow();
 //	debugWindow->setVisible(true);
-    addAndMakeVisible (objComp = new ObjComp(objController));
+    addAndMakeVisible (objComp = new ObjComp(appController_));
     //[/Constructor]
 }
 
@@ -386,100 +383,7 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 // this is the ApplicationCommandTarget method that is used to actually perform one of our commands..
 bool ContentComp::perform (const InvocationInfo& info)
 {
-    switch (info.commandID)
-    {
-    case CommandIDs::newFile:
-    	mdlController.newFile();
-        return true;
-        break;
-    case CommandIDs::open:
-    	mdlController.open();
-        return true;
-        break;
-    case CommandIDs::closeDocument:
-    	mdlController.close();
-        return true;
-        break;
-    case CommandIDs::saveDocument:
-    	mdlController.save();
-        return true;
-        break;
-    case CommandIDs::saveDocumentAs:
-    	mdlController.saveAs();
-        return true;
-        break;
-    case CommandIDs::undo:
-		break;
-	case CommandIDs::redo:
-		break;
-
-	case StandardApplicationCommandIDs::cut:
-		break;
-	case StandardApplicationCommandIDs::copy:
-		break;
-	case StandardApplicationCommandIDs::paste:
-		break;
-	case StandardApplicationCommandIDs::selectAll:
-		break;
-	case StandardApplicationCommandIDs::deselectAll:
-		break;
-
-    case CommandIDs::segmentedConnectors:
-    	break;
-    case CommandIDs::zoomIn:
-    	break;
-    case CommandIDs::zoomOut:
-    	break;
-    case CommandIDs::zoomNormal:
-    	break;
-    case CommandIDs::reverseDirection:
-    	break;
-    case CommandIDs::showLabels:
-    	break;
-
-    case CommandIDs::insertMass:
-    	break;
-    case CommandIDs::insertGround:
-    	break;
-    case CommandIDs::insertResonator:
-    	break;
-    case CommandIDs::insertPort:
-    	break;
-
-    case CommandIDs::insertLink:
-    	break;
-    case CommandIDs::insertTouch:
-    	break;
-    case CommandIDs::insertPluck:
-    	break;
-
-    case CommandIDs::insertAudioOutput:
-    	break;
-    case CommandIDs::insertWaveguide:
-    	break;
-    case CommandIDs::insertTermination:
-    	break;
-
-    case CommandIDs::generateFaust:
-    	appController.generateFaust();
-    	break;
-    case CommandIDs::generateExternal:
-    	appController.generateExternal();
-    	break;
-
-    case CommandIDs::showOutputConsole:
-    	appController.debugWindowToggle();
-//    	mainWindow.toFront(true);
-    	break;
-    case CommandIDs::clearOutputConsole:
-    	appController.debugWindowClear();
-    	break;
-
-	default:
-        return false;
-    };
-
-    return true;
+	return appController.menuItemWasClicked(info.commandID);
 }
 
 

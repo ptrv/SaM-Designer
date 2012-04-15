@@ -39,10 +39,7 @@ MainAppWindow::MainAppWindow()
 
     debugWindow = new DebugWindow();
     appController = new AppController(*this, *debugWindow);
-    mdlController = new MDLController();
-    objController = new ObjController();
-    ContentComp* contentComp = new ContentComp(*this, *appController.get(),
-    		*mdlController.get(), *objController.get());
+    ContentComp* contentComp = new ContentComp(*this, *appController.get());
 
     commandManager.registerAllCommandsForTarget (contentComp);
     commandManager.registerAllCommandsForTarget (JUCEApplication::getInstance());

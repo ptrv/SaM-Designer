@@ -26,6 +26,8 @@
 #ifndef __MDLCONTROLLER_H_8A72BC7D__
 #define __MDLCONTROLLER_H_8A72BC7D__
 
+class MDLFile;
+class OutputCmd;
 
 class MDLController {
 public:
@@ -38,7 +40,13 @@ public:
 	void saveAs();
 	void close();
 
+	void generateFaust();
+	void generateExternal();
+
+
 private:
+	ScopedPointer<MDLFile> currentMdl;
+	ScopedPointer<OutputCmd> outCmd;
 };
 
 

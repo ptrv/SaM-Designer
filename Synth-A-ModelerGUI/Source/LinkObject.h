@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    LinkObject.h
+    Created: 16 Apr 2012 1:23:34am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,18 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
+#ifndef __LINKOBJECT_H_9C798D41__
+#define __LINKOBJECT_H_9C798D41__
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+#include "BaseObject.h"
 
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+class LinkObject : BaseObject {
+public:
+	LinkObject();
+	virtual ~LinkObject();
+
+private:
+};
 
 
-
-#endif  // __COMMONHEADERS_H_CA475C67__
+#endif  // __LINKOBJECT_H_9C798D41__

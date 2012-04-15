@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    MassObject.h
+    Created: 16 Apr 2012 1:23:24am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,18 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
+#ifndef __MASSOBJECT_H_64984A3B__
+#define __MASSOBJECT_H_64984A3B__
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+#include "BaseObject.h"
 
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+class MassObject : public BaseObject {
+public:
+	MassObject();
+	~MassObject();
+
+private:
+};
 
 
-
-#endif  // __COMMONHEADERS_H_CA475C67__
+#endif  // __MASSOBJECT_H_64984A3B__

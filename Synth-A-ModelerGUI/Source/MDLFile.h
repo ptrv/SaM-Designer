@@ -27,7 +27,16 @@
 #define __MDLFILE_H_70428F9D__
 
 
+class MDLFile {
+	friend class MDLParser;
+public:
+	MDLFile();
+	~MDLFile();
 
+	bool openMDL(const char* mdlPath);
+
+private:
+};
 
 
 #endif  // __MDLFILE_H_70428F9D__
