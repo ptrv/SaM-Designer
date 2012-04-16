@@ -29,6 +29,7 @@
             file="BinaryData/synthamodeler_icon.png"/>
     </GROUP>
     <GROUP id="{335554E1-26F8-DC02-DBE7-A8EECB870A14}" name="Testsuite">
+      <FILE id="LIATDU" name="MDLFile_test.h" compile="0" resource="0" file="Testsuite/MDLFile_test.h"/>
       <FILE id="f4Xh6K" name="TestUtils.h" compile="0" resource="0" file="Testsuite/TestUtils.h"/>
       <FILE id="XMa5Xv" name="OutputCmd_test.h" compile="0" resource="0"
             file="Testsuite/OutputCmd_test.h"/>

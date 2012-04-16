@@ -3,7 +3,7 @@
 
     OutputCmd_test.h
     Created: 11 Apr 2012 11:55:25pm
-    Author:  peter
+    Author:  Peter Vasil
 
   ==============================================================================
 
@@ -60,8 +60,6 @@ public:
 		outFile.deleteFile();
 
 	}
-
-private:
 };
 
 static OutputCmdTest outputCmdTest;

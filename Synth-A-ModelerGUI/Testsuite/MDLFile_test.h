@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    MDLFile.cpp
-    Created: 11 Apr 2012 3:18:35pm
+    MDLFile_test.h
+    Created: 16 Apr 2012 2:00:10am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,37 +23,26 @@
 
 */
 
-#include "MDLFile.h"
-#include "MDLParser.h"
+#ifndef __MDLFILE_TEST_H_234EF909__
+#define __MDLFILE_TEST_H_234EF909__
 
-MDLFile::MDLFile()
+#include "TestUtils.h"
+class MDLFileTest : public UnitTest
 {
+public:
+	MDLFileTest() : UnitTest("MDLFileTest") {}
 
-}
-
-MDLFile::~MDLFile()
-{
-
-}
-
-bool MDLFile::openMDL(const char* mdlPath)
-{
-	MDLParser pa(*this, mdlPath);
-	if(pa.parseMDL())
+	void runTest()
 	{
-		// success
-		return true;
+		String mdlPath = String(TESTSUITE_DATA_PATH) + "examplelinks.mdl";
+		MDLFile mdlFile;
+
+		beginTest("openMDL");
+		bool loadOk = mdlFile.openMDL(mdlPath.toUTF8().getAddress());
+		expect(loadOk, "Error opening MDL file");
 	}
-	else
-	{
-		// fail
-		return false;
-	}
-}
+};
 
-//==============================================================================
-#if UNIT_TESTS
+static MDLFileTest mdlFileTest;
 
-#include "../Testsuite/MDLFile_test.h"
-
-#endif
+#endif  // __MDLFILE_TEST_H_234EF909__

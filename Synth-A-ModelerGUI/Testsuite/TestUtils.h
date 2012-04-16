@@ -26,6 +26,7 @@
 #ifndef __TESTUTILS_H_D0F1300A__
 #define __TESTUTILS_H_D0F1300A__
 
+#include "../JuceLibraryCode/JuceHeader.h"
 
 #if JUCE_MAC
 static const char* TESTSUITE_DATA_PATH = "../../../../Testsuite/data/";
