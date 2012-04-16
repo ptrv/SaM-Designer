@@ -23,10 +23,10 @@
 
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "Application.h"
 #if UNIT_TESTS
-#include "../Testsuite/TestRunner.h"
+#include "../../Testsuite/TestRunner.h"
 #endif
 
 

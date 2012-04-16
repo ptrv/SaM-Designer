@@ -26,7 +26,7 @@
 #ifndef __APPCONTROLLER_H_B0B552E9__
 #define __APPCONTROLLER_H_B0B552E9__
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLController.h"
 #include "ObjController.h"
 

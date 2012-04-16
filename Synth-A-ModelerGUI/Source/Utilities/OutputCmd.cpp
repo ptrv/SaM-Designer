@@ -126,6 +126,6 @@ const String OutputCmd::generateFaustCode(const String& inPath, const String& ou
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../Testsuite/OutputCmd_test.h"
+#include "../../Testsuite/OutputCmd_test.h"
 
 #endif

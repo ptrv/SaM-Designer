@@ -23,7 +23,7 @@
 
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "Alerts.h"
 
 void Alerts::missingFaust()

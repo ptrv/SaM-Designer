@@ -54,6 +54,6 @@ bool MDLFile::openMDL(const char* mdlPath)
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../Testsuite/MDLFile_test.h"
+#include "../../Testsuite/MDLFile_test.h"
 
 #endif

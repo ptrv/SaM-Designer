@@ -23,7 +23,7 @@
 #define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Application/MainWindow.h"
 #include "ObjComp.h"
 //[/Headers]

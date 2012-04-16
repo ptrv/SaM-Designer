@@ -28,7 +28,7 @@
 #ifndef __MAINWINDOW_H_3C77CBD5__
 #define __MAINWINDOW_H_3C77CBD5__
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "DebugWindow.h"
 #include "../Controller/AppController.h"
 

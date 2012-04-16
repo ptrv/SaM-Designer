@@ -26,7 +26,7 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Controller/AppController.h"
 
 class ObjComp : public Component {

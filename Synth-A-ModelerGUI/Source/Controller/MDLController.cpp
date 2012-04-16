@@ -23,7 +23,7 @@
 
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLController.h"
 #include "../Models/MDLFile.h"
 #include "../Utilities/OutputCmd.h"
