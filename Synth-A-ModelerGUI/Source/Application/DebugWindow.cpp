@@ -24,7 +24,7 @@
 */
 
 #include "DebugWindow.h"
-#include "TextConsole.h"
+#include "../View/TextConsole.h"
 
 DebugWindow::DebugWindow()
 :

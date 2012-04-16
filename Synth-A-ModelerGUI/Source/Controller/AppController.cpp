@@ -25,9 +25,9 @@
 
 #include "AppController.h"
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MainWindow.h"
-#include "DebugWindow.h"
-#include "CommonHeaders.h"
+#include "../Application//MainWindow.h"
+#include "../Application/DebugWindow.h"
+#include "../Application/CommonHeaders.h"
 
 AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 : maw(maw_), dw(dw_)

@@ -20,7 +20,7 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "CommonHeaders.h"
+#include "../Application/CommonHeaders.h"
 //[/Headers]
 
 #include "ContentComp.h"

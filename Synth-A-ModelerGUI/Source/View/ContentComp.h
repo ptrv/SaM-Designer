@@ -24,7 +24,7 @@
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "MainWindow.h"
+#include "../Application/MainWindow.h"
 #include "ObjComp.h"
 //[/Headers]
 

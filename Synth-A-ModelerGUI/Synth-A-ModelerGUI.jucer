@@ -36,46 +36,56 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
-      <FILE id="CqGXQV" name="LinkObject.cpp" compile="1" resource="0" file="Source/LinkObject.cpp"/>
-      <FILE id="FjtR16" name="LinkObject.h" compile="0" resource="0" file="Source/LinkObject.h"/>
-      <FILE id="Xc3q23" name="MassObject.cpp" compile="1" resource="0" file="Source/MassObject.cpp"/>
-      <FILE id="klF2YS" name="MassObject.h" compile="0" resource="0" file="Source/MassObject.h"/>
-      <FILE id="KBUVM3" name="BaseObject.h" compile="0" resource="0" file="Source/BaseObject.h"/>
-      <FILE id="tiwUS6" name="MDLParser.cpp" compile="1" resource="0" file="Source/MDLParser.cpp"/>
-      <FILE id="C2dsFA" name="MDLParser.h" compile="0" resource="0" file="Source/MDLParser.h"/>
-      <FILE id="NElun3" name="ObjController.cpp" compile="1" resource="0"
-            file="Source/ObjController.cpp"/>
-      <FILE id="QIUP9X" name="ObjController.h" compile="0" resource="0" file="Source/ObjController.h"/>
-      <FILE id="FIWzbM" name="MDLController.cpp" compile="1" resource="0"
-            file="Source/MDLController.cpp"/>
-      <FILE id="V9BC3e" name="MDLController.h" compile="0" resource="0" file="Source/MDLController.h"/>
-      <FILE id="vWuvpY" name="Alerts.cpp" compile="1" resource="0" file="Source/Alerts.cpp"/>
-      <FILE id="vgwGHf" name="Alerts.h" compile="0" resource="0" file="Source/Alerts.h"/>
-      <FILE id="X6h80E" name="AppController.cpp" compile="1" resource="0"
-            file="Source/AppController.cpp"/>
-      <FILE id="GOF51R" name="AppController.h" compile="0" resource="0" file="Source/AppController.h"/>
-      <FILE id="vUuImn" name="ObjComp.cpp" compile="1" resource="0" file="Source/ObjComp.cpp"/>
-      <FILE id="lsdGlZ" name="ObjComp.h" compile="0" resource="0" file="Source/ObjComp.h"/>
-      <FILE id="pJvZiu" name="MDLFile.cpp" compile="1" resource="0" file="Source/MDLFile.cpp"/>
-      <FILE id="ZWoVGF" name="MDLFile.h" compile="0" resource="0" file="Source/MDLFile.h"/>
-      <FILE id="X8xXqB" name="DebugWindow.cpp" compile="1" resource="0" file="Source/DebugWindow.cpp"/>
-      <FILE id="tgS9IL" name="DebugWindow.h" compile="0" resource="0" file="Source/DebugWindow.h"/>
-      <FILE id="IXdJ52" name="OutputCmd.cpp" compile="1" resource="0" file="Source/OutputCmd.cpp"/>
-      <FILE id="QppwLO" name="OutputCmd.h" compile="0" resource="0" file="Source/OutputCmd.h"/>
-      <FILE id="jWEP2M" name="Application.cpp" compile="1" resource="0" file="Source/Application.cpp"/>
-      <FILE id="avA0th" name="Application.h" compile="0" resource="0" file="Source/Application.h"/>
-      <FILE id="d2Z4xB" name="TextConsole.h" compile="0" resource="0" file="Source/TextConsole.h"/>
-      <FILE id="TvSAqE" name="CommandIDs.h" compile="0" resource="0" file="Source/CommandIDs.h"/>
-      <FILE id="sdQxAd" name="CommonHeaders.h" compile="0" resource="0" file="Source/CommonHeaders.h"/>
-      <FILE id="Pa81ro" name="ContentComp.cpp" compile="1" resource="0" file="Source/ContentComp.cpp"/>
-      <FILE id="oZMDvL" name="ContentComp.h" compile="0" resource="0" file="Source/ContentComp.h"/>
-      <FILE id="wneb90" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="GfQd67" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
-      <FILE id="sx0Rgh" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
-      <FILE id="lA59eL" name="StoredSettings.cpp" compile="1" resource="0"
-            file="Source/StoredSettings.cpp"/>
-      <FILE id="Yyvnt5" name="StoredSettings.h" compile="0" resource="0"
-            file="Source/StoredSettings.h"/>
+      <GROUP id="{902B3BB9-D93B-9CA8-A833-9D80066DDF9F}" name="Application">
+        <FILE id="iU3jsz" name="Application.cpp" compile="1" resource="0" file="Source/Application/Application.cpp"/>
+        <FILE id="XI6BZB" name="Application.h" compile="0" resource="0" file="Source/Application/Application.h"/>
+        <FILE id="Qd23p8" name="CommandIDs.h" compile="0" resource="0" file="Source/Application/CommandIDs.h"/>
+        <FILE id="Joemsc" name="CommonHeaders.h" compile="0" resource="0" file="Source/Application/CommonHeaders.h"/>
+        <FILE id="MUZfxA" name="DebugWindow.cpp" compile="1" resource="0" file="Source/Application/DebugWindow.cpp"/>
+        <FILE id="Osn7oX" name="DebugWindow.h" compile="0" resource="0" file="Source/Application/DebugWindow.h"/>
+        <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
+        <FILE id="H2O5xO" name="MainWindow.cpp" compile="1" resource="0" file="Source/Application/MainWindow.cpp"/>
+        <FILE id="zCXtM2" name="MainWindow.h" compile="0" resource="0" file="Source/Application/MainWindow.h"/>
+      </GROUP>
+      <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="alRTki" name="Alerts.cpp" compile="1" resource="0" file="Source/Utilities/Alerts.cpp"/>
+        <FILE id="VydeMF" name="Alerts.h" compile="0" resource="0" file="Source/Utilities/Alerts.h"/>
+        <FILE id="ieHEvG" name="MDLParser.cpp" compile="1" resource="0" file="Source/Utilities/MDLParser.cpp"/>
+        <FILE id="AXKDWX" name="MDLParser.h" compile="0" resource="0" file="Source/Utilities/MDLParser.h"/>
+        <FILE id="eMCYh8" name="OutputCmd.cpp" compile="1" resource="0" file="Source/Utilities/OutputCmd.cpp"/>
+        <FILE id="cfBrJb" name="OutputCmd.h" compile="0" resource="0" file="Source/Utilities/OutputCmd.h"/>
+        <FILE id="TuCUfD" name="StoredSettings.cpp" compile="1" resource="0"
+              file="Source/Utilities/StoredSettings.cpp"/>
+        <FILE id="xs733f" name="StoredSettings.h" compile="0" resource="0"
+              file="Source/Utilities/StoredSettings.h"/>
+      </GROUP>
+      <GROUP id="{3076B932-78A9-9CF5-9D15-340DC0A8A1FF}" name="Controller">
+        <FILE id="w1WXqJ" name="AppController.cpp" compile="1" resource="0"
+              file="Source/Controller/AppController.cpp"/>
+        <FILE id="rtmHfN" name="AppController.h" compile="0" resource="0" file="Source/Controller/AppController.h"/>
+        <FILE id="M8Afyp" name="MDLController.cpp" compile="1" resource="0"
+              file="Source/Controller/MDLController.cpp"/>
+        <FILE id="K00AiB" name="MDLController.h" compile="0" resource="0" file="Source/Controller/MDLController.h"/>
+        <FILE id="YVkLhR" name="ObjController.cpp" compile="1" resource="0"
+              file="Source/Controller/ObjController.cpp"/>
+        <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
+      </GROUP>
+      <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
+        <FILE id="BMVnZx" name="BaseObject.h" compile="0" resource="0" file="Source/Models/BaseObject.h"/>
+        <FILE id="CCraVa" name="LinkObject.cpp" compile="1" resource="0" file="Source/Models/LinkObject.cpp"/>
+        <FILE id="SIXF4i" name="LinkObject.h" compile="0" resource="0" file="Source/Models/LinkObject.h"/>
+        <FILE id="uphAV7" name="MassObject.cpp" compile="1" resource="0" file="Source/Models/MassObject.cpp"/>
+        <FILE id="LcJLEH" name="MassObject.h" compile="0" resource="0" file="Source/Models/MassObject.h"/>
+        <FILE id="geNURR" name="MDLFile.cpp" compile="1" resource="0" file="Source/Models/MDLFile.cpp"/>
+        <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
+      </GROUP>
+      <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="b4aWii" name="ContentComp.cpp" compile="1" resource="0" file="Source/View/ContentComp.cpp"/>
+        <FILE id="H2ej5x" name="ContentComp.h" compile="0" resource="0" file="Source/View/ContentComp.h"/>
+        <FILE id="ZTJE9i" name="ObjComp.cpp" compile="1" resource="0" file="Source/View/ObjComp.cpp"/>
+        <FILE id="mY7Tor" name="ObjComp.h" compile="0" resource="0" file="Source/View/ObjComp.h"/>
+        <FILE id="rGYoRN" name="TextConsole.h" compile="0" resource="0" file="Source/View/TextConsole.h"/>
+      </GROUP>
     </GROUP>
   </MAINGROUP>
   <MODULES>

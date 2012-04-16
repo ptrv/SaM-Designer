@@ -27,7 +27,7 @@
 
 #include "MainWindow.h"
 #include "CommonHeaders.h"
-#include "ContentComp.h"
+#include "../View/ContentComp.h"
 
 //==============================================================================
 MainAppWindow::MainAppWindow()

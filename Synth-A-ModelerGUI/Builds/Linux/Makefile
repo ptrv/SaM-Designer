@@ -43,22 +43,22 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
-  $(OBJDIR)/LinkObject_1431dce2.o \
-  $(OBJDIR)/MassObject_4f95435c.o \
-  $(OBJDIR)/MDLParser_942e4995.o \
-  $(OBJDIR)/ObjController_183891d4.o \
-  $(OBJDIR)/MDLController_80166212.o \
-  $(OBJDIR)/Alerts_9cdb9ea0.o \
-  $(OBJDIR)/AppController_200d0d7e.o \
-  $(OBJDIR)/ObjComp_5c080a07.o \
-  $(OBJDIR)/MDLFile_298ca8b2.o \
-  $(OBJDIR)/DebugWindow_f3bce504.o \
-  $(OBJDIR)/OutputCmd_3df0755a.o \
-  $(OBJDIR)/Application_d2fc77b1.o \
-  $(OBJDIR)/ContentComp_8a043989.o \
-  $(OBJDIR)/Main_90ebc5c2.o \
-  $(OBJDIR)/MainWindow_499ac812.o \
-  $(OBJDIR)/StoredSettings_dfdf196f.o \
+  $(OBJDIR)/Application_7b202ed2.o \
+  $(OBJDIR)/DebugWindow_9be09c25.o \
+  $(OBJDIR)/Main_70df61c1.o \
+  $(OBJDIR)/MainWindow_3e8328d1.o \
+  $(OBJDIR)/Alerts_379eb1e5.o \
+  $(OBJDIR)/MDLParser_674db430.o \
+  $(OBJDIR)/OutputCmd_110fdff5.o \
+  $(OBJDIR)/StoredSettings_125117b4.o \
+  $(OBJDIR)/AppController_eaa3b8d3.o \
+  $(OBJDIR)/MDLController_4aad0d67.o \
+  $(OBJDIR)/ObjController_e2cf3d29.o \
+  $(OBJDIR)/LinkObject_3aeff31f.o \
+  $(OBJDIR)/MassObject_76535999.o \
+  $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/ContentComp_99fa8a27.o \
+  $(OBJDIR)/ObjComp_838b59a5.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
   $(OBJDIR)/juce_audio_basics_5460bccb.o \
   $(OBJDIR)/juce_audio_devices_44d00ac9.o \
@@ -87,84 +87,84 @@ clean:
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
-$(OBJDIR)/LinkObject_1431dce2.o: ../../Source/LinkObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LinkObject.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/MassObject_4f95435c.o: ../../Source/MassObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MassObject.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/MDLParser_942e4995.o: ../../Source/MDLParser.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MDLParser.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/ObjController_183891d4.o: ../../Source/ObjController.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ObjController.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/MDLController_80166212.o: ../../Source/MDLController.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MDLController.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/Alerts_9cdb9ea0.o: ../../Source/Alerts.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling Alerts.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/AppController_200d0d7e.o: ../../Source/AppController.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling AppController.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/ObjComp_5c080a07.o: ../../Source/ObjComp.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ObjComp.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/MDLFile_298ca8b2.o: ../../Source/MDLFile.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MDLFile.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/DebugWindow_f3bce504.o: ../../Source/DebugWindow.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling DebugWindow.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/OutputCmd_3df0755a.o: ../../Source/OutputCmd.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling OutputCmd.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/Application_d2fc77b1.o: ../../Source/Application.cpp
+$(OBJDIR)/Application_7b202ed2.o: ../../Source/Application/Application.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Application.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/ContentComp_8a043989.o: ../../Source/ContentComp.cpp
+$(OBJDIR)/DebugWindow_9be09c25.o: ../../Source/Application/DebugWindow.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ContentComp.cpp"
+	@echo "Compiling DebugWindow.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
+$(OBJDIR)/Main_70df61c1.o: ../../Source/Application/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/MainWindow_499ac812.o: ../../Source/MainWindow.cpp
+$(OBJDIR)/MainWindow_3e8328d1.o: ../../Source/Application/MainWindow.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MainWindow.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/StoredSettings_dfdf196f.o: ../../Source/StoredSettings.cpp
+$(OBJDIR)/Alerts_379eb1e5.o: ../../Source/Utilities/Alerts.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling Alerts.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLParser_674db430.o: ../../Source/Utilities/MDLParser.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLParser.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/OutputCmd_110fdff5.o: ../../Source/Utilities/OutputCmd.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling OutputCmd.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/StoredSettings_125117b4.o: ../../Source/Utilities/StoredSettings.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling StoredSettings.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/AppController_eaa3b8d3.o: ../../Source/Controller/AppController.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling AppController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLController_4aad0d67.o: ../../Source/Controller/MDLController.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/LinkObject_3aeff31f.o: ../../Source/Models/LinkObject.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling LinkObject.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MassObject_76535999.o: ../../Source/Models/MassObject.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MassObject.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ContentComp_99fa8a27.o: ../../Source/View/ContentComp.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ContentComp.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ObjComp_838b59a5.o: ../../Source/View/ObjComp.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjComp.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

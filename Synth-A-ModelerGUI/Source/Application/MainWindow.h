@@ -30,7 +30,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "DebugWindow.h"
-#include "AppController.h"
+#include "../Controller/AppController.h"
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow

@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-    CommonHeaders.h
-
-    Created: 22 Jan 2012 10:50:41pm
+    ObjComp.h
+    Created: 11 Apr 2012 5:10:20pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -24,15 +23,23 @@
 
 */
 
-#ifndef __COMMONHEADERS_H_CA475C67__
-#define __COMMONHEADERS_H_CA475C67__
+#ifndef __OBJCOMP_H_F3604232__
+#define __OBJCOMP_H_F3604232__
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "../Controller/AppController.h"
 
-#include "StoredSettings.h"
-#include "CommandIDs.h"
-#include "Alerts.h"
+class ObjComp : public Component {
+public:
+	ObjComp(AppController& appController_);
+	~ObjComp();
+
+	void paint(Graphics& g);
+//	void resized();
+
+private:
+	AppController& appController;
+};
 
 
-
-#endif  // __COMMONHEADERS_H_CA475C67__
+#endif  // __OBJCOMP_H_F3604232__

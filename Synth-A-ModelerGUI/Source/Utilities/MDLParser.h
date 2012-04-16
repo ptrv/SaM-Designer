@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    MDLFile.cpp
-    Created: 11 Apr 2012 3:18:35pm
+    MDLParser.h
+    Created: 16 Apr 2012 1:04:09am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,37 +23,22 @@
 
 */
 
-#include "MDLFile.h"
-#include "MDLParser.h"
+#ifndef __MDLPARSER_H_DC928BC0__
+#define __MDLPARSER_H_DC928BC0__
 
-MDLFile::MDLFile()
-{
 
-}
+#include "../Models/MDLFile.h"
+#include <string>
 
-MDLFile::~MDLFile()
-{
+class MDLParser {
+public:
+	MDLParser(MDLFile& mdlFile_, const char* mdlPath_);
+	bool parseMDL();
+private:
+	MDLFile& mdlFile;
+	std::string mdlPath;
+};
 
-}
 
-bool MDLFile::openMDL(const char* mdlPath)
-{
-	MDLParser pa(*this, mdlPath);
-	if(pa.parseMDL())
-	{
-		// success
-		return true;
-	}
-	else
-	{
-		// fail
-		return false;
-	}
-}
 
-//==============================================================================
-#if UNIT_TESTS
-
-#include "../Testsuite/MDLFile_test.h"
-
-#endif
+#endif  // __MDLPARSER_H_DC928BC0__

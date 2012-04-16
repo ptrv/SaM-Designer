@@ -24,7 +24,7 @@
 */
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "CommonHeaders.h"
+#include "../Application/CommonHeaders.h"
 
 //==============================================================================
 StoredSettings::StoredSettings()
