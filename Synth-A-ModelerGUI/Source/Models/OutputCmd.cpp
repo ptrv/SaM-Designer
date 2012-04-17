@@ -23,9 +23,9 @@
 
 */
 
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "OutputCmd.h"
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "StoredSettings.h"
+#include "../Utilities/StoredSettings.h"
 
 OutputCmd::OutputCmd()
 {

@@ -23,6 +23,7 @@
 
 */
 
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLParser.h"
 
 MDLParser::MDLParser(MDLFile& mdlFile_, const char* mdlPath_)
@@ -33,5 +34,11 @@ MDLParser::MDLParser(MDLFile& mdlFile_, const char* mdlPath_)
 
 bool MDLParser::parseMDL()
 {
+	File in(mdlPath);
+
+	String mdlContent = in.loadFileAsString();
+
+
+
 	return true;
 }

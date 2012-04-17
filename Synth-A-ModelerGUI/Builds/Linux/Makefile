@@ -49,11 +49,11 @@ OBJECTS := \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Alerts_379eb1e5.o \
   $(OBJDIR)/MDLParser_674db430.o \
-  $(OBJDIR)/OutputCmd_110fdff5.o \
   $(OBJDIR)/StoredSettings_125117b4.o \
   $(OBJDIR)/AppController_eaa3b8d3.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
+  $(OBJDIR)/OutputCmd_1e28237d.o \
   $(OBJDIR)/LinkObject_3aeff31f.o \
   $(OBJDIR)/MassObject_76535999.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
@@ -117,11 +117,6 @@ $(OBJDIR)/MDLParser_674db430.o: ../../Source/Utilities/MDLParser.cpp
 	@echo "Compiling MDLParser.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/OutputCmd_110fdff5.o: ../../Source/Utilities/OutputCmd.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling OutputCmd.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/StoredSettings_125117b4.o: ../../Source/Utilities/StoredSettings.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling StoredSettings.cpp"
@@ -140,6 +135,11 @@ $(OBJDIR)/MDLController_4aad0d67.o: ../../Source/Controller/MDLController.cpp
 $(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ObjController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/OutputCmd_1e28237d.o: ../../Source/Models/OutputCmd.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling OutputCmd.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/LinkObject_3aeff31f.o: ../../Source/Models/LinkObject.cpp

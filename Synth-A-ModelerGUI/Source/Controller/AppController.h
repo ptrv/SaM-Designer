@@ -40,9 +40,10 @@ public:
 
 	bool menuItemWasClicked(CommandID menuId);
 
+private:
 	void debugWindowToggle();
 	void debugWindowClear();
-private:
+
 	MainAppWindow& maw;
 	DebugWindow& dw;
 

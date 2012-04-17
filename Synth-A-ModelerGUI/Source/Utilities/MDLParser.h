@@ -27,8 +27,8 @@
 #define __MDLPARSER_H_DC928BC0__
 
 
+#include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Models/MDLFile.h"
-#include <string>
 
 class MDLParser {
 public:
@@ -36,7 +36,7 @@ public:
 	bool parseMDL();
 private:
 	MDLFile& mdlFile;
-	std::string mdlPath;
+	String mdlPath;
 };
 
 

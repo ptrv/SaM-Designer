@@ -26,7 +26,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLController.h"
 #include "../Models/MDLFile.h"
-#include "../Utilities/OutputCmd.h"
+#include "../Models/OutputCmd.h"
 #include "../Application/CommonHeaders.h"
 
 MDLController::MDLController()
