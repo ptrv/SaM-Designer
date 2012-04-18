@@ -36,16 +36,17 @@ public:
 	void runTest()
 	{
 		String mdlPath = String(TESTSUITE_DATA_PATH) + "examplelinks.mdl";
-		MDLFile mdlFile;
+		ScopedPointer<MDLFile> mdlFile;
+		mdlFile = new MDLFile();
 
 		beginTest("openMDL");
-		bool loadOk = mdlFile.openMDL(mdlPath.toUTF8().getAddress());
+		bool loadOk = mdlFile->openMDL(mdlPath.toUTF8().getAddress());
 		expect(loadOk, "Error opening MDL file");
 
 		beginTest("getMasses");
-		const Array<Mass*>& m = mdlFile.getMasses();
+		const Array<Mass*>& m = mdlFile->getMasses();
 		expect(m.size() == 4, "have "+String(m.size())+" masses");
-		expect(mdlFile.getNumberOfObjectsByType(MassType) == 3, "");
+		expect(mdlFile->getNumberOfObjectsByType(MassType) == 3, "");
 		// mass 1
 		expectEquals(m[0]->getType(), MassType);
 		Array<float> params = m[0]->getParameters();
@@ -78,7 +79,7 @@ public:
 
 		beginTest("getLinks");
 
-		const Array<LinkObject*>& ls = mdlFile.getLinks();
+		const Array<LinkObject*>& ls = mdlFile->getLinks();
 		expect(ls.size() == 3, "have "+String(ls.size())+" links");
 
 		// link 1
