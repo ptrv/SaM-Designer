@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    OutputCmd.h
-    Created: 11 Apr 2012 3:17:58pm
-    Author:  Peter Vasil
+    Types.h
+    Created: 18 Apr 2012 12:13:29am
+    Author:  peter
 
   ==============================================================================
 
@@ -23,26 +23,14 @@
 
 */
 
-#ifndef __OUTPUTCMD_H_1206E4C5__
-#define __OUTPUTCMD_H_1206E4C5__
-
-#include "../../JuceLibraryCode/JuceHeader.h"
-
-class OutputCmd
-{
-public:
-	OutputCmd();
-	~OutputCmd();
-
-	bool isSynthAModelerCmdAvailable();
-	bool isCmdAvailable(const String& cmdStr);
-	bool isPerlAvailable();
-	bool isFaustAvailable();
-	bool isFaust2puredataAvailable();
-	bool isFaust2supercolliderAvailable();
-	const String generateFaustCode(const String& inPath, const String& outPath);
-private:
-};
+#ifndef __TYPES_H_4907E39C__
+#define __TYPES_H_4907E39C__
 
 
-#endif  // __OUTPUTCMD_H_1206E4C5__
+#include "../Models/MassObject.h"
+#include "../Models/LinkObject.h"
+#include "../Models/LabelObject.h"
+#include "../Models/AudioObject.h"
+
+
+#endif  // __TYPES_H_4907E39C__

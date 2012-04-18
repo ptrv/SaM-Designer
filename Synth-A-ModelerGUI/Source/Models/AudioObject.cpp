@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    OutputCmd.h
-    Created: 11 Apr 2012 3:17:58pm
+    AudioObject.cpp
+    Created: 18 Apr 2012 12:12:39am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,26 +23,15 @@
 
 */
 
-#ifndef __OUTPUTCMD_H_1206E4C5__
-#define __OUTPUTCMD_H_1206E4C5__
+#include "AudioObject.h"
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
-class OutputCmd
+AudioObject::AudioObject(ObjectType objType_)
+: BaseObject(objType_)
 {
-public:
-	OutputCmd();
-	~OutputCmd();
 
-	bool isSynthAModelerCmdAvailable();
-	bool isCmdAvailable(const String& cmdStr);
-	bool isPerlAvailable();
-	bool isFaustAvailable();
-	bool isFaust2puredataAvailable();
-	bool isFaust2supercolliderAvailable();
-	const String generateFaustCode(const String& inPath, const String& outPath);
-private:
-};
+}
 
+AudioObject::~AudioObject()
+{
 
-#endif  // __OUTPUTCMD_H_1206E4C5__
+}

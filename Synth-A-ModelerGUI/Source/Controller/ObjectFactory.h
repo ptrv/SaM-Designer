@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    OutputCmd.h
-    Created: 11 Apr 2012 3:17:58pm
+    ObjectFactory.h
+    Created: 17 Apr 2012 11:55:19pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,26 +23,29 @@
 
 */
 
-#ifndef __OUTPUTCMD_H_1206E4C5__
-#define __OUTPUTCMD_H_1206E4C5__
+#ifndef __ONJECTFACTORY_H_E3D01814__
+#define __ONJECTFACTORY_H_E3D01814__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Models/Types.h"
 
-class OutputCmd
+class ObjectFactory
 {
 public:
-	OutputCmd();
-	~OutputCmd();
 
-	bool isSynthAModelerCmdAvailable();
-	bool isCmdAvailable(const String& cmdStr);
-	bool isPerlAvailable();
-	bool isFaustAvailable();
-	bool isFaust2puredataAvailable();
-	bool isFaust2supercolliderAvailable();
-	const String generateFaustCode(const String& inPath, const String& outPath);
+	static Mass* createNewMass();
+	static Ground* createNewGround();
+	static Resonator* createNewResonator();
+	static Port* createNewPort();
+	static Link* createNewLink();
+	static Pluck* createNewPluck();
+	static Touch* createNewTouch();
+	static LabelObject* createNewLabelObject();
+	static AudioObject* createNewAudioObject();
+
 private:
+	ObjectFactory(){}
+	~ObjectFactory(){}
 };
 
 
-#endif  // __OUTPUTCMD_H_1206E4C5__
+#endif  // __ONJECTFACTORY_H_E3D01814__

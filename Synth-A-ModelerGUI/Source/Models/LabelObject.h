@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    OutputCmd.h
-    Created: 11 Apr 2012 3:17:58pm
+    LabelObject.h
+    Created: 18 Apr 2012 12:09:08am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,26 +23,19 @@
 
 */
 
-#ifndef __OUTPUTCMD_H_1206E4C5__
-#define __OUTPUTCMD_H_1206E4C5__
+#ifndef __LABELOBJECT_H_CBE5136__
+#define __LABELOBJECT_H_CBE5136__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "BaseObject.h"
 
-class OutputCmd
+class LabelObject : public BaseObject
 {
 public:
-	OutputCmd();
-	~OutputCmd();
+	LabelObject(ObjectType objType_= LabelType);
+	~LabelObject();
 
-	bool isSynthAModelerCmdAvailable();
-	bool isCmdAvailable(const String& cmdStr);
-	bool isPerlAvailable();
-	bool isFaustAvailable();
-	bool isFaust2puredataAvailable();
-	bool isFaust2supercolliderAvailable();
-	const String generateFaustCode(const String& inPath, const String& outPath);
 private:
 };
 
 
-#endif  // __OUTPUTCMD_H_1206E4C5__
+#endif  // __LABELOBJECT_H_CBE5136__

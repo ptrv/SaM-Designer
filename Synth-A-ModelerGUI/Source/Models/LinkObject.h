@@ -28,13 +28,22 @@
 
 #include "BaseObject.h"
 
-class LinkObject : BaseObject {
+class LinkObject : public BaseObject
+{
 public:
-	LinkObject();
+	LinkObject(ObjectType objType_= LinkType);
 	virtual ~LinkObject();
 
 private:
+	Array<float> parameters;
+	Array<String> labels;
+	String startingVertex;
+	String endVertex;
+
 };
 
+typedef LinkObject Link;
+typedef LinkObject Touch;
+typedef LinkObject Pluck;
 
 #endif  // __LINKOBJECT_H_9C798D41__

@@ -29,7 +29,8 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-class TextConsole : public TextEditor {
+class TextConsole : public TextEditor
+{
 public:
 	TextConsole() : TextEditor("Console")
 	{

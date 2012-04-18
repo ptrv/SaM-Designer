@@ -27,15 +27,30 @@
 #define __MDLFILE_H_70428F9D__
 
 
-class MDLFile {
-	friend class MDLParser;
+#include "../Models/Types.h"
+
+class MDLFile
+{
+//	friend class MDLParser;
 public:
 	MDLFile();
 	~MDLFile();
 
 	bool openMDL(const char* mdlPath);
+	const Array<MassObject*>& getMasses()const { return masses; }
+	const int getNumberOfObjectsByType(ObjectType objType);
+
+	void addMassObject(MassObject* obj);
+	void addLinkObject(LinkObject* obj);
+	void addLabelObject(LabelObject* obj);
+	void addAudioObject(AudioObject* obj);
 
 private:
+	HashMap<String,BaseObject*> allObjects;
+	Array<MassObject*> masses;
+	Array<LinkObject*> links;
+	Array<LabelObject*> labels;
+	Array<AudioObject*> audioObjects;
 };
 
 

@@ -29,7 +29,8 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Controller/AppController.h"
 
-class ObjComp : public Component {
+class ObjComp : public Component
+{
 public:
 	ObjComp(AppController& appController_);
 	~ObjComp();

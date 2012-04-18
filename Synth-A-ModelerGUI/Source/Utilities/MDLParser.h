@@ -30,7 +30,8 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Models/MDLFile.h"
 
-class MDLParser {
+class MDLParser
+{
 public:
 	MDLParser(MDLFile& mdlFile_, const char* mdlPath_);
 	bool parseMDL();

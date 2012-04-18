@@ -26,11 +26,38 @@
 #ifndef __BASEOBJECT_H_F4381D18__
 #define __BASEOBJECT_H_F4381D18__
 
+#include "../../JuceLibraryCode/JuceHeader.h"
 
-class BaseObject {
+enum ObjectType
+{
+	MassType,
+	GroundType,
+	ResonatorType,
+	PortType,
+	LinkType,
+	TouchType,
+	PluckType,
+	LabelType,
+	AudioObjectType
+};
+
+class BaseObject
+{
 public:
-	BaseObject(){}
+	BaseObject(ObjectType objType_)
+	: objType(objType_), name(String::empty){}
 	virtual ~BaseObject(){}
+
+	const String& getAttributeNames();
+
+	const ObjectType& getType() const { return objType; }
+
+	const String& getName() const { return name; }
+	void setName(const String& name_) { name = name_; }
+
+protected:
+	ObjectType objType;
+	String name;
 
 private:
 };

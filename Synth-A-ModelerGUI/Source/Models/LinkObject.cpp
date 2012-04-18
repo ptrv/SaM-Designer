@@ -25,7 +25,8 @@
 
 #include "LinkObject.h"
 
-LinkObject::LinkObject()
+LinkObject::LinkObject(ObjectType objType_)
+: BaseObject(objType_)
 {
 
 }

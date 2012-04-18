@@ -33,7 +33,8 @@
 class DebugWindow;
 class MainAppWindow;
 
-class AppController {
+class AppController
+{
 public:
 	AppController(MainAppWindow& maw_, DebugWindow& dw_);
 	~AppController();

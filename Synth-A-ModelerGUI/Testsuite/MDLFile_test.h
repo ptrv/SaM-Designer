@@ -27,6 +27,7 @@
 #define __MDLFILE_TEST_H_234EF909__
 
 #include "TestUtils.h"
+
 class MDLFileTest : public UnitTest
 {
 public:
@@ -40,6 +41,16 @@ public:
 		beginTest("openMDL");
 		bool loadOk = mdlFile.openMDL(mdlPath.toUTF8().getAddress());
 		expect(loadOk, "Error opening MDL file");
+
+		beginTest("getMasses");
+		const Array<Mass*>& m = mdlFile.getMasses();
+		expect(m.size() == 4, "have "+String(m.size())+" masses");
+		expect(mdlFile.getNumberOfObjectsByType(MassType) == 3, "");
+		expectEquals(m[0]->getType(), MassType);
+		Array<float> params = m[0]->getParameters();
+		expectEquals(params[0], 0.01f);
+		Array<String> labels = m[0]->getLabels();
+		expectEquals(labels[0], String("mymass"));
 	}
 };
 

@@ -29,7 +29,8 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 class TextConsole;
-class DebugWindow : public DocumentWindow {
+class DebugWindow : public DocumentWindow
+{
 public:
 	DebugWindow();
 	~DebugWindow();

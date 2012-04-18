@@ -28,13 +28,26 @@
 
 #include "BaseObject.h"
 
-class MassObject : public BaseObject {
+class MassObject : public BaseObject
+{
 public:
-	MassObject();
+	MassObject(ObjectType objType_= MassType);
 	~MassObject();
 
+	void addParameter(float value);
+	Array<float>& getParameters() { return parameters; }
+	void addLabel(const String& label);
+	Array<String>& getLabels() { return labels; }
+
 private:
+	Array<float> parameters;
+	Array<String> labels;
+
 };
 
+typedef MassObject Mass;
+typedef MassObject Port;
+typedef MassObject Ground;
+typedef MassObject Resonator;
 
 #endif  // __MASSOBJECT_H_64984A3B__

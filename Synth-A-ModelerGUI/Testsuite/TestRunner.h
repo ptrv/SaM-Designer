@@ -28,7 +28,8 @@
 
 #include "../Source/Utilities/StoredSettings.h"
 static const char* delimLine = "-----------------------------------------------------------------";
-class TestRunner {
+class TestRunner
+{
 private:
     TestRunner(){}
     ~TestRunner(){}

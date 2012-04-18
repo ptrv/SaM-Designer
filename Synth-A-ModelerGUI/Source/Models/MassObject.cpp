@@ -25,7 +25,8 @@
 
 #include "MassObject.h"
 
-MassObject::MassObject()
+MassObject::MassObject(ObjectType objType_)
+: BaseObject(objType_)
 {
 
 }
@@ -33,4 +34,14 @@ MassObject::MassObject()
 MassObject::~MassObject()
 {
 
+}
+
+void MassObject::addParameter(float value)
+{
+	parameters.add(value);
+}
+
+void MassObject::addLabel(const String& label)
+{
+	labels.add(label);
 }

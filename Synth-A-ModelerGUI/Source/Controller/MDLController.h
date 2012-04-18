@@ -29,7 +29,8 @@
 class MDLFile;
 class OutputCmd;
 
-class MDLController {
+class MDLController
+{
 public:
 	MDLController();
 	~MDLController();
