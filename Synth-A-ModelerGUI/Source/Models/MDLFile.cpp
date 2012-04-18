@@ -27,6 +27,7 @@
 #include "../Utilities/MDLParser.h"
 
 MDLFile::MDLFile()
+: isModified(false)
 {
 
 }
@@ -107,7 +108,10 @@ void MDLFile::addAudioObject(AudioObject* obj)
 	allObjects.set(obj->getName(), obj);
 }
 
-
+bool MDLFile::needsSaving()
+{
+	return isModified;
+}
 
 //==============================================================================
 #if UNIT_TESTS

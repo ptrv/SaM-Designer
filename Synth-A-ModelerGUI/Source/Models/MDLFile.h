@@ -45,12 +45,15 @@ public:
 	void addLabelObject(LabelObject* obj);
 	void addAudioObject(AudioObject* obj);
 
+	bool needsSaving();
+
 private:
 	HashMap<String,BaseObject*> allObjects;
 	Array<MassObject*> masses;
 	Array<LinkObject*> links;
 	Array<LabelObject*> labels;
 	Array<AudioObject*> audioObjects;
+	bool isModified;
 };
 
 

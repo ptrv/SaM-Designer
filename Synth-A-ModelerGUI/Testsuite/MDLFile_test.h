@@ -72,6 +72,13 @@ public:
 		expectEquals(m[3]->getName(), String("dev1"));
 		labels = m[3]->getLabels();
 		expectEquals(labels[0], String("hapticdev"));
+
+//		beginTest("getLinks");
+//
+//		beginTest("getLabels");
+//
+//		beginTest("getAudioObjects");
+
 	}
 };
 
