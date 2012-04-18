@@ -32,6 +32,8 @@
 AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 : maw(maw_), dw(dw_)
 {
+	mdlController = new MDLController();
+	objController = new ObjController();
 }
 
 AppController::~AppController()
@@ -46,23 +48,18 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     case CommandIDs::newFile:
     	mdlController->newFile();
         return true;
-        break;
     case CommandIDs::open:
     	mdlController->open();
         return true;
-        break;
     case CommandIDs::closeDocument:
     	mdlController->close();
         return true;
-        break;
     case CommandIDs::saveDocument:
     	mdlController->save();
         return true;
-        break;
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
         return true;
-        break;
     case CommandIDs::undo:
 		break;
 	case CommandIDs::redo:
