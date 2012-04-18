@@ -25,7 +25,7 @@
 
 #include "AppController.h"
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "../Application//MainWindow.h"
+#include "../Application/MainWindow.h"
 #include "../Application/DebugWindow.h"
 #include "../Application/CommonHeaders.h"
 

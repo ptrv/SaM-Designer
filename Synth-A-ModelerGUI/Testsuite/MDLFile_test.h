@@ -47,10 +47,31 @@ public:
 		expect(m.size() == 4, "have "+String(m.size())+" masses");
 		expect(mdlFile.getNumberOfObjectsByType(MassType) == 3, "");
 		expectEquals(m[0]->getType(), MassType);
+		// mass 1
 		Array<float> params = m[0]->getParameters();
 		expectEquals(params[0], 0.01f);
+		expectEquals(m[0]->getName(), String("m1"));
 		Array<String> labels = m[0]->getLabels();
 		expectEquals(labels[0], String("mymass"));
+		// mass 2
+		params = m[1]->getParameters();
+		expectEquals(params[0], 0.01f);
+		expectEquals(m[1]->getName(), String("m2"));
+		labels = m[1]->getLabels();
+		expectEquals(labels[0], String("mymass"));
+		expectEquals(labels[1], String("mmiddle"));
+		// mass 3
+		params = m[2]->getParameters();
+		expectEquals(params[0], 0.03f);
+		expectEquals(m[2]->getName(), String("m3"));
+		labels = m[2]->getLabels();
+		expectEquals(labels[0], String("mymass"));
+		// port
+		params = m[3]->getParameters();
+//		expect(params.size() == 0, "size is "+String(params.size()));
+		expectEquals(m[3]->getName(), String("dev1"));
+		labels = m[3]->getLabels();
+		expectEquals(labels[0], String("hapticdev"));
 	}
 };
 

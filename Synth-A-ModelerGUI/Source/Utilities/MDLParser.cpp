@@ -97,7 +97,7 @@ bool MDLParser::parseMDL()
 						mass->addParameter(paramVal);
 					}
 					// get remaining line content
-					line = line.substring(indexParantese+1);
+					line = line.substring(indexCloseParan+1);
 					line = line.trimCharactersAtStart(",");
 
 					// get string till next comma
