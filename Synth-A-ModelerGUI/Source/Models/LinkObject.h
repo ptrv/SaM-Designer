@@ -34,6 +34,14 @@ public:
 	LinkObject(ObjectType objType_= LinkType);
 	virtual ~LinkObject();
 
+	void addParameter(float value);
+	Array<float>& getParameters() { return parameters; }
+	void addLabel(const String& label);
+	Array<String>& getLabels() { return labels; }
+	void setStartVertex(const String& startVert);
+	void setEndVertex(const String& endVert);
+	String& getStartVertex() { return startingVertex; }
+	String& getEndVertex() { return endVertex; }
 private:
 	Array<float> parameters;
 	Array<String> labels;

@@ -141,6 +141,40 @@ bool MDLParser::parseMDL()
 						return false;
 					}
 
+					//get values between first parantheses
+					int indexCloseParan = line.indexOf(")");
+					String params = line.substring(indexParantese+1, indexCloseParan);
+					StringArray paramsArray;
+					paramsArray.addTokens(params, ",", "\"");
+					for (int param = 0; param < paramsArray.size(); ++param) {
+						float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
+						link->addParameter(paramVal);
+					}
+					// get remaining line content
+					line = line.substring(indexCloseParan+1);
+					line = line.trimCharactersAtStart(",");
+
+					// get string till next opening paranthese
+					indexParantese = line.indexOf("(");
+
+					String params2 = line.substring(0,indexParantese);
+					StringArray paramsArray2;
+					paramsArray2.addTokens(params2, ",", "\"");
+					if(paramsArray2.size() >= 3)
+					{
+						link->setName(paramsArray2[0]);
+						link->setStartVertex(paramsArray2[1]);
+						link->setEndVertex(paramsArray2[2]);
+					}
+					line = line.substring(indexParantese);
+					indexCloseParan = line.indexOf(")");
+					String labels = line.substring(1, indexCloseParan);
+					StringArray labelsArray;
+					labelsArray.addTokens(labels, ",", "\"");
+					for (int l = 0; l < labelsArray.size(); ++l) {
+						link->addLabel(labelsArray[l]);
+					}
+
 					mdlFile.addLinkObject(link);
 				}
 			}

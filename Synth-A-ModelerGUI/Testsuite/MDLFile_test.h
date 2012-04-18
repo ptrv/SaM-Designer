@@ -46,14 +46,15 @@ public:
 		const Array<Mass*>& m = mdlFile.getMasses();
 		expect(m.size() == 4, "have "+String(m.size())+" masses");
 		expect(mdlFile.getNumberOfObjectsByType(MassType) == 3, "");
-		expectEquals(m[0]->getType(), MassType);
 		// mass 1
+		expectEquals(m[0]->getType(), MassType);
 		Array<float> params = m[0]->getParameters();
 		expectEquals(params[0], 0.01f);
 		expectEquals(m[0]->getName(), String("m1"));
 		Array<String> labels = m[0]->getLabels();
 		expectEquals(labels[0], String("mymass"));
 		// mass 2
+		expectEquals(m[1]->getType(), MassType);
 		params = m[1]->getParameters();
 		expectEquals(params[0], 0.01f);
 		expectEquals(m[1]->getName(), String("m2"));
@@ -61,20 +62,63 @@ public:
 		expectEquals(labels[0], String("mymass"));
 		expectEquals(labels[1], String("mmiddle"));
 		// mass 3
+		expectEquals(m[2]->getType(), MassType);
 		params = m[2]->getParameters();
 		expectEquals(params[0], 0.03f);
 		expectEquals(m[2]->getName(), String("m3"));
 		labels = m[2]->getLabels();
 		expectEquals(labels[0], String("mymass"));
 		// port
+		expectEquals(m[3]->getType(), PortType);
 		params = m[3]->getParameters();
 //		expect(params.size() == 0, "size is "+String(params.size()));
 		expectEquals(m[3]->getName(), String("dev1"));
 		labels = m[3]->getLabels();
 		expectEquals(labels[0], String("hapticdev"));
 
-//		beginTest("getLinks");
-//
+		beginTest("getLinks");
+
+		const Array<LinkObject*>& ls = mdlFile.getLinks();
+		expect(ls.size() == 3, "have "+String(ls.size())+" links");
+
+		// link 1
+		expectEquals(ls[0]->getType(), LinkType, "");
+		params = ls[0]->getParameters();
+		expectEquals(params[0], 12000.0f);
+		expectEquals(params[1], 0.003f);
+		expectEquals(params[2], 0.0f);
+		expectEquals(ls[0]->getName(), String("l1"));
+		expectEquals(ls[0]->getStartVertex(), String("m1"));
+		expectEquals(ls[0]->getEndVertex(), String("m2"));
+		labels = ls[0]->getLabels();
+		expectEquals(labels[0], String("thisl"));
+
+		// link 2
+		expectEquals(ls[1]->getType(), LinkType, "");
+		params = ls[1]->getParameters();
+		expectEquals(params[0], 12000.0f);
+		expectEquals(params[1], 0.004f);
+		expectEquals(params[2], 0.0f);
+		expectEquals(ls[1]->getName(), String("l2"));
+		expectEquals(ls[1]->getStartVertex(), String("m2"));
+		expectEquals(ls[1]->getEndVertex(), String("m3"));
+		labels = ls[1]->getLabels();
+		expectEquals(labels[0], String("thisLLL"));
+		expectEquals(labels[1], String("thisl"));
+
+		// link 3
+		expectEquals(ls[2]->getType(), LinkType, "");
+		params = ls[2]->getParameters();
+		expectEquals(params[0], 12000.0f);
+		expectEquals(params[1], 0.005f);
+		expectEquals(params[2], 0.0f);
+		expectEquals(ls[2]->getName(), String("l3"));
+		expectEquals(ls[2]->getStartVertex(), String("m2"));
+		expectEquals(ls[2]->getEndVertex(), String("dev1"));
+		labels = ls[2]->getLabels();
+		expectEquals(labels[0], String("thisl"));
+
+
 //		beginTest("getLabels");
 //
 //		beginTest("getAudioObjects");

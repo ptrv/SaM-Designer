@@ -38,6 +38,7 @@ public:
 
 	bool openMDL(const char* mdlPath);
 	const Array<MassObject*>& getMasses()const { return masses; }
+	const Array<LinkObject*>& getLinks() const { return links; }
 	const int getNumberOfObjectsByType(ObjectType objType);
 
 	void addMassObject(MassObject* obj);

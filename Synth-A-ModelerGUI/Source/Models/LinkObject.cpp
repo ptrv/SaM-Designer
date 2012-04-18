@@ -35,3 +35,23 @@ LinkObject::~LinkObject()
 {
 
 }
+
+void LinkObject::addParameter(float value)
+{
+	parameters.add(value);
+}
+
+void LinkObject::addLabel(const String& label)
+{
+	labels.add(label);
+}
+
+void LinkObject::setStartVertex(const String& startVert)
+{
+	startingVertex = startVert;
+}
+void LinkObject::setEndVertex(const String& endVert)
+{
+	endVertex = endVert;
+}
+
