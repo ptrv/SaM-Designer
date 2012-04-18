@@ -120,10 +120,33 @@ public:
 		expectEquals(labels[0], String("thisl"));
 
 
-//		beginTest("getLabels");
-//
-//		beginTest("getAudioObjects");
+		beginTest("getLabels");
 
+		const Array<LabelObject*>& labelObjs = mdlFile->getLabels();
+		expect(labelObjs.size() == 1, "have "+String(labelObjs.size())+" labels");
+
+		expectEquals(labelObjs[0]->getType(), LabelType);
+		expectEquals(labelObjs[0]->getTitle(), String("rtadjust"));
+		expectEquals(labelObjs[0]->getName(), String("adjStiffness"));
+		expectEquals(labelObjs[0]->getParamName(), String("thisl"));
+		expectEquals(labelObjs[0]->getParamId(), 1);
+
+
+		beginTest("getAudioObjects");
+
+		const Array<AudioObject*>& aus = mdlFile->getAudioObjects();
+		expect(aus.size() == 2, "have "+String(aus.size())+" audio objects");
+
+		expectEquals(aus[0]->getType(), AudioObjectType);
+		expectEquals(aus[0]->getName(), String("a1"));
+		expectEquals(aus[0]->getParameters()["m1"], 1000.f);
+		expectEquals(aus[0]->getParameters()["l1"], 100.f);
+
+		expectEquals(aus[1]->getType(), AudioObjectType);
+		expectEquals(aus[1]->getName(), String("a2"));
+		expectEquals(aus[1]->getParameters()["l2"], 1000.f);
+		expectEquals(aus[1]->getParameters()["l3"], -50.f);
+		expectEquals(aus[1]->getParameters()["l1"], 0.01f);
 	}
 };
 

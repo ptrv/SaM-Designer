@@ -21,21 +21,21 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-*/
+ */
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLParser.h"
 #include "../Controller/ObjectFactory.h"
 
-MDLParser::MDLParser(MDLFile& mdlFile_, const char* mdlPath_)
-: mdlFile(mdlFile_), mdlPath(mdlPath_)
+MDLParser::MDLParser(MDLFile& mdlFile_)
+: mdlFile(mdlFile_)
 {
 
 }
 
 bool MDLParser::parseMDL()
 {
-	File in(mdlPath);
+	File in(mdlFile.getFilePath());
 	String mdlContent = in.loadFileAsString();
 
 	int fileLength = mdlContent.length();
@@ -47,13 +47,8 @@ bool MDLParser::parseMDL()
 
 		line = line.trimCharactersAtStart(" ");
 
-		if(line[0] == '#')
+		if(line[0] != '#')
 		{
-			continue;
-		}
-
-		for (int var = 0; var < line.length(); ++var) {
-
 			int indexParantese = line.indexOf("(");
 			// mass or link type
 			if(indexParantese != -1)
@@ -84,7 +79,7 @@ bool MDLParser::parseMDL()
 					else
 					{
 						DBG("Something went really wrong!")
-						return false;
+										return false;
 					}
 
 					//get values between first parantheses
@@ -138,7 +133,7 @@ bool MDLParser::parseMDL()
 					else
 					{
 						DBG("Something went really wrong!")
-						return false;
+										return false;
 					}
 
 					//get values between first parantheses
@@ -181,12 +176,46 @@ bool MDLParser::parseMDL()
 			// labeös and audio objects
 			else
 			{
-
+				if(line.startsWith("audioout"))
+				{
+					StringArray audioOutAttributeList;
+					int indexSemicolon = line.length()-1;
+					String lineTmp = line.substring(0, indexSemicolon);
+					audioOutAttributeList.addTokens(lineTmp, ",", "\"");
+					if(audioOutAttributeList.size() > 2)
+					{
+						AudioObject* audioObj = ObjectFactory::createNewAudioObject();
+						audioObj->setName(audioOutAttributeList[1]);
+						for (int aIdx = 2; aIdx < audioOutAttributeList.size(); aIdx+=2) {
+							String keyTmp = audioOutAttributeList[aIdx];
+							float valueTmp = audioOutAttributeList[aIdx+1].getFloatValue();
+							audioObj->addParameter(keyTmp, valueTmp);
+						}
+						mdlFile.addAudioObject(audioObj);
+					}
+				}
+				else if(line.indexOf(",") != -1)
+				{
+					StringArray labelAttributeList;
+					int indexSemicolon = line.length()-1;
+					String lineTmp = line.substring(0, indexSemicolon);
+					labelAttributeList.addTokens(lineTmp, ",", "\"");
+					if(labelAttributeList.size() == 3)
+					{
+						LabelObject* labelObj = ObjectFactory::createNewLabelObject();
+						labelObj->setTitle(labelAttributeList[0]);
+						labelObj->setName(labelAttributeList[1]);
+						String labelTmp = labelAttributeList[2].upToFirstOccurrenceOf(":", false, false);
+						int idxTmp = labelAttributeList[2].fromFirstOccurrenceOf(":", false, false).getIntValue();
+						labelObj->setParameterIndex(labelTmp, idxTmp);
+						mdlFile.addLabelObject(labelObj);
+					}
+				}
 			}
 		}
 
-
 	}
+
 
 	return true;
 }

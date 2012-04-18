@@ -36,9 +36,12 @@ public:
 	MDLFile();
 	~MDLFile();
 
-	bool openMDL(const char* mdlPath);
+	bool openMDL(const char* mdlPath_);
+	void newMDL(const char* mdlPath_);
 	const Array<MassObject*>& getMasses()const { return masses; }
 	const Array<LinkObject*>& getLinks() const { return links; }
+	const Array<LabelObject*>& getLabels() const { return labelObjs; }
+	const Array<AudioObject*>& getAudioObjects() const { return audioObjects; }
 	const int getNumberOfObjectsByType(ObjectType objType);
 
 	void addMassObject(MassObject* obj);
@@ -48,13 +51,21 @@ public:
 
 	bool needsSaving();
 
+	const String& getFilePath() const { return mdlPath; }
+
 private:
+
+	void initMDL();
+	void destroyMDL();
+
 	HashMap<String,BaseObject*> allObjects;
 	Array<MassObject*> masses;
 	Array<LinkObject*> links;
-	Array<LabelObject*> labels;
+	Array<LabelObject*> labelObjs;
 	Array<AudioObject*> audioObjects;
 	bool isModified;
+
+	String mdlPath;
 };
 
 

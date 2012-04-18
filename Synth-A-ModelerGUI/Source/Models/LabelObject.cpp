@@ -35,3 +35,18 @@ LabelObject::~LabelObject()
 {
 
 }
+
+void LabelObject::setTitle(const String& value)
+{
+	title = value;
+}
+void LabelObject::addParameter(const String& value)
+{
+	parameters.add(value);
+}
+
+void LabelObject::setParameterIndex(const String& key, int value)
+{
+	labelParamIdx.labelName = key;
+	labelParamIdx.parameterId = value;
+}

@@ -33,11 +33,10 @@
 class MDLParser
 {
 public:
-	MDLParser(MDLFile& mdlFile_, const char* mdlPath_);
+	MDLParser(MDLFile& mdlFile_);
 	bool parseMDL();
 private:
 	MDLFile& mdlFile;
-	String mdlPath;
 };
 
 

@@ -31,9 +31,13 @@
 class AudioObject : public BaseObject {
 public:
 	AudioObject(ObjectType objType_= AudioObjectType);
-	~AudioObject();
+	virtual ~AudioObject();
 
+	void addParameter(const String& key, float value);
+	const HashMap<String, float>& getParameters() const { return parameters; }
 private:
+//	Array<String> parameters;
+	HashMap<String, float> parameters;
 };
 
 

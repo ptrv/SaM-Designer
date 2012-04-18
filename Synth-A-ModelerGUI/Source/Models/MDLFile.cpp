@@ -34,10 +34,16 @@ MDLFile::MDLFile()
 
 MDLFile::~MDLFile()
 {
-//	for (HashMap<String, BaseObject*>::Iterator i (allObjects); i.next();)
-//	{
-//
-//	}
+	destroyMDL();
+}
+
+void MDLFile::initMDL()
+{
+
+}
+
+void MDLFile::destroyMDL()
+{
 	allObjects.clear();
 	for (int i = 0; i < masses.size(); ++i) {
 		delete masses[i];
@@ -47,10 +53,10 @@ MDLFile::~MDLFile()
 		delete links[i];
 	}
 	links.clear();
-	for (int i = 0; i < labels.size(); ++i) {
-		delete labels[i];
+	for (int i = 0; i < labelObjs.size(); ++i) {
+		delete labelObjs[i];
 	}
-	labels.clear();
+	labelObjs.clear();
 	for (int i = 0; i < audioObjects.size(); ++i) {
 		delete audioObjects[i];
 	}
@@ -58,9 +64,12 @@ MDLFile::~MDLFile()
 
 }
 
-bool MDLFile::openMDL(const char* mdlPath)
+bool MDLFile::openMDL(const char* mdlPath_)
 {
-	MDLParser pa(*this, mdlPath);
+	destroyMDL();
+	initMDL();
+	mdlPath = mdlPath_;
+	MDLParser pa(*this);
 	if(pa.parseMDL())
 	{
 		// success
@@ -71,6 +80,12 @@ bool MDLFile::openMDL(const char* mdlPath)
 		// fail
 		return false;
 	}
+}
+
+void MDLFile::newMDL(const char* mdlPath_)
+{
+	mdlPath = mdlPath_;
+	initMDL();
 }
 
 const int MDLFile::getNumberOfObjectsByType(ObjectType objType)
@@ -98,7 +113,7 @@ void MDLFile::addLinkObject(LinkObject* obj)
 
 void MDLFile::addLabelObject(LabelObject* obj)
 {
-	labels.add(obj);
+	labelObjs.add(obj);
 	allObjects.set(obj->getName(), obj);
 }
 

@@ -45,15 +45,28 @@ void MDLController::newFile()
 	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
 			"*.mdl", false);
 
-	if (fch.browseForFileToOpen())
+	if (fch.browseForFileToSave(true))
 	{
 		File result = fch.getResult();
-		bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
+		currentMdl->newMDL(result.getFullPathName().toUTF8().getAddress());
 	}
+
 
 }
 void MDLController::open()
 {
+	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
+			"*.mdl", false);
+
+	if (fch.browseForFileToOpen())
+	{
+		File result = fch.getResult();
+		bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
+		if(! loadOK)
+		{
+			DBG("Something went wrong with loading the mdl file.");
+		}
+	}
 
 }
 void MDLController::save()
