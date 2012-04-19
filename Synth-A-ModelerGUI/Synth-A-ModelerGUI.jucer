@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="VkFX9m" name="Synth-A-ModelerGUI" projectType="guiapp" version="1.0.0"
+<JUCERPROJECT id="VkFX9m" name="Synth-A-ModelerGUI" projectType="guiapp" version="1.0.0dev"
               bundleIdentifier="de.tu-berlin.SynthAModelerGUI" jucerVersion="3.0.0">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"

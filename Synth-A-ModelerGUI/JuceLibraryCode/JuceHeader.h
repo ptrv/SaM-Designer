@@ -37,7 +37,7 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "Synth-A-ModelerGUI";
-    const char* const  versionString  = "1.0.0";
+    const char* const  versionString  = "1.0.0dev";
     const int          versionNumber  = 0x10000;
 }
 
