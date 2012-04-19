@@ -24,8 +24,9 @@
   </EXPORTFORMATS>
   <MAINGROUP id="RyljMx" name="Synth-A-ModelerGUI">
     <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">
+      <FILE id="n8OTz8" name="Info.txt" compile="0" resource="1" file="BinaryData/Info.txt"/>
+      <FILE id="TtDmJX" name="prefs_audio.png" compile="0" resource="1" file="BinaryData/prefs_audio.png"/>
       <FILE id="BQgaoD" name="prefs_about.png" compile="0" resource="1" file="BinaryData/prefs_about.png"/>
-      <FILE id="t954so" name="prefs_keys.png" compile="0" resource="1" file="BinaryData/prefs_keys.png"/>
       <FILE id="liqvJ3" name="prefs_misc.png" compile="0" resource="1" file="BinaryData/prefs_misc.png"/>
       <FILE id="MnjVic" name="icons.zip" compile="0" resource="1" file="BinaryData/icons.zip"/>
       <FILE id="WodEAp" name="synthamodeler_icon.png" compile="0" resource="1"
@@ -114,6 +115,7 @@
     <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

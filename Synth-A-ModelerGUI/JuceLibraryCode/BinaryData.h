@@ -7,11 +7,14 @@
 
 namespace BinaryData
 {
+    extern const char*   Info_txt;
+    const int            Info_txtSize = 407;
+
+    extern const char*   prefs_audio_png;
+    const int            prefs_audio_pngSize = 4248;
+
     extern const char*   prefs_about_png;
     const int            prefs_about_pngSize = 1819;
-
-    extern const char*   prefs_keys_png;
-    const int            prefs_keys_pngSize = 3794;
 
     extern const char*   prefs_misc_png;
     const int            prefs_misc_pngSize = 6162;

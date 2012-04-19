@@ -12,6 +12,32 @@
 #include "PrefsPanel.h"
 #include "../Utilities/StoredSettings.h"
 
+
+class AudioPage  : public Component
+{
+public:
+	AudioPage(AudioDeviceManager& deviceManager_)
+	: deviceManager(deviceManager_),
+	  deviceSelector(0)
+    {
+		addAndMakeVisible (deviceSelector = new AudioDeviceSelectorComponent (deviceManager, 0, 2, 0, 2, true, true, true, false));
+    }
+
+    ~AudioPage()
+    {
+    	deleteAndZero (deviceSelector);
+    }
+
+    void resized()
+    {
+    	deviceSelector->setBounds (8, 8, getWidth() - 16, getHeight() - 16);
+    }
+
+private:
+    AudioDeviceManager& deviceManager;
+    AudioDeviceSelectorComponent* deviceSelector;
+};
+
 //==============================================================================
 class MiscPage  : public Component
 {
@@ -49,19 +75,17 @@ class AboutPage   : public Component
 {
 public:
     AboutPage()
-        : link ("www.rawmaterialsoftware.com/juce",
-                URL ("http://www.rawmaterialsoftware.com/juce"))//,
-          //logo (ImageCache::getFromMemory (BinaryData::jules_jpg, BinaryData::jules_jpgSize))
+        : link ("https://github.com/ptrv/Synth-A-Modeler",
+                URL ("https://github.com/ptrv/Synth-A-Modeler")),
+          logo (ImageCache::getFromMemory (BinaryData::synthamodeler_icon_png,
+        		  BinaryData::synthamodeler_icon_pngSize))
     {
         text1.setJustification (Justification::centredTop);
-        text1.append ("Programmer Julian Storer, seen here demonstrating a beard designed to "
-                      "gain approval from the Linux programming community. Each hair of the beard "
-                      "represents one line of source code from the ", Font (13.0f));
-        text1.append ("Jucer", Font (13.0f, Font::bold));
-        text1.append (" component design tool.", Font (13.0f));
+        String infoTxt(BinaryData::Info_txt);
+        text1.append (infoTxt, Font (13.0f));
 
         text2.setJustification (Justification::centred);
-        text2.append ("Jucer v" + JUCEApplication::getInstance()->getApplicationVersion()
+        text2.append ("Synth-A-Modeler v" + JUCEApplication::getInstance()->getApplicationVersion()
                         + ", " + SystemStats::getJUCEVersion(), Font (12.0f, Font::bold));
 
         addAndMakeVisible (&link);
@@ -71,9 +95,9 @@ public:
     void paint (Graphics& g)
     {
         g.fillAll (Colour (0xffebebeb));
-//        g.drawImageWithin (logo, 0, 4, getWidth(), getHeight() - 144,
-//                           RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize,
-//                           false);
+        g.drawImageWithin (logo, 0, 4, getWidth(), getHeight() - 144,
+                           RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize,
+                           false);
 
         text1.draw (g, Rectangle<int> (12, getHeight() - 130, getWidth() - 24, 100).toFloat());
         text2.draw (g, Rectangle<int> (12, getHeight() - 50, getWidth() - 24, 20).toFloat());
@@ -88,13 +112,13 @@ public:
 
 private:
     HyperlinkButton link;
-//    Image logo;
+    Image logo;
     AttributedString text1, text2;
 };
 
 
 //==============================================================================
-static const char* audioPage = "Audio Device";
+static const char* audioPage = "Audio";
 static const char* miscPage = "Misc";
 static const char* aboutPage = "About";
 
@@ -103,9 +127,9 @@ class PrefsTabComp  : public PreferencesPanel
 public:
     PrefsTabComp()
     {
-        addSettingsPage (audioPage, BinaryData::prefs_keys_png, BinaryData::prefs_keys_pngSize);
-//        addSettingsPage (miscPage, BinaryData::prefs_misc_png, BinaryData::prefs_misc_pngSize);
-//        addSettingsPage (aboutPage, BinaryData::prefs_about_png, BinaryData::prefs_about_pngSize);
+        addSettingsPage (audioPage, BinaryData::prefs_audio_png, BinaryData::prefs_audio_pngSize);
+        addSettingsPage (miscPage, BinaryData::prefs_misc_png, BinaryData::prefs_misc_pngSize);
+        addSettingsPage (aboutPage, BinaryData::prefs_about_png, BinaryData::prefs_about_pngSize);
     }
 
     ~PrefsTabComp()
@@ -117,19 +141,21 @@ public:
     {
         if (pageName == audioPage)
         {
-//            return new MiscPage();
+        	return new AudioPage(deviceManager);
         }
         else if (pageName == miscPage)
         {
-//            return new KeyMappingEditorComponent (*commandManager->getKeyMappings(), true);
+            return new MiscPage();
         }
         else if (pageName == aboutPage)
         {
-//            return new AboutPage();
+            return new AboutPage();
         }
 
         return new Component();
     }
+private:
+    AudioDeviceManager deviceManager;
 };
 
 

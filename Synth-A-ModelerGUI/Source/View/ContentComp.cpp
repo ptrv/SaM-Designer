@@ -265,7 +265,7 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showPrefs:
-    	result.setInfo ("Preferences", "Open preferences window",
+    	result.setInfo ("Preferences...", "Open preferences window",
     			CommandCategories::general, 0);
     	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
     	break;

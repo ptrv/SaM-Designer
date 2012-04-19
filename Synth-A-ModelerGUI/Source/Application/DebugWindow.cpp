@@ -37,7 +37,7 @@ DocumentWindow("Output", Colours::black, DocumentWindow::closeButton, true)
 
 	setContentOwned(console,true);
 
-	setVisible (true);
+	setVisible (false);
 }
 
 DebugWindow::~DebugWindow()
