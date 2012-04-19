@@ -37,6 +37,7 @@ public:
 
 	void newFile();
 	void open();
+	void openFromFile(const File& mdlFile);
 	void save();
 	void saveAs();
 	void close();

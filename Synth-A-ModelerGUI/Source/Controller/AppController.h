@@ -40,6 +40,7 @@ public:
 	~AppController();
 
 	bool menuItemWasClicked(CommandID menuId);
+	void openMDL(const File& mdlFile);
 
 private:
 	void debugWindowToggle();

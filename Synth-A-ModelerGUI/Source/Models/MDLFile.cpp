@@ -66,6 +66,7 @@ void MDLFile::destroyMDL()
 
 bool MDLFile::openMDL(const char* mdlPath_)
 {
+	DBG("Opened MDL file: "+String(mdlPath_));
 	destroyMDL();
 	initMDL();
 	mdlPath = mdlPath_;

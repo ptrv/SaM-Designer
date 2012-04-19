@@ -134,7 +134,10 @@ bool AppController::menuItemWasClicked(CommandID menuId)
 
 }
 
-
+void AppController::openMDL(const File& mdlFile)
+{
+	mdlController->openFromFile(mdlFile);
+}
 void AppController::debugWindowToggle()
 {
 	dw.toggleDebugWindow();

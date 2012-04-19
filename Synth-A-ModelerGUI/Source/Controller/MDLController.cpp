@@ -62,12 +62,29 @@ void MDLController::open()
 	{
 		File result = fch.getResult();
 		bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
-		if(! loadOK)
+		if(loadOK)
+		{
+			StoredSettings::getInstance()->recentFiles.addFile(result);
+		}
+		else
 		{
 			DBG("Something went wrong with loading the mdl file.");
 		}
 	}
 
+}
+
+void MDLController::openFromFile(const File& mdlFile)
+{
+	bool loadOk = currentMdl->openMDL(mdlFile.getFullPathName().toUTF8().getAddress());
+	if(loadOk)
+	{
+
+	}
+	else
+	{
+		DBG("Something went wrong loading the mdl file.")
+	}
 }
 void MDLController::save()
 {

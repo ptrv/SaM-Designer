@@ -178,15 +178,18 @@ void ContentComp::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
     // most of our menu items are invoked automatically as commands, but we can handle the
     // other special cases here..
 
-    if (menuItemID >= 5001 && menuItemID < 5010)
+    if (menuItemID >= 100 && menuItemID < 200)
     {
+		// open a file from the "recent files" menu
+		const File file (StoredSettings::getInstance()->recentFiles.getFile (menuItemID - 100));
+		appController.openMDL(file);
     }
 }
 
 
 ApplicationCommandTarget* ContentComp::getNextCommandTarget()
 {
-    // this will return the next parent component that is an ApplicationCommandTarget (in this
+    // this will return the next parent			 component that is an ApplicationCommandTarget (in this
     // case, there probably isn't one, but it's best to use this method in your own apps).
     return findFirstTargetParentComponent();
 }
