@@ -25,6 +25,7 @@
 
 #include "DebugWindow.h"
 #include "../View/TextConsole.h"
+#include "../Utilities/StoredSettings.h"
 
 DebugWindow::DebugWindow()
 :
@@ -37,7 +38,7 @@ DocumentWindow("Output", Colours::black, DocumentWindow::closeButton, true)
 
 	setContentOwned(console,true);
 
-	setVisible (false);
+	setVisible (StoredSettings::getInstance()->getShowCompilerWindow());
 }
 
 DebugWindow::~DebugWindow()
@@ -53,9 +54,15 @@ void DebugWindow::closeButtonPressed()
 void DebugWindow::toggleDebugWindow()
 {
 	if(isVisible())
+	{
 		setVisible(false);
+		StoredSettings::getInstance()->setShowCompilerWindow(false);
+	}
 	else
+	{
 		setVisible(true);
+		StoredSettings::getInstance()->setShowCompilerWindow(true);
+	}
 }
 
 void DebugWindow::clear()

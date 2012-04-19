@@ -378,7 +378,8 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	break;
 
     case CommandIDs::showOutputConsole:
-    	result.setInfo("Toggle compiler window", "", CommandCategories::tools,0);
+    	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
+    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::clearOutputConsole:

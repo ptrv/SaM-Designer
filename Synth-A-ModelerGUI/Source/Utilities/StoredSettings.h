@@ -57,6 +57,9 @@ public:
     String getCmdSAM() const;
     void setCmdSAM(const String& cmdSAM);
 
+    bool getShowCompilerWindow() const;
+    void setShowCompilerWindow(bool shouldShow);
+
     const StringArray& getFontNames();
 
 

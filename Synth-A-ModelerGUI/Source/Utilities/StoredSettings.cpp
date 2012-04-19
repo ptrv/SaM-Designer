@@ -150,3 +150,12 @@ void StoredSettings::setCmdSAM(const String& cmdSAM)
 {
 	props->setValue("cmdsam", cmdSAM);
 }
+
+bool StoredSettings::getShowCompilerWindow() const
+{
+	return props->getBoolValue("showcompilerwindow", false);
+}
+void StoredSettings::setShowCompilerWindow(bool shouldShow)
+{
+	props->setValue("showcompilerwindow", shouldShow);
+}
