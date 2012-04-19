@@ -43,31 +43,66 @@ class MiscPage  : public Component
 {
 public:
     MiscPage()
-        : samPath ("Synth-A-Modeler location:",
-                       StoredSettings::getInstance()->getCmdSAM(),
-                       true, false, false,
-                       "*.plx", String::empty,
-                       "(select the Synth-A-Modeler.plx file)"),
-          label (String::empty, samPath.getCurrentFile().getFileNameWithoutExtension())
+    : samPath ("Synth-A-Modeler location:",
+    		StoredSettings::getInstance()->getCmdSAM(),
+    		true, false, false,
+    		"*.plx", String::empty,
+    		"(select the Synth-A-Modeler.plx file)"),
+		faustPath ("faust location:",
+				StoredSettings::getInstance()->getCmdFaust(),
+				true, false, false,
+				"*.*", String::empty,
+				"(select the faust executable)"),
+		faust2supercolliderPath ("faust2supercollider location:",
+				StoredSettings::getInstance()->getCmdFaust2supercollider(),
+				true, false, false,
+				"*.*", String::empty,
+				"(select the faust2supercollider executable)"),
+		faust2puredataPath ("faust2puredata location:",
+				StoredSettings::getInstance()->getCmdFaust2puredata(),
+				true, false, false,
+				"*.*", String::empty,
+				"(select the faust2puredata executable)"),
+		labelSAM (String::empty, samPath.getCurrentFile().getFileNameWithoutExtension()),
+		labelFaust(String::empty, faustPath.getCurrentFile().getFileNameWithoutExtension()),
+		labelFaust2supercollider(String::empty, faust2supercolliderPath.getCurrentFile().getFileNameWithoutExtension()),
+		labelFaust2puredata(String::empty, faust2puredataPath.getCurrentFile().getFileNameWithoutExtension())
     {
         addAndMakeVisible (&samPath);
-        label.attachToComponent (&samPath, true);
+        labelSAM.attachToComponent (&samPath, true);
+        addAndMakeVisible (&faustPath);
+        labelFaust.attachToComponent (&faustPath, true);
+        addAndMakeVisible (&faust2supercolliderPath);
+        labelFaust2supercollider.attachToComponent (&faust2supercolliderPath, true);
+        addAndMakeVisible (&faust2puredataPath);
+        labelFaust2puredata.attachToComponent (&faust2puredataPath, true);
     }
 
     ~MiscPage()
     {
         StoredSettings::getInstance()->setCmdSAM(samPath.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setCmdFaust(faustPath.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setCmdFaust2supercollider(faust2supercolliderPath.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setCmdFaust2puredata(faust2puredataPath.getCurrentFile().getFullPathName());
     }
 
     void resized()
     {
         samPath.setBounds (150, 16, getWidth() - 160, 22);
+        faustPath.setBounds(150, 56, getWidth() -160, 22);
+        faust2supercolliderPath.setBounds(150, 96, getWidth() -160, 22);
+        faust2puredataPath.setBounds(150, 136, getWidth() -160, 22);
     }
 
 private:
     FilenameComponent samPath;
-//    FilenameComponent faustPath;
-    Label label;
+    FilenameComponent faustPath;
+    FilenameComponent faust2supercolliderPath;
+    FilenameComponent faust2puredataPath;
+    Label labelSAM;
+    Label labelFaust;
+    Label labelFaust2supercollider;
+    Label labelFaust2puredata;
 };
 
 //==============================================================================
