@@ -26,6 +26,80 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../Application/CommonHeaders.h"
 
+static const String getDefaultPathSAM()
+{
+	String samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx";
+#if JUCE_MAC
+	samPath = "../"+samPath;
+#endif
+
+	File infile(File::getCurrentWorkingDirectory().getChildFile(samPath));
+	if(infile.existsAsFile())
+	{
+		return samPath;
+	}
+	else
+	{
+		return "";
+	}
+}
+static const String getDefaultPathFaust()
+{
+	File infile("/usr/local/bin/faust");
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	infile = "/usr/bin/faust";
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	return "";
+}
+static const String getDefaultPathFaust2supercollider()
+{
+	File infile("/usr/local/bin/faust2supercollider");
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	infile = "/usr/bin/faust2supercollider";
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	return "";
+}
+static const String getDefaultPathFaust2puredata()
+{
+	File infile("/usr/local/bin/faust2puredata");
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	infile = "/usr/bin/faust2puredata";
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	return "";
+}
+static const String getDefaultPathPerl()
+{
+	File infile("/usr/bin/perl");
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	infile = "/usr/local/bin/perl";
+	if(infile.existsAsFile())
+	{
+		return infile.getFullPathName();
+	}
+	return "";
+}
+
 //==============================================================================
 StoredSettings::StoredSettings()
 {
@@ -108,7 +182,7 @@ const StringArray& StoredSettings::getFontNames()
 
 String StoredSettings::getCmdPerl() const
 {
-	return props->getValue("cmdperl", "/usr/bin/perl");
+	return props->getValue("cmdperl", getDefaultPathPerl());
 }
 void StoredSettings::setCmdPerl(const String& cmdPerl)
 {
@@ -117,7 +191,7 @@ void StoredSettings::setCmdPerl(const String& cmdPerl)
 
 String StoredSettings::getCmdFaust() const
 {
-	return props->getValue("cmdfaust", "/usr/local/bin/faust");
+	return props->getValue("cmdfaust", getDefaultPathFaust());
 }
 void StoredSettings::setCmdFaust(const String& cmdFaust)
 {
@@ -126,7 +200,7 @@ void StoredSettings::setCmdFaust(const String& cmdFaust)
 
 String StoredSettings::getCmdFaust2supercollider() const
 {
-	return props->getValue("cmdfaust2supercollider", "/usr/local/bin/faust2supercollider");
+	return props->getValue("cmdfaust2supercollider", getDefaultPathFaust2supercollider());
 }
 void StoredSettings::setCmdFaust2supercollider(const String& cmdFaust2supercollider)
 {
@@ -135,7 +209,7 @@ void StoredSettings::setCmdFaust2supercollider(const String& cmdFaust2supercolli
 
 String StoredSettings::getCmdFaust2puredata() const
 {
-	return props->getValue("cmdfaust2puredata", "/usr/local/bin/faust2puredata");
+	return props->getValue("cmdfaust2puredata", getDefaultPathFaust2puredata());
 }
 void StoredSettings::setCmdFaust2puredata(const String& cmdFaust2puredata)
 {
@@ -144,11 +218,7 @@ void StoredSettings::setCmdFaust2puredata(const String& cmdFaust2puredata)
 
 String StoredSettings::getCmdSAM() const
 {
-	String samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx";
-#if JUCE_MAC
-	samPath = "../"+samPath;
-#endif
-	return props->getValue("cmdsam", samPath);
+	return props->getValue("cmdsam", getDefaultPathSAM());
 }
 void StoredSettings::setCmdSAM(const String& cmdSAM)
 {
