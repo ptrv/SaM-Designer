@@ -111,6 +111,8 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
         menu.addCommandItem (commandManager, CommandIDs::closeDocument);
         menu.addCommandItem (commandManager, CommandIDs::saveDocument);
         menu.addCommandItem (commandManager, CommandIDs::saveDocumentAs);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showPrefs);
 
 #if ! JUCE_MAC
         menu.addSeparator();
@@ -202,6 +204,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::closeDocument,
                               CommandIDs::saveDocument,
                               CommandIDs::saveDocumentAs,
+                              CommandIDs::showPrefs,
                               CommandIDs::undo,
                               CommandIDs::redo,
                               StandardApplicationCommandIDs::cut,
@@ -261,6 +264,11 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
         result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
+    case CommandIDs::showPrefs:
+    	result.setInfo ("Preferences", "Open preferences window",
+    			CommandCategories::general, 0);
+    	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
+    	break;
     case CommandIDs::undo:
     	result.setInfo("Undo", "Undo last edit", CommandCategories::editing,0);
     	result.addDefaultKeypress('z', ModifierKeys::commandModifier);

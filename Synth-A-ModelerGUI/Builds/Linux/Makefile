@@ -60,6 +60,7 @@ OBJECTS := \
   $(OBJDIR)/LinkObject_3aeff31f.o \
   $(OBJDIR)/MassObject_76535999.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/PrefsPanel_2006a45f.o \
   $(OBJDIR)/ContentComp_99fa8a27.o \
   $(OBJDIR)/ObjComp_838b59a5.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
@@ -173,6 +174,11 @@ $(OBJDIR)/MassObject_76535999.o: ../../Source/Models/MassObject.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/PrefsPanel_2006a45f.o: ../../Source/View/PrefsPanel.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling PrefsPanel.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ContentComp_99fa8a27.o: ../../Source/View/ContentComp.cpp

@@ -28,6 +28,7 @@
 #include "../Application/MainWindow.h"
 #include "../Application/DebugWindow.h"
 #include "../Application/CommonHeaders.h"
+#include "../View/PrefsPanel.h"
 
 AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 : maw(maw_), dw(dw_)
@@ -60,6 +61,9 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
         return true;
+    case CommandIDs::showPrefs:
+    	PrefsPanel::show();
+    	break;
     case CommandIDs::undo:
 		break;
 	case CommandIDs::redo:
