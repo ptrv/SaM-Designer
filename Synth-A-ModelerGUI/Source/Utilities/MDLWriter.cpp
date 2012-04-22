@@ -129,11 +129,6 @@ bool MDLWriter::writeMDL(const String& savePath)
 
 	// ------------------------------------------------------------------------
 
-	if(outFile.existsAsFile())
-	{
-		outFile.deleteFile();
-	}
-
 	TemporaryFile temp (outFile);
 
 	ScopedPointer <FileOutputStream> out (temp.getFile().createOutputStream());
@@ -141,7 +136,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 	if (out != nullptr)
 	{
 
-		out->writeString(mdlContent);
+		out->write(mdlContent.toUTF8(), mdlContent.getNumBytesAsUTF8());
 		out = nullptr; // (deletes the stream)
 
 		bool succeeded = temp.overwriteTargetFileWithTemporary();
