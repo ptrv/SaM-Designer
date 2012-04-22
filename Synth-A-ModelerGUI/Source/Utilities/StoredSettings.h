@@ -60,6 +60,9 @@ public:
     bool getShowCompilerWindow() const;
     void setShowCompilerWindow(bool shouldShow);
 
+	const String getWorkingFolder() const;
+    void setWorkingFolder (const String& folder);
+
     const StringArray& getFontNames();
 
 

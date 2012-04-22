@@ -233,3 +233,14 @@ void StoredSettings::setShowCompilerWindow(bool shouldShow)
 {
 	props->setValue("showcompilerwindow", shouldShow);
 }
+
+const String StoredSettings::getWorkingFolder() const
+{
+	return props->getValue("workingdir",
+			File::getCurrentWorkingDirectory().getFullPathName());
+}
+
+void StoredSettings::setWorkingFolder (const String& folder)
+{
+	props->setValue("workingdir", folder);
+}

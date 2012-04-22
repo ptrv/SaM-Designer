@@ -51,8 +51,8 @@ void MDLController::open()
 {
 	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
 	{
-		FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
-				"*.mdl", false);
+		FileChooser fch("Choose mdl file",
+				StoredSettings::getInstance()->getWorkingFolder(), "*.mdl", false);
 
 		if (fch.browseForFileToOpen())
 		{
@@ -60,6 +60,7 @@ void MDLController::open()
 			bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
 			if(loadOK)
 			{
+				StoredSettings::getInstance()->setWorkingFolder(result.getParentDirectory().getFullPathName());
 				StoredSettings::getInstance()->recentFiles.addFile(result);
 			}
 			else
@@ -75,7 +76,11 @@ void MDLController::openFromFile(const File& mdlFile)
 	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
 	{
 		bool loadOk = currentMdl->openMDL(mdlFile.getFullPathName().toUTF8().getAddress());
-		if(! loadOk)
+		if(loadOk)
+		{
+			StoredSettings::getInstance()->setWorkingFolder(mdlFile.getParentDirectory().getFullPathName());
+		}
+		else
 		{
 			DBG("Something went wrong loading the mdl file.");
 		}
@@ -98,11 +103,13 @@ void MDLController::save()
 }
 void MDLController::saveAs()
 {
-	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
-			"*.mdl", false);
+	FileChooser fch("Choose mdl file",
+			StoredSettings::getInstance()->getWorkingFolder(), "*.mdl", false);
+
 	if(fch.browseForFileToSave(true))
 	{
 		File result = fch.getResult();
+		StoredSettings::getInstance()->setWorkingFolder(result.getParentDirectory().getFullPathName());
 		bool saveOk = currentMdl->save(result.getFullPathName());
 		if(! saveOk)
 		{
@@ -163,11 +170,13 @@ const String MDLController::generateFaust()
 		Alerts::missingFaust();
 		return "Missing Faust";
 	}
-	FileChooser fch("Choose output faust file", File::getCurrentWorkingDirectory(),"*.mdl", false);
+	FileChooser fch("Choose output faust file",
+			StoredSettings::getInstance()->getWorkingFolder(),"*.mdl", false);
 
 	if (fch.browseForFileToSave(true))
 	{
 		File result = fch.getResult();
+		StoredSettings::getInstance()->setWorkingFolder(result.getParentDirectory().getFullPathName());
 		return outCmd->generateFaustCode(currentMdl->getFilePath(), result.getFullPathName());
 	}
 	return String::empty;
