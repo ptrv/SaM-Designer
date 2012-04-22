@@ -42,10 +42,10 @@ public:
 	bool menuItemWasClicked(CommandID menuId);
 	void openMDL(const File& mdlFile);
 
+	void setMainWindowTitle();
 private:
 	void debugWindowToggle();
 	void debugWindowClear();
-	void setMainWindowTitle();
 
 	MainAppWindow& maw;
 	DebugWindow& dw;

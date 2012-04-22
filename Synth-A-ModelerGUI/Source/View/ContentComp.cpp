@@ -185,6 +185,7 @@ void ContentComp::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
 		// open a file from the "recent files" menu
 		const File file (StoredSettings::getInstance()->recentFiles.getFile (menuItemID - 100));
 		appController.openMDL(file);
+		appController.setMainWindowTitle();
     }
 }
 

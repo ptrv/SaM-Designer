@@ -53,15 +53,19 @@ bool AppController::menuItemWasClicked(CommandID menuId)
         return true;
     case CommandIDs::open:
     	mdlController->open();
-        return true;
+    	setMainWindowTitle();
+    	return true;
     case CommandIDs::closeDocument:
     	mdlController->close();
-        return true;
+    	setMainWindowTitle();
+    	return true;
     case CommandIDs::saveDocument:
     	mdlController->save();
+    	setMainWindowTitle();
         return true;
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
+    	setMainWindowTitle();
         return true;
     case CommandIDs::showPrefs:
     	PrefsPanel::show();

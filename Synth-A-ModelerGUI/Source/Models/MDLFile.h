@@ -56,7 +56,7 @@ public:
 	bool hasNotBeenSavedYet() const { return isInit; }
 
 	const String& getFilePath() const { return mdlPath; }
-	const String& getName() const { return mdlName; }
+	const String getName() { return isModified ? mdlName+"*" : mdlName; }
 
 private:
 

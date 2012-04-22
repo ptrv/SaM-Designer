@@ -177,7 +177,7 @@ const String MDLController::generateExternal()
 	return "Not implemented yet.";
 }
 
-const String& MDLController::getMDLName()
+const String MDLController::getMDLName()
 {
 	return currentMdl->getName();
 }

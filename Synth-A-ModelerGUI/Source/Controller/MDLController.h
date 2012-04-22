@@ -44,7 +44,7 @@ public:
 
 	const String generateFaust();
 	const String generateExternal();
-	const String& getMDLName();
+	const String getMDLName();
 
 
 private:
