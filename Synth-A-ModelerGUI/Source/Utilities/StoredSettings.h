@@ -65,6 +65,8 @@ public:
 
     const StringArray& getFontNames();
 
+    const String getExporters() const;
+    void setExporters(const String& exporters);
 
     //==============================================================================
 //    Image getFallbackImage();

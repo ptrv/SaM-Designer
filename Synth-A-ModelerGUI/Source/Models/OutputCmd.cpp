@@ -100,15 +100,9 @@ bool OutputCmd::isFaust2supercolliderAvailable()
 	String cmdFaust2supercollider = StoredSettings::getInstance()->getCmdFaust2supercollider();
 	return isCmdAvailable(cmdFaust2supercollider);
 }
-
-const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)
+const String OutputCmd::runChildProcess(const String& processStr)
 {
 	ChildProcess child;
-
-	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	String cmdSAM = StoredSettings::getInstance()->getCmdSAM();
-	String processStr = cmdPerl +" " + cmdSAM + " " + inPath + " " + outPath;
-
 	if(child.start(processStr))
 	{
 		const String result (child.readAllProcessOutput());
@@ -122,6 +116,31 @@ const String OutputCmd::generateFaustCode(const String& inPath, const String& ou
 		return "failed to start process";
 	}
 }
+const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)
+{
+	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
+	String cmdSAM = StoredSettings::getInstance()->getCmdSAM();
+	String processStr = cmdPerl +" " + cmdSAM + " " + inPath + " " + outPath;
+
+	return runChildProcess(processStr);
+}
+
+const String OutputCmd::generateExternalSC(const String& inPath)
+{
+	String cmdSC = StoredSettings::getInstance()->getCmdFaust2supercollider();
+	String processStr = cmdSC + " " + inPath;
+
+	return runChildProcess(processStr);
+}
+const String OutputCmd::generateExternalPD(const String& inPath)
+{
+	String cmdPD = StoredSettings::getInstance()->getCmdFaust2puredata();
+	String processStr = cmdPD + " " + inPath;
+
+	return runChildProcess(processStr);
+
+}
+
 
 //==============================================================================
 #if UNIT_TESTS

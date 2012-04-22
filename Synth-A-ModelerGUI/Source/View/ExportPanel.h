@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    PrefsPanel.h
-    Created: 19 Apr 2012 2:25:09pm
+    ExportPanel.h
+    Created: 22 Apr 2012 8:26:07pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,20 +23,23 @@
 
 */
 
-#ifndef __PREFSPANEL_H_87C5CC8A__
-#define __PREFSPANEL_H_87C5CC8A__
+#ifndef __EXPORTPANEL_H_CA4E7DCE__
+#define __EXPORTPANEL_H_CA4E7DCE__
 
-class PrefsPanel  : public DialogWindow
+
+class ExportPanel  : public DialogWindow
 {
 public:
-    PrefsPanel();
-    ~PrefsPanel();
+	ExportPanel(MDLController& mdlController_);
+    ~ExportPanel();
 
     void closeButtonPressed();
 
-    static void show();
+    static void show(MDLController& mdlCtrl);
+
+private:
+    MDLController& mdlController;
 };
 
 
-
-#endif  // __PREFSPANEL_H_87C5CC8A__
+#endif  // __EXPORTPANEL_H_CA4E7DCE__

@@ -61,6 +61,7 @@ OBJECTS := \
   $(OBJDIR)/LinkObject_3aeff31f.o \
   $(OBJDIR)/MassObject_76535999.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/ExportPanel_4e5f49af.o \
   $(OBJDIR)/PrefsPanel_2006a45f.o \
   $(OBJDIR)/ContentComp_99fa8a27.o \
   $(OBJDIR)/ObjComp_838b59a5.o \
@@ -181,6 +182,11 @@ $(OBJDIR)/MassObject_76535999.o: ../../Source/Models/MassObject.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ExportPanel_4e5f49af.o: ../../Source/View/ExportPanel.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ExportPanel.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/PrefsPanel_2006a45f.o: ../../Source/View/PrefsPanel.cpp

@@ -41,7 +41,10 @@ public:
 	bool isFaust2puredataAvailable();
 	bool isFaust2supercolliderAvailable();
 	const String generateFaustCode(const String& inPath, const String& outPath);
+	const String generateExternalSC(const String& inPath);
+	const String generateExternalPD(const String& inPath);
 private:
+	const String runChildProcess(const String& processStr);
 };
 
 

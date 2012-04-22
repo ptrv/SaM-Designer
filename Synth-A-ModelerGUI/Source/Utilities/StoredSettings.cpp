@@ -244,3 +244,12 @@ void StoredSettings::setWorkingFolder (const String& folder)
 {
 	props->setValue("workingdir", folder);
 }
+
+const String StoredSettings::getExporters() const
+{
+	return props->getValue("exporters", "sc|pd");
+}
+void StoredSettings::setExporters(const String& exporters)
+{
+	props->setValue("exporters", exporters);
+}

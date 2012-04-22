@@ -96,6 +96,8 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="WLXXDy" name="ExportPanel.cpp" compile="1" resource="0" file="Source/View/ExportPanel.cpp"/>
+        <FILE id="OwQrzA" name="ExportPanel.h" compile="0" resource="0" file="Source/View/ExportPanel.h"/>
         <FILE id="dNRcpC" name="PrefsPanel.cpp" compile="1" resource="0" file="Source/View/PrefsPanel.cpp"/>
         <FILE id="DWHh36" name="PrefsPanel.h" compile="0" resource="0" file="Source/View/PrefsPanel.h"/>
         <FILE id="b4aWii" name="ContentComp.cpp" compile="1" resource="0" file="Source/View/ContentComp.cpp"/>
