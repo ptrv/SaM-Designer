@@ -47,6 +47,7 @@ OBJECTS := \
   $(OBJDIR)/DebugWindow_9be09c25.o \
   $(OBJDIR)/Main_70df61c1.o \
   $(OBJDIR)/MainWindow_3e8328d1.o \
+  $(OBJDIR)/MDLWriter_7bd6d284.o \
   $(OBJDIR)/Alerts_379eb1e5.o \
   $(OBJDIR)/MDLParser_674db430.o \
   $(OBJDIR)/StoredSettings_125117b4.o \
@@ -110,6 +111,11 @@ $(OBJDIR)/Main_70df61c1.o: ../../Source/Application/Main.cpp
 $(OBJDIR)/MainWindow_3e8328d1.o: ../../Source/Application/MainWindow.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MainWindow.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLWriter_7bd6d284.o: ../../Source/Utilities/MDLWriter.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLWriter.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Alerts_379eb1e5.o: ../../Source/Utilities/Alerts.cpp

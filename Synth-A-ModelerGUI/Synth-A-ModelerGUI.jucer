@@ -24,6 +24,8 @@
   </EXPORTFORMATS>
   <MAINGROUP id="RyljMx" name="Synth-A-ModelerGUI">
     <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">
+      <FILE id="zDjPgE" name="mdl_file_header.txt" compile="0" resource="1"
+            file="BinaryData/mdl_file_header.txt"/>
       <FILE id="n8OTz8" name="Info.txt" compile="0" resource="1" file="BinaryData/Info.txt"/>
       <FILE id="TtDmJX" name="prefs_audio.png" compile="0" resource="1" file="BinaryData/prefs_audio.png"/>
       <FILE id="BQgaoD" name="prefs_about.png" compile="0" resource="1" file="BinaryData/prefs_about.png"/>
@@ -52,6 +54,8 @@
         <FILE id="zCXtM2" name="MainWindow.h" compile="0" resource="0" file="Source/Application/MainWindow.h"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="p09OA7" name="MDLWriter.cpp" compile="1" resource="0" file="Source/Utilities/MDLWriter.cpp"/>
+        <FILE id="G2H9bT" name="MDLWriter.h" compile="0" resource="0" file="Source/Utilities/MDLWriter.h"/>
         <FILE id="alRTki" name="Alerts.cpp" compile="1" resource="0" file="Source/Utilities/Alerts.cpp"/>
         <FILE id="VydeMF" name="Alerts.h" compile="0" resource="0" file="Source/Utilities/Alerts.h"/>
         <FILE id="ieHEvG" name="MDLParser.cpp" compile="1" resource="0" file="Source/Utilities/MDLParser.cpp"/>

@@ -35,6 +35,7 @@ AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 {
 	mdlController = new MDLController();
 	objController = new ObjController();
+	setMainWindowTitle();
 }
 
 AppController::~AppController()
@@ -48,6 +49,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     {
     case CommandIDs::newFile:
     	mdlController->newFile();
+    	setMainWindowTitle();
         return true;
     case CommandIDs::open:
     	mdlController->open();
@@ -117,10 +119,10 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	break;
 
     case CommandIDs::generateFaust:
-    	mdlController->generateFaust();
+    	dw.addText(mdlController->generateFaust());
     	break;
     case CommandIDs::generateExternal:
-    	mdlController->generateExternal();
+    	dw.addText(mdlController->generateExternal());
     	break;
 
     case CommandIDs::showOutputConsole:
@@ -152,4 +154,11 @@ void AppController::debugWindowToggle()
 void AppController::debugWindowClear()
 {
 	dw.clear();
+}
+
+void AppController::setMainWindowTitle()
+{
+	String title = JUCEApplication::getInstance()->getApplicationName();
+	title << " - " << mdlController->getMDLName();
+	maw.setName(title);
 }

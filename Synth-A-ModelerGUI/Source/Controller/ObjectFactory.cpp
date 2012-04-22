@@ -27,51 +27,42 @@
 
 Mass* ObjectFactory::createNewMass()
 {
-	Mass* mass = new Mass(MassType);
-
-	return mass;
+	return new Mass(MassType);
 }
+
 Ground* ObjectFactory::createNewGround()
 {
-	Ground* ground = new Ground(GroundType);
-	return ground;
+	return new Ground(GroundType);
 }
 Port* ObjectFactory::createNewResonator()
 {
-	Resonator* resonator = new Resonator(ResonatorType);
-	return resonator;
+	return new Resonator(ResonatorType);
 }
 Port* ObjectFactory::createNewPort()
 {
-	Port* port = new Port(PortType);
-	return port;
+	return new Port(PortType);
 }
 Link* ObjectFactory::createNewLink()
 {
-	Link* link = new Link(LinkType);
-	return link;
+	return new Link(LinkType);
 }
 Pluck* ObjectFactory::createNewPluck()
 {
-	Pluck* pluck = new Pluck(PluckType);
-	return pluck;
+	return new Pluck(PluckType);
 }
 
 Touch* ObjectFactory::createNewTouch()
 {
-	Touch* contact = new Touch(TouchType);
-	return contact;
+	return new Touch(TouchType);
 }
 
 LabelObject* ObjectFactory::createNewLabelObject()
 {
-	LabelObject* label = new LabelObject(LabelType);
-	return label;
+	return new LabelObject(LabelType);
 }
 
 AudioObject* ObjectFactory::createNewAudioObject()
 {
-	AudioObject* audioObj = new AudioObject(AudioObjectType);
-	return audioObj;
+	return new AudioObject(AudioObjectType);
 }
 

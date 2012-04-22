@@ -42,11 +42,13 @@ public:
 	void saveAs();
 	void close();
 
-	void generateFaust();
-	void generateExternal();
+	const String generateFaust();
+	const String generateExternal();
+	const String& getMDLName();
 
 
 private:
+	FileBasedDocument::SaveResult saveIfNeededAndUserAgrees (MDLFile* mdl);
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;
 };

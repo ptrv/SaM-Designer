@@ -8,6 +8,33 @@
 namespace BinaryData
 {
 
+//================== mdl_file_header.txt ==================
+static const unsigned char temp_35c88a8a[] =
+"# MDL file for Synth-A-Modeler\n"
+"#\n"
+"# Edgar Berdahl, 2012\n"
+"# Audio Communication Group\n"
+"# Technical University of Berlin\n"
+"#\n"
+"# -------------------------------------------------------------------\n"
+"#\n"
+"# This program is free software; you can redistribute it and/or modify\n"
+"# it under the terms of the GNU General Public License as published by\n"
+"# the Free Software Foundation; either version 2 of the License, or\n"
+"# (at your option) any later version.\n"
+"#\n"
+"# This program is distributed in the hope that it will be useful,\n"
+"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"# GNU General Public License for more details.\n"
+"#\n"
+"# You should have received a copy of the GNU General Public License\n"
+"# along with this program; if not, write to the Free Software\n"
+"# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.\n"
+"\n";
+
+const char* mdl_file_header_txt = (const char*) temp_35c88a8a;
+
 //================== Info.txt ==================
 static const unsigned char temp_881e27ae[] =
 "The Synth-A-Model project was carried out at the TU Berlin's Audio Communication Group.  The Synth-A-Model compiler was written by Edgar Berdahl, and the graphical user interface was created by Peter Vasil.  We would like to graciously thank Prof. Ju"
@@ -728,6 +755,8 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
 
     switch (hash)
     {
+        case 0xe7d611d7:
+        case 0x344f5dad:  numBytes = 875; return mdl_file_header_txt;
         case 0x0e7ab37f:
         case 0x1f1fe76c:  numBytes = 407; return Info_txt;
         case 0xa475a371:

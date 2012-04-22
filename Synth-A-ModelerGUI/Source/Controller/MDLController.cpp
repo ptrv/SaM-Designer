@@ -42,91 +42,142 @@ MDLController::~MDLController()
 
 void MDLController::newFile()
 {
-	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
-			"*.mdl", false);
-
-	if (fch.browseForFileToSave(true))
-	{
-		File result = fch.getResult();
-		currentMdl->newMDL(result.getFullPathName().toUTF8().getAddress());
-	}
-
-
+	currentMdl->newMDL();
 }
 void MDLController::open()
 {
-	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
-			"*.mdl", false);
-
-	if (fch.browseForFileToOpen())
+	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
 	{
-		File result = fch.getResult();
-		bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
-		if(loadOK)
+		FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
+				"*.mdl", false);
+
+		if (fch.browseForFileToOpen())
 		{
-			StoredSettings::getInstance()->recentFiles.addFile(result);
+			File result = fch.getResult();
+			bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
+			if(loadOK)
+			{
+				StoredSettings::getInstance()->recentFiles.addFile(result);
+			}
+			else
+			{
+				DBG("Something went wrong loading the mdl file.");
+			}
 		}
-		else
-		{
-			DBG("Something went wrong with loading the mdl file.");
-		}
-	}
+    }
+
 
 }
 
 void MDLController::openFromFile(const File& mdlFile)
 {
-	bool loadOk = currentMdl->openMDL(mdlFile.getFullPathName().toUTF8().getAddress());
-	if(loadOk)
+	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
 	{
-
-	}
-	else
-	{
-		DBG("Something went wrong loading the mdl file.")
+		bool loadOk = currentMdl->openMDL(mdlFile.getFullPathName().toUTF8().getAddress());
+		if(! loadOk)
+		{
+			DBG("Something went wrong loading the mdl file.");
+		}
 	}
 }
 void MDLController::save()
 {
-
+	if(currentMdl->hasNotBeenSavedYet())
+	{
+		saveAs();
+	}
+	else if(saveIfNeededAndUserAgrees(currentMdl) == FileBasedDocument::savedOk)
+	{
+		bool saveOk = currentMdl->save(currentMdl->getFilePath());
+		if(! saveOk)
+		{
+			DBG("Something went wrong saving the mdl file.")
+		}
+	}
 }
 void MDLController::saveAs()
 {
+	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),
+			"*.mdl", false);
+	if(fch.browseForFileToSave(true))
+	{
+		File result = fch.getResult();
+		bool saveOk = currentMdl->save(result.getFullPathName());
+		if(! saveOk)
+		{
+			DBG("Something went wrong saving the mdl file.")
+		}
+	}
+}
+FileBasedDocument::SaveResult MDLController::saveIfNeededAndUserAgrees (MDLFile* mdl)
+{
+    if (! mdl->needsSaving())
+        return FileBasedDocument::savedOk;
 
+    const int r = AlertWindow::showYesNoCancelBox (AlertWindow::QuestionIcon,
+                                                   TRANS("Closing document..."),
+                                                   TRANS("Do you want to save the changes to \"")
+                                                       + mdl->getName() + "\"?",
+                                                   TRANS("save"),
+                                                   TRANS("discard changes"),
+                                                   TRANS("cancel"));
+
+    if (r == 1)
+    {
+        // save changes
+        return mdl->save(mdl->getFilePath()) ? FileBasedDocument::savedOk
+                           : FileBasedDocument::failedToWriteToFile;
+    }
+    else if (r == 2)
+    {
+        // discard changes
+        return FileBasedDocument::savedOk;
+    }
+
+    return FileBasedDocument::userCancelledSave;
 }
 void MDLController::close()
 {
-
+	if(saveIfNeededAndUserAgrees(currentMdl) == FileBasedDocument::savedOk)
+	{
+		currentMdl->close();
+	}
 }
 
-void MDLController::generateFaust()
+const String MDLController::generateFaust()
 {
 	if(! outCmd->isPerlAvailable())
 	{
 		Alerts::missingPerl();
-		return;
+		return "Missing Perl";
 	}
 	if(! outCmd->isSynthAModelerCmdAvailable())
 	{
 		Alerts::missingSAM();
-		return;
+		return "Missing Synth-A-Modeler.plx";
 	}
 	if(! outCmd->isFaustAvailable())
 	{
 		Alerts::missingFaust();
-		return;
+		return "Missing Faust";
 	}
-//	FileChooser fch("Choose mdl file", File::getCurrentWorkingDirectory(),"*.mdl", false);
-//
-//	if (fch.browseForFileToOpen())
-//	{
-//		File result = fch.getResult();
-//		String compilerText = outCmd->generateFaustCode(result.getFullPathName(), "examplelinks.dsp");
-//		dw->addText(compilerText);
-//	}
+	FileChooser fch("Choose output faust file", File::getCurrentWorkingDirectory(),"*.mdl", false);
+
+	if (fch.browseForFileToSave(true))
+	{
+		File result = fch.getResult();
+		return outCmd->generateFaustCode(currentMdl->getFilePath(), result.getFullPathName());
+	}
+	return String::empty;
 }
 
-void MDLController::generateExternal()
+const String MDLController::generateExternal()
 {
+	// TODO: implement generate external
+	return "Not implemented yet.";
+}
 
+const String& MDLController::getMDLName()
+{
+	return currentMdl->getName();
 }

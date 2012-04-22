@@ -7,6 +7,9 @@
 
 namespace BinaryData
 {
+    extern const char*   mdl_file_header_txt;
+    const int            mdl_file_header_txtSize = 875;
+
     extern const char*   Info_txt;
     const int            Info_txtSize = 407;
 

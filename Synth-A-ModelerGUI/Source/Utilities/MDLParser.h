@@ -27,7 +27,6 @@
 #define __MDLPARSER_H_DC928BC0__
 
 
-#include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Models/MDLFile.h"
 
 class MDLParser

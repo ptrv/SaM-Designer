@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    AppController.h
-    Created: 12 Apr 2012 1:30:25am
+    MDLWriter.h
+    Created: 22 Apr 2012 1:07:57am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -11,50 +11,33 @@
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-  
+
 */
 
-#ifndef __APPCONTROLLER_H_B0B552E9__
-#define __APPCONTROLLER_H_B0B552E9__
+#ifndef __MDLWRITER_H_CB9D9CEF__
+#define __MDLWRITER_H_CB9D9CEF__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "MDLController.h"
-#include "ObjController.h"
 
-class DebugWindow;
-class MainAppWindow;
+#include "../Models/MDLFile.h"
 
-class AppController
+class MDLWriter
 {
 public:
-	AppController(MainAppWindow& maw_, DebugWindow& dw_);
-	~AppController();
-
-	bool menuItemWasClicked(CommandID menuId);
-	void openMDL(const File& mdlFile);
-
+	MDLWriter(MDLFile& mdlFile_);
+	bool writeMDL(const String& savePath);
 private:
-	void debugWindowToggle();
-	void debugWindowClear();
-	void setMainWindowTitle();
-
-	MainAppWindow& maw;
-	DebugWindow& dw;
-
-    ScopedPointer<MDLController> mdlController;
-    ScopedPointer<ObjController> objController;
-
-//	ScopedPointer<OutputCmd> outCmd;
+	MDLFile& mdlFile;
 };
 
 
-#endif  // __APPCONTROLLER_H_B0B552E9__
+
+#endif  // __MDLWRITER_H_CB9D9CEF__

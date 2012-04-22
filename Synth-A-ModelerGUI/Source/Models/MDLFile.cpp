@@ -25,11 +25,12 @@
 
 #include "MDLFile.h"
 #include "../Utilities/MDLParser.h"
+#include "../Utilities/MDLWriter.h"
 
 MDLFile::MDLFile()
 : isModified(false)
 {
-
+	initMDL();
 }
 
 MDLFile::~MDLFile()
@@ -39,7 +40,10 @@ MDLFile::~MDLFile()
 
 void MDLFile::initMDL()
 {
-
+	isInit = true;
+	isModified = false;
+	mdlPath = String::empty;
+	mdlName = "Untitled";
 }
 
 void MDLFile::destroyMDL()
@@ -64,9 +68,14 @@ void MDLFile::destroyMDL()
 
 }
 
+void MDLFile::newMDL()
+{
+	destroyMDL();
+	initMDL();
+}
+
 bool MDLFile::openMDL(const char* mdlPath_)
 {
-	DBG("Opened MDL file: "+String(mdlPath_));
 	destroyMDL();
 	initMDL();
 	mdlPath = mdlPath_;
@@ -74,6 +83,10 @@ bool MDLFile::openMDL(const char* mdlPath_)
 	if(pa.parseMDL())
 	{
 		// success
+		DBG("Opened MDL file: "+String(mdlPath));
+		isInit = false;
+		File mf(mdlPath);
+		mdlName = mf.getFileName();
 		return true;
 	}
 	else
@@ -81,12 +94,6 @@ bool MDLFile::openMDL(const char* mdlPath_)
 		// fail
 		return false;
 	}
-}
-
-void MDLFile::newMDL(const char* mdlPath_)
-{
-	mdlPath = mdlPath_;
-	initMDL();
 }
 
 const int MDLFile::getNumberOfObjectsByType(ObjectType objType)
@@ -129,6 +136,25 @@ bool MDLFile::needsSaving()
 	return isModified;
 }
 
+bool MDLFile::save(const String& savePath)
+{
+	isModified = false;
+	MDLWriter wr(*this);
+	if(wr.writeMDL(savePath))
+	{
+		DBG("Saved MDL file: "+savePath);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void MDLFile::close()
+{
+	newMDL();
+}
 //==============================================================================
 #if UNIT_TESTS
 

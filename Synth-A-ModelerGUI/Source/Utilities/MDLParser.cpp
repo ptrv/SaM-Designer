@@ -78,18 +78,21 @@ bool MDLParser::parseMDL()
 					}
 					else
 					{
-						DBG("Something went really wrong!")
-										return false;
+						DBG("Something went really wrong!");
+						return false;
 					}
 
 					//get values between first parantheses
 					int indexCloseParan = line.indexOf(")");
-					String params = line.substring(indexParantese+1, indexCloseParan);
-					StringArray paramsArray;
-					paramsArray.addTokens(params, ",", "\"");
-					for (int param = 0; param < paramsArray.size(); ++param) {
-						float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
-						mass->addParameter(paramVal);
+					if(mass->getType() != PortType)
+					{
+						String params = line.substring(indexParantese+1, indexCloseParan);
+						StringArray paramsArray;
+						paramsArray.addTokens(params, ",", "\"");
+						for (int param = 0; param < paramsArray.size(); ++param) {
+							float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
+							mass->addParameter(paramVal);
+						}
 					}
 					// get remaining line content
 					line = line.substring(indexCloseParan+1);

@@ -36,8 +36,8 @@ public:
 	MDLFile();
 	~MDLFile();
 
+	void newMDL();
 	bool openMDL(const char* mdlPath_);
-	void newMDL(const char* mdlPath_);
 	const Array<MassObject*>& getMasses()const { return masses; }
 	const Array<LinkObject*>& getLinks() const { return links; }
 	const Array<LabelObject*>& getLabels() const { return labelObjs; }
@@ -51,7 +51,12 @@ public:
 
 	bool needsSaving();
 
+	bool save(const String& savePath);
+	void close();
+	bool hasNotBeenSavedYet() const { return isInit; }
+
 	const String& getFilePath() const { return mdlPath; }
+	const String& getName() const { return mdlName; }
 
 private:
 
@@ -64,8 +69,10 @@ private:
 	Array<LabelObject*> labelObjs;
 	Array<AudioObject*> audioObjects;
 	bool isModified;
+	bool isInit;
 
 	String mdlPath;
+	String mdlName;
 };
 
 

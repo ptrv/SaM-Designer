@@ -45,18 +45,54 @@ class BaseObject
 {
 public:
 	BaseObject(ObjectType objType_)
-	: objType(objType_), name(String::empty){}
+	: objType(objType_), name(String::empty)
+	{
+		switch (objType) {
+			case MassType:
+				typeString = "mass";
+				break;
+			case GroundType:
+				typeString = "ground";
+				break;
+			case ResonatorType:
+				typeString = "resonator";
+				break;
+			case PortType:
+				typeString = "port";
+				break;
+			case LinkType:
+				typeString = "link";
+				break;
+			case TouchType:
+				typeString = "touch";
+				break;
+			case PluckType:
+				typeString = "pluck";
+				break;
+			case LabelType:
+				typeString = "label";
+				break;
+			case AudioObjectType:
+				typeString = "audioout";
+				break;
+
+			default:
+				break;
+		}
+	}
 	virtual ~BaseObject(){}
 
 	const String& getAttributeNames();
 
 	const ObjectType& getType() const { return objType; }
+	const String& getTypeString() const { return typeString; }
 
 	const String& getName() const { return name; }
 	void setName(const String& name_) { name = name_; }
 
 protected:
 	ObjectType objType;
+	String typeString;
 	String name;
 
 private:
