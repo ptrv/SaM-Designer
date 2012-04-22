@@ -42,7 +42,10 @@ MDLController::~MDLController()
 
 void MDLController::newFile()
 {
-	currentMdl->newMDL();
+	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
+	{
+		currentMdl->newMDL();
+	}
 }
 void MDLController::open()
 {
@@ -65,8 +68,6 @@ void MDLController::open()
 			}
 		}
     }
-
-
 }
 
 void MDLController::openFromFile(const File& mdlFile)
@@ -109,6 +110,7 @@ void MDLController::saveAs()
 		}
 	}
 }
+
 FileBasedDocument::SaveResult MDLController::saveIfNeededAndUserAgrees (MDLFile* mdl)
 {
     if (! mdl->needsSaving())
