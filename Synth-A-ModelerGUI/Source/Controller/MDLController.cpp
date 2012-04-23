@@ -172,7 +172,7 @@ const String MDLController::generateFaust()
 		return "Missing Faust";
 	}
 	FileChooser fch("Choose output faust file",
-			StoredSettings::getInstance()->getWorkingFolder(),"*.mdl", false);
+			StoredSettings::getInstance()->getWorkingFolder(),"*.dsp", false);
 
 	if (fch.browseForFileToSave(true))
 	{
