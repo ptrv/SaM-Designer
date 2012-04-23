@@ -253,3 +253,21 @@ void StoredSettings::setExporters(const String& exporters)
 {
 	props->setValue("exporters", exporters);
 }
+
+const bool StoredSettings::getShowLabels() const
+{
+	return props->getBoolValue("showlabels", true);
+}
+void StoredSettings::setShowLabels (bool showLabels)
+{
+	props->setValue("showlabels", showLabels);
+}
+
+const bool StoredSettings::getIsSegmentedConnectors() const
+{
+	return props->getBoolValue("segmentedconnectors", false);
+}
+void StoredSettings::setIsSegmentedConnectors (bool isSegmentedConnectors)
+{
+	props->setValue("segmentedconnectors", isSegmentedConnectors);
+}
