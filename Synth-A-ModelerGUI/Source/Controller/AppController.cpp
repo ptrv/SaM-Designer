@@ -123,11 +123,19 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	break;
 
     case CommandIDs::generateFaust:
-    	dw.addText(mdlController->generateFaust());
+    {
+    	String consoleText = mdlController->generateFaust();
+    	if(consoleText.compare("") != 0)
+    		dw.addText(consoleText);
+    }
     	break;
     case CommandIDs::generateExternal:
-    	dw.addText(mdlController->generateExternal());
+    {
+    	String consoleText = mdlController->generateExternal();
+    	if(consoleText.compare("") != 0)
+    		dw.addText(consoleText);
     	break;
+    }
 
     case CommandIDs::showOutputConsole:
     	debugWindowToggle();

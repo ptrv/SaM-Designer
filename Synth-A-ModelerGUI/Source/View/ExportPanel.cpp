@@ -65,16 +65,19 @@ public:
 
     void buttonClicked(Button* btn)
     {
+    	exportPanel.returnVal = 0;
     	if(btn == &buttonOk)
     	{
 //    		String
     		DBG("Clicked Ok");
     		setExporters();
+    		exportPanel.returnVal = 1;
     		exportPanel.closeButtonPressed();
     	}
     	else if(btn == &buttonCancel)
     	{
     		DBG("Clicked Cancel");
+    		exportPanel.returnVal = 2;
     		exportPanel.closeButtonPressed();
     	}
     }
@@ -122,9 +125,9 @@ private:
 //static String exportWindowPos;
 
 
-ExportPanel::ExportPanel(MDLController& mdlController_)
+ExportPanel::ExportPanel()
     : DialogWindow ("Export externals", Colour::greyLevel (0.92f), true),
-      mdlController(mdlController_)
+      returnVal(0)
 {
     ExportComp* const p = new ExportComp(*this);
     p->setSize (250, 150);
@@ -146,8 +149,9 @@ void ExportPanel::closeButtonPressed()
     setVisible (false);
 }
 
-void ExportPanel::show(MDLController& mdlCtrl)
+int ExportPanel::show()
 {
-	ExportPanel ep(mdlCtrl);
+	ExportPanel ep;
     ep.runModalLoop();
+    return ep.returnVal;
 }

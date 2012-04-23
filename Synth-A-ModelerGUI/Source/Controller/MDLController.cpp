@@ -189,25 +189,29 @@ const String MDLController::generateExternal()
 	if(currentMdl->getName().compare("Untitled") == 0)
 		return "No mdl file\n\n";
 
-	ExportPanel::show(*this);
+	int r = ExportPanel::show();
+	DBG(r);
+	if(r != 1)
+		return "";
 	StringArray exporters;
 	String exportersStr = StoredSettings::getInstance()->getExporters();
 	exporters.addTokens(exportersStr, "|", "\"");
 	String outText;
 	Random random(Time::currentTimeMillis());
-	String tmpFaust = currentMdl->getFilePath() + "_tmp" + String(random.nextInt(1000000));
+
+	String tmpFaust = currentMdl->getFilePath().upToFirstOccurrenceOf(".mdl", false, false) + "_tmp" + String(random.nextInt(1000000)) + String(".dsp");
 	DBG(tmpFaust);
 	outText << outCmd->generateFaustCode(currentMdl->getFilePath(), tmpFaust);
 	if(exporters.indexOf("sc") != -1)
 	{
 		outText << outCmd->generateExternalSC(tmpFaust);
 	}
-	if(exporters.indexOf("pd") != -1)
-	{
-		outText << outCmd->generateExternalPD(tmpFaust);
-	}
-	File tmpF(tmpFaust);
-	tmpF.deleteFile();
+//	if(exporters.indexOf("pd") != -1)
+//	{
+//		outText << outCmd->generateExternalPD(tmpFaust);
+//	}
+//	File tmpF(tmpFaust);
+//	tmpF.deleteFile();
 	return outText;
 }
 

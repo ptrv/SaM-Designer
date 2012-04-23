@@ -30,15 +30,14 @@
 class ExportPanel  : public DialogWindow
 {
 public:
-	ExportPanel(MDLController& mdlController_);
+	ExportPanel();
     ~ExportPanel();
 
     void closeButtonPressed();
 
-    static void show(MDLController& mdlCtrl);
+    static int show();
 
-private:
-    MDLController& mdlController;
+    int returnVal;
 };
 
 
