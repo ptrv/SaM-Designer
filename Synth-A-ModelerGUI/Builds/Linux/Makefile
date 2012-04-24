@@ -55,6 +55,7 @@ OBJECTS := \
   $(OBJDIR)/AppController_eaa3b8d3.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
+  $(OBJDIR)/WaveguideObject_c310a006.o \
   $(OBJDIR)/AudioObject_ad765bf9.o \
   $(OBJDIR)/LabelObject_2a157197.o \
   $(OBJDIR)/OutputCmd_1e28237d.o \
@@ -147,6 +148,11 @@ $(OBJDIR)/MDLController_4aad0d67.o: ../../Source/Controller/MDLController.cpp
 $(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ObjController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/WaveguideObject_c310a006.o: ../../Source/Models/WaveguideObject.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling WaveguideObject.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/AudioObject_ad765bf9.o: ../../Source/Models/AudioObject.cpp

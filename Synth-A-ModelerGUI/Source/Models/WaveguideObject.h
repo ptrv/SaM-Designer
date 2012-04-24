@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    Types.h
-    Created: 18 Apr 2012 12:13:29am
-    Author:  peter
+    WaveguideObject.h
+    Created: 24 Apr 2012 7:48:52pm
+    Author:  Peter Vasil
 
   ==============================================================================
 
@@ -23,15 +23,36 @@
 
 */
 
-#ifndef __TYPES_H_4907E39C__
-#define __TYPES_H_4907E39C__
+#ifndef __WAVEGUIDEOBJECT_H_D78ED265__
+#define __WAVEGUIDEOBJECT_H_D78ED265__
+
+#include "BaseObject.h"
+
+class WaveguideObject : public BaseObject
+{
+public:
+	WaveguideObject(ObjectType objType_=WaveguideType);
+	virtual ~WaveguideObject();
+
+private:
+};
+
+class TerminationObject : public BaseObject
+{
+public:
+	TerminationObject(ObjectType objType_=TerminationType);
+	virtual ~TerminationObject();
+
+private:
+};
+class JunctionObject : public BaseObject
+{
+public:
+	JunctionObject(ObjectType objType_=JunctionType);
+	virtual ~JunctionObject();
+
+private:
+};
 
 
-#include "../Models/MassObject.h"
-#include "../Models/LinkObject.h"
-#include "../Models/LabelObject.h"
-#include "../Models/AudioObject.h"
-#include "../Models/WaveguideObject.h"
-
-
-#endif  // __TYPES_H_4907E39C__
+#endif  // __WAVEGUIDEOBJECT_H_D78ED265__

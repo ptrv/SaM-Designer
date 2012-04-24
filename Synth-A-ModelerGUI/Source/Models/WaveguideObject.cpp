@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    Types.h
-    Created: 18 Apr 2012 12:13:29am
-    Author:  peter
+    WaveguideObject.cpp
+    Created: 24 Apr 2012 7:48:52pm
+    Author:  Peter Vasil
 
   ==============================================================================
 
@@ -23,15 +23,37 @@
 
 */
 
-#ifndef __TYPES_H_4907E39C__
-#define __TYPES_H_4907E39C__
+#include "../../JuceLibraryCode/JuceHeader.h"
+#include "WaveguideObject.h"
 
+WaveguideObject::WaveguideObject(ObjectType objType_)
+: BaseObject(objType_)
+{
 
-#include "../Models/MassObject.h"
-#include "../Models/LinkObject.h"
-#include "../Models/LabelObject.h"
-#include "../Models/AudioObject.h"
-#include "../Models/WaveguideObject.h"
+}
 
+WaveguideObject::~WaveguideObject()
+{
 
-#endif  // __TYPES_H_4907E39C__
+}
+
+TerminationObject::TerminationObject(ObjectType objType_)
+: BaseObject(objType_)
+{
+
+}
+
+TerminationObject::~TerminationObject()
+{
+
+}
+JunctionObject::JunctionObject(ObjectType objType_)
+: BaseObject(objType_)
+{
+
+}
+
+JunctionObject::~JunctionObject()
+{
+
+}

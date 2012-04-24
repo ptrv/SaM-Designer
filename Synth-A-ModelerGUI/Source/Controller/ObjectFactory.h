@@ -41,6 +41,9 @@ public:
 	static Touch* createNewTouch();
 	static LabelObject* createNewLabelObject();
 	static AudioObject* createNewAudioObject();
+	static WaveguideObject* createNewWaveguideObject();
+	static TerminationObject* createNewTerminationObject();
+	static JunctionObject* createNewJunctionObject();
 
 private:
 	ObjectFactory(){}

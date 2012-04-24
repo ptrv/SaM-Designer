@@ -79,6 +79,10 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
+        <FILE id="csu22C" name="WaveguideObject.cpp" compile="1" resource="0"
+              file="Source/Models/WaveguideObject.cpp"/>
+        <FILE id="KTFAPq" name="WaveguideObject.h" compile="0" resource="0"
+              file="Source/Models/WaveguideObject.h"/>
         <FILE id="i5K8EW" name="Types.h" compile="0" resource="0" file="Source/Models/Types.h"/>
         <FILE id="nJcyNt" name="AudioObject.cpp" compile="1" resource="0" file="Source/Models/AudioObject.cpp"/>
         <FILE id="uA0jai" name="AudioObject.h" compile="0" resource="0" file="Source/Models/AudioObject.h"/>

@@ -50,19 +50,27 @@ Pluck* ObjectFactory::createNewPluck()
 {
 	return new Pluck(PluckType);
 }
-
 Touch* ObjectFactory::createNewTouch()
 {
 	return new Touch(TouchType);
 }
-
 LabelObject* ObjectFactory::createNewLabelObject()
 {
 	return new LabelObject(LabelType);
 }
-
 AudioObject* ObjectFactory::createNewAudioObject()
 {
 	return new AudioObject(AudioObjectType);
 }
-
+WaveguideObject* ObjectFactory::createNewWaveguideObject()
+{
+	return new WaveguideObject(WaveguideType);
+}
+TerminationObject* ObjectFactory::createNewTerminationObject()
+{
+	return new TerminationObject(TerminationType);
+}
+JunctionObject* ObjectFactory::createNewJunctionObject()
+{
+	return new JunctionObject(JunctionType);
+}

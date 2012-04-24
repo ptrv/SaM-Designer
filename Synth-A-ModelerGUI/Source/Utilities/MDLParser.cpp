@@ -220,7 +220,18 @@ bool MDLParser::parseMDL()
 					mdlFile.addAudioObject(audioObj);
 				}
 			}
+			else if(line.startsWith("waveguide"))
+			{
 
+			}
+			else if(line.startsWith("termination"))
+			{
+
+			}
+			else if(line.startsWith("junction"))
+			{
+
+			}
 
 		}
 

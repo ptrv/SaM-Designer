@@ -37,6 +37,9 @@ enum ObjectType
 	LinkType,
 	TouchType,
 	PluckType,
+	WaveguideType,
+	TerminationType,
+	JunctionType,
 	LabelType,
 	AudioObjectType
 };
@@ -71,6 +74,15 @@ public:
 				break;
 			case LabelType:
 				typeString = "label";
+				break;
+			case WaveguideType:
+				typeString = "waveguide";
+				break;
+			case TerminationType:
+				typeString = "termination";
+				break;
+			case JunctionType:
+				typeString = "junction";
 				break;
 			case AudioObjectType:
 				typeString = "audioout";
