@@ -28,28 +28,17 @@
 
 #include "BaseObject.h"
 
-struct LabelParameterIdx
-{
-	String labelName;
-	int parameterId;
-};
 class LabelObject : public BaseObject
 {
 public:
 	LabelObject(ObjectType objType_= LabelType);
 	virtual ~LabelObject();
 
-	void setTitle(const String& value);
-	const String& getTitle() const { return title; }
 	void addParameter(const String& value);
-	void setParameterIndex(const String& key, int value);
-	const String& getParamName() const { return labelParamIdx.labelName; }
-	const int getParamId() const { return labelParamIdx.parameterId; }
+	const String& getParameters() const { return parameters; }
 
 private:
-	String title;
-	Array<String> parameters;
-	LabelParameterIdx labelParamIdx;
+	String parameters;
 };
 
 

@@ -33,11 +33,12 @@ public:
 	AudioObject(ObjectType objType_= AudioObjectType);
 	virtual ~AudioObject();
 
-	void addParameter(const String& key, float value);
-	const HashMap<String, float>& getParameters() const { return parameters; }
+	void addParameter(const String& value);
+	const String& getParameters() const { return parameters; }
 private:
 //	Array<String> parameters;
-	HashMap<String, float> parameters;
+//	HashMap<String, float> parameters;
+	String parameters;
 };
 
 

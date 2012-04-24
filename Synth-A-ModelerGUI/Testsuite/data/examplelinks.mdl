@@ -1,62 +1,78 @@
-# Example MDL file for Synth-A-Modeler
-#
 # Edgar Berdahl, 2012
 # Audio Communication Group
 # Technical University of Berlin
-#
 # -------------------------------------------------------------------
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# Note that each Synth-A-Modeler object specified in an MDL file must have its own
+# unique identifier, which is specified in this file. This is because each identifier corresponds
+# to a unique variable in the output Faust DSP file.
+# Mass-like objects
+# ---------------------
+# format [type]([default parameters]),[identifier],([label1],[label2],...)
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# For instance, for a one-dimensional mass we have
+# mass([mass in kg],[optional initial position in m (defaults to zero)],[optional initial velocity in m/s (defaults toi zero)]),[identifier],([label1],[label2],...)
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-
-# format [type]([default parameters]),[identifying_name],([label1],[label2],É)
-# mass is a normal 1-D mass
-# port is a port to the external world, for example to a haptic device, or just for a position
-# input and force output.  
-mass( 0.01),m1,(mymass);
+# Or for a port to the real world, which corresponds to one position input and one force output, we have
+# port( ),[identifier],([label1],[label2],...)
+#
+# Finally ground object is like an infinite mass that never moves. It always stays at the same position.
+# ground([optional initial position in m]),[identifier],([label1],[label2],...)
+mass(0.01),m1,(mymass);
 mass(1e-2),m2,(mymass,mmiddle);
 mass(0.03),m3,(mymass);
 port( ),dev1,(hapticdev);
+ground(0.0),g,(glabel);
 
-
-
-# format [type]([default parameters]),[identifying_name],[starting_vertex],[ending_vertex],([label1],[label2],É)
+# Link-like objects
+# ---------------------
+# Link-type objects connect from one mass-like object to another mass-like object. For that
+# reason, each of the links must specify the two mass-like objects that it connects.
+#
+# format:
+# [type]([default parameters]),[identifying_name],[starting_vertex],[ending_vertex],([label1],[label2],...)
 #
 # For instance for a linear link we have
-# link([stiffness in N/m],[damping in N/(m/s)],[center position offset in m]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],É)
+# link([stiffness in N/m],[damping in N/(m/s)],[optional center position offset in m (defaults to zero)]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],...)
 #
 # Or for a nonlinear, switching "BUT" contact link, we have
-# contact([stiffness in N/m],[damping in N/(m/s)],[offset for engagement in m]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],É)
+# contact([stiffness in N/m],[damping in N/(m/s)],[optional offset for engagement in m] (defaults to zero)),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],...)
 #
 # Or for a nonlinear plucking link, we have
-# pluck([stiffness in N/m],[damping in N/(m/s)],[Minimum displacement difference for contact in m]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],É)
+# pluck([stiffness in N/m],[damping in N/(m/s)],[optional minimum displacement difference for contact in m (defaults to zero)]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],...)
+# In this model, we have just three simple linear links. The stiffness parameter is written as a mathematical expression in terms of the identifier (Â¿variableÂ¿) adjStiffness (see faustcode below for definition of adjStiffness).
+link(2.0*adjStiffness,0.003,0.0),l1,m1,m2,(thisl);
+link(2.0*adjStiffness,0.004,0.0),l2,m2,m3,(thisLLL,thisl);
+link(2.0*adjStiffness,0.005,0.0),l3,m2,dev1,(thisl);
+pluck(2.0*adjStiffness,0.005,0.0),l3,junct1,dev1,(thisl);
 
-# Just two simple linear links
-link(12000.0,0.003,0.0),l1,m1,m2,(thisl);
-link(12000.0,0.004,0.0),l2,m2,m3,(thisLLL,thisl);
-link(12000.0,0.005,0.0),l3,m2,dev1,(thisl);
+# A waveguide uses wave variables to represent the vibration of a string.
+# format: waveguide([characteristic wave impedance in N/(m/s)],[time delay in seconds]),[identifier],[connected object on left],[connected object on right],([label1],[label2],...);
+waveguide(5.0,0.01),wg1,T1,junct1,(wglabel);
+waveguide(5.0,0.01),wg2,junct1,T2,(wglabel2);
 
+# A termination represents an object like a bridge or a nut. In other words, a termination marks
+# the end of one or more waveguides
+# format: termination([terminationFilter]),[identifier],([label1],[label2],...);
+# where terminationFilter is a string specifying a filter to use at the termination. The GUI should
+# suggest the user to use the default terminationFilter(0.1,5), where 0.1 is a unitless constant.
+termination(terminationFilter(0.1,5)),T1,(labelT,anotherTLabel);
+termination(terminationFilter(0.01,12)),T2,(labelT);
 
+# A junction allows one or more waveguides and up to one other element to be connected together.
+# format: junction([initial displacement in m]),[identifier],([label1],[label2],...);
+junction(0.01),junct1,(junctLabel);
 
-# Then a list of labels allowing parameters to be controlled in real time
-# [rtadjust],[identifying_name],[label]:[parameter_index_for_label]
-rtadjust,adjStiffness,thisl:1;
+# We show how to assign a value from a horizontal slider to the first parameter of any object with the label thisl
+# First a line of Faust code is specified, which will be copied into the top of the output .DSP file.
+# For example, we assign the value of a horizontal slider with name stiffness, initial value 2200.0,
+# minimum value 500.0, GUI adjustment step 100.0, and maximum value 4000.0 to the unique
+# identifier adjStiffness. The GUI needs to
+faustcode: adjStiffness=hslider("stiffness", 2200.0, 500.0, 100.0, 4000.0);
 
+# Then a list of audio-only outputs
+# audioout,[identifier],[linear combination of source identifier names specifies the mix]
+# Here is a stereo audio output example:
+audioout,a1,m1*(1000.0)+l1*(100.0);
+audioout,a2,l2*(1000.0)+l3*(-50.0)+l1*(0.01);
 
-
-# Define extra audio outputs which are separate from the formal ports.
-# Each audio output a linear combination of the output variables from the represented elements.
-audioout,a1,m1,1000.0,l1,100.0;
-audioout,a2,l2,1000.0,l3,-50.0,l1,0.01;

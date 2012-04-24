@@ -102,11 +102,10 @@ bool MDLWriter::writeMDL(const String& savePath)
 	const Array<LabelObject*>& labels = mdlFile.getLabels();
 	for (int labIdx = 0; labIdx < labels.size(); ++labIdx) {
 		LabelObject* la = labels[labIdx];
-		mdlContent << la->getTitle();
-		mdlContent << ",";
+		mdlContent << "faustcode: ";
 		mdlContent << la->getName();
-		mdlContent << ",";
-		mdlContent << la->getParamName() << ":" << la->getParamId();
+		mdlContent << "=";
+		mdlContent << la->getParameters();
 		mdlContent << ";";
 		mdlContent << "\n";
 	}
@@ -119,9 +118,8 @@ bool MDLWriter::writeMDL(const String& savePath)
 		mdlContent << ao->getTypeString();
 		mdlContent << ",";
 		mdlContent << ao->getName();
-		for (HashMap<String,float>::Iterator i(ao->getParameters());i.next();) {
-			mdlContent << "," << i.getKey() << "," << i.getValue();
-		}
+		mdlContent << ",";
+		mdlContent << ao->getParameters();
 		mdlContent << ";";
 		mdlContent << "\n";
 

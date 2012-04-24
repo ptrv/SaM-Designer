@@ -36,7 +36,7 @@ AudioObject::~AudioObject()
 
 }
 
-void AudioObject::addParameter(const String& key, float value)
+void AudioObject::addParameter(const String& value)
 {
-	parameters.set(key, value);
+	parameters = value;
 }

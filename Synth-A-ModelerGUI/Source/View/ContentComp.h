@@ -68,7 +68,9 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
-	MainAppWindow& mainWindow;
+//	void addColouredCommandItem()
+
+    MainAppWindow& mainWindow;
 	AppController& appController;
 	ObjComp* objComp;
     //[/UserVariables]

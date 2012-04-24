@@ -45,7 +45,7 @@ public:
 
 		beginTest("getMasses");
 		const Array<Mass*>& m = mdlFile->getMasses();
-		expect(m.size() == 4, "have "+String(m.size())+" masses");
+		expect(m.size() == 5, "have "+String(m.size())+" masses");
 		expect(mdlFile->getNumberOfObjectsByType(MassType) == 3, "");
 		// mass 1
 		expectEquals(m[0]->getType(), MassType);
@@ -76,18 +76,24 @@ public:
 		expectEquals(m[3]->getName(), String("dev1"));
 		labels = m[3]->getLabels();
 		expectEquals(labels[0], String("hapticdev"));
+		// port
+		expectEquals(m[4]->getType(), GroundType);
+		params = m[4]->getParameters();
+		expectEquals(m[4]->getName(), String("g"));
+		labels = m[4]->getLabels();
+		expectEquals(labels[0], String("glabel"));
 
 		beginTest("getLinks");
 
 		const Array<LinkObject*>& ls = mdlFile->getLinks();
-		expect(ls.size() == 3, "have "+String(ls.size())+" links");
+		expect(ls.size() == 4, "have "+String(ls.size())+" links");
 
 		// link 1
 		expectEquals(ls[0]->getType(), LinkType, "");
-		params = ls[0]->getParameters();
-		expectEquals(params[0], 12000.0f);
-		expectEquals(params[1], 0.003f);
-		expectEquals(params[2], 0.0f);
+		Array<String> paramsStr = ls[0]->getParameters();
+		expectEquals(paramsStr[0], String("2.0*adjStiffness"));
+		expectEquals(paramsStr[1], String("0.003"));
+		expectEquals(paramsStr[2], String("0.0"));
 		expectEquals(ls[0]->getName(), String("l1"));
 		expectEquals(ls[0]->getStartVertex(), String("m1"));
 		expectEquals(ls[0]->getEndVertex(), String("m2"));
@@ -96,10 +102,10 @@ public:
 
 		// link 2
 		expectEquals(ls[1]->getType(), LinkType, "");
-		params = ls[1]->getParameters();
-		expectEquals(params[0], 12000.0f);
-		expectEquals(params[1], 0.004f);
-		expectEquals(params[2], 0.0f);
+		paramsStr = ls[1]->getParameters();
+		expectEquals(paramsStr[0], String("2.0*adjStiffness"));
+		expectEquals(paramsStr[1], String("0.004"));
+		expectEquals(paramsStr[2], String("0.0"));
 		expectEquals(ls[1]->getName(), String("l2"));
 		expectEquals(ls[1]->getStartVertex(), String("m2"));
 		expectEquals(ls[1]->getEndVertex(), String("m3"));
@@ -109,10 +115,10 @@ public:
 
 		// link 3
 		expectEquals(ls[2]->getType(), LinkType, "");
-		params = ls[2]->getParameters();
-		expectEquals(params[0], 12000.0f);
-		expectEquals(params[1], 0.005f);
-		expectEquals(params[2], 0.0f);
+		paramsStr = ls[2]->getParameters();
+		expectEquals(paramsStr[0], String("2.0*adjStiffness"));
+		expectEquals(paramsStr[1], String("0.005"));
+		expectEquals(paramsStr[2], String("0.0"));
 		expectEquals(ls[2]->getName(), String("l3"));
 		expectEquals(ls[2]->getStartVertex(), String("m2"));
 		expectEquals(ls[2]->getEndVertex(), String("dev1"));
@@ -125,11 +131,8 @@ public:
 		const Array<LabelObject*>& labelObjs = mdlFile->getLabels();
 		expect(labelObjs.size() == 1, "have "+String(labelObjs.size())+" labels");
 
-		expectEquals(labelObjs[0]->getType(), LabelType);
-		expectEquals(labelObjs[0]->getTitle(), String("rtadjust"));
 		expectEquals(labelObjs[0]->getName(), String("adjStiffness"));
-		expectEquals(labelObjs[0]->getParamName(), String("thisl"));
-		expectEquals(labelObjs[0]->getParamId(), 1);
+		expectEquals(labelObjs[0]->getParameters(), String("hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0)"));
 
 
 		beginTest("getAudioObjects");
@@ -139,14 +142,11 @@ public:
 
 		expectEquals(aus[0]->getType(), AudioObjectType);
 		expectEquals(aus[0]->getName(), String("a1"));
-		expectEquals(aus[0]->getParameters()["m1"], 1000.f);
-		expectEquals(aus[0]->getParameters()["l1"], 100.f);
+		expectEquals(aus[0]->getParameters(), String("m1*(1000.0)+l1*(100.0)"));
 
 		expectEquals(aus[1]->getType(), AudioObjectType);
 		expectEquals(aus[1]->getName(), String("a2"));
-		expectEquals(aus[1]->getParameters()["l2"], 1000.f);
-		expectEquals(aus[1]->getParameters()["l3"], -50.f);
-		expectEquals(aus[1]->getParameters()["l1"], 0.01f);
+		expectEquals(aus[1]->getParameters(), String("l2*(1000.0)+l3*(-50.0)+l1*(0.01)"));
 	}
 };
 

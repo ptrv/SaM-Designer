@@ -36,7 +36,7 @@ LinkObject::~LinkObject()
 
 }
 
-void LinkObject::addParameter(float value)
+void LinkObject::addParameter(const String& value)
 {
 	parameters.add(value);
 }

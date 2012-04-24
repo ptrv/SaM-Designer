@@ -49,172 +49,179 @@ bool MDLParser::parseMDL()
 
 		if(line[0] != '#')
 		{
-			int indexParantese = line.indexOf("(");
-			// mass or link type
-			if(indexParantese != -1)
+			if(line.startsWith("mass")
+					|| line.startsWith("port")
+					|| line.startsWith("resonator")
+					|| line.startsWith("ground"))
 			{
-				String objType = line.substring(0, indexParantese);
-				if(objType.compare("mass") == 0 ||
-						objType.compare("port") == 0 ||
-						objType.compare("resonator") == 0 ||
-						objType.compare("ground") == 0)
+				int indexParantese = line.indexOf("(");
+				// mass or link type
+				if(indexParantese != -1)
 				{
-					MassObject* mass;
-					if(objType.compare("mass") == 0)
+					String objType = line.substring(0, indexParantese);
+					if(objType.compare("mass") == 0 ||
+							objType.compare("port") == 0 ||
+							objType.compare("resonator") == 0 ||
+							objType.compare("ground") == 0)
 					{
-						mass = ObjectFactory::createNewMass();
-					}
-					else if(objType.compare("port") == 0)
-					{
-						mass = ObjectFactory::createNewPort();
-					}
-					else if(objType.compare("ground") == 0)
-					{
-						mass = ObjectFactory::createNewGround();
-					}
-					else if(objType.compare("resonator") == 0)
-					{
-						mass = ObjectFactory::createNewResonator();
-					}
-					else
-					{
-						DBG("Something went really wrong!");
-						return false;
-					}
+						MassObject* mass;
+						if(objType.compare("mass") == 0)
+						{
+							mass = ObjectFactory::createNewMass();
+						}
+						else if(objType.compare("port") == 0)
+						{
+							mass = ObjectFactory::createNewPort();
+						}
+						else if(objType.compare("ground") == 0)
+						{
+							mass = ObjectFactory::createNewGround();
+						}
+						else if(objType.compare("resonator") == 0)
+						{
+							mass = ObjectFactory::createNewResonator();
+						}
+						else
+						{
+							DBG("Something went really wrong!");
+							return false;
+						}
 
-					//get values between first parantheses
-					int indexCloseParan = line.indexOf(")");
-					if(mass->getType() != PortType)
+						//get values between first parantheses
+						int indexCloseParan = line.indexOf(")");
+						if(mass->getType() != PortType)
+						{
+							String params = line.substring(indexParantese+1, indexCloseParan);
+							StringArray paramsArray;
+							paramsArray.addTokens(params, ",", "\"");
+							for (int param = 0; param < paramsArray.size(); ++param) {
+								float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
+								mass->addParameter(paramVal);
+							}
+						}
+						// get remaining line content
+						line = line.substring(indexCloseParan+1);
+						line = line.trimCharactersAtStart(",");
+
+						// get string till next comma
+						int commaIndex = line.indexOf(",");
+						if(commaIndex != -1)
+							mass->setName(line.substring(0, commaIndex));
+
+						line = line.substring(commaIndex);
+
+						indexParantese = line.indexOf("(");
+						indexCloseParan = line.indexOf(")");
+						String labels = line.substring(indexParantese+1, indexCloseParan);
+						StringArray labelsArray;
+						labelsArray.addTokens(labels, ",", "\"");
+						for (int l = 0; l < labelsArray.size(); ++l) {
+							mass->addLabel(labelsArray[l]);
+						}
+
+						mdlFile.addMassObject(mass);
+					}
+				}
+			}
+			else if(line.startsWith("link")
+					|| line.startsWith("touch")
+					|| line.startsWith("pluck"))
+			{
+				int indexParantese = line.indexOf("(");
+				// mass or link type
+				if(indexParantese != -1)
+				{
+					String objType = line.substring(0, indexParantese);
+					if(objType.compare("link") == 0 ||
+							objType.compare("touch") == 0 ||
+							objType.compare("pluck") == 0)
 					{
+						LinkObject* link;
+						if(objType.compare("link") == 0)
+						{
+							link = ObjectFactory::createNewLink();
+						}
+						else if(objType.compare("touch") == 0)
+						{
+							link = ObjectFactory::createNewTouch();
+						}
+						else if(objType.compare("pluck") == 0)
+						{
+							link = ObjectFactory::createNewPluck();
+						}
+						else
+						{
+							DBG("Something went really wrong!");
+							return false;
+						}
+
+						//get values between first parantheses
+						int indexCloseParan = line.indexOf(")");
 						String params = line.substring(indexParantese+1, indexCloseParan);
 						StringArray paramsArray;
 						paramsArray.addTokens(params, ",", "\"");
 						for (int param = 0; param < paramsArray.size(); ++param) {
-							float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
-							mass->addParameter(paramVal);
+							String paramVal = paramsArray[param].trimCharactersAtStart(" ");
+							link->addParameter(paramVal);
 						}
-					}
-					// get remaining line content
-					line = line.substring(indexCloseParan+1);
-					line = line.trimCharactersAtStart(",");
+						// get remaining line content
+						line = line.substring(indexCloseParan+1);
+						line = line.trimCharactersAtStart(",");
 
-					// get string till next comma
-					int commaIndex = line.indexOf(",");
-					if(commaIndex != -1)
-						mass->setName(line.substring(0, commaIndex));
+						// get string till next opening paranthese
+						indexParantese = line.indexOf("(");
 
-					line = line.substring(commaIndex);
+						String params2 = line.substring(0,indexParantese);
+						StringArray paramsArray2;
+						paramsArray2.addTokens(params2, ",", "\"");
+						if(paramsArray2.size() >= 3)
+						{
+							link->setName(paramsArray2[0]);
+							link->setStartVertex(paramsArray2[1]);
+							link->setEndVertex(paramsArray2[2]);
+						}
+						line = line.substring(indexParantese);
+						indexCloseParan = line.indexOf(")");
+						String labels = line.substring(1, indexCloseParan);
+						StringArray labelsArray;
+						labelsArray.addTokens(labels, ",", "\"");
+						for (int l = 0; l < labelsArray.size(); ++l) {
+							link->addLabel(labelsArray[l]);
+						}
 
-					indexParantese = line.indexOf("(");
-					indexCloseParan = line.indexOf(")");
-					String labels = line.substring(indexParantese+1, indexCloseParan);
-					StringArray labelsArray;
-					labelsArray.addTokens(labels, ",", "\"");
-					for (int l = 0; l < labelsArray.size(); ++l) {
-						mass->addLabel(labelsArray[l]);
+						mdlFile.addLinkObject(link);
 					}
-
-					mdlFile.addMassObject(mass);
-				}
-				else if(objType.compare("link") == 0 ||
-						objType.compare("touch") == 0 ||
-						objType.compare("pluck") == 0)
-				{
-					LinkObject* link;
-					if(objType.compare("link") == 0)
-					{
-						link = ObjectFactory::createNewLink();
-					}
-					else if(objType.compare("touch") == 0)
-					{
-						link = ObjectFactory::createNewTouch();
-					}
-					else if(objType.compare("pluck") == 0)
-					{
-						link = ObjectFactory::createNewPluck();
-					}
-					else
-					{
-						DBG("Something went really wrong!")
-										return false;
-					}
-
-					//get values between first parantheses
-					int indexCloseParan = line.indexOf(")");
-					String params = line.substring(indexParantese+1, indexCloseParan);
-					StringArray paramsArray;
-					paramsArray.addTokens(params, ",", "\"");
-					for (int param = 0; param < paramsArray.size(); ++param) {
-						float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
-						link->addParameter(paramVal);
-					}
-					// get remaining line content
-					line = line.substring(indexCloseParan+1);
-					line = line.trimCharactersAtStart(",");
-
-					// get string till next opening paranthese
-					indexParantese = line.indexOf("(");
-
-					String params2 = line.substring(0,indexParantese);
-					StringArray paramsArray2;
-					paramsArray2.addTokens(params2, ",", "\"");
-					if(paramsArray2.size() >= 3)
-					{
-						link->setName(paramsArray2[0]);
-						link->setStartVertex(paramsArray2[1]);
-						link->setEndVertex(paramsArray2[2]);
-					}
-					line = line.substring(indexParantese);
-					indexCloseParan = line.indexOf(")");
-					String labels = line.substring(1, indexCloseParan);
-					StringArray labelsArray;
-					labelsArray.addTokens(labels, ",", "\"");
-					for (int l = 0; l < labelsArray.size(); ++l) {
-						link->addLabel(labelsArray[l]);
-					}
-
-					mdlFile.addLinkObject(link);
 				}
 			}
-			// labeös and audio objects
-			else
+			else if(line.startsWith("faustcode:"))
 			{
-				if(line.startsWith("audioout"))
+				StringArray labelAttributeList;
+				int indexSemicolon = line.indexOf(";");
+				int indexColon = line.indexOf(":");
+				String lineTmp = line.substring(indexColon+1, indexSemicolon);
+				lineTmp = lineTmp.trimCharactersAtStart(" ");
+				int indexEquals = lineTmp.indexOf("=");
+				LabelObject* labelObj = ObjectFactory::createNewLabelObject();
+				labelObj->setName(lineTmp.substring(0,indexEquals));
+				labelObj->addParameter(lineTmp.substring(indexEquals+1));
+				mdlFile.addLabelObject(labelObj);
+			}
+			else if(line.startsWith("audioout"))
+			{
+				StringArray audioOutAttributeList;
+				int indexSemicolon = line.length()-1;
+				String lineTmp = line.substring(0, indexSemicolon);
+				audioOutAttributeList.addTokens(lineTmp, ",", "\"");
+				if(audioOutAttributeList.size() > 2)
 				{
-					StringArray audioOutAttributeList;
-					int indexSemicolon = line.length()-1;
-					String lineTmp = line.substring(0, indexSemicolon);
-					audioOutAttributeList.addTokens(lineTmp, ",", "\"");
-					if(audioOutAttributeList.size() > 2)
-					{
-						AudioObject* audioObj = ObjectFactory::createNewAudioObject();
-						audioObj->setName(audioOutAttributeList[1]);
-						for (int aIdx = 2; aIdx < audioOutAttributeList.size(); aIdx+=2) {
-							String keyTmp = audioOutAttributeList[aIdx];
-							float valueTmp = audioOutAttributeList[aIdx+1].getFloatValue();
-							audioObj->addParameter(keyTmp, valueTmp);
-						}
-						mdlFile.addAudioObject(audioObj);
-					}
-				}
-				else if(line.indexOf(",") != -1)
-				{
-					StringArray labelAttributeList;
-					int indexSemicolon = line.length()-1;
-					String lineTmp = line.substring(0, indexSemicolon);
-					labelAttributeList.addTokens(lineTmp, ",", "\"");
-					if(labelAttributeList.size() == 3)
-					{
-						LabelObject* labelObj = ObjectFactory::createNewLabelObject();
-						labelObj->setTitle(labelAttributeList[0]);
-						labelObj->setName(labelAttributeList[1]);
-						String labelTmp = labelAttributeList[2].upToFirstOccurrenceOf(":", false, false);
-						int idxTmp = labelAttributeList[2].fromFirstOccurrenceOf(":", false, false).getIntValue();
-						labelObj->setParameterIndex(labelTmp, idxTmp);
-						mdlFile.addLabelObject(labelObj);
-					}
+					AudioObject* audioObj = ObjectFactory::createNewAudioObject();
+					audioObj->setName(audioOutAttributeList[1]);
+					audioObj->addParameter(audioOutAttributeList[2]);
+					mdlFile.addAudioObject(audioObj);
 				}
 			}
+
+
 		}
 
 	}

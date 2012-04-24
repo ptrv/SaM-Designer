@@ -190,7 +190,7 @@ const String MDLController::generateExternal()
 		return "No mdl file\n\n";
 
 	int r = ExportPanel::show();
-	DBG(r);
+//	DBG(r);
 	if(r != 1)
 		return "";
 	StringArray exporters;

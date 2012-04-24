@@ -34,8 +34,8 @@ public:
 	LinkObject(ObjectType objType_= LinkType);
 	virtual ~LinkObject();
 
-	void addParameter(float value);
-	Array<float>& getParameters() { return parameters; }
+	void addParameter(const String& value);
+	Array<String>& getParameters() { return parameters; }
 	void addLabel(const String& label);
 	Array<String>& getLabels() { return labels; }
 	void setStartVertex(const String& startVert);
@@ -43,7 +43,7 @@ public:
 	String& getStartVertex() { return startingVertex; }
 	String& getEndVertex() { return endVertex; }
 private:
-	Array<float> parameters;
+	Array<String> parameters;
 	Array<String> labels;
 	String startingVertex;
 	String endVertex;
