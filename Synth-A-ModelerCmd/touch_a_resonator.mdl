@@ -31,4 +31,4 @@ port( ),dev1,(devlabel);
 link(4200.0,0.001,0.0),ll,m1,g,(llabel);
 touch(1000.0,0.03,0.0),tt,m1,dev1,(tlabel);
 
-audioout,a1,m1,1000.0;
+audioout,a1,m1*(1000.0);
