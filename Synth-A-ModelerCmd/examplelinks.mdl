@@ -1,0 +1,62 @@
+# Example MDL file for Synth-A-Modeler
+#
+# Edgar Berdahl, 2012
+# Audio Communication Group
+# Technical University of Berlin
+#
+# -------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+# format [type]([default parameters]),[identifying_name],([label1],[label2],É)
+# mass is a normal 1-D mass
+# port is a port to the external world, for example to a haptic device, or just for a position
+# input and force output.  
+mass( 0.01),m1,(mymass);
+mass(1e-2),m2,(mymass,mmiddle);
+mass(0.03),m3,(mymass);
+port( ),dev1,(hapticdev);
+
+
+
+# format [type]([default parameters]),[identifying_name],[starting_vertex],[ending_vertex],([label1],[label2],É)
+#
+# For instance for a linear link we have
+# link([stiffness in N/m],[damping in N/(m/s)],[center position offset in m]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],É)
+#
+# Or for a nonlinear, switching "BUT" contact link, we have
+# contact([stiffness in N/m],[damping in N/(m/s)],[offset for engagement in m]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],É)
+#
+# Or for a nonlinear plucking link, we have
+# pluck([stiffness in N/m],[damping in N/(m/s)],[Minimum displacement difference for contact in m]),[unique_linkname],[starting_vertex],[ending_vertex],([label1],[label2],É)
+
+# Just two simple linear links
+link(12000.0,0.003,0.0),l1,m1,m2,(thisl);
+link(12000.0,0.004,0.0),l2,m2,m3,(thisLLL,thisl);
+link(12000.0,0.005,0.0),l3,m2,dev1,(thisl);
+
+
+
+# Then a list of labels allowing parameters to be controlled in real time
+# [rtadjust],[identifying_name],[label]:[parameter_index_for_label]
+rtadjust,adjStiffness,thisl:1;
+
+
+
+# Define extra audio outputs which are separate from the formal ports.
+# Each audio output a linear combination of the output variables from the represented elements.
+audioout,a1,m1,1000.0,l1,100.0;
+audioout,a2,l2,1000.0,l3,-50.0,l1,0.01;

@@ -1,0 +1,67 @@
+// Some physical modeling primitives written in Faust code.
+//
+// 2011 and 2012 by Edgar Berdahl
+// Audio Communication Group, Technical University of Berlin
+//
+// --------------------------------------------------------------------
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+// Forward Euler differentiator
+differentiator = _ <: (_, mem) : - : *(fs) : _;
+
+
+link(k,R,o) = _ : (_-o) <: (_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs))) : (_,_) : + : _;
+
+
+// Like contact~
+touch(k,R,o) = _ <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), (_>o)) : (_,_,_) : (+,_) : * : _;
+
+
+
+
+
+
+resonator(f,tau,m) = mainStuff:chooseOutputs
+with {
+  PI = 3.1415926535897932384626;
+  b = 0.0;
+
+  decayParam = exp(-1.0/tau/fs);
+  x1 = decayParam*cos(2.0*PI*f/fs);
+  y1 = decayParam*sin(2.0*PI*f/fs);
+
+  b1 = 1.0/m/fs/fs;
+  b2 = -1.0*b1*cos(2.0*PI*f/fs)/sin(2.0*PI*f/fs);
+
+  mainBox(w,u,Fext,nl) = (x1*w + nl*w - y1*u + b1*Fext,   y1*w + x1*u + nl*u + b2*Fext);
+  mainStuff = (calcNonlinear:mainBox)~(chooseFeedbacks);
+  calcNonlinear(w,u,Fext)=(w,u,Fext,b*(w*w+u*u)/fs);
+					
+  chooseFeedbacks = (_,_);  		
+  chooseOutputs = (_,!);
+};
+  
+
+
+// Maybe this is actually getting the sampling rate
+fs = min(192000, max(1, fconstant(int fSamplingFreq, <math.h>)));
+
+
+mass(m) = (/(m*fs*fs) : ((_,_ : +) ~ _) : ((_,_ : +) ~ _));
+
+
+ground(g)=_:!:g;
