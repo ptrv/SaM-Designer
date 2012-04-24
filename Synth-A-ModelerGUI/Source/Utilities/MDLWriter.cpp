@@ -97,6 +97,81 @@ bool MDLWriter::writeMDL(const String& savePath)
 		mdlContent << "\n";
 	}
 
+	// write waveguides
+	mdlContent << "\n\n";
+	const Array<WaveguideObject*>& waveObjs = mdlFile.getWaveguides();
+	for (int wavIdx = 0; wavIdx < waveObjs.size(); ++wavIdx) {
+		WaveguideObject* wo = waveObjs[wavIdx];
+		mdlContent << wo->getTypeString();
+		mdlContent << "(";
+		for (int m = 0; m < wo->getParameters().size(); ++m) {
+			mdlContent << wo->getParameters()[m];
+			if(m != wo->getParameters().size()-1)
+				mdlContent << ",";
+		}
+		mdlContent << "),";
+		mdlContent << wo->getName();
+		mdlContent << ",";
+		mdlContent << wo->getObjectLeft();
+		mdlContent << ",";
+		mdlContent << wo->getObjectRight();
+		mdlContent << ",(";
+		for (int n = 0; n < wo->getLabels().size(); ++n) {
+			mdlContent << wo->getLabels()[n];
+			if(n != wo->getLabels().size()-1)
+				mdlContent << ",";
+		}
+		mdlContent << ");";
+		mdlContent << "\n";
+
+	}
+
+	// write terminations
+	mdlContent << "\n\n";
+	const Array<TerminationObject*>& termObjs = mdlFile.getTerminations();
+	for (int termIdx = 0; termIdx < termObjs.size(); ++termIdx) {
+		TerminationObject* to = termObjs[termIdx];
+		mdlContent << to->getTypeString();
+		mdlContent << "(";
+		for (int o = 0; o < to->getParameters().size(); ++o) {
+			mdlContent << to->getParameters()[0];
+			if(o != to->getParameters().size()-1)
+				mdlContent << ",";
+		}
+		mdlContent << "),";
+		mdlContent << to->getName();
+		mdlContent << ",";
+		for (int p = 0; p < to->getLabels().size(); ++p) {
+			mdlContent << to->getLabels()[p];
+			if(p != to->getLabels().size()-1)
+				mdlContent << ",";
+		}
+		mdlContent << ");";
+		mdlContent << "\n";
+
+	}
+
+	// write junctions
+	mdlContent << "\n\n";
+	const Array<JunctionObject*>& junctObjs = mdlFile.getJunctions();
+	for (int junctIdx = 0; junctIdx < junctObjs.size(); ++junctIdx) {
+		JunctionObject* jo = junctObjs[junctIdx];
+		mdlContent << jo->getTypeString();
+		mdlContent << "(";
+		mdlContent << jo->getParameters();
+		mdlContent << "),";
+		mdlContent << jo->getName();
+		mdlContent << ",";
+		for (int q = 0; q < jo->getLabels().size(); ++q) {
+			mdlContent << jo->getLabels()[q];
+			if(q != jo->getLabels().size()-1)
+				mdlContent << ",";
+		}
+		mdlContent << ");";
+		mdlContent << "\n";
+
+	}
+
 	// write labels
 	mdlContent << "\n\n";
 	const Array<LabelObject*>& labels = mdlFile.getLabels();

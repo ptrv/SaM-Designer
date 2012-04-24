@@ -65,6 +65,18 @@ void MDLFile::destroyMDL()
 		delete audioObjects[i];
 	}
 	audioObjects.clear();
+	for (int i = 0; i < waveguides.size(); ++i) {
+		delete waveguides[i];
+	}
+	waveguides.clear();
+	for (int i = 0; i < terminations.size(); ++i) {
+		delete terminations[i];
+	}
+	terminations.clear();
+	for (int i = 0; i < junctions.size(); ++i) {
+		delete junctions[i];
+	}
+	junctions.clear();
 
 }
 
@@ -128,6 +140,24 @@ void MDLFile::addLabelObject(LabelObject* obj)
 void MDLFile::addAudioObject(AudioObject* obj)
 {
 	audioObjects.add(obj);
+	allObjects.set(obj->getName(), obj);
+}
+
+void MDLFile::addWaveguideObject(WaveguideObject* obj)
+{
+	waveguides.add(obj);
+	allObjects.set(obj->getName(), obj);
+}
+
+void MDLFile::addTerminationObject(TerminationObject* obj)
+{
+	terminations.add(obj);
+	allObjects.set(obj->getName(), obj);
+}
+
+void MDLFile::addJunctionObject(JunctionObject* obj)
+{
+	junctions.add(obj);
 	allObjects.set(obj->getName(), obj);
 }
 

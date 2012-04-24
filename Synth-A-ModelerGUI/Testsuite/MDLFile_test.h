@@ -130,10 +130,70 @@ public:
 
 		const Array<LabelObject*>& labelObjs = mdlFile->getLabels();
 		expect(labelObjs.size() == 1, "have "+String(labelObjs.size())+" labels");
-
 		expectEquals(labelObjs[0]->getName(), String("adjStiffness"));
 		expectEquals(labelObjs[0]->getParameters(), String("hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0)"));
 
+		beginTest("getWaveguides");
+
+		const Array<WaveguideObject*>& waveObjs = mdlFile->getWaveguides();
+		expect(waveObjs.size() == 2, "have "+String(waveObjs.size())+" waveguides");
+
+		// waveguide 1
+		expectEquals(waveObjs[0]->getType(), WaveguideType);
+		expectEquals(waveObjs[0]->getName(), String("wg1"));
+		params = waveObjs[0]->getParameters();
+		expectEquals(params[0], 5.0f);
+		expectEquals(params[1], 0.01f);
+		labels = waveObjs[0]->getLabels();
+		expectEquals(labels[0], String("wglabel"));
+		expectEquals(waveObjs[0]->getObjectLeft(), String("T1"));
+		expectEquals(waveObjs[0]->getObjectRight(), String("junct1"));
+
+		// waveguide 2
+		expectEquals(waveObjs[1]->getType(), WaveguideType);
+		expectEquals(waveObjs[1]->getName(), String("wg2"));
+		params = waveObjs[1]->getParameters();
+		expectEquals(params[0], 5.0f);
+		expectEquals(params[1], 0.01f);
+		labels = waveObjs[1]->getLabels();
+		expectEquals(labels[0], String("wglabel2"));
+		expectEquals(waveObjs[1]->getObjectLeft(), String("junct1"));
+		expectEquals(waveObjs[1]->getObjectRight(), String("T2"));
+
+		beginTest("getTerminations");
+
+		const Array<TerminationObject*>& termObjs = mdlFile->getTerminations();
+		expect(termObjs.size() == 2, "have "+String(termObjs.size())+" terminations");
+
+		// termination 1
+		expectEquals(termObjs[0]->getType(), TerminationType);
+		expectEquals(termObjs[0]->getName(), String("T1"));
+		paramsStr = termObjs[0]->getParameters();
+		expectEquals(paramsStr[0], String("terminationFilter(0.1,5)"));
+		labels = termObjs[0]->getLabels();
+		expectEquals(labels[0], String("labelT"));
+		expectEquals(labels[1], String("anotherTLabel"));
+
+		// termination 2
+		expectEquals(termObjs[1]->getType(), TerminationType);
+		expectEquals(termObjs[1]->getName(), String("T2"));
+		paramsStr = termObjs[1]->getParameters();
+		expectEquals(paramsStr[0], String("terminationFilter(0.01,12)"));
+		labels = termObjs[1]->getLabels();
+		expectEquals(labels[0], String("labelT"));
+
+		beginTest("getJunctions");
+
+		const Array<JunctionObject*>& junctObjs = mdlFile->getJunctions();
+		expect(junctObjs.size() == 1, "have "+String(junctObjs.size())+" junctions");
+
+		// termination 1
+		expectEquals(junctObjs[0]->getType(), JunctionType);
+		expectEquals(junctObjs[0]->getName(), String("junct1"));
+		float param = junctObjs[0]->getParameters();
+		expectEquals(param, 0.01f);
+		labels = junctObjs[0]->getLabels();
+		expectEquals(labels[0], String("junctLabel"));
 
 		beginTest("getAudioObjects");
 

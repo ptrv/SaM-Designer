@@ -222,21 +222,118 @@ bool MDLParser::parseMDL()
 			}
 			else if(line.startsWith("waveguide"))
 			{
+				int indexParantese = line.indexOf("(");
+				// mass or link type
+				if(indexParantese != -1)
+				{
+					WaveguideObject* wave = ObjectFactory::createNewWaveguideObject();
+
+					String objType = line.substring(0, indexParantese);
+					int indexCloseParan = line.indexOf(")");
+					String params = line.substring(indexParantese+1, indexCloseParan);
+					StringArray paramsArray;
+					paramsArray.addTokens(params, ",", "\"");
+					for (int param = 0; param < paramsArray.size(); ++param) {
+						float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
+						wave->addParameter(paramVal);
+					}
+
+					// get remaining line content
+					line = line.substring(indexCloseParan+1);
+					line = line.trimCharactersAtStart(",");
+
+					// get string till next comma
+					int commaIndex = line.indexOf(",");
+					if(commaIndex != -1)
+						wave->setName(line.substring(0, commaIndex));
+
+					// get left object
+					line = line.substring(commaIndex+1);
+					commaIndex = line.indexOf(",");
+					wave->setObjectLeft(line.substring(0, commaIndex));
+
+					// get right object
+					line = line.substring(commaIndex+1);
+					commaIndex = line.indexOf(",");
+					wave->setObjectRight(line.substring(0, commaIndex));
+
+					indexParantese = line.indexOf("(");
+					indexCloseParan = line.indexOf(")");
+					String labels = line.substring(indexParantese+1, indexCloseParan);
+					StringArray labelsArray;
+					labelsArray.addTokens(labels, ",", "\"");
+					for (int l = 0; l < labelsArray.size(); ++l) {
+						wave->addLabel(labelsArray[l]);
+					}
+					mdlFile.addWaveguideObject(wave);
+				}
 
 			}
 			else if(line.startsWith("termination"))
 			{
+				int indexParantese = line.indexOf("(");
+				// mass or link type
+				if(indexParantese != -1)
+				{
+					TerminationObject* term = ObjectFactory::createNewTerminationObject();
 
+					int indexCloseParan = line.indexOf(")");
+					String params = line.substring(indexParantese+1, indexCloseParan+1);
+					term->addParameter(params);
+
+					// get remaining line content
+					line = line.substring(indexCloseParan+2);
+					line = line.trimCharactersAtStart(",");
+
+					// get string till next comma
+					int commaIndex = line.indexOf(",");
+					if(commaIndex != -1)
+						term->setName(line.substring(0, commaIndex));
+
+					indexParantese = line.indexOf("(");
+					indexCloseParan = line.indexOf(")");
+					String labels = line.substring(indexParantese+1, indexCloseParan);
+					StringArray labelsArray;
+					labelsArray.addTokens(labels, ",", "\"");
+					for (int l = 0; l < labelsArray.size(); ++l) {
+						term->addLabel(labelsArray[l]);
+					}
+					mdlFile.addTerminationObject(term);
+				}
 			}
 			else if(line.startsWith("junction"))
 			{
+				int indexParantese = line.indexOf("(");
+				// mass or link type
+				if(indexParantese != -1)
+				{
+					JunctionObject* junct = ObjectFactory::createNewJunctionObject();
 
+					int indexCloseParan = line.indexOf(")");
+					String params = line.substring(indexParantese+1, indexCloseParan);
+					junct->addParameter(params.getFloatValue());
+
+					// get remaining line content
+					line = line.substring(indexCloseParan+1);
+					line = line.trimCharactersAtStart(",");
+
+					// get string till next comma
+					int commaIndex = line.indexOf(",");
+					if(commaIndex != -1)
+						junct->setName(line.substring(0, commaIndex));
+
+					indexParantese = line.indexOf("(");
+					indexCloseParan = line.indexOf(")");
+					String labels = line.substring(indexParantese+1, indexCloseParan);
+					StringArray labelsArray;
+					labelsArray.addTokens(labels, ",", "\"");
+					for (int l = 0; l < labelsArray.size(); ++l) {
+						junct->addLabel(labelsArray[l]);
+					}
+					mdlFile.addJunctionObject(junct);
+				}
 			}
-
 		}
-
 	}
-
-
 	return true;
 }

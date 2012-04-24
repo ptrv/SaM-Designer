@@ -34,7 +34,22 @@ public:
 	WaveguideObject(ObjectType objType_=WaveguideType);
 	virtual ~WaveguideObject();
 
+	void addParameter(float value);
+	const Array<float> getParameters() const { return parameters; }
+	void setObjectLeft(const String& objLeft_);
+	const String& getObjectLeft() const { return objLeft; }
+	void setObjectRight(const String& objRight_);
+	const String& getObjectRight() const { return objRight; }
+	void addLabel(const String& label);
+	const Array<String>& getLabels() const { return labels; }
+
+
 private:
+	Array<float> parameters;
+	String objLeft;
+	String objRight;
+	Array<String> labels;
+
 };
 
 class TerminationObject : public BaseObject
@@ -43,7 +58,14 @@ public:
 	TerminationObject(ObjectType objType_=TerminationType);
 	virtual ~TerminationObject();
 
+	void addParameter(const String& value);
+	const Array<String>& getParameters() const { return parameters; }
+	void addLabel(const String& label);
+	const Array<String>& getLabels() const { return labels; }
+
 private:
+	Array<String> parameters;
+	Array<String> labels;
 };
 class JunctionObject : public BaseObject
 {
@@ -51,7 +73,14 @@ public:
 	JunctionObject(ObjectType objType_=JunctionType);
 	virtual ~JunctionObject();
 
+	void addParameter(float value);
+	float getParameters() const { return parameters; }
+	void addLabel(const String& label);
+	const Array<String>& getLabels() const { return labels; }
+
 private:
+	float parameters;
+	Array<String> labels;
 };
 
 

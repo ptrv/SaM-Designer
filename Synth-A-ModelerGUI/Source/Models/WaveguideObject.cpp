@@ -37,6 +37,26 @@ WaveguideObject::~WaveguideObject()
 
 }
 
+void WaveguideObject::addParameter(float value)
+{
+	parameters.add(value);
+}
+
+void WaveguideObject::addLabel(const String& label)
+{
+	labels.add(label);
+}
+
+void WaveguideObject::setObjectLeft(const String& objLeft_)
+{
+	objLeft = objLeft_;
+}
+
+void WaveguideObject::setObjectRight(const String& objRight_)
+{
+	objRight = objRight_;
+}
+
 TerminationObject::TerminationObject(ObjectType objType_)
 : BaseObject(objType_)
 {
@@ -47,6 +67,18 @@ TerminationObject::~TerminationObject()
 {
 
 }
+
+void TerminationObject::addParameter(const String& value)
+{
+	parameters.add(value);
+}
+
+void TerminationObject::addLabel(const String& label)
+{
+	labels.add(label);
+}
+
+
 JunctionObject::JunctionObject(ObjectType objType_)
 : BaseObject(objType_)
 {
@@ -57,3 +89,14 @@ JunctionObject::~JunctionObject()
 {
 
 }
+
+void JunctionObject::addParameter(float value)
+{
+	parameters = value;
+}
+
+void JunctionObject::addLabel(const String& label)
+{
+	labels.add(label);
+}
+

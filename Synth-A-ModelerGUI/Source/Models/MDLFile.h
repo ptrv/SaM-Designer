@@ -42,12 +42,18 @@ public:
 	const Array<LinkObject*>& getLinks() const { return links; }
 	const Array<LabelObject*>& getLabels() const { return labelObjs; }
 	const Array<AudioObject*>& getAudioObjects() const { return audioObjects; }
+	const Array<WaveguideObject*>& getWaveguides() const { return waveguides; }
+	const Array<TerminationObject*>& getTerminations() const { return terminations; }
+	const Array<JunctionObject*>& getJunctions() const { return junctions; }
 	const int getNumberOfObjectsByType(ObjectType objType);
 
 	void addMassObject(MassObject* obj);
 	void addLinkObject(LinkObject* obj);
 	void addLabelObject(LabelObject* obj);
 	void addAudioObject(AudioObject* obj);
+	void addWaveguideObject(WaveguideObject* obj);
+	void addTerminationObject(TerminationObject* obj);
+	void addJunctionObject(JunctionObject* obj);
 
 	bool needsSaving();
 
@@ -68,6 +74,9 @@ private:
 	Array<LinkObject*> links;
 	Array<LabelObject*> labelObjs;
 	Array<AudioObject*> audioObjects;
+	Array<WaveguideObject*> waveguides;
+	Array<TerminationObject*> terminations;
+	Array<JunctionObject*> junctions;
 	bool isModified;
 	bool isInit;
 

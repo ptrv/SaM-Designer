@@ -399,7 +399,6 @@ bool ContentComp::perform (const InvocationInfo& info)
 	return appController.menuItemWasClicked(info.commandID);
 }
 
-
 //[/MiscUserCode]
 
 
