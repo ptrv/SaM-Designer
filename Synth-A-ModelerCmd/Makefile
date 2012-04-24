@@ -299,4 +299,5 @@ help:
 clean :
 	rm -rf *dir
 	rm -rf *-svg
+	rm *.dsp
 	# EJB commented this out:  $(MAKE) -f Makefile.mathdoc clean

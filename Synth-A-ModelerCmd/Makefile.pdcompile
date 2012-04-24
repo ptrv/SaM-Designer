@@ -5,23 +5,23 @@
 
 system			:= $(shell uname -s)
 DEST			:= pddir/
-dspsrc  		:= $(wildcard *.dsp)
-cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.dsp=.cpp))
-patches			:= $(addprefix $(DEST),  $(dspsrc:.dsp=.pd))
+dspsrc  		:= $(wildcard *.mdl)
+cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.mdl=.cpp))
+dspfile			:= $(dspsrc:.mdl=.dsp)
+patches			:= $(addprefix $(DEST),  $(dspsrc:.mdl=.pd))
 FAUST2PD 		:= faust2pd
 F2PDFLAGS 		:= -r 10 -s
 
 ###--------------------------------------------
 ### compilation flags for Linux
 ###
-LINUXCFLAGS 	:= -DPD -O2 -funroll-loops -fomit-frame-pointer -fPIC \
-                   -Wall $(CXXFLAGS)
+LINUXCFLAGS 	:= -DPD -fPIC -Wall -O3 -mfpmath=sse -msse -msse2 -msse3 -ffast-math
 LINUXINCLUDE 	:= -I/usr/include/pdextended
 
 ###--------------------------------------------
 ### compilation flags for Darwin
 ###
-DARWINCFLAGS 	:= -DPD -O2 -m32 -funroll-loops -fomit-frame-pointer -fPIC -Wall -msse
+DARWINCFLAGS 	:= -DPD -fPIC -Wall -O3 -mfpmath=sse -msse -msse2 -msse3 -ffast-math
 DYNLOAD_FLAGS	:= -bundle -undefined suppress -flat_namespace
 DARWININCLUDE 	:= -I/Applications/Pd-extended.app/Contents/Resources/include/
 
@@ -29,9 +29,9 @@ DARWININCLUDE 	:= -I/Applications/Pd-extended.app/Contents/Resources/include/
 ### check what type of modules to build (MacOSX Darwin or Linux)
 ###
 ifeq ($(system), Darwin)
-modules 		:= $(addprefix $(DEST),  $(dspsrc:.dsp=~.pd_darwin))
+modules 		:= $(addprefix $(DEST),  $(dspsrc:.mdl=~.pd_darwin))
 else
-modules			:= $(addprefix $(DEST),  $(dspsrc:.dsp=~.pd_linux))
+modules			:= $(addprefix $(DEST),  $(dspsrc:.mdl=~.pd_linux))
 endif
 
 
@@ -51,11 +51,17 @@ endif
 ###--------------------------------------------
 
 
-allmodules: $(todo)
+allmodules: $(dspfile) $(todo)
+
+%.dsp : %.mdl
+	perl Synth-A-Modeler $< $@
 
 $(DEST)%.cpp: %.dsp
-#	faust -a $(ARCH) -ps $< -o $@
-	faust -a $(ARCH) $< -o $@
+#	$(dspfile)   # EJB: I don't know why that was in here, so I commented it out ...
+	faust -a $(ARCH) -double $< -o $@
+	# If there are pre-specified help files, then copy them over
+	cp pdhelp/$(<:.dsp=*) $(DEST) &
+	#cp pdhelp/$(<:.dsp=-help.pd) $(@:.cpp=-help.pd) &
 	
 $(DEST)%.pd: %.dsp
 	faust -xml $< -o /dev/null
@@ -66,8 +72,12 @@ $(DEST)%.pd: %.dsp
 $(DEST)%~.pd_linux: $(DEST)%.cpp
 	$(CXX) $(LINUXCFLAGS) $(LINUXINCLUDE) -shared -Dmydsp=$(patsubst %~.pd_linux,%,$(notdir $@)) $< -o $@
 
+# On Darwin we create both 32-bits and 64-bits intel code
 $(DEST)%~.pd_darwin: $(DEST)%.cpp
-	$(CXX) $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@
+	$(CXX) -arch i386 $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@.i386
+	$(CXX) -arch x86_64 $(DARWINCFLAGS) $(DARWININCLUDE) $(DYNLOAD_FLAGS) -Dmydsp=$(patsubst %~.pd_darwin,%,$(notdir $@)) $< -o $@.x86_64
+	lipo -create $@.i386 $@.x86_64  -output $@
+	rm $@.i386 $@.x86_64
 
 clean:
 	rm -rf $(DEST)
