@@ -27,7 +27,6 @@
       <FILE id="zDjPgE" name="mdl_file_header.txt" compile="0" resource="1"
             file="BinaryData/mdl_file_header.txt"/>
       <FILE id="n8OTz8" name="Info.txt" compile="0" resource="1" file="BinaryData/Info.txt"/>
-      <FILE id="TtDmJX" name="prefs_audio.png" compile="0" resource="1" file="BinaryData/prefs_audio.png"/>
       <FILE id="BQgaoD" name="prefs_about.png" compile="0" resource="1" file="BinaryData/prefs_about.png"/>
       <FILE id="liqvJ3" name="prefs_misc.png" compile="0" resource="1" file="BinaryData/prefs_misc.png"/>
       <FILE id="MnjVic" name="icons.zip" compile="0" resource="1" file="BinaryData/icons.zip"/>
@@ -117,11 +116,6 @@
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
     <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
-    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

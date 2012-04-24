@@ -28,31 +28,6 @@
 #include "../Utilities/StoredSettings.h"
 
 
-class AudioPage  : public Component
-{
-public:
-	AudioPage(AudioDeviceManager& deviceManager_)
-	: deviceManager(deviceManager_),
-	  deviceSelector(0)
-    {
-		addAndMakeVisible (deviceSelector = new AudioDeviceSelectorComponent (deviceManager, 0, 2, 0, 2, true, true, true, false));
-    }
-
-    ~AudioPage()
-    {
-    	deleteAndZero (deviceSelector);
-    }
-
-    void resized()
-    {
-    	deviceSelector->setBounds (8, 8, getWidth() - 16, getHeight() - 16);
-    }
-
-private:
-    AudioDeviceManager& deviceManager;
-    AudioDeviceSelectorComponent* deviceSelector;
-};
-
 //==============================================================================
 class MiscPage  : public Component
 {
@@ -168,7 +143,6 @@ private:
 
 
 //==============================================================================
-static const char* audioPage = "Audio";
 static const char* miscPage = "Misc";
 static const char* aboutPage = "About";
 
@@ -177,7 +151,6 @@ class PrefsTabComp  : public PreferencesPanel
 public:
     PrefsTabComp()
     {
-        addSettingsPage (audioPage, BinaryData::prefs_audio_png, BinaryData::prefs_audio_pngSize);
         addSettingsPage (miscPage, BinaryData::prefs_misc_png, BinaryData::prefs_misc_pngSize);
         addSettingsPage (aboutPage, BinaryData::prefs_about_png, BinaryData::prefs_about_pngSize);
     }
@@ -189,11 +162,7 @@ public:
 
     Component* createComponentForPage (const String& pageName)
     {
-        if (pageName == audioPage)
-        {
-        	return new AudioPage(deviceManager);
-        }
-        else if (pageName == miscPage)
+    	if (pageName == miscPage)
         {
             return new MiscPage();
         }
@@ -204,8 +173,6 @@ public:
 
         return new Component();
     }
-private:
-    AudioDeviceManager deviceManager;
 };
 
 

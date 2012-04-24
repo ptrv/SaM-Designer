@@ -66,11 +66,6 @@ OBJECTS := \
   $(OBJDIR)/ContentComp_99fa8a27.o \
   $(OBJDIR)/ObjComp_838b59a5.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
-  $(OBJDIR)/juce_audio_basics_5460bccb.o \
-  $(OBJDIR)/juce_audio_devices_44d00ac9.o \
-  $(OBJDIR)/juce_audio_formats_73515469.o \
-  $(OBJDIR)/juce_audio_processors_d11d9b83.o \
-  $(OBJDIR)/juce_audio_utils_5ff6f09.o \
   $(OBJDIR)/juce_core_5f5a3bad.o \
   $(OBJDIR)/juce_cryptography_55e5c007.o \
   $(OBJDIR)/juce_data_structures_7e517fa9.o \
@@ -207,31 +202,6 @@ $(OBJDIR)/ObjComp_838b59a5.o: ../../Source/View/ObjComp.cpp
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling BinaryData.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_audio_basics_5460bccb.o: ../../../juce/modules/juce_audio_basics/juce_audio_basics.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_audio_basics.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_audio_devices_44d00ac9.o: ../../../juce/modules/juce_audio_devices/juce_audio_devices.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_audio_devices.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_audio_formats_73515469.o: ../../../juce/modules/juce_audio_formats/juce_audio_formats.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_audio_formats.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_audio_processors_d11d9b83.o: ../../../juce/modules/juce_audio_processors/juce_audio_processors.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_audio_processors.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/juce_audio_utils_5ff6f09.o: ../../../juce/modules/juce_audio_utils/juce_audio_utils.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling juce_audio_utils.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/juce_core_5f5a3bad.o: ../../../juce/modules/juce_core/juce_core.cpp
