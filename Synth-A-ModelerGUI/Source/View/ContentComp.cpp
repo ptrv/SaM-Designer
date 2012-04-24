@@ -133,13 +133,13 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::selectAll);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::deselectAll);
         menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::defineVariables);
+        menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
         menu.addCommandItem (commandManager, CommandIDs::zoomIn);
         menu.addCommandItem (commandManager, CommandIDs::zoomOut);
         menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
-        menu.addSeparator();
-        menu.addCommandItem (commandManager, CommandIDs::showLabels);
 
     }
     else if (menuIndex == 2)
@@ -219,7 +219,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::zoomOut,
                               CommandIDs::zoomNormal,
                               CommandIDs::reverseDirection,
-                              CommandIDs::showLabels,
+                              CommandIDs::defineVariables,
                               CommandIDs::insertMass,
                               CommandIDs::insertGround,
                               CommandIDs::insertResonator,
@@ -297,11 +297,12 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	break;
     case StandardApplicationCommandIDs::deselectAll:
     	result.setInfo("DeselectAll", "", CommandCategories::editing,0);
-    	result.addDefaultKeypress('d', ModifierKeys::commandModifier);
+    	result.addDefaultKeypress('a', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
     	break;
 
     case CommandIDs::segmentedConnectors:
     	result.setInfo("Segmeted connectors", "", CommandCategories::editing,0);
+    	result.setTicked(StoredSettings::getInstance()->getIsSegmentedConnectors());
     	result.addDefaultKeypress('t', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::zoomIn:
@@ -320,9 +321,9 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	result.setInfo("Reverse direction", "", CommandCategories::editing,0);
     	result.addDefaultKeypress('r', ModifierKeys::commandModifier);
     	break;
-    case CommandIDs::showLabels:
-    	result.setInfo("Show labels", "", CommandCategories::editing,0);
-    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+    case CommandIDs::defineVariables:
+    	result.setInfo("Define variable", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress('d', ModifierKeys::commandModifier);
     	break;
 
 

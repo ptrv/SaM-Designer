@@ -86,7 +86,10 @@ bool AppController::menuItemWasClicked(CommandID menuId)
 	case StandardApplicationCommandIDs::deselectAll:
 		break;
 
+    case CommandIDs::defineVariables:
+    	break;
     case CommandIDs::segmentedConnectors:
+    	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
     	break;
     case CommandIDs::zoomIn:
     	break;
@@ -95,8 +98,6 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     case CommandIDs::zoomNormal:
     	break;
     case CommandIDs::reverseDirection:
-    	break;
-    case CommandIDs::showLabels:
     	break;
 
     case CommandIDs::insertMass:

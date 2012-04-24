@@ -68,8 +68,6 @@ public:
     const String getExporters() const;
     void setExporters(const String& exporters);
 
-	const bool getShowLabels() const;
-    void setShowLabels (bool showLabels);
 	const bool getIsSegmentedConnectors() const;
     void setIsSegmentedConnectors (bool isSegmentedConnectors);
 
