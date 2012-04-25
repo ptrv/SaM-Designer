@@ -26,23 +26,6 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../Application/CommonHeaders.h"
 
-static const String getDefaultPathSAM()
-{
-	String samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler";
-#if JUCE_MAC
-	samPath = "../"+samPath;
-#endif
-
-	File infile(File::getCurrentWorkingDirectory().getChildFile(samPath));
-	if(infile.existsAsFile())
-	{
-		return samPath;
-	}
-	else
-	{
-		return "";
-	}
-}
 //static const String getDefaultPathFaust()
 //{
 //	File infile("/usr/local/bin/faust");
@@ -51,34 +34,6 @@ static const String getDefaultPathSAM()
 //		return infile.getFullPathName();
 //	}
 //	infile = "/usr/bin/faust";
-//	if(infile.existsAsFile())
-//	{
-//		return infile.getFullPathName();
-//	}
-//	return "";
-//}
-//static const String getDefaultPathFaust2supercollider()
-//{
-//	File infile("/usr/local/bin/faust2supercollider");
-//	if(infile.existsAsFile())
-//	{
-//		return infile.getFullPathName();
-//	}
-//	infile = "/usr/bin/faust2supercollider";
-//	if(infile.existsAsFile())
-//	{
-//		return infile.getFullPathName();
-//	}
-//	return "";
-//}
-//static const String getDefaultPathFaust2puredata()
-//{
-//	File infile("/usr/local/bin/faust2puredata");
-//	if(infile.existsAsFile())
-//	{
-//		return infile.getFullPathName();
-//	}
-//	infile = "/usr/bin/faust2puredata";
 //	if(infile.existsAsFile())
 //	{
 //		return infile.getFullPathName();
@@ -189,15 +144,6 @@ void StoredSettings::setCmdPerl(const String& cmdPerl)
 	props->setValue("cmdperl", cmdPerl);
 }
 
-String StoredSettings::getCmdSAM() const
-{
-	return props->getValue("cmdsam", getDefaultPathSAM());
-}
-void StoredSettings::setCmdSAM(const String& cmdSAM)
-{
-	props->setValue("cmdsam", cmdSAM);
-}
-
 bool StoredSettings::getShowCompilerWindow() const
 {
 	return props->getBoolValue("showcompilerwindow", false);
@@ -248,7 +194,7 @@ void StoredSettings::setIsSegmentedConnectors (bool isSegmentedConnectors)
 
 const bool StoredSettings::getIsExportConfirm() const
 {
-	return props->getBoolValue("exportconfirm", true);
+	return props->getBoolValue("exportconfirm", false);
 }
 void StoredSettings::setIsExportConfirm (bool isExportConfirm)
 {

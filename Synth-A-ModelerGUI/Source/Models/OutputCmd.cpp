@@ -38,12 +38,7 @@ OutputCmd::~OutputCmd()
 
 bool OutputCmd::isSynthAModelerCmdAvailable()
 {
-	String cmdSAM = StoredSettings::getInstance()->getCmdSAM();
-	if(! File::isAbsolutePath(cmdSAM))
-	{
-		cmdSAM = File::getCurrentWorkingDirectory().getChildFile(cmdSAM).getFullPathName();
-	}
-	File samCompiler(cmdSAM);
+	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/Synth-A-Modeler");
 	if(samCompiler.existsAsFile())
 		return true;
 	else
@@ -85,6 +80,7 @@ bool OutputCmd::isPerlAvailable()
 
 const String OutputCmd::runChildProcess(const String& processStr)
 {
+	// TODO: read std error
 	ChildProcess child;
 	if(child.start(processStr))
 	{
@@ -110,8 +106,8 @@ const String OutputCmd::generateFaustCode(const String& inPath, const String& ou
 
 const String OutputCmd::generateExternal()
 {
-	String processStr = "make -C " + StoredSettings::getInstance()->getDataDir()
-			+ " " + StoredSettings::getInstance()->getCmdExporter();// + " " + inPath;
+	String processStr = StoredSettings::getInstance()->getCmdExporter();
+	processStr = processStr.replace("$(DATA_DIR)", StoredSettings::getInstance()->getDataDir(), true);
 
 	return runChildProcess(processStr);
 }

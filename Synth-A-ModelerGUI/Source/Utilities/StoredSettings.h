@@ -48,8 +48,6 @@ public:
 
     String getCmdPerl() const;
     void setCmdPerl(const String& cmdPerl);
-    String getCmdSAM() const;
-    void setCmdSAM(const String& cmdSAM);
 
     bool getShowCompilerWindow() const;
     void setShowCompilerWindow(bool shouldShow);

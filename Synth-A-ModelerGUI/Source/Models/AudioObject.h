@@ -36,8 +36,6 @@ public:
 	void addParameter(const String& value);
 	const String& getParameters() const { return parameters; }
 private:
-//	Array<String> parameters;
-//	HashMap<String, float> parameters;
 	String parameters;
 };
 

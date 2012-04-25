@@ -191,12 +191,15 @@ const String MDLController::generateExternal()
 		return "No mdl file\n\n";
 
 
-//	File result(currentMdl->getFilePath());
-	String outText;
-//	String tmpFaust = currentMdl->getFilePath().upToFirstOccurrenceOf(".mdl", false, false) + String(".dsp");
-//	DBG(tmpFaust);
-	outText << outCmd->generateExternal();
-	return outText;
+	bool r = true;
+	if(StoredSettings::getInstance()->getIsExportConfirm())
+		r = Alerts::confirmExport("Really export faust");
+
+	if (r)
+	{
+		return outCmd->generateExternal();
+	}
+	return String::empty;
 }
 
 const String MDLController::getMDLName()

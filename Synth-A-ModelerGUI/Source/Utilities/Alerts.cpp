@@ -44,7 +44,7 @@ void Alerts::missingSAM()
 
 bool Alerts::confirmExport(const String& text)
 {
-	String title = "Confirm export";
+	String title = "Export external";
 	return AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, title, text);
 }
 

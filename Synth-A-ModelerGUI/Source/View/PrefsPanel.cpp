@@ -44,9 +44,9 @@ public:
 		labelCmdExport(String::empty, "Exporter Command")
     {
         addAndMakeVisible (&fcDataDir);
-        labelDataDir.attachToComponent (&fcDataDir, true);
+        labelDataDir.attachToComponent (&fcDataDir, false);
         addAndMakeVisible (&teCmdExport);
-        labelCmdExport.attachToComponent (&teCmdExport, true);
+        labelCmdExport.attachToComponent (&teCmdExport, false);
         teCmdExport.setMultiLine(false);
         teCmdExport.setText(StoredSettings::getInstance()->getCmdExporter());
         addAndMakeVisible(&tbExportConfirm);
@@ -63,9 +63,9 @@ public:
 
     void resized()
     {
-        fcDataDir.setBounds (150, 16, getWidth() - 160, 22);
-        teCmdExport.setBounds(150, 56, getWidth() -160, 22);
-        tbExportConfirm.setBounds(10, 96, getWidth() - 20, 22);
+        fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
+        teCmdExport.setBounds(10, 100, getWidth() -20, 22);
+        tbExportConfirm.setBounds(10, 150, getWidth() - 20, 22);
     }
 
 private:
@@ -101,11 +101,11 @@ public:
     void paint (Graphics& g)
     {
         g.fillAll (Colour (0xffebebeb));
-        g.drawImageWithin (logo, 0, 4, getWidth(), getHeight() - 144,
+        g.drawImageWithin (logo, 0, 4, getWidth(), getHeight()*0.3,
                            RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize,
                            false);
 
-        text1.draw (g, Rectangle<int> (12, getHeight() - 130, getWidth() - 24, 100).toFloat());
+        text1.draw (g, Rectangle<int> (12, getHeight()*0.4, getWidth() - 24, 100).toFloat());
         text2.draw (g, Rectangle<int> (12, getHeight() - 50, getWidth() - 24, 20).toFloat());
     }
 
