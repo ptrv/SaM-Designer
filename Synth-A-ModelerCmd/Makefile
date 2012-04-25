@@ -17,7 +17,7 @@ MYICCFLAGS := '-O3 -xHost -ftz -fno-alias -fp-model fast=2 $(OSCCTRL)'
 ifeq ($(system), Darwin)
 MYGCCFLAGS := '-O3 -m32 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
 else
-MYGCCFLAGS := '-O3 -m32 -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
+MYGCCFLAGS := '-O3 -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
 endif
 
 VSIZE := 256
@@ -239,11 +239,13 @@ q :
 	install -d qdir
 	$(MAKE) DEST='qdir/' ARCH='q.cpp' LIB='-I$(LIB)/faust/' -f Makefile.qcompile
 
-SCCFLAGS := $(MYGCCFLAGS:'=) `pkg-config --cflags libscsynth`'
+# SCCFLAGS := $(MYGCCFLAGS:'=) `pkg-config --cflags libscsynth`'
+# SCCFLAGS := $(MYGCCFLAGS:=) `pkg-config --cflags libscsynth`
+# SCCFLAGS := $(MYGCCFLAGS:=) -lscsynth
 
 supercollider sc:
 	install -d supercolliderdir
-	$(MAKE) DEST='supercolliderdir/' ARCH='supercollider.cpp' CXXFLAGS=$(SCCFLAGS) LIB='-I$(LIB)/faust/ -fPIC -shared' EXT='.so' -f Makefile.sccompile
+	$(MAKE) DEST='supercolliderdir/' -f Makefile.sccompile
 
 # supercollider :
 # 	ls *.dsp | ../tools/scbuilder/scbuilder \
