@@ -39,6 +39,8 @@ public:
 
 	void toggleDebugWindow();
 
+	void printHeader();
+
 	void clear();
 
 	void addText(const String& compilerText);

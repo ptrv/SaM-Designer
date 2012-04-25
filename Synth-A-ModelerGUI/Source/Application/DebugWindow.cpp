@@ -73,6 +73,20 @@ void DebugWindow::clear()
 
 void DebugWindow::addText(const String& compilerText)
 {
+//	String debugText = "-------------------";
+//	debugText << newLine;
+//	debugText << "Synth-A-Modeler: ";
+//	debugText << Time::getCurrentTime().toString(true,true, true, true);
+//	debugText << newLine;
+//	debugText << "-------------------";
+//	debugText << newLine << newLine;
+//	debugText << compilerText;
+//	console->addLine(debugText);
+	console->addLine(compilerText);
+}
+
+void DebugWindow::printHeader()
+{
 	String debugText = "-------------------";
 	debugText << newLine;
 	debugText << "Synth-A-Modeler: ";
@@ -80,6 +94,5 @@ void DebugWindow::addText(const String& compilerText)
 	debugText << newLine;
 	debugText << "-------------------";
 	debugText << newLine << newLine;
-	debugText << compilerText;
 	console->addLine(debugText);
 }

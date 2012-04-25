@@ -127,16 +127,22 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     {
     	String consoleText = mdlController->generateFaust();
     	if(consoleText.compare("") != 0)
+    	{
+    		dw.printHeader();
+    		dw.addText("Generating FAUST code...\n");
     		dw.addText(consoleText);
+    	}
     }
     	break;
     case CommandIDs::generateExternal:
     {
     	String consoleText = mdlController->generateExternal();
     	if(consoleText.compare("") != 0)
+    		dw.printHeader();
+    		dw.addText("Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n");
     		dw.addText(consoleText);
-    	break;
     }
+    	break;
 
     case CommandIDs::showOutputConsole:
     	debugWindowToggle();
