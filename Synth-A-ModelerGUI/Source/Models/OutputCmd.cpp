@@ -83,23 +83,6 @@ bool OutputCmd::isPerlAvailable()
 	return isCmdAvailable(cmdPerl);
 }
 
-bool OutputCmd::isFaustAvailable()
-{
-	String cmdFaust = StoredSettings::getInstance()->getCmdFaust();
-	return isCmdAvailable(cmdFaust);
-}
-
-bool OutputCmd::isFaust2puredataAvailable()
-{
-	String cmdFaust2puredata = StoredSettings::getInstance()->getCmdFaust2puredata();
-	return isCmdAvailable(cmdFaust2puredata);
-}
-
-bool OutputCmd::isFaust2supercolliderAvailable()
-{
-	String cmdFaust2supercollider = StoredSettings::getInstance()->getCmdFaust2supercollider();
-	return isCmdAvailable(cmdFaust2supercollider);
-}
 const String OutputCmd::runChildProcess(const String& processStr)
 {
 	ChildProcess child;
@@ -119,28 +102,19 @@ const String OutputCmd::runChildProcess(const String& processStr)
 const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)
 {
 	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	String cmdSAM = StoredSettings::getInstance()->getCmdSAM();
-	String processStr = cmdPerl +" " + cmdSAM + " " + inPath + " " + outPath;
+	String processStr = cmdPerl + " " + StoredSettings::getInstance()->getDataDir()
+			+ "/Synth-A-Modeler " + inPath + " " + outPath;
 
 	return runChildProcess(processStr);
 }
 
-const String OutputCmd::generateExternalSC(const String& inPath)
+const String OutputCmd::generateExternal()
 {
-	String cmdSC = StoredSettings::getInstance()->getCmdFaust2supercollider();
-	String processStr = cmdSC + " " + inPath;
+	String processStr = "make -C " + StoredSettings::getInstance()->getDataDir()
+			+ " " + StoredSettings::getInstance()->getCmdExporter();// + " " + inPath;
 
 	return runChildProcess(processStr);
 }
-const String OutputCmd::generateExternalPD(const String& inPath)
-{
-	String cmdPD = StoredSettings::getInstance()->getCmdFaust2puredata();
-	String processStr = cmdPD + " " + inPath;
-
-	return runChildProcess(processStr);
-
-}
-
 
 //==============================================================================
 #if UNIT_TESTS

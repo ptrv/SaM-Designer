@@ -48,12 +48,6 @@ public:
 
     String getCmdPerl() const;
     void setCmdPerl(const String& cmdPerl);
-    String getCmdFaust() const;
-    void setCmdFaust(const String& cmdFaust);
-    String getCmdFaust2supercollider() const;
-    void setCmdFaust2supercollider(const String& cmdFaust2supercollider);
-    String getCmdFaust2puredata() const;
-    void setCmdFaust2puredata(const String& cmdFaust2puredata);
     String getCmdSAM() const;
     void setCmdSAM(const String& cmdSAM);
 
@@ -63,13 +57,19 @@ public:
 	const String getWorkingFolder() const;
     void setWorkingFolder (const String& folder);
 
+	const String getDataDir() const;
+    void setDataDir (const String& folder);
+
     const StringArray& getFontNames();
 
-    const String getExporters() const;
-    void setExporters(const String& exporters);
+    const String getCmdExporter() const;
+    void setCmdExporter(const String& exporters);
 
 	const bool getIsSegmentedConnectors() const;
     void setIsSegmentedConnectors (bool isSegmentedConnectors);
+
+	const bool getIsExportConfirm() const;
+    void setIsExportConfirm (bool isExportConfirm);
 
     //==============================================================================
 //    Image getFallbackImage();

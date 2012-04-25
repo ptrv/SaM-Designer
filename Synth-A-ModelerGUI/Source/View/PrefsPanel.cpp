@@ -33,66 +33,47 @@ class MiscPage  : public Component
 {
 public:
     MiscPage()
-    : samPath ("Synth-A-Modeler location:",
-    		StoredSettings::getInstance()->getCmdSAM(),
-    		true, false, false,
+    : fcDataDir ("Synth-A-Modeler location:",
+    		StoredSettings::getInstance()->getDataDir(),
+    		true, true, false,
     		"*.plx", String::empty,
     		"(select the Synth-A-Modeler.plx file)"),
-		faustPath ("faust location:",
-				StoredSettings::getInstance()->getCmdFaust(),
-				true, false, false,
-				"*.*", String::empty,
-				"(select the faust executable)"),
-		faust2supercolliderPath ("faust2supercollider location:",
-				StoredSettings::getInstance()->getCmdFaust2supercollider(),
-				true, false, false,
-				"*.*", String::empty,
-				"(select the faust2supercollider executable)"),
-		faust2puredataPath ("faust2puredata location:",
-				StoredSettings::getInstance()->getCmdFaust2puredata(),
-				true, false, false,
-				"*.*", String::empty,
-				"(select the faust2puredata executable)"),
-		labelSAM (String::empty, samPath.getCurrentFile().getFileNameWithoutExtension()),
-		labelFaust(String::empty, faustPath.getCurrentFile().getFileNameWithoutExtension()),
-		labelFaust2supercollider(String::empty, faust2supercolliderPath.getCurrentFile().getFileNameWithoutExtension()),
-		labelFaust2puredata(String::empty, faust2puredataPath.getCurrentFile().getFileNameWithoutExtension())
+		teCmdExport("CmdExport"),
+		tbExportConfirm("Confirm export"),
+		labelDataDir (String::empty, "Data Dir"),
+		labelCmdExport(String::empty, "Exporter Command")
     {
-        addAndMakeVisible (&samPath);
-        labelSAM.attachToComponent (&samPath, true);
-        addAndMakeVisible (&faustPath);
-        labelFaust.attachToComponent (&faustPath, true);
-        addAndMakeVisible (&faust2supercolliderPath);
-        labelFaust2supercollider.attachToComponent (&faust2supercolliderPath, true);
-        addAndMakeVisible (&faust2puredataPath);
-        labelFaust2puredata.attachToComponent (&faust2puredataPath, true);
+        addAndMakeVisible (&fcDataDir);
+        labelDataDir.attachToComponent (&fcDataDir, true);
+        addAndMakeVisible (&teCmdExport);
+        labelCmdExport.attachToComponent (&teCmdExport, true);
+        teCmdExport.setMultiLine(false);
+        teCmdExport.setText(StoredSettings::getInstance()->getCmdExporter());
+        addAndMakeVisible(&tbExportConfirm);
+        tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
+
     }
 
     ~MiscPage()
     {
-        StoredSettings::getInstance()->setCmdSAM(samPath.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setCmdFaust(faustPath.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setCmdFaust2supercollider(faust2supercolliderPath.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setCmdFaust2puredata(faust2puredataPath.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setDataDir(fcDataDir.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setCmdExporter(teCmdExport.getText());
+        StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
     }
 
     void resized()
     {
-        samPath.setBounds (150, 16, getWidth() - 160, 22);
-        faustPath.setBounds(150, 56, getWidth() -160, 22);
-        faust2supercolliderPath.setBounds(150, 96, getWidth() -160, 22);
-        faust2puredataPath.setBounds(150, 136, getWidth() -160, 22);
+        fcDataDir.setBounds (150, 16, getWidth() - 160, 22);
+        teCmdExport.setBounds(150, 56, getWidth() -160, 22);
+        tbExportConfirm.setBounds(10, 96, getWidth() - 20, 22);
     }
 
 private:
-    FilenameComponent samPath;
-    FilenameComponent faustPath;
-    FilenameComponent faust2supercolliderPath;
-    FilenameComponent faust2puredataPath;
-    Label labelSAM;
-    Label labelFaust;
-    Label labelFaust2supercollider;
-    Label labelFaust2puredata;
+    FilenameComponent fcDataDir;
+    TextEditor teCmdExport;
+    ToggleButton tbExportConfirm;
+    Label labelDataDir;
+    Label labelCmdExport;
 };
 
 //==============================================================================

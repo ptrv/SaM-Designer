@@ -26,12 +26,6 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "Alerts.h"
 
-void Alerts::missingFaust()
-{
-	String title = "Missing faust executable";
-	String msg;
-	AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
-}
 
 void Alerts::missingPerl()
 {
@@ -46,5 +40,11 @@ void Alerts::missingSAM()
 	String msg;
 	AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
 
+}
+
+bool Alerts::confirmExport(const String& text)
+{
+	String title = "Confirm export";
+	return AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, title, text);
 }
 

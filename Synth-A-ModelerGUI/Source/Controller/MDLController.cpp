@@ -166,19 +166,20 @@ const String MDLController::generateFaust()
 		Alerts::missingSAM();
 		return "Missing Synth-A-Modeler.plx";
 	}
-	if(! outCmd->isFaustAvailable())
-	{
-		Alerts::missingFaust();
-		return "Missing Faust";
-	}
-	FileChooser fch("Choose output faust file",
-			StoredSettings::getInstance()->getWorkingFolder(),"*.dsp", false);
 
-	if (fch.browseForFileToSave(true))
+	bool r = true;
+	if(StoredSettings::getInstance()->getIsExportConfirm())
+		r = Alerts::confirmExport("Really export faust");
+
+	if (r)
 	{
-		File result = fch.getResult();
-		StoredSettings::getInstance()->setWorkingFolder(result.getParentDirectory().getFullPathName());
-		return outCmd->generateFaustCode(currentMdl->getFilePath(), result.getFullPathName());
+		File result(currentMdl->getFilePath());
+		String outFileName= result.getFileNameWithoutExtension();
+		outFileName << ".dsp";
+
+		String outPath = StoredSettings::getInstance()->getDataDir();
+		outPath << "/" << outFileName;
+		return outCmd->generateFaustCode(currentMdl->getFilePath(), outPath);
 	}
 	return String::empty;
 }
@@ -189,29 +190,12 @@ const String MDLController::generateExternal()
 	if(currentMdl->getName().compare("Untitled") == 0)
 		return "No mdl file\n\n";
 
-	int r = ExportPanel::show();
-//	DBG(r);
-	if(r != 1)
-		return "";
-	StringArray exporters;
-	String exportersStr = StoredSettings::getInstance()->getExporters();
-	exporters.addTokens(exportersStr, "|", "\"");
-	String outText;
-	Random random(Time::currentTimeMillis());
 
-	String tmpFaust = currentMdl->getFilePath().upToFirstOccurrenceOf(".mdl", false, false) + "_tmp" + String(random.nextInt(1000000)) + String(".dsp");
-	DBG(tmpFaust);
-	outText << outCmd->generateFaustCode(currentMdl->getFilePath(), tmpFaust);
-	if(exporters.indexOf("sc") != -1)
-	{
-		outText << outCmd->generateExternalSC(tmpFaust);
-	}
-//	if(exporters.indexOf("pd") != -1)
-//	{
-//		outText << outCmd->generateExternalPD(tmpFaust);
-//	}
-//	File tmpF(tmpFaust);
-//	tmpF.deleteFile();
+//	File result(currentMdl->getFilePath());
+	String outText;
+//	String tmpFaust = currentMdl->getFilePath().upToFirstOccurrenceOf(".mdl", false, false) + String(".dsp");
+//	DBG(tmpFaust);
+	outText << outCmd->generateExternal();
 	return outText;
 }
 

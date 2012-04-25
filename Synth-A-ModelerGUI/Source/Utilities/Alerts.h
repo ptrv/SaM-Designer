@@ -32,9 +32,9 @@ private:
 	Alerts();
 	~Alerts();
 public:
-	static void missingFaust();
 	static void missingPerl();
 	static void missingSAM();
+	static bool confirmExport(const String& text);
 
 };
 

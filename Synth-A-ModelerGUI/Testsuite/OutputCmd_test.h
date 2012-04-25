@@ -39,12 +39,6 @@ public:
 		OutputCmd cmd;
 		beginTest("isSynthAModelerCmdAvailable");
 		expect(cmd.isSynthAModelerCmdAvailable(), "");
-		beginTest("isFaustAvailable");
-		expect(cmd.isFaustAvailable(), "");
-		beginTest("isFaust2supercolliderAvailable");
-		expect(cmd.isFaust2supercolliderAvailable(), "");
-		beginTest("isFaust2puredataAvailable");
-		expect(cmd.isFaust2puredataAvailable(), "");
 		beginTest("isPerlAvailable");
 		expect(cmd.isPerlAvailable(), "");
 		beginTest("generateFaustCode");

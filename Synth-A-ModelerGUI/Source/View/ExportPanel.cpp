@@ -90,7 +90,7 @@ private:
 
     void getExporters()
     {
-    	String exportersStr = StoredSettings::getInstance()->getExporters();
+    	String exportersStr = StoredSettings::getInstance()->getCmdExporter();
     	StringArray exporters;
     	exporters.addTokens(exportersStr, "|", "\"");
 
@@ -112,7 +112,7 @@ private:
     		exporters.add("pd");
     	}
     	String exportersStr = exporters.joinIntoString("|");
-    	StoredSettings::getInstance()->setExporters(exportersStr);
+    	StoredSettings::getInstance()->setCmdExporter(exportersStr);
     }
 
     ExportPanel& exportPanel;

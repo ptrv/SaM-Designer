@@ -37,12 +37,8 @@ public:
 	bool isSynthAModelerCmdAvailable();
 	bool isCmdAvailable(const String& cmdStr);
 	bool isPerlAvailable();
-	bool isFaustAvailable();
-	bool isFaust2puredataAvailable();
-	bool isFaust2supercolliderAvailable();
 	const String generateFaustCode(const String& inPath, const String& outPath);
-	const String generateExternalSC(const String& inPath);
-	const String generateExternalPD(const String& inPath);
+	const String generateExternal();
 private:
 	const String runChildProcess(const String& processStr);
 };

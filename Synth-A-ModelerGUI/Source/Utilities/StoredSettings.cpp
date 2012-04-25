@@ -28,7 +28,7 @@
 
 static const String getDefaultPathSAM()
 {
-	String samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler.plx";
+	String samPath = "../../../../Synth-A-ModelerCmd/Synth-A-Modeler";
 #if JUCE_MAC
 	samPath = "../"+samPath;
 #endif
@@ -43,48 +43,48 @@ static const String getDefaultPathSAM()
 		return "";
 	}
 }
-static const String getDefaultPathFaust()
-{
-	File infile("/usr/local/bin/faust");
-	if(infile.existsAsFile())
-	{
-		return infile.getFullPathName();
-	}
-	infile = "/usr/bin/faust";
-	if(infile.existsAsFile())
-	{
-		return infile.getFullPathName();
-	}
-	return "";
-}
-static const String getDefaultPathFaust2supercollider()
-{
-	File infile("/usr/local/bin/faust2supercollider");
-	if(infile.existsAsFile())
-	{
-		return infile.getFullPathName();
-	}
-	infile = "/usr/bin/faust2supercollider";
-	if(infile.existsAsFile())
-	{
-		return infile.getFullPathName();
-	}
-	return "";
-}
-static const String getDefaultPathFaust2puredata()
-{
-	File infile("/usr/local/bin/faust2puredata");
-	if(infile.existsAsFile())
-	{
-		return infile.getFullPathName();
-	}
-	infile = "/usr/bin/faust2puredata";
-	if(infile.existsAsFile())
-	{
-		return infile.getFullPathName();
-	}
-	return "";
-}
+//static const String getDefaultPathFaust()
+//{
+//	File infile("/usr/local/bin/faust");
+//	if(infile.existsAsFile())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	infile = "/usr/bin/faust";
+//	if(infile.existsAsFile())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	return "";
+//}
+//static const String getDefaultPathFaust2supercollider()
+//{
+//	File infile("/usr/local/bin/faust2supercollider");
+//	if(infile.existsAsFile())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	infile = "/usr/bin/faust2supercollider";
+//	if(infile.existsAsFile())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	return "";
+//}
+//static const String getDefaultPathFaust2puredata()
+//{
+//	File infile("/usr/local/bin/faust2puredata");
+//	if(infile.existsAsFile())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	infile = "/usr/bin/faust2puredata";
+//	if(infile.existsAsFile())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	return "";
+//}
 static const String getDefaultPathPerl()
 {
 	File infile("/usr/bin/perl");
@@ -189,33 +189,6 @@ void StoredSettings::setCmdPerl(const String& cmdPerl)
 	props->setValue("cmdperl", cmdPerl);
 }
 
-String StoredSettings::getCmdFaust() const
-{
-	return props->getValue("cmdfaust", getDefaultPathFaust());
-}
-void StoredSettings::setCmdFaust(const String& cmdFaust)
-{
-	props->setValue("cmdfaust", cmdFaust);
-}
-
-String StoredSettings::getCmdFaust2supercollider() const
-{
-	return props->getValue("cmdfaust2supercollider", getDefaultPathFaust2supercollider());
-}
-void StoredSettings::setCmdFaust2supercollider(const String& cmdFaust2supercollider)
-{
-	props->setValue("cmdfaust2supercollider", cmdFaust2supercollider);
-}
-
-String StoredSettings::getCmdFaust2puredata() const
-{
-	return props->getValue("cmdfaust2puredata", getDefaultPathFaust2puredata());
-}
-void StoredSettings::setCmdFaust2puredata(const String& cmdFaust2puredata)
-{
-	props->setValue("cmdfaust2puredata", cmdFaust2puredata);
-}
-
 String StoredSettings::getCmdSAM() const
 {
 	return props->getValue("cmdsam", getDefaultPathSAM());
@@ -245,13 +218,23 @@ void StoredSettings::setWorkingFolder (const String& folder)
 	props->setValue("workingdir", folder);
 }
 
-const String StoredSettings::getExporters() const
+const String StoredSettings::getDataDir() const
 {
-	return props->getValue("exporters", "sc|pd");
+	return props->getValue("datadir",
+			File::getSpecialLocation(File::userDocumentsDirectory).getChildFile("Synth-A-ModelerData").getFullPathName());
 }
-void StoredSettings::setExporters(const String& exporters)
+void StoredSettings::setDataDir (const String& folder)
 {
-	props->setValue("exporters", exporters);
+	props->setValue("datadir", folder);
+}
+
+const String StoredSettings::getCmdExporter() const
+{
+	return props->getValue("cmdexporter", "puredata");
+}
+void StoredSettings::setCmdExporter(const String& exporters)
+{
+	props->setValue("cmdexporter", exporters);
 }
 
 const bool StoredSettings::getIsSegmentedConnectors() const
@@ -261,4 +244,13 @@ const bool StoredSettings::getIsSegmentedConnectors() const
 void StoredSettings::setIsSegmentedConnectors (bool isSegmentedConnectors)
 {
 	props->setValue("segmentedconnectors", isSegmentedConnectors);
+}
+
+const bool StoredSettings::getIsExportConfirm() const
+{
+	return props->getBoolValue("exportconfirm", true);
+}
+void StoredSettings::setIsExportConfirm (bool isExportConfirm)
+{
+	props->setValue("exportconfirm", isExportConfirm);
 }
