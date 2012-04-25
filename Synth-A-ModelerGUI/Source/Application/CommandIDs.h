@@ -54,7 +54,7 @@ namespace CommandIDs
 //    static const int audioOutput            = 0x200067;
 
     static const int saveProjectAs          = 0x200070;
-    static const int openInIDE              = 0x200072;
+    static const int openDataDir			= 0x200072;
     static const int saveAndOpenInIDE       = 0x200073;
     static const int showProjectSettings    = 0x200074;
     static const int updateModules          = 0x200075;

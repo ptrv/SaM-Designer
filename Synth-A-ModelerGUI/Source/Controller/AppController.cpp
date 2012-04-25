@@ -150,7 +150,11 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     case CommandIDs::clearOutputConsole:
     	debugWindowClear();
     	break;
-
+    case CommandIDs::openDataDir:
+    {
+    	Process::openDocument("file:"+StoredSettings::getInstance()->getDataDir(), "");
+    }
+    	break;
 	default:
         return false;
     };

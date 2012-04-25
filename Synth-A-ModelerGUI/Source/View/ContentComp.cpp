@@ -167,6 +167,8 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
     {
     	menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
     	menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::openDataDir);
     }
     else if (menuIndex == 5)
     {
@@ -234,6 +236,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::generateExternal,
                               CommandIDs::showOutputConsole,
                               CommandIDs::clearOutputConsole,
+                              CommandIDs::openDataDir,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -389,6 +392,10 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
     	break;
 
+    case CommandIDs::openDataDir:
+    	result.setInfo("Open data dir", "", CommandCategories::tools, 0);
+    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+    	break;
     default:
         break;
     };
