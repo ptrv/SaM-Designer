@@ -32,7 +32,7 @@ MDLParser::MDLParser(MDLFile& mdlFile_)
 {
 
 }
-Point<int> getPos(const String& posStr)
+static Point<int> getPos(const String& posStr)
 {
 	Point<int> p(0,0);
 	int pp = posStr.indexOf("# pos");
