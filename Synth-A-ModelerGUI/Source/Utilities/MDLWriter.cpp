@@ -65,6 +65,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
+		mdlContent << " # pos " << mo->getPosition().x << "," << mo->getPosition().y;
 		mdlContent << "\n";
 	}
 
@@ -94,6 +95,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
+		mdlContent << " # pos " << li->getPosition().x << "," << li->getPosition().y;
 		mdlContent << "\n";
 	}
 
@@ -122,6 +124,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
+		mdlContent << " # pos " << wo->getPosition().x << "," << wo->getPosition().y;
 		mdlContent << "\n";
 
 	}
@@ -147,6 +150,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
+		mdlContent << " # pos " << to->getPosition().x << "," << to->getPosition().y;
 		mdlContent << "\n";
 
 	}
@@ -168,6 +172,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
+		mdlContent << " # pos " << jo->getPosition().x << "," << jo->getPosition().y;
 		mdlContent << "\n";
 
 	}
@@ -196,6 +201,7 @@ bool MDLWriter::writeMDL(const String& savePath)
 		mdlContent << ",";
 		mdlContent << ao->getParameters();
 		mdlContent << ";";
+		mdlContent << " # pos " << ao->getPosition().x << "," << ao->getPosition().y;
 		mdlContent << "\n";
 
 	}

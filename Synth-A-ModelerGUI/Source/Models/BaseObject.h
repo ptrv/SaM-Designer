@@ -48,7 +48,7 @@ class BaseObject
 {
 public:
 	BaseObject(ObjectType objType_)
-	: objType(objType_), name(String::empty)
+	: objType(objType_), name(String::empty), position(0,0)
 	{
 		switch (objType) {
 			case MassType:
@@ -102,10 +102,14 @@ public:
 	const String& getName() const { return name; }
 	void setName(const String& name_) { name = name_; }
 
+	const Point<int>& getPosition() const { return position; }
+	void setPosition(int x, int y) { position.setXY(x, y); }
+
 protected:
 	ObjectType objType;
 	String typeString;
 	String name;
+	Point<int> position;
 
 private:
 };

@@ -32,7 +32,21 @@ MDLParser::MDLParser(MDLFile& mdlFile_)
 {
 
 }
-
+Point<int> getPos(const String& posStr)
+{
+	Point<int> p(0,0);
+	int pp = posStr.indexOf("# pos");
+	if(pp != -1)
+	{
+		String tmp = posStr.substring(pp+5);
+		tmp = tmp.trim();
+		StringArray posArray;
+		posArray.addTokens(tmp, ",", "\"");
+		if(posArray.size() == 2)
+			p.setXY(posArray[0].getIntValue(), posArray[1].getIntValue());
+	}
+	return p;
+}
 bool MDLParser::parseMDL()
 {
 	File in(mdlFile.getFilePath());
@@ -86,6 +100,9 @@ bool MDLParser::parseMDL()
 							DBG("Something went really wrong!");
 							return false;
 						}
+
+						Point<int> pos = getPos(line);
+						mass->setPosition(pos.x, pos.y);
 
 						//get values between first parantheses
 						int indexCloseParan = line.indexOf(")");
@@ -154,6 +171,9 @@ bool MDLParser::parseMDL()
 							DBG("Something went really wrong!");
 							return false;
 						}
+
+						Point<int> pos = getPos(line);
+						link->setPosition(pos.x, pos.y);
 
 						//get values between first parantheses
 						int indexCloseParan = line.indexOf(")");
@@ -228,6 +248,9 @@ bool MDLParser::parseMDL()
 				{
 					WaveguideObject* wave = ObjectFactory::createNewWaveguideObject();
 
+					Point<int> pos = getPos(line);
+					wave->setPosition(pos.x, pos.y);
+
 					String objType = line.substring(0, indexParantese);
 					int indexCloseParan = line.indexOf(")");
 					String params = line.substring(indexParantese+1, indexCloseParan);
@@ -277,6 +300,9 @@ bool MDLParser::parseMDL()
 				{
 					TerminationObject* term = ObjectFactory::createNewTerminationObject();
 
+					Point<int> pos = getPos(line);
+					term->setPosition(pos.x, pos.y);
+
 					int indexCloseParan = line.indexOf(")");
 					String params = line.substring(indexParantese+1, indexCloseParan+1);
 					term->addParameter(params);
@@ -308,6 +334,9 @@ bool MDLParser::parseMDL()
 				if(indexParantese != -1)
 				{
 					JunctionObject* junct = ObjectFactory::createNewJunctionObject();
+
+					Point<int> pos = getPos(line);
+					junct->setPosition(pos.x, pos.y);
 
 					int indexCloseParan = line.indexOf(")");
 					String params = line.substring(indexParantese+1, indexCloseParan);
