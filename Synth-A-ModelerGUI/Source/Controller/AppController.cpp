@@ -169,7 +169,13 @@ bool AppController::menuItemWasClicked(CommandID menuId)
 #endif
         
     }
-    	break;
+    break;
+    case CommandIDs::showHelp:
+    {
+    	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+    	helpUrl.launchInDefaultBrowser();
+    }
+    break;
 	default:
         return false;
     };

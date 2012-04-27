@@ -87,7 +87,7 @@ namespace CommandIDs
     static const int ungroup                = 0x202180;
 
     static const int showPrefs              = 0x2020c0;
-    static const int useTabbedWindows       = 0x2020d0;
+    static const int showHelp				= 0x2020d0;
 
     static const int showGrid               = 0x2020e0;
     static const int enableSnapToGrid       = 0x2020f0;
@@ -121,6 +121,7 @@ namespace CommandCategories
     static const char* const tools		   = "Tools";
     static const char* const view          = "View";
     static const char* const windows       = "Windows";
+    static const char* const help = "help";
 }
 
 #endif  // __COMMANDIDS_H_5D051BD1__

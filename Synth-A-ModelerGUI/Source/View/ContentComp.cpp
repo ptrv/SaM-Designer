@@ -172,6 +172,7 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
     }
     else if (menuIndex == 5)
     {
+    	menu.addCommandItem(commandManager, CommandIDs::showHelp);
     }
 
     return menu;
@@ -237,6 +238,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::showOutputConsole,
                               CommandIDs::clearOutputConsole,
                               CommandIDs::openDataDir,
+                              CommandIDs::showHelp,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -395,6 +397,9 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     case CommandIDs::openDataDir:
     	result.setInfo("Open data dir", "", CommandCategories::tools, 0);
     	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::showHelp:
+    	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
     	break;
     default:
         break;
