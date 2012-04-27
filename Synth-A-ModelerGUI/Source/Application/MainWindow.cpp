@@ -26,7 +26,9 @@
 */
 
 #include "MainWindow.h"
-#include "CommonHeaders.h"
+//#include "../Application/CommonHeaders.h"
+#include "../View/DebugWindow.h"
+#include "../Controller/AppController.h"
 #include "../View/ContentComp.h"
 
 //==============================================================================

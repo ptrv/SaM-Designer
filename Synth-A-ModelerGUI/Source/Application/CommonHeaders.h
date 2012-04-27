@@ -27,7 +27,7 @@
 #ifndef __COMMONHEADERS_H_CA475C67__
 #define __COMMONHEADERS_H_CA475C67__
 
-//#include "../JuceLibraryCode/JuceHeader.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 #include "../Utilities/StoredSettings.h"
 #include "CommandIDs.h"

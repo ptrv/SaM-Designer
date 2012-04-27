@@ -28,9 +28,14 @@
 #ifndef __MAINWINDOW_H_3C77CBD5__
 #define __MAINWINDOW_H_3C77CBD5__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "DebugWindow.h"
-#include "../Controller/AppController.h"
+//#include "../../JuceLibraryCode/JuceHeader.h"
+//#include "../View/DebugWindow.h"
+//#include "../Controller/AppController.h"
+
+#include "../Application/CommonHeaders.h"
+
+class DebugWindow;
+class AppController;
 
 //==============================================================================
 class MainAppWindow   : public DocumentWindow

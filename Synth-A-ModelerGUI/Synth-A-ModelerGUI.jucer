@@ -42,15 +42,13 @@
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
       <GROUP id="{902B3BB9-D93B-9CA8-A833-9D80066DDF9F}" name="Application">
+        <FILE id="V8E6ag" name="MainWindow.cpp" compile="1" resource="0" file="Source/Application/MainWindow.cpp"/>
+        <FILE id="kk1gp7" name="MainWindow.h" compile="0" resource="0" file="Source/Application/MainWindow.h"/>
         <FILE id="iU3jsz" name="Application.cpp" compile="1" resource="0" file="Source/Application/Application.cpp"/>
         <FILE id="XI6BZB" name="Application.h" compile="0" resource="0" file="Source/Application/Application.h"/>
         <FILE id="Qd23p8" name="CommandIDs.h" compile="0" resource="0" file="Source/Application/CommandIDs.h"/>
         <FILE id="Joemsc" name="CommonHeaders.h" compile="0" resource="0" file="Source/Application/CommonHeaders.h"/>
-        <FILE id="MUZfxA" name="DebugWindow.cpp" compile="1" resource="0" file="Source/Application/DebugWindow.cpp"/>
-        <FILE id="Osn7oX" name="DebugWindow.h" compile="0" resource="0" file="Source/Application/DebugWindow.h"/>
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
-        <FILE id="H2O5xO" name="MainWindow.cpp" compile="1" resource="0" file="Source/Application/MainWindow.cpp"/>
-        <FILE id="zCXtM2" name="MainWindow.h" compile="0" resource="0" file="Source/Application/MainWindow.h"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
         <FILE id="p09OA7" name="MDLWriter.cpp" compile="1" resource="0" file="Source/Utilities/MDLWriter.cpp"/>
@@ -99,6 +97,8 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="gzMWlB" name="DebugWindow.cpp" compile="1" resource="0" file="Source/View/DebugWindow.cpp"/>
+        <FILE id="bVPf9s" name="DebugWindow.h" compile="0" resource="0" file="Source/View/DebugWindow.h"/>
         <FILE id="WLXXDy" name="ExportPanel.cpp" compile="1" resource="0" file="Source/View/ExportPanel.cpp"/>
         <FILE id="OwQrzA" name="ExportPanel.h" compile="0" resource="0" file="Source/View/ExportPanel.h"/>
         <FILE id="dNRcpC" name="PrefsPanel.cpp" compile="1" resource="0" file="Source/View/PrefsPanel.cpp"/>

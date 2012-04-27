@@ -27,10 +27,7 @@
 #define __APPLICATION_H_BBAD6F5C__
 
 
-//#include "../JuceLibraryCode/JuceHeader.h"
 #include "MainWindow.h"
-#include "DebugWindow.h"
-
 
 //==============================================================================
 class SynthAModelerApplication  : public JUCEApplication

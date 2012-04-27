@@ -43,10 +43,9 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
-  $(OBJDIR)/Application_7b202ed2.o \
-  $(OBJDIR)/DebugWindow_9be09c25.o \
-  $(OBJDIR)/Main_70df61c1.o \
   $(OBJDIR)/MainWindow_3e8328d1.o \
+  $(OBJDIR)/Application_7b202ed2.o \
+  $(OBJDIR)/Main_70df61c1.o \
   $(OBJDIR)/MDLWriter_7bd6d284.o \
   $(OBJDIR)/Alerts_379eb1e5.o \
   $(OBJDIR)/MDLParser_674db430.o \
@@ -62,6 +61,7 @@ OBJECTS := \
   $(OBJDIR)/LinkObject_3aeff31f.o \
   $(OBJDIR)/MassObject_76535999.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/DebugWindow_3b335a2.o \
   $(OBJDIR)/ExportPanel_4e5f49af.o \
   $(OBJDIR)/PrefsPanel_2006a45f.o \
   $(OBJDIR)/ContentComp_99fa8a27.o \
@@ -90,24 +90,19 @@ clean:
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
+$(OBJDIR)/MainWindow_3e8328d1.o: ../../Source/Application/MainWindow.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MainWindow.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 $(OBJDIR)/Application_7b202ed2.o: ../../Source/Application/Application.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Application.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/DebugWindow_9be09c25.o: ../../Source/Application/DebugWindow.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling DebugWindow.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/Main_70df61c1.o: ../../Source/Application/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/MainWindow_3e8328d1.o: ../../Source/Application/MainWindow.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MainWindow.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/MDLWriter_7bd6d284.o: ../../Source/Utilities/MDLWriter.cpp
@@ -183,6 +178,11 @@ $(OBJDIR)/MassObject_76535999.o: ../../Source/Models/MassObject.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/DebugWindow_3b335a2.o: ../../Source/View/DebugWindow.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling DebugWindow.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ExportPanel_4e5f49af.o: ../../Source/View/ExportPanel.cpp
