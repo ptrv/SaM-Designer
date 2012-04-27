@@ -29,9 +29,9 @@
 
 DebugWindow::DebugWindow()
 :
-DocumentWindow("Output", Colours::black, DocumentWindow::closeButton, true)
+DocumentWindow("Output", Colours::darkgrey, DocumentWindow::closeButton, true)
 {
-	setResizable (false, false); // resizability is a property of ResizableWindow
+	setResizable (true, true); // resizability is a property of ResizableWindow
 
 	console = new TextConsole();
 	console->setSize(400,400);
@@ -73,26 +73,17 @@ void DebugWindow::clear()
 
 void DebugWindow::addText(const String& compilerText)
 {
-//	String debugText = "-------------------";
-//	debugText << newLine;
-//	debugText << "Synth-A-Modeler: ";
-//	debugText << Time::getCurrentTime().toString(true,true, true, true);
-//	debugText << newLine;
-//	debugText << "-------------------";
-//	debugText << newLine << newLine;
-//	debugText << compilerText;
-//	console->addLine(debugText);
 	console->addLine(compilerText);
 }
 
 void DebugWindow::printHeader()
 {
-	String debugText = "-------------------";
+	String debugText = "----------------------------------------------";
 	debugText << newLine;
 	debugText << "Synth-A-Modeler: ";
 	debugText << Time::getCurrentTime().toString(true,true, true, true);
 	debugText << newLine;
-	debugText << "-------------------";
+	debugText << "----------------------------------------------";
 	debugText << newLine << newLine;
 	console->addLine(debugText);
 }

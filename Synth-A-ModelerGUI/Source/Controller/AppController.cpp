@@ -134,7 +134,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	}
     	else
     	{
-    		dw.addText("Nothing...");
+    		dw.addText("Nothing...\n\n");
     	}
     }
     	break;
@@ -149,7 +149,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	}
     	else
     	{
-    		dw.addText("Nothing...");
+    		dw.addText("Nothing...\n\n");
     	}
     }
     	break;
