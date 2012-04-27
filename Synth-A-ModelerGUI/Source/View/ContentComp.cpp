@@ -189,6 +189,7 @@ void ContentComp::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
 		const File file (StoredSettings::getInstance()->recentFiles.getFile (menuItemID - 100));
 		appController.openMDL(file);
 		appController.setMainWindowTitle();
+		StoredSettings::getInstance()->recentFiles.addFile(file);
     }
 }
 
