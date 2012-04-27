@@ -78,38 +78,57 @@ bool OutputCmd::isPerlAvailable()
 	return isCmdAvailable(cmdPerl);
 }
 
-const String OutputCmd::runChildProcess(const String& processStr)
-{
-	// TODO: read std error
-	ChildProcess child;
-	if(child.start(processStr))
-	{
-		const String result (child.readAllProcessOutput());
-
-		child.waitForProcessToFinish (60 * 1000);
-
-		return result;
-	}
-	else
-	{
-		return "failed to start process";
-	}
+//const String OutputCmd::runChildProcess(const String& processStr)
+//{
+//	ChildProcess child;
+//	if(child.start(processStr))
+//	{
+//		const String result (child.readAllProcessOutput());
+//
+//		child.waitForProcessToFinish (60 * 1000);
+//
+//		return result;
+//	}
+//	else
+//	{
+//		return "failed to start process";
+//	}
+//}
+static String execProcess(char* cmd) {
+    FILE* pipe = popen(cmd, "r");
+    if (!pipe) return "ERROR";
+    char buffer[128];
+    String result = "";
+    while(!feof(pipe)) {
+        if(fgets(buffer, 128, pipe) != NULL)
+                result += buffer;
+    }
+    pclose(pipe);
+    return result;
 }
 const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)
 {
 	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	String processStr = cmdPerl + " " + StoredSettings::getInstance()->getDataDir()
-			+ "/Synth-A-Modeler " + inPath + " " + outPath;
+	String processStr = "/bin/bash -c \"";
+	processStr << cmdPerl << " " << StoredSettings::getInstance()->getDataDir();
+	processStr << "/Synth-A-Modeler " << inPath << " " << outPath << " 2>&1\"";
 
-	return runChildProcess(processStr);
+	String processoutput = execProcess(processStr.toUTF8().getAddress());
+	return processoutput;
 }
 
 const String OutputCmd::generateExternal()
 {
-	String processStr = StoredSettings::getInstance()->getCmdExporter();
+	String processStr = "/bin/bash -c \"export PATH=${PATH}:";
+	processStr << StoredSettings::getInstance()->getFaustDir();
+	processStr << " ; ";
+	processStr << StoredSettings::getInstance()->getCmdExporter();
 	processStr = processStr.replace("$(DATA_DIR)", StoredSettings::getInstance()->getDataDir(), true);
+	processStr << " 2>&1\"";
 
-	return runChildProcess(processStr);
+	DBG(processStr);
+	String processoutput = execProcess(processStr.toUTF8().getAddress());
+	return processoutput;
 }
 
 //==============================================================================

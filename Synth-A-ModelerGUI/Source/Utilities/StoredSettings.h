@@ -49,6 +49,9 @@ public:
     String getCmdPerl() const;
     void setCmdPerl(const String& cmdPerl);
 
+    String getFaustDir() const;
+    void setFaustDir(const String& faustDir);
+
     bool getShowCompilerWindow() const;
     void setShowCompilerWindow(bool shouldShow);
 

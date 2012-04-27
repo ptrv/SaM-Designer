@@ -39,8 +39,6 @@ public:
 	bool isPerlAvailable();
 	const String generateFaustCode(const String& inPath, const String& outPath);
 	const String generateExternal();
-private:
-	const String runChildProcess(const String& processStr);
 };
 
 

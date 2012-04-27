@@ -38,13 +38,21 @@ public:
     		true, true, false,
     		"*.plx", String::empty,
     		"(select the Synth-A-Modeler.plx file)"),
+    	fcFaustDir ("FAUST directory:",
+			StoredSettings::getInstance()->getFaustDir(),
+			true, true, false,
+			"*.*", String::empty,
+			"(select the directory which faust is in)"),
 		teCmdExport("CmdExport"),
 		tbExportConfirm("Confirm export"),
 		labelDataDir (String::empty, "Data Dir"),
+		labelFaustDir (String::empty, "FAUST Dir"),
 		labelCmdExport(String::empty, "Exporter Command")
     {
         addAndMakeVisible (&fcDataDir);
         labelDataDir.attachToComponent (&fcDataDir, false);
+        addAndMakeVisible (&fcFaustDir);
+        labelFaustDir.attachToComponent (&fcFaustDir, false);
         addAndMakeVisible (&teCmdExport);
         labelCmdExport.attachToComponent (&teCmdExport, false);
         teCmdExport.setMultiLine(false);
@@ -57,6 +65,7 @@ public:
     ~MiscPage()
     {
         StoredSettings::getInstance()->setDataDir(fcDataDir.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setFaustDir(fcFaustDir.getCurrentFile().getFullPathName());
         StoredSettings::getInstance()->setCmdExporter(teCmdExport.getText());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
     }
@@ -64,15 +73,18 @@ public:
     void resized()
     {
         fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
-        teCmdExport.setBounds(10, 100, getWidth() -20, 22);
-        tbExportConfirm.setBounds(10, 150, getWidth() - 20, 22);
+        fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
+        teCmdExport.setBounds(10, 170, getWidth() -20, 22);
+        tbExportConfirm.setBounds(10, 220, getWidth() - 20, 22);
     }
 
 private:
     FilenameComponent fcDataDir;
+    FilenameComponent fcFaustDir;
     TextEditor teCmdExport;
     ToggleButton tbExportConfirm;
     Label labelDataDir;
+    Label labelFaustDir;
     Label labelCmdExport;
 };
 

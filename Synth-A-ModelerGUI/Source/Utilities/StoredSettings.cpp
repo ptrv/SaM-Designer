@@ -26,20 +26,20 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "../Application/CommonHeaders.h"
 
-//static const String getDefaultPathFaust()
-//{
-//	File infile("/usr/local/bin/faust");
-//	if(infile.existsAsFile())
-//	{
-//		return infile.getFullPathName();
-//	}
-//	infile = "/usr/bin/faust";
-//	if(infile.existsAsFile())
-//	{
-//		return infile.getFullPathName();
-//	}
-//	return "";
-//}
+static const String getDefaultPathFaustDir()
+{
+	File infile("/usr/local/bin/faust");
+	if(infile.existsAsFile())
+	{
+		return infile.getParentDirectory().getFullPathName();
+	}
+	infile = "/usr/bin/faust";
+	if(infile.existsAsFile())
+	{
+		return infile.getParentDirectory().getFullPathName();
+	}
+	return "";
+}
 static const String getDefaultPathPerl()
 {
 	File infile("/usr/bin/perl");
@@ -142,6 +142,15 @@ String StoredSettings::getCmdPerl() const
 void StoredSettings::setCmdPerl(const String& cmdPerl)
 {
 	props->setValue("cmdperl", cmdPerl);
+}
+
+String StoredSettings::getFaustDir() const
+{
+	return props->getValue("faustdir", getDefaultPathFaustDir());
+}
+void StoredSettings::setFaustDir(const String& faustDir)
+{
+	props->setValue("faustdir", faustDir);
 }
 
 bool StoredSettings::getShowCompilerWindow() const
