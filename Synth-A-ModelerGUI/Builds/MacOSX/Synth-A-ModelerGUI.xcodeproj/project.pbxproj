@@ -655,7 +655,7 @@
 		ED30090630CFBF66E24AB9BA = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_PropertySet.h"; path = "../../../juce/modules/juce_core/containers/juce_PropertySet.h"; sourceTree = "SOURCE_ROOT"; };
 		ED8882B156CEEF81B0C5F442 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_StringArray.cpp"; path = "../../../juce/modules/juce_core/text/juce_StringArray.cpp"; sourceTree = "SOURCE_ROOT"; };
 		EEA0486E648FC2A8AA5CA152 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		1D7A5AC47520D28066A971E0 = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Synth-A-Modeler.app"; sourceTree = "BUILT_PRODUCTS_DIR"; };
+		1D7A5AC47520D28066A971E0 = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Synth-A-ModelerGUI.app"; sourceTree = "BUILT_PRODUCTS_DIR"; };
 		DAB24EB7B3A665A91C8084CF = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MDLFile.h; path = ../../Source/Models/MDLFile.h; sourceTree = "SOURCE_ROOT"; };
 		E7A174AE45A59B6FEB1017F1 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_ComponentBuilder.h"; path = "../../../juce/modules/juce_gui_basics/layout/juce_ComponentBuilder.h"; sourceTree = "SOURCE_ROOT"; };
 		E8C38F0556F3C8A11E361380 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_GroupComponent.h"; path = "../../../juce/modules/juce_gui_basics/layout/juce_GroupComponent.h"; sourceTree = "SOURCE_ROOT"; };
@@ -1624,7 +1624,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				ZERO_LINK = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf";
-				PRODUCT_NAME = "Synth-A-Modeler"; }; name = Debug; };
+				PRODUCT_NAME = "Synth-A-ModelerGUI"; }; name = Debug; };
 		9A75537CD7000D20379515CF = { isa = XCBuildConfiguration; buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -1639,7 +1639,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				ZERO_LINK = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf";
-				PRODUCT_NAME = "Synth-A-Modeler"; }; name = Release; };
+				PRODUCT_NAME = "Synth-A-ModelerGUI"; }; name = Release; };
 		E06CEDCE05EB0F43F76924E8 = { isa = XCConfigurationList; buildConfigurations = (
 				CB7D49DC606871A43686D7A5,
 				9A75537CD7000D20379515CF ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Debug; };

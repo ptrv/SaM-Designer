@@ -6,19 +6,19 @@
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
                bigIcon="WodEAp">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-Modeler"
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        defines="UNIT_TESTS=1"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-Modeler"
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-ModelerGUI"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
       </CONFIGURATIONS>
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="../juce/modules" bigIcon="WodEAp">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
-                       targetName="Synth-A-Modeler" defines="UNIT_TESTS=1"/>
+                       targetName="Synth-A-ModelerGUI" defines="UNIT_TESTS=1"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
-                       targetName="Synth-A-Modeler"/>
+                       targetName="Synth-A-ModelerGUI"/>
       </CONFIGURATIONS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
