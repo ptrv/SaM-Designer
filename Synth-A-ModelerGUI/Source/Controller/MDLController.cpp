@@ -30,6 +30,12 @@
 #include "../Application/CommonHeaders.h"
 #include "../View/ExportPanel.h"
 
+#ifdef JUCE_LINUX
+static const bool USE_NATIVE_FILECHOOSER = false;
+#else
+static const bool USE_NATIVE_FILECHOOSER = true;
+#endif
+
 MDLController::MDLController()
 {
 	currentMdl = new MDLFile();
@@ -53,7 +59,8 @@ void MDLController::open()
 	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
 	{
 		FileChooser fch("Choose mdl file",
-				StoredSettings::getInstance()->getWorkingFolder(), "*.mdl", false);
+				StoredSettings::getInstance()->getWorkingFolder(), "*.mdl",
+				USE_NATIVE_FILECHOOSER);
 
 		if (fch.browseForFileToOpen())
 		{
@@ -105,7 +112,8 @@ void MDLController::save()
 void MDLController::saveAs()
 {
 	FileChooser fch("Choose mdl file",
-			StoredSettings::getInstance()->getWorkingFolder(), "*.mdl", false);
+			StoredSettings::getInstance()->getWorkingFolder(), "*.mdl",
+			USE_NATIVE_FILECHOOSER);
 
 	if(fch.browseForFileToSave(true))
 	{
