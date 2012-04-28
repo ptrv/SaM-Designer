@@ -131,6 +131,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     		dw.printHeader();
     		dw.addText("Generating FAUST code...\n");
     		dw.addText(consoleText);
+    		dw.addText(newLine);
     	}
     	else
     	{
@@ -146,6 +147,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     		dw.printHeader();
     		dw.addText("Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n");
     		dw.addText(consoleText);
+    		dw.addText(newLine);
     	}
     	else
     	{
