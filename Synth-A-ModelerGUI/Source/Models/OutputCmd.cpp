@@ -111,7 +111,7 @@ const String OutputCmd::generateFaustCode(const String& inPath, const String& ou
 	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
 	String processStr = "/bin/bash -c \"";
 	processStr << cmdPerl << " " << StoredSettings::getInstance()->getDataDir();
-	processStr << "/Synth-A-Modeler " << inPath << " " << outPath << " 2>&1\"";
+	processStr << "/Synth-A-Modeler " << inPath << " " << outPath << " 2>&1\" 2>&1";
 
 	DBG("Synth-A-Modeler command: " + processStr);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
@@ -125,7 +125,7 @@ const String OutputCmd::generateExternal()
 	processStr << " ; ";
 	processStr << StoredSettings::getInstance()->getCmdExporter();
 	processStr = processStr.replace("$(DATA_DIR)", StoredSettings::getInstance()->getDataDir(), true);
-	processStr << " 2>&1\"";
+	processStr << " 2>&1\" 2>&1";
 
 	DBG("Export command: " + processStr);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
