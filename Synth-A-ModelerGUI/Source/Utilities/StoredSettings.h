@@ -58,6 +58,9 @@ public:
 	const String getWorkingFolder() const;
     void setWorkingFolder (const String& folder);
 
+	const String getLastDocument() const;
+    void setLastDocument(const String& docName);
+
 	const String getDataDir() const;
     void setDataDir (const String& folder);
 

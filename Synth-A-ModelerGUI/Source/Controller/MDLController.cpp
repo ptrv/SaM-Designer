@@ -30,11 +30,6 @@
 #include "../Application/CommonHeaders.h"
 #include "../View/ExportPanel.h"
 
-#ifdef JUCE_LINUX
-static const bool USE_NATIVE_FILECHOOSER = false;
-#else
-static const bool USE_NATIVE_FILECHOOSER = true;
-#endif
 
 MDLController::MDLController()
 {
@@ -49,44 +44,20 @@ MDLController::~MDLController()
 
 void MDLController::newFile()
 {
-	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
+	if (currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
 	{
 		currentMdl->newMDL();
 	}
 }
 void MDLController::open()
 {
-	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
+	if (currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
 	{
-		FileChooser fch("Choose mdl file",
-				StoredSettings::getInstance()->getWorkingFolder(), "*.mdl",
-				USE_NATIVE_FILECHOOSER);
+		bool loadOk = currentMdl->loadFromUserSpecifiedFile(true);
 
-		if (fch.browseForFileToOpen())
-		{
-			File result = fch.getResult();
-			bool loadOK = currentMdl->openMDL(result.getFullPathName().toUTF8().getAddress());
-			if(loadOK)
-			{
-				StoredSettings::getInstance()->setWorkingFolder(result.getParentDirectory().getFullPathName());
-				StoredSettings::getInstance()->recentFiles.addFile(result);
-			}
-			else
-			{
-				DBG("Something went wrong loading the mdl file.");
-			}
-		}
-    }
-}
-
-void MDLController::openFromFile(const File& mdlFile)
-{
-	if (saveIfNeededAndUserAgrees (currentMdl) == FileBasedDocument::savedOk)
-	{
-		bool loadOk = currentMdl->openMDL(mdlFile.getFullPathName().toUTF8().getAddress());
 		if(loadOk)
 		{
-			StoredSettings::getInstance()->setWorkingFolder(mdlFile.getParentDirectory().getFullPathName());
+			StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
 		}
 		else
 		{
@@ -94,69 +65,32 @@ void MDLController::openFromFile(const File& mdlFile)
 		}
 	}
 }
+
+void MDLController::openFromFile(const File& mdlFile)
+{
+	if(currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+	{
+		currentMdl->loadFrom(mdlFile, true);
+	}
+}
 void MDLController::save()
 {
-	if(currentMdl->hasNotBeenSavedYet())
+	if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
 	{
-		saveAs();
-	}
-	else if(saveIfNeededAndUserAgrees(currentMdl) == FileBasedDocument::savedOk)
-	{
-		bool saveOk = currentMdl->save(currentMdl->getFilePath());
-		if(! saveOk)
-		{
-			DBG("Something went wrong saving the mdl file.")
-		}
+		DBG("Something went wrong saving the mdl file.")
 	}
 }
 void MDLController::saveAs()
 {
-	FileChooser fch("Choose mdl file",
-			StoredSettings::getInstance()->getWorkingFolder(), "*.mdl",
-			USE_NATIVE_FILECHOOSER);
-
-	if(fch.browseForFileToSave(true))
+	if(currentMdl->saveAsInteractive(true))
 	{
-		File result = fch.getResult();
-		StoredSettings::getInstance()->setWorkingFolder(result.getParentDirectory().getFullPathName());
-		bool saveOk = currentMdl->save(result.getFullPathName());
-		if(! saveOk)
-		{
-			DBG("Something went wrong saving the mdl file.")
-		}
+		DBG("Something went wrong saving the mdl file.")
 	}
 }
 
-FileBasedDocument::SaveResult MDLController::saveIfNeededAndUserAgrees (MDLFile* mdl)
-{
-    if (! mdl->needsSaving())
-        return FileBasedDocument::savedOk;
-
-    const int r = AlertWindow::showYesNoCancelBox (AlertWindow::QuestionIcon,
-                                                   TRANS("Closing document..."),
-                                                   TRANS("Do you want to save the changes to \"")
-                                                       + mdl->getName() + "\"?",
-                                                   TRANS("save"),
-                                                   TRANS("discard changes"),
-                                                   TRANS("cancel"));
-
-    if (r == 1)
-    {
-        // save changes
-        return mdl->save(mdl->getFilePath()) ? FileBasedDocument::savedOk
-                           : FileBasedDocument::failedToWriteToFile;
-    }
-    else if (r == 2)
-    {
-        // discard changes
-        return FileBasedDocument::savedOk;
-    }
-
-    return FileBasedDocument::userCancelledSave;
-}
 void MDLController::close()
 {
-	if(saveIfNeededAndUserAgrees(currentMdl) == FileBasedDocument::savedOk)
+	if(currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
 	{
 		currentMdl->close();
 	}
@@ -194,7 +128,6 @@ const String MDLController::generateFaust()
 
 const String MDLController::generateExternal()
 {
-	// TODO: implement generate external
 	if(currentMdl->getName().compare("Untitled") == 0)
 		return "No mdl file\n\n";
 

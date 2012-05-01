@@ -26,9 +26,11 @@
 #include "MDLFile.h"
 #include "../Utilities/MDLParser.h"
 #include "../Utilities/MDLWriter.h"
+#include "../Utilities/StoredSettings.h"
 
 MDLFile::MDLFile()
-: isModified(false)
+: FileBasedDocument(".mdl", "*.mdl", "Open mdl...", "Save mdl..."),
+  isModified(false)
 {
 	initMDL();
 }
@@ -41,7 +43,7 @@ MDLFile::~MDLFile()
 void MDLFile::initMDL()
 {
 	isInit = true;
-	isModified = false;
+	setChangedFlag(false);
 	mdlPath = String::empty;
 	mdlName = "Untitled";
 }
@@ -84,28 +86,6 @@ void MDLFile::newMDL()
 {
 	destroyMDL();
 	initMDL();
-}
-
-bool MDLFile::openMDL(const char* mdlPath_)
-{
-	destroyMDL();
-	initMDL();
-	mdlPath = mdlPath_;
-	MDLParser pa(*this);
-	if(pa.parseMDL())
-	{
-		// success
-		DBG("Opened MDL file: "+String(mdlPath));
-		isInit = false;
-		File mf(mdlPath);
-		mdlName = mf.getFileName();
-		return true;
-	}
-	else
-	{
-		// fail
-		return false;
-	}
 }
 
 const int MDLFile::getNumberOfObjectsByType(ObjectType objType)
@@ -161,30 +141,63 @@ void MDLFile::addJunctionObject(JunctionObject* obj)
 	allObjects.set(obj->getName(), obj);
 }
 
-bool MDLFile::needsSaving()
-{
-	return isModified;
-}
-
-bool MDLFile::save(const String& savePath)
-{
-	isModified = false;
-	MDLWriter wr(*this);
-	if(wr.writeMDL(savePath))
-	{
-		DBG("Saved MDL file: "+savePath);
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 void MDLFile::close()
 {
 	newMDL();
 }
+
+const String MDLFile::getDocumentTitle()
+{
+	return mdlName;
+}
+const String MDLFile::loadDocument (const File& file)
+{
+	destroyMDL();
+	initMDL();
+	mdlPath = file.getFullPathName();
+	MDLParser pa(*this);
+	if(pa.parseMDL())
+	{
+		// success
+		DBG("Opened MDL file: "+String(mdlPath));
+		isInit = false;
+		File mf(mdlPath);
+		mdlName = mf.getFileName();
+		return String::empty;
+	}
+	else
+	{
+		// fail
+		return "ERROR: could not load mdl file.";
+	}
+}
+const String MDLFile::saveDocument (const File& file)
+{
+	this->setChangedFlag(false);
+	MDLWriter wr(*this);
+	if(wr.writeMDL(file))
+	{
+		DBG("Saved MDL file: "+file.getFullPathName());
+		return String::empty;
+	}
+	else
+	{
+		return "ERROR: could not save mdl file.";
+	}
+}
+
+File MDLFile::lastDocumentOpened;
+const File MDLFile::getLastDocumentOpened()
+{
+//	return File(StoredSettings::getInstance()->getLastDocument());
+	return lastDocumentOpened;
+}
+void MDLFile::setLastDocumentOpened (const File& file)
+{
+	lastDocumentOpened = file;
+	StoredSettings::getInstance()->setLastDocument(file.getFullPathName());
+}
+
 //==============================================================================
 #if UNIT_TESTS
 

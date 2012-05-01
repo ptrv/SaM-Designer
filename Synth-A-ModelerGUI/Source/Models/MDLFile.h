@@ -29,7 +29,7 @@
 
 #include "../Models/Types.h"
 
-class MDLFile
+class MDLFile : public FileBasedDocument
 {
 //	friend class MDLParser;
 public:
@@ -37,7 +37,8 @@ public:
 	~MDLFile();
 
 	void newMDL();
-	bool openMDL(const char* mdlPath_);
+	void close();
+
 	const Array<MassObject*>& getMasses()const { return masses; }
 	const Array<LinkObject*>& getLinks() const { return links; }
 	const Array<LabelObject*>& getLabels() const { return labelObjs; }
@@ -55,14 +56,15 @@ public:
 	void addTerminationObject(TerminationObject* obj);
 	void addJunctionObject(JunctionObject* obj);
 
-	bool needsSaving();
-
-	bool save(const String& savePath);
-	void close();
-	bool hasNotBeenSavedYet() const { return isInit; }
-
 	const String& getFilePath() const { return mdlPath; }
 	const String getName() { return isModified ? mdlName+"*" : mdlName; }
+
+protected:
+	const String getDocumentTitle();
+	const String loadDocument (const File& file);
+	const String saveDocument (const File& file);
+	const File getLastDocumentOpened();
+	void setLastDocumentOpened (const File& file);
 
 private:
 
@@ -82,6 +84,7 @@ private:
 
 	String mdlPath;
 	String mdlName;
+	static File lastDocumentOpened;
 };
 
 

@@ -173,6 +173,15 @@ void StoredSettings::setWorkingFolder (const String& folder)
 	props->setValue("workingdir", folder);
 }
 
+const String StoredSettings::getLastDocument() const
+{
+	return props->getValue("lastmdl", String::empty);
+}
+void StoredSettings::setLastDocument(const String& docName)
+{
+	props->setValue("lastmdl", docName);
+}
+
 const String StoredSettings::getDataDir() const
 {
 	return props->getValue("datadir",

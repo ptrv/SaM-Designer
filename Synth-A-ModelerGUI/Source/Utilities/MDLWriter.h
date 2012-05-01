@@ -33,7 +33,7 @@ class MDLWriter
 {
 public:
 	MDLWriter(MDLFile& mdlFile_);
-	bool writeMDL(const String& savePath);
+	bool writeMDL(const File& saveFile);
 private:
 	MDLFile& mdlFile;
 };

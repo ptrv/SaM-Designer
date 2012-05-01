@@ -31,9 +31,9 @@ MDLWriter::MDLWriter(MDLFile& mdlFile_)
 {
 }
 
-bool MDLWriter::writeMDL(const String& savePath)
+bool MDLWriter::writeMDL(const File& saveFile)
 {
-	File outFile(savePath);
+	const File& outFile = saveFile;//(savePath);
 
 	String mdlHeader(BinaryData::mdl_file_header_txt);
 

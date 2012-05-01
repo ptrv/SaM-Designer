@@ -128,7 +128,6 @@ const PopupMenu ContentComp::getMenuForIndex (int menuIndex, const String& /*men
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::cut);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::copy);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::paste);
-        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::del);
         menu.addSeparator();
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::selectAll);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::deselectAll);

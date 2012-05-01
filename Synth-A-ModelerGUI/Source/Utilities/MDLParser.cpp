@@ -49,7 +49,7 @@ static Point<int> getPos(const String& posStr)
 }
 bool MDLParser::parseMDL()
 {
-	File in(mdlFile.getFilePath());
+	const File& in = mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
 
 	int fileLength = mdlContent.length();

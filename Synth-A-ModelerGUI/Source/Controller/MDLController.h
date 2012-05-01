@@ -48,7 +48,6 @@ public:
 
 
 private:
-	FileBasedDocument::SaveResult saveIfNeededAndUserAgrees (MDLFile* mdl);
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;
 };

@@ -40,7 +40,7 @@ public:
 		mdlFile = new MDLFile();
 
 		beginTest("openMDL");
-		bool loadOk = mdlFile->openMDL(mdlPath.toUTF8().getAddress());
+		bool loadOk = mdlFile->loadFrom(File(mdlPath), false);
 		expect(loadOk, "Error opening MDL file");
 
 		beginTest("getMasses");
