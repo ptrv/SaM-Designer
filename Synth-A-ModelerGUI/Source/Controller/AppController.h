@@ -43,6 +43,8 @@ public:
 	void openMDL(const File& mdlFile);
 
 	void setMainWindowTitle();
+
+	UndoManager* getUndoMgr() { return undoMgr; }
 private:
 	void debugWindowToggle();
 	void debugWindowClear();
@@ -53,6 +55,7 @@ private:
     ScopedPointer<MDLController> mdlController;
     ScopedPointer<ObjController> objController;
 
+    ScopedPointer<UndoManager> undoMgr;
 //	ScopedPointer<OutputCmd> outCmd;
 };
 

@@ -36,6 +36,7 @@ AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 	mdlController = new MDLController();
 	objController = new ObjController();
 	setMainWindowTitle();
+	undoMgr = new UndoManager();
 }
 
 AppController::~AppController()

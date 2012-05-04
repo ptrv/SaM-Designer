@@ -82,7 +82,7 @@ void MDLController::save()
 }
 void MDLController::saveAs()
 {
-	if(currentMdl->saveAsInteractive(true))
+	if(currentMdl->saveAsInteractive(true) != FileBasedDocument::savedOk)
 	{
 		DBG("Something went wrong saving the mdl file.")
 	}

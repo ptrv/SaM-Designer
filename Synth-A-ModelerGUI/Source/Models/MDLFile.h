@@ -27,7 +27,7 @@
 #define __MDLFILE_H_70428F9D__
 
 
-#include "../Models/Types.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 
 class MDLFile : public FileBasedDocument
 {
@@ -39,26 +39,10 @@ public:
 	void newMDL();
 	void close();
 
-	const Array<MassObject*>& getMasses()const { return masses; }
-	const Array<LinkObject*>& getLinks() const { return links; }
-	const Array<LabelObject*>& getLabels() const { return labelObjs; }
-	const Array<AudioObject*>& getAudioObjects() const { return audioObjects; }
-	const Array<WaveguideObject*>& getWaveguides() const { return waveguides; }
-	const Array<TerminationObject*>& getTerminations() const { return terminations; }
-	const Array<JunctionObject*>& getJunctions() const { return junctions; }
-	const int getNumberOfObjectsByType(ObjectType objType);
-
-	void addMassObject(MassObject* obj);
-	void addLinkObject(LinkObject* obj);
-	void addLabelObject(LabelObject* obj);
-	void addAudioObject(AudioObject* obj);
-	void addWaveguideObject(WaveguideObject* obj);
-	void addTerminationObject(TerminationObject* obj);
-	void addJunctionObject(JunctionObject* obj);
-
 	const String& getFilePath() const { return mdlPath; }
 	const String getName() { return isModified ? mdlName+"*" : mdlName; }
 
+	ValueTree mdlRoot;
 protected:
 	const String getDocumentTitle();
 	const String loadDocument (const File& file);
@@ -71,20 +55,13 @@ private:
 	void initMDL();
 	void destroyMDL();
 
-	HashMap<String,BaseObject*> allObjects;
-	Array<MassObject*> masses;
-	Array<LinkObject*> links;
-	Array<LabelObject*> labelObjs;
-	Array<AudioObject*> audioObjects;
-	Array<WaveguideObject*> waveguides;
-	Array<TerminationObject*> terminations;
-	Array<JunctionObject*> junctions;
 	bool isModified;
 	bool isInit;
 
 	String mdlPath;
 	String mdlName;
 	static File lastDocumentOpened;
+
 };
 
 

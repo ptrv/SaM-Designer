@@ -44,169 +44,173 @@ public:
 		expect(loadOk, "Error opening MDL file");
 
 		beginTest("getMasses");
-		const Array<Mass*>& m = mdlFile->getMasses();
-		expect(m.size() == 5, "have "+String(m.size())+" masses");
-		expect(mdlFile->getNumberOfObjectsByType(MassType) == 3, "");
+		const ValueTree m = mdlFile->mdlRoot.getChildWithName(Objects::mdlMasses);
+		expect(m.getNumChildren() == 5, "have "+String(m.getNumChildren())+" masses");
+
 		// mass 1
-		expectEquals(m[0]->getType(), MassType);
-		Array<float> params = m[0]->getParameters();
-		expectEquals(params[0], 0.01f);
-		expectEquals(m[0]->getName(), String("m1"));
-		Array<String> labels = m[0]->getLabels();
-		expectEquals(labels[0], String("mymass"));
+		expectEquals(m.getChild(0).getType().toString(), Ids::mass.toString());
+		ValueTree params = m.getChild(0).getChildWithName(Ids::parameters);
+		expectEquals(float(params[Ids::idx[0]]), 0.01f);
+		expectEquals(m.getChild(0)[Ids::identifier].toString(), String("m1"));
+		ValueTree labels = m.getChild(0).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("mymass"));
+
 		// mass 2
-		expectEquals(m[1]->getType(), MassType);
-		params = m[1]->getParameters();
-		expectEquals(params[0], 0.01f);
-		expectEquals(m[1]->getName(), String("m2"));
-		labels = m[1]->getLabels();
-		expectEquals(labels[0], String("mymass"));
-		expectEquals(labels[1], String("mmiddle"));
+		expectEquals(m.getChild(1).getType().toString(), Ids::mass.toString());
+		params = m.getChild(1).getChildWithName(Ids::parameters);
+		expectEquals(float(params[Ids::idx[0]]), 0.01f);
+		expectEquals(m.getChild(1)[Ids::identifier].toString(), String("m2"));
+		labels = m.getChild(1).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("mymass"));
+		expectEquals(labels[Ids::idx[1]].toString(), String("mmiddle"));
+
 		// mass 3
-		expectEquals(m[2]->getType(), MassType);
-		params = m[2]->getParameters();
-		expectEquals(params[0], 0.03f);
-		expectEquals(m[2]->getName(), String("m3"));
-		labels = m[2]->getLabels();
-		expectEquals(labels[0], String("mymass"));
+		expectEquals(m.getChild(2).getType().toString(), Ids::mass.toString());
+		params = m.getChild(2).getChildWithName(Ids::parameters);
+		expectEquals(float(params[Ids::idx[0]]), 0.03f);
+		expectEquals(m.getChild(2)[Ids::identifier].toString(), String("m3"));
+		labels = m.getChild(2).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("mymass"));
+
 		// port
-		expectEquals(m[3]->getType(), PortType);
-		params = m[3]->getParameters();
-//		expect(params.size() == 0, "size is "+String(params.size()));
-		expectEquals(m[3]->getName(), String("dev1"));
-		labels = m[3]->getLabels();
-		expectEquals(labels[0], String("hapticdev"));
-		// port
-		expectEquals(m[4]->getType(), GroundType);
-		params = m[4]->getParameters();
-		expectEquals(m[4]->getName(), String("g"));
-		labels = m[4]->getLabels();
-		expectEquals(labels[0], String("glabel"));
+		expectEquals(m.getChild(3).getType().toString(), Ids::port.toString());
+//		params = m.getChild(3).getChildWithName(Ids::parameters);
+		expectEquals(m.getChild(3)[Ids::identifier].toString(), String("dev1"));
+		labels = m.getChild(3).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("hapticdev"));
+
+		// ground
+		expectEquals(m.getChild(4).getType().toString(), Ids::ground.toString());
+//		params = m.getChild(4).getChildWithName(Ids::parameters);
+		expectEquals(m.getChild(4)[Ids::identifier].toString(), String("g"));
+		labels = m.getChild(4).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("glabel"));
+
 
 		beginTest("getLinks");
 
-		const Array<LinkObject*>& ls = mdlFile->getLinks();
-		expect(ls.size() == 4, "have "+String(ls.size())+" links");
+		ValueTree ls = mdlFile->mdlRoot.getChildWithName(Objects::mdlLinks);
+		expect(ls.getNumChildren() == 4, "have "+String(ls.getNumChildren())+" links");
 
 		// link 1
-		expectEquals(ls[0]->getType(), LinkType, "");
-		Array<String> paramsStr = ls[0]->getParameters();
-		expectEquals(paramsStr[0], String("2.0*adjStiffness"));
-		expectEquals(paramsStr[1], String("0.003"));
-		expectEquals(paramsStr[2], String("0.0"));
-		expectEquals(ls[0]->getName(), String("l1"));
-		expectEquals(ls[0]->getStartVertex(), String("m1"));
-		expectEquals(ls[0]->getEndVertex(), String("m2"));
-		labels = ls[0]->getLabels();
-		expectEquals(labels[0], String("thisl"));
+		expectEquals(ls.getChild(0).getType().toString(), Ids::link.toString(), "");
+		ValueTree paramsStr = ls.getChild(0).getChildWithName(Ids::parameters);
+		expectEquals(paramsStr[Ids::idx[0]].toString(), String("2.0*adjStiffness"));
+		expectEquals(paramsStr[Ids::idx[1]].toString(), String("0.003"));
+		expectEquals(paramsStr[Ids::idx[2]].toString(), String("0.0"));
+		expectEquals(ls.getChild(0)[Ids::identifier].toString(), String("l1"));
+		expectEquals(ls.getChild(0)[Ids::startVertex].toString(), String("m1"));
+		expectEquals(ls.getChild(0)[Ids::endVertex].toString(), String("m2"));
+		labels = ls.getChild(0).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("thisl"));
 
 		// link 2
-		expectEquals(ls[1]->getType(), LinkType, "");
-		paramsStr = ls[1]->getParameters();
-		expectEquals(paramsStr[0], String("2.0*adjStiffness"));
-		expectEquals(paramsStr[1], String("0.004"));
-		expectEquals(paramsStr[2], String("0.0"));
-		expectEquals(ls[1]->getName(), String("l2"));
-		expectEquals(ls[1]->getStartVertex(), String("m2"));
-		expectEquals(ls[1]->getEndVertex(), String("m3"));
-		labels = ls[1]->getLabels();
-		expectEquals(labels[0], String("thisLLL"));
-		expectEquals(labels[1], String("thisl"));
+		expectEquals(ls.getChild(1).getType().toString(), Ids::link.toString(), "");
+		paramsStr = ls.getChild(1).getChildWithName(Ids::parameters);
+		expectEquals(paramsStr[Ids::idx[0]].toString(), String("2.0*adjStiffness"));
+		expectEquals(paramsStr[Ids::idx[1]].toString(), String("0.004"));
+		expectEquals(paramsStr[Ids::idx[2]].toString(), String("0.0"));
+		expectEquals(ls.getChild(1)[Ids::identifier].toString(), String("l2"));
+		expectEquals(ls.getChild(1)[Ids::startVertex].toString(), String("m2"));
+		expectEquals(ls.getChild(1)[Ids::endVertex].toString(), String("m3"));
+		labels = ls.getChild(1).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("thisLLL"));
+		expectEquals(labels[Ids::idx[1]].toString(), String("thisl"));
 
 		// link 3
-		expectEquals(ls[2]->getType(), LinkType, "");
-		paramsStr = ls[2]->getParameters();
-		expectEquals(paramsStr[0], String("2.0*adjStiffness"));
-		expectEquals(paramsStr[1], String("0.005"));
-		expectEquals(paramsStr[2], String("0.0"));
-		expectEquals(ls[2]->getName(), String("l3"));
-		expectEquals(ls[2]->getStartVertex(), String("m2"));
-		expectEquals(ls[2]->getEndVertex(), String("dev1"));
-		labels = ls[2]->getLabels();
-		expectEquals(labels[0], String("thisl"));
-
+		expectEquals(ls.getChild(2).getType().toString(), Ids::link.toString(), "");
+		paramsStr = ls.getChild(2).getChildWithName(Ids::parameters);
+		expectEquals(paramsStr[Ids::idx[0]].toString(), String("2.0*adjStiffness"));
+		expectEquals(paramsStr[Ids::idx[1]].toString(), String("0.005"));
+		expectEquals(paramsStr[Ids::idx[2]].toString(), String("0.0"));
+		expectEquals(ls.getChild(2)[Ids::identifier].toString(), String("l3"));
+		expectEquals(ls.getChild(2)[Ids::startVertex].toString(), String("m2"));
+		expectEquals(ls.getChild(2)[Ids::endVertex].toString(), String("dev1"));
+		labels = ls.getChild(2).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("thisl"));
 
 		beginTest("getLabels");
 
-		const Array<LabelObject*>& labelObjs = mdlFile->getLabels();
-		expect(labelObjs.size() == 1, "have "+String(labelObjs.size())+" labels");
-		expectEquals(labelObjs[0]->getName(), String("adjStiffness"));
-		expectEquals(labelObjs[0]->getParameters(), String("hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0)"));
+		ValueTree labelObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlLabels);
+		expect(labelObjs.getNumChildren() == 1, "have "+String(labelObjs.getNumChildren())+" labels");
+		expectEquals(labelObjs.getChild(0)[Ids::identifier].toString(), String("adjStiffness"));
+		expectEquals(labelObjs.getChild(0)[Ids::faustCode].toString(), String("hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0)"));
 
 		beginTest("getWaveguides");
 
-		const Array<WaveguideObject*>& waveObjs = mdlFile->getWaveguides();
-		expect(waveObjs.size() == 2, "have "+String(waveObjs.size())+" waveguides");
+		ValueTree waveObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlWaveguides);
+		expect(waveObjs.getNumChildren() == 2, "have "+String(waveObjs.getNumChildren())+" waveguides");
 
 		// waveguide 1
-		expectEquals(waveObjs[0]->getType(), WaveguideType);
-		expectEquals(waveObjs[0]->getName(), String("wg1"));
-		params = waveObjs[0]->getParameters();
-		expectEquals(params[0], 5.0f);
-		expectEquals(params[1], 0.01f);
-		labels = waveObjs[0]->getLabels();
-		expectEquals(labels[0], String("wglabel"));
-		expectEquals(waveObjs[0]->getObjectLeft(), String("T1"));
-		expectEquals(waveObjs[0]->getObjectRight(), String("junct1"));
+		expectEquals(waveObjs.getChild(0).getType().toString(), Ids::waveguide.toString());
+		expectEquals(waveObjs.getChild(0)[Ids::identifier].toString(), String("wg1"));
+		params = waveObjs.getChild(0).getChildWithName(Ids::parameters);
+		expectEquals(float(params[Ids::idx[0]]), 5.0f);
+		expectEquals(float(params[Ids::idx[1]]), 0.01f);
+		labels = waveObjs.getChild(0).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("wglabel"));
+		expectEquals(waveObjs.getChild(0)[Ids::objLeft].toString(), String("T1"));
+		expectEquals(waveObjs.getChild(0)[Ids::objRight].toString(), String("junct1"));
+
 
 		// waveguide 2
-		expectEquals(waveObjs[1]->getType(), WaveguideType);
-		expectEquals(waveObjs[1]->getName(), String("wg2"));
-		params = waveObjs[1]->getParameters();
-		expectEquals(params[0], 5.0f);
-		expectEquals(params[1], 0.01f);
-		labels = waveObjs[1]->getLabels();
-		expectEquals(labels[0], String("wglabel2"));
-		expectEquals(waveObjs[1]->getObjectLeft(), String("junct1"));
-		expectEquals(waveObjs[1]->getObjectRight(), String("T2"));
+		expectEquals(waveObjs.getChild(1).getType().toString(), Ids::waveguide.toString());
+		expectEquals(waveObjs.getChild(1)[Ids::identifier].toString(), String("wg2"));
+		params = waveObjs.getChild(1).getChildWithName(Ids::parameters);
+		expectEquals(float(params[Ids::idx[0]]), 5.0f);
+		expectEquals(float(params[Ids::idx[1]]), 0.01f);
+		labels = waveObjs.getChild(1).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("wglabel2"));
+		expectEquals(waveObjs.getChild(1)[Ids::objLeft].toString(), String("junct1"));
+		expectEquals(waveObjs.getChild(1)[Ids::objRight].toString(), String("T2"));
 
 		beginTest("getTerminations");
 
-		const Array<TerminationObject*>& termObjs = mdlFile->getTerminations();
-		expect(termObjs.size() == 2, "have "+String(termObjs.size())+" terminations");
+		ValueTree termObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlTerminations);
+		expect(termObjs.getNumChildren() == 2, "have "+String(termObjs.getNumChildren())+" terminations");
 
 		// termination 1
-		expectEquals(termObjs[0]->getType(), TerminationType);
-		expectEquals(termObjs[0]->getName(), String("T1"));
-		paramsStr = termObjs[0]->getParameters();
-		expectEquals(paramsStr[0], String("terminationFilter(0.1,5)"));
-		labels = termObjs[0]->getLabels();
-		expectEquals(labels[0], String("labelT"));
-		expectEquals(labels[1], String("anotherTLabel"));
+		expectEquals(termObjs.getChild(0).getType().toString(), Ids::termination.toString());
+		expectEquals(termObjs.getChild(0)[Ids::identifier].toString(), String("T1"));
+		params = termObjs.getChild(0).getChildWithName(Ids::parameters);
+		expectEquals(params[Ids::idx[0]].toString(), String("terminationFilter(0.1,5)"));
+		labels = termObjs.getChild(0).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("labelT"));
+		expectEquals(labels[Ids::idx[1]].toString(), String("anotherTLabel"));
 
 		// termination 2
-		expectEquals(termObjs[1]->getType(), TerminationType);
-		expectEquals(termObjs[1]->getName(), String("T2"));
-		paramsStr = termObjs[1]->getParameters();
-		expectEquals(paramsStr[0], String("terminationFilter(0.01,12)"));
-		labels = termObjs[1]->getLabels();
-		expectEquals(labels[0], String("labelT"));
+		expectEquals(termObjs.getChild(1).getType().toString(), Ids::termination.toString());
+		expectEquals(termObjs.getChild(1)[Ids::identifier].toString(), String("T2"));
+		params = termObjs.getChild(1).getChildWithName(Ids::parameters);
+		expectEquals(params[Ids::idx[0]].toString(), String("terminationFilter(0.01,12)"));
+		labels = termObjs.getChild(1).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("labelT"));
 
 		beginTest("getJunctions");
 
-		const Array<JunctionObject*>& junctObjs = mdlFile->getJunctions();
-		expect(junctObjs.size() == 1, "have "+String(junctObjs.size())+" junctions");
+		ValueTree junctObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlJunctions);
+		expect(junctObjs.getNumChildren() == 1, "have "+String(junctObjs.getNumChildren())+" junctions");
 
 		// termination 1
-		expectEquals(junctObjs[0]->getType(), JunctionType);
-		expectEquals(junctObjs[0]->getName(), String("junct1"));
-		float param = junctObjs[0]->getParameters();
-		expectEquals(param, 0.01f);
-		labels = junctObjs[0]->getLabels();
-		expectEquals(labels[0], String("junctLabel"));
+		expectEquals(junctObjs.getChild(0).getType().toString(), Ids::junction.toString());
+		expectEquals(junctObjs.getChild(0)[Ids::identifier].toString(), String("junct1"));
+		params = junctObjs.getChild(0).getChildWithName(Ids::parameters);
+		expectEquals(float(params[Ids::idx[0]]), 0.01f);
+		labels = junctObjs.getChild(0).getChildWithName(Ids::labels);
+		expectEquals(labels[Ids::idx[0]].toString(), String("junctLabel"));
 
 		beginTest("getAudioObjects");
 
-		const Array<AudioObject*>& aus = mdlFile->getAudioObjects();
-		expect(aus.size() == 2, "have "+String(aus.size())+" audio objects");
+		ValueTree aus = mdlFile->mdlRoot.getChildWithName(Objects::mdlAudioObjects);
+		expect(aus.getNumChildren() == 2, "have "+String(aus.getNumChildren())+" audio objects");
 
-		expectEquals(aus[0]->getType(), AudioObjectType);
-		expectEquals(aus[0]->getName(), String("a1"));
-		expectEquals(aus[0]->getParameters(), String("m1*(1000.0)+l1*(100.0)"));
+		expectEquals(aus.getChild(0).getType().toString(), Ids::audioout.toString());
+		expectEquals(aus.getChild(0)[Ids::identifier].toString(), String("a1"));
+		expectEquals(aus.getChild(0)[Ids::sources].toString(), String("m1*(1000.0)+l1*(100.0)"));
+		expectEquals(aus.getChild(1).getType().toString(), Ids::audioout.toString());
+		expectEquals(aus.getChild(1)[Ids::identifier].toString(), String("a2"));
+		expectEquals(aus.getChild(1)[Ids::sources].toString(), String("l2*(1000.0)+l3*(-50.0)+l1*(0.01)"));
 
-		expectEquals(aus[1]->getType(), AudioObjectType);
-		expectEquals(aus[1]->getName(), String("a2"));
-		expectEquals(aus[1]->getParameters(), String("l2*(1000.0)+l3*(-50.0)+l1*(0.01)"));
 	}
 };
 

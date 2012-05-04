@@ -25,7 +25,7 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLParser.h"
-#include "../Controller/ObjectFactory.h"
+#include "../Models/ObjectIDs.h"
 
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
@@ -75,22 +75,22 @@ bool MDLParser::parseMDL()
 						objType.compare("resonator") == 0 ||
 						objType.compare("ground") == 0)
 				{
-					MassObject* mass;
+					ValueTree newTree;
 					if(objType.compare("mass") == 0)
 					{
-						mass = ObjectFactory::createNewMass();
+						newTree = ValueTree(Ids::mass);
 					}
 					else if(objType.compare("port") == 0)
 					{
-						mass = ObjectFactory::createNewPort();
+						newTree = ValueTree(Ids::port);
 					}
 					else if(objType.compare("ground") == 0)
 					{
-						mass = ObjectFactory::createNewGround();
+						newTree = ValueTree(Ids::ground);
 					}
 					else if(objType.compare("resonator") == 0)
 					{
-						mass = ObjectFactory::createNewResonator();
+						newTree = ValueTree(Ids::resonator);
 					}
 					else
 					{
@@ -99,19 +99,24 @@ bool MDLParser::parseMDL()
 					}
 
 					Point<int> pos = getPos(line);
-					mass->setPosition(pos.x, pos.y);
+					newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+					newTree.setProperty(Ids::posY, pos.getY(), nullptr);
 
 					//get values between first parantheses
 					int indexCloseParan = line.indexOf(")");
-					if(mass->getType() != PortType)
+
+					if(newTree.getType() != Ids::port)
+//					if(mass->getType() != PortType)
 					{
 						String params = line.substring(indexParantese+1, indexCloseParan);
 						StringArray paramsArray;
 						paramsArray.addTokens(params, ",", "\"");
+						ValueTree paramsTree(Ids::parameters);
 						for (int param = 0; param < paramsArray.size(); ++param) {
 							float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
-							mass->addParameter(paramVal);
+							paramsTree.setProperty(Ids::idx[param], paramVal, nullptr);
 						}
+						newTree.addChild(paramsTree, -1, nullptr);
 					}
 					// get remaining line content
 					line = line.substring(indexCloseParan+1);
@@ -120,7 +125,9 @@ bool MDLParser::parseMDL()
 					// get string till next comma
 					int commaIndex = line.indexOf(",");
 					if(commaIndex != -1)
-						mass->setName(line.substring(0, commaIndex));
+					{
+						newTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+					}
 
 					line = line.substring(commaIndex);
 
@@ -129,11 +136,14 @@ bool MDLParser::parseMDL()
 					String labels = line.substring(indexParantese+1, indexCloseParan);
 					StringArray labelsArray;
 					labelsArray.addTokens(labels, ",", "\"");
+					ValueTree labelsTree(Ids::labels);
 					for (int l = 0; l < labelsArray.size(); ++l) {
-						mass->addLabel(labelsArray[l]);
+						labelsTree.setProperty(Ids::idx[l], labelsArray[l], nullptr);
 					}
+					newTree.addChild(labelsTree, -1, nullptr);
 
-					mdlFile.addMassObject(mass);
+					ValueTree masses = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlMasses, nullptr);
+					masses.addChild(newTree, -1, nullptr);
 				}
 			}
 			else if(line.startsWith("link")
@@ -146,18 +156,18 @@ bool MDLParser::parseMDL()
 						objType.compare("touch") == 0 ||
 						objType.compare("pluck") == 0)
 				{
-					LinkObject* link;
+					ValueTree linkTree;
 					if(objType.compare("link") == 0)
 					{
-						link = ObjectFactory::createNewLink();
+						linkTree = ValueTree(Ids::link);
 					}
 					else if(objType.compare("touch") == 0)
 					{
-						link = ObjectFactory::createNewTouch();
+						linkTree = ValueTree(Ids::touch);
 					}
 					else if(objType.compare("pluck") == 0)
 					{
-						link = ObjectFactory::createNewPluck();
+						linkTree = ValueTree(Ids::pluck);
 					}
 					else
 					{
@@ -166,17 +176,21 @@ bool MDLParser::parseMDL()
 					}
 
 					Point<int> pos = getPos(line);
-					link->setPosition(pos.x, pos.y);
+					linkTree.setProperty(Ids::posX, pos.x, nullptr);
+					linkTree.setProperty(Ids::posY, pos.y, nullptr);
 
 					//get values between first parantheses
 					int indexCloseParan = line.indexOf(")");
 					String params = line.substring(indexParantese+1, indexCloseParan);
 					StringArray paramsArray;
 					paramsArray.addTokens(params, ",", "\"");
+					ValueTree paramsTree(Ids::parameters);
 					for (int param = 0; param < paramsArray.size(); ++param) {
 						String paramVal = paramsArray[param].trimCharactersAtStart(" ");
-						link->addParameter(paramVal);
+						paramsTree.setProperty(Ids::idx[param], paramVal, nullptr);
 					}
+					linkTree.addChild(paramsTree, -1, nullptr);
+
 					// get remaining line content
 					line = line.substring(indexCloseParan+1);
 					line = line.trimCharactersAtStart(",");
@@ -189,20 +203,23 @@ bool MDLParser::parseMDL()
 					paramsArray2.addTokens(params2, ",", "\"");
 					if(paramsArray2.size() >= 3)
 					{
-						link->setName(paramsArray2[0]);
-						link->setStartVertex(paramsArray2[1]);
-						link->setEndVertex(paramsArray2[2]);
+						linkTree.setProperty(Ids::identifier, paramsArray2[0], nullptr);
+						linkTree.setProperty(Ids::startVertex, paramsArray2[1], nullptr);
+						linkTree.setProperty(Ids::endVertex, paramsArray2[2], nullptr);
 					}
 					line = line.substring(indexParantese);
 					indexCloseParan = line.indexOf(")");
 					String labels = line.substring(1, indexCloseParan);
 					StringArray labelsArray;
 					labelsArray.addTokens(labels, ",", "\"");
+					ValueTree labelsTree(Ids::labels);
 					for (int l = 0; l < labelsArray.size(); ++l) {
-						link->addLabel(labelsArray[l]);
+						labelsTree.setProperty(Ids::idx[l], labelsArray[l], nullptr);
 					}
+					linkTree.addChild(labelsTree, -1, nullptr);
 
-					mdlFile.addLinkObject(link);
+					ValueTree linksTree = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlLinks, nullptr);
+					linksTree.addChild(linkTree, -1, nullptr);
 				}
 			}
 			else if(line.startsWith("faustcode:"))
@@ -213,42 +230,53 @@ bool MDLParser::parseMDL()
 				String lineTmp = line.substring(indexColon+1, indexSemicolon);
 				lineTmp = lineTmp.trimCharactersAtStart(" ");
 				int indexEquals = lineTmp.indexOf("=");
-				LabelObject* labelObj = ObjectFactory::createNewLabelObject();
-				labelObj->setName(lineTmp.substring(0,indexEquals));
-				labelObj->addParameter(lineTmp.substring(indexEquals+1));
-				mdlFile.addLabelObject(labelObj);
+				ValueTree labelTree(Ids::label);
+				labelTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals), nullptr);
+				labelTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1), nullptr);
+				ValueTree labelsTree = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlLabels, nullptr);
+				labelsTree.addChild(labelTree, -1, nullptr);
 			}
 			else if(line.startsWith("audioout"))
 			{
 				StringArray audioOutAttributeList;
+
 				int indexSemicolon = line.length()-1;
 				String lineTmp = line.substring(0, indexSemicolon);
 				audioOutAttributeList.addTokens(lineTmp, ",", "\"");
 				if(audioOutAttributeList.size() > 2)
 				{
-					AudioObject* audioObj = ObjectFactory::createNewAudioObject();
-					audioObj->setName(audioOutAttributeList[1]);
-					audioObj->addParameter(audioOutAttributeList[2]);
-					mdlFile.addAudioObject(audioObj);
+					Point<int> pos = getPos(line);
+
+					ValueTree audioTree(Ids::audioout);
+					audioTree.setProperty(Ids::posX, pos.x, nullptr);
+					audioTree.setProperty(Ids::posY, pos.y, nullptr);
+					audioTree.setProperty(Ids::identifier, audioOutAttributeList[1], nullptr);
+					audioTree.setProperty(Ids::sources, audioOutAttributeList[2], nullptr);
+					ValueTree audioObjectsTree = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlAudioObjects, nullptr);
+					audioObjectsTree.addChild(audioTree, -1, nullptr);
 				}
 			}
 			else if(line.startsWith("waveguide"))
 			{
 				int indexParantese = line.indexOf("(");
-				WaveguideObject* wave = ObjectFactory::createNewWaveguideObject();
 
 				Point<int> pos = getPos(line);
-				wave->setPosition(pos.x, pos.y);
+
+				ValueTree waveguideTree(Ids::waveguide);
+				waveguideTree.setProperty(Ids::posX, pos.x, nullptr);
+				waveguideTree.setProperty(Ids::posY, pos.y, nullptr);
 
 				String objType = line.substring(0, indexParantese);
 				int indexCloseParan = line.indexOf(")");
 				String params = line.substring(indexParantese+1, indexCloseParan);
 				StringArray paramsArray;
 				paramsArray.addTokens(params, ",", "\"");
+				ValueTree waveParams(Ids::parameters);
 				for (int param = 0; param < paramsArray.size(); ++param) {
 					float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
-					wave->addParameter(paramVal);
+					waveParams.setProperty(Ids::idx[param], paramVal, nullptr);
 				}
+				waveguideTree.addChild(waveParams, -1, nullptr);
 
 				// get remaining line content
 				line = line.substring(indexCloseParan+1);
@@ -257,40 +285,50 @@ bool MDLParser::parseMDL()
 				// get string till next comma
 				int commaIndex = line.indexOf(",");
 				if(commaIndex != -1)
-					wave->setName(line.substring(0, commaIndex));
+				{
+					waveguideTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+				}
 
 				// get left object
 				line = line.substring(commaIndex+1);
 				commaIndex = line.indexOf(",");
-				wave->setObjectLeft(line.substring(0, commaIndex));
+				waveguideTree.setProperty(Ids::objLeft, line.substring(0, commaIndex), nullptr);
 
 				// get right object
 				line = line.substring(commaIndex+1);
 				commaIndex = line.indexOf(",");
-				wave->setObjectRight(line.substring(0, commaIndex));
+				waveguideTree.setProperty(Ids::objRight, line.substring(0, commaIndex), nullptr);
 
 				indexParantese = line.indexOf("(");
 				indexCloseParan = line.indexOf(")");
 				String labels = line.substring(indexParantese+1, indexCloseParan);
 				StringArray labelsArray;
 				labelsArray.addTokens(labels, ",", "\"");
+				ValueTree labelTree(Ids::labels);
 				for (int l = 0; l < labelsArray.size(); ++l) {
-					wave->addLabel(labelsArray[l]);
+					labelTree.setProperty(Ids::idx[l], labelsArray[l], nullptr);
 				}
-				mdlFile.addWaveguideObject(wave);
+				waveguideTree.addChild(labelTree, -1, nullptr);
+
+				ValueTree wavesTree = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlWaveguides, nullptr);
+				wavesTree.addChild(waveguideTree, -1, nullptr);
 
 			}
 			else if(line.startsWith("termination"))
 			{
 				int indexParantese = line.indexOf("(");
-				TerminationObject* term = ObjectFactory::createNewTerminationObject();
 
 				Point<int> pos = getPos(line);
-				term->setPosition(pos.x, pos.y);
+
+				ValueTree terminationTree(Ids::termination);
+				terminationTree.setProperty(Ids::posX, pos.x, nullptr);
+				terminationTree.setProperty(Ids::posY, pos.y, nullptr);
 
 				int indexCloseParan = line.indexOf(")");
 				String params = line.substring(indexParantese+1, indexCloseParan+1);
-				term->addParameter(params);
+				ValueTree termParams(Ids::parameters);
+				termParams.setProperty(Ids::idx[0], params, nullptr);
+				terminationTree.addChild(termParams, -1, nullptr);
 
 				// get remaining line content
 				line = line.substring(indexCloseParan+2);
@@ -299,29 +337,40 @@ bool MDLParser::parseMDL()
 				// get string till next comma
 				int commaIndex = line.indexOf(",");
 				if(commaIndex != -1)
-					term->setName(line.substring(0, commaIndex));
+				{
+					terminationTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+				}
 
 				indexParantese = line.indexOf("(");
 				indexCloseParan = line.indexOf(")");
 				String labels = line.substring(indexParantese+1, indexCloseParan);
 				StringArray labelsArray;
 				labelsArray.addTokens(labels, ",", "\"");
+				ValueTree labelTree(Ids::labels);
 				for (int l = 0; l < labelsArray.size(); ++l) {
-					term->addLabel(labelsArray[l]);
+					labelTree.setProperty(Ids::idx[l], labelsArray[l], nullptr);
 				}
-				mdlFile.addTerminationObject(term);
+				terminationTree.addChild(labelTree, -1, nullptr);
+
+
+				ValueTree termsTree = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlTerminations, nullptr);
+				termsTree.addChild(terminationTree, -1, nullptr);
 			}
 			else if(line.startsWith("junction"))
 			{
 				int indexParantese = line.indexOf("(");
-				JunctionObject* junct = ObjectFactory::createNewJunctionObject();
 
 				Point<int> pos = getPos(line);
-				junct->setPosition(pos.x, pos.y);
+
+				ValueTree junctTree(Ids::junction);
+				junctTree.setProperty(Ids::posX, pos.x, nullptr);
+				junctTree.setProperty(Ids::posY, pos.y, nullptr);
 
 				int indexCloseParan = line.indexOf(")");
 				String params = line.substring(indexParantese+1, indexCloseParan);
-				junct->addParameter(params.getFloatValue());
+				ValueTree junctParams(Ids::parameters);
+				junctParams.setProperty(Ids::idx[0], params, nullptr);
+				junctTree.addChild(junctParams, -1, nullptr);
 
 				// get remaining line content
 				line = line.substring(indexCloseParan+1);
@@ -330,19 +379,27 @@ bool MDLParser::parseMDL()
 				// get string till next comma
 				int commaIndex = line.indexOf(",");
 				if(commaIndex != -1)
-					junct->setName(line.substring(0, commaIndex));
+				{
+					junctTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+				}
 
 				indexParantese = line.indexOf("(");
 				indexCloseParan = line.indexOf(")");
 				String labels = line.substring(indexParantese+1, indexCloseParan);
 				StringArray labelsArray;
 				labelsArray.addTokens(labels, ",", "\"");
+				ValueTree labelTree(Ids::labels);
 				for (int l = 0; l < labelsArray.size(); ++l) {
-					junct->addLabel(labelsArray[l]);
+					labelTree.setProperty(Ids::idx[l], labelsArray[l], nullptr);
 				}
-				mdlFile.addJunctionObject(junct);
+				junctTree.addChild(labelTree, -1, nullptr);
+
+				ValueTree junctsTree = mdlFile.mdlRoot.getOrCreateChildWithName(Objects::mdlJunctions, nullptr);
+				junctsTree.addChild(junctTree, -1, nullptr);
+
 			}
 		}
 	}
 	return true;
 }
+

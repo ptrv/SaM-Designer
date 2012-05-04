@@ -63,9 +63,6 @@
               file="Source/Utilities/StoredSettings.h"/>
       </GROUP>
       <GROUP id="{3076B932-78A9-9CF5-9D15-340DC0A8A1FF}" name="Controller">
-        <FILE id="dGltP5" name="ObjectFactory.cpp" compile="1" resource="0"
-              file="Source/Controller/ObjectFactory.cpp"/>
-        <FILE id="QhOB49" name="ObjectFactory.h" compile="0" resource="0" file="Source/Controller/ObjectFactory.h"/>
         <FILE id="w1WXqJ" name="AppController.cpp" compile="1" resource="0"
               file="Source/Controller/AppController.cpp"/>
         <FILE id="rtmHfN" name="AppController.h" compile="0" resource="0" file="Source/Controller/AppController.h"/>
@@ -77,22 +74,9 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
-        <FILE id="csu22C" name="WaveguideObject.cpp" compile="1" resource="0"
-              file="Source/Models/WaveguideObject.cpp"/>
-        <FILE id="KTFAPq" name="WaveguideObject.h" compile="0" resource="0"
-              file="Source/Models/WaveguideObject.h"/>
-        <FILE id="i5K8EW" name="Types.h" compile="0" resource="0" file="Source/Models/Types.h"/>
-        <FILE id="nJcyNt" name="AudioObject.cpp" compile="1" resource="0" file="Source/Models/AudioObject.cpp"/>
-        <FILE id="uA0jai" name="AudioObject.h" compile="0" resource="0" file="Source/Models/AudioObject.h"/>
-        <FILE id="uw5XsC" name="LabelObject.cpp" compile="1" resource="0" file="Source/Models/LabelObject.cpp"/>
-        <FILE id="ro9M5h" name="LabelObject.h" compile="0" resource="0" file="Source/Models/LabelObject.h"/>
+        <FILE id="NrcNFQ" name="ObjectIDs.h" compile="0" resource="0" file="Source/Models/ObjectIDs.h"/>
         <FILE id="IQfEQd" name="OutputCmd.cpp" compile="1" resource="0" file="Source/Models/OutputCmd.cpp"/>
         <FILE id="D0k5Mg" name="OutputCmd.h" compile="0" resource="0" file="Source/Models/OutputCmd.h"/>
-        <FILE id="BMVnZx" name="BaseObject.h" compile="0" resource="0" file="Source/Models/BaseObject.h"/>
-        <FILE id="CCraVa" name="LinkObject.cpp" compile="1" resource="0" file="Source/Models/LinkObject.cpp"/>
-        <FILE id="SIXF4i" name="LinkObject.h" compile="0" resource="0" file="Source/Models/LinkObject.h"/>
-        <FILE id="uphAV7" name="MassObject.cpp" compile="1" resource="0" file="Source/Models/MassObject.cpp"/>
-        <FILE id="LcJLEH" name="MassObject.h" compile="0" resource="0" file="Source/Models/MassObject.h"/>
         <FILE id="geNURR" name="MDLFile.cpp" compile="1" resource="0" file="Source/Models/MDLFile.cpp"/>
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>

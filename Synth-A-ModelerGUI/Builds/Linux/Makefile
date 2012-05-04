@@ -50,16 +50,10 @@ OBJECTS := \
   $(OBJDIR)/Alerts_379eb1e5.o \
   $(OBJDIR)/MDLParser_674db430.o \
   $(OBJDIR)/StoredSettings_125117b4.o \
-  $(OBJDIR)/ObjectFactory_e9697e01.o \
   $(OBJDIR)/AppController_eaa3b8d3.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
-  $(OBJDIR)/WaveguideObject_c310a006.o \
-  $(OBJDIR)/AudioObject_ad765bf9.o \
-  $(OBJDIR)/LabelObject_2a157197.o \
   $(OBJDIR)/OutputCmd_1e28237d.o \
-  $(OBJDIR)/LinkObject_3aeff31f.o \
-  $(OBJDIR)/MassObject_76535999.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
   $(OBJDIR)/DebugWindow_3b335a2.o \
   $(OBJDIR)/ExportPanel_4e5f49af.o \
@@ -125,11 +119,6 @@ $(OBJDIR)/StoredSettings_125117b4.o: ../../Source/Utilities/StoredSettings.cpp
 	@echo "Compiling StoredSettings.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/ObjectFactory_e9697e01.o: ../../Source/Controller/ObjectFactory.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ObjectFactory.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/AppController_eaa3b8d3.o: ../../Source/Controller/AppController.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling AppController.cpp"
@@ -145,34 +134,9 @@ $(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
 	@echo "Compiling ObjController.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/WaveguideObject_c310a006.o: ../../Source/Models/WaveguideObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling WaveguideObject.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/AudioObject_ad765bf9.o: ../../Source/Models/AudioObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling AudioObject.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/LabelObject_2a157197.o: ../../Source/Models/LabelObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LabelObject.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/OutputCmd_1e28237d.o: ../../Source/Models/OutputCmd.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling OutputCmd.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/LinkObject_3aeff31f.o: ../../Source/Models/LinkObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LinkObject.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/MassObject_76535999.o: ../../Source/Models/MassObject.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MassObject.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
