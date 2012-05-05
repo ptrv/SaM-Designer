@@ -1,3 +1,7 @@
 build
 *dir/
 *.dsp
+
+# built docs
+*/Docs/html
+*/Docs/latex
