@@ -55,6 +55,27 @@ static const String getDefaultPathPerl()
 	return "";
 }
 
+static const String getDefaultPathDataDir()
+{
+	File infile = File::getSpecialLocation(File::userDocumentsDirectory)
+									.getChildFile("Synth-A-Modeler-Data");
+	if(infile.isDirectory())
+	{
+		return infile.getFullPathName();
+	}
+#if JUCE_MAC
+	String relDataDir = "../../../../../Synth-A-ModelerCmd";
+#else
+	String relDataDir = "../../../../Synth-A-ModelerCmd";
+#endif
+	infile = File::getCurrentWorkingDirectory().getChildFile(relDataDir);
+	if(infile.isDirectory())
+	{
+		return infile.getFullPathName();
+	}
+	return "";
+}
+
 //==============================================================================
 StoredSettings::StoredSettings()
 {
@@ -184,8 +205,7 @@ void StoredSettings::setLastDocument(const String& docName)
 
 const String StoredSettings::getDataDir() const
 {
-	return props->getValue("datadir",
-			File::getSpecialLocation(File::userDocumentsDirectory).getChildFile("Synth-A-ModelerData").getFullPathName());
+	return props->getValue("datadir", getDefaultPathDataDir());
 }
 void StoredSettings::setDataDir (const String& folder)
 {
