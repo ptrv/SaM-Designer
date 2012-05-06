@@ -194,7 +194,7 @@ void StoredSettings::setDataDir (const String& folder)
 
 const String StoredSettings::getCmdExporter() const
 {
-	return props->getValue("cmdexporter", "puredata");
+	return props->getValue("cmdexporter", "make -C $(DATA_DIR) puredata");
 }
 void StoredSettings::setCmdExporter(const String& exporters)
 {
