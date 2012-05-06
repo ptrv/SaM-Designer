@@ -28,11 +28,12 @@
 
 class MDLFile;
 class OutputCmd;
+class AppController;
 
 class MDLController
 {
 public:
-	MDLController();
+	MDLController(AppController& owner_);
 	~MDLController();
 
 	void newFile();
@@ -46,10 +47,16 @@ public:
 	const String generateExternal();
 	const String getMDLName();
 
+	UndoManager* getUndoManager();
 
+	bool perform (UndoableAction* const action, const String& actionName);
+
+	ValueTree getMDLTree();
+	bool mdlCheckAndSaveIfNeeded();
 private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;
+	AppController& owner;
 };
 
 

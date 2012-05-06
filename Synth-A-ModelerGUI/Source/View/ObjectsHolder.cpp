@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    DebugWindow.h
-    Created: 11 Apr 2012 3:18:15pm
+    ObjectsHolder.cpp
+    Created: 11 Apr 2012 5:10:20pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,33 +23,28 @@
 
 */
 
-#ifndef __DEBUGWINDOW_H_3A3F156F__
-#define __DEBUGWINDOW_H_3A3F156F__
+#include "ObjectsHolder.h"
 
-//#include "../../JuceLibraryCode/JuceHeader.h"
-
-class TextConsole;
-class DebugWindow : public DocumentWindow
+ObjectsHolder::ObjectsHolder(ObjController* objController_)
+: Component(), objController(objController_)
 {
-public:
-	DebugWindow();
-	~DebugWindow();
+	setSize(100,100);
+}
 
-	void closeButtonPressed();
+ObjectsHolder::~ObjectsHolder()
+{
 
-	void toggleDebugWindow();
+}
 
-	void printHeader();
+void ObjectsHolder::paint(Graphics& g)
+{
+	g.fillAll (Colours::white);
+	g.drawText("This will be the object component", 10, 10 ,
+			getWidth()-20, getHeight()-20, Justification::centred, false);
 
-	void clear();
+}
 
-	void addText(const String& compilerText);
-
-	void makeVisible();
-	void makeHide();
-private:
-	TextConsole* console;
-};
-
-
-#endif  // __DEBUGWINDOW_H_3A3F156F__
+//void ObjComp::resized()
+//{
+//
+//}

@@ -38,7 +38,9 @@ class DebugWindow;
 class AppController;
 
 //==============================================================================
-class MainAppWindow   : public DocumentWindow
+class MainAppWindow   : public DocumentWindow,
+						public MenuBarModel,
+						public ApplicationCommandTarget
 {
 public:
     //==============================================================================
@@ -46,6 +48,18 @@ public:
     ~MainAppWindow();
 
     void closeButtonPressed();
+
+    bool mdlCheckAndSave();
+    //==============================================================================
+    const StringArray getMenuBarNames ();
+    const PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName);
+    void menuItemSelected (int menuItemID, int topLevelMenuIndex);
+//==============================================================================
+    ApplicationCommandTarget* getNextCommandTarget();
+    void getAllCommands (Array <CommandID>& commands);
+    void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
+    bool isCommandActive (const CommandID commandID);
+    bool perform (const InvocationInfo& info);
 
     // the command manager object used to dispatch command events
     ApplicationCommandManager commandManager;

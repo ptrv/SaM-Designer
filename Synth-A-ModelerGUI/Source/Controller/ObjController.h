@@ -26,14 +26,20 @@
 #ifndef __OBJCONTROLLER_H_A98EC6A3__
 #define __OBJCONTROLLER_H_A98EC6A3__
 
+#include "../../JuceLibraryCode/JuceHeader.h"
+class AppController;
 
 class ObjController
 {
 public:
-	ObjController();
+	ObjController(AppController& owner_);
 	~ObjController();
 
+	bool perform (UndoableAction* const action, const String& actionName);
+
+	void addObject(const Identifier& objId);
 private:
+	AppController& owner;
 };
 
 

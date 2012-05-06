@@ -29,7 +29,8 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-class MDLFile : public FileBasedDocument
+class MDLFile : public FileBasedDocument,
+				public ValueTree::Listener
 {
 //	friend class MDLParser;
 public:
@@ -40,9 +41,21 @@ public:
 	void close();
 
 	const String& getFilePath() const { return mdlPath; }
-	const String getName() { return isModified ? mdlName+"*" : mdlName; }
+	const String getName() { return hasChangedSinceSaved() ? mdlName+"*" : mdlName; }
+
+	bool perform (UndoableAction* const action, const String& actionName);
+
+	UndoManager& getUndoMgr() throw() { return undoMgr; }
 
 	ValueTree mdlRoot;
+
+    void valueTreePropertyChanged (ValueTree& tree, const Identifier& property);
+    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
+    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved);
+    void valueTreeChildOrderChanged (ValueTree& parentTree);
+    void valueTreeParentChanged (ValueTree& tree);
+
+    void mdlChanged();
 protected:
 	const String getDocumentTitle();
 	const String loadDocument (const File& file);
@@ -61,6 +74,8 @@ private:
 	String mdlPath;
 	String mdlName;
 	static File lastDocumentOpened;
+
+	UndoManager undoMgr;
 
 };
 

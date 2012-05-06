@@ -44,7 +44,14 @@ public:
 
 	void setMainWindowTitle();
 
-	UndoManager* getUndoMgr() { return undoMgr; }
+	bool perform (UndoableAction* const action, const String& actionName);
+
+	MDLController* const getMDLController() { return mdlController; }
+	ObjController* const getObjController() { return objController; }
+
+	ValueTree getMDLTree();
+
+	bool mdlCheckAndSave();
 private:
 	void debugWindowToggle();
 	void debugWindowClear();
@@ -55,7 +62,7 @@ private:
     ScopedPointer<MDLController> mdlController;
     ScopedPointer<ObjController> objController;
 
-    ScopedPointer<UndoManager> undoMgr;
+//    ScopedPointer<UndoManager> undoMgr;
 //	ScopedPointer<OutputCmd> outCmd;
 };
 

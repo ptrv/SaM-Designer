@@ -59,7 +59,7 @@ OBJECTS := \
   $(OBJDIR)/ExportPanel_4e5f49af.o \
   $(OBJDIR)/PrefsPanel_2006a45f.o \
   $(OBJDIR)/ContentComp_99fa8a27.o \
-  $(OBJDIR)/ObjComp_838b59a5.o \
+  $(OBJDIR)/ObjectsHolder_b334705f.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
   $(OBJDIR)/juce_core_5f5a3bad.o \
   $(OBJDIR)/juce_cryptography_55e5c007.o \
@@ -164,9 +164,9 @@ $(OBJDIR)/ContentComp_99fa8a27.o: ../../Source/View/ContentComp.cpp
 	@echo "Compiling ContentComp.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/ObjComp_838b59a5.o: ../../Source/View/ObjComp.cpp
+$(OBJDIR)/ObjectsHolder_b334705f.o: ../../Source/View/ObjectsHolder.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ObjComp.cpp"
+	@echo "Compiling ObjectsHolder.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

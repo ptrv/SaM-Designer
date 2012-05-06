@@ -29,39 +29,45 @@
 
 DebugWindow::DebugWindow()
 :
-DocumentWindow("Output", Colours::darkgrey, DocumentWindow::closeButton, true)
+DocumentWindow("Output", Colours::darkgrey, DocumentWindow::closeButton)
 {
 	setResizable (true, true); // resizability is a property of ResizableWindow
 
+	setSize(400,400);
+	// restore the last size and position from our settings file..
+	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
+	                                    .getValue ("lastDebugWindowPos"));
+
 	console = new TextConsole();
-	console->setSize(400,400);
+	console->setSize(getWidth(),getHeight());
 
 	setContentOwned(console,true);
-
-	setVisible (StoredSettings::getInstance()->getShowCompilerWindow());
 }
 
 DebugWindow::~DebugWindow()
 {
-	clearContentComponent();
+    // save the current size and position to our settings file..
+    StoredSettings::getInstance()->getProps()
+        .setValue ("lastDebugWindowPos", getWindowStateAsString());
+
+    clearContentComponent();
+
 }
 
 void DebugWindow::closeButtonPressed()
 {
-	setVisible(false);
+	makeHide();
 }
 
 void DebugWindow::toggleDebugWindow()
 {
 	if(isVisible())
 	{
-		setVisible(false);
-		StoredSettings::getInstance()->setShowCompilerWindow(false);
+		makeHide();
 	}
 	else
 	{
-		setVisible(true);
-		StoredSettings::getInstance()->setShowCompilerWindow(true);
+		makeVisible();
 	}
 }
 
@@ -86,4 +92,18 @@ void DebugWindow::printHeader()
 	debugText << "----------------------------------------------";
 	debugText << newLine << newLine;
 	console->addLine(debugText);
+}
+
+void DebugWindow::makeVisible()
+{
+	setVisible(true);
+	addToDesktop();
+	StoredSettings::getInstance()->setShowCompilerWindow(true);
+}
+
+void DebugWindow::makeHide()
+{
+	setVisible(false);
+	removeFromDesktop();
+	StoredSettings::getInstance()->setShowCompilerWindow(false);
 }

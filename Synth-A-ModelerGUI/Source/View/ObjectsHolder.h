@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    ObjComp.cpp
+    ObjectsHolder.h
     Created: 11 Apr 2012 5:10:20pm
     Author:  Peter Vasil
 
@@ -23,28 +23,26 @@
 
 */
 
-#include "ObjComp.h"
+#ifndef __OBJCOMP_H_F3604232__
+#define __OBJCOMP_H_F3604232__
 
-ObjComp::ObjComp(AppController& appController_)
-: Component(), appController(appController_)
+#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Controller/AppController.h"
+#include "BaseObjectComponent.h"
+
+class ObjectsHolder : public Component
 {
-	setSize(100,100);
-}
+public:
+	ObjectsHolder(ObjController* objController_);
+	~ObjectsHolder();
 
-ObjComp::~ObjComp()
-{
+	void paint(Graphics& g);
+//	void resized();
 
-}
+private:
+	OwnedArray<BaseObjectComponent> objects;
+	ObjController* objController;
+};
 
-void ObjComp::paint(Graphics& g)
-{
-	g.fillAll (Colours::white);
-	g.drawText("This will be the object component", 10, 10 ,
-			getWidth()-20, getHeight()-20, Justification::centred, false);
 
-}
-
-//void ObjComp::resized()
-//{
-//
-//}
+#endif  // __OBJCOMP_H_F3604232__

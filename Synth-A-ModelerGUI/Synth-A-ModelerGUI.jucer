@@ -74,6 +74,7 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
+        <FILE id="u30khk" name="ObjectActions.h" compile="0" resource="0" file="Source/Models/ObjectActions.h"/>
         <FILE id="NrcNFQ" name="ObjectIDs.h" compile="0" resource="0" file="Source/Models/ObjectIDs.h"/>
         <FILE id="IQfEQd" name="OutputCmd.cpp" compile="1" resource="0" file="Source/Models/OutputCmd.cpp"/>
         <FILE id="D0k5Mg" name="OutputCmd.h" compile="0" resource="0" file="Source/Models/OutputCmd.h"/>
@@ -81,6 +82,8 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="kbQNVc" name="BaseObjectComponent.h" compile="0" resource="0"
+              file="Source/View/BaseObjectComponent.h"/>
         <FILE id="gzMWlB" name="DebugWindow.cpp" compile="1" resource="0" file="Source/View/DebugWindow.cpp"/>
         <FILE id="bVPf9s" name="DebugWindow.h" compile="0" resource="0" file="Source/View/DebugWindow.h"/>
         <FILE id="WLXXDy" name="ExportPanel.cpp" compile="1" resource="0" file="Source/View/ExportPanel.cpp"/>
@@ -89,8 +92,9 @@
         <FILE id="DWHh36" name="PrefsPanel.h" compile="0" resource="0" file="Source/View/PrefsPanel.h"/>
         <FILE id="b4aWii" name="ContentComp.cpp" compile="1" resource="0" file="Source/View/ContentComp.cpp"/>
         <FILE id="H2ej5x" name="ContentComp.h" compile="0" resource="0" file="Source/View/ContentComp.h"/>
-        <FILE id="ZTJE9i" name="ObjComp.cpp" compile="1" resource="0" file="Source/View/ObjComp.cpp"/>
-        <FILE id="mY7Tor" name="ObjComp.h" compile="0" resource="0" file="Source/View/ObjComp.h"/>
+        <FILE id="ZTJE9i" name="ObjectsHolder.cpp" compile="1" resource="0"
+              file="Source/View/ObjectsHolder.cpp"/>
+        <FILE id="mY7Tor" name="ObjectsHolder.h" compile="0" resource="0" file="Source/View/ObjectsHolder.h"/>
         <FILE id="rGYoRN" name="TextConsole.h" compile="0" resource="0" file="Source/View/TextConsole.h"/>
       </GROUP>
     </GROUP>

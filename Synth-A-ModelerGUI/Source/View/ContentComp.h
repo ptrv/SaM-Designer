@@ -25,7 +25,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "../Application/MainWindow.h"
-#include "ObjComp.h"
+#include "ObjectsHolder.h"
 //[/Headers]
 
 
@@ -39,7 +39,6 @@
                                                                     //[/Comments]
 */
 class ContentComp  : public Component,
-                     public MenuBarModel,
                      public ApplicationCommandTarget
 {
 public:
@@ -49,9 +48,6 @@ public:
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
-    const StringArray getMenuBarNames();
-    const PopupMenu getMenuForIndex (int menuIndex, const String&);
-	void menuItemSelected(int menuItemID, int);
 	ApplicationCommandTarget* getNextCommandTarget();
 	void getAllCommands(Array<CommandID>& commands);
 	void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
@@ -70,7 +66,7 @@ private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     MainAppWindow& mainWindow;
 	AppController& appController;
-	ObjComp* objComp;
+	ObjectsHolder* objectsHolder;
     //[/UserVariables]
 
     //==============================================================================

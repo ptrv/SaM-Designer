@@ -29,14 +29,14 @@
 #include "../View/DebugWindow.h"
 #include "../Application/CommonHeaders.h"
 #include "../View/PrefsPanel.h"
+#include "../Models/ObjectIDs.h"
 
 AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
 : maw(maw_), dw(dw_)
 {
-	mdlController = new MDLController();
-	objController = new ObjController();
+	mdlController = new MDLController(*this);
+	objController = new ObjController(*this);
 	setMainWindowTitle();
-	undoMgr = new UndoManager();
 }
 
 AppController::~AppController()
@@ -44,6 +44,12 @@ AppController::~AppController()
 
 }
 
+bool AppController::perform (UndoableAction* const action, const String& actionName)
+{
+	mdlController->getUndoManager()->beginNewTransaction(actionName);
+	bool performOk = mdlController->getUndoManager()->perform(action, actionName);
+	return performOk;
+}
 bool AppController::menuItemWasClicked(CommandID menuId)
 {
     switch (menuId)
@@ -72,8 +78,10 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	PrefsPanel::show();
     	break;
     case CommandIDs::undo:
+    	mdlController->getUndoManager()->undo();
 		break;
 	case CommandIDs::redo:
+		mdlController->getUndoManager()->redo();
 		break;
 
 	case StandardApplicationCommandIDs::cut:
@@ -102,26 +110,36 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	break;
 
     case CommandIDs::insertMass:
+    	objController->addObject(Ids::mass);
     	break;
     case CommandIDs::insertGround:
+    	objController->addObject(Ids::ground);
     	break;
     case CommandIDs::insertResonator:
+    	objController->addObject(Ids::resonator);
     	break;
     case CommandIDs::insertPort:
+    	objController->addObject(Ids::port);
     	break;
 
     case CommandIDs::insertLink:
+    	objController->addObject(Ids::link);
     	break;
     case CommandIDs::insertTouch:
+    	objController->addObject(Ids::touch);
     	break;
     case CommandIDs::insertPluck:
+    	objController->addObject(Ids::pluck);
     	break;
 
     case CommandIDs::insertAudioOutput:
+    	objController->addObject(Ids::audioout);
     	break;
     case CommandIDs::insertWaveguide:
+    	objController->addObject(Ids::waveguide);
     	break;
     case CommandIDs::insertTermination:
+    	objController->addObject(Ids::termination);
     	break;
 
     case CommandIDs::generateFaust:
@@ -182,7 +200,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
 	default:
         return false;
     };
-
+    setMainWindowTitle();
     return true;
 
 }
@@ -208,4 +226,14 @@ void AppController::setMainWindowTitle()
 	String title = JUCEApplication::getInstance()->getApplicationName();
 	title << " - " << mdlController->getMDLName();
 	maw.setName(title);
+}
+
+ValueTree AppController::getMDLTree()
+{
+	return mdlController->getMDLTree();
+}
+
+bool AppController::mdlCheckAndSave()
+{
+	return mdlController->mdlCheckAndSaveIfNeeded();
 }

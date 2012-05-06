@@ -61,12 +61,14 @@ void SynthAModelerApplication::shutdown()
 {
 	// Do your application's shutdown code here..
 	mainWindow = 0;
+    StoredSettings::deleteInstance();
 }
 
 //==============================================================================
 void SynthAModelerApplication::systemRequestedQuit()
 {
-	quit();
+	if(mainWindow->mdlCheckAndSave())
+		quit();
 }
 
 //==============================================================================

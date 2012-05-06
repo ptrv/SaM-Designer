@@ -24,8 +24,12 @@
 */
 
 #include "ObjController.h"
+#include "AppController.h"
+#include "../Models/ObjectIDs.h"
+#include "../Models/ObjectActions.h"
 
-ObjController::ObjController()
+ObjController::ObjController(AppController& owner_)
+: owner(owner_)
 {
 
 }
@@ -33,4 +37,15 @@ ObjController::ObjController()
 ObjController::~ObjController()
 {
 
+}
+
+bool ObjController::perform (UndoableAction* const action, const String& actionName)
+{
+	return owner.perform(action, actionName);
+}
+
+void ObjController::addObject(const Identifier& objId)
+{
+
+	this->perform(new AddObjectAction(owner.getMDLTree()), "Add new Object");
 }

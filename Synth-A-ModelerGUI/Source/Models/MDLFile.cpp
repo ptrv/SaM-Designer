@@ -36,11 +36,17 @@ MDLFile::MDLFile()
   mdlRoot(Objects::mdlRoot)
 {
 	initMDL();
+	mdlRoot.addListener(this);
 }
 
 MDLFile::~MDLFile()
 {
 	destroyMDL();
+}
+
+bool MDLFile::perform (UndoableAction* const action, const String& actionName)
+{
+	return undoMgr.perform(action, actionName);
 }
 
 void MDLFile::initMDL()
@@ -84,6 +90,7 @@ const String MDLFile::loadDocument (const File& file)
 		// success
 		DBG("Opened MDL file: "+String(mdlPath));
 		isInit = false;
+		setChangedFlag(false);
 		File mf(mdlPath);
 		mdlName = mf.getFileName();
 		return String::empty;
@@ -120,6 +127,39 @@ void MDLFile::setLastDocumentOpened (const File& file)
 	lastDocumentOpened = file;
 	StoredSettings::getInstance()->setLastDocument(file.getFullPathName());
 }
+void MDLFile::mdlChanged()
+{
+	changed();
+}
+//==============================================================================
+void MDLFile::valueTreePropertyChanged (ValueTree& tree, const Identifier& property)
+{
+//    if (property == Ids::projectType)
+//        setMissingDefaultValues();
+
+    mdlChanged();
+}
+
+void MDLFile::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
+{
+	mdlChanged();
+}
+
+void MDLFile::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved)
+{
+	mdlChanged();
+}
+
+void MDLFile::valueTreeChildOrderChanged (ValueTree& parentTree)
+{
+	mdlChanged();
+}
+
+void MDLFile::valueTreeParentChanged (ValueTree& tree)
+{
+}
+
+//==============================================================================
 
 
 //==============================================================================

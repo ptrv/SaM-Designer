@@ -29,9 +29,12 @@
 #include "../Models/OutputCmd.h"
 #include "../Application/CommonHeaders.h"
 #include "../View/ExportPanel.h"
+#include "AppController.h"
+#include "../Models/ObjectIDs.h"
 
 
-MDLController::MDLController()
+MDLController::MDLController(AppController& owner_)
+: owner(owner_)
 {
 	currentMdl = new MDLFile();
 	outCmd = new OutputCmd();
@@ -146,4 +149,32 @@ const String MDLController::generateExternal()
 const String MDLController::getMDLName()
 {
 	return currentMdl->getName();
+}
+
+UndoManager* MDLController::getUndoManager()
+{
+	if(currentMdl != nullptr)
+		return &currentMdl->getUndoMgr();
+	else
+		return nullptr;
+}
+
+bool MDLController::perform (UndoableAction* const action, const String& actionName)
+{
+	return owner.perform(action, actionName);
+}
+
+ValueTree MDLController::getMDLTree()
+{
+	return currentMdl->mdlRoot;
+}
+
+bool MDLController::mdlCheckAndSaveIfNeeded()
+{
+	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
+	if(sr == FileBasedDocument::userCancelledSave)
+		return false;
+	else
+		return true;
+
 }

@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    ObjComp.h
-    Created: 11 Apr 2012 5:10:20pm
+    BaseObjectComponent.h
+    Created: 5 May 2012 4:31:59pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,24 +23,18 @@
 
 */
 
-#ifndef __OBJCOMP_H_F3604232__
-#define __OBJCOMP_H_F3604232__
+#ifndef __BASEOBJECTCOMPONENT_H_4AC10D4B__
+#define __BASEOBJECTCOMPONENT_H_4AC10D4B__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Controller/AppController.h"
 
-class ObjComp : public Component
+class BaseObjectComponent : public Component
 {
 public:
-	ObjComp(AppController& appController_);
-	~ObjComp();
-
-	void paint(Graphics& g);
-//	void resized();
+	BaseObjectComponent(){}
+	~BaseObjectComponent(){}
 
 private:
-	AppController& appController;
 };
 
 
-#endif  // __OBJCOMP_H_F3604232__
+#endif  // __BASEOBJECTCOMPONENT_H_4AC10D4B__

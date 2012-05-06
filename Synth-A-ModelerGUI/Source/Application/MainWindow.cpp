@@ -37,12 +37,24 @@ MainAppWindow::MainAppWindow()
                       Colours::lightgrey,
                       DocumentWindow::allButtons)
 {
-    setResizable (true, true); // resizability is a property of ResizableWindow
-
     debugWindow = new DebugWindow();
     appController = new AppController(*this, *debugWindow);
     ContentComp* contentComp = new ContentComp(*this, *appController.get());
 
+    setContentOwned(contentComp, true);
+//    multiDocHolder = new MultiDocHolder();
+//    multiDocHolder->addDocument(contentComp, Colours::azure, true);
+
+    setApplicationCommandManagerToWatch (&commandManager);
+
+    setUsingNativeTitleBar(true);
+    centreWithSize (getWidth(), getHeight());
+
+    // restore the last size and position from our settings file..
+	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
+									.getValue ("lastMainWindowPos"));
+
+	commandManager.registerAllCommandsForTarget(this);
     commandManager.registerAllCommandsForTarget (contentComp);
     commandManager.registerAllCommandsForTarget (JUCEApplication::getInstance());
 
@@ -50,40 +62,253 @@ MainAppWindow::MainAppWindow()
     // out commands
     addKeyListener (commandManager.getKeyMappings());
 
-    setContentOwned(contentComp,true);
-
-    // this tells the DocumentWindow to automatically create and manage a MenuBarComponent
-    // which uses our contentComp as its MenuBarModel
-#ifdef JUCE_MAC
-    setMenuBar(nullptr);
-    MenuBarModel::setMacMainMenu(contentComp);
+#if JUCE_MAC
+    setMacMainMenu (this);
 #else
-    setMenuBar (contentComp);
+ 	setMenuBar (this);
 #endif
 
-    // tells our menu bar model that it should watch this command manager for
-    // changes, and send change messages accordingly.
-    contentComp->setApplicationCommandManagerToWatch (&commandManager);
-
-    centreWithSize (getWidth(), getHeight());
     setVisible (true);
-    setUsingNativeTitleBar(true);
+    setWantsKeyboardFocus (false);
+    setResizable (true, true); // resizability is a property of ResizableWindow
 
+	if(StoredSettings::getInstance()->getShowCompilerWindow())
+		debugWindow->makeVisible ();
+
+//	getContentComponent()->grabKeyboardFocus();
 }
 
 MainAppWindow::~MainAppWindow()
 {
-    setMenuBar (nullptr);
-
-#if JUCE_MAC  // ..and also the main bar if we're using that on a Mac...
-    MenuBarModel::setMacMainMenu (nullptr);
+#if JUCE_MAC
+	setMacMainMenu (0);
+#else
+	setMenuBar (0);
 #endif
-    StoredSettings::deleteInstance();
+	removeKeyListener (commandManager.getKeyMappings());
+
+    // save the current size and position to our settings file..
+    StoredSettings::getInstance()->getProps()
+        .setValue ("lastMainWindowPos", getWindowStateAsString());
 
     clearContentComponent();
+
 }
 
 void MainAppWindow::closeButtonPressed()
 {
+//	appController->c
     JUCEApplication::getInstance()->systemRequestedQuit();
+}
+
+//==============================================================================
+const StringArray MainAppWindow::getMenuBarNames()
+{
+    const char* const names[] = { "File", "Edit", "Insert", "Generate", "Tools", "Help", nullptr };
+
+    return StringArray (names);
+}
+
+const PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex,
+                                             const String& menuName)
+{
+//    ApplicationCommandManager* commandManager = &(commandManager);
+
+    PopupMenu menu;
+
+    if (topLevelMenuIndex == 0)
+    {
+        menu.addCommandItem (&commandManager, CommandIDs::newFile);
+        menu.addCommandItem (&commandManager, CommandIDs::open);
+
+        PopupMenu recentFiles;
+        StoredSettings::getInstance()->recentFiles.createPopupMenuItems (recentFiles, 100, true, true);
+        menu.addSubMenu ("Open recent file", recentFiles);
+
+        menu.addSeparator();
+        menu.addCommandItem (&commandManager, CommandIDs::closeDocument);
+        menu.addCommandItem (&commandManager, CommandIDs::saveDocument);
+        menu.addCommandItem (&commandManager, CommandIDs::saveDocumentAs);
+        menu.addSeparator();
+        menu.addCommandItem(&commandManager, CommandIDs::showPrefs);
+
+#if ! JUCE_MAC
+        menu.addSeparator();
+        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::quit);
+#endif
+
+    }
+    else if (topLevelMenuIndex == 1)
+    {
+        menu.addCommandItem (&commandManager, CommandIDs::undo);
+        menu.addCommandItem (&commandManager, CommandIDs::redo);
+        menu.addSeparator();
+        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::cut);
+        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::copy);
+        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::paste);
+        menu.addSeparator();
+        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::selectAll);
+        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::deselectAll);
+        menu.addSeparator();
+        menu.addCommandItem (&commandManager, CommandIDs::defineVariables);
+        menu.addSeparator();
+        menu.addCommandItem (&commandManager, CommandIDs::segmentedConnectors);
+        menu.addCommandItem (&commandManager, CommandIDs::zoomIn);
+        menu.addCommandItem (&commandManager, CommandIDs::zoomOut);
+        menu.addCommandItem (&commandManager, CommandIDs::zoomNormal);
+        menu.addCommandItem(&commandManager, CommandIDs::reverseDirection);
+
+    }
+    else if (topLevelMenuIndex == 2)
+    {
+    	menu.addCommandItem(&commandManager, CommandIDs::insertMass);
+    	menu.addCommandItem(&commandManager, CommandIDs::insertGround);
+    	menu.addCommandItem(&commandManager, CommandIDs::insertResonator);
+    	menu.addCommandItem(&commandManager, CommandIDs::insertPort);
+    	menu.addSeparator();
+    	menu.addCommandItem(&commandManager, CommandIDs::insertLink);
+    	menu.addCommandItem(&commandManager, CommandIDs::insertTouch);
+    	menu.addCommandItem(&commandManager, CommandIDs::insertPluck);
+    	menu.addSeparator();
+    	menu.addCommandItem(&commandManager, CommandIDs::insertAudioOutput);
+    	menu.addSeparator();
+    	menu.addCommandItem(&commandManager, CommandIDs::insertWaveguide);
+    	menu.addCommandItem(&commandManager, CommandIDs::insertTermination);
+    }
+    else if (topLevelMenuIndex == 3)
+    {
+    	menu.addCommandItem(&commandManager, CommandIDs::generateFaust);
+    	menu.addCommandItem(&commandManager, CommandIDs::generateExternal);
+    }
+    else if (topLevelMenuIndex == 4)
+    {
+    	menu.addCommandItem(&commandManager, CommandIDs::showOutputConsole);
+    	menu.addCommandItem(&commandManager, CommandIDs::clearOutputConsole);
+    	menu.addSeparator();
+    	menu.addCommandItem(&commandManager, CommandIDs::openDataDir);
+    }
+    else if (topLevelMenuIndex == 5)
+    {
+    	menu.addCommandItem(&commandManager, CommandIDs::showHelp);
+    }
+
+    return menu;
+}
+
+void MainAppWindow::menuItemSelected (int menuItemID,
+                                   int topLevelMenuIndex)
+{
+    if (menuItemID >= 100 && menuItemID < 200)
+    {
+		// open a file from the "recent files" menu
+		const File file (StoredSettings::getInstance()->recentFiles.getFile (menuItemID - 100));
+		appController->openMDL(file);
+		appController->setMainWindowTitle();
+		StoredSettings::getInstance()->recentFiles.addFile(file);
+    }
+}
+
+//==============================================================================
+ApplicationCommandTarget* MainAppWindow::getNextCommandTarget()
+{
+    return 0;
+}
+
+void MainAppWindow::getAllCommands (Array <CommandID>& commands)
+{
+    const CommandID ids[] = { CommandIDs::newFile,
+            					CommandIDs::open,
+            					CommandIDs::closeDocument,
+            					CommandIDs::saveDocument,
+            					CommandIDs::saveDocumentAs,
+            					CommandIDs::showPrefs,
+                                CommandIDs::generateFaust,
+                                CommandIDs::generateExternal,
+                                CommandIDs::showOutputConsole,
+                                CommandIDs::clearOutputConsole,
+                                CommandIDs::openDataDir,
+                                CommandIDs::showHelp,
+    };
+
+    commands.addArray (ids, numElementsInArray (ids));
+}
+
+void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationCommandInfo& result)
+{
+    switch (commandID)
+    {
+    case CommandIDs::newFile:
+        result.setInfo("New", "Create new *.mdl file.", CommandCategories::general, 0);
+        result.addDefaultKeypress('n', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::open:
+        result.setInfo ("Open", "Open *.mdl file.", CommandCategories::general, 0);
+        result.addDefaultKeypress ('o', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::closeDocument:
+        result.setInfo("Close", "Close file.", CommandCategories::general, 0);
+        result.addDefaultKeypress('w', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::saveDocument:
+        result.setInfo ("Save", "Save file.", CommandCategories::general, 0);
+        result.addDefaultKeypress ('s', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::saveDocumentAs:
+        result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
+        result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::showPrefs:
+    	result.setInfo ("Preferences...", "Open preferences window",
+    			CommandCategories::general, 0);
+    	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::undo:
+    	result.setInfo("Undo", "Undo last edit", CommandCategories::editing,0);
+    	result.addDefaultKeypress('z', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::generateFaust:
+    	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
+    	result.addDefaultKeypress('g', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::generateExternal:
+    	result.setInfo("External Object", "", CommandCategories::generation,0);
+    	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
+    	break;
+
+    case CommandIDs::showOutputConsole:
+    	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
+    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
+    	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::clearOutputConsole:
+    	result.setInfo("Clear compiler window", "", CommandCategories::tools,0);
+    	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+    	break;
+
+    case CommandIDs::openDataDir:
+    	result.setInfo("Open data dir", "", CommandCategories::tools, 0);
+    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::showHelp:
+    	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
+    	break;
+    default:
+        break;
+    };
+}
+
+bool MainAppWindow::isCommandActive (const CommandID commandID)
+{
+    return true;
+}
+
+bool MainAppWindow::perform (const InvocationInfo& info)
+{
+    return appController->menuItemWasClicked(info.commandID);
+}
+
+bool MainAppWindow::mdlCheckAndSave()
+{
+	return appController->mdlCheckAndSave();
 }
