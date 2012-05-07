@@ -33,7 +33,7 @@
 MDLFile::MDLFile()
 : FileBasedDocument(".mdl", "*.mdl", "Open mdl...", "Save mdl..."),
   isModified(false),
-  mdlRoot(Objects::mdlRoot)
+  mdlRoot(Objects::MDLROOT)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -51,7 +51,7 @@ bool MDLFile::perform (UndoableAction* const action, const String& actionName)
 
 void MDLFile::initMDL()
 {
-	mdlRoot = ValueTree(Objects::mdlRoot);
+	mdlRoot = ValueTree(Objects::MDLROOT);
 	isInit = true;
 	setChangedFlag(false);
 	mdlPath = String::empty;

@@ -44,7 +44,7 @@ public:
 		expect(loadOk, "Error opening MDL file");
 
 		beginTest("getMasses");
-		const ValueTree m = mdlFile->mdlRoot.getChildWithName(Objects::mdlMasses);
+		const ValueTree m = mdlFile->mdlRoot.getChildWithName(Objects::masses);
 		expect(m.getNumChildren() == 5, "have "+String(m.getNumChildren())+" masses");
 
 		// mass 1
@@ -89,7 +89,7 @@ public:
 
 		beginTest("getLinks");
 
-		ValueTree ls = mdlFile->mdlRoot.getChildWithName(Objects::mdlLinks);
+		ValueTree ls = mdlFile->mdlRoot.getChildWithName(Objects::links);
 		expect(ls.getNumChildren() == 4, "have "+String(ls.getNumChildren())+" links");
 
 		// link 1
@@ -131,14 +131,14 @@ public:
 
 		beginTest("getLabels");
 
-		ValueTree labelObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlLabels);
+		ValueTree labelObjs = mdlFile->mdlRoot.getChildWithName(Objects::labels);
 		expect(labelObjs.getNumChildren() == 1, "have "+String(labelObjs.getNumChildren())+" labels");
 		expectEquals(labelObjs.getChild(0)[Ids::identifier].toString(), String("adjStiffness"));
 		expectEquals(labelObjs.getChild(0)[Ids::faustCode].toString(), String("hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0)"));
 
 		beginTest("getWaveguides");
 
-		ValueTree waveObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlWaveguides);
+		ValueTree waveObjs = mdlFile->mdlRoot.getChildWithName(Objects::waveguides);
 		expect(waveObjs.getNumChildren() == 2, "have "+String(waveObjs.getNumChildren())+" waveguides");
 
 		// waveguide 1
@@ -166,7 +166,7 @@ public:
 
 		beginTest("getTerminations");
 
-		ValueTree termObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlTerminations);
+		ValueTree termObjs = mdlFile->mdlRoot.getChildWithName(Objects::terminations);
 		expect(termObjs.getNumChildren() == 2, "have "+String(termObjs.getNumChildren())+" terminations");
 
 		// termination 1
@@ -188,7 +188,7 @@ public:
 
 		beginTest("getJunctions");
 
-		ValueTree junctObjs = mdlFile->mdlRoot.getChildWithName(Objects::mdlJunctions);
+		ValueTree junctObjs = mdlFile->mdlRoot.getChildWithName(Objects::junctions);
 		expect(junctObjs.getNumChildren() == 1, "have "+String(junctObjs.getNumChildren())+" junctions");
 
 		// termination 1
@@ -201,7 +201,7 @@ public:
 
 		beginTest("getAudioObjects");
 
-		ValueTree aus = mdlFile->mdlRoot.getChildWithName(Objects::mdlAudioObjects);
+		ValueTree aus = mdlFile->mdlRoot.getChildWithName(Objects::audioobjects);
 		expect(aus.getNumChildren() == 2, "have "+String(aus.getNumChildren())+" audio objects");
 
 		expectEquals(aus.getChild(0).getType().toString(), Ids::audioout.toString());

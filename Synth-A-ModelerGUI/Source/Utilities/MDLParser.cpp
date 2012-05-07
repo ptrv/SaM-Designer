@@ -54,7 +54,7 @@ bool MDLParser::parseMDL()
 
 	int fileLength = mdlContent.length();
 
-	ValueTree mdlTree(Objects::mdlRoot);// = mdlFile.mdlRoot;
+	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
 
 	StringArray lines;
 	lines.addTokens(mdlContent, "\n", "\"");
@@ -144,7 +144,7 @@ bool MDLParser::parseMDL()
 					}
 					newTree.addChild(labelsTree, -1, nullptr);
 
-					ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::mdlMasses, nullptr);
+					ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::masses, nullptr);
 					masses.addChild(newTree, -1, nullptr);
 				}
 			}
@@ -220,7 +220,7 @@ bool MDLParser::parseMDL()
 					}
 					linkTree.addChild(labelsTree, -1, nullptr);
 
-					ValueTree linksTree = mdlTree.getOrCreateChildWithName(Objects::mdlLinks, nullptr);
+					ValueTree linksTree = mdlTree.getOrCreateChildWithName(Objects::links, nullptr);
 					linksTree.addChild(linkTree, -1, nullptr);
 				}
 			}
@@ -235,7 +235,7 @@ bool MDLParser::parseMDL()
 				ValueTree labelTree(Ids::label);
 				labelTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals), nullptr);
 				labelTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1), nullptr);
-				ValueTree labelsTree = mdlTree.getOrCreateChildWithName(Objects::mdlLabels, nullptr);
+				ValueTree labelsTree = mdlTree.getOrCreateChildWithName(Objects::labels, nullptr);
 				labelsTree.addChild(labelTree, -1, nullptr);
 			}
 			else if(line.startsWith("audioout"))
@@ -254,7 +254,7 @@ bool MDLParser::parseMDL()
 					audioTree.setProperty(Ids::posY, pos.y, nullptr);
 					audioTree.setProperty(Ids::identifier, audioOutAttributeList[1], nullptr);
 					audioTree.setProperty(Ids::sources, audioOutAttributeList[2], nullptr);
-					ValueTree audioObjectsTree = mdlTree.getOrCreateChildWithName(Objects::mdlAudioObjects, nullptr);
+					ValueTree audioObjectsTree = mdlTree.getOrCreateChildWithName(Objects::audioobjects, nullptr);
 					audioObjectsTree.addChild(audioTree, -1, nullptr);
 				}
 			}
@@ -312,7 +312,7 @@ bool MDLParser::parseMDL()
 				}
 				waveguideTree.addChild(labelTree, -1, nullptr);
 
-				ValueTree wavesTree = mdlTree.getOrCreateChildWithName(Objects::mdlWaveguides, nullptr);
+				ValueTree wavesTree = mdlTree.getOrCreateChildWithName(Objects::waveguides, nullptr);
 				wavesTree.addChild(waveguideTree, -1, nullptr);
 
 			}
@@ -355,7 +355,7 @@ bool MDLParser::parseMDL()
 				terminationTree.addChild(labelTree, -1, nullptr);
 
 
-				ValueTree termsTree = mdlTree.getOrCreateChildWithName(Objects::mdlTerminations, nullptr);
+				ValueTree termsTree = mdlTree.getOrCreateChildWithName(Objects::terminations, nullptr);
 				termsTree.addChild(terminationTree, -1, nullptr);
 			}
 			else if(line.startsWith("junction"))
@@ -396,7 +396,7 @@ bool MDLParser::parseMDL()
 				}
 				junctTree.addChild(labelTree, -1, nullptr);
 
-				ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::mdlJunctions, nullptr);
+				ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
 				junctsTree.addChild(junctTree, -1, nullptr);
 
 			}

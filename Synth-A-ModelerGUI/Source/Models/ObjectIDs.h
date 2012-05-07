@@ -84,15 +84,43 @@ namespace Ids
 
 namespace Objects
 {
-    const Identifier mdlRoot("MDLROOT");
-    const Identifier mdlMasses("masses");
-    const Identifier mdlLinks("links");
-    const Identifier mdlLabels("labels");
-    const Identifier mdlAudioObjects("audioobjects");
-    const Identifier mdlWaveguides("waveguides");
-    const Identifier mdlTerminations("terminations");
-    const Identifier mdlJunctions("junctions");
-    const Identifier mdlInvalid("invalid");
+	#define DECLARE_ID(name)      const Identifier name (#name)
+
+	DECLARE_ID(MDLROOT);
+	DECLARE_ID(masses);
+	DECLARE_ID(links);
+	DECLARE_ID(labels);
+	DECLARE_ID(audioobjects);
+	DECLARE_ID(waveguides);
+	DECLARE_ID(terminations);
+	DECLARE_ID(junctions);
+	DECLARE_ID(invalid);
+
+	#undef DECLARE_ID
+
+	static const Identifier& getObjectType(const Identifier& ident)
+	{
+		if(ident == Ids::mass || ident == Ids::port
+				|| ident == Ids::ground	|| ident == Ids::resonator)
+			return Objects::masses;
+		else if(ident == Ids::link || ident == Ids::touch
+				|| ident == Ids::pluck)
+			return Objects::links;
+		else if(ident == Ids::audioout)
+			return Objects::audioobjects;
+		else if(ident == Ids::waveguide)
+			return Objects::waveguides;
+		else if(ident == Ids::termination)
+			return Objects::terminations;
+		else if(ident == Ids::junction)
+			return Objects::junctions;
+		else if(ident == Ids::label)
+			return Objects::labels;
+
+		else
+			return Objects::invalid;
+	}
+
 };
 
 

@@ -44,7 +44,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 	// ------------------------------------------------------------------------
 	// write masses
 	mdlContent << "\n\n";
-	ValueTree masses = mdlFile.mdlRoot.getChildWithName(Objects::mdlMasses);
+	ValueTree masses = mdlFile.mdlRoot.getChildWithName(Objects::masses);
 	for (int mIdx = 0; mIdx < masses.getNumChildren(); ++mIdx)
 	{
 		ValueTree mo = masses.getChild(mIdx);
@@ -74,7 +74,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write links
 	mdlContent << "\n\n";
-	ValueTree links = mdlFile.mdlRoot.getChildWithName(Objects::mdlLinks);
+	ValueTree links = mdlFile.mdlRoot.getChildWithName(Objects::links);
 	for (int lIdx = 0; lIdx < links.getNumChildren(); ++lIdx)
 	{
 		ValueTree li = links.getChild(lIdx);
@@ -106,7 +106,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write waveguides
 	mdlContent << "\n\n";
-	ValueTree waveObjs = mdlFile.mdlRoot.getChildWithName(Objects::mdlWaveguides);
+	ValueTree waveObjs = mdlFile.mdlRoot.getChildWithName(Objects::waveguides);
 	for (int wavIdx = 0; wavIdx < waveObjs.getNumChildren(); ++wavIdx) {
 		ValueTree wo = waveObjs.getChild(wavIdx);
 		mdlContent << wo.getType().toString();
@@ -138,7 +138,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write terminations
 	mdlContent << "\n\n";
-	ValueTree termObjs = mdlFile.mdlRoot.getChildWithName(Objects::mdlTerminations);
+	ValueTree termObjs = mdlFile.mdlRoot.getChildWithName(Objects::terminations);
 	for (int termIdx = 0; termIdx < termObjs.getNumChildren(); ++termIdx) {
 		ValueTree to = termObjs.getChild(termIdx);
 		mdlContent << to.getType().toString();
@@ -166,7 +166,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write junctions
 	mdlContent << "\n\n";
-	ValueTree junctObjs = mdlFile.mdlRoot.getChildWithName(Objects::mdlJunctions);
+	ValueTree junctObjs = mdlFile.mdlRoot.getChildWithName(Objects::junctions);
 	for (int junctIdx = 0; junctIdx < junctObjs.getNumChildren(); ++junctIdx) {
 		ValueTree jo = junctObjs.getChild(junctIdx);
 		mdlContent << jo.getType().toString();
@@ -189,7 +189,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write labels
 	mdlContent << "\n\n";
-	ValueTree labelsTree = mdlFile.mdlRoot.getChildWithName(Objects::mdlLabels);
+	ValueTree labelsTree = mdlFile.mdlRoot.getChildWithName(Objects::labels);
 	for (int labIdx = 0; labIdx < labelsTree.getNumChildren(); ++labIdx) {
 		ValueTree la = labelsTree.getChild(labIdx);
 		mdlContent << "faustcode: ";
@@ -203,7 +203,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write audioouts
 	mdlContent << "\n\n";
-	ValueTree audioTree = mdlFile.mdlRoot.getChildWithName(Objects::mdlAudioObjects);
+	ValueTree audioTree = mdlFile.mdlRoot.getChildWithName(Objects::audioobjects);
 	for (int aIdx = 0; aIdx < audioTree.getNumChildren(); ++aIdx) {
 		ValueTree ao = audioTree.getChild(aIdx);
 		mdlContent << ao.getType().toString();
