@@ -52,8 +52,6 @@ bool MDLParser::parseMDL()
 	const File& in = mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
 
-	int fileLength = mdlContent.length();
-
 	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
 
 	StringArray lines;

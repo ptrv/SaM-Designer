@@ -68,9 +68,6 @@ private:
 	void initMDL();
 	void destroyMDL();
 
-	bool isModified;
-	bool isInit;
-
 	String mdlPath;
 	String mdlName;
 	static File lastDocumentOpened;
