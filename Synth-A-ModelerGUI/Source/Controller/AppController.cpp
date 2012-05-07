@@ -94,7 +94,9 @@ bool AppController::menuItemWasClicked(CommandID menuId)
 		break;
 	case StandardApplicationCommandIDs::deselectAll:
 		break;
-
+	case StandardApplicationCommandIDs::del:
+		DBG("delete");
+		break;
     case CommandIDs::defineVariables:
     	break;
     case CommandIDs::segmentedConnectors:

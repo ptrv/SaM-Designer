@@ -53,3 +53,28 @@ void ObjController::addObject(const Identifier& objId, int posX, int posY)
 		this->perform(new AddObjectAction(subTree, objId, posX, posY), "Add new Object");
 	}
 }
+
+void ObjController::removeObject(const String& objName)
+{
+
+	ValueTree mdl = owner.getMDLTree();
+	ValueTree childToRemove;
+	ValueTree subTree;
+	bool breakLoop = false;
+	for (int i = 0; i < mdl.getNumChildren(); ++i) {
+		subTree = mdl.getChild(i);
+		for (int j = 0; j < mdl.getChild(i).getNumChildren(); ++j) {
+			ValueTree ch = mdl.getChild(i).getChild(j);
+			if(ch[Ids::identifier].toString().compare(objName) == 0)
+			{
+				childToRemove = ch;
+				breakLoop = true;
+				break;
+			}
+		}
+		if(breakLoop)
+			break;
+	}
+	if(childToRemove != ValueTree::invalid)
+		this->perform(new RemoveObjectAction(subTree, childToRemove), "Remove Object");
+}

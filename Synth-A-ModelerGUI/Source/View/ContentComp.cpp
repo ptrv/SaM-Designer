@@ -102,7 +102,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
                               StandardApplicationCommandIDs::cut,
                               StandardApplicationCommandIDs::copy,
                               StandardApplicationCommandIDs::paste,
-//                              StandardApplicationCommandIDs::del,
+                              StandardApplicationCommandIDs::del,
                               StandardApplicationCommandIDs::selectAll,
                               StandardApplicationCommandIDs::deselectAll,
                               CommandIDs::segmentedConnectors,
@@ -161,7 +161,10 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	result.setInfo("DeselectAll", "", CommandCategories::editing,0);
     	result.addDefaultKeypress('a', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
     	break;
-
+    case StandardApplicationCommandIDs::del:
+    	result.setInfo("Delete", "", CommandCategories::editing,0);
+    	result.addDefaultKeypress(KeyPress::deleteKey, 0);
+    	break;
     case CommandIDs::segmentedConnectors:
     	result.setInfo("Segmeted connectors", "", CommandCategories::editing,0);
     	result.setTicked(StoredSettings::getInstance()->getIsSegmentedConnectors());

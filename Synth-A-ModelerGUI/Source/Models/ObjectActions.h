@@ -45,14 +45,18 @@ public:
 	bool perform()
 	{
 		DBG("Add "+objId.toString());
+		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.addChild(newValue,-1, nullptr);
+		DBG(mdlSubTree.getNumChildren());
 		return true;
 	}
 
 	bool undo()
 	{
 		DBG("Undo add "+objId.toString());
+		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.removeChild(newValue, nullptr);
+		DBG(mdlSubTree.getNumChildren());
 		return true;
 	}
 private:
@@ -61,5 +65,37 @@ private:
 	const Identifier& objId;
 };
 
+class RemoveObjectAction : public UndoableAction
+{
+public:
+	RemoveObjectAction(ValueTree mdlTree_, ValueTree objToRemove_)
+	: mdlSubTree(mdlTree_),
+	  oldValue(objToRemove_)
+	{
+	}
+	~RemoveObjectAction()
+	{
+	}
 
+	bool perform()
+	{
+		DBG("Remove "+oldValue[Ids::identifier].toString());
+		DBG(mdlSubTree.getNumChildren());
+		mdlSubTree.removeChild(oldValue, nullptr);
+		DBG(mdlSubTree.getNumChildren());
+		return true;
+	}
+
+	bool undo()
+	{
+		DBG("Undo remove "+oldValue[Ids::identifier].toString());
+		DBG(mdlSubTree.getNumChildren());
+		mdlSubTree.addChild(oldValue,-1, nullptr);
+		DBG(mdlSubTree.getNumChildren());
+		return true;
+	}
+private:
+	ValueTree mdlSubTree;
+	ValueTree oldValue;
+};
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

@@ -27,6 +27,7 @@
 #define __OBJCONTROLLER_H_A98EC6A3__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
+
 class AppController;
 
 class ObjController
@@ -38,6 +39,7 @@ public:
 	bool perform (UndoableAction* const action, const String& actionName);
 
 	void addObject(const Identifier& objId, int posX=10, int posY=10);
+	void removeObject(const String& objName);
 private:
 	AppController& owner;
 };
