@@ -74,6 +74,9 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
+        <FILE id="G9OIi7" name="ObjectFactory.cpp" compile="1" resource="0"
+              file="Source/Models/ObjectFactory.cpp"/>
+        <FILE id="Z559dG" name="ObjectFactory.h" compile="0" resource="0" file="Source/Models/ObjectFactory.h"/>
         <FILE id="u30khk" name="ObjectActions.h" compile="0" resource="0" file="Source/Models/ObjectActions.h"/>
         <FILE id="NrcNFQ" name="ObjectIDs.h" compile="0" resource="0" file="Source/Models/ObjectIDs.h"/>
         <FILE id="IQfEQd" name="OutputCmd.cpp" compile="1" resource="0" file="Source/Models/OutputCmd.cpp"/>

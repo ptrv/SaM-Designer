@@ -92,6 +92,7 @@ namespace Objects
     const Identifier mdlWaveguides("waveguides");
     const Identifier mdlTerminations("terminations");
     const Identifier mdlJunctions("junctions");
+    const Identifier mdlInvalid("invalid");
 };
 
 

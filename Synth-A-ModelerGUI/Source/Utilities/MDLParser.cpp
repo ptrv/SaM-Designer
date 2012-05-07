@@ -54,7 +54,7 @@ bool MDLParser::parseMDL()
 
 	int fileLength = mdlContent.length();
 
-	ValueTree mdlTree = mdlFile.mdlRoot;
+	ValueTree mdlTree(Objects::mdlRoot);// = mdlFile.mdlRoot;
 
 	StringArray lines;
 	lines.addTokens(mdlContent, "\n", "\"");

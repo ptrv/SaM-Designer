@@ -43,9 +43,34 @@ bool ObjController::perform (UndoableAction* const action, const String& actionN
 {
 	return owner.perform(action, actionName);
 }
-
-void ObjController::addObject(const Identifier& objId)
+static const Identifier& getObjectType(const Identifier& ident)
 {
+	if(ident == Ids::mass || ident == Ids::port
+			|| ident == Ids::ground	|| ident == Ids::resonator)
+		return Objects::mdlMasses;
+	else if(ident == Ids::link || ident == Ids::touch
+			|| ident == Ids::pluck)
+		return Objects::mdlLinks;
+	else if(ident == Ids::audioout)
+		return Objects::mdlAudioObjects;
+	else if(ident == Ids::waveguide)
+		return Objects::mdlWaveguides;
+	else if(ident == Ids::termination)
+		return Objects::mdlTerminations;
+	else if(ident == Ids::junction)
+		return Objects::mdlJunctions;
+	else if(ident == Ids::label)
+		return Objects::mdlLabels;
 
-	this->perform(new AddObjectAction(owner.getMDLTree()), "Add new Object");
+	else
+		return Objects::mdlInvalid;
+}
+void ObjController::addObject(const Identifier& objId, int posX, int posY)
+{
+	const Identifier& tmpIdent = getObjectType(objId);
+	if(tmpIdent != Objects::mdlInvalid)
+	{
+		ValueTree subTree = owner.getMDLTree().getOrCreateChildWithName(tmpIdent, nullptr);
+		this->perform(new AddObjectAction(subTree, objId, posX, posY), "Add new Object");
+	}
 }

@@ -37,7 +37,7 @@ public:
 
 	bool perform (UndoableAction* const action, const String& actionName);
 
-	void addObject(const Identifier& objId);
+	void addObject(const Identifier& objId, int posX=10, int posY=10);
 private:
 	AppController& owner;
 };

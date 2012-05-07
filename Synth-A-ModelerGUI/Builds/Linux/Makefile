@@ -53,6 +53,7 @@ OBJECTS := \
   $(OBJDIR)/AppController_eaa3b8d3.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
+  $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/OutputCmd_1e28237d.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
   $(OBJDIR)/DebugWindow_3b335a2.o \
@@ -132,6 +133,11 @@ $(OBJDIR)/MDLController_4aad0d67.o: ../../Source/Controller/MDLController.cpp
 $(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ObjController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ObjectFactory_a170b74f.o: ../../Source/Models/ObjectFactory.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjectFactory.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/OutputCmd_1e28237d.o: ../../Source/Models/OutputCmd.cpp

@@ -27,23 +27,16 @@
 #define __OBJECTACTIONS_H_7C20FDA1__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "ObjectFactory.h"
 
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(ValueTree mdlTree_) : mdlTree(mdlTree_)
+	AddObjectAction(ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
+	: mdlSubTree(mdlTree_),
+	  objId(objId_)
 	{
-		oldValue = mdlTree.getOrCreateChildWithName(Objects::mdlMasses, nullptr);
-		newValue = ValueTree(Ids::mass);
-		newValue.setProperty(Ids::posX, 10, nullptr);
-		newValue.setProperty(Ids::posY, 10, nullptr);
-		ValueTree paramsTree(Ids::parameters);
-		paramsTree.setProperty(Ids::idx[0], 1.0f, nullptr);
-		newValue.addChild(paramsTree, -1, nullptr);
-		newValue.setProperty(Ids::identifier, "blabla", nullptr);
-		ValueTree labelsTree(Ids::labels);
-		labelsTree.setProperty(Ids::idx[0], "", nullptr);
-		newValue.addChild(labelsTree, -1, nullptr);
+		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
 	}
 	~AddObjectAction()
 	{
@@ -51,21 +44,21 @@ public:
 
 	bool perform()
 	{
-		DBG("Add mass");
-		ValueTree masses = mdlTree.getChildWithName(Objects::mdlMasses);
-		masses.addChild(newValue,-1, nullptr);
+		DBG("Add "+objId.toString());
+		mdlSubTree.addChild(newValue,-1, nullptr);
 		return true;
 	}
 
 	bool undo()
 	{
-		DBG("Undo add mass");
-		mdlTree.getChildWithName(Objects::mdlMasses).removeChild(newValue, nullptr);
+		DBG("Undo add "+objId.toString());
+		mdlSubTree.removeChild(newValue, nullptr);
 		return true;
 	}
 private:
-	ValueTree mdlTree;
-	ValueTree oldValue, newValue;
+	ValueTree mdlSubTree;
+	ValueTree newValue;
+	const Identifier& objId;
 };
 
 
