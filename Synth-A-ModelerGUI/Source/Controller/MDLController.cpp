@@ -134,6 +134,11 @@ const String MDLController::generateExternal()
 	if(currentMdl->getName().compare("Untitled") == 0)
 		return "No mdl file\n\n";
 
+	if(! outCmd->isFaustAvailable())
+	{
+		Alerts::missingFaust();
+		return "Missing faust executable";
+	}
 
 	bool r = true;
 	if(StoredSettings::getInstance()->getIsExportConfirm())

@@ -34,7 +34,10 @@ private:
 public:
 	static void missingPerl();
 	static void missingSAM();
+	static void missingFaust();
 	static bool confirmExport(const String& text);
+private:
+	static void missingAlert(const String& title, const String& msg);
 
 };
 

@@ -78,6 +78,11 @@ bool OutputCmd::isPerlAvailable()
 	return isCmdAvailable(cmdPerl);
 }
 
+bool OutputCmd::isFaustAvailable()
+{
+	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust";
+	return isCmdAvailable(cmdFaust);
+}
 //const String OutputCmd::runChildProcess(const String& processStr)
 //{
 //	ChildProcess child;

@@ -31,17 +31,25 @@ void Alerts::missingPerl()
 {
 	String title = "Missing perl executable";
 	String msg;
-	AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
-
+	missingAlert(title, msg);
 }
 void Alerts::missingSAM()
 {
 	String title = "Missing Synth-A-Modeler compiler";
 	String msg;
-	AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
-
+	missingAlert(title, msg);
+}
+void Alerts::missingFaust()
+{
+	String title = "Missing faust executable";
+	String msg;
+	missingAlert(title, msg);
 }
 
+void Alerts::missingAlert(const String& title, const String& msg)
+{
+	AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
+}
 bool Alerts::confirmExport(const String& text)
 {
 	String title = "Export external";

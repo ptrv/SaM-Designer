@@ -37,6 +37,7 @@ public:
 	bool isSynthAModelerCmdAvailable();
 	bool isCmdAvailable(const String& cmdStr);
 	bool isPerlAvailable();
+	bool isFaustAvailable();
 	const String generateFaustCode(const String& inPath, const String& outPath);
 	const String generateExternal();
 };
