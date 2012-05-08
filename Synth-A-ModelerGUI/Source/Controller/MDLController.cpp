@@ -47,14 +47,16 @@ MDLController::~MDLController()
 
 void MDLController::newFile()
 {
-	if (currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
+	if (sr != FileBasedDocument::userCancelledSave)
 	{
 		currentMdl->newMDL();
 	}
 }
 void MDLController::open()
 {
-	if (currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
+	if (sr != FileBasedDocument::userCancelledSave)
 	{
 		bool loadOk = currentMdl->loadFromUserSpecifiedFile(true);
 
@@ -62,16 +64,17 @@ void MDLController::open()
 		{
 			StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
 		}
-		else
-		{
-			DBG("Something went wrong loading the mdl file.");
-		}
+//		else
+//		{
+//			DBG("Something went wrong loading the mdl file.");
+//		}
 	}
 }
 
 void MDLController::openFromFile(const File& mdlFile)
 {
-	if(currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
+	if (sr != FileBasedDocument::userCancelledSave)
 	{
 		currentMdl->loadFrom(mdlFile, true);
 	}
@@ -93,7 +96,8 @@ void MDLController::saveAs()
 
 void MDLController::close()
 {
-	if(currentMdl->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
+	if(sr != FileBasedDocument::userCancelledSave)
 	{
 		currentMdl->close();
 	}
