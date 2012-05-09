@@ -22,11 +22,14 @@ static ValueTree createNewMassTree(int x, int y)
 	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], 1.0f, nullptr);
+	paramsTree.setProperty(Ids::idx[1], 0.0f, nullptr);
+	paramsTree.setProperty(Ids::idx[2], 0.0f, nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"m_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+
+	newTree.setProperty(Ids::identifier,"m_"+String(rnd), nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "", nullptr);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -38,10 +41,10 @@ static ValueTree createNewPortTree(int x, int y)
 
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"dev_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier, "dev_"+String(rnd), nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "", nullptr);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -56,10 +59,10 @@ static ValueTree createNewGroundTree(int x, int y)
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], 0.0f, nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"g_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier, "g_"+String(rnd), nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "", nullptr);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -74,12 +77,12 @@ static ValueTree createNewLinkTree(int x, int y)
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], "", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"l_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier,"l_"+String(rnd), nullptr);
 	newTree.setProperty(Ids::startVertex, "", nullptr);
 	newTree.setProperty(Ids::endVertex, "", nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "", nullptr);
+	labelsTree.setProperty(Ids::idx[0], "laebl_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -94,12 +97,12 @@ static ValueTree createNewTouchTree(int x, int y)
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], "", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"t_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier, "t_"+String(rnd), nullptr);
 	newTree.setProperty(Ids::startVertex, "", nullptr);
 	newTree.setProperty(Ids::endVertex, "", nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "", nullptr);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -113,12 +116,12 @@ static ValueTree createNewPluckTree(int x, int y)
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], "", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"p_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier,"p_"+String(rnd), nullptr);
 	newTree.setProperty(Ids::startVertex, "", nullptr);
 	newTree.setProperty(Ids::endVertex, "", nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "", nullptr);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -129,8 +132,8 @@ static ValueTree createNewAudioOutTree(int x, int y)
 
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
-	newTree.setProperty(Ids::identifier,
-			"a_"+String(Random::getSystemRandom().nextInt(100000)), nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier,"a_"+String(rnd), nullptr);
 	newTree.setProperty(Ids::sources, "", nullptr);
 
 	return newTree;
@@ -154,7 +157,7 @@ ValueTree createNewObjectTree(const Identifier& objType, int x, int y)
 	else if(objType == Ids::audioout)
 		return createNewAudioOutTree(x, y);
 	else
-		return ValueTree();
+		return ValueTree::invalid;
 }
 
 }
