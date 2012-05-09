@@ -104,7 +104,8 @@ void MainAppWindow::closeButtonPressed()
 //==============================================================================
 const StringArray MainAppWindow::getMenuBarNames()
 {
-    const char* const names[] = { "File", "Edit", "Insert", "Generate", "Tools", "Help", nullptr };
+    const char* const names[] = { "File", "Edit", "Insert",
+    		"Generate", "Tools", "Help", nullptr };
 
     return StringArray (names);
 }
@@ -122,7 +123,9 @@ const PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex,
         menu.addCommandItem (&commandManager, CommandIDs::open);
 
         PopupMenu recentFiles;
-        StoredSettings::getInstance()->recentFiles.createPopupMenuItems (recentFiles, 100, true, true);
+        StoredSettings::getInstance()->recentFiles
+        		.createPopupMenuItems (recentFiles, 100, true, true);
+
         menu.addSubMenu ("Open recent file", recentFiles);
 
         menu.addSeparator();
@@ -201,7 +204,9 @@ void MainAppWindow::menuItemSelected (int menuItemID,
     if (menuItemID >= 100 && menuItemID < 200)
     {
 		// open a file from the "recent files" menu
-		const File file (StoredSettings::getInstance()->recentFiles.getFile (menuItemID - 100));
+		const File file (StoredSettings::getInstance()->recentFiles
+				.getFile (menuItemID - 100));
+
 		appController->openMDL(file);
 		appController->setMainWindowTitle();
 		StoredSettings::getInstance()->recentFiles.addFile(file);

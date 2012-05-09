@@ -56,6 +56,9 @@ public:
     void valueTreeParentChanged (ValueTree& tree);
 
     void mdlChanged();
+
+    ValueTree getObjectWithName(const String& objName);
+
 protected:
 	const String getDocumentTitle();
 	const String loadDocument (const File& file);

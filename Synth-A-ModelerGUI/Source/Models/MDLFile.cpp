@@ -31,7 +31,7 @@
 
 
 MDLFile::MDLFile()
-: FileBasedDocument(".mdl", "*.mdl", "Open mdl...", "Save mdl..."),
+: FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
   mdlRoot(Objects::MDLROOT)
 {
 	initMDL();
@@ -157,6 +157,20 @@ void MDLFile::valueTreeParentChanged (ValueTree& tree)
 }
 
 //==============================================================================
+
+ValueTree MDLFile::getObjectWithName(const String& objName)
+{
+	for (int i = 0; i < mdlRoot.getNumChildren(); ++i) {
+		for (int j = 0; j < mdlRoot.getChild(i).getNumChildren(); ++j) {
+			ValueTree ch = mdlRoot.getChild(i).getChild(j);
+			if(ch[Ids::identifier].toString().compare(objName) == 0)
+			{
+				return ch;
+			}
+		}
+	}
+	return ValueTree::invalid;
+}
 
 
 //==============================================================================

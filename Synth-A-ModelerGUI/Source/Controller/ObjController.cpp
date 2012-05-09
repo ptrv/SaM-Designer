@@ -27,6 +27,7 @@
 #include "AppController.h"
 #include "../Models/ObjectIDs.h"
 #include "../Models/ObjectActions.h"
+#include "../Models/MDLFile.h"
 
 ObjController::ObjController(AppController& owner_)
 : owner(owner_)
@@ -49,32 +50,20 @@ void ObjController::addObject(const Identifier& objId, int posX, int posY)
 	const Identifier& tmpIdent = Objects::getObjectType(objId);
 	if(tmpIdent != Objects::invalid)
 	{
-		ValueTree subTree = owner.getMDLTree().getOrCreateChildWithName(tmpIdent, nullptr);
+		ValueTree mdl = owner.mdlController->getMDLTree();
+		ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
 		this->perform(new AddObjectAction(subTree, objId, posX, posY), "Add new Object");
 	}
 }
 
+
 void ObjController::removeObject(const String& objName)
 {
-
-	ValueTree mdl = owner.getMDLTree();
-	ValueTree childToRemove;
-	ValueTree subTree;
-	bool breakLoop = false;
-	for (int i = 0; i < mdl.getNumChildren(); ++i) {
-		subTree = mdl.getChild(i);
-		for (int j = 0; j < mdl.getChild(i).getNumChildren(); ++j) {
-			ValueTree ch = mdl.getChild(i).getChild(j);
-			if(ch[Ids::identifier].toString().compare(objName) == 0)
-			{
-				childToRemove = ch;
-				breakLoop = true;
-				break;
-			}
-		}
-		if(breakLoop)
-			break;
+	MDLFile* const mf = owner.mdlController->getMDLFile();
+	ValueTree childToRemove = mf->getObjectWithName(objName);
+	if(childToRemove.isValid())
+	{
+		this->perform(new RemoveObjectAction(childToRemove.getParent(), childToRemove), "Remove Object");
+//		subTree.removeChild(childToRemove, owner.getUndoManager());
 	}
-	if(childToRemove != ValueTree::invalid)
-		this->perform(new RemoveObjectAction(subTree, childToRemove), "Remove Object");
 }

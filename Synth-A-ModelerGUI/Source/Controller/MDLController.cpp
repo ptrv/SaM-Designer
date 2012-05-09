@@ -187,3 +187,8 @@ bool MDLController::mdlCheckAndSaveIfNeeded()
 		return true;
 
 }
+
+MDLFile* MDLController::getMDLFile() const
+{
+	return currentMdl.get();
+}

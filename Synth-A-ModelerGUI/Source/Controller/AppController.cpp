@@ -46,8 +46,12 @@ AppController::~AppController()
 
 bool AppController::perform (UndoableAction* const action, const String& actionName)
 {
-	mdlController->getUndoManager()->beginNewTransaction(actionName);
-	bool performOk = mdlController->getUndoManager()->perform(action, actionName);
+	bool performOk = false;
+	if(mdlController->getUndoManager() != nullptr)
+	{
+		mdlController->getUndoManager()->beginNewTransaction(actionName);
+		performOk = mdlController->getUndoManager()->perform(action, actionName);
+	}
 	return performOk;
 }
 bool AppController::menuItemWasClicked(CommandID menuId)
@@ -230,12 +234,12 @@ void AppController::setMainWindowTitle()
 	maw.setName(title);
 }
 
-ValueTree AppController::getMDLTree()
-{
-	return mdlController->getMDLTree();
-}
-
 bool AppController::mdlCheckAndSave()
 {
 	return mdlController->mdlCheckAndSaveIfNeeded();
+}
+
+UndoManager* AppController::getUndoManager()
+{
+	return mdlController->getUndoManager();
 }

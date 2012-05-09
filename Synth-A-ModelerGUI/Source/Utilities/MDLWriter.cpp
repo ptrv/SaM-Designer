@@ -53,7 +53,8 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		ValueTree massParams = mo.getChildWithName(Ids::parameters);
 		for (int i = 0; i < massParams.getNumProperties(); ++i)
 		{
-			mdlContent << massParams[Ids::idx[i]].toString();
+//			mdlContent << String::formatted("%f", float(massParams[Ids::idx[i]]));
+			mdlContent << float(massParams[Ids::idx[i]]);
 			if(i != massParams.getNumProperties()-1)
 				mdlContent << ",";
 		}

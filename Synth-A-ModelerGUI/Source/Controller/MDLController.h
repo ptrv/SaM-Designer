@@ -53,6 +53,7 @@ public:
 
 	ValueTree getMDLTree();
 	bool mdlCheckAndSaveIfNeeded();
+	MDLFile* getMDLFile() const;
 private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;

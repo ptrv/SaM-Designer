@@ -49,10 +49,13 @@ public:
 	MDLController* const getMDLController() { return mdlController; }
 	ObjController* const getObjController() { return objController; }
 
-	ValueTree getMDLTree();
-
 	bool mdlCheckAndSave();
+
+	UndoManager* getUndoManager();
 private:
+	friend class MDLController;
+	friend class ObjController;
+
 	void debugWindowToggle();
 	void debugWindowClear();
 
