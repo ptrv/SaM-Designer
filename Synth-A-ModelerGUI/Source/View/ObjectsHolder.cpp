@@ -26,7 +26,7 @@
 #include "ObjectsHolder.h"
 
 ObjectsHolder::ObjectsHolder(ObjController* objController_)
-: Component(), objController(objController_)
+: objController(objController_)
 {
 	setSize(100,100);
 }

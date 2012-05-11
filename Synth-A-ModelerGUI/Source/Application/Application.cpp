@@ -25,6 +25,8 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "Application.h"
+#include "../Controller/AppController.h"
+
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"
 #endif
@@ -45,31 +47,100 @@ SynthAModelerApplication::~SynthAModelerApplication()
 void SynthAModelerApplication::initialise (const String& commandLine)
 {
 #if UNIT_TESTS
-		if(commandLine.contains("--test"))
-		{
-            TestRunner::doTests();
-			quit();
-            return;
-		}
+	if(commandLine.contains("--test"))
+	{
+		TestRunner::doTests();
+		quit();
+		return;
+	}
 #endif
 
-	// Do your application's initialisation code here..
-	mainWindow = new MainAppWindow();
+	// Do your application's initialisation code here
+	commandManager = new ApplicationCommandManager();
+	commandManager->registerAllCommandsForTarget (this);
+
+	menuModel = new MainMenuModel();
+
+	debugWindow = new DebugWindow();
+	appController = new AppController(*this, *debugWindow);
+//	mainWindow = new MainAppWindow(*appController.get());
+
+    if (mainWindows.size() == 0)
+        createNewMainWindow()->makeVisible();
+
+#if JUCE_MAC
+	MenuBarModel::setMacMainMenu (menuModel);
+#endif
+
+	if(StoredSettings::getInstance()->getShowCompilerWindow())
+		debugWindow->makeVisible ();
+
 }
 
 void SynthAModelerApplication::shutdown()
 {
 	// Do your application's shutdown code here..
-	mainWindow = 0;
-    StoredSettings::deleteInstance();
+
+#if JUCE_MAC
+	MenuBarModel::setMacMainMenu (nullptr);
+#endif
+	menuModel = nullptr;
+
+	debugWindow = nullptr;
+	appController = nullptr;
+
+	StoredSettings::deleteInstance();
+	mainWindows.clear();
+
+//	OpenDocumentManager::deleteInstance();
+	commandManager = nullptr;
+
+//	mainWindow = 0;
+
 }
 
 //==============================================================================
 void SynthAModelerApplication::systemRequestedQuit()
 {
-	if(mainWindow->mdlCheckAndSave())
-		quit();
+//	if(appController->mdlCheckAndSave())
+//		quit();
+
+//    if (cancelAnyModalComponents())
+//    {
+//        new AsyncQuitRetrier();
+//        return;
+//    }
+
+    while (mainWindows.size() > 0)
+    {
+        if (! mainWindows[0]->closeCurrentMDLFile())
+            return;
+
+        mainWindows.remove (0);
+    }
+
+    quit();
+
 }
+
+void SynthAModelerApplication::closeWindow (MainAppWindow* w)
+{
+    jassert (mainWindows.contains (w));
+    mainWindows.removeObject (w);
+
+#if ! JUCE_MAC
+    if (mainWindows.size() == 0)
+        systemRequestedQuit();
+#endif
+
+    updateRecentProjectList();
+}
+
+bool SynthAModelerApplication::isCommandActive (const CommandID commandID)
+{
+    return true;
+}
+
 
 //==============================================================================
 const String SynthAModelerApplication::getApplicationName()
@@ -89,6 +160,386 @@ bool SynthAModelerApplication::moreThanOneInstanceAllowed()
 
 void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
 {
+
+}
+
+SynthAModelerApplication* SynthAModelerApplication::getApp()
+{
+    return dynamic_cast<SynthAModelerApplication*> (JUCEApplication::getInstance());
+}
+
+
+void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
+{
+    JUCEApplication::getAllCommands (commands);
+
+    const CommandID ids[] = { CommandIDs::newFile,
+                              CommandIDs::open,
+                              CommandIDs::showPrefs,
+                              CommandIDs::closeAllDocuments,
+                              CommandIDs::saveAll,
+                              CommandIDs::showOutputConsole,
+                              CommandIDs::clearOutputConsole,
+                              CommandIDs::openDataDir,
+                              CommandIDs::showHelp,
+
+    };
+
+    commands.addArray (ids, numElementsInArray (ids));
+}
+
+void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
+{
+    switch (commandID)
+    {
+
+    case CommandIDs::newFile:
+        result.setInfo("New", "Create new *.mdl file.", CommandCategories::general, 0);
+        result.addDefaultKeypress('n', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::open:
+        result.setInfo ("Open", "Open *.mdl file.", CommandCategories::general, 0);
+        result.addDefaultKeypress ('o', ModifierKeys::commandModifier);
+        break;
+
+    case CommandIDs::showPrefs:
+    	result.setInfo ("Preferences...", "Open preferences window",
+    			CommandCategories::general, 0);
+    	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
+    	break;
+
+
+    case CommandIDs::clearOutputConsole:
+    	result.setInfo("Clear compiler window", "", CommandCategories::tools,0);
+    	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+    	break;
+
+    case CommandIDs::openDataDir:
+    	result.setInfo("Open data dir", "", CommandCategories::tools, 0);
+    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::showHelp:
+    	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
+    	break;
+
+
+    case CommandIDs::closeAllDocuments:
+        result.setInfo ("Close All Documents", "Closes all open documents", CommandCategories::general, 0);
+//        result.setActive (OpenDocumentManager::getInstance()->getNumOpenDocuments() > 0);
+        break;
+
+    case CommandIDs::saveAll:
+        result.setInfo ("Save All", "Saves all open documents", CommandCategories::general, 0);
+//        result.setActive (OpenDocumentManager::getInstance()->anyFilesNeedSaving());
+        break;
+
+    case CommandIDs::showOutputConsole:
+    	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
+    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
+    	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
+    	break;
+
+    default:
+        JUCEApplication::getCommandInfo (commandID, result);
+        break;
+    }
+}
+
+bool SynthAModelerApplication::perform (const InvocationInfo& info)
+{
+	if(appController->menuItemWasClicked(info.commandID))
+		return true;
+	else
+		return JUCEApplication::perform (info);
+
+//    switch (info.commandID)
+//    {
+//        case CommandIDs::newProject:        createNewProject(); break;
+//        case CommandIDs::open:              askUserToOpenFile(); break;
+//        case CommandIDs::showPrefs:         showPrefsPanel(); break;
+//        case CommandIDs::saveAll:           OpenDocumentManager::getInstance()->saveAll(); break;
+//        case CommandIDs::closeAllDocuments: closeAllDocuments (true); break;
+//        case CommandIDs::showUTF8Tool:      showUTF8ToolWindow(); break;
+//        case CommandIDs::updateModules:     runModuleUpdate (String::empty); break;
+//
+//        default:                            return JUCEApplication::perform (info);
+//    }
+//
+//    return true;
+}
+
+//==============================================================================
+
+void SynthAModelerApplication::createNewProject()
+{
+	MainAppWindow* mw = getOrCreateEmptyWindow();
+//	mw->showNewProjectWizard();
+	avoidSuperimposedWindows (mw);
+}
+
+void SynthAModelerApplication::askUserToOpenFile()
+{
+    FileChooser fc ("Open File");
+
+    if (fc.browseForFileToOpen())
+        openFile (fc.getResult());
+}
+
+bool SynthAModelerApplication::closeAllDocuments (bool askUserToSave)
+{
+//    return OpenDocumentManager::getInstance()->closeAll (askUserToSave);
+}
+
+void SynthAModelerApplication::updateRecentProjectList()
+{
+    Array<File> projects;
+
+    for (int i = 0; i < mainWindows.size(); ++i)
+    {
+        MainAppWindow* mw = mainWindows[i];
+
+//        if (mw != nullptr && mw->getProject() != nullptr)
+//            projects.add (mw->getProject()->getFile());
+    }
+
+    StoredSettings::getInstance()->setLastFiles(projects);
+}
+
+MainAppWindow* SynthAModelerApplication::createNewMainWindow()
+{
+    MainAppWindow* mw = new MainAppWindow(*appController.get());
+    mainWindows.add (mw);
+    mw->restoreWindowPosition();
+    avoidSuperimposedWindows (mw);
+    return mw;
+}
+
+MainAppWindow* SynthAModelerApplication::getOrCreateFrontmostWindow()
+{
+	if (mainWindows.size() == 0)
+		return createNewMainWindow();
+
+	for (int i = Desktop::getInstance().getNumComponents(); --i >= 0;)
+	{
+		MainAppWindow* mw = dynamic_cast <MainAppWindow*> (Desktop::getInstance().getComponent (i));
+		if (mainWindows.contains (mw))
+			return mw;
+	}
+
+	return mainWindows.getLast();
+}
+
+MainAppWindow* SynthAModelerApplication::getOrCreateEmptyWindow()
+{
+	if (mainWindows.size() == 0)
+		return createNewMainWindow();
+
+	for (int i = Desktop::getInstance().getNumComponents(); --i >= 0;)
+	{
+		MainAppWindow* mw = dynamic_cast <MainAppWindow*> (Desktop::getInstance().getComponent (i));
+		if (mainWindows.contains (mw) && mw->getMDLFile() == nullptr)
+			return mw;
+	}
+
+	return createNewMainWindow();
+}
+
+void SynthAModelerApplication::avoidSuperimposedWindows (MainAppWindow* const mw)
+{
+	for (int i = mainWindows.size(); --i >= 0;)
+	{
+		MainAppWindow* const other = mainWindows.getUnchecked(i);
+
+		const Rectangle<int> b1 (mw->getBounds());
+		const Rectangle<int> b2 (other->getBounds());
+
+		if (mw != other
+			 && std::abs (b1.getX() - b2.getX()) < 3
+			 && std::abs (b1.getY() - b2.getY()) < 3
+			 && std::abs (b1.getRight() - b2.getRight()) < 3
+			 && std::abs (b1.getBottom() - b2.getBottom()) < 3)
+		{
+			int dx = 40, dy = 30;
+
+			if (b1.getCentreX() >= mw->getScreenBounds().getCentreX())   dx = -dx;
+			if (b1.getCentreY() >= mw->getScreenBounds().getCentreY())   dy = -dy;
+
+			mw->setBounds (b1.translated (dx, dy));
+		}
+	}
+}
+
+bool SynthAModelerApplication::openFile(const File& file)
+{
+	appController->openMDL(file);
+	appController->setMainWindowTitle();
+	return true;
+}
+//==============================================================================
+
+SynthAModelerApplication::AsyncQuitRetrier::AsyncQuitRetrier()
+{
+	startTimer (500);
+}
+
+void SynthAModelerApplication::AsyncQuitRetrier::timerCallback()
+{
+	stopTimer();
+	delete this;
+
+	if (getApp() != nullptr)
+		getApp()->systemRequestedQuit();
+}
+
+//==============================================================================
+
+SynthAModelerApplication::MainMenuModel::MainMenuModel()
+{
+	setApplicationCommandManagerToWatch (commandManager);
+}
+
+const StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
+{
+//	const char* const names[] = { "File", "Edit", "View", "Window", "Tools", 0 };
+//	return StringArray ((const char**) names);
+
+    const char* const names[] = { "File", "Edit", "Insert",
+    		"Generate", "Tools", "Window", "Help", nullptr };
+
+    return StringArray (names);
+
+}
+
+const PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/)
+{
+	PopupMenu menu;
+    if (topLevelMenuIndex == 0)
+    {
+        menu.addCommandItem (commandManager, CommandIDs::newFile);
+        menu.addCommandItem (commandManager, CommandIDs::open);
+
+        PopupMenu recentFiles;
+        StoredSettings::getInstance()->recentFiles
+        		.createPopupMenuItems (recentFiles, 100, true, true);
+
+        menu.addSubMenu ("Open recent file", recentFiles);
+
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::closeDocument);
+        menu.addCommandItem (commandManager, CommandIDs::saveDocument);
+        menu.addCommandItem (commandManager, CommandIDs::saveDocumentAs);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showPrefs);
+
+#if ! JUCE_MAC
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::quit);
+#endif
+
+    }
+    else if (topLevelMenuIndex == 1)
+    {
+        menu.addCommandItem (commandManager, CommandIDs::undo);
+        menu.addCommandItem (commandManager, CommandIDs::redo);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::cut);
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::copy);
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::paste);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::selectAll);
+        menu.addCommandItem (commandManager, StandardApplicationCommandIDs::deselectAll);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::defineVariables);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
+        menu.addCommandItem (commandManager, CommandIDs::zoomIn);
+        menu.addCommandItem (commandManager, CommandIDs::zoomOut);
+        menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
+        menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
+
+    }
+    else if (topLevelMenuIndex == 2)
+    {
+    	menu.addCommandItem(commandManager, CommandIDs::insertMass);
+    	menu.addCommandItem(commandManager, CommandIDs::insertGround);
+    	menu.addCommandItem(commandManager, CommandIDs::insertResonator);
+    	menu.addCommandItem(commandManager, CommandIDs::insertPort);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::insertLink);
+    	menu.addCommandItem(commandManager, CommandIDs::insertTouch);
+    	menu.addCommandItem(commandManager, CommandIDs::insertPluck);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::insertAudioOutput);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::insertWaveguide);
+    	menu.addCommandItem(commandManager, CommandIDs::insertTermination);
+    }
+    else if (topLevelMenuIndex == 3)
+    {
+    	menu.addCommandItem(commandManager, CommandIDs::generateFaust);
+    	menu.addCommandItem(commandManager, CommandIDs::generateExternal);
+    }
+    else if (topLevelMenuIndex == 4)
+    {
+    	menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
+    	menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
+    	menu.addSeparator();
+    	menu.addCommandItem(commandManager, CommandIDs::openDataDir);
+    }
+    else if (topLevelMenuIndex == 5)
+    {
+        menu.addCommandItem (commandManager, CommandIDs::closeWindow);
+        menu.addSeparator();
+
+//        const int numDocs = jmin (50, OpenDocumentManager::getInstance()->getNumOpenDocuments());
+//
+//        for (int i = 0; i < numDocs; ++i)
+//        {
+//            OpenDocumentManager::Document* doc = OpenDocumentManager::getInstance()->getOpenDocument(i);
+//
+//            menu.addItem (300 + i, doc->getName());
+//        }
+
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::closeAllDocuments);
+
+    }
+    else if (topLevelMenuIndex == 6)
+    {
+    	menu.addCommandItem(commandManager, CommandIDs::showHelp);
+    }
+
+	return menu;
+}
+
+void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
+{
+//	if (menuItemID >= 100 && menuItemID < 200)
+//	{
+//		// open a file from the "recent files" menu
+//		const File file (StoredSettings::getInstance()->recentFiles.getFile (menuItemID - 100));
+//
+//		getApp()->openFile (file);
+//	}
+//	else if (menuItemID >= 300 && menuItemID < 400)
+//	{
+//		OpenDocumentManager::Document* doc = OpenDocumentManager::getInstance()->getOpenDocument (menuItemID - 300);
+//
+//		MainWindow* w = getApp()->getOrCreateFrontmostWindow();
+//		w->makeVisible();
+//		w->getProjectContentComponent()->showDocument (doc);
+//		getApp()->avoidSuperimposedWindows (w);
+//	}
+
+    if (menuItemID >= 100 && menuItemID < 200)
+    {
+		// open a file from the "recent files" menu
+		const File file (StoredSettings::getInstance()->recentFiles
+				.getFile (menuItemID - 100));
+
+		getApp()->openFile(file);
+		StoredSettings::getInstance()->recentFiles.addFile(file);
+    }
 
 }
 

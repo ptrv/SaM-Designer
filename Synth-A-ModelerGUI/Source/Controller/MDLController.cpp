@@ -42,7 +42,8 @@ MDLController::MDLController(AppController& owner_)
 
 MDLController::~MDLController()
 {
-
+	currentMdl = nullptr;
+	outCmd = nullptr;
 }
 
 void MDLController::newFile()
@@ -191,4 +192,9 @@ bool MDLController::mdlCheckAndSaveIfNeeded()
 MDLFile* MDLController::getMDLFile() const
 {
 	return currentMdl.get();
+}
+
+void MDLController::setMDLFile(MDLFile* mdlFile)
+{
+	currentMdl = mdlFile;
 }

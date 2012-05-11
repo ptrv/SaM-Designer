@@ -33,6 +33,6 @@
 #include "CommandIDs.h"
 #include "../Utilities/Alerts.h"
 
-
+extern ScopedPointer<ApplicationCommandManager> commandManager;
 
 #endif  // __COMMONHEADERS_H_CA475C67__

@@ -28,7 +28,7 @@
 
 
 #include "MainWindow.h"
-
+#include "../Controller/AppController.h"
 //==============================================================================
 class SynthAModelerApplication  : public JUCEApplication
 {
@@ -42,13 +42,71 @@ public:
     void shutdown();
     //==============================================================================
     void systemRequestedQuit();
+    void closeWindow(MainAppWindow* w);
     //==============================================================================
     const String getApplicationName();
     const String getApplicationVersion();
     bool moreThanOneInstanceAllowed();
     void anotherInstanceStarted (const String& commandLine);
-private:
-    ScopedPointer <MainAppWindow> mainWindow;
+
+    static SynthAModelerApplication* getApp();
+
+
+    ApplicationCommandTarget* getNextCommandTarget()
+    {
+        return findFirstTargetParentComponent();
+
+    }
+
+    void getAllCommands (Array <CommandID>& commands);
+    void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
+    bool perform (const InvocationInfo& info);
+    bool isCommandActive (const CommandID commandID);
+
+    //==============================================================================
+    class MainMenuModel  : public MenuBarModel
+    {
+    public:
+        MainMenuModel();
+        const StringArray getMenuBarNames();
+
+        const PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/);
+        void menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/);
+    };
+
+    ScopedPointer<MainMenuModel> menuModel;
+
+    bool openFile(const File& file);
+
+    virtual MainAppWindow* createNewMainWindow();
+
+    void createNewProject();
+    void askUserToOpenFile();
+    bool closeAllDocuments (bool askUserToSave);
+    void updateRecentProjectList();
+
+    private:
+    friend class AppController;
+
+    OwnedArray<MainAppWindow> mainWindows;
+
+    ScopedPointer<DebugWindow> debugWindow;
+    ScopedPointer<AppController> appController;
+
+    MainAppWindow* getOrCreateFrontmostWindow();
+    MainAppWindow* getOrCreateEmptyWindow();
+    void avoidSuperimposedWindows (MainAppWindow* const mw);
+
+    class AsyncQuitRetrier  : public Timer
+    {
+    public:
+    	AsyncQuitRetrier();
+    	void timerCallback();
+    	JUCE_DECLARE_NON_COPYABLE (AsyncQuitRetrier);
+    };
+
+    //==============================================================================
+
 };
 
 

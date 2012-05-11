@@ -30,62 +30,58 @@
 #include "../View/DebugWindow.h"
 #include "../Controller/AppController.h"
 #include "../View/ContentComp.h"
+#include "../Application/Application.h"
+#include "../Controller/MDLController.h"
+#include "../Models/MDLFile.h"
+
+ScopedPointer<ApplicationCommandManager> commandManager;
 
 //==============================================================================
-MainAppWindow::MainAppWindow()
+MainAppWindow::MainAppWindow(AppController& appController_)
     : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
-                      Colours::lightgrey,
-                      DocumentWindow::allButtons)
+    		Colour::greyLevel (0.6f),
+                      DocumentWindow::allButtons,
+                      false),
+      appController(appController_)
 {
-    debugWindow = new DebugWindow();
-    appController = new AppController(*this, *debugWindow);
-    ContentComp* contentComp = new ContentComp(*this, *appController.get());
+	setUsingNativeTitleBar (true);
+	createMDLFileContentCompIfNeeded();
 
-    setContentOwned(contentComp, true);
-//    multiDocHolder = new MultiDocHolder();
-//    multiDocHolder->addDocument(contentComp, Colours::azure, true);
+#if ! JUCE_MAC
+	setMenuBar (SynthAModelerApplication::getApp()->menuModel);
+#endif
 
-    setApplicationCommandManagerToWatch (&commandManager);
+    setResizable (true, false);
+//    centreWithSize (getWidth(), getHeight());
+    centreWithSize (800, 600);
 
-    setUsingNativeTitleBar(true);
-    centreWithSize (getWidth(), getHeight());
 
     // restore the last size and position from our settings file..
-	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
-									.getValue ("lastMainWindowPos"));
+//	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
+//									.getValue ("lastMainWindowPos"));
 
-	commandManager.registerAllCommandsForTarget(this);
-    commandManager.registerAllCommandsForTarget (contentComp);
-    commandManager.registerAllCommandsForTarget (JUCEApplication::getInstance());
+	commandManager->registerAllCommandsForTarget(this);
+    commandManager->registerAllCommandsForTarget (getMDLFileContentComponent());
+//    commandManager->registerAllCommandsForTarget (JUCEApplication::getInstance());
 
     // this lets the command manager use keypresses that arrive in our window to send
     // out commands
-    addKeyListener (commandManager.getKeyMappings());
+    addKeyListener (commandManager->getKeyMappings());
 
-#if JUCE_MAC
-    setMacMainMenu (this);
-#else
- 	setMenuBar (this);
-#endif
-
-    setVisible (true);
+//    setVisible (true);
     setWantsKeyboardFocus (false);
-    setResizable (true, true); // resizability is a property of ResizableWindow
 
-	if(StoredSettings::getInstance()->getShowCompilerWindow())
-		debugWindow->makeVisible ();
+    getLookAndFeel().setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
 
 //	getContentComponent()->grabKeyboardFocus();
 }
 
 MainAppWindow::~MainAppWindow()
 {
-#if JUCE_MAC
-	setMacMainMenu (0);
-#else
-	setMenuBar (0);
+#if ! JUCE_MAC
+	setMenuBar (nullptr);
 #endif
-	removeKeyListener (commandManager.getKeyMappings());
+	removeKeyListener (commandManager->getKeyMappings());
 
     // save the current size and position to our settings file..
     StoredSettings::getInstance()->getProps()
@@ -95,144 +91,130 @@ MainAppWindow::~MainAppWindow()
 
 }
 
+void MainAppWindow::createMDLFileContentCompIfNeeded()
+{
+    if (getMDLFileContentComponent() == nullptr)
+    {
+        clearContentComponent();
+        setContentOwned (new ContentComp(*this, appController), false);
+    }
+}
+
+ContentComp* MainAppWindow::getMDLFileContentComponent() const
+{
+	return dynamic_cast<ContentComp*> (getContentComponent());
+}
 void MainAppWindow::closeButtonPressed()
 {
-//	appController->c
-    JUCEApplication::getInstance()->systemRequestedQuit();
+//    if (! closeCurrentProject())
+//        return;
+
+    SynthAModelerApplication::getApp()->closeWindow (this);
 }
 
+//void MainAppWindow::closeButtonPressed()
+//{
+////	appController->c
+////    JUCEApplication::getInstance()->systemRequestedQuit();
+//}
+
+bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
+{
+    jassert (mdlFile == mdlController->getMDLFile() && mdlFile != nullptr);
+
+    if (mdlFile == nullptr)
+        return true;
+
+    StoredSettings::getInstance()->getProps()
+        .setValue (getProjectWindowPosName(), getWindowStateAsString());
+
+//    if (! OpenDocumentManager::getInstance()->closeAllDocumentsUsingProject (*project, true))
+//        return false;
+
+//    ContentComp* const pcc = getMDLFileContentComponent();
+//
+//    if (pcc != nullptr)
+//        pcc->saveTreeViewState();
+
+    FileBasedDocument::SaveResult r = mdlFile->saveIfNeededAndUserAgrees();
+
+    if (r == FileBasedDocument::savedOk)
+    {
+        setMDLFile(nullptr);
+        return true;
+    }
+
+    return false;
+}
+
+void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
+{
+    createMDLFileContentCompIfNeeded();
+//    getMDLFileContentComponent()->set(newProject);
+    mdlController->setMDLFile(newMDLFile);
+    commandManager->commandStatusChanged();
+
+    // (mustn't do this when the project is 0, because that'll happen on shutdown,
+    // which will erase the list of recent projects)
+    if (newMDLFile != nullptr)
+        SynthAModelerApplication::getApp()->updateRecentProjectList();
+}
+
+bool MainAppWindow::closeCurrentMDLFile()
+{
+    return mdlController->getMDLFile() == nullptr || closeMDLFile(mdlController->getMDLFile());
+}
+
+//void MainAppWindow::setMDLFile(MDLFile* newMDLFile)
+//{
+//    createMDLFileContentCompIfNeeded();
+//    getProjectContentComponent()->setProject (newProject);
+//    currentProject = newProject;
+//    commandManager->commandStatusChanged();
+//
+//    // (mustn't do this when the project is 0, because that'll happen on shutdown,
+//    // which will erase the list of recent projects)
+//    if (newProject != nullptr)
+//        JucerApplication::getApp()->updateRecentProjectList();
+//}
+
+void MainAppWindow::restoreWindowPosition()
+{
+    String windowState;
+
+//    if (currentProject != nullptr)
+//        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName());
+
+    if (windowState.isEmpty())
+        windowState = StoredSettings::getInstance()->getProps().getValue ("lastMainWindowPos");
+
+    restoreWindowStateFromString (windowState);
+}
 //==============================================================================
-const StringArray MainAppWindow::getMenuBarNames()
+void MainAppWindow::makeVisible()
 {
-    const char* const names[] = { "File", "Edit", "Insert",
-    		"Generate", "Tools", "Help", nullptr };
+    setVisible (true);
+    addToDesktop();  // (must add before restoring size so that fullscreen will work)
+    restoreWindowPosition();
 
-    return StringArray (names);
+    getContentComponent()->grabKeyboardFocus();
 }
 
-const PopupMenu MainAppWindow::getMenuForIndex (int topLevelMenuIndex,
-                                             const String& menuName)
-{
-//    ApplicationCommandManager* commandManager = &(commandManager);
-
-    PopupMenu menu;
-
-    if (topLevelMenuIndex == 0)
-    {
-        menu.addCommandItem (&commandManager, CommandIDs::newFile);
-        menu.addCommandItem (&commandManager, CommandIDs::open);
-
-        PopupMenu recentFiles;
-        StoredSettings::getInstance()->recentFiles
-        		.createPopupMenuItems (recentFiles, 100, true, true);
-
-        menu.addSubMenu ("Open recent file", recentFiles);
-
-        menu.addSeparator();
-        menu.addCommandItem (&commandManager, CommandIDs::closeDocument);
-        menu.addCommandItem (&commandManager, CommandIDs::saveDocument);
-        menu.addCommandItem (&commandManager, CommandIDs::saveDocumentAs);
-        menu.addSeparator();
-        menu.addCommandItem(&commandManager, CommandIDs::showPrefs);
-
-#if ! JUCE_MAC
-        menu.addSeparator();
-        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::quit);
-#endif
-
-    }
-    else if (topLevelMenuIndex == 1)
-    {
-        menu.addCommandItem (&commandManager, CommandIDs::undo);
-        menu.addCommandItem (&commandManager, CommandIDs::redo);
-        menu.addSeparator();
-        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::cut);
-        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::copy);
-        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::paste);
-        menu.addSeparator();
-        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::selectAll);
-        menu.addCommandItem (&commandManager, StandardApplicationCommandIDs::deselectAll);
-        menu.addSeparator();
-        menu.addCommandItem (&commandManager, CommandIDs::defineVariables);
-        menu.addSeparator();
-        menu.addCommandItem (&commandManager, CommandIDs::segmentedConnectors);
-        menu.addCommandItem (&commandManager, CommandIDs::zoomIn);
-        menu.addCommandItem (&commandManager, CommandIDs::zoomOut);
-        menu.addCommandItem (&commandManager, CommandIDs::zoomNormal);
-        menu.addCommandItem(&commandManager, CommandIDs::reverseDirection);
-
-    }
-    else if (topLevelMenuIndex == 2)
-    {
-    	menu.addCommandItem(&commandManager, CommandIDs::insertMass);
-    	menu.addCommandItem(&commandManager, CommandIDs::insertGround);
-    	menu.addCommandItem(&commandManager, CommandIDs::insertResonator);
-    	menu.addCommandItem(&commandManager, CommandIDs::insertPort);
-    	menu.addSeparator();
-    	menu.addCommandItem(&commandManager, CommandIDs::insertLink);
-    	menu.addCommandItem(&commandManager, CommandIDs::insertTouch);
-    	menu.addCommandItem(&commandManager, CommandIDs::insertPluck);
-    	menu.addSeparator();
-    	menu.addCommandItem(&commandManager, CommandIDs::insertAudioOutput);
-    	menu.addSeparator();
-    	menu.addCommandItem(&commandManager, CommandIDs::insertWaveguide);
-    	menu.addCommandItem(&commandManager, CommandIDs::insertTermination);
-    }
-    else if (topLevelMenuIndex == 3)
-    {
-    	menu.addCommandItem(&commandManager, CommandIDs::generateFaust);
-    	menu.addCommandItem(&commandManager, CommandIDs::generateExternal);
-    }
-    else if (topLevelMenuIndex == 4)
-    {
-    	menu.addCommandItem(&commandManager, CommandIDs::showOutputConsole);
-    	menu.addCommandItem(&commandManager, CommandIDs::clearOutputConsole);
-    	menu.addSeparator();
-    	menu.addCommandItem(&commandManager, CommandIDs::openDataDir);
-    }
-    else if (topLevelMenuIndex == 5)
-    {
-    	menu.addCommandItem(&commandManager, CommandIDs::showHelp);
-    }
-
-    return menu;
-}
-
-void MainAppWindow::menuItemSelected (int menuItemID,
-                                   int topLevelMenuIndex)
-{
-    if (menuItemID >= 100 && menuItemID < 200)
-    {
-		// open a file from the "recent files" menu
-		const File file (StoredSettings::getInstance()->recentFiles
-				.getFile (menuItemID - 100));
-
-		appController->openMDL(file);
-		appController->setMainWindowTitle();
-		StoredSettings::getInstance()->recentFiles.addFile(file);
-    }
-}
 
 //==============================================================================
 ApplicationCommandTarget* MainAppWindow::getNextCommandTarget()
 {
-    return 0;
+    return findFirstTargetParentComponent();
+
 }
 
 void MainAppWindow::getAllCommands (Array <CommandID>& commands)
 {
-    const CommandID ids[] = { CommandIDs::newFile,
-            					CommandIDs::open,
-            					CommandIDs::closeDocument,
+    const CommandID ids[] = { 	CommandIDs::closeDocument,
             					CommandIDs::saveDocument,
             					CommandIDs::saveDocumentAs,
-            					CommandIDs::showPrefs,
                                 CommandIDs::generateFaust,
                                 CommandIDs::generateExternal,
-                                CommandIDs::showOutputConsole,
-                                CommandIDs::clearOutputConsole,
-                                CommandIDs::openDataDir,
-                                CommandIDs::showHelp,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -242,14 +224,6 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
 {
     switch (commandID)
     {
-    case CommandIDs::newFile:
-        result.setInfo("New", "Create new *.mdl file.", CommandCategories::general, 0);
-        result.addDefaultKeypress('n', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::open:
-        result.setInfo ("Open", "Open *.mdl file.", CommandCategories::general, 0);
-        result.addDefaultKeypress ('o', ModifierKeys::commandModifier);
-        break;
     case CommandIDs::closeDocument:
         result.setInfo("Close", "Close file.", CommandCategories::general, 0);
         result.addDefaultKeypress('w', ModifierKeys::commandModifier);
@@ -262,15 +236,10 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
-    case CommandIDs::showPrefs:
-    	result.setInfo ("Preferences...", "Open preferences window",
-    			CommandCategories::general, 0);
-    	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
-    	break;
-    case CommandIDs::undo:
-    	result.setInfo("Undo", "Undo last edit", CommandCategories::editing,0);
-    	result.addDefaultKeypress('z', ModifierKeys::commandModifier);
-    	break;
+//    case CommandIDs::undo:
+//    	result.setInfo("Undo", "Undo last edit", CommandCategories::editing,0);
+//    	result.addDefaultKeypress('z', ModifierKeys::commandModifier);
+//    	break;
 
     case CommandIDs::generateFaust:
     	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
@@ -281,23 +250,6 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
     	break;
 
-    case CommandIDs::showOutputConsole:
-    	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
-    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
-    	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
-    	break;
-    case CommandIDs::clearOutputConsole:
-    	result.setInfo("Clear compiler window", "", CommandCategories::tools,0);
-    	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
-    	break;
-
-    case CommandIDs::openDataDir:
-    	result.setInfo("Open data dir", "", CommandCategories::tools, 0);
-    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
-    	break;
-    case CommandIDs::showHelp:
-    	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
-    	break;
     default:
         break;
     };
@@ -310,10 +262,28 @@ bool MainAppWindow::isCommandActive (const CommandID commandID)
 
 bool MainAppWindow::perform (const InvocationInfo& info)
 {
-    return appController->menuItemWasClicked(info.commandID);
+    return appController.menuItemWasClicked(info.commandID);
 }
 
 bool MainAppWindow::mdlCheckAndSave()
 {
-	return appController->mdlCheckAndSave();
+	return appController.mdlCheckAndSave();
 }
+
+void MainAppWindow::updateTitle (const String& documentName)
+{
+	String title = JUCEApplication::getInstance()->getApplicationName();
+	title << " - " << mdlController->getMDLFile()->getName();
+	this->setName(title);
+
+}
+
+MDLFile* MainAppWindow::getMDLFile()
+{
+	return mdlController->getMDLFile();
+}
+//bool MainAppWindow::closeCurrentMDLFile()
+//{
+//	mdlController->mdlCheckAndSaveIfNeeded();
+//	return true;
+//}

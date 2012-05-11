@@ -80,18 +80,14 @@ public:
 	bool perform()
 	{
 		DBG("Remove "+oldValue[Ids::identifier].toString());
-		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.removeChild(oldValue, nullptr);
-		DBG(mdlSubTree.getNumChildren());
 		return true;
 	}
 
 	bool undo()
 	{
 		DBG("Undo remove "+oldValue[Ids::identifier].toString());
-		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.addChild(oldValue,-1, nullptr);
-		DBG(mdlSubTree.getNumChildren());
 		return true;
 	}
 private:

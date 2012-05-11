@@ -31,8 +31,8 @@
 #include "../View/PrefsPanel.h"
 #include "../Models/ObjectIDs.h"
 
-AppController::AppController(MainAppWindow& maw_, DebugWindow& dw_)
-: maw(maw_), dw(dw_)
+AppController::AppController(SynthAModelerApplication& app_, DebugWindow& dw_)
+: app(app_), dw(dw_)
 {
 	mdlController = new MDLController(*this);
 	objController = new ObjController(*this);
@@ -74,6 +74,10 @@ bool AppController::menuItemWasClicked(CommandID menuId)
     	mdlController->save();
     	setMainWindowTitle();
         return true;
+    case CommandIDs::saveAll:
+    	break;
+    case CommandIDs::closeAllDocuments:
+    	break;
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
     	setMainWindowTitle();
@@ -100,6 +104,7 @@ bool AppController::menuItemWasClicked(CommandID menuId)
 		break;
 	case StandardApplicationCommandIDs::del:
 		DBG("delete");
+		objController->removeObject("dev1");
 		break;
     case CommandIDs::defineVariables:
     	break;
@@ -218,7 +223,7 @@ void AppController::openMDL(const File& mdlFile)
 void AppController::debugWindowToggle()
 {
 	dw.toggleDebugWindow();
-	maw.toFront(true);
+//	maw.toFront(true);
 
 }
 
@@ -229,9 +234,10 @@ void AppController::debugWindowClear()
 
 void AppController::setMainWindowTitle()
 {
+
 	String title = JUCEApplication::getInstance()->getApplicationName();
 	title << " - " << mdlController->getMDLName();
-	maw.setName(title);
+//	maw.setName(title);
 }
 
 bool AppController::mdlCheckAndSave()

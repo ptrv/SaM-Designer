@@ -29,14 +29,15 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "MDLController.h"
 #include "ObjController.h"
-
-class DebugWindow;
+#include "../View/DebugWindow.h"
+class SynthAModelerApplication;
+//class DebugWindow;
 class MainAppWindow;
 
 class AppController
 {
 public:
-	AppController(MainAppWindow& maw_, DebugWindow& dw_);
+	AppController(SynthAModelerApplication& app_, DebugWindow& dw_);
 	~AppController();
 
 	bool menuItemWasClicked(CommandID menuId);
@@ -52,6 +53,8 @@ public:
 	bool mdlCheckAndSave();
 
 	UndoManager* getUndoManager();
+//	void addMainWindow(MainAppWindow* maw_);
+//	void removeMainWindow(MainAppWindow* maw_);
 private:
 	friend class MDLController;
 	friend class ObjController;
@@ -59,7 +62,8 @@ private:
 	void debugWindowToggle();
 	void debugWindowClear();
 
-	MainAppWindow& maw;
+//	MainAppWindow& maw;
+	SynthAModelerApplication& app;
 	DebugWindow& dw;
 
     ScopedPointer<MDLController> mdlController;
