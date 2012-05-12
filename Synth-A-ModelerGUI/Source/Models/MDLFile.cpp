@@ -142,7 +142,6 @@ const String MDLFile::saveDocument (const File& file)
 File MDLFile::lastDocumentOpened;
 const File MDLFile::getLastDocumentOpened()
 {
-//	return File(StoredSettings::getInstance()->getLastDocument());
 	return lastDocumentOpened;
 }
 void MDLFile::setLastDocumentOpened (const File& file)
@@ -157,9 +156,6 @@ void MDLFile::mdlChanged()
 //==============================================================================
 void MDLFile::valueTreePropertyChanged (ValueTree& tree, const Identifier& property)
 {
-//    if (property == Ids::projectType)
-//        setMissingDefaultValues();
-
     mdlChanged();
 }
 

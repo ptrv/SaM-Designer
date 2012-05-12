@@ -42,7 +42,9 @@ public:
 		beginTest("isPerlAvailable");
 		expect(cmd.isPerlAvailable(), "");
 		beginTest("generateFaustCode");
-		String result = cmd.generateFaustCode(inPath, outPath);
+		String inPathFull = File::getCurrentWorkingDirectory().getChildFile(inPath).getFullPathName();
+		String outPathFull = File::getCurrentWorkingDirectory().getChildFile(outPath).getFullPathName();
+		String result = cmd.generateFaustCode(inPathFull, outPathFull);
 		bool resultOk = false;
 		if(result.compare("failed to start process") != 0)
 			resultOk = true;

@@ -53,28 +53,18 @@ MainAppWindow::MainAppWindow()
 #endif
 
     setResizable (true, false);
-//    centreWithSize (getWidth(), getHeight());
     centreWithSize (800, 600);
-
-
-    // restore the last size and position from our settings file..
-//	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
-//									.getValue ("lastMainWindowPos"));
 
 	commandManager->registerAllCommandsForTarget(this);
     commandManager->registerAllCommandsForTarget (getMDLFileContentComponent());
-//    commandManager->registerAllCommandsForTarget (JUCEApplication::getInstance());
 
     // this lets the command manager use keypresses that arrive in our window to send
     // out commands
     addKeyListener (commandManager->getKeyMappings());
 
-//    setVisible (true);
     setWantsKeyboardFocus (false);
 
     getLookAndFeel().setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
-
-//	getContentComponent()->grabKeyboardFocus();
 }
 
 MainAppWindow::~MainAppWindow()
@@ -113,12 +103,6 @@ void MainAppWindow::closeButtonPressed()
     SynthAModelerApplication::getApp()->closeWindow (this);
 }
 
-//void MainAppWindow::closeButtonPressed()
-//{
-////	appController->c
-////    JUCEApplication::getInstance()->systemRequestedQuit();
-//}
-
 void MainAppWindow::changeListenerCallback(ChangeBroadcaster*)
 {
 	updateTitle();
@@ -134,14 +118,6 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 
     StoredSettings::getInstance()->getProps()
         .setValue (getProjectWindowPosName(), getWindowStateAsString());
-
-//    if (! OpenDocumentManager::getInstance()->closeAllDocumentsUsingProject (*project, true))
-//        return false;
-
-//    ContentComp* const pcc = getMDLFileContentComponent();
-//
-//    if (pcc != nullptr)
-//        pcc->saveTreeViewState();
 
     FileBasedDocument::SaveResult r = mdlFile->saveIfNeededAndUserAgrees();
 

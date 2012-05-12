@@ -66,7 +66,6 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	menuModel = new MainMenuModel();
 
 	outputWindow = new OutputWindow();
-//	commandManager->registerAllCommandsForTarget(debugWindow);
     Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
 
     for (int i = 0; i < mdls.size(); ++ i)
@@ -79,14 +78,9 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	MenuBarModel::setMacMainMenu (menuModel);
 #endif
 
-//	if(StoredSettings::getInstance()->getShowCompilerWindow())
-	{
-		outputWindow->printWelcomeMessage();
-		outputWindow->makeVisible ();
-		getOrCreateFrontmostWindow()->toFront(true);
-
-	}
-
+	outputWindow->printWelcomeMessage();
+	outputWindow->makeVisible ();
+	getOrCreateFrontmostWindow()->toFront(true);
 }
 
 void SynthAModelerApplication::shutdown()
@@ -222,7 +216,6 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	break;
     case CommandIDs::showOutputConsole:
     	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
-//    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     default:

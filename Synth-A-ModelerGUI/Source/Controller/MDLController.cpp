@@ -170,7 +170,6 @@ UndoManager* MDLController::getUndoManager()
 
 bool MDLController::perform (UndoableAction* const action, const String& actionName)
 {
-//	return owner.perform(action, actionName);
 	return getUndoManager()->perform(action, actionName);
 }
 

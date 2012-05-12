@@ -47,8 +47,6 @@ ContentComp::ContentComp (MainAppWindow& mainWindow_, ObjController& objControll
 
 
     //[Constructor] You can add your own custom stuff here..
-//	debugWindow = new DebugWindow();
-//	debugWindow->setVisible(true);
     addAndMakeVisible (objectsHolder = new ObjectsHolder(objController));
     setWantsKeyboardFocus(true);
     //[/Constructor]
@@ -81,7 +79,6 @@ void ContentComp::paint (Graphics& g)
 void ContentComp::resized()
 {
     //[UserResized] Add your own custom resize handling here..
-//	objComp->setBounds(1, 1, getWidth(), getHeight());
 	if(objectsHolder != nullptr)
 		objectsHolder->setBounds(0, 0, getWidth(), getHeight());
     //[/UserResized]
