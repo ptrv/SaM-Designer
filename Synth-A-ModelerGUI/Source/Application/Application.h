@@ -27,8 +27,9 @@
 #define __APPLICATION_H_BBAD6F5C__
 
 
-#include "MainWindow.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 
+class MainAppWindow;
 class DebugWindow;
 //==============================================================================
 class SynthAModelerApplication  : public JUCEApplication
@@ -83,7 +84,6 @@ public:
     void writeToDebugConsole(const String& title, const String& textToWrite);
 
     private:
-    friend class AppController;
 
     OwnedArray<MainAppWindow> mainWindows;
 

@@ -26,7 +26,6 @@
 #ifndef __OUTPUTCMD_H_1206E4C5__
 #define __OUTPUTCMD_H_1206E4C5__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
 
 class OutputCmd
 {

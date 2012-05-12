@@ -23,11 +23,12 @@
 
 */
 
-#include "ObjController.h"
-#include "MDLController.h"
-#include "../Models/ObjectIDs.h"
+#include "../Application/CommonHeaders.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
+#include "MDLController.h"
+
+#include "ObjController.h"
 
 ObjController::ObjController(MDLController& owner_)
 : owner(owner_)

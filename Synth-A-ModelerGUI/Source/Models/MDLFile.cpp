@@ -24,12 +24,10 @@
 */
 
 #include "../Application/CommonHeaders.h"
-#include "MDLFile.h"
 #include "../Utilities/MDLParser.h"
 #include "../Utilities/MDLWriter.h"
-#include "../Utilities/StoredSettings.h"
 
-#include "ObjectIDs.h"
+#include "MDLFile.h"
 
 const char* MDLFile::mdlFileExtension = ".mdl";
 

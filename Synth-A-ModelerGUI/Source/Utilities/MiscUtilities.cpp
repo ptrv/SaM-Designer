@@ -25,6 +25,8 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "StoredSettings.h"
 
+#include "MiscUtilities.h"
+
 namespace Utils
 {
 

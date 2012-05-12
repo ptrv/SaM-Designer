@@ -26,7 +26,6 @@
 #ifndef __OBJCONTROLLER_H_A98EC6A3__
 #define __OBJCONTROLLER_H_A98EC6A3__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
 
 class MDLController;
 

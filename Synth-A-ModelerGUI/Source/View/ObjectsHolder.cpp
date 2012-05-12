@@ -23,9 +23,11 @@
 
 */
 
-#include "ObjectsHolder.h"
 #include "../Models/MDLFile.h"
 #include "ContentComp.h"
+#include "BaseObjectComponent.h"
+
+#include "ObjectsHolder.h"
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_),

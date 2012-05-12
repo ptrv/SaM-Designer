@@ -23,9 +23,10 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Application/CommonHeaders.h"
+#include "../Models/MDLFile.h"
+
 #include "MDLWriter.h"
-#include "../Models/ObjectIDs.h"
 
 MDLWriter::MDLWriter(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)

@@ -23,9 +23,10 @@
 
 */
 
+#include "../Application/CommonHeaders.h"
+
 #include "ObjectFactory.h"
 
-#include "ObjectIDs.h"
 namespace ObjectFactory
 {
 

@@ -23,9 +23,10 @@
 
  */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Application/CommonHeaders.h"
+#include "../Models/MDLFile.h"
+
 #include "MDLParser.h"
-#include "../Models/ObjectIDs.h"
 
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)

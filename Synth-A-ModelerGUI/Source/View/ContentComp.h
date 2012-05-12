@@ -23,9 +23,10 @@
 #define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_20A12D4E__
 
 //[Headers]     -- You can add your own extra header files here --
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Application/MainWindow.h"
-#include "ObjectsHolder.h"
+class MainAppWindow;
+class ObjController;
+class ObjectsHolder;
+class MDLFile;
 //[/Headers]
 
 

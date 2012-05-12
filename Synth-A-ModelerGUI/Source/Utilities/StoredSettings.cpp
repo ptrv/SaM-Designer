@@ -23,8 +23,9 @@
 
 */
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "../Application/CommonHeaders.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
+
+#include "StoredSettings.h"
 
 static const String getDefaultPathFaustDir()
 {

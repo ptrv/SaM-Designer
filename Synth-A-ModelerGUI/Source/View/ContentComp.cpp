@@ -21,7 +21,10 @@
 
 //[Headers] You can add your own extra header files here...
 #include "../Application/CommonHeaders.h"
-#include "../Models/ObjectIDs.h"
+#include "../Application/MainWindow.h"
+#include "../Controller/ObjController.h"
+#include "ObjectsHolder.h"
+#include "../Models/MDLFile.h"
 //[/Headers]
 
 #include "ContentComp.h"

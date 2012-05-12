@@ -27,7 +27,7 @@
 #define __MDLWRITER_H_CB9D9CEF__
 
 
-#include "../Models/MDLFile.h"
+class MDLFile;
 
 class MDLWriter
 {

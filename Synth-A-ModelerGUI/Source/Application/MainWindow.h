@@ -30,11 +30,11 @@
 
 
 #include "../Application/CommonHeaders.h"
-#include "../Models/MDLFile.h"
 #include "../Controller/MDLController.h"
-#include "../Controller/ObjController.h"
 
 class ContentComp;
+class ObjController;
+class MDLFile;
 //==============================================================================
 class MainAppWindow   : public DocumentWindow,
 						public ApplicationCommandTarget,
@@ -78,15 +78,7 @@ public:
     UndoManager* getUndoManager();
 private:
 
-    String getProjectWindowPosName() const
-    {
-        jassert (mdlController->getMDLFile() != nullptr);
-        if (mdlController->getMDLFile() == nullptr)
-            return String::empty;
-
-        return "projectWindowPos_" + mdlController->getMDLFile()->getName();
-    }
-
+    String getProjectWindowPosName() const;
 
 //    AppController& appController;
     ScopedPointer<MDLController> mdlController;

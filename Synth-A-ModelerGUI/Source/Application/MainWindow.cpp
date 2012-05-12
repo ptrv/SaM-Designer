@@ -25,13 +25,14 @@
 
 */
 
-#include "MainWindow.h"
-#include "../View/DebugWindow.h"
-#include "../Controller/ObjController.h"
-#include "../View/ContentComp.h"
 #include "../Application/Application.h"
+#include "../View/DebugWindow.h"
+#include "../View/ContentComp.h"
+#include "../Controller/ObjController.h"
 #include "../Controller/MDLController.h"
 #include "../Models/MDLFile.h"
+
+#include "MainWindow.h"
 
 ScopedPointer<ApplicationCommandManager> commandManager;
 
@@ -307,4 +308,13 @@ MDLFile* MainAppWindow::getMDLFile()
 UndoManager* MainAppWindow::getUndoManager()
 {
 	return mdlController->getUndoManager();
+}
+
+String MainAppWindow::getProjectWindowPosName() const
+{
+    jassert (mdlController->getMDLFile() != nullptr);
+    if (mdlController->getMDLFile() == nullptr)
+        return String::empty;
+
+    return "projectWindowPos_" + mdlController->getMDLFile()->getName();
 }

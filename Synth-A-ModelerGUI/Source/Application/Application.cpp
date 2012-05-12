@@ -23,12 +23,13 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
 #include "CommonHeaders.h"
-#include "Application.h"
 #include "../View/PrefsPanel.h"
 #include "../View/DebugWindow.h"
-#include "../Utilities/MiscUtilities.h"
+#include "MainWindow.h"
+#include "../Models/MDLFile.h"
+
+#include "Application.h"
 
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"

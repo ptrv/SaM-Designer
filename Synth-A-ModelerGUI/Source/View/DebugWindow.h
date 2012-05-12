@@ -26,8 +26,6 @@
 #ifndef __DEBUGWINDOW_H_3A3F156F__
 #define __DEBUGWINDOW_H_3A3F156F__
 
-//#include "../../JuceLibraryCode/JuceHeader.h"
-
 class TextConsole;
 class DebugWindow : public DocumentWindow,
 					public ApplicationCommandTarget

@@ -26,10 +26,7 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-//#include "../Controller/AppController.h"
-#include "BaseObjectComponent.h"
-
+class BaseObjectComponent;
 class MDLFile;
 class ObjController;
 

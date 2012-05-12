@@ -27,7 +27,7 @@
 #define __MDLPARSER_H_DC928BC0__
 
 
-#include "../Models/MDLFile.h"
+class MDLFile;
 
 class MDLParser
 {

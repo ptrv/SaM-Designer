@@ -24,8 +24,8 @@
 */
 
 #include "../Application/CommonHeaders.h"
+
 #include "OutputCmd.h"
-#include "../Utilities/StoredSettings.h"
 
 OutputCmd::OutputCmd()
 {

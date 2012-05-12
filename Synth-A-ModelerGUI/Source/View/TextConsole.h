@@ -27,8 +27,6 @@
 #define __TEXTCONSOLE_H_16CA25D5__
 
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
 class TextConsole : public TextEditor
 {
 public:

@@ -23,13 +23,12 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "MDLController.h"
+#include "../Application/CommonHeaders.h"
+#include "../Application/MainWindow.h"
 #include "../Models/MDLFile.h"
 #include "../Models/OutputCmd.h"
-#include "../Application/CommonHeaders.h"
-#include "../Models/ObjectIDs.h"
-#include "../Application/MainWindow.h"
+
+#include "MDLController.h"
 
 
 MDLController::MDLController(MainAppWindow& mainAppWindow_)

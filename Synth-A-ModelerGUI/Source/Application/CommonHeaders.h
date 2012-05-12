@@ -31,6 +31,7 @@
 
 #include "../Utilities/StoredSettings.h"
 #include "CommandIDs.h"
+#include "../Models/ObjectIDs.h"
 #include "../Utilities/Alerts.h"
 #include "../Utilities/MiscUtilities.h"
 
