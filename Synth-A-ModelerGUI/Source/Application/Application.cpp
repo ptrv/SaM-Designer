@@ -526,12 +526,12 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
 
 }
 
-void SynthAModelerApplication::writeToDebugConsole(const String& textToWrite)
+void SynthAModelerApplication::writeToDebugConsole(const String& title, const String& textToWrite)
 {
 	if(textToWrite.compare("") != 0)
 	{
 		debugWindow->printHeader();
-		debugWindow->addText("Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n");
+		debugWindow->addText(title);
 		debugWindow->addText(textToWrite);
 		debugWindow->addText(newLine);
 	}

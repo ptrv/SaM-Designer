@@ -272,13 +272,15 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     case CommandIDs::generateFaust:
     {
     	String consoleText = mdlController->generateFaust();
-    	SynthAModelerApplication::getApp()->writeToDebugConsole(consoleText);
+    	String titleText = "Generating FAUST code...\n";
+    	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
     }
     	break;
     case CommandIDs::generateExternal:
     {
     	String consoleText = mdlController->generateExternal();
-    	SynthAModelerApplication::getApp()->writeToDebugConsole(consoleText);
+    	String titleText = "Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n";
+    	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
     }
     	break;
 

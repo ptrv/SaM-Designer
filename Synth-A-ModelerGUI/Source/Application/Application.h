@@ -86,7 +86,7 @@ public:
     bool closeAllDocuments (bool askUserToSave);
     void updateRecentProjectList();
 
-    void writeToDebugConsole(const String& textToWrite);
+    void writeToDebugConsole(const String& title, const String& textToWrite);
 
     private:
     friend class AppController;
