@@ -126,10 +126,10 @@ void SynthAModelerApplication::closeWindow (MainAppWindow* w)
     jassert (mainWindows.contains (w));
     mainWindows.removeObject (w);
 
-#if ! JUCE_MAC
+//#if ! JUCE_MAC
     if (mainWindows.size() == 0)
         systemRequestedQuit();
-#endif
+//#endif
 
     updateRecentProjectList();
 }
