@@ -44,7 +44,7 @@ public:
 
 	bool perform()
 	{
-		DBG("Add "+objId.toString());
+		SAM_LOG("Add "+objId.toString());
 		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.addChild(newValue,-1, nullptr);
 		DBG(mdlSubTree.getNumChildren());
@@ -53,7 +53,7 @@ public:
 
 	bool undo()
 	{
-		DBG("Undo add "+objId.toString());
+		SAM_LOG("Undo add "+objId.toString());
 		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.removeChild(newValue, nullptr);
 		DBG(mdlSubTree.getNumChildren());
@@ -79,14 +79,14 @@ public:
 
 	bool perform()
 	{
-		DBG("Remove "+oldValue[Ids::identifier].toString());
+		SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
 		mdlSubTree.removeChild(oldValue, nullptr);
 		return true;
 	}
 
 	bool undo()
 	{
-		DBG("Undo remove "+oldValue[Ids::identifier].toString());
+		SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 		mdlSubTree.addChild(oldValue,-1, nullptr);
 		return true;
 	}

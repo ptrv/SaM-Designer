@@ -24,6 +24,7 @@
 */
 
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "CommonHeaders.h"
 #include "Application.h"
 #include "../View/PrefsPanel.h"
 #include "../View/DebugWindow.h"
@@ -56,13 +57,15 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 #endif
 
 	// Do your application's initialisation code here
+	Logger::setCurrentLogger(getLogger(), true);
+
 	commandManager = new ApplicationCommandManager();
 	commandManager->registerAllCommandsForTarget (this);
 
 	menuModel = new MainMenuModel();
 
 	debugWindow = new DebugWindow();
-
+//	commandManager->registerAllCommandsForTarget(debugWindow);
     Array<File> projects (StoredSettings::getInstance()->getLastFiles());
 
     for (int i = 0; i < projects.size(); ++ i)
@@ -75,10 +78,12 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	MenuBarModel::setMacMainMenu (menuModel);
 #endif
 
-	if(StoredSettings::getInstance()->getShowCompilerWindow())
+//	if(StoredSettings::getInstance()->getShowCompilerWindow())
 	{
+		debugWindow->printWelcomeMessage();
 		debugWindow->makeVisible ();
 		getOrCreateFrontmostWindow()->toFront(true);
+
 	}
 
 }
@@ -98,6 +103,8 @@ void SynthAModelerApplication::shutdown()
 	mainWindows.clear();
 
 	commandManager = nullptr;
+
+	Logger::setCurrentLogger(nullptr, true);
 }
 
 //==============================================================================
@@ -214,7 +221,7 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	break;
     case CommandIDs::showOutputConsole:
     	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
-    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
+//    	result.setTicked(StoredSettings::getInstance()->getShowCompilerWindow());
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     default:
@@ -238,7 +245,8 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::showOutputConsole:
-    	debugWindow->toggleDebugWindow();
+//    	debugWindow->toggleDebugWindow();
+    	debugWindow->toFront(false);
     	getOrCreateFrontmostWindow()->toFront(true);
     	break;
     case CommandIDs::clearOutputConsole:
@@ -533,7 +541,7 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title, const St
 		debugWindow->printHeader();
 		debugWindow->addText(title);
 		debugWindow->addText(textToWrite);
-		debugWindow->addText(newLine);
+		debugWindow->addNewLine();
 	}
 	else
 	{

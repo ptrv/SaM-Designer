@@ -19,3 +19,25 @@ bool cancelAnyModalComponents()
 
     return numModal > 0;
 }
+
+void SAMLogger(const String& message)
+{
+	String timeString;
+//	timeString << "[" << Time::getCurrentTime().formatted("%H:%M:%S")
+	timeString << "[" << Time::getCurrentTime().formatted("%c") << "]: ";
+	String tmp;
+	tmp << timeString << message;
+	Logger::writeToLog(tmp);
+}
+
+FileLogger* getLogger()
+{
+#if JUCE_LINUX
+	String subDir = ".Synth-A-Modeler";
+#else
+	String subDir = "";
+#endif
+
+	return FileLogger::createDefaultAppLogger(subDir,
+			"Synth-A-Modeler.log", "Synth-A-Modeler logfile");
+}

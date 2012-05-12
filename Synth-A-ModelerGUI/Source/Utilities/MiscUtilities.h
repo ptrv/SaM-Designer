@@ -14,6 +14,8 @@
 
 bool cancelAnyModalComponents();
 
+void SAMLogger(const String& message);
 
+FileLogger* getLogger();
 
 #endif  // __MISCUTILITIES_H_64FF5DE5__

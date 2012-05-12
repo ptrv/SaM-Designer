@@ -29,7 +29,8 @@
 //#include "../../JuceLibraryCode/JuceHeader.h"
 
 class TextConsole;
-class DebugWindow : public DocumentWindow
+class DebugWindow : public DocumentWindow,
+					public ApplicationCommandTarget
 {
 public:
 	DebugWindow();
@@ -47,6 +48,15 @@ public:
 
 	void makeVisible();
 	void makeHide();
+
+	void printWelcomeMessage();
+	void addNewLine();
+
+    ApplicationCommandTarget* getNextCommandTarget();
+    void getAllCommands (Array <CommandID>& commands);
+    void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
+    bool perform (const InvocationInfo& info);
+
 private:
 	TextConsole* console;
 };

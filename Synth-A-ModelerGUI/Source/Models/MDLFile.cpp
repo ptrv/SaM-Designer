@@ -23,10 +23,12 @@
 
 */
 
+#include "../Application/CommonHeaders.h"
 #include "MDLFile.h"
 #include "../Utilities/MDLParser.h"
 #include "../Utilities/MDLWriter.h"
 #include "../Utilities/StoredSettings.h"
+
 #include "ObjectIDs.h"
 
 const char* MDLFile::mdlFileExtension = ".mdl";
@@ -107,7 +109,7 @@ const String MDLFile::loadDocument (const File& file)
 	if(pa.parseMDL())
 	{
 		// success
-		DBG("Opened MDL file: "+String(mdlPath));
+		SAM_LOG("Opened MDL file: "+String(mdlPath));
 		setFile(file);
 		setChangedFlag(false);
 //		File mf(mdlPath);
@@ -117,7 +119,9 @@ const String MDLFile::loadDocument (const File& file)
 	else
 	{
 		// fail
-		return "ERROR: could not load mdl file.";
+		String errorMsg = "ERROR: could not load mdl file.";
+		SAM_LOG(errorMsg);
+		return errorMsg;
 	}
 }
 const String MDLFile::saveDocument (const File& file)
@@ -126,12 +130,14 @@ const String MDLFile::saveDocument (const File& file)
 	MDLWriter wr(*this);
 	if(wr.writeMDL(file))
 	{
-		DBG("Saved MDL file: "+file.getFullPathName());
+		SAM_LOG("Saved MDL file: "+file.getFullPathName());
 		return String::empty;
 	}
 	else
 	{
-		return "ERROR: could not save mdl file.";
+		String errorMsg = "ERROR: could not save mdl file.";
+		SAM_LOG(errorMsg);
+		return errorMsg;
 	}
 }
 

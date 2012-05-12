@@ -85,14 +85,14 @@ void MDLController::save()
 {
 	if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
 	{
-		DBG("Something went wrong saving the mdl file.")
+		SAM_LOG("Something went wrong saving the mdl file.");
 	}
 }
 void MDLController::saveAs()
 {
 	if(currentMdl->saveAsInteractive(true) != FileBasedDocument::savedOk)
 	{
-		DBG("Something went wrong saving the mdl file.")
+		SAM_LOG("Something went wrong saving the mdl file.");
 	}
 }
 

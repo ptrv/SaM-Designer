@@ -94,7 +94,6 @@ public:
     OwnedArray<MainAppWindow> mainWindows;
 
     ScopedPointer<DebugWindow> debugWindow;
-//    ScopedPointer<AppController> appController;
 
     MainAppWindow* getOrCreateFrontmostWindow();
     MainAppWindow* getOrCreateEmptyWindow();

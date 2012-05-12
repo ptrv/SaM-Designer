@@ -32,7 +32,10 @@
 #include "../Utilities/StoredSettings.h"
 #include "CommandIDs.h"
 #include "../Utilities/Alerts.h"
+#include "../Utilities/MiscUtilities.h"
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
+
+#define SAM_LOG(message) SAMLogger(message)
 
 #endif  // __COMMONHEADERS_H_CA475C67__

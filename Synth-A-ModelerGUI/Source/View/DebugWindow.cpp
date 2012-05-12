@@ -24,12 +24,13 @@
 */
 #include "../Application/CommonHeaders.h"
 #include "DebugWindow.h"
+#include "../Application/Application.h"
 #include "../View/TextConsole.h"
 #include "../Utilities/StoredSettings.h"
 
 DebugWindow::DebugWindow()
 :
-DocumentWindow("Output", Colours::darkgrey, DocumentWindow::closeButton)
+DocumentWindow("Output", Colours::darkseagreen, 0)
 {
 	setResizable (true, true); // resizability is a property of ResizableWindow
 
@@ -42,6 +43,10 @@ DocumentWindow("Output", Colours::darkgrey, DocumentWindow::closeButton)
 	console->setSize(getWidth(),getHeight());
 
 	setContentOwned(console,true);
+
+	commandManager->registerAllCommandsForTarget(this);
+
+	addKeyListener(commandManager->getKeyMappings());
 }
 
 DebugWindow::~DebugWindow()
@@ -86,21 +91,34 @@ void DebugWindow::clear()
 
 void DebugWindow::addText(const String& compilerText)
 {
+	SAM_LOG(compilerText);
 	console->addLine(compilerText);
 }
 
+void DebugWindow::printWelcomeMessage()
+{
+	String welcomeMsg;
+	welcomeMsg << "Hi " << SystemStats::getLogonName() << "!" << newLine;
+	welcomeMsg << "Welcome to Synth-A-Modeler. Have fun!" << newLine;
+	welcomeMsg << "----------------------------------------------";
+	welcomeMsg << newLine;
+	console->addLine(welcomeMsg);
+}
 void DebugWindow::printHeader()
 {
-	String debugText = "----------------------------------------------";
+	String debugText;
 	debugText << newLine;
-	debugText << "Synth-A-Modeler: ";
+	debugText << "[";
 	debugText << Time::getCurrentTime().toString(true,true, true, true);
+	debugText << "]: " << newLine;
 	debugText << newLine;
-	debugText << "----------------------------------------------";
-	debugText << newLine << newLine;
 	console->addLine(debugText);
 }
 
+void DebugWindow::addNewLine()
+{
+	console->addLine(newLine);
+}
 void DebugWindow::makeVisible()
 {
 	setVisible(true);
@@ -113,4 +131,23 @@ void DebugWindow::makeHide()
 	setVisible(false);
 	removeFromDesktop();
 	StoredSettings::getInstance()->setShowCompilerWindow(false);
+}
+
+ApplicationCommandTarget* DebugWindow::getNextCommandTarget()
+{
+    return findFirstTargetParentComponent();
+}
+
+void DebugWindow::getAllCommands (Array <CommandID>& commands)
+{
+}
+
+void DebugWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
+{
+}
+
+bool DebugWindow::perform (const InvocationInfo& info)
+{
+	DBG("perform");
+	return SynthAModelerApplication::getApp()->perform(info);
 }
