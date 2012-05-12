@@ -30,7 +30,8 @@
 
 DebugWindow::DebugWindow()
 :
-DocumentWindow("Output", Colours::darkseagreen, 0)
+DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Output",
+		Colours::darkseagreen, 0)
 {
 	setResizable (true, true); // resizability is a property of ResizableWindow
 

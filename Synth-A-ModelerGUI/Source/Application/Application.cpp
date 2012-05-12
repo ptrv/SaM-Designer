@@ -67,10 +67,10 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 
 	debugWindow = new DebugWindow();
 //	commandManager->registerAllCommandsForTarget(debugWindow);
-    Array<File> projects (StoredSettings::getInstance()->getLastFiles());
+    Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
 
-    for (int i = 0; i < projects.size(); ++ i)
-        openFile (projects.getReference(i));
+    for (int i = 0; i < mdls.size(); ++ i)
+        openFile (mdls.getReference(i));
 
     if (mainWindows.size() == 0)
         createNewMainWindow()->makeVisible();
@@ -246,7 +246,6 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::showOutputConsole:
-//    	debugWindow->toggleDebugWindow();
     	debugWindow->toFront(false);
     	getOrCreateFrontmostWindow()->toFront(true);
     	break;
@@ -277,7 +276,7 @@ void SynthAModelerApplication::creatNewMDLDocument()
 
 void SynthAModelerApplication::askUserToOpenFile()
 {
-    FileChooser fc ("Open File");
+    FileChooser fc ("Open MDL File");
 
     if (fc.browseForFileToOpen())
         openFile (fc.getResult());
@@ -304,7 +303,6 @@ MainAppWindow* SynthAModelerApplication::createNewMainWindow()
 
     MainAppWindow* mw = new MainAppWindow();
     mw->setMDLFile(newMDL.release());
-//    mw->makeVisible();
     mainWindows.add (mw);
     mw->restoreWindowPosition();
     avoidSuperimposedWindows (mw);
