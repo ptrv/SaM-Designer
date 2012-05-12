@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  16 Apr 2012 1:46:30am
+  Creation date:  12 May 2012 12:35:30am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -21,6 +21,7 @@
 
 //[Headers] You can add your own extra header files here...
 #include "../Application/CommonHeaders.h"
+#include "../Models/ObjectIDs.h"
 //[/Headers]
 
 #include "ContentComp.h"
@@ -30,9 +31,9 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appController_)
+ContentComp::ContentComp (MainAppWindow& mainWindow_, ObjController& objController_)
     : mainWindow(mainWindow_),
-      appController(appController_),
+      objController(objController_),
       objectsHolder(0)
 {
 
@@ -45,7 +46,7 @@ ContentComp::ContentComp (MainAppWindow& mainWindow_, AppController& appControll
     //[Constructor] You can add your own custom stuff here..
 //	debugWindow = new DebugWindow();
 //	debugWindow->setVisible(true);
-    addAndMakeVisible (objectsHolder = new ObjectsHolder(appController.getObjController()));
+    addAndMakeVisible (objectsHolder = new ObjectsHolder(objController));
     setWantsKeyboardFocus(true);
     //[/Constructor]
 }
@@ -58,7 +59,7 @@ ContentComp::~ContentComp()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-	deleteAndZero(objectsHolder);
+	objectsHolder = nullptr;
     //[/Destructor]
 }
 
@@ -86,6 +87,20 @@ void ContentComp::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
+
+void ContentComp::setMDLFile(MDLFile* newMDLFile)
+{
+	objectsHolder->setMDLFile(newMDLFile);
+}
+
+void ContentComp::updateMainAppWindowTitle(const String& newTitle)
+{
+    MainAppWindow* mw = findParentComponentOfClass<MainAppWindow>();
+
+    if (mw != nullptr)
+        mw->updateTitle ();
+
+}
 
 ApplicationCommandTarget* ContentComp::getNextCommandTarget()
 {
@@ -243,8 +258,81 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 // this is the ApplicationCommandTarget method that is used to actually perform one of our commands..
 bool ContentComp::perform (const InvocationInfo& info)
 {
-	return appController.menuItemWasClicked(info.commandID);
+	switch(info.commandID)
+	{
+    case CommandIDs::undo:
+    	mainWindow.getUndoManager()->undo();
+		break;
+	case CommandIDs::redo:
+		mainWindow.getUndoManager()->redo();
+		break;
+
+	case StandardApplicationCommandIDs::cut:
+		break;
+	case StandardApplicationCommandIDs::copy:
+		break;
+	case StandardApplicationCommandIDs::paste:
+		break;
+	case StandardApplicationCommandIDs::selectAll:
+		break;
+	case StandardApplicationCommandIDs::deselectAll:
+		break;
+	case StandardApplicationCommandIDs::del:
+		DBG("delete");
+		objController.removeObject("dev1");
+		break;
+    case CommandIDs::defineVariables:
+    	break;
+    case CommandIDs::segmentedConnectors:
+    	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
+    	break;
+    case CommandIDs::zoomIn:
+    	break;
+    case CommandIDs::zoomOut:
+    	break;
+    case CommandIDs::zoomNormal:
+    	break;
+    case CommandIDs::reverseDirection:
+    	break;
+
+    case CommandIDs::insertMass:
+    	objController.addObject(Ids::mass);
+    	break;
+    case CommandIDs::insertGround:
+    	objController.addObject(Ids::ground);
+    	break;
+    case CommandIDs::insertResonator:
+    	objController.addObject(Ids::resonator);
+    	break;
+    case CommandIDs::insertPort:
+    	objController.addObject(Ids::port);
+    	break;
+
+    case CommandIDs::insertLink:
+    	objController.addObject(Ids::link);
+    	break;
+    case CommandIDs::insertTouch:
+    	objController.addObject(Ids::touch);
+    	break;
+    case CommandIDs::insertPluck:
+    	objController.addObject(Ids::pluck);
+    	break;
+
+    case CommandIDs::insertAudioOutput:
+    	objController.addObject(Ids::audioout);
+    	break;
+    case CommandIDs::insertWaveguide:
+    	objController.addObject(Ids::waveguide);
+    	break;
+    case CommandIDs::insertTermination:
+    	objController.addObject(Ids::termination);
+    	break;
+    default:
+    	return false;
+	}
+	return true;
 }
+
 
 //[/MiscUserCode]
 
@@ -258,9 +346,9 @@ bool ContentComp::perform (const InvocationInfo& info)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="ContentComp" componentName=""
-                 parentClasses="public Component, public MenuBarModel, public ApplicationCommandTarget"
-                 constructorParams="MainAppWindow&amp; mainWindow_, AppController&amp; appController_"
-                 variableInitialisers="mainWindow(mainWindow_),&#10;appController(appController_),&#10;objComp(0)"
+                 parentClasses="public Component, public ApplicationCommandTarget"
+                 constructorParams="MainAppWindow&amp; mainWindow_, ObjController&amp; objController_"
+                 variableInitialisers="mainWindow(mainWindow_),&#10;objController(objController_),&#10;objectsHolder(0)"
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="0" initialWidth="600" initialHeight="400">
   <BACKGROUND backgroundColour="ff000000"/>

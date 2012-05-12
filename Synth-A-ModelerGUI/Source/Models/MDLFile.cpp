@@ -29,6 +29,7 @@
 #include "../Utilities/StoredSettings.h"
 #include "ObjectIDs.h"
 
+const char* MDLFile::mdlFileExtension = ".mdl";
 
 MDLFile::MDLFile()
 : FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
@@ -36,10 +37,21 @@ MDLFile::MDLFile()
 {
 	initMDL();
 	mdlRoot.addListener(this);
+
+}
+MDLFile::MDLFile(const File& file)
+: FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
+  mdlRoot(Objects::MDLROOT)
+{
+	initMDL();
+	mdlRoot.addListener(this);
+
+	loadDocument(file);
 }
 
 MDLFile::~MDLFile()
 {
+	mdlRoot.removeListener(this);
 	destroyMDL();
 }
 
@@ -87,9 +99,10 @@ const String MDLFile::loadDocument (const File& file)
 	{
 		// success
 		DBG("Opened MDL file: "+String(mdlPath));
+		setFile(file);
 		setChangedFlag(false);
-		File mf(mdlPath);
-		mdlName = mf.getFileName();
+//		File mf(mdlPath);
+		mdlName = file.getFileName();
 		return String::empty;
 	}
 	else

@@ -3,7 +3,7 @@
 
   This is an automatically generated file created by the Jucer!
 
-  Creation date:  16 Apr 2012 1:46:30am
+  Creation date:  12 May 2012 12:35:30am
 
   Be careful when adding custom code to these files, as only the code within
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
@@ -19,8 +19,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__
-#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__
+#ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_20A12D4E__
+#define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_20A12D4E__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../../JuceLibraryCode/JuceHeader.h"
@@ -43,7 +43,7 @@ class ContentComp  : public Component,
 {
 public:
     //==============================================================================
-    ContentComp (MainAppWindow& mainWindow_, AppController& appController_);
+    ContentComp (MainAppWindow& mainWindow_, ObjController& objController_);
     ~ContentComp();
 
     //==============================================================================
@@ -52,6 +52,9 @@ public:
 	void getAllCommands(Array<CommandID>& commands);
 	void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
 	bool perform(const InvocationInfo& info);
+
+	void setMDLFile(MDLFile* newMDLFile);
+    void updateMainAppWindowTitle(const String& newTitle);
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -64,9 +67,12 @@ public:
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+
+
     MainAppWindow& mainWindow;
-	AppController& appController;
-	ObjectsHolder* objectsHolder;
+    ObjController& objController;
+	ScopedPointer<ObjectsHolder> objectsHolder;
+//	MDLFile* mdlFile;
     //[/UserVariables]
 
     //==============================================================================
@@ -79,4 +85,4 @@ private:
 };
 
 
-#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_67843116__
+#endif   // __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_20A12D4E__

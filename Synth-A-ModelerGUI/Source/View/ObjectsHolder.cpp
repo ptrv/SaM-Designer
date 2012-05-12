@@ -24,9 +24,11 @@
 */
 
 #include "ObjectsHolder.h"
+#include "../Models/MDLFile.h"
 
-ObjectsHolder::ObjectsHolder(ObjController* objController_)
-: objController(objController_)
+ObjectsHolder::ObjectsHolder(ObjController& objController_)
+: objController(objController_),
+  mdlFile(nullptr)
 {
 	setSize(100,100);
 }
@@ -48,3 +50,17 @@ void ObjectsHolder::paint(Graphics& g)
 //{
 //
 //}
+
+void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
+{
+
+}
+
+void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
+{
+	if(newMDLFile != mdlFile)
+	{
+		mdlFile = newMDLFile;
+		mdlFile->addChangeListener(this);
+	}
+}

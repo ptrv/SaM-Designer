@@ -24,12 +24,12 @@
 */
 
 #include "ObjController.h"
-#include "AppController.h"
+#include "MDLController.h"
 #include "../Models/ObjectIDs.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
 
-ObjController::ObjController(AppController& owner_)
+ObjController::ObjController(MDLController& owner_)
 : owner(owner_)
 {
 
@@ -50,7 +50,7 @@ void ObjController::addObject(const Identifier& objId, int posX, int posY)
 	const Identifier& tmpIdent = Objects::getObjectType(objId);
 	if(tmpIdent != Objects::invalid)
 	{
-		ValueTree mdl = owner.mdlController->getMDLTree();
+		ValueTree mdl = owner.getMDLTree();
 		ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
 		this->perform(new AddObjectAction(subTree, objId, posX, posY), "Add new Object");
 	}
@@ -59,7 +59,7 @@ void ObjController::addObject(const Identifier& objId, int posX, int posY)
 
 void ObjController::removeObject(const String& objName)
 {
-	MDLFile* const mf = owner.mdlController->getMDLFile();
+	MDLFile* const mf = owner.getMDLFile();
 	ValueTree childToRemove = mf->getObjectWithName(objName);
 	if(childToRemove.isValid())
 	{

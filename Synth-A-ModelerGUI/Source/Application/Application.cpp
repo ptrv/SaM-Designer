@@ -26,6 +26,8 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "Application.h"
 #include "../Controller/AppController.h"
+#include "../View/PrefsPanel.h"
+
 
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"
@@ -62,7 +64,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	menuModel = new MainMenuModel();
 
 	debugWindow = new DebugWindow();
-	appController = new AppController(*this, *debugWindow);
+//	appController = new AppController(*this, *debugWindow);
 //	mainWindow = new MainAppWindow(*appController.get());
 
     if (mainWindows.size() == 0)
@@ -87,7 +89,7 @@ void SynthAModelerApplication::shutdown()
 	menuModel = nullptr;
 
 	debugWindow = nullptr;
-	appController = nullptr;
+//	appController = nullptr;
 
 	StoredSettings::deleteInstance();
 	mainWindows.clear();
@@ -247,13 +249,13 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
 
 bool SynthAModelerApplication::perform (const InvocationInfo& info)
 {
-	if(appController->menuItemWasClicked(info.commandID))
-		return true;
-	else
-		return JUCEApplication::perform (info);
+//	if(appController->menuItemWasClicked(info.commandID))
+//		return true;
+//	else
+//		return JUCEApplication::perform (info);
 
-//    switch (info.commandID)
-//    {
+    switch (info.commandID)
+    {
 //        case CommandIDs::newProject:        createNewProject(); break;
 //        case CommandIDs::open:              askUserToOpenFile(); break;
 //        case CommandIDs::showPrefs:         showPrefsPanel(); break;
@@ -262,15 +264,53 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
 //        case CommandIDs::showUTF8Tool:      showUTF8ToolWindow(); break;
 //        case CommandIDs::updateModules:     runModuleUpdate (String::empty); break;
 //
-//        default:                            return JUCEApplication::perform (info);
-//    }
-//
-//    return true;
+    case CommandIDs::newFile:
+    	creatNewMDLDocument();
+    	break;
+    case CommandIDs::open:
+    	askUserToOpenFile();
+    	break;
+    case CommandIDs::saveAll:
+    	break;
+    case CommandIDs::closeAllDocuments:
+    	break;
+    case CommandIDs::showPrefs:
+    	PrefsPanel::show();
+    	break;
+
+    case CommandIDs::showOutputConsole:
+    	debugWindow->toggleDebugWindow();
+    	getOrCreateFrontmostWindow()->toFront(true);
+    	break;
+    case CommandIDs::clearOutputConsole:
+    	debugWindow->clear();
+    	break;
+    case CommandIDs::openDataDir:
+    {
+#if JUCE_MAC
+        Process::openDocument("/usr/bin/open", StoredSettings::getInstance()->getDataDir());
+#else
+    	Process::openDocument("file:"+StoredSettings::getInstance()->getDataDir(), "");
+#endif
+
+    }
+    break;
+    case CommandIDs::showHelp:
+    {
+    	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+    	helpUrl.launchInDefaultBrowser();
+    }
+    break;
+    default:
+    	return JUCEApplication::perform (info);
+    }
+
+    return true;
 }
 
 //==============================================================================
 
-void SynthAModelerApplication::createNewProject()
+void SynthAModelerApplication::creatNewMDLDocument()
 {
 	MainAppWindow* mw = getOrCreateEmptyWindow();
 //	mw->showNewProjectWizard();
@@ -298,8 +338,8 @@ void SynthAModelerApplication::updateRecentProjectList()
     {
         MainAppWindow* mw = mainWindows[i];
 
-//        if (mw != nullptr && mw->getProject() != nullptr)
-//            projects.add (mw->getProject()->getFile());
+        if (mw != nullptr && mw->getMDLFile() != nullptr)
+            projects.add (mw->getMDLFile()->getFile());
     }
 
     StoredSettings::getInstance()->setLastFiles(projects);
@@ -307,7 +347,7 @@ void SynthAModelerApplication::updateRecentProjectList()
 
 MainAppWindow* SynthAModelerApplication::createNewMainWindow()
 {
-    MainAppWindow* mw = new MainAppWindow(*appController.get());
+    MainAppWindow* mw = new MainAppWindow();
     mainWindows.add (mw);
     mw->restoreWindowPosition();
     avoidSuperimposedWindows (mw);
@@ -371,9 +411,46 @@ void SynthAModelerApplication::avoidSuperimposedWindows (MainAppWindow* const mw
 
 bool SynthAModelerApplication::openFile(const File& file)
 {
-	appController->openMDL(file);
-	appController->setMainWindowTitle();
-	return true;
+    for (int j = mainWindows.size(); --j >= 0;)
+    {
+        if (mainWindows.getUnchecked(j)->getMDLFile() != nullptr
+             && mainWindows.getUnchecked(j)->getMDLFile()->getFile() == file)
+        {
+            mainWindows.getUnchecked(j)->toFront (true);
+            return true;
+        }
+    }
+
+    if (file.hasFileExtension (MDLFile::mdlFileExtension))
+    {
+        ScopedPointer <MDLFile> newMDL (new MDLFile());
+
+        if (newMDL->loadFrom (file, true))
+        {
+            MainAppWindow* w = getOrCreateEmptyWindow();
+            w->setMDLFile(newMDL.release());
+            w->makeVisible();
+            avoidSuperimposedWindows (w);
+            return true;
+        }
+    }
+    else if (file.exists())
+    {
+//        MainWindow* w = getOrCreateFrontmostWindow();
+//
+//        const bool ok = w->openFile (file);
+//        w->makeVisible();
+//        avoidSuperimposedWindows (w);
+//        return ok;
+    	Alerts::wrongFileType();
+
+    }
+
+    return false;
+
+//	appController->openMDL(file);
+//	appController->setMainWindowTitle();
+//	return true;
 }
 //==============================================================================
 
@@ -543,3 +620,18 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
 
 }
 
+void SynthAModelerApplication::writeToDebugConsole(const String& textToWrite)
+{
+	if(textToWrite.compare("") != 0)
+	{
+		debugWindow->printHeader();
+		debugWindow->addText("Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n");
+		debugWindow->addText(textToWrite);
+		debugWindow->addText(newLine);
+	}
+	else
+	{
+		debugWindow->addText("Nothing...\n\n");
+	}
+
+}

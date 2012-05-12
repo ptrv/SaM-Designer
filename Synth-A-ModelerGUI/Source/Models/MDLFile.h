@@ -35,6 +35,7 @@ class MDLFile : public FileBasedDocument,
 //	friend class MDLParser;
 public:
 	MDLFile();
+	MDLFile(const File& file);
 	~MDLFile();
 
 	void newMDL();
@@ -59,6 +60,8 @@ public:
 
     ValueTree getObjectWithName(const String& objName);
 
+    static const char* mdlFileExtension;
+
 protected:
 	const String getDocumentTitle();
 	const String loadDocument (const File& file);
@@ -76,6 +79,8 @@ private:
 	static File lastDocumentOpened;
 
 	UndoManager undoMgr;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLFile);
 
 };
 

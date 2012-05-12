@@ -37,13 +37,14 @@
 ScopedPointer<ApplicationCommandManager> commandManager;
 
 //==============================================================================
-MainAppWindow::MainAppWindow(AppController& appController_)
+MainAppWindow::MainAppWindow()
     : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
     		Colour::greyLevel (0.6f),
                       DocumentWindow::allButtons,
-                      false),
-      appController(appController_)
+                      false)
 {
+	mdlController = new MDLController();
+	objController = new ObjController(*mdlController);
 	setUsingNativeTitleBar (true);
 	createMDLFileContentCompIfNeeded();
 
@@ -96,7 +97,7 @@ void MainAppWindow::createMDLFileContentCompIfNeeded()
     if (getMDLFileContentComponent() == nullptr)
     {
         clearContentComponent();
-        setContentOwned (new ContentComp(*this, appController), false);
+        setContentOwned (new ContentComp(*this, *objController), false);
     }
 }
 
@@ -150,7 +151,7 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
 {
     createMDLFileContentCompIfNeeded();
-//    getMDLFileContentComponent()->set(newProject);
+    getMDLFileContentComponent()->setMDLFile(newMDLFile);
     mdlController->setMDLFile(newMDLFile);
     commandManager->commandStatusChanged();
 
@@ -182,8 +183,8 @@ void MainAppWindow::restoreWindowPosition()
 {
     String windowState;
 
-//    if (currentProject != nullptr)
-//        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName());
+    if (mdlController->getMDLFile() != nullptr)
+        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName());
 
     if (windowState.isEmpty())
         windowState = StoredSettings::getInstance()->getProps().getValue ("lastMainWindowPos");
@@ -262,15 +263,46 @@ bool MainAppWindow::isCommandActive (const CommandID commandID)
 
 bool MainAppWindow::perform (const InvocationInfo& info)
 {
-    return appController.menuItemWasClicked(info.commandID);
+//    return appController.menuItemWasClicked(info.commandID);
+    switch (info.commandID)
+    {
+    case CommandIDs::closeDocument:
+    	mdlController->close();
+//    	setMainWindowTitle();
+    	break;
+    case CommandIDs::saveDocument:
+    	mdlController->save();
+//    	setMaiWindowTitle();
+    	break;
+    case CommandIDs::saveDocumentAs:
+    	mdlController->saveAs();
+    	break;
+    case CommandIDs::generateFaust:
+    {
+    	String consoleText = mdlController->generateFaust();
+    	SynthAModelerApplication::getApp()->writeToDebugConsole(consoleText);
+    }
+    	break;
+    case CommandIDs::generateExternal:
+    {
+    	String consoleText = mdlController->generateExternal();
+    	SynthAModelerApplication::getApp()->writeToDebugConsole(consoleText);
+    }
+    	break;
+
+	default:
+        return false;
+    };
+    return true;
+
 }
 
-bool MainAppWindow::mdlCheckAndSave()
-{
-	return appController.mdlCheckAndSave();
-}
+//bool MainAppWindow::mdlCheckAndSave()
+//{
+//	return appController.mdlCheckAndSave();
+//}
 
-void MainAppWindow::updateTitle (const String& documentName)
+void MainAppWindow::updateTitle ()
 {
 	String title = JUCEApplication::getInstance()->getApplicationName();
 	title << " - " << mdlController->getMDLFile()->getName();
@@ -287,3 +319,8 @@ MDLFile* MainAppWindow::getMDLFile()
 //	mdlController->mdlCheckAndSaveIfNeeded();
 //	return true;
 //}
+
+UndoManager* MainAppWindow::getUndoManager()
+{
+	return mdlController->getUndoManager();
+}

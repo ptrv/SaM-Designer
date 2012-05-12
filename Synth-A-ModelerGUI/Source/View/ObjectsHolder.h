@@ -30,18 +30,25 @@
 #include "../Controller/AppController.h"
 #include "BaseObjectComponent.h"
 
-class ObjectsHolder : public Component
+class MDLFile;
+
+class ObjectsHolder : public Component,
+						public ChangeListener
 {
 public:
-	ObjectsHolder(ObjController* objController_);
+	ObjectsHolder(ObjController& objController_);
 	~ObjectsHolder();
 
 	void paint(Graphics& g);
 //	void resized();
 
+	void setMDLFile(MDLFile* newMDLFile);
+
+	void changeListenerCallback(ChangeBroadcaster*);
 private:
 	OwnedArray<BaseObjectComponent> objects;
-	ObjController* objController;
+	ObjController& objController;
+	MDLFile* mdlFile;
 };
 
 

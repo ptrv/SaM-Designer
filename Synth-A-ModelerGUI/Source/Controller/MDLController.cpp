@@ -33,10 +33,10 @@
 #include "../Models/ObjectIDs.h"
 
 
-MDLController::MDLController(AppController& owner_)
-: owner(owner_)
+MDLController::MDLController()
+//: owner(owner_)
 {
-	currentMdl = new MDLFile();
+	currentMdl = nullptr;
 	outCmd = new OutputCmd();
 }
 
@@ -171,7 +171,8 @@ UndoManager* MDLController::getUndoManager()
 
 bool MDLController::perform (UndoableAction* const action, const String& actionName)
 {
-	return owner.perform(action, actionName);
+//	return owner.perform(action, actionName);
+	return getUndoManager()->perform(action, actionName);
 }
 
 ValueTree MDLController::getMDLTree()
@@ -197,4 +198,6 @@ MDLFile* MDLController::getMDLFile() const
 void MDLController::setMDLFile(MDLFile* mdlFile)
 {
 	currentMdl = mdlFile;
+	StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
+	StoredSettings::getInstance()->flush();
 }

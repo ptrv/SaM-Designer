@@ -28,12 +28,12 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
-class AppController;
+class MDLController;
 
 class ObjController
 {
 public:
-	ObjController(AppController& owner_);
+	ObjController(MDLController& owner_);
 	~ObjController();
 
 	bool perform (UndoableAction* const action, const String& actionName);
@@ -41,7 +41,7 @@ public:
 	void addObject(const Identifier& objId, int posX=10, int posY=10);
 	void removeObject(const String& objName);
 private:
-	AppController& owner;
+	MDLController& owner;
 };
 
 

@@ -33,7 +33,7 @@ class AppController;
 class MDLController
 {
 public:
-	MDLController(AppController& owner_);
+	MDLController();
 	~MDLController();
 
 	void newFile();
@@ -58,7 +58,7 @@ public:
 private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;
-	AppController& owner;
+//	AppController& owner;
 };
 
 

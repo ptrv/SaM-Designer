@@ -80,10 +80,12 @@ public:
 
     virtual MainAppWindow* createNewMainWindow();
 
-    void createNewProject();
+    void creatNewMDLDocument();
     void askUserToOpenFile();
     bool closeAllDocuments (bool askUserToSave);
     void updateRecentProjectList();
+
+    void writeToDebugConsole(const String& textToWrite);
 
     private:
     friend class AppController;
@@ -91,7 +93,7 @@ public:
     OwnedArray<MainAppWindow> mainWindows;
 
     ScopedPointer<DebugWindow> debugWindow;
-    ScopedPointer<AppController> appController;
+//    ScopedPointer<AppController> appController;
 
     MainAppWindow* getOrCreateFrontmostWindow();
     MainAppWindow* getOrCreateEmptyWindow();

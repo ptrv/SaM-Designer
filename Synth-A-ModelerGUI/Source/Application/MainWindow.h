@@ -45,7 +45,7 @@ class MainAppWindow   : public DocumentWindow,
 {
 public:
     //==============================================================================
-    MainAppWindow(AppController& appController_);
+    MainAppWindow();
     ~MainAppWindow();
 
     void closeButtonPressed();
@@ -68,7 +68,7 @@ public:
     bool isCommandActive (const CommandID commandID);
     bool perform (const InvocationInfo& info);
 
-    void updateTitle (const String& documentName);
+    void updateTitle ();
 
     MDLFile* getMDLFile();
     void setMDLFile(MDLFile* newMDLFile);
@@ -76,6 +76,7 @@ public:
     // the command manager object used to dispatch command events
 //    ApplicationCommandManager commandManager;
     ContentComp* getMDLFileContentComponent() const;
+    UndoManager* getUndoManager();
 private:
 
     String getProjectWindowPosName() const
@@ -88,8 +89,9 @@ private:
     }
 
 
-    AppController& appController;
+//    AppController& appController;
     ScopedPointer<MDLController> mdlController;
+    ScopedPointer<ObjController> objController;
 
     void createMDLFileContentCompIfNeeded();
 

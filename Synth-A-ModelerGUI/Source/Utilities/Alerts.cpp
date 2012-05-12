@@ -46,6 +46,12 @@ void Alerts::missingFaust()
 	missingAlert(title, msg);
 }
 
+void Alerts::wrongFileType()
+{
+	String title = "You tried to open a wrong file type";
+	String msg = "Try to open a file with the extension .mdl";
+	missingAlert(title, msg);
+}
 void Alerts::missingAlert(const String& title, const String& msg)
 {
 	AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");

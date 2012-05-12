@@ -63,9 +63,6 @@
               file="Source/Utilities/StoredSettings.h"/>
       </GROUP>
       <GROUP id="{3076B932-78A9-9CF5-9D15-340DC0A8A1FF}" name="Controller">
-        <FILE id="w1WXqJ" name="AppController.cpp" compile="1" resource="0"
-              file="Source/Controller/AppController.cpp"/>
-        <FILE id="rtmHfN" name="AppController.h" compile="0" resource="0" file="Source/Controller/AppController.h"/>
         <FILE id="M8Afyp" name="MDLController.cpp" compile="1" resource="0"
               file="Source/Controller/MDLController.cpp"/>
         <FILE id="K00AiB" name="MDLController.h" compile="0" resource="0" file="Source/Controller/MDLController.h"/>
