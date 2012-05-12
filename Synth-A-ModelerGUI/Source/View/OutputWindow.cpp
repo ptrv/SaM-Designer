@@ -23,12 +23,13 @@
 
 */
 #include "../Application/CommonHeaders.h"
-#include "DebugWindow.h"
 #include "../Application/Application.h"
 #include "../View/TextConsole.h"
 #include "../Utilities/StoredSettings.h"
 
-DebugWindow::DebugWindow()
+#include "OutputWindow.h"
+
+OutputWindow::OutputWindow()
 :
 DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Output",
 		Colours::darkseagreen, 0)
@@ -50,7 +51,7 @@ DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Ou
 	addKeyListener(commandManager->getKeyMappings());
 }
 
-DebugWindow::~DebugWindow()
+OutputWindow::~OutputWindow()
 {
 	// Workaround to prevent wrong bound values to be stored in user settings on linux
 #if JUCE_LINUX
@@ -67,12 +68,12 @@ DebugWindow::~DebugWindow()
 
 }
 
-void DebugWindow::closeButtonPressed()
+void OutputWindow::closeButtonPressed()
 {
 	makeHide();
 }
 
-void DebugWindow::toggleDebugWindow()
+void OutputWindow::toggleDebugWindow()
 {
 	if(isVisible())
 	{
@@ -84,19 +85,19 @@ void DebugWindow::toggleDebugWindow()
 	}
 }
 
-void DebugWindow::clear()
+void OutputWindow::clear()
 {
 	if(isVisible())
 		console->clear();
 }
 
-void DebugWindow::addText(const String& compilerText)
+void OutputWindow::addText(const String& compilerText)
 {
 	SAM_LOG(compilerText);
 	console->addLine(compilerText);
 }
 
-void DebugWindow::printWelcomeMessage()
+void OutputWindow::printWelcomeMessage()
 {
 	String welcomeMsg;
 	welcomeMsg << "Hi " << SystemStats::getLogonName() << "!" << newLine;
@@ -105,7 +106,7 @@ void DebugWindow::printWelcomeMessage()
 	welcomeMsg << newLine;
 	console->addLine(welcomeMsg);
 }
-void DebugWindow::printHeader()
+void OutputWindow::printHeader()
 {
 	String debugText;
 	debugText << newLine;
@@ -116,38 +117,38 @@ void DebugWindow::printHeader()
 	console->addLine(debugText);
 }
 
-void DebugWindow::addNewLine()
+void OutputWindow::addNewLine()
 {
 	console->addLine(newLine);
 }
-void DebugWindow::makeVisible()
+void OutputWindow::makeVisible()
 {
 	setVisible(true);
 	addToDesktop();
 	StoredSettings::getInstance()->setShowCompilerWindow(true);
 }
 
-void DebugWindow::makeHide()
+void OutputWindow::makeHide()
 {
 	setVisible(false);
 	removeFromDesktop();
 	StoredSettings::getInstance()->setShowCompilerWindow(false);
 }
 
-ApplicationCommandTarget* DebugWindow::getNextCommandTarget()
+ApplicationCommandTarget* OutputWindow::getNextCommandTarget()
 {
     return findFirstTargetParentComponent();
 }
 
-void DebugWindow::getAllCommands (Array <CommandID>& commands)
+void OutputWindow::getAllCommands (Array <CommandID>& commands)
 {
 }
 
-void DebugWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
+void OutputWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
 {
 }
 
-bool DebugWindow::perform (const InvocationInfo& info)
+bool OutputWindow::perform (const InvocationInfo& info)
 {
 	return false;
 }

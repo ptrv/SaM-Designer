@@ -25,7 +25,7 @@
 
 #include "CommonHeaders.h"
 #include "../View/PrefsPanel.h"
-#include "../View/DebugWindow.h"
+#include "../View/OutputWindow.h"
 #include "MainWindow.h"
 #include "../Models/MDLFile.h"
 
@@ -65,7 +65,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 
 	menuModel = new MainMenuModel();
 
-	debugWindow = new DebugWindow();
+	outputWindow = new OutputWindow();
 //	commandManager->registerAllCommandsForTarget(debugWindow);
     Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
 
@@ -81,8 +81,8 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 
 //	if(StoredSettings::getInstance()->getShowCompilerWindow())
 	{
-		debugWindow->printWelcomeMessage();
-		debugWindow->makeVisible ();
+		outputWindow->printWelcomeMessage();
+		outputWindow->makeVisible ();
 		getOrCreateFrontmostWindow()->toFront(true);
 
 	}
@@ -98,7 +98,7 @@ void SynthAModelerApplication::shutdown()
 #endif
 	menuModel = nullptr;
 
-	debugWindow = nullptr;
+	outputWindow = nullptr;
 
 	StoredSettings::deleteInstance();
 	mainWindows.clear();
@@ -246,11 +246,11 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::showOutputConsole:
-    	debugWindow->toFront(false);
+    	outputWindow->toFront(false);
     	getOrCreateFrontmostWindow()->toFront(true);
     	break;
     case CommandIDs::clearOutputConsole:
-    	debugWindow->clear();
+    	outputWindow->clear();
     	break;
     case CommandIDs::openDataDir:
     	Utils::openDataDir();
@@ -527,14 +527,14 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title, const St
 {
 	if(textToWrite.compare("") != 0)
 	{
-		debugWindow->printHeader();
-		debugWindow->addText(title);
-		debugWindow->addText(textToWrite);
-		debugWindow->addNewLine();
+		outputWindow->printHeader();
+		outputWindow->addText(title);
+		outputWindow->addText(textToWrite);
+		outputWindow->addNewLine();
 	}
 	else
 	{
-		debugWindow->addText("Nothing...\n\n");
+		outputWindow->addText("Nothing...\n\n");
 	}
 
 }

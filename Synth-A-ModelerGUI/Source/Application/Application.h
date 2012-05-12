@@ -30,7 +30,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 class MainAppWindow;
-class DebugWindow;
+class OutputWindow;
 //==============================================================================
 class SynthAModelerApplication  : public JUCEApplication
 {
@@ -87,7 +87,7 @@ public:
 
     OwnedArray<MainAppWindow> mainWindows;
 
-    ScopedPointer<DebugWindow> debugWindow;
+    ScopedPointer<OutputWindow> outputWindow;
 
     MainAppWindow* getOrCreateFrontmostWindow();
     MainAppWindow* getOrCreateEmptyWindow();

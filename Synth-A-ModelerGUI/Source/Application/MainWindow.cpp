@@ -26,7 +26,7 @@
 */
 
 #include "../Application/Application.h"
-#include "../View/DebugWindow.h"
+#include "../View/OutputWindow.h"
 #include "../View/ContentComp.h"
 #include "../Controller/ObjController.h"
 #include "../Controller/MDLController.h"

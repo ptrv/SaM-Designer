@@ -27,12 +27,12 @@
 #define __DEBUGWINDOW_H_3A3F156F__
 
 class TextConsole;
-class DebugWindow : public DocumentWindow,
+class OutputWindow : public DocumentWindow,
 					public ApplicationCommandTarget
 {
 public:
-	DebugWindow();
-	~DebugWindow();
+	OutputWindow();
+	~OutputWindow();
 
 	void closeButtonPressed();
 
