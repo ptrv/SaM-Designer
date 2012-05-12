@@ -28,7 +28,6 @@
 #include "../Models/MDLFile.h"
 #include "../Models/OutputCmd.h"
 #include "../Application/CommonHeaders.h"
-#include "../View/ExportPanel.h"
 #include "../Models/ObjectIDs.h"
 #include "../Application/MainWindow.h"
 

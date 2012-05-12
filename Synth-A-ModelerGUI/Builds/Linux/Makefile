@@ -57,7 +57,6 @@ OBJECTS := \
   $(OBJDIR)/OutputCmd_1e28237d.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
   $(OBJDIR)/DebugWindow_3b335a2.o \
-  $(OBJDIR)/ExportPanel_4e5f49af.o \
   $(OBJDIR)/PrefsPanel_2006a45f.o \
   $(OBJDIR)/ContentComp_99fa8a27.o \
   $(OBJDIR)/ObjectsHolder_b334705f.o \
@@ -153,11 +152,6 @@ $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 $(OBJDIR)/DebugWindow_3b335a2.o: ../../Source/View/DebugWindow.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling DebugWindow.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/ExportPanel_4e5f49af.o: ../../Source/View/ExportPanel.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ExportPanel.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/PrefsPanel_2006a45f.o: ../../Source/View/PrefsPanel.cpp

@@ -89,8 +89,6 @@
               file="Source/View/BaseObjectComponent.h"/>
         <FILE id="gzMWlB" name="DebugWindow.cpp" compile="1" resource="0" file="Source/View/DebugWindow.cpp"/>
         <FILE id="bVPf9s" name="DebugWindow.h" compile="0" resource="0" file="Source/View/DebugWindow.h"/>
-        <FILE id="WLXXDy" name="ExportPanel.cpp" compile="1" resource="0" file="Source/View/ExportPanel.cpp"/>
-        <FILE id="OwQrzA" name="ExportPanel.h" compile="0" resource="0" file="Source/View/ExportPanel.h"/>
         <FILE id="dNRcpC" name="PrefsPanel.cpp" compile="1" resource="0" file="Source/View/PrefsPanel.cpp"/>
         <FILE id="DWHh36" name="PrefsPanel.h" compile="0" resource="0" file="Source/View/PrefsPanel.h"/>
         <FILE id="b4aWii" name="ContentComp.cpp" compile="1" resource="0" file="Source/View/ContentComp.cpp"/>
