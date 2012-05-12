@@ -46,7 +46,14 @@ DocumentWindow("Output", Colours::darkgrey, DocumentWindow::closeButton)
 
 DebugWindow::~DebugWindow()
 {
-    // save the current size and position to our settings file..
+	// Workaround to prevent wrong bound values to be stored in user settings on linux
+#if JUCE_LINUX
+	Rectangle<int> br = getBounds();
+	br.setHeight(getHeight()-28);
+	br.setWidth(getWidth()-2);
+	setBounds(br);
+#endif
+
     StoredSettings::getInstance()->getProps()
         .setValue ("lastDebugWindowPos", getWindowStateAsString());
 
