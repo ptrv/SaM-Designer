@@ -99,7 +99,7 @@ public:
         		  BinaryData::synthamodeler_icon_pngSize))
     {
         text1.setJustification (Justification::centredTop);
-        String infoTxt(BinaryData::Info_txt);
+        String infoTxt(BinaryData::about_txt);
         text1.append (infoTxt, Font (13.0f));
 
         text2.setJustification (Justification::centred);

@@ -35,13 +35,13 @@ static const unsigned char temp_35c88a8a[] =
 
 const char* mdl_file_header_txt = (const char*) temp_35c88a8a;
 
-//================== Info.txt ==================
-static const unsigned char temp_881e27ae[] =
+//================== about.txt ==================
+static const unsigned char temp_6d92d1f1[] =
 "The Synth-A-Model project was carried out at the TU Berlin's Audio Communication Group.  The Synth-A-Model compiler was written by Edgar Berdahl, and the graphical user interface was created by Peter Vasil.  We would like to graciously thank Prof. Ju"
 "lius O. Smith III, Alexandros Kontogeorgakopoulos, Prof. Stefan Weinzierl, Prof. Yann Orlarey, and the Alexander von Humboldt foundation for their support.\n"
 "\n";
 
-const char* Info_txt = (const char*) temp_881e27ae;
+const char* about_txt = (const char*) temp_6d92d1f1;
 
 //================== prefs_about.png ==================
 static const unsigned char temp_dcbdb15b[] =
@@ -692,8 +692,8 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     {
         case 0xe7d611d7:
         case 0x344f5dad:  numBytes = 875; return mdl_file_header_txt;
-        case 0x0e7ab37f:
-        case 0x1f1fe76c:  numBytes = 407; return Info_txt;
+        case 0xb02b86be:
+        case 0x1f1fe76c:  numBytes = 407; return about_txt;
         case 0x496477a8:
         case 0xd576101d:  numBytes = 1819; return prefs_about_png;
         case 0xdd254505:

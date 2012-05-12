@@ -1,0 +1,34 @@
+/** \mainpage
+
+<p>The Synth-A-Model project was carried out at the TU Berlin's Audio
+Communication Group. The Synth-A-Model compiler was written by Edgar Berdahl,
+and the graphical user interface was created by Peter Vasil.  We would like to
+graciously thank Prof. Julius O. Smith III, Alexandros Kontogeorgakopoulos,
+Prof. Stefan Weinzierl, Prof. Yann Orlarey, and the Alexander von Humboldt
+foundation for their support.</p>
+
+<p>For further information on physical modeling for artistic applications, please
+see the following publications:</p>
+
+<ul>
+<li><p>C. Cadoz, A. Luciani, and J.-L. Florens, CORDIS-ANIMA: A Modeling and
+Simulation System for Sound and Image Synthesis---The General Formalism,
+Computer Music Journal, 17(1), pp. 19-29, 1993.</p></li> <li><p>N. Castagne and
+C. Cadoz. "Creating music by means of physical thinking: The musician oriented
+Genesis environment." In Proceedings of the 5th International Conference on
+Digital Audio Effects, pp. 169 - 174, Hamburg, Germany, Sept. 2002.</p></li>
+<li><p>J. Smith III. Physical Audio Signal Processing: For Virtual Musical
+Instruments and Audio Effects, W3K Publishing, 2011, ISBN 978-0-9745607-2-4,
+available online at: http://ccrma.stanford.edu/~jos/pasp/</p></li> <li><p>E.
+Berdahl, G. Niemeyer, and J. Smith III. "Using Haptic Devices to Interface
+Directly with Digital Waveguide-Based Musical Instruments," in Proceedings of
+the Ninth International Conference on New Interfaces for Musical Expression,
+Pittsburgh, PA, pp. 183-186, June 4-6, 2009.</p></li> <li><p>A.
+Kontogeorgakopoulos and C. Cadoz. "Cordis Anima Physical Modeling and
+Simulation System Analysis." In Proceedings SMC'07, 4th Sound and Music
+Computing Conference, Lefkada, Greece, July 11-13, 2007.</p></li> <li><p>C.
+Cadoz, A. Luciani, J.-L. Florens, Synthese musicale par simulation des
+mecanismes instrumentaux, Revue d'acouqistique, 59, pp. 279-292, 1981.</p></li>
+</ul>
+
+*/
