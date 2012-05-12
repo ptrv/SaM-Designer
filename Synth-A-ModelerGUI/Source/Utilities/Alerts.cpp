@@ -30,26 +30,27 @@
 void Alerts::missingPerl()
 {
 	String title = "Missing perl executable";
-	String msg;
+	String msg = "Please install perl >= 5.10";
 	missingAlert(title, msg);
 }
 void Alerts::missingSAM()
 {
 	String title = "Missing Synth-A-Modeler compiler";
-	String msg;
+	String msg = "Please set the path for the DATA_DIR which consists ";
+	msg << "the Synth-A-Modeler script.";
 	missingAlert(title, msg);
 }
 void Alerts::missingFaust()
 {
 	String title = "Missing faust executable";
-	String msg;
+	String msg = "Please install faust and set path in preferences.";
 	missingAlert(title, msg);
 }
 
 void Alerts::wrongFileType()
 {
 	String title = "You tried to open a wrong file type";
-	String msg = "Try to open a file with the extension .mdl";
+	String msg = "Open a file with the extension .mdl";
 	missingAlert(title, msg);
 }
 void Alerts::missingAlert(const String& title, const String& msg)

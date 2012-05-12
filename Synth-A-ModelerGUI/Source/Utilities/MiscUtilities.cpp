@@ -8,6 +8,10 @@
   ==============================================================================
 */
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "StoredSettings.h"
+
+namespace Utils
+{
 
 bool cancelAnyModalComponents()
 {
@@ -40,4 +44,23 @@ FileLogger* getLogger()
 
 	return FileLogger::createDefaultAppLogger(subDir,
 			"Synth-A-Modeler.log", "Synth-A-Modeler logfile");
+}
+
+void openHelpUrl()
+{
+	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+	helpUrl.launchInDefaultBrowser();
+}
+
+void openDataDir()
+{
+#if JUCE_MAC
+	Process::openDocument("/usr/bin/open", StoredSettings::getInstance()->getDataDir());
+#else
+	Process::openDocument("file:"+StoredSettings::getInstance()->getDataDir(), "");
+#endif
+
+}
+
+
 }

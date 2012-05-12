@@ -182,7 +182,7 @@ PrefsPanel::PrefsPanel()
     setContentOwned (p, true);
 
     if (! restoreWindowStateFromString (prefsWindowPos))
-        centreAroundComponent (0, getWidth(), getHeight());
+        centreWithSize(getWidth(), getHeight());
 
     setResizable (true, true);
     setResizeLimits (400, 400, 1000, 800);

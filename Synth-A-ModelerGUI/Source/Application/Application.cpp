@@ -57,7 +57,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 #endif
 
 	// Do your application's initialisation code here
-	Logger::setCurrentLogger(getLogger(), true);
+	Logger::setCurrentLogger(Utils::getLogger(), true);
 
 	commandManager = new ApplicationCommandManager();
 	commandManager->registerAllCommandsForTarget (this);
@@ -110,7 +110,7 @@ void SynthAModelerApplication::shutdown()
 //==============================================================================
 void SynthAModelerApplication::systemRequestedQuit()
 {
-    if (cancelAnyModalComponents())
+    if (Utils::cancelAnyModalComponents())
     {
         new AsyncQuitRetrier();
         return;
@@ -253,21 +253,11 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	debugWindow->clear();
     	break;
     case CommandIDs::openDataDir:
-    {
-#if JUCE_MAC
-        Process::openDocument("/usr/bin/open", StoredSettings::getInstance()->getDataDir());
-#else
-    	Process::openDocument("file:"+StoredSettings::getInstance()->getDataDir(), "");
-#endif
-
-    }
-    break;
+    	Utils::openDataDir();
+    	break;
     case CommandIDs::showHelp:
-    {
-    	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
-    	helpUrl.launchInDefaultBrowser();
-    }
-    break;
+    	Utils::openHelpUrl();
+    	break;
     default:
     	return JUCEApplication::perform (info);
     }

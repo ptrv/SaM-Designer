@@ -53,12 +53,6 @@ public:
     static SynthAModelerApplication* getApp();
 
 
-    ApplicationCommandTarget* getNextCommandTarget()
-    {
-        return findFirstTargetParentComponent();
-
-    }
-
     void getAllCommands (Array <CommandID>& commands);
     void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
     bool perform (const InvocationInfo& info);

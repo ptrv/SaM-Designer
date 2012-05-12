@@ -36,6 +36,6 @@
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 
-#define SAM_LOG(message) SAMLogger(message)
+#define SAM_LOG(message) Utils::SAMLogger(message)
 
 #endif  // __COMMONHEADERS_H_CA475C67__
