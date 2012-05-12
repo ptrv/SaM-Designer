@@ -148,6 +148,5 @@ void DebugWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 
 bool DebugWindow::perform (const InvocationInfo& info)
 {
-	DBG("perform");
-	return SynthAModelerApplication::getApp()->perform(info);
+	return false;
 }
