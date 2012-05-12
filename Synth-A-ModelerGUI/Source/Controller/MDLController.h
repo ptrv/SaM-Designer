@@ -29,11 +29,12 @@
 class MDLFile;
 class OutputCmd;
 class AppController;
+class MainAppWindow;
 
 class MDLController
 {
 public:
-	MDLController();
+	MDLController(MainAppWindow& mainAppWindow_);
 	~MDLController();
 
 	void newFile();
@@ -58,7 +59,7 @@ public:
 private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;
-//	AppController& owner;
+	MainAppWindow& mainAppWindow;
 };
 
 

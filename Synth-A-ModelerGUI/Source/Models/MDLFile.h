@@ -32,7 +32,6 @@
 class MDLFile : public FileBasedDocument,
 				public ValueTree::Listener
 {
-//	friend class MDLParser;
 public:
 	MDLFile();
 	MDLFile(const File& file);
@@ -62,6 +61,7 @@ public:
 
     static const char* mdlFileExtension;
 
+    bool isEmpty();
 protected:
 	const String getDocumentTitle();
 	const String loadDocument (const File& file);

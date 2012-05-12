@@ -28,20 +28,17 @@
 #ifndef __MAINWINDOW_H_3C77CBD5__
 #define __MAINWINDOW_H_3C77CBD5__
 
-//#include "../../JuceLibraryCode/JuceHeader.h"
-//#include "../View/DebugWindow.h"
-#include "../Controller/AppController.h"
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
-
-//class DebugWindow;
-//class AppController;
+#include "../Controller/MDLController.h"
+#include "../Controller/ObjController.h"
 
 class ContentComp;
 //==============================================================================
 class MainAppWindow   : public DocumentWindow,
-						public ApplicationCommandTarget
+						public ApplicationCommandTarget,
+						public ChangeListener
 {
 public:
     //==============================================================================
@@ -69,6 +66,8 @@ public:
     bool perform (const InvocationInfo& info);
 
     void updateTitle ();
+
+    void changeListenerCallback(ChangeBroadcaster*);
 
     MDLFile* getMDLFile();
     void setMDLFile(MDLFile* newMDLFile);

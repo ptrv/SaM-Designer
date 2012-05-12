@@ -29,12 +29,13 @@
 #include "../Models/OutputCmd.h"
 #include "../Application/CommonHeaders.h"
 #include "../View/ExportPanel.h"
-#include "AppController.h"
 #include "../Models/ObjectIDs.h"
+#include "../Application/MainWindow.h"
 
 
-MDLController::MDLController()
+MDLController::MDLController(MainAppWindow& mainAppWindow_)
 //: owner(owner_)
+: mainAppWindow(mainAppWindow_)
 {
 	currentMdl = nullptr;
 	outCmd = new OutputCmd();
@@ -198,6 +199,9 @@ MDLFile* MDLController::getMDLFile() const
 void MDLController::setMDLFile(MDLFile* mdlFile)
 {
 	currentMdl = mdlFile;
-	StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
-	StoredSettings::getInstance()->flush();
+	if(mdlFile != nullptr)
+	{
+		StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
+		StoredSettings::getInstance()->flush();
+	}
 }

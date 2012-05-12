@@ -51,6 +51,9 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="ISG5W5" name="MiscUtilities.cpp" compile="1" resource="0"
+              file="Source/Utilities/MiscUtilities.cpp"/>
+        <FILE id="qsy70L" name="MiscUtilities.h" compile="0" resource="0" file="Source/Utilities/MiscUtilities.h"/>
         <FILE id="p09OA7" name="MDLWriter.cpp" compile="1" resource="0" file="Source/Utilities/MDLWriter.cpp"/>
         <FILE id="G2H9bT" name="MDLWriter.h" compile="0" resource="0" file="Source/Utilities/MDLWriter.h"/>
         <FILE id="alRTki" name="Alerts.cpp" compile="1" resource="0" file="Source/Utilities/Alerts.cpp"/>

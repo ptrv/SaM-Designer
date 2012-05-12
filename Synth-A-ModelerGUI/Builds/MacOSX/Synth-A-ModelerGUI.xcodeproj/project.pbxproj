@@ -15,6 +15,7 @@
 		199B58018DEF2008BFBB6554 = { isa = PBXBuildFile; fileRef = 007149778634D7092074BB4D; };
 		06B2037F22F395C83BE71359 = { isa = PBXBuildFile; fileRef = 36C0CC4FE71CDF3B9B559F2E; };
 		C23304AF5660C122F7B90274 = { isa = PBXBuildFile; fileRef = 62797BF3F44CD539612C515C; };
+		2D54C02C18296A81E6C977A9 = { isa = PBXBuildFile; fileRef = B4C5E49228AA0A5CA31548D6; };
 		14D5D6100218D84C68420673 = { isa = PBXBuildFile; fileRef = 6C5673C493E4D62C0AF46DA8; };
 		B191AABF42631FA06D8A185F = { isa = PBXBuildFile; fileRef = 5B3BC10820E6A611DABD8729; };
 		99082F613B373758743F33BF = { isa = PBXBuildFile; fileRef = B36A6A8C1F297790F513EB7A; };
@@ -449,6 +450,7 @@
 		9EFD9FB3708AEF1E0FA272E0 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_win32_Files.cpp"; path = "../../../juce/modules/juce_core/native/juce_win32_Files.cpp"; sourceTree = "SOURCE_ROOT"; };
 		9F3088688DD47AAEDB280605 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_Logger.cpp"; path = "../../../juce/modules/juce_core/logging/juce_Logger.cpp"; sourceTree = "SOURCE_ROOT"; };
 		9FFA48523CF0595597C9D5A5 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_JSON.cpp"; path = "../../../juce/modules/juce_core/json/juce_JSON.cpp"; sourceTree = "SOURCE_ROOT"; };
+		A0179A5A149BB93183B343ED = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MiscUtilities.h; path = ../../Source/Utilities/MiscUtilities.h; sourceTree = "SOURCE_ROOT"; };
 		A03F279DAEE01D039308915B = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_ImageFileFormat.cpp"; path = "../../../juce/modules/juce_graphics/images/juce_ImageFileFormat.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A0A079956E6032AA486D56DD = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = "SOURCE_ROOT"; };
 		A0AA6F5E3CCD5D11F428FB8F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_LookAndFeel.cpp"; path = "../../../juce/modules/juce_gui_basics/lookandfeel/juce_LookAndFeel.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -496,6 +498,7 @@
 		B429D95C6DCCA76E8EBAC2D7 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_MouseEvent.h"; path = "../../../juce/modules/juce_gui_basics/mouse/juce_MouseEvent.h"; sourceTree = "SOURCE_ROOT"; };
 		B473EDB4D75696344FCAFF7B = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_RelativePoint.h"; path = "../../../juce/modules/juce_gui_basics/positioning/juce_RelativePoint.h"; sourceTree = "SOURCE_ROOT"; };
 		B49313330CAB78153B232798 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_Drawable.cpp"; path = "../../../juce/modules/juce_gui_basics/drawables/juce_Drawable.cpp"; sourceTree = "SOURCE_ROOT"; };
+		B4C5E49228AA0A5CA31548D6 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MiscUtilities.cpp; path = ../../Source/Utilities/MiscUtilities.cpp; sourceTree = "SOURCE_ROOT"; };
 		B501DB0DAA7CA4C6D316061F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_win32_Network.cpp"; path = "../../../juce/modules/juce_core/native/juce_win32_Network.cpp"; sourceTree = "SOURCE_ROOT"; };
 		B5393A8C081746076980D1C1 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_SystemTrayIconComponent.cpp"; path = "../../../juce/modules/juce_gui_extra/misc/juce_SystemTrayIconComponent.cpp"; sourceTree = "SOURCE_ROOT"; };
 		B54149A86F3E5DDCB85A1000 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -732,6 +735,8 @@
 				1EBAF58AC2AC31B67BBAFCA8,
 				62797BF3F44CD539612C515C ); name = Application; sourceTree = "<group>"; };
 		126C85E7F0EFC183C94CE79B = { isa = PBXGroup; children = (
+				B4C5E49228AA0A5CA31548D6,
+				A0179A5A149BB93183B343ED,
 				6C5673C493E4D62C0AF46DA8,
 				824D231D507A492AF9D6868A,
 				5B3BC10820E6A611DABD8729,
@@ -1624,6 +1629,7 @@
 				199B58018DEF2008BFBB6554,
 				06B2037F22F395C83BE71359,
 				C23304AF5660C122F7B90274,
+				2D54C02C18296A81E6C977A9,
 				14D5D6100218D84C68420673,
 				B191AABF42631FA06D8A185F,
 				99082F613B373758743F33BF,

@@ -27,10 +27,11 @@
 #define __OBJCOMP_H_F3604232__
 
 #include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Controller/AppController.h"
+//#include "../Controller/AppController.h"
 #include "BaseObjectComponent.h"
 
 class MDLFile;
+class ObjController;
 
 class ObjectsHolder : public Component,
 						public ChangeListener

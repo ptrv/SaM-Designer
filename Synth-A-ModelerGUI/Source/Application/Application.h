@@ -28,7 +28,8 @@
 
 
 #include "MainWindow.h"
-#include "../Controller/AppController.h"
+
+class DebugWindow;
 //==============================================================================
 class SynthAModelerApplication  : public JUCEApplication
 {

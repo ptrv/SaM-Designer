@@ -26,9 +26,8 @@
 */
 
 #include "MainWindow.h"
-//#include "../Application/CommonHeaders.h"
 #include "../View/DebugWindow.h"
-#include "../Controller/AppController.h"
+#include "../Controller/ObjController.h"
 #include "../View/ContentComp.h"
 #include "../Application/Application.h"
 #include "../Controller/MDLController.h"
@@ -43,7 +42,7 @@ MainAppWindow::MainAppWindow()
                       DocumentWindow::allButtons,
                       false)
 {
-	mdlController = new MDLController();
+	mdlController = new MDLController(*this);
 	objController = new ObjController(*mdlController);
 	setUsingNativeTitleBar (true);
 	createMDLFileContentCompIfNeeded();
@@ -107,8 +106,8 @@ ContentComp* MainAppWindow::getMDLFileContentComponent() const
 }
 void MainAppWindow::closeButtonPressed()
 {
-//    if (! closeCurrentProject())
-//        return;
+    if (! closeCurrentMDLFile())
+        return;
 
     SynthAModelerApplication::getApp()->closeWindow (this);
 }
@@ -119,11 +118,17 @@ void MainAppWindow::closeButtonPressed()
 ////    JUCEApplication::getInstance()->systemRequestedQuit();
 //}
 
+void MainAppWindow::changeListenerCallback(ChangeBroadcaster*)
+{
+	updateTitle();
+}
+
+
 bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 {
     jassert (mdlFile == mdlController->getMDLFile() && mdlFile != nullptr);
 
-    if (mdlFile == nullptr)
+    if (mdlFile->isEmpty() || mdlFile == nullptr)
         return true;
 
     StoredSettings::getInstance()->getProps()
@@ -142,6 +147,8 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
     if (r == FileBasedDocument::savedOk)
     {
         setMDLFile(nullptr);
+//        mdlFile->removeChangeListener(this);
+//        mdlController->close();
         return true;
     }
 
@@ -158,7 +165,12 @@ void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
     // (mustn't do this when the project is 0, because that'll happen on shutdown,
     // which will erase the list of recent projects)
     if (newMDLFile != nullptr)
+    {
         SynthAModelerApplication::getApp()->updateRecentProjectList();
+
+        newMDLFile->addChangeListener(this);
+        updateTitle();
+    }
 }
 
 bool MainAppWindow::closeCurrentMDLFile()
@@ -166,18 +178,6 @@ bool MainAppWindow::closeCurrentMDLFile()
     return mdlController->getMDLFile() == nullptr || closeMDLFile(mdlController->getMDLFile());
 }
 
-//void MainAppWindow::setMDLFile(MDLFile* newMDLFile)
-//{
-//    createMDLFileContentCompIfNeeded();
-//    getProjectContentComponent()->setProject (newProject);
-//    currentProject = newProject;
-//    commandManager->commandStatusChanged();
-//
-//    // (mustn't do this when the project is 0, because that'll happen on shutdown,
-//    // which will erase the list of recent projects)
-//    if (newProject != nullptr)
-//        JucerApplication::getApp()->updateRecentProjectList();
-//}
 
 void MainAppWindow::restoreWindowPosition()
 {
@@ -237,11 +237,6 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
-//    case CommandIDs::undo:
-//    	result.setInfo("Undo", "Undo last edit", CommandCategories::editing,0);
-//    	result.addDefaultKeypress('z', ModifierKeys::commandModifier);
-//    	break;
-
     case CommandIDs::generateFaust:
     	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
     	result.addDefaultKeypress('g', ModifierKeys::commandModifier);
@@ -263,16 +258,13 @@ bool MainAppWindow::isCommandActive (const CommandID commandID)
 
 bool MainAppWindow::perform (const InvocationInfo& info)
 {
-//    return appController.menuItemWasClicked(info.commandID);
     switch (info.commandID)
     {
     case CommandIDs::closeDocument:
-    	mdlController->close();
-//    	setMainWindowTitle();
+    	closeButtonPressed();
     	break;
     case CommandIDs::saveDocument:
     	mdlController->save();
-//    	setMaiWindowTitle();
     	break;
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
@@ -297,11 +289,6 @@ bool MainAppWindow::perform (const InvocationInfo& info)
 
 }
 
-//bool MainAppWindow::mdlCheckAndSave()
-//{
-//	return appController.mdlCheckAndSave();
-//}
-
 void MainAppWindow::updateTitle ()
 {
 	String title = JUCEApplication::getInstance()->getApplicationName();
@@ -314,11 +301,6 @@ MDLFile* MainAppWindow::getMDLFile()
 {
 	return mdlController->getMDLFile();
 }
-//bool MainAppWindow::closeCurrentMDLFile()
-//{
-//	mdlController->mdlCheckAndSaveIfNeeded();
-//	return true;
-//}
 
 UndoManager* MainAppWindow::getUndoManager()
 {

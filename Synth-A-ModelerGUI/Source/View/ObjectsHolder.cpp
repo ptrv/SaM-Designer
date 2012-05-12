@@ -25,6 +25,7 @@
 
 #include "ObjectsHolder.h"
 #include "../Models/MDLFile.h"
+#include "ContentComp.h"
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_),
@@ -35,7 +36,10 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
 
 ObjectsHolder::~ObjectsHolder()
 {
-
+	if(mdlFile != nullptr)
+	{
+		mdlFile->removeChangeListener(this);
+	}
 }
 
 void ObjectsHolder::paint(Graphics& g)
@@ -53,12 +57,14 @@ void ObjectsHolder::paint(Graphics& g)
 
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 {
-
+//	ContentComp* cc = findParentComponentOfClass<ContentComp>();
+//	if(cc != nullptr)
+//		cc->updateMainAppWindowTitle("");
 }
 
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 {
-	if(newMDLFile != mdlFile)
+	if(newMDLFile != mdlFile && newMDLFile != nullptr)
 	{
 		mdlFile = newMDLFile;
 		mdlFile->addChangeListener(this);

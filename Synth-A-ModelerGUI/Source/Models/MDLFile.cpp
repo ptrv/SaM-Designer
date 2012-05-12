@@ -52,6 +52,7 @@ MDLFile::MDLFile(const File& file)
 MDLFile::~MDLFile()
 {
 	mdlRoot.removeListener(this);
+	removeAllChangeListeners();
 	destroyMDL();
 }
 
@@ -68,6 +69,14 @@ void MDLFile::initMDL()
 	mdlName = "Untitled";
 }
 
+bool MDLFile::isEmpty()
+{
+	if(mdlName.compare("Untitled") == 0 && mdlRoot.getNumChildren() == 0)
+	{
+		return true;
+	}
+	return false;
+}
 void MDLFile::destroyMDL()
 {
 	mdlRoot = ValueTree();
