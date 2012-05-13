@@ -49,7 +49,7 @@ public:
 	}
 	~BaseObjectComponent()
 	{
-		icon = nullptr;
+//		icon = nullptr;
 	}
 
 	void paint(Graphics& g)
@@ -169,7 +169,7 @@ private:
 //	}
 
 	const Identifier& objId;
-	ScopedPointer<DrawableComposite> icon;
+	DrawableComposite* icon;
     DropShadowEffect shadow;
 
 	Point<int> actualPos;
