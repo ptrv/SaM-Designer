@@ -38,15 +38,25 @@ public:
 	~ObjectsHolder();
 
 	void paint(Graphics& g);
-//	void resized();
+    void resized();
+    void changeListenerCallback (ChangeBroadcaster*);
+    void updateComponents();
+
+    void mouseDown (const MouseEvent& e);
+	void mouseDrag (const MouseEvent& e);
+	void mouseUp (const MouseEvent& e);
+
+	bool dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info);
 
 	void setMDLFile(MDLFile* newMDLFile);
 
-	void changeListenerCallback(ChangeBroadcaster*);
 private:
-	OwnedArray<BaseObjectComponent> objects;
 	ObjController& objController;
 	MDLFile* mdlFile;
+
+	bool dragging;
+	Point<int> draggingStart;
+	Point<int> draggingActual;
 };
 
 

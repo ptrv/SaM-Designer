@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    ObjController.h
-    Created: 13 Apr 2012 12:06:25am
+    ObjectPropertiesPanel.h
+    Created: 13 May 2012 7:22:03pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,28 +23,22 @@
 
 */
 
-#ifndef __OBJCONTROLLER_H_A98EC6A3__
-#define __OBJCONTROLLER_H_A98EC6A3__
+#ifndef __OBJECTPROPERTIESPANEL_H_460EACF0__
+#define __OBJECTPROPERTIESPANEL_H_460EACF0__
 
 
-class MDLController;
-class BaseObjectComponent;
 
-class ObjController
+class ObjectPropertiesPanel  : public DialogWindow
 {
 public:
-	ObjController(MDLController& owner_);
-	~ObjController();
+	ObjectPropertiesPanel(Component* caller);
+    ~ObjectPropertiesPanel();
 
-	bool perform (UndoableAction* const action, const String& actionName);
+    void closeButtonPressed();
 
-	void removeObject(const String& objName);
-	void addObject(Component* holder, const Identifier& objId, int posX, int posY);
-private:
-	MDLController& owner;
-	OwnedArray<BaseObjectComponent> objects;
+    static int show(Component* caller);
 
+    int returnVal;
 };
 
-
-#endif  // __OBJCONTROLLER_H_A98EC6A3__
+#endif  // __OBJECTPROPERTIESPANEL_H_460EACF0__

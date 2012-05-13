@@ -26,14 +26,105 @@
 #ifndef __BASEOBJECTCOMPONENT_H_4AC10D4B__
 #define __BASEOBJECTCOMPONENT_H_4AC10D4B__
 
+#include "../Application/CommonHeaders.h"
+#include "ObjectsHolder.h"
+#include "ObjectPropertiesPanel.h"
 
 class BaseObjectComponent : public Component
 {
 public:
-	BaseObjectComponent(){}
-	~BaseObjectComponent(){}
+	BaseObjectComponent(const Identifier& objId_, int x, int y)
+	: objId(objId_)
+	{
+		shadow.setShadowProperties (5.5f, 0.5f, -1, 0);
+		setComponentEffect (&shadow);
 
+		setSize(50, 50);
+//		originalPos.setXY(100, 100);
+		actualPos.setXY(x, y);
+		icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(objId));
+
+	}
+	~BaseObjectComponent()
+	{
+		icon = nullptr;
+	}
+
+	void paint(Graphics& g)
+	{
+		g.setColour (Colours::lightgrey);
+
+		const int x = 4;
+		const int y = 4;
+		const int w = getWidth() - x * 2;
+		const int h = getHeight() - y * 2;
+
+		g.fillRect (x, y, w, h);
+
+		g.setColour (Colours::black);
+//		g.setFont (font);
+//		g.drawFittedText (getName(),
+//						  x + 4, y + 2, w - 8, h - 4,
+//						  Justification::centred, 2);
+//
+		g.setColour (Colours::grey);
+		g.drawRect (x, y, w, h);
+//		Rectangle<float> rect(0.0f, 0.0f, (float)getWidth(), (float)getWidth());
+		Rectangle<float> rect(x+2, y+2, w-4, h-4);
+		icon->drawWithin(g, rect, RectanglePlacement::centred, 1.0f);
+
+
+	}
+
+	void mouseDown (const MouseEvent& e)
+	{
+		originalPos = localPointToGlobal (Point<int>());
+
+		toFront (true);
+	}
+
+	void mouseDrag (const MouseEvent& e)
+	{
+		Point<int> pos (originalPos + Point<int> (e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
+
+		if (getParentComponent() != nullptr)
+			pos = getParentComponent()->getLocalPoint (nullptr, pos);
+
+		actualPos.x = (pos.getX() + getWidth() /2);// / (double)(getParentWidth());
+		actualPos.y = (pos.getY() + getHeight() /2);// / (double)(getParentHeight());
+		getGraphPanel()->updateComponents();
+
+	}
+
+	void mouseUp (const MouseEvent& e)
+	{
+		if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
+		{
+			ObjectPropertiesPanel::show(this);
+		}
+		else if (! e.mouseWasClicked())
+		{
+	            // object changed
+		}
+	}
+
+	void update()
+	{
+        setCentrePosition((float) actualPos.x, (float) actualPos.y);
+	}
 private:
+	const Identifier& objId;
+	ScopedPointer<DrawableComposite> icon;
+    DropShadowEffect shadow;
+
+	Point<int> actualPos;
+	Point<int> originalPos;
+
+    ObjectsHolder* getGraphPanel() const noexcept
+    {
+        return findParentComponentOfClass<ObjectsHolder>();
+    }
+
 };
 
 

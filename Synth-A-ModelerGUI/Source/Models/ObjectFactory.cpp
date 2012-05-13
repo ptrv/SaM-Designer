@@ -84,6 +84,24 @@ static ValueTree createNewGroundTree(int x, int y)
 	return newTree;
 }
 
+static ValueTree createNewResonatorTree(int x, int y)
+{
+	ValueTree newTree(Ids::resonator);
+
+	newTree.setProperty(Ids::posX, x, nullptr);
+	newTree.setProperty(Ids::posY, y, nullptr);
+	ValueTree paramsTree(Ids::parameters);
+	paramsTree.setProperty(Ids::idx[0], 0.0f, nullptr);
+	newTree.addChild(paramsTree, -1, nullptr);
+	int rnd = Random::getSystemRandom().nextInt(100000);
+	newTree.setProperty(Ids::identifier, "r_"+String(rnd), nullptr);
+	ValueTree labelsTree(Ids::labels);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
+	newTree.addChild(labelsTree, -1, nullptr);
+
+	return newTree;
+}
+
 static ValueTree createNewLinkTree(int x, int y)
 {
 	ValueTree newTree(Ids::link);
@@ -164,6 +182,8 @@ ValueTree createNewObjectTree(const Identifier& objType, int x, int y)
 		return createNewPortTree(x, y);
 	else if(objType == Ids::ground)
 		return createNewGroundTree(x, y);
+	else if(objType == Ids::resonator)
+		return createNewResonatorTree(x, y);
 	else if(objType == Ids::link)
 		return createNewLinkTree(x, y);
 	else if(objType == Ids::touch)

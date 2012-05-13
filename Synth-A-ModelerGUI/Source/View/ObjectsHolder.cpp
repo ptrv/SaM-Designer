@@ -23,17 +23,35 @@
 
 */
 
+#include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 #include "ContentComp.h"
 #include "BaseObjectComponent.h"
+#include "../Controller/ObjController.h"
 
 #include "ObjectsHolder.h"
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_),
-  mdlFile(nullptr)
+  mdlFile(nullptr),
+  dragging(false)
 {
 	setSize(100,100);
+//	objects.add(new BaseObjectComponent(Ids::mass, 50, 50));
+//	objects.add(new BaseObjectComponent(Ids::port, 100, 50));
+//	objects.add(new BaseObjectComponent(Ids::ground, 150, 50));
+//	objects.add(new BaseObjectComponent(Ids::resonator, 200, 50));
+//	objects.add(new BaseObjectComponent(Ids::link, 250, 50));
+//	objects.add(new BaseObjectComponent(Ids::touch, 300, 50));
+//	objects.add(new BaseObjectComponent(Ids::pluck, 350, 50));
+//	addAndMakeVisible(objects[0]);
+//	addAndMakeVisible(objects[1]);
+//	addAndMakeVisible(objects[2]);
+//	addAndMakeVisible(objects[3]);
+//	addAndMakeVisible(objects[4]);
+//	addAndMakeVisible(objects[5]);
+//	addAndMakeVisible(objects[6]);
+
 }
 
 ObjectsHolder::~ObjectsHolder()
@@ -42,26 +60,79 @@ ObjectsHolder::~ObjectsHolder()
 	{
 		mdlFile->removeChangeListener(this);
 	}
+//	deleteAllChildren();
 }
+
 
 void ObjectsHolder::paint(Graphics& g)
 {
 	g.fillAll (Colours::white);
-	g.drawText("This will be the object component", 10, 10 ,
-			getWidth()-20, getHeight()-20, Justification::centred, false);
+//	g.drawText("This will be the object component", 10, 10 ,
+//			getWidth()-20, getHeight()-20, Justification::centred, false);
 
+	g.setColour(Colours::black);
+	if(dragging)
+	{
+		float x = draggingStart.x;
+		float y = draggingStart.y;
+		float w = draggingActual.x;// - x;
+		float h = draggingActual.y;// - y;
+		g.drawRect(x, y, w, h);
+	}
 }
 
-//void ObjComp::resized()
-//{
-//
-//}
+void ObjectsHolder::resized()
+{
+	updateComponents();
+}
 
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 {
 //	ContentComp* cc = findParentComponentOfClass<ContentComp>();
 //	if(cc != nullptr)
 //		cc->updateMainAppWindowTitle("");
+	updateComponents();
+}
+
+void ObjectsHolder::updateComponents()
+{
+	int i;
+    for (i = getNumChildComponents(); --i >= 0;)
+    {
+        BaseObjectComponent* const bobj = dynamic_cast <BaseObjectComponent*> (getChildComponent (i));
+
+        if (bobj != nullptr)
+            bobj->update();
+    }
+
+}
+
+void ObjectsHolder::mouseDrag (const MouseEvent& e)
+{
+	draggingActual.x = e.getOffsetFromDragStart().x;
+	draggingActual.y = e.getOffsetFromDragStart().y;
+
+	dragging = true;
+	repaint();
+}
+
+void ObjectsHolder::mouseUp (const MouseEvent& e)
+{
+	if (! e.mouseWasClicked())
+	{
+            // object changed
+		dragging = false;
+		repaint();
+	}
+}
+
+void ObjectsHolder::mouseDown (const MouseEvent& e)
+{
+	draggingStart.x = e.getMouseDownX();
+	draggingStart.y = e.getMouseDownY();
+//	dragging = true;
+
+
 }
 
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
@@ -72,3 +143,85 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 		mdlFile->addChangeListener(this);
 	}
 }
+
+bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
+{
+	Point<int> mp = getMouseXYRelative();
+
+	if(mp.x < 0)
+		mp.x = 0;
+	else if(mp.x > getWidth())
+		mp.x = getWidth();
+	if(mp.y < 0)
+		mp.y = 0;
+	else if(mp.y > getHeight())
+		mp.y = getHeight();
+
+	switch(info.commandID)
+	{
+	case StandardApplicationCommandIDs::cut:
+		break;
+	case StandardApplicationCommandIDs::copy:
+		break;
+	case StandardApplicationCommandIDs::paste:
+		break;
+	case StandardApplicationCommandIDs::selectAll:
+		break;
+	case StandardApplicationCommandIDs::deselectAll:
+		break;
+	case StandardApplicationCommandIDs::del:
+		DBG("delete");
+//		objController.removeObject("dev1");
+		break;
+    case CommandIDs::defineVariables:
+    	break;
+    case CommandIDs::segmentedConnectors:
+    	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
+    	break;
+    case CommandIDs::zoomIn:
+    	break;
+    case CommandIDs::zoomOut:
+    	break;
+    case CommandIDs::zoomNormal:
+    	break;
+    case CommandIDs::reverseDirection:
+    	break;
+
+    case CommandIDs::insertMass:
+    	objController.addObject(this, Ids::mass, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertGround:
+    	objController.addObject(this, Ids::ground, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertResonator:
+    	objController.addObject(this, Ids::resonator, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertPort:
+    	objController.addObject(this, Ids::port, mp.x, mp.y);
+    	break;
+
+    case CommandIDs::insertLink:
+    	objController.addObject(this, Ids::link, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertTouch:
+    	objController.addObject(this, Ids::touch, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertPluck:
+    	objController.addObject(this, Ids::pluck, mp.x, mp.y);
+    	break;
+
+    case CommandIDs::insertAudioOutput:
+    	objController.addObject(this, Ids::audioout, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertWaveguide:
+    	objController.addObject(this, Ids::waveguide, mp.x, mp.y);
+    	break;
+    case CommandIDs::insertTermination:
+    	objController.addObject(this, Ids::termination, mp.x, mp.y);
+    	break;
+    default:
+    	return false;
+	}
+	return true;
+}
+

@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    ObjController.h
-    Created: 13 Apr 2012 12:06:25am
+    ResourceLoader.h
+    Created: 13 May 2012 1:20:17am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,28 +23,28 @@
 
 */
 
-#ifndef __OBJCONTROLLER_H_A98EC6A3__
-#define __OBJCONTROLLER_H_A98EC6A3__
+#ifndef __RESOURCELOADER_H_E0EF3E32__
+#define __RESOURCELOADER_H_E0EF3E32__
 
 
-class MDLController;
-class BaseObjectComponent;
-
-class ObjController
+class ResourceLoader
 {
 public:
-	ObjController(MDLController& owner_);
-	~ObjController();
+	ResourceLoader();
+	~ResourceLoader();
 
-	bool perform (UndoableAction* const action, const String& actionName);
+	juce_DeclareSingleton (ResourceLoader, false)
 
-	void removeObject(const String& objName);
-	void addObject(Component* holder, const Identifier& objId, int posX, int posY);
+	Drawable* getDrawableForId(const Identifier& objId);
+	Drawable* createSVGDrawable(const String& filename);
+
 private:
-	MDLController& owner;
-	OwnedArray<BaseObjectComponent> objects;
-
+	void initObjectIconMap();
+	HashMap<String,String> objectIcons;
+	StringArray iconNames;
+	OwnedArray<Drawable> iconsFromZipFile;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResourceLoader);
 };
 
 
-#endif  // __OBJCONTROLLER_H_A98EC6A3__
+#endif  // __RESOURCELOADER_H_E0EF3E32__

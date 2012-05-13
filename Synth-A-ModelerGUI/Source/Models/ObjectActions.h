@@ -28,12 +28,16 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "ObjectFactory.h"
+#include "../View/BaseObjectComponent.h"
 
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
-	: mdlSubTree(mdlTree_),
+	AddObjectAction(Component* objHolderComp_, BaseObjectComponent* objComp_,
+			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
+	: holderComp(objHolderComp_),
+	  objComp(objComp_),
+	  mdlSubTree(mdlTree_),
 	  objId(objId_)
 	{
 		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
@@ -44,7 +48,9 @@ public:
 
 	bool perform()
 	{
+
 		mdlSubTree.addChild(newValue,-1, nullptr);
+		holderComp->addAndMakeVisible(objComp);
         String logText = "Add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -53,6 +59,7 @@ public:
 
 	bool undo()
 	{
+		holderComp->removeChildComponent(objComp);
 		mdlSubTree.removeChild(newValue, nullptr);
         String logText = "Undo add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
@@ -63,6 +70,8 @@ private:
 	ValueTree mdlSubTree;
 	ValueTree newValue;
 	const Identifier& objId;
+	Component* holderComp;
+	BaseObjectComponent* objComp;
 };
 
 class RemoveObjectAction : public UndoableAction

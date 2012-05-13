@@ -34,6 +34,7 @@
 #include "../Models/ObjectIDs.h"
 #include "../Utilities/Alerts.h"
 #include "../Utilities/MiscUtilities.h"
+#include "../Utilities/ResourceLoader.h"
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 

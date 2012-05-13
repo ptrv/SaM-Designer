@@ -115,27 +115,27 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
     const CommandID ids[] = { CommandIDs::undo,
                               CommandIDs::redo,
                               StandardApplicationCommandIDs::cut,
-                              StandardApplicationCommandIDs::copy,
-                              StandardApplicationCommandIDs::paste,
-                              StandardApplicationCommandIDs::del,
-                              StandardApplicationCommandIDs::selectAll,
-                              StandardApplicationCommandIDs::deselectAll,
-                              CommandIDs::segmentedConnectors,
-                              CommandIDs::zoomIn,
-                              CommandIDs::zoomOut,
-                              CommandIDs::zoomNormal,
-                              CommandIDs::reverseDirection,
-                              CommandIDs::defineVariables,
-                              CommandIDs::insertMass,
-                              CommandIDs::insertGround,
-                              CommandIDs::insertResonator,
-                              CommandIDs::insertPort,
-                              CommandIDs::insertLink,
-                              CommandIDs::insertTouch,
-                              CommandIDs::insertPluck,
-                              CommandIDs::insertAudioOutput,
-                              CommandIDs::insertWaveguide,
-                              CommandIDs::insertTermination,
+							StandardApplicationCommandIDs::copy,
+							StandardApplicationCommandIDs::paste,
+							StandardApplicationCommandIDs::del,
+							StandardApplicationCommandIDs::selectAll,
+							StandardApplicationCommandIDs::deselectAll,
+							CommandIDs::segmentedConnectors,
+							CommandIDs::zoomIn,
+							CommandIDs::zoomOut,
+							CommandIDs::zoomNormal,
+							CommandIDs::reverseDirection,
+							CommandIDs::defineVariables,
+							CommandIDs::insertMass,
+							CommandIDs::insertGround,
+							CommandIDs::insertResonator,
+							CommandIDs::insertPort,
+							CommandIDs::insertLink,
+							CommandIDs::insertTouch,
+							CommandIDs::insertPluck,
+							CommandIDs::insertAudioOutput,
+							CommandIDs::insertWaveguide,
+							CommandIDs::insertTermination,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -267,68 +267,8 @@ bool ContentComp::perform (const InvocationInfo& info)
 		mainWindow.getUndoManager()->redo();
 		break;
 
-	case StandardApplicationCommandIDs::cut:
-		break;
-	case StandardApplicationCommandIDs::copy:
-		break;
-	case StandardApplicationCommandIDs::paste:
-		break;
-	case StandardApplicationCommandIDs::selectAll:
-		break;
-	case StandardApplicationCommandIDs::deselectAll:
-		break;
-	case StandardApplicationCommandIDs::del:
-		DBG("delete");
-		objController.removeObject("dev1");
-		break;
-    case CommandIDs::defineVariables:
-    	break;
-    case CommandIDs::segmentedConnectors:
-    	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
-    	break;
-    case CommandIDs::zoomIn:
-    	break;
-    case CommandIDs::zoomOut:
-    	break;
-    case CommandIDs::zoomNormal:
-    	break;
-    case CommandIDs::reverseDirection:
-    	break;
-
-    case CommandIDs::insertMass:
-    	objController.addObject(Ids::mass);
-    	break;
-    case CommandIDs::insertGround:
-    	objController.addObject(Ids::ground);
-    	break;
-    case CommandIDs::insertResonator:
-    	objController.addObject(Ids::resonator);
-    	break;
-    case CommandIDs::insertPort:
-    	objController.addObject(Ids::port);
-    	break;
-
-    case CommandIDs::insertLink:
-    	objController.addObject(Ids::link);
-    	break;
-    case CommandIDs::insertTouch:
-    	objController.addObject(Ids::touch);
-    	break;
-    case CommandIDs::insertPluck:
-    	objController.addObject(Ids::pluck);
-    	break;
-
-    case CommandIDs::insertAudioOutput:
-    	objController.addObject(Ids::audioout);
-    	break;
-    case CommandIDs::insertWaveguide:
-    	objController.addObject(Ids::waveguide);
-    	break;
-    case CommandIDs::insertTermination:
-    	objController.addObject(Ids::termination);
-    	break;
     default:
-    	return false;
+    	return objectsHolder->dispatchMenuItemClick(info);
 	}
 	return true;
 }

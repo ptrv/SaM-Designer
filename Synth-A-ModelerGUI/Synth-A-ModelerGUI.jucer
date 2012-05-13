@@ -51,6 +51,10 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="e53h53" name="ResourceLoader.cpp" compile="1" resource="0"
+              file="Source/Utilities/ResourceLoader.cpp"/>
+        <FILE id="c1ZfA0" name="ResourceLoader.h" compile="0" resource="0"
+              file="Source/Utilities/ResourceLoader.h"/>
         <FILE id="ISG5W5" name="MiscUtilities.cpp" compile="1" resource="0"
               file="Source/Utilities/MiscUtilities.cpp"/>
         <FILE id="qsy70L" name="MiscUtilities.h" compile="0" resource="0" file="Source/Utilities/MiscUtilities.h"/>
@@ -85,6 +89,10 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="IPEDKA" name="ObjectPropertiesPanel.cpp" compile="1" resource="0"
+              file="Source/View/ObjectPropertiesPanel.cpp"/>
+        <FILE id="zbvgtU" name="ObjectPropertiesPanel.h" compile="0" resource="0"
+              file="Source/View/ObjectPropertiesPanel.h"/>
         <FILE id="kbQNVc" name="BaseObjectComponent.h" compile="0" resource="0"
               file="Source/View/BaseObjectComponent.h"/>
         <FILE id="gzMWlB" name="OutputWindow.cpp" compile="1" resource="0"

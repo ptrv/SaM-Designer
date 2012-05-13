@@ -103,6 +103,8 @@ void SynthAModelerApplication::shutdown()
 	commandManager = nullptr;
 
 	Logger::setCurrentLogger(nullptr, true);
+
+	ResourceLoader::deleteInstance();
 }
 
 //==============================================================================

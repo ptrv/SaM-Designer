@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    ObjController.h
-    Created: 13 Apr 2012 12:06:25am
+    ObjectPropertiesPanel.cpp
+    Created: 13 May 2012 7:22:03pm
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,28 +23,40 @@
 
 */
 
-#ifndef __OBJCONTROLLER_H_A98EC6A3__
-#define __OBJCONTROLLER_H_A98EC6A3__
+#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Controller/MDLController.h"
+#include "../Utilities/StoredSettings.h"
+
+#include "ObjectPropertiesPanel.h"
+
+//==============================================================================
+
+static String exportWindowPos;
 
 
-class MDLController;
-class BaseObjectComponent;
-
-class ObjController
+ObjectPropertiesPanel::ObjectPropertiesPanel(Component* caller)
+    : DialogWindow ("Object properties", Colour::greyLevel (0.92f), true),
+      returnVal(0)
 {
-public:
-	ObjController(MDLController& owner_);
-	~ObjController();
 
-	bool perform (UndoableAction* const action, const String& actionName);
+    centreAroundComponent (caller, 300, 300);
 
-	void removeObject(const String& objName);
-	void addObject(Component* holder, const Identifier& objId, int posX, int posY);
-private:
-	MDLController& owner;
-	OwnedArray<BaseObjectComponent> objects;
+    setResizable (false, false);
+    setVisible(true);
+}
 
-};
+ObjectPropertiesPanel::~ObjectPropertiesPanel()
+{
+}
 
+void ObjectPropertiesPanel::closeButtonPressed()
+{
+    setVisible (false);
+}
 
-#endif  // __OBJCONTROLLER_H_A98EC6A3__
+int ObjectPropertiesPanel::show(Component* caller)
+{
+	ObjectPropertiesPanel ep(caller);
+    ep.runModalLoop();
+    return ep.returnVal;
+}

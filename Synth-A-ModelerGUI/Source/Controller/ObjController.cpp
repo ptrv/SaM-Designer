@@ -27,6 +27,7 @@
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
 #include "MDLController.h"
+#include "../View/BaseObjectComponent.h"
 
 #include "ObjController.h"
 
@@ -38,7 +39,7 @@ ObjController::ObjController(MDLController& owner_)
 
 ObjController::~ObjController()
 {
-
+	objects.clear(true);
 }
 
 bool ObjController::perform (UndoableAction* const action, const String& actionName)
@@ -46,14 +47,18 @@ bool ObjController::perform (UndoableAction* const action, const String& actionN
 	return owner.perform(action, actionName);
 }
 
-void ObjController::addObject(const Identifier& objId, int posX, int posY)
+void ObjController::addObject(Component* holder, const Identifier& objId,
+		int posX, int posY)
 {
 	const Identifier& tmpIdent = Objects::getObjectType(objId);
 	if(tmpIdent != Objects::invalid)
 	{
 		ValueTree mdl = owner.getMDLTree();
 		ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
-		this->perform(new AddObjectAction(subTree, objId, posX, posY), "Add new Object");
+		BaseObjectComponent* objComp = new BaseObjectComponent(objId, posX, posY);
+		objects.add(objComp);
+		this->perform(new AddObjectAction(holder, objComp,
+				subTree, objId, posX, posY), "Add new Object");
 	}
 }
 
