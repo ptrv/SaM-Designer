@@ -36,10 +36,13 @@ public:
 	ObjController(MDLController& owner_);
 	~ObjController();
 
+//	UndoManager* getUndoManager();
 	bool perform (UndoableAction* const action, const String& actionName);
 
-	void removeObject(const String& objName);
 	void addObject(Component* holder, const Identifier& objId, int posX, int posY);
+	void removeObject(Component* holder, const String& objName);
+
+	void loadComponents(Component* holder);
 private:
 	MDLController& owner;
 	OwnedArray<BaseObjectComponent> objects;

@@ -141,6 +141,7 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 	{
 		mdlFile = newMDLFile;
 		mdlFile->addChangeListener(this);
+		objController.loadComponents(this);
 	}
 }
 

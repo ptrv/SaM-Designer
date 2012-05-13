@@ -50,6 +50,7 @@ public:
 	{
 
 		mdlSubTree.addChild(newValue,-1, nullptr);
+		objComp->setData(newValue);
 		holderComp->addAndMakeVisible(objComp);
         String logText = "Add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();

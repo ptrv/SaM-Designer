@@ -135,8 +135,8 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
 {
     createMDLFileContentCompIfNeeded();
-    getMDLFileContentComponent()->setMDLFile(newMDLFile);
     mdlController->setMDLFile(newMDLFile);
+    getMDLFileContentComponent()->setMDLFile(newMDLFile);
     commandManager->commandStatusChanged();
 
     // (mustn't do this when the project is 0, because that'll happen on shutdown,
@@ -147,6 +147,7 @@ void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
 
         newMDLFile->addChangeListener(this);
         updateTitle();
+
     }
 }
 

@@ -26,8 +26,8 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
-#include "MDLController.h"
 #include "../View/BaseObjectComponent.h"
+#include "MDLController.h"
 
 #include "ObjController.h"
 
@@ -63,7 +63,7 @@ void ObjController::addObject(Component* holder, const Identifier& objId,
 }
 
 
-void ObjController::removeObject(const String& objName)
+void ObjController::removeObject(Component* holder, const String& objName)
 {
 	MDLFile* const mf = owner.getMDLFile();
 	ValueTree childToRemove = mf->getObjectWithName(objName);
@@ -73,3 +73,34 @@ void ObjController::removeObject(const String& objName)
 //		subTree.removeChild(childToRemove, owner.getUndoManager());
 	}
 }
+
+void ObjController::loadComponents(Component* holder)
+{
+	MDLFile*  mf = owner.getMDLFile();
+	ValueTree mdl = mf->mdlRoot;
+	for (int i = 0; i < mdl.getNumChildren(); ++i)
+	{
+		ValueTree objectGroup = mdl.getChild(i);
+		for (int j = 0; j < objectGroup.getNumChildren(); ++j) {
+			ValueTree obj = objectGroup.getChild(j);
+
+			// TODO: Remove conditional when icons zip is complete
+			if(obj.getType() == Ids::mass || obj.getType() == Ids::port
+					|| obj.getType() == Ids::ground || obj.getType() == Ids::resonator
+					|| obj.getType() == Ids::link || obj.getType() == Ids::touch
+					|| obj.getType() == Ids::pluck)
+			{
+				BaseObjectComponent* objComp = new BaseObjectComponent(obj.getType(),
+						int(obj.getProperty(Ids::posX)), int(obj.getProperty(Ids::posY)));
+				objComp->setData(obj);
+				objects.add(objComp);
+				holder->addAndMakeVisible(objComp);
+			}
+		}
+	}
+}
+
+//UndoManager* ObjController::getUndoManager()
+//{
+//	return
+//}

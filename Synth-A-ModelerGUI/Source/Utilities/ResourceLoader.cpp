@@ -46,12 +46,15 @@ void ResourceLoader::initObjectIconMap()
 	objectIcons.set(Ids::port.toString(), "port.svg");
 	objectIcons.set(Ids::resonator.toString(), "resonator.svg");
 	objectIcons.set(Ids::ground.toString(), "ground.svg");
-	objectIcons.set(Ids::link.toString(), "link.svg");
-//	objectIcons.set(Ids::link.toString(), "link-no-connectors.svg");
+//	objectIcons.set(Ids::link.toString(), "link.svg");
+	objectIcons.set(Ids::link.toString(), "link-no-connectors.svg");
 	objectIcons.set(Ids::touch.toString(), "touch.svg");
 	objectIcons.set(Ids::pluck.toString(), "pluck.svg");
 	objectIcons.set(Ids::termination.toString(), "termination.svg");
 	objectIcons.set(Ids::waveguide.toString(), "waveguide.svg");
+//	objectIcons.set(Ids::audioout.toString(), "waveguide.svg");
+//	objectIcons.set(Ids::junction.toString(), "waveguide.svg");
+//	objectIcons.set(Ids::label.toString(), "waveguide.svg");
 }
 Drawable* ResourceLoader::getDrawableForId(const Identifier& objId)
 {
@@ -59,6 +62,8 @@ Drawable* ResourceLoader::getDrawableForId(const Identifier& objId)
 }
 Drawable* ResourceLoader::createSVGDrawable(const String& filename)
 {
+	initObjectIconMap();
+
     if (iconsFromZipFile.size() == 0)
     {
         // If we've not already done so, load all the images from the zip file..
@@ -77,5 +82,5 @@ Drawable* ResourceLoader::createSVGDrawable(const String& filename)
         }
     }
 
-    return iconsFromZipFile [iconNames.indexOf (filename)]->createCopy();
+    return iconsFromZipFile [iconNames.indexOf (filename)];//->createCopy();
 }
