@@ -101,8 +101,8 @@ void OutputWindow::addText(const String& compilerText)
 void OutputWindow::printWelcomeMessage()
 {
 	String welcomeMsg;
-	welcomeMsg << "Hi " << SystemStats::getLogonName() << "!" << newLine;
-	welcomeMsg << "Welcome to Synth-A-Modeler. Have fun!" << newLine;
+	welcomeMsg << "Hello " << SystemStats::getLogonName() << "!" << newLine;
+	welcomeMsg << "Welcome to Synth-A-Modeler. Happy physical modelling!" << newLine;
 	welcomeMsg << "----------------------------------------------";
 	welcomeMsg << newLine;
 	console->addLine(welcomeMsg);
