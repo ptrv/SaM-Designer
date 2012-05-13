@@ -44,19 +44,19 @@ public:
 
 	bool perform()
 	{
-		SAM_LOG("Add "+objId.toString());
-		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.addChild(newValue,-1, nullptr);
-		DBG(mdlSubTree.getNumChildren());
+        String logText = "Add ";
+        logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
+		SAM_LOG(logText);
 		return true;
 	}
 
 	bool undo()
 	{
-		SAM_LOG("Undo add "+objId.toString());
-		DBG(mdlSubTree.getNumChildren());
 		mdlSubTree.removeChild(newValue, nullptr);
-		DBG(mdlSubTree.getNumChildren());
+        String logText = "Undo add ";
+        logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
+		SAM_LOG(logText);
 		return true;
 	}
 private:
