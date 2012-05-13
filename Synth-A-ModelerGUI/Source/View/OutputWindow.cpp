@@ -32,8 +32,9 @@
 OutputWindow::OutputWindow()
 :
 DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Output",
-		Colours::darkseagreen, 0)
+               Colours::darkseagreen, DocumentWindow::closeButton)
 {
+    setUsingNativeTitleBar(true);
 	setResizable (true, true); // resizability is a property of ResizableWindow
 
 	setSize(400,400);
@@ -70,7 +71,7 @@ OutputWindow::~OutputWindow()
 
 void OutputWindow::closeButtonPressed()
 {
-	makeHide();
+    SynthAModelerApplication::getApp()->systemRequestedQuit();
 }
 
 void OutputWindow::toggleDebugWindow()
