@@ -239,3 +239,12 @@ void StoredSettings::setIsExportConfirm (bool isExportConfirm)
 {
 	props->setValue("exportconfirm", isExportConfirm);
 }
+
+const bool StoredSettings::getIsLoggingOn() const
+{
+    return props->getBoolValue("loggingon", true);
+}
+void StoredSettings::setIsLoggingOn (bool isLoggingOn)
+{
+    props->setValue("loggingon", isLoggingOn);
+}

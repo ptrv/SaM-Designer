@@ -74,6 +74,9 @@ public:
 	const bool getIsExportConfirm() const;
     void setIsExportConfirm (bool isExportConfirm);
 
+    const bool getIsLoggingOn() const;
+    void setIsLoggingOn (bool isLoggingOn);
+
     //==============================================================================
 //    Image getFallbackImage();
 //    const Drawable* getImageFileIcon();

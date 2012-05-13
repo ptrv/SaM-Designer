@@ -58,7 +58,10 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 #endif
 
 	// Do your application's initialisation code here
-	Logger::setCurrentLogger(Utils::getLogger(), true);
+    if( StoredSettings::getInstance()->getIsLoggingOn() )
+    {
+        Logger::setCurrentLogger(Utils::getLogger(), true);
+    }
 
 	commandManager = new ApplicationCommandManager();
 	commandManager->registerAllCommandsForTarget (this);
