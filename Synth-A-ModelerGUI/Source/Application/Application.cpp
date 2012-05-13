@@ -207,7 +207,7 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::clearOutputConsole:
-    	result.setInfo("Clear compiler window", "", CommandCategories::tools,0);
+    	result.setInfo("Clear output window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
     	break;
     case CommandIDs::openDataDir:
@@ -218,7 +218,7 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
     	break;
     case CommandIDs::showOutputConsole:
-    	result.setInfo("Show compiler window", "", CommandCategories::tools,0);
+    	result.setInfo("Show output window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     default:
