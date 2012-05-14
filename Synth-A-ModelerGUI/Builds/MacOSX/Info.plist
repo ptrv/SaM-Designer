@@ -21,5 +21,20 @@
     <string>1.0.0dev</string>
     <key>NSHumanReadableCopyright</key>
     <string></string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>mdl</string>
+        </array>
+        <key>CFBundleTypeName</key>
+        <string>mdl</string>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>NSPersistentStoreTypeKey</key>
+        <string>XML</string>
+      </dict>
+    </array>
   </dict>
 </plist>

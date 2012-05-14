@@ -4,7 +4,7 @@
               bundleIdentifier="de.tu-berlin.SynthAModelerGUI" jucerVersion="3.0.0">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
-               bigIcon="WodEAp">
+               bigIcon="WodEAp" documentExtensions=".mdl">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
