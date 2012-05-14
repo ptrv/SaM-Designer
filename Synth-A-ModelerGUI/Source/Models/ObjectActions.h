@@ -40,6 +40,7 @@ public:
 	  mdlSubTree(mdlTree_),
 	  objId(objId_)
 	{
+		// create a ValueTree with default values.
 		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
 	}
 	~AddObjectAction()
@@ -48,7 +49,7 @@ public:
 
 	bool perform()
 	{
-
+		// Add new Object to mdlRoot and ObjectHolder
 		mdlSubTree.addChild(newValue,-1, nullptr);
 		objComp->setData(newValue);
 		holderComp->addAndMakeVisible(objComp);

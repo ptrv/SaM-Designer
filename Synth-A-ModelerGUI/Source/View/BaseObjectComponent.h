@@ -41,15 +41,11 @@ public:
 		setComponentEffect (&shadow);
 
 		setSize(50, 50);
-//		originalPos.setXY(100, 100);
 		actualPos.setXY(x, y);
 		icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(objId));
-//		createSVGDrawable();
-		DBG(objId.toString());
 	}
 	~BaseObjectComponent()
 	{
-//		icon = nullptr;
 	}
 
 	void paint(Graphics& g)
@@ -63,19 +59,10 @@ public:
 
 		g.fillRect (x, y, w, h);
 
-		g.setColour (Colours::black);
-//		g.setFont (font);
-//		g.drawFittedText (getName(),
-//						  x + 4, y + 2, w - 8, h - 4,
-//						  Justification::centred, 2);
-//
 		g.setColour (Colours::grey);
 		g.drawRect (x, y, w, h);
-//		Rectangle<float> rect(0.0f, 0.0f, (float)getWidth(), (float)getWidth());
 		Rectangle<float> rect(x+2, y+2, w-4, h-4);
 		icon->drawWithin(g, rect, RectanglePlacement::centred, 1.0f);
-
-
 	}
 
 	void mouseDown (const MouseEvent& e)
@@ -92,8 +79,8 @@ public:
 		if (getParentComponent() != nullptr)
 			pos = getParentComponent()->getLocalPoint (nullptr, pos);
 
-		actualPos.x = (pos.getX() + getWidth() /2);// / (double)(getParentWidth());
-		actualPos.y = (pos.getY() + getHeight() /2);// / (double)(getParentHeight());
+		actualPos.x = (pos.getX() + getWidth() /2);
+		actualPos.y = (pos.getY() + getHeight() /2);
 		getGraphPanel()->updateComponents();
 
 	}
@@ -106,8 +93,8 @@ public:
 		}
 		else if (! e.mouseWasClicked())
 		{
-	            // object changed
-
+			// object changed / mouse realeased after drag
+			// TODO: Implement moving object
 		}
 	}
 
@@ -121,53 +108,6 @@ public:
 		data = dataTree;
 	}
 private:
-//	void createSVGDrawable()
-//	{
-//		MemoryInputStream iconsFileStream (BinaryData::icons_zip, BinaryData::icons_zipSize, false);
-//		ZipFile icons (&iconsFileStream, false);
-//
-//		// Load a random SVG file from our embedded icons.zip file.
-//		int index = icons.getIndexOfFileName(getIconName());
-//		ScopedPointer<InputStream> svgFileStream (icons.createStreamForEntry (index));
-//
-//		if (svgFileStream != 0)
-//		{
-//			icon = dynamic_cast <DrawableComposite*> (Drawable::createFromImageDataStream (*svgFileStream));
-//
-//			if (icon != 0)
-//			{
-//				// to make our icon the right size, we'll set its bounding box to the size and position that we want.
-////				icon->setBoundingBox (RelativeParallelogram (Point<float> (-100, -100),
-////																	Point<float> (100, -100),
-////																	Point<float> (-100, 100)));
-//			}
-//		}
-//	}
-
-//	String getIconName()
-//	{
-//		if(objId == Ids::mass)
-//			return "mass.svg";
-//		else if(objId == Ids::port)
-//			return "port.svg";
-//		else if(objId == Ids::resonator)
-//			return "resonator.svg";
-//		else if(objId == Ids::ground)
-//			return "ground.svg";
-//		else if(objId == Ids::link)
-//			return "link.svg";
-//		else if(objId == Ids::touch)
-//			return "touch.svg";
-//		else if(objId == Ids::pluck)
-//			return "pluck.svg";
-//		else if(objId == Ids::termination)
-//			return "termination.svg";
-//		else if(objId == Ids::waveguide)
-//			return "waveguide.svg";
-//		else
-//			return "waveguide.svg";
-//	}
-
 	const Identifier& objId;
 	DrawableComposite* icon;
     DropShadowEffect shadow;

@@ -80,6 +80,9 @@ MainAppWindow::~MainAppWindow()
 
     clearContentComponent();
 
+    mdlController = nullptr;
+    objController = nullptr;
+
 }
 
 void MainAppWindow::createMDLFileContentCompIfNeeded()

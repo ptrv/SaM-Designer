@@ -95,12 +95,8 @@ void ObjController::loadComponents(Component* holder)
 				objComp->setData(obj);
 				objects.add(objComp);
 				holder->addAndMakeVisible(objComp);
+				SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
 			}
 		}
 	}
 }
-
-//UndoManager* ObjController::getUndoManager()
-//{
-//	return
-//}

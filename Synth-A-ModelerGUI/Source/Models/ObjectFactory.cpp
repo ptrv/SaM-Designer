@@ -196,5 +196,9 @@ ValueTree createNewObjectTree(const Identifier& objType, int x, int y)
 		return ValueTree::invalid;
 }
 
+//BaseObjectComponent* createObjectComponent(const Identifier& objType, int x, int y)
+//{
+//}
+
 }
 
