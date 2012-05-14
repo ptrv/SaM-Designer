@@ -105,7 +105,7 @@ void OutputWindow::printWelcomeMessage()
 	String welcomeMsg;
 	welcomeMsg << "Hello " << SystemStats::getLogonName() << "!" << newLine;
 	welcomeMsg << "Welcome to Synth-A-Modeler. Happy physical modelling!" << newLine;
-	welcomeMsg << "----------------------------------------------";
+//	welcomeMsg << "----------------------------------------------";
 	welcomeMsg << newLine;
 	console->addLine(welcomeMsg);
 }
