@@ -82,7 +82,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 #endif
 
 	outputWindow->printWelcomeMessage();
-	outputWindow->makeVisible ();
+//	outputWindow->makeVisible ();
 	getOrCreateFrontmostWindow()->toFront(true);
 }
 
@@ -133,10 +133,10 @@ void SynthAModelerApplication::closeWindow (MainAppWindow* w)
     jassert (mainWindows.contains (w));
     mainWindows.removeObject (w);
 
-#if ! JUCE_MAC
-    if (mainWindows.size() == 0)
-        systemRequestedQuit();
-#endif
+//#if ! JUCE_MAC
+//    if (mainWindows.size() == 0)
+//        systemRequestedQuit();
+//#endif
 
     updateRecentProjectList();
 }
