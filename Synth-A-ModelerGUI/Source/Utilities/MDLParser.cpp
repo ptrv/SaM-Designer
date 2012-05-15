@@ -55,6 +55,9 @@ bool MDLParser::parseMDL()
 
 	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
 
+	mdlTree.setProperty(Ids::mdlName, in.getFileName(), nullptr);
+	mdlTree.setProperty(Ids::mdlPath, in.getFullPathName(), nullptr);
+
 	StringArray lines;
 	lines.addTokens(mdlContent, "\n", "\"");
 	for (int i = 0; i < lines.size(); ++i) {
@@ -405,4 +408,5 @@ bool MDLParser::parseMDL()
 	mdlFile.mdlRoot = mdlTree;
 	return true;
 }
+
 

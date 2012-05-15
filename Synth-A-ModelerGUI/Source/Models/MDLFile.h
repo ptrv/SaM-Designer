@@ -27,7 +27,8 @@
 #define __MDLFILE_H_70428F9D__
 
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Application/CommonHeaders.h"
+
 
 class MDLFile : public FileBasedDocument,
 				public ValueTree::Listener
@@ -40,7 +41,7 @@ public:
 	void newMDL();
 	void close();
 
-	const String& getFilePath() const { return mdlPath; }
+	const String getFilePath() const { return mdlRoot.getProperty(Ids::mdlPath).toString(); }
 	const String getNameWithStatus() 
     { 
         return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle(); 
@@ -78,8 +79,6 @@ private:
 	void initMDL();
 	void destroyMDL();
 
-	String mdlPath;
-	String mdlName;
 	static File lastDocumentOpened;
 
 	UndoManager undoMgr;

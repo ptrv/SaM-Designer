@@ -31,6 +31,8 @@ namespace Ids
 {
     #define DECLARE_ID(name)      const Identifier name (#name)
 
+	DECLARE_ID (mdlName);
+	DECLARE_ID (mdlPath);
 	DECLARE_ID (mass);
 	DECLARE_ID (port);
 	DECLARE_ID (ground);
