@@ -31,10 +31,10 @@
 #include "ObjectPropertiesPanel.h"
 
 
-class BaseObjectComponent : public Component
+class ObjectComponent : public Component
 {
 public:
-	BaseObjectComponent(const Identifier& objId_, int x, int y)
+	ObjectComponent(const Identifier& objId_, int x, int y)
 	: objId(objId_)
 	{
 		shadow.setShadowProperties (5.5f, 0.5f, -1, 0);
@@ -44,7 +44,7 @@ public:
 		actualPos.setXY(x, y);
 		icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(objId));
 	}
-	~BaseObjectComponent()
+	~ObjectComponent()
 	{
 	}
 

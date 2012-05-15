@@ -26,7 +26,7 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
-class BaseObjectComponent;
+class ObjectComponent;
 class MDLFile;
 class ObjController;
 

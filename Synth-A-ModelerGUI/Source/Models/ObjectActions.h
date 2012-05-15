@@ -28,12 +28,12 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "ObjectFactory.h"
-#include "../View/BaseObjectComponent.h"
+#include "../View/ObjectComponent.h"
 
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(Component* objHolderComp_, BaseObjectComponent* objComp_,
+	AddObjectAction(Component* objHolderComp_, ObjectComponent* objComp_,
 			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
 	: mdlSubTree(mdlTree_),
       objId(objId_),
@@ -73,7 +73,7 @@ private:
 	ValueTree newValue;
 	const Identifier& objId;
 	Component* holderComp;
-	BaseObjectComponent* objComp;
+	ObjectComponent* objComp;
 };
 
 class RemoveObjectAction : public UndoableAction

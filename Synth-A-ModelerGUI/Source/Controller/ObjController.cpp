@@ -26,7 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
-#include "../View/BaseObjectComponent.h"
+#include "../View/ObjectComponent.h"
 #include "MDLController.h"
 
 #include "ObjController.h"
@@ -55,7 +55,7 @@ void ObjController::addObject(Component* holder, const Identifier& objId,
 	{
 		ValueTree mdl = owner.getMDLTree();
 		ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
-		BaseObjectComponent* objComp = new BaseObjectComponent(objId, posX, posY);
+		ObjectComponent* objComp = new ObjectComponent(objId, posX, posY);
 		objects.add(objComp);
 		this->perform(new AddObjectAction(holder, objComp,
 				subTree, objId, posX, posY), "Add new Object");
@@ -90,7 +90,7 @@ void ObjController::loadComponents(Component* holder)
 					|| obj.getType() == Ids::link || obj.getType() == Ids::touch
 					|| obj.getType() == Ids::pluck || obj.getType() == Ids::audioout)
 			{
-				BaseObjectComponent* objComp = new BaseObjectComponent(obj.getType(),
+				ObjectComponent* objComp = new ObjectComponent(obj.getType(),
 						int(obj.getProperty(Ids::posX)), int(obj.getProperty(Ids::posY)));
 				objComp->setData(obj);
 				objects.add(objComp);

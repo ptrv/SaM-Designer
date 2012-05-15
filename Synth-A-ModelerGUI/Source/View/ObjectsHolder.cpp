@@ -26,7 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 #include "ContentComp.h"
-#include "BaseObjectComponent.h"
+#include "ObjectComponent.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
 
@@ -38,21 +38,6 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
   dragging(false)
 {
 	setSize(100,100);
-//	objects.add(new BaseObjectComponent(Ids::mass, 50, 50));
-//	objects.add(new BaseObjectComponent(Ids::port, 100, 50));
-//	objects.add(new BaseObjectComponent(Ids::ground, 150, 50));
-//	objects.add(new BaseObjectComponent(Ids::resonator, 200, 50));
-//	objects.add(new BaseObjectComponent(Ids::link, 250, 50));
-//	objects.add(new BaseObjectComponent(Ids::touch, 300, 50));
-//	objects.add(new BaseObjectComponent(Ids::pluck, 350, 50));
-//	addAndMakeVisible(objects[0]);
-//	addAndMakeVisible(objects[1]);
-//	addAndMakeVisible(objects[2]);
-//	addAndMakeVisible(objects[3]);
-//	addAndMakeVisible(objects[4]);
-//	addAndMakeVisible(objects[5]);
-//	addAndMakeVisible(objects[6]);
-
 }
 
 ObjectsHolder::~ObjectsHolder()
@@ -100,7 +85,7 @@ void ObjectsHolder::updateComponents()
 	int i;
     for (i = getNumChildComponents(); --i >= 0;)
     {
-        BaseObjectComponent* const bobj = dynamic_cast <BaseObjectComponent*> (getChildComponent (i));
+        ObjectComponent* const bobj = dynamic_cast <ObjectComponent*> (getChildComponent (i));
 
         if (bobj != nullptr)
             bobj->update();

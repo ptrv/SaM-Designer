@@ -97,8 +97,8 @@
               file="Source/View/ObjectPropertiesPanel.cpp"/>
         <FILE id="zbvgtU" name="ObjectPropertiesPanel.h" compile="0" resource="0"
               file="Source/View/ObjectPropertiesPanel.h"/>
-        <FILE id="kbQNVc" name="BaseObjectComponent.h" compile="0" resource="0"
-              file="Source/View/BaseObjectComponent.h"/>
+        <FILE id="kbQNVc" name="ObjectComponent.h" compile="0" resource="0"
+              file="Source/View/ObjectComponent.h"/>
         <FILE id="gzMWlB" name="OutputWindow.cpp" compile="1" resource="0"
               file="Source/View/OutputWindow.cpp"/>
         <FILE id="bVPf9s" name="OutputWindow.h" compile="0" resource="0" file="Source/View/OutputWindow.h"/>

@@ -28,7 +28,7 @@
 
 
 class MDLController;
-class BaseObjectComponent;
+class ObjectComponent;
 
 class ObjController
 {
@@ -44,7 +44,7 @@ public:
 	void loadComponents(Component* holder);
 private:
 	MDLController& owner;
-	OwnedArray<BaseObjectComponent> objects;
+	OwnedArray<ObjectComponent> objects;
 
 };
 
