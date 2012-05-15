@@ -28,6 +28,7 @@
 #include "ContentComp.h"
 #include "BaseObjectComponent.h"
 #include "../Controller/ObjController.h"
+#include "VariablesPanel.h"
 
 #include "ObjectsHolder.h"
 
@@ -175,6 +176,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 //		objController.removeObject("dev1");
 		break;
     case CommandIDs::defineVariables:
+    	VariablesPanel::show(mdlFile->mdlRoot);
     	break;
     case CommandIDs::segmentedConnectors:
     	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
