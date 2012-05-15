@@ -32,7 +32,8 @@ class VariableInputPanel : public DialogWindow
 {
 public:
 	VariableInputPanel(ValueTree data_, bool edit_)
-	: DialogWindow("Variable", Colours::lightgrey, true)
+	: DialogWindow("Variable", Colours::lightgrey, true),
+	  returnVal(0)
 	{
 		VariableInputComponent* const vic = new VariableInputComponent(*this, data_, edit_);
 		vic->setSize(350, 100);
@@ -55,13 +56,15 @@ public:
     	setVisible(false);
     }
 
-    static void show(ValueTree data, bool edit)
+    static int show(ValueTree data, bool edit)
     {
     	VariableInputPanel vip(data, edit);
         vip.runModalLoop();
+        return vip.returnVal;
     }
 
 private:
+	int returnVal;
     class VariableInputComponent : public Component,
     								public Button::Listener
     {
@@ -125,10 +128,12 @@ private:
     			{
 					data.addChild(newData, -1, nullptr);
     			}
+    			parent.returnVal = 1;
 				parent.closeButtonPressed();
     		}
     		else if(button == &btCancel)
     		{
+    			parent.returnVal = 2;
     			parent.closeButtonPressed();
     		}
     	}
@@ -204,9 +209,12 @@ public:
 	void addRow()
 	{
 
-		VariableInputPanel::show(data.getOrCreateChildWithName(Objects::labels, nullptr), false);
+		int r = VariableInputPanel::show(data.getOrCreateChildWithName(Objects::labels, nullptr), false);
 		table.updateContent();
-		SAM_LOG(data[Ids::mdlName].toString() + ": Add variable");
+		if(r == 1)
+			SAM_LOG(data[Ids::mdlName].toString() + ": Add variable");
+		else if(r == 2)
+			SAM_LOG(data[Ids::mdlName].toString() + ": Canceled add variable");
 	}
 
 	void editRow()
@@ -215,10 +223,13 @@ public:
 		if(rowIndex >= 0)
 		{
 			ValueTree editData = data.getChildWithName(Objects::labels).getChild(rowIndex);
-			VariableInputPanel::show(editData, true);
+			int r = VariableInputPanel::show(editData, true);
 			table.updateContent();
-			table.repaint();
-			SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
+			table.repaintRow(rowIndex);
+			if(r == 1)
+				SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
+			else if(r == 2)
+				SAM_LOG(data[Ids::mdlName].toString() + ": Canceled edit variable");
 		}
 	}
 
