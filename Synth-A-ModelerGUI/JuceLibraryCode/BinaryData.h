@@ -20,7 +20,7 @@ namespace BinaryData
     const int            prefs_misc_pngSize = 6162;
 
     extern const char*   icons_zip;
-    const int            icons_zipSize = 10095;
+    const int            icons_zipSize = 10934;
 
     extern const char*   synthamodeler_icon_png;
     const int            synthamodeler_icon_pngSize = 25836;

@@ -52,7 +52,7 @@ void ResourceLoader::initObjectIconMap()
 	objectIcons.set(Ids::pluck.toString(), "pluck.svg");
 	objectIcons.set(Ids::termination.toString(), "termination.svg");
 	objectIcons.set(Ids::waveguide.toString(), "waveguide.svg");
-//	objectIcons.set(Ids::audioout.toString(), "waveguide.svg");
+	objectIcons.set(Ids::audioout.toString(), "audioout.svg");
 //	objectIcons.set(Ids::junction.toString(), "waveguide.svg");
 //	objectIcons.set(Ids::label.toString(), "waveguide.svg");
 }

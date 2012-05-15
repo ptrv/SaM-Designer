@@ -88,7 +88,7 @@ void ObjController::loadComponents(Component* holder)
 			if(obj.getType() == Ids::mass || obj.getType() == Ids::port
 					|| obj.getType() == Ids::ground || obj.getType() == Ids::resonator
 					|| obj.getType() == Ids::link || obj.getType() == Ids::touch
-					|| obj.getType() == Ids::pluck)
+					|| obj.getType() == Ids::pluck || obj.getType() == Ids::audioout)
 			{
 				BaseObjectComponent* objComp = new BaseObjectComponent(obj.getType(),
 						int(obj.getProperty(Ids::posX)), int(obj.getProperty(Ids::posY)));
