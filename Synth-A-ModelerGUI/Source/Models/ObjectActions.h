@@ -35,10 +35,10 @@ class AddObjectAction : public UndoableAction
 public:
 	AddObjectAction(Component* objHolderComp_, BaseObjectComponent* objComp_,
 			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
-	: holderComp(objHolderComp_),
-	  objComp(objComp_),
-	  mdlSubTree(mdlTree_),
-	  objId(objId_)
+	: mdlSubTree(mdlTree_),
+      objId(objId_),
+      holderComp(objHolderComp_),
+      objComp(objComp_)
 	{
 		// create a ValueTree with default values.
 		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);

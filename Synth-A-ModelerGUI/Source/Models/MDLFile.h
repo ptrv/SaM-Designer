@@ -41,7 +41,11 @@ public:
 	void close();
 
 	const String& getFilePath() const { return mdlPath; }
-	const String getName() { return hasChangedSinceSaved() ? mdlName+"*" : mdlName; }
+	const String getNameWithStatus() 
+    { 
+        return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle(); 
+    }
+	const String getName() { return getDocumentTitle(); }
 
 	bool perform (UndoableAction* const action, const String& actionName);
 

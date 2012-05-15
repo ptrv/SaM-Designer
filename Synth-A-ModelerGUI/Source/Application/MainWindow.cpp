@@ -246,6 +246,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     	break;
     case CommandIDs::saveDocument:
     	mdlController->save();
+        updateTitle();
     	break;
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
@@ -275,7 +276,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
 void MainAppWindow::updateTitle ()
 {
 	String title = JUCEApplication::getInstance()->getApplicationName();
-	title << " - " << mdlController->getMDLFile()->getName();
+	title << " - " << mdlController->getMDLFile()->getNameWithStatus();
 	this->setName(title);
 
 }

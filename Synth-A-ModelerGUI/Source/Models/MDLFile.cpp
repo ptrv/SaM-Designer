@@ -96,7 +96,7 @@ void MDLFile::close()
 
 const String MDLFile::getDocumentTitle()
 {
-	return mdlName;
+    return mdlName;
 }
 const String MDLFile::loadDocument (const File& file)
 {
@@ -129,6 +129,9 @@ const String MDLFile::saveDocument (const File& file)
 	if(wr.writeMDL(file))
 	{
 		SAM_LOG("Saved MDL file: "+file.getFullPathName());
+        setFile(file);
+        setChangedFlag(false);
+        mdlName = file.getFileName();
 		return String::empty;
 	}
 	else
