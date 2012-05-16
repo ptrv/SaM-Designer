@@ -166,8 +166,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 		objController.selectAll(false);
 		break;
 	case StandardApplicationCommandIDs::del:
-		DBG("delete");
-//		objController.removeObject("dev1");
+		objController.removeObject(this);
 		break;
     case CommandIDs::defineVariables:
     	VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());

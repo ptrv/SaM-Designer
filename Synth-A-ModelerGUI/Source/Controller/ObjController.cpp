@@ -63,15 +63,13 @@ void ObjController::addObject(Component* holder, const Identifier& objId,
 }
 
 
-void ObjController::removeObject(Component* holder, const String& objName)
+void ObjController::removeObject(Component* holder)
 {
-	MDLFile* const mf = owner.getMDLFile();
-	ValueTree childToRemove = mf->getObjectWithName(objName);
-	if(childToRemove.isValid())
-	{
-		this->perform(new RemoveObjectAction(childToRemove.getParent(), childToRemove), "Remove Object");
-//		subTree.removeChild(childToRemove, owner.getUndoManager());
-	}
+	Array<ValueTree> childrenDataToRemove = getChildrenDataToRemove();
+	Array<ObjectComponent*> childrenComponentsToRemove = getChildrenComponentsToRemove();
+
+	this->perform(new RemoveObjectAction(holder, childrenComponentsToRemove,
+				childrenDataToRemove), "Remove Object");
 }
 
 void ObjController::loadComponents(Component* holder)
@@ -129,4 +127,27 @@ void ObjController::selectAll(bool shouldBeSelected)
 	{
 		objects[i]->setSelected(shouldBeSelected);
 	}
+}
+
+Array<ValueTree> ObjController::getChildrenDataToRemove()
+{
+	Array<ValueTree> childrenToRemove;
+	for (int i = 0; i < objects.size(); ++i) {
+		if(objects[i]->selected())
+		{
+			childrenToRemove.add(objects[i]->getData());
+		}
+	}
+	return childrenToRemove;
+}
+Array<ObjectComponent*> ObjController::getChildrenComponentsToRemove()
+{
+	Array<ObjectComponent*> childrenToRemove;
+	for (int i = 0; i < objects.size(); ++i) {
+		if(objects[i]->selected())
+		{
+			childrenToRemove.add(objects[i]);
+		}
+	}
+	return childrenToRemove;
 }

@@ -39,13 +39,15 @@ public:
 	bool perform (UndoableAction* const action, const String& actionName);
 
 	void addObject(Component* holder, const Identifier& objId, int posX, int posY);
-	void removeObject(Component* holder, const String& objName);
+	void removeObject(Component* holder);
 
 	void loadComponents(Component* holder);
 
 	void selectObjectsWithinRectagle(Rectangle<int> rect);
 	void selectAll(bool shouldBeSelected);
 private:
+	Array<ValueTree> getChildrenDataToRemove();
+	Array<ObjectComponent*> getChildrenComponentsToRemove();
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
 

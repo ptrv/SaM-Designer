@@ -79,9 +79,12 @@ private:
 class RemoveObjectAction : public UndoableAction
 {
 public:
-	RemoveObjectAction(ValueTree mdlTree_, ValueTree objToRemove_)
-	: mdlSubTree(mdlTree_),
-	  oldValue(objToRemove_)
+	RemoveObjectAction(Component* objHolderComp_,
+			Array<ObjectComponent*> componentsToRemove,
+			Array<ValueTree> childrenToRemove)
+	: holderComp(objHolderComp_),
+	  objComps(componentsToRemove),
+	  oldValue(childrenToRemove)
 	{
 	}
 	~RemoveObjectAction()
@@ -90,19 +93,28 @@ public:
 
 	bool perform()
 	{
-		SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
-		mdlSubTree.removeChild(oldValue, nullptr);
+		for (int i = 0; i < oldValue.size(); ++i)
+		{
+			SAM_LOG("Remove "+oldValue[i][Ids::identifier].toString());
+			holderComp->removeChildComponent(objComps[i]);
+			oldValue[i].getParent().removeChild(oldValue[i], nullptr);
+		}
 		return true;
 	}
 
 	bool undo()
 	{
-		SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
-		mdlSubTree.addChild(oldValue,-1, nullptr);
+		for (int i = 0; i < oldValue.size(); ++i) {
+			SAM_LOG("Undo remove "+oldValue[i][Ids::identifier].toString());
+			holderComp->addAndMakeVisible(objComps[i]);
+			oldValue[i].getParent().addChild(oldValue[i],-1, nullptr);
+		}
 		return true;
 	}
 private:
-	ValueTree mdlSubTree;
-	ValueTree oldValue;
+	Component* holderComp;
+	Array<ObjectComponent*> objComps;
+	Array<ValueTree> oldValue;
+
 };
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

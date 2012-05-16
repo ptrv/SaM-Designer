@@ -39,6 +39,7 @@ public:
 	void mouseUp (const MouseEvent& e);
 	void update();
 	void setData(ValueTree dataTree);
+	ValueTree getData();
 
 	void setSelected(bool shouldBeSelected);
 	bool selected() const { return isSelected; }

@@ -110,6 +110,11 @@ void ObjectComponent::setData(ValueTree dataTree)
 	data = dataTree;
 }
 
+ValueTree ObjectComponent::getData()
+{
+	return data;
+}
+
 ObjectsHolder* ObjectComponent::getGraphPanel() const noexcept
 {
     return findParentComponentOfClass<ObjectsHolder>();
