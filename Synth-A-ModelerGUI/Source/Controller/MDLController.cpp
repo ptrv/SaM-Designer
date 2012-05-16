@@ -32,10 +32,9 @@
 
 
 MDLController::MDLController(MainAppWindow& mainAppWindow_)
-//: owner(owner_)
-: mainAppWindow(mainAppWindow_)
+: mainAppWindow(mainAppWindow_),
+  currentMdl(nullptr)
 {
-	currentMdl = nullptr;
 	outCmd = new OutputCmd();
 }
 
@@ -162,20 +161,31 @@ const String MDLController::getMDLName()
 
 UndoManager* MDLController::getUndoManager()
 {
-	if(currentMdl != nullptr)
-		return &currentMdl->getUndoMgr();
-	else
+	if(currentMdl == nullptr)
 		return nullptr;
+
+	return &currentMdl->getUndoMgr();
+
 }
 
 bool MDLController::perform (UndoableAction* const action, const String& actionName)
 {
-    getUndoManager()->beginNewTransaction(actionName);
-	return getUndoManager()->perform(action, actionName);
+	if(getUndoManager() != nullptr)
+	{
+		getUndoManager()->beginNewTransaction(actionName);
+		return getUndoManager()->perform(action, actionName);
+	}
+	else
+	{
+		return false;
+	}
 }
 
 ValueTree MDLController::getMDLTree()
 {
+	if(currentMdl == nullptr)
+		return ValueTree::invalid;
+
 	return currentMdl->mdlRoot;
 }
 
@@ -197,7 +207,7 @@ MDLFile* MDLController::getMDLFile() const
 void MDLController::setMDLFile(MDLFile* mdlFile)
 {
 	currentMdl = mdlFile;
-	if(mdlFile != nullptr)
+	if(currentMdl != nullptr)
 	{
 		StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
 		StoredSettings::getInstance()->flush();
