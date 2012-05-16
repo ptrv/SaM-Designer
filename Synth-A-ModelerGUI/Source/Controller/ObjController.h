@@ -45,6 +45,7 @@ public:
 
 	void selectObjectsWithinRectagle(Rectangle<int> rect);
 	void selectAll(bool shouldBeSelected);
+
 private:
 	Array<ValueTree> getChildrenDataToRemove();
 	Array<ObjectComponent*> getChildrenComponentsToRemove();

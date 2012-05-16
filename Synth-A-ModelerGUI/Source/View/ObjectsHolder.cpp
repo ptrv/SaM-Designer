@@ -154,10 +154,13 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 	switch(info.commandID)
 	{
 	case StandardApplicationCommandIDs::cut:
+		// TODO: implement cut
 		break;
 	case StandardApplicationCommandIDs::copy:
+		// TODO: implement copy
 		break;
 	case StandardApplicationCommandIDs::paste:
+		// TODO: implement paste
 		break;
 	case StandardApplicationCommandIDs::selectAll:
 		objController.selectAll(true);
@@ -172,15 +175,20 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     	VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());
     	break;
     case CommandIDs::segmentedConnectors:
+    	// TODO: implement segmented connectors
     	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
     	break;
     case CommandIDs::zoomIn:
+    	// TODO: implement zoom in
     	break;
     case CommandIDs::zoomOut:
+    	// TODO: implement zoom out
     	break;
     case CommandIDs::zoomNormal:
+    	// TODO: implement zoom normal
     	break;
     case CommandIDs::reverseDirection:
+    	// TODO: implement reverse direction
     	break;
 
     case CommandIDs::insertMass:
@@ -220,4 +228,3 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 	}
 	return true;
 }
-

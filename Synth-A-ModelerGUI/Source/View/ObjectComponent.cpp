@@ -9,6 +9,7 @@
 */
 
 #include "../Application/CommonHeaders.h"
+#include "../Controller/ObjController.h"
 #include "ObjectsHolder.h"
 #include "ObjectPropertiesPanel.h"
 
@@ -91,6 +92,13 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 	}
 	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
 	{
+
+		if(!isSelected){
+			for (int i = getGraphPanel()->getNumChildComponents(); --i >= 0;){
+				ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getGraphPanel()->getChildComponent(i));
+				oc->setSelected(false);
+			}
+		}
 		toggleSelected();
 	}
 	else if (! e.mouseWasClicked())
@@ -128,6 +136,10 @@ void ObjectComponent::setSelected(bool shouldBeSelected)
 
 void ObjectComponent::toggleSelected()
 {
-	isSelected = !isSelected;
+	if(isSelected)
+		setSelected(false);
+	else
+		setSelected(true);
 	repaint();
 }
+

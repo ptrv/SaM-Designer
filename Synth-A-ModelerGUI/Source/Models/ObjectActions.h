@@ -33,12 +33,12 @@
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(Component* objHolderComp_, ObjectComponent* objComp_,
+	AddObjectAction(OwnedArray<ObjectComponent>& objects_, Component* objHolderComp_,
 			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
-	: mdlSubTree(mdlTree_),
+	: objects(objects_),
+	  mdlSubTree(mdlTree_),
       objId(objId_),
-      holderComp(objHolderComp_),
-      objComp(objComp_)
+      holderComp(objHolderComp_)
 	{
 		// create a ValueTree with default values.
 		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
@@ -50,8 +50,10 @@ public:
 	bool perform()
 	{
 		// Add new Object to mdlRoot and ObjectHolder
+		objComp = new ObjectComponent(objId, int(newValue[Ids::posX]), int(newValue[Ids::posY]));
 		mdlSubTree.addChild(newValue,-1, nullptr);
 		objComp->setData(newValue);
+		objects.add(objComp);
 		holderComp->addAndMakeVisible(objComp);
         String logText = "Add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
@@ -62,6 +64,7 @@ public:
 	bool undo()
 	{
 		holderComp->removeChildComponent(objComp);
+		objects.removeObject(objComp);
 		mdlSubTree.removeChild(newValue, nullptr);
         String logText = "Undo add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
@@ -69,6 +72,7 @@ public:
 		return true;
 	}
 private:
+	OwnedArray<ObjectComponent>& objects;
 	ValueTree mdlSubTree;
 	ValueTree newValue;
 	const Identifier& objId;
@@ -79,10 +83,12 @@ private:
 class RemoveObjectAction : public UndoableAction
 {
 public:
-	RemoveObjectAction(Component* objHolderComp_,
+	RemoveObjectAction(OwnedArray<ObjectComponent>& objects_,
+			Component* objHolderComp_,
 			Array<ObjectComponent*> componentsToRemove,
 			Array<ValueTree> childrenToRemove)
-	: holderComp(objHolderComp_),
+	: objects(objects_),
+	  holderComp(objHolderComp_),
 	  objComps(componentsToRemove),
 	  oldValue(childrenToRemove)
 	{
@@ -97,8 +103,10 @@ public:
 		{
 			SAM_LOG("Remove "+oldValue[i][Ids::identifier].toString());
 			holderComp->removeChildComponent(objComps[i]);
+			objects.removeObject(objComps[i]);
 			oldValue[i].getParent().removeChild(oldValue[i], nullptr);
 		}
+		objComps.clear();
 		return true;
 	}
 
@@ -106,12 +114,18 @@ public:
 	{
 		for (int i = 0; i < oldValue.size(); ++i) {
 			SAM_LOG("Undo remove "+oldValue[i][Ids::identifier].toString());
-			holderComp->addAndMakeVisible(objComps[i]);
 			oldValue[i].getParent().addChild(oldValue[i],-1, nullptr);
+			ObjectComponent* oc = new ObjectComponent(oldValue[i].getType(),
+					int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
+			objComps.add(oc);
+			oc->setData(oldValue[i]);
+			objects.add(oc);
+			holderComp->addAndMakeVisible(oc);
 		}
 		return true;
 	}
 private:
+	OwnedArray<ObjectComponent>& objects;
 	Component* holderComp;
 	Array<ObjectComponent*> objComps;
 	Array<ValueTree> oldValue;

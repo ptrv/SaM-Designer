@@ -27,6 +27,7 @@
 #define __BASEOBJECTCOMPONENT_H_4AC10D4B__
 
 class ObjectsHolder;
+class ObjController;
 class ObjectComponent : public Component
 {
 public:
@@ -56,6 +57,8 @@ private:
     ValueTree data;
 
     bool isSelected;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };
 
 

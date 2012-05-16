@@ -55,10 +55,9 @@ void ObjController::addObject(Component* holder, const Identifier& objId,
 	{
 		ValueTree mdl = owner.getMDLTree();
 		ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
-		ObjectComponent* objComp = new ObjectComponent(objId, posX, posY);
-		objects.add(objComp);
-		this->perform(new AddObjectAction(holder, objComp,
-				subTree, objId, posX, posY), "Add new Object");
+
+		this->perform(new AddObjectAction(objects, holder,subTree, objId,
+				posX, posY), "Add new Object");
 	}
 }
 
@@ -68,7 +67,7 @@ void ObjController::removeObject(Component* holder)
 	Array<ValueTree> childrenDataToRemove = getChildrenDataToRemove();
 	Array<ObjectComponent*> childrenComponentsToRemove = getChildrenComponentsToRemove();
 
-	this->perform(new RemoveObjectAction(holder, childrenComponentsToRemove,
+	this->perform(new RemoveObjectAction(objects, holder, childrenComponentsToRemove,
 				childrenDataToRemove), "Remove Object");
 }
 
@@ -133,9 +132,9 @@ Array<ValueTree> ObjController::getChildrenDataToRemove()
 {
 	Array<ValueTree> childrenToRemove;
 	for (int i = 0; i < objects.size(); ++i) {
-		if(objects[i]->selected())
+		if(objects.getUnchecked(i)->selected())
 		{
-			childrenToRemove.add(objects[i]->getData());
+			childrenToRemove.add(objects.getUnchecked(i)->getData());
 		}
 	}
 	return childrenToRemove;
@@ -144,10 +143,11 @@ Array<ObjectComponent*> ObjController::getChildrenComponentsToRemove()
 {
 	Array<ObjectComponent*> childrenToRemove;
 	for (int i = 0; i < objects.size(); ++i) {
-		if(objects[i]->selected())
+		if(objects.getUnchecked(i)->selected())
 		{
-			childrenToRemove.add(objects[i]);
+			childrenToRemove.add(objects.getUnchecked(i));
 		}
 	}
 	return childrenToRemove;
 }
+
