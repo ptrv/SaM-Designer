@@ -100,3 +100,25 @@ void ObjController::loadComponents(Component* holder)
 		}
 	}
 }
+
+void ObjController::selectObjectsWithinRectagle(Rectangle<int> rect)
+{
+	if(rect.getWidth() < 0)
+	{
+		rect.setX(rect.getX() + rect.getWidth());
+		rect.setWidth(-rect.getWidth());
+	}
+	if(rect.getHeight() < 0)
+	{
+		rect.setY(rect.getY() + rect.getHeight());
+		rect.setHeight(-rect.getHeight());
+	}
+
+	for (int i = 0; i < objects.size(); ++i) {
+		if(rect.intersects(objects[i]->getBounds()))
+		{
+			DBG("Selection intersects object number " + i);
+			objects[i]->toggleSelected();
+		}
+	}
+}

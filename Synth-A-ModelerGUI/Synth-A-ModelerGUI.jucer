@@ -89,6 +89,8 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="W2WCvr" name="ObjectComponent.cpp" compile="1" resource="0"
+              file="Source/View/ObjectComponent.cpp"/>
         <FILE id="qzm70P" name="VariablesPanel.cpp" compile="1" resource="0"
               file="Source/View/VariablesPanel.cpp"/>
         <FILE id="ZgiRJ5" name="VariablesPanel.h" compile="0" resource="0"

@@ -51,6 +51,7 @@ public:
 	void setMDLFile(MDLFile* newMDLFile);
 
 private:
+
 	ObjController& objController;
 	MDLFile* mdlFile;
 

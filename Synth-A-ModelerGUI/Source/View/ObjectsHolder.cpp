@@ -107,6 +107,13 @@ void ObjectsHolder::mouseUp (const MouseEvent& e)
 	if (! e.mouseWasClicked())
 	{
             // object changed
+		int x = draggingStart.x;
+		int y = draggingStart.y;
+		int w = draggingActual.x;// - x;
+		int h = draggingActual.y;// - y;
+
+		Rectangle<int> tmpRect(x, y, w, h);
+		objController.selectObjectsWithinRectagle(tmpRect);
 		dragging = false;
 		repaint();
 	}

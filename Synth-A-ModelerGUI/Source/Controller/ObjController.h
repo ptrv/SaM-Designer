@@ -42,6 +42,8 @@ public:
 	void removeObject(Component* holder, const String& objName);
 
 	void loadComponents(Component* holder);
+
+	void selectObjectsWithinRectagle(Rectangle<int> rect);
 private:
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
