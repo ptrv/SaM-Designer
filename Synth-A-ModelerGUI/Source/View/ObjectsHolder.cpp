@@ -161,7 +161,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 //		objController.removeObject("dev1");
 		break;
     case CommandIDs::defineVariables:
-    	VariablesPanel::show(mdlFile->mdlRoot);
+    	VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());
     	break;
     case CommandIDs::segmentedConnectors:
     	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());

@@ -30,12 +30,12 @@
 class VariablesPanel  : public DialogWindow
 {
 public:
-	VariablesPanel(ValueTree data);
+	VariablesPanel(ValueTree data, UndoManager* undoManager);
     ~VariablesPanel();
 
     void closeButtonPressed();
 
-    static void show(ValueTree data);
+    static void show(ValueTree data, UndoManager* undoManager);
 };
 
 

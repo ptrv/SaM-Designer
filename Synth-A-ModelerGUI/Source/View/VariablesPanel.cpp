@@ -31,11 +31,12 @@
 class VariableInputPanel : public DialogWindow
 {
 public:
-	VariableInputPanel(ValueTree data_, bool edit_)
+	VariableInputPanel(ValueTree data_, bool edit_, UndoManager* undoManager_)
 	: DialogWindow("Variable", Colours::lightgrey, true),
 	  returnVal(0)
 	{
-		VariableInputComponent* const vic = new VariableInputComponent(*this, data_, edit_);
+		VariableInputComponent* const vic = new VariableInputComponent(*this,
+				data_, edit_, undoManager_);
 		vic->setSize(350, 100);
 
 		setContentOwned (vic, true);
@@ -56,9 +57,9 @@ public:
     	setVisible(false);
     }
 
-    static int show(ValueTree data, bool edit)
+    static int show(ValueTree data, bool edit, UndoManager* undoManager)
     {
-    	VariableInputPanel vip(data, edit);
+    	VariableInputPanel vip(data, edit, undoManager);
         vip.runModalLoop();
         return vip.returnVal;
     }
@@ -69,7 +70,8 @@ private:
     								public Button::Listener
     {
     public:
-    	VariableInputComponent(VariableInputPanel& parent_, ValueTree data_, bool edit_)
+    	VariableInputComponent(VariableInputPanel& parent_, ValueTree data_,
+    			bool edit_,	UndoManager* undoManager_)
     	: parent(parent_),
     	  labelVarName("Variable"),
     	  labelVarValue("Value"),
@@ -78,7 +80,8 @@ private:
     	  data(data_),
     	  edit(edit_),
     	  btOk("Ok"),
-    	  btCancel("Cancel")
+    	  btCancel("Cancel"),
+    	  undoManager(undoManager_)
     	{
     		labelVarName.setText("Variable", false);
     		addAndMakeVisible(&labelVarName);
@@ -121,12 +124,15 @@ private:
 				newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
     			if(edit)
     			{
-					data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), nullptr);
-					data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), nullptr);
+    				undoManager->beginNewTransaction("Edit variable");
+					data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), undoManager);
+					data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), undoManager);
+					DBG(undoManager->getNumActionsInCurrentTransaction())	;
     			}
     			else
     			{
-					data.addChild(newData, -1, nullptr);
+    				undoManager->beginNewTransaction("Add variable");
+					data.addChild(newData, -1, undoManager);
     			}
     			parent.returnVal = 1;
 				parent.closeButtonPressed();
@@ -147,6 +153,8 @@ private:
     	bool edit;
     	TextButton btOk;
     	TextButton btCancel;
+    	UndoManager* undoManager;
+
     };
 
 };
@@ -206,10 +214,10 @@ public:
 		}
 	}
 
-	void addRow()
+	void addRow(UndoManager* undoManager)
 	{
 
-		int r = VariableInputPanel::show(data.getOrCreateChildWithName(Objects::labels, nullptr), false);
+		int r = VariableInputPanel::show(data.getOrCreateChildWithName(Objects::labels, nullptr), false, undoManager);
 		table.updateContent();
 		if(r == 1)
 			SAM_LOG(data[Ids::mdlName].toString() + ": Add variable");
@@ -217,13 +225,13 @@ public:
 			SAM_LOG(data[Ids::mdlName].toString() + ": Canceled add variable");
 	}
 
-	void editRow()
+	void editRow(UndoManager* undoManager)
 	{
 		int rowIndex = table.getSelectedRow();
 		if(rowIndex >= 0)
 		{
 			ValueTree editData = data.getChildWithName(Objects::labels).getChild(rowIndex);
-			int r = VariableInputPanel::show(editData, true);
+			int r = VariableInputPanel::show(editData, true, undoManager);
 			table.updateContent();
 			table.repaintRow(rowIndex);
 			if(r == 1)
@@ -233,13 +241,14 @@ public:
 		}
 	}
 
-	void removeSelectedRow()
+	void removeSelectedRow(UndoManager* undoManager)
 	{
 		int rowIndex = table.getLastRowSelected();
 		if(rowIndex >= 0)
 		{
 			String varName = data.getChildWithName(Objects::labels).getChild(rowIndex)[Ids::identifier].toString();
-			data.getChildWithName(Objects::labels).removeChild(rowIndex,nullptr);
+			undoManager->beginNewTransaction("Add variable");
+			data.getChildWithName(Objects::labels).removeChild(rowIndex, undoManager);
 			table.updateContent();
 			SAM_LOG(data[Ids::mdlName].toString() + ": Remove variable " + varName);
 		}
@@ -258,11 +267,12 @@ class VariablesComponent : public Component,
 							public Button::Listener
 {
 public:
-	VariablesComponent(ValueTree data)
+	VariablesComponent(ValueTree data, UndoManager* undoManager_)
 	: btAdd("Add"),
 	  btRemove("Remove"),
 	  btEdit("Edit"),
-	  varTable(data)
+	  varTable(data),
+	  undoManager(undoManager_)
 	{
 		btAdd.addListener(this);
 		addAndMakeVisible(&btAdd);
@@ -289,15 +299,15 @@ public:
 	{
 		if(button == &btAdd)
 		{
-			varTable.addRow();
+			varTable.addRow(undoManager);
 		}
 		else if( button == &btRemove)
 		{
-			varTable.removeSelectedRow();
+			varTable.removeSelectedRow(undoManager);
 		}
 		else if( button == &btEdit)
 		{
-			varTable.editRow();
+			varTable.editRow(undoManager);
 		}
 	}
 
@@ -306,15 +316,16 @@ private:
 	TextButton btRemove;
 	TextButton btEdit;
 	VariablesTable varTable;
+	UndoManager* undoManager;
 };
 
 static String variablesWindowPos;
 
 
-VariablesPanel::VariablesPanel(ValueTree data)
+VariablesPanel::VariablesPanel(ValueTree data, UndoManager* undoManager)
     : DialogWindow ("Define variables", Colour::greyLevel (0.92f), true)
 {
-	VariablesComponent* const vc = new VariablesComponent(data);
+	VariablesComponent* const vc = new VariablesComponent(data, undoManager);
     vc->setSize (600, 400);
 
     setContentOwned (vc, true);
@@ -335,9 +346,9 @@ void VariablesPanel::closeButtonPressed()
     setVisible (false);
 }
 
-void VariablesPanel::show(ValueTree data)
+void VariablesPanel::show(ValueTree data, UndoManager* undoManager)
 {
-	VariablesPanel vp(data);
+	VariablesPanel vp(data, undoManager);
     vp.runModalLoop();
 }
 
