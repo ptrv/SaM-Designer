@@ -48,6 +48,15 @@ public:
 	{
 	}
 
+    bool hitTest (int x, int y)
+    {
+        for (int i = getNumChildComponents(); --i >= 0;)
+            if (getChildComponent(i)->getBounds().contains (x, y))
+                return true;
+
+        return x >= 4 && x < getWidth() - 4 && y >= 4 && y < getHeight() - 4;
+    }
+
 	void paint(Graphics& g)
 	{
 		g.setColour (Colours::lightgrey);
