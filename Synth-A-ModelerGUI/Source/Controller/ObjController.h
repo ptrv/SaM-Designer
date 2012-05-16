@@ -44,6 +44,7 @@ public:
 	void loadComponents(Component* holder);
 
 	void selectObjectsWithinRectagle(Rectangle<int> rect);
+	void selectAll(bool shouldBeSelected);
 private:
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;

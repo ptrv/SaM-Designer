@@ -160,8 +160,10 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 	case StandardApplicationCommandIDs::paste:
 		break;
 	case StandardApplicationCommandIDs::selectAll:
+		objController.selectAll(true);
 		break;
 	case StandardApplicationCommandIDs::deselectAll:
+		objController.selectAll(false);
 		break;
 	case StandardApplicationCommandIDs::del:
 		DBG("delete");

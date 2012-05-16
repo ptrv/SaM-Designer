@@ -114,11 +114,19 @@ void ObjController::selectObjectsWithinRectagle(Rectangle<int> rect)
 		rect.setHeight(-rect.getHeight());
 	}
 
-	for (int i = 0; i < objects.size(); ++i) {
+	for (int i = 0; i < objects.size(); ++i)
+	{
 		if(rect.intersects(objects[i]->getBounds()))
 		{
-			DBG("Selection intersects object number " + i);
 			objects[i]->toggleSelected();
 		}
+	}
+}
+
+void ObjController::selectAll(bool shouldBeSelected)
+{
+	for (int i = 0; i < objects.size(); ++i)
+	{
+		objects[i]->setSelected(shouldBeSelected);
 	}
 }
