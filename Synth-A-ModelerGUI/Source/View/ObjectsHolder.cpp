@@ -104,7 +104,15 @@ void ObjectsHolder::mouseDrag (const MouseEvent& e)
 
 void ObjectsHolder::mouseUp (const MouseEvent& e)
 {
-	if (! e.mouseWasClicked())
+	if( e.mouseWasClicked())
+	{
+		for (int i = getNumChildComponents(); --i >= 0;){
+			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
+			oc->setSelected(false);
+		}
+
+	}
+	else if (! e.mouseWasClicked())
 	{
             // object changed
 		int x = draggingStart.x;
@@ -138,6 +146,40 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 	}
 }
 
+void ObjectsHolder::moveObjects(Point<int> offset)
+{
+	objController.moveObjects(this, offset);
+}
+
+void ObjectsHolder::moveObjectComponents(Point<int> offset)
+{
+//	DBG(offset.toString());
+	for (int i = 0; i < getNumChildComponents(); ++i) {
+		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
+		if(oc->selected() && oc != ObjectComponent::isLastClicked)
+		{
+			Rectangle<int> tmpRect = oc->getBounds();
+			Point<int> tmpP = oc->getoriginalPosition();
+
+//			DBG(tmpP.toString());
+			tmpP.setX(tmpP.getX() + offset.getX());
+			tmpP.setY(tmpP.getY() + offset.getY());
+			oc->setActualPosition(tmpP);
+		}
+	}
+}
+
+void ObjectsHolder::updateObjectComponentPositions()
+{
+	for (int i = 0; i < getNumChildComponents(); ++i) {
+		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
+		if(oc->selected() && oc != ObjectComponent::isLastClicked)
+		{
+			oc->assignActualPosToOriginalPos();
+		}
+	}
+
+}
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
 	Point<int> mp = getMouseXYRelative();

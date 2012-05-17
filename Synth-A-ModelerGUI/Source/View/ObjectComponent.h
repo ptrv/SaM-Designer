@@ -45,6 +45,13 @@ public:
 	void setSelected(bool shouldBeSelected);
 	bool selected() const { return isSelected; }
 	void toggleSelected();
+
+	void setActualPosition(Point<int> pos);
+	Point<int> getoriginalPosition();
+
+	void assignActualPosToOriginalPos();
+
+	static ObjectComponent* isLastClicked;
 private:
 	const Identifier& objId;
 	DrawableComposite* icon;

@@ -15,6 +15,7 @@
 
 #include "ObjectComponent.h"
 
+ObjectComponent* ObjectComponent::isLastClicked = nullptr;
 ObjectComponent::ObjectComponent(const Identifier& objId_, int x, int y)
 : objId(objId_),
   isSelected(false)
@@ -23,6 +24,7 @@ ObjectComponent::ObjectComponent(const Identifier& objId_, int x, int y)
 	setComponentEffect (&shadow);
 
 	setSize(50, 50);
+	originalPos.setXY(x, y);
 	actualPos.setXY(x, y);
 	icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(objId));
 }
@@ -59,8 +61,8 @@ void ObjectComponent::paint(Graphics& g)
 	{
 
 		Colour col(0x88228b22);
-		g.setColour(col);
-		g.drawRect(x, y, w, h, 4);
+		g.setColour(Colours::black);
+		g.drawRect(x, y, w, h, 2);
 	}
 }
 
@@ -69,6 +71,21 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 	originalPos = localPointToGlobal (Point<int>());
 
 	toFront (true);
+
+	if(! isSelected)
+	{
+		setSelected(true);
+	}
+	isLastClicked = this;
+	if(! e.mods.isShiftDown())
+	{
+		for (int i = getGraphPanel()->getNumChildComponents(); --i >= 0;){
+			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getGraphPanel()->getChildComponent(i));
+			if(oc->selected() && oc != isLastClicked)
+				oc->setSelected(false);
+		}
+	}
+
 }
 
 void ObjectComponent::mouseDrag (const MouseEvent& e)
@@ -80,6 +97,7 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 
 	actualPos.x = (pos.getX() + getWidth() /2);
 	actualPos.y = (pos.getY() + getHeight() /2);
+	getGraphPanel()->moveObjectComponents(e.getOffsetFromDragStart());
 	getGraphPanel()->updateComponents();
 
 }
@@ -92,19 +110,25 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 	}
 	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
 	{
-
-		if(!isSelected){
-			for (int i = getGraphPanel()->getNumChildComponents(); --i >= 0;){
-				ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getGraphPanel()->getChildComponent(i));
-				oc->setSelected(false);
-			}
-		}
-		toggleSelected();
+		// nselect other sekected
+//		if(! e.mods.isShiftDown())
+//		{
+//			for (int i = getGraphPanel()->getNumChildComponents(); --i >= 0;){
+//				ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getGraphPanel()->getChildComponent(i));
+//				if(oc->selected() && oc != isLastClicked)
+//					oc->setSelected(false);
+//			}
+//		}
+//
 	}
 	else if (! e.mouseWasClicked())
 	{
 		// object changed / mouse realeased after drag
 		// TODO: Implement moving object
+//		DBG("Dragged")
+		getGraphPanel()->moveObjects(e.getOffsetFromDragStart());
+		getGraphPanel()->updateObjectComponentPositions();
+
 	}
 }
 
@@ -113,6 +137,20 @@ void ObjectComponent::update()
 	setCentrePosition((float) actualPos.x, (float) actualPos.y);
 }
 
+void ObjectComponent::setActualPosition(Point<int> pos)
+{
+	actualPos = pos;
+}
+
+Point<int> ObjectComponent::getoriginalPosition()
+{
+	return originalPos;
+}
+
+void ObjectComponent::assignActualPosToOriginalPos()
+{
+	originalPos = actualPos;
+}
 void ObjectComponent::setData(ValueTree dataTree)
 {
 	data = dataTree;

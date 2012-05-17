@@ -29,6 +29,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "ObjectFactory.h"
 #include "../View/ObjectComponent.h"
+#include "../View/ObjectsHolder.h"
 
 class AddObjectAction : public UndoableAction
 {
@@ -130,5 +131,69 @@ private:
 	Array<ObjectComponent*> objComps;
 	Array<ValueTree> oldValue;
 
+};
+
+class MoveObjectAction : public UndoableAction {
+public:
+	MoveObjectAction(OwnedArray<ObjectComponent>& objects_,
+			ObjectsHolder* objHolderComp_,
+			Array<ObjectComponent*> componentsToMove,
+			Array<ValueTree> childrenToMove,
+			Point<int> dragOffset_)
+	: objects(objects_),
+	  holderComp(objHolderComp_),
+	  objComps(componentsToMove),
+	  newValues(childrenToMove),
+	  moveOffset(dragOffset_)
+	{
+
+	}
+
+	~MoveObjectAction()
+	{
+
+	}
+
+	bool perform()
+	{
+		for (int i = 0; i < newValues.size(); ++i)
+		{
+			Point<int> tmpP;
+			tmpP.x = int(newValues[i][Ids::posX]);
+			tmpP.y = int(newValues[i][Ids::posY]);
+			tmpP.setX(tmpP.getX() + moveOffset.getX());
+			tmpP.setY(tmpP.getY() + moveOffset.getY());
+			newValues[i].setProperty(Ids::posX, tmpP.getX(), nullptr);
+			newValues[i].setProperty(Ids::posY, tmpP.getY(), nullptr);
+			objComps[i]->setActualPosition(tmpP);
+			SAM_LOG("Move "+newValues[i][Ids::identifier].toString());
+		}
+		holderComp->updateComponents();
+		return true;
+	}
+
+	bool undo()
+	{
+		for (int i = 0; i < newValues.size(); ++i)
+		{
+			Point<int> tmpP;
+			tmpP.x = int(newValues[i][Ids::posX]);
+			tmpP.y = int(newValues[i][Ids::posY]);
+			tmpP.setX(tmpP.getX() - moveOffset.getX());
+			tmpP.setY(tmpP.getY() - moveOffset.getY());
+			newValues[i].setProperty(Ids::posX, tmpP.getX(), nullptr);
+			newValues[i].setProperty(Ids::posY, tmpP.getY(), nullptr);
+			objComps[i]->setActualPosition(tmpP);
+			SAM_LOG("Undo move "+newValues[i][Ids::identifier].toString());
+		}
+		holderComp->updateComponents();
+		return true;
+	}
+private:
+	OwnedArray<ObjectComponent>& objects;
+	ObjectsHolder* holderComp;
+	Array<ObjectComponent*> objComps;
+	Array<ValueTree> newValues;
+	Point<int> moveOffset;
 };
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

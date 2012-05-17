@@ -64,8 +64,8 @@ void ObjController::addObject(Component* holder, const Identifier& objId,
 
 void ObjController::removeObject(Component* holder)
 {
-	Array<ValueTree> childrenDataToRemove = getChildrenDataToRemove();
-	Array<ObjectComponent*> childrenComponentsToRemove = getChildrenComponentsToRemove();
+	Array<ValueTree> childrenDataToRemove = getSelectedChildrenData();
+	Array<ObjectComponent*> childrenComponentsToRemove = getSelectedChildrenComponents();
 
 	this->perform(new RemoveObjectAction(objects, holder, childrenComponentsToRemove,
 				childrenDataToRemove), "Remove Object");
@@ -128,26 +128,35 @@ void ObjController::selectAll(bool shouldBeSelected)
 	}
 }
 
-Array<ValueTree> ObjController::getChildrenDataToRemove()
+Array<ValueTree> ObjController::getSelectedChildrenData()
 {
-	Array<ValueTree> childrenToRemove;
+	Array<ValueTree> childrenSelected;
 	for (int i = 0; i < objects.size(); ++i) {
 		if(objects.getUnchecked(i)->selected())
 		{
-			childrenToRemove.add(objects.getUnchecked(i)->getData());
+			childrenSelected.add(objects.getUnchecked(i)->getData());
 		}
 	}
-	return childrenToRemove;
+	return childrenSelected;
 }
-Array<ObjectComponent*> ObjController::getChildrenComponentsToRemove()
+Array<ObjectComponent*> ObjController::getSelectedChildrenComponents()
 {
-	Array<ObjectComponent*> childrenToRemove;
+	Array<ObjectComponent*> childrenSelected;
 	for (int i = 0; i < objects.size(); ++i) {
 		if(objects.getUnchecked(i)->selected())
 		{
-			childrenToRemove.add(objects.getUnchecked(i));
+			childrenSelected.add(objects.getUnchecked(i));
 		}
 	}
-	return childrenToRemove;
+	return childrenSelected;
 }
 
+void ObjController::moveObjects(ObjectsHolder* holder, Point<int> offset)
+{
+	Array<ValueTree> childrenDataMove = getSelectedChildrenData();
+	Array<ObjectComponent*> childrenComponentsToMove = getSelectedChildrenComponents();
+
+	this->perform(new MoveObjectAction(objects, holder, childrenComponentsToMove,
+			childrenDataMove, offset), "Move objects");
+
+}

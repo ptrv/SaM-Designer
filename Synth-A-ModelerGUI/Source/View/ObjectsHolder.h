@@ -50,6 +50,10 @@ public:
 
 	void setMDLFile(MDLFile* newMDLFile);
 
+	void moveObjects(Point<int> offset);
+	void moveObjectComponents(Point<int> offset);
+	void updateObjectComponentPositions();
+
 private:
 
 	ObjController& objController;

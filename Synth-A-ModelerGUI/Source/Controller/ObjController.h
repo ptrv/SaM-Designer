@@ -29,6 +29,7 @@
 
 class MDLController;
 class ObjectComponent;
+class ObjectsHolder;
 
 class ObjController
 {
@@ -46,9 +47,11 @@ public:
 	void selectObjectsWithinRectagle(Rectangle<int> rect);
 	void selectAll(bool shouldBeSelected);
 
+	void moveObjects(ObjectsHolder* holder, Point<int> offset);
+
 private:
-	Array<ValueTree> getChildrenDataToRemove();
-	Array<ObjectComponent*> getChildrenComponentsToRemove();
+	Array<ValueTree> getSelectedChildrenData();
+	Array<ObjectComponent*> getSelectedChildrenComponents();
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
 
