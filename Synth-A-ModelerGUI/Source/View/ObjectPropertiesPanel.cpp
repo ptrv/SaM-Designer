@@ -28,6 +28,7 @@
 #include "../Utilities/StoredSettings.h"
 #include "ObjectComponent.h"
 #include "../Models/ObjectIDs.h"
+#include "../Utilities/MiscUtilities.h"
 
 #include "ObjectPropertiesPanel.h"
 
@@ -568,7 +569,8 @@ static String exportWindowPos;
 
 
 ObjectPropertiesPanel::ObjectPropertiesPanel(ObjectComponent* caller, UndoManager* undoManager_)
-    : DialogWindow ("Object properties", Colour::greyLevel (0.92f), true),
+    : DialogWindow (Utils::getObjectTypeAsString(caller->getData().getType())+ " properties",
+    		Colour::greyLevel (0.92f), true),
       returnVal(0)
 {
 

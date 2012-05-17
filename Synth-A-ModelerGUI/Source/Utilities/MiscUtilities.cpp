@@ -24,6 +24,7 @@
 */
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "StoredSettings.h"
+#include "../Models/ObjectIDs.h"
 
 #include "MiscUtilities.h"
 
@@ -79,5 +80,32 @@ void openDataDir()
 
 }
 
+String getObjectTypeAsString(const Identifier& objType)
+{
+	if(objType == Ids::mass)
+		return "Mass";
+	else if(objType == Ids::port)
+		return "Port";
+	else if(objType == Ids::ground)
+		return "Ground";
+	else if(objType == Ids::resonator)
+		return "Resonator";
+	else if(objType == Ids::link)
+		return "Link";
+	else if(objType == Ids::touch)
+		return "Touch";
+	else if(objType == Ids::pluck)
+		return "Pluck";
+	else if(objType == Ids::audioout)
+		return "AudioOut";
+	else if(objType == Ids::waveguide)
+		return "Waveguide";
+	else if(objType == Ids::termination)
+		return "Termination";
+	else if(objType == Ids::junction)
+		return "Junction";
+	else
+		return String::empty;
+}
 
 }

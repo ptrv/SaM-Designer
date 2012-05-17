@@ -39,6 +39,8 @@ void openHelpUrl();
 
 void openDataDir();
 
+String getObjectTypeAsString(const Identifier& objType);
+
 };
 
 #endif  // __MISCUTILITIES_H_64FF5DE5__
