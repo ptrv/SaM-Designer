@@ -49,6 +49,7 @@ public:
 
 	void moveObjects(ObjectsHolder* holder, Point<int> offset);
 
+	void editObjectProperties(ObjectComponent* oc, UndoManager* undoManager);
 private:
 	Array<ValueTree> getSelectedChildrenData();
 	Array<ObjectComponent*> getSelectedChildrenComponents();

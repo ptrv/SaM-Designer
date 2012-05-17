@@ -27,16 +27,17 @@
 #define __OBJECTPROPERTIESPANEL_H_460EACF0__
 
 
+class ObjectComponent;
 
 class ObjectPropertiesPanel  : public DialogWindow
 {
 public:
-	ObjectPropertiesPanel(Component* caller);
+	ObjectPropertiesPanel(ObjectComponent* caller, UndoManager* undoManager_);
     ~ObjectPropertiesPanel();
 
     void closeButtonPressed();
 
-    static int show(Component* caller);
+    static int show(ObjectComponent* caller, UndoManager* undoManager_);
 
     int returnVal;
 };

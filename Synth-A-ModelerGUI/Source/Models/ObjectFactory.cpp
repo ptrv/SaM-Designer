@@ -37,9 +37,9 @@ static ValueTree createNewMassTree(int x, int y)
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
-	paramsTree.setProperty(Ids::idx[0], 1.0f, nullptr);
-	paramsTree.setProperty(Ids::idx[1], 0.0f, nullptr);
-	paramsTree.setProperty(Ids::idx[2], 0.0f, nullptr);
+	paramsTree.setProperty(Ids::idx[0], "0.001", nullptr);
+	paramsTree.setProperty(Ids::idx[1], "0.0", nullptr);
+	paramsTree.setProperty(Ids::idx[2], "0.0", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 

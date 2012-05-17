@@ -79,8 +79,8 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 	isLastClicked = this;
 	if(! e.mods.isShiftDown())
 	{
-		for (int i = getGraphPanel()->getNumChildComponents(); --i >= 0;){
-			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getGraphPanel()->getChildComponent(i));
+		for (int i = getObjectsHolder()->getNumChildComponents(); --i >= 0;){
+			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getObjectsHolder()->getChildComponent(i));
 			if(oc->selected() && oc != isLastClicked)
 				oc->setSelected(false);
 		}
@@ -97,8 +97,8 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 
 	actualPos.x = (pos.getX() + getWidth() /2);
 	actualPos.y = (pos.getY() + getHeight() /2);
-	getGraphPanel()->moveObjectComponents(e.getOffsetFromDragStart());
-	getGraphPanel()->updateComponents();
+	getObjectsHolder()->moveObjectComponents(e.getOffsetFromDragStart());
+	getObjectsHolder()->updateComponents();
 
 }
 
@@ -106,7 +106,7 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 {
 	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
-		ObjectPropertiesPanel::show(this);
+		getObjectsHolder()->editObjectProperties(this);
 	}
 	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
 	{
@@ -126,8 +126,8 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 		// object changed / mouse realeased after drag
 		// TODO: Implement moving object
 //		DBG("Dragged")
-		getGraphPanel()->moveObjects(e.getOffsetFromDragStart());
-		getGraphPanel()->updateObjectComponentPositions();
+		getObjectsHolder()->moveObjects(e.getOffsetFromDragStart());
+		getObjectsHolder()->updateObjectComponentPositions();
 
 	}
 }
@@ -161,7 +161,7 @@ ValueTree ObjectComponent::getData()
 	return data;
 }
 
-ObjectsHolder* ObjectComponent::getGraphPanel() const noexcept
+ObjectsHolder* ObjectComponent::getObjectsHolder() const noexcept
 {
     return findParentComponentOfClass<ObjectsHolder>();
 }

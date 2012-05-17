@@ -60,10 +60,11 @@ private:
 	Point<int> actualPos;
 	Point<int> originalPos;
 
-    ObjectsHolder* getGraphPanel() const noexcept;
+    ObjectsHolder* getObjectsHolder() const noexcept;
     ValueTree data;
 
     bool isSelected;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };

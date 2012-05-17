@@ -27,6 +27,7 @@
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
 #include "../View/ObjectComponent.h"
+#include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
 
 #include "ObjController.h"
@@ -159,4 +160,9 @@ void ObjController::moveObjects(ObjectsHolder* holder, Point<int> offset)
 	this->perform(new MoveObjectAction(objects, holder, childrenComponentsToMove,
 			childrenDataMove, offset), "Move objects");
 
+}
+
+void ObjController::editObjectProperties(ObjectComponent* oc, UndoManager* undoManager)
+{
+	ObjectPropertiesPanel::show(oc, undoManager);
 }

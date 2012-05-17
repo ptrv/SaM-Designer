@@ -270,3 +270,8 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 	}
 	return true;
 }
+
+void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
+{
+	objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
+}

@@ -54,6 +54,8 @@ public:
 	void moveObjectComponents(Point<int> offset);
 	void updateObjectComponentPositions();
 
+	void editObjectProperties(ObjectComponent* oc);
+
 private:
 
 	ObjController& objController;
