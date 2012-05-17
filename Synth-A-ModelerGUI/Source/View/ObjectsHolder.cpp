@@ -46,15 +46,12 @@ ObjectsHolder::~ObjectsHolder()
 	{
 		mdlFile->removeChangeListener(this);
 	}
-//	deleteAllChildren();
 }
 
 
 void ObjectsHolder::paint(Graphics& g)
 {
 	g.fillAll (Colours::white);
-//	g.drawText("This will be the object component", 10, 10 ,
-//			getWidth()-20, getHeight()-20, Justification::centred, false);
 
 	g.setColour(Colours::black);
 	if(dragging)
@@ -74,9 +71,6 @@ void ObjectsHolder::resized()
 
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 {
-//	ContentComp* cc = findParentComponentOfClass<ContentComp>();
-//	if(cc != nullptr)
-//		cc->updateMainAppWindowTitle("");
 	updateComponents();
 }
 
@@ -146,40 +140,22 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 	}
 }
 
-void ObjectsHolder::moveObjects(Point<int> offset)
+void ObjectsHolder::moveObjectsData(Point<int> offset)
 {
 	objController.moveObjects(this, offset);
 }
 
 void ObjectsHolder::moveObjectComponents(Point<int> offset)
 {
-//	DBG(offset.toString());
 	for (int i = 0; i < getNumChildComponents(); ++i) {
 		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
 		if(oc->selected() && oc != ObjectComponent::isLastClicked)
 		{
-			Rectangle<int> tmpRect = oc->getBounds();
-			Point<int> tmpP = oc->getoriginalPosition();
-
-//			DBG(tmpP.toString());
-			tmpP.setX(tmpP.getX() + offset.getX());
-			tmpP.setY(tmpP.getY() + offset.getY());
-			oc->setActualPosition(tmpP);
+			oc->mouseDragPassive(offset);
 		}
 	}
 }
 
-void ObjectsHolder::updateObjectComponentPositions()
-{
-	for (int i = 0; i < getNumChildComponents(); ++i) {
-		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
-		if(oc->selected() && oc != ObjectComponent::isLastClicked)
-		{
-			oc->assignActualPosToOriginalPos();
-		}
-	}
-
-}
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
 	Point<int> mp = getMouseXYRelative();

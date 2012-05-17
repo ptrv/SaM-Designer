@@ -36,6 +36,7 @@ public:
     bool hitTest (int x, int y);
 	void paint(Graphics& g);
 	void mouseDown (const MouseEvent& e);
+	void mouseDragPassive (const Point<int> offset);
 	void mouseDrag (const MouseEvent& e);
 	void mouseUp (const MouseEvent& e);
 	void update();
@@ -47,11 +48,12 @@ public:
 	void toggleSelected();
 
 	void setActualPosition(Point<int> pos);
-	Point<int> getoriginalPosition();
 
-	void assignActualPosToOriginalPos();
+	void setOriginalPosition();
 
 	static ObjectComponent* isLastClicked;
+
+	const Identifier& getId() const { return objId; }
 private:
 	const Identifier& objId;
 	DrawableComposite* icon;

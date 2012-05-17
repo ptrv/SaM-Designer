@@ -50,9 +50,8 @@ public:
 
 	void setMDLFile(MDLFile* newMDLFile);
 
-	void moveObjects(Point<int> offset);
+	void moveObjectsData(Point<int> offset);
 	void moveObjectComponents(Point<int> offset);
-	void updateObjectComponentPositions();
 
 	void editObjectProperties(ObjectComponent* oc);
 
