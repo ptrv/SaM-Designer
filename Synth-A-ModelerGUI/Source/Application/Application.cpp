@@ -82,7 +82,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 #endif
 
 	outputWindow->printWelcomeMessage();
-//	outputWindow->makeVisible ();
+	outputWindow->makeVisible ();
 	getOrCreateFrontmostWindow()->toFront(true);
 }
 

@@ -32,7 +32,7 @@
 OutputWindow::OutputWindow()
 :
 DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Output",
-               Colours::darkseagreen, DocumentWindow::closeButton)
+               Colours::darkseagreen, DocumentWindow::closeButton, false)
 {
     setUsingNativeTitleBar(true);
 	setResizable (true, true); // resizability is a property of ResizableWindow
@@ -50,6 +50,7 @@ DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Ou
 	commandManager->registerAllCommandsForTarget(this);
 
 	addKeyListener(commandManager->getKeyMappings());
+
 }
 
 OutputWindow::~OutputWindow()
