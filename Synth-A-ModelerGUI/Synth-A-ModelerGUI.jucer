@@ -42,6 +42,10 @@
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
       <GROUP id="{902B3BB9-D93B-9CA8-A833-9D80066DDF9F}" name="Application">
+        <FILE id="FRUoR4" name="SAMLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/Application/SAMLookAndFeel.cpp"/>
+        <FILE id="jw1O2C" name="SAMLookAndFeel.h" compile="0" resource="0"
+              file="Source/Application/SAMLookAndFeel.h"/>
         <FILE id="V8E6ag" name="MainWindow.cpp" compile="1" resource="0" file="Source/Application/MainWindow.cpp"/>
         <FILE id="kk1gp7" name="MainWindow.h" compile="0" resource="0" file="Source/Application/MainWindow.h"/>
         <FILE id="iU3jsz" name="Application.cpp" compile="1" resource="0" file="Source/Application/Application.cpp"/>

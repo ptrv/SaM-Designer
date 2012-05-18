@@ -28,6 +28,7 @@
 #include "../View/OutputWindow.h"
 #include "MainWindow.h"
 #include "../Models/MDLFile.h"
+#include "SAMLookAndFeel.h"
 
 #include "Application.h"
 
@@ -58,6 +59,8 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 #endif
 
 	// Do your application's initialisation code here
+	samLookAndFeel = new SAMLookAndFeel();
+	LookAndFeel::setDefaultLookAndFeel(samLookAndFeel);
     if( StoredSettings::getInstance()->getIsLoggingOn() )
     {
         Logger::setCurrentLogger(Utils::getLogger(), true);
@@ -105,6 +108,8 @@ void SynthAModelerApplication::shutdown()
 	Logger::setCurrentLogger(nullptr, true);
 
 	ResourceLoader::deleteInstance();
+
+	samLookAndFeel = nullptr;
 }
 
 //==============================================================================

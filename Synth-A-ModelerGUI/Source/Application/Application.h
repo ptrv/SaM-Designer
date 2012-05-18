@@ -31,6 +31,7 @@
 
 class MainAppWindow;
 class OutputWindow;
+class SAMLookAndFeel;
 //==============================================================================
 class SynthAModelerApplication  : public JUCEApplication
 {
@@ -101,6 +102,7 @@ public:
     	JUCE_DECLARE_NON_COPYABLE (AsyncQuitRetrier);
     };
 
+    ScopedPointer<SAMLookAndFeel> samLookAndFeel;
     //==============================================================================
 
 };

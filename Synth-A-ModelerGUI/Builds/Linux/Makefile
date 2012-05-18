@@ -43,6 +43,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/SAMLookAndFeel_df6eec67.o \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Application_7b202ed2.o \
   $(OBJDIR)/Main_70df61c1.o \
@@ -87,6 +88,11 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+$(OBJDIR)/SAMLookAndFeel_df6eec67.o: ../../Source/Application/SAMLookAndFeel.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SAMLookAndFeel.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/MainWindow_3e8328d1.o: ../../Source/Application/MainWindow.cpp
 	-@mkdir -p $(OBJDIR)
