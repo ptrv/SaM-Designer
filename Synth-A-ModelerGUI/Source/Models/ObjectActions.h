@@ -85,7 +85,7 @@ class RemoveObjectAction : public UndoableAction
 {
 public:
 	RemoveObjectAction(OwnedArray<ObjectComponent>& objects_,
-			Component* objHolderComp_,
+			ObjectsHolder* objHolderComp_,
 			Array<ObjectComponent*> componentsToRemove,
 			Array<ValueTree> childrenToRemove)
 	: objects(objects_),
@@ -120,14 +120,16 @@ public:
 					int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
 			objComps.add(oc);
 			oc->setData(oldValue[i]);
+			oc->setCentrePosition(int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
 			objects.add(oc);
 			holderComp->addAndMakeVisible(oc);
 		}
+
 		return true;
 	}
 private:
 	OwnedArray<ObjectComponent>& objects;
-	Component* holderComp;
+	ObjectsHolder* holderComp;
 	Array<ObjectComponent*> objComps;
 	Array<ValueTree> oldValue;
 

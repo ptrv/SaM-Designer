@@ -63,7 +63,7 @@ void ObjController::addObject(Component* holder, const Identifier& objId,
 }
 
 
-void ObjController::removeObject(Component* holder)
+void ObjController::removeObject(ObjectsHolder* holder)
 {
 	Array<ValueTree> childrenDataToRemove = getSelectedChildrenData();
 	Array<ObjectComponent*> childrenComponentsToRemove = getSelectedChildrenComponents();
