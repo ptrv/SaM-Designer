@@ -71,6 +71,7 @@ void ObjectComponent::setOriginalPosition()
 	originalPos = localPointToGlobal (Point<int>());
 
 }
+//bool shouldBeUnselected = false;
 void ObjectComponent::mouseDown (const MouseEvent& e)
 {
 	originalPos = localPointToGlobal (Point<int>());
@@ -79,6 +80,14 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
 	isLastClicked = this;
 
+    if (e.mods.isPopupMenu() && getObjectsHolder()->getNumSelected() == 2)
+    {
+    	showLinkPopupMenu();
+    }
+    else if(e.mods.isPopupMenu())
+    {
+    	showContextMenu();
+    }
 	// TODO: not perfect, implement shift click deselection
 
 	if(! isSelected)// && ! e.mods.isShiftDown() )
@@ -100,6 +109,11 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 				getObjectsHolder()->getSelectedObject(i)->setSelected(false);
 		}
 
+	}
+	else if(e.mods.isShiftDown())// && ! getObjectsHolder()->multipleObjectsSelected())
+	{
+//		setSelected(false);
+//		shouldBeUnselected = true;
 	}
 
 	// set origianl position
@@ -143,7 +157,9 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 	}
 	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
 	{
-
+//		if(shouldBeUnselected && e.mods.isShiftDown())
+//			setSelected(false);
+//
 	}
 	else if (! e.mouseWasClicked())
 	{
@@ -194,5 +210,53 @@ void ObjectComponent::toggleSelected()
 	else
 		setSelected(true);
 	repaint();
+}
+
+void ObjectComponent::showLinkPopupMenu()
+{
+	PopupMenu m;
+	m.addItem (1, "Add link");
+	m.addItem (2, "Add touch");
+	m.addItem (3, "Add pluck");
+	m.addSeparator();
+	m.addItem (4, "Connect");
+	const int r = m.show();
+
+	if (r == 1)
+	{
+		DBG("Add link");
+		return;
+	}
+	else if (r == 2)
+	{
+		DBG("Add touch");
+	}
+	else if (r == 3)
+	{
+		DBG("Add pluck");
+	}
+	else if (r == 4)
+	{
+		DBG("Add connect");
+	}
+}
+void ObjectComponent::showContextMenu()
+{
+	PopupMenu m;
+	m.addItem (1, "Edit");
+	m.addSeparator();
+	m.addItem (2, "Help");
+
+	const int r = m.show();
+
+	if (r == 1)
+	{
+		getObjectsHolder()->editObjectProperties(this);
+	}
+	else if (r == 2)
+	{
+		DBG("Help is not implemented yet");
+	}
+
 }
 

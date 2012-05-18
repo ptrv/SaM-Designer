@@ -65,6 +65,8 @@ public:
 	void updateSelectedObjects();
 private:
 
+	void showContextMenu(const Point<int> mPos);
+
 	ObjController& objController;
 	MDLFile* mdlFile;
 

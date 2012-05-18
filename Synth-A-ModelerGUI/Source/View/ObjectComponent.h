@@ -55,6 +55,10 @@ public:
 
 	const Identifier& getId() const { return objId; }
 private:
+
+	void showLinkPopupMenu();
+	void showContextMenu();
+
 	const Identifier& objId;
 	DrawableComposite* icon;
     DropShadowEffect shadow;

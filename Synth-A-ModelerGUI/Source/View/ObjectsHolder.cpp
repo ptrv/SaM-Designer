@@ -122,6 +122,10 @@ void ObjectsHolder::mouseUp (const MouseEvent& e)
 
 void ObjectsHolder::mouseDown (const MouseEvent& e)
 {
+	if(e.mods.isPopupMenu())
+	{
+		showContextMenu(e.getMouseDownPosition());
+	}
 	draggingStart.x = e.getMouseDownX();
 	draggingStart.y = e.getMouseDownY();
 //	dragging = true;
@@ -260,6 +264,52 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     	return false;
 	}
 	return true;
+}
+
+void ObjectsHolder::showContextMenu(const Point<int> mPos)
+{
+	PopupMenu m;
+	m.addSectionHeader("Insert...");
+	m.addItem(1, "mass");
+	m.addItem(2, "ground");
+	m.addItem(3, "resonator");
+	m.addItem(4, "port");
+	m.addSeparator();
+	m.addItem(5, "audioout");
+	m.addSeparator();
+	m.addItem(6, "waveguide");
+	m.addItem(7, "termination");
+
+	const int r = m.show();
+
+	if(r == 1)
+	{
+		objController.addObject(this, Ids::mass, mPos.x, mPos.y);
+	}
+	else if( r == 2)
+	{
+		objController.addObject(this, Ids::ground, mPos.x, mPos.y);
+	}
+	else if( r == 3)
+	{
+		objController.addObject(this, Ids::resonator, mPos.x, mPos.y);
+	}
+	else if( r == 4)
+	{
+		objController.addObject(this, Ids::port, mPos.x, mPos.y);
+	}
+	else if( r == 5)
+	{
+		objController.addObject(this, Ids::audioout, mPos.x, mPos.y);
+	}
+	else if( r == 6)
+	{
+		objController.addObject(this, Ids::waveguide, mPos.x, mPos.y);
+	}
+	else if( r == 7)
+	{
+		objController.addObject(this, Ids::termination, mPos.x, mPos.y);
+	}
 }
 
 void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
