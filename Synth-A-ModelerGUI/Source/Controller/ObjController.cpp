@@ -48,7 +48,7 @@ bool ObjController::perform (UndoableAction* const action, const String& actionN
 	return owner.perform(action, actionName);
 }
 
-void ObjController::addObject(Component* holder, const Identifier& objId,
+void ObjController::addObject(ObjectsHolder* holder, const Identifier& objId,
 		int posX, int posY)
 {
 	const Identifier& tmpIdent = Objects::getObjectType(objId);

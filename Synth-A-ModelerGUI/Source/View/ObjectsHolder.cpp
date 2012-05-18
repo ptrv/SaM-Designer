@@ -294,3 +294,13 @@ ObjectComponent* ObjectsHolder::getSelectedObject(int index)
 {
 	return selectedObjects[index];
 }
+
+void ObjectsHolder::updateSelectedObjects()
+{
+	selectedObjects.clear();
+	for (int i = 0; i < getNumChildComponents(); ++i) {
+		ObjectComponent* const oc = dynamic_cast<ObjectComponent*> (getChildComponent(i));
+		if(oc->selected())
+			selectedObjects.add(oc);
+	}
+}

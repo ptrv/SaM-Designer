@@ -61,6 +61,8 @@ public:
 	bool multipleObjectsSelected() { return isMultipleSelection; }
 	void deselectAllSelectedObjects();
 	ObjectComponent* getSelectedObject(int index);
+
+	void updateSelectedObjects();
 private:
 
 	ObjController& objController;

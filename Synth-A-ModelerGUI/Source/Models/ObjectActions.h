@@ -34,7 +34,7 @@
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(OwnedArray<ObjectComponent>& objects_, Component* objHolderComp_,
+	AddObjectAction(OwnedArray<ObjectComponent>& objects_, ObjectsHolder* objHolderComp_,
 			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
 	: objects(objects_),
 	  mdlSubTree(mdlTree_),
@@ -56,6 +56,7 @@ public:
 		objComp->setData(newValue);
 		objects.add(objComp);
 		holderComp->addAndMakeVisible(objComp);
+		holderComp->updateSelectedObjects();
         String logText = "Add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -67,6 +68,7 @@ public:
 		holderComp->removeChildComponent(objComp);
 		objects.removeObject(objComp);
 		mdlSubTree.removeChild(newValue, nullptr);
+		holderComp->updateSelectedObjects();
         String logText = "Undo add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -77,7 +79,7 @@ private:
 	ValueTree mdlSubTree;
 	ValueTree newValue;
 	const Identifier& objId;
-	Component* holderComp;
+	ObjectsHolder* holderComp;
 	ObjectComponent* objComp;
 };
 
@@ -106,6 +108,7 @@ public:
 			holderComp->removeChildComponent(objComps[i]);
 			objects.removeObject(objComps[i]);
 			oldValue[i].getParent().removeChild(oldValue[i], nullptr);
+			holderComp->updateSelectedObjects();
 		}
 		objComps.clear();
 		return true;
@@ -123,6 +126,7 @@ public:
 			oc->setCentrePosition(int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
 			objects.add(oc);
 			holderComp->addAndMakeVisible(oc);
+			holderComp->updateSelectedObjects();
 		}
 
 		return true;
