@@ -108,4 +108,16 @@ String getObjectTypeAsString(const Identifier& objType)
 		return String::empty;
 }
 
+String fixParameterValueIfNeeded(const String& paramVal)
+{
+	if( paramVal == String::empty)
+		return "0.0";
+
+	String tmpVal = paramVal;
+	if(tmpVal.indexOf(".") == -1)
+		tmpVal << ".0";
+
+	return tmpVal;
+}
+
 }

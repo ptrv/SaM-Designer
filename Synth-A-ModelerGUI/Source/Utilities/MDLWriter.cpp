@@ -54,8 +54,9 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		ValueTree massParams = mo.getChildWithName(Ids::parameters);
 		for (int i = 0; i < massParams.getNumProperties(); ++i)
 		{
-			mdlContent << String::formatted("%#f", float(massParams[Ids::idx[i]]));
+//			mdlContent << String::formatted("%#f", float(massParams[Ids::idx[i]]));
 //			mdlContent << float(massParams[Ids::idx[i]]);
+			mdlContent << massParams[Ids::idx[i]].toString();
 			if(i != massParams.getNumProperties()-1)
 				mdlContent << ",";
 		}
@@ -84,7 +85,8 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << "(";
 		ValueTree linkParams = li.getChildWithName(Ids::parameters);
 		for (int k = 0; k < linkParams.getNumProperties(); ++k) {
-			mdlContent << String::formatted("%#f", float(linkParams[Ids::idx[k]]));
+//			mdlContent << String::formatted("%#f", float(linkParams[Ids::idx[k]]));
+			mdlContent << linkParams[Ids::idx[k]].toString();
 			if(k != linkParams.getNumProperties()-1)
 				mdlContent << ",";
 		}
@@ -115,7 +117,8 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << "(";
 		ValueTree waveParams = wo.getChildWithName(Ids::parameters);
 		for (int m = 0; m < waveParams.getNumProperties(); ++m) {
-			mdlContent << String::formatted("%#f", float(waveParams[Ids::idx[m]]));
+//			mdlContent << String::formatted("%#f", float(waveParams[Ids::idx[m]]));
+			mdlContent << waveParams[Ids::idx[m]].toString();
 			if(m != waveParams.getNumProperties()-1)
 				mdlContent << ",";
 		}
@@ -147,7 +150,8 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << "(";
 		ValueTree termParams = to.getChildWithName(Ids::parameters);
 		for (int o = 0; o < termParams.getNumProperties(); ++o) {
-			mdlContent << String::formatted("%#f", float(termParams[Ids::idx[o]]));
+//			mdlContent << String::formatted("%#f", float(termParams[Ids::idx[o]]));
+			mdlContent << termParams[Ids::idx[o]].toString();
 			if(o != termParams.getNumProperties()-1)
 				mdlContent << ",";
 		}

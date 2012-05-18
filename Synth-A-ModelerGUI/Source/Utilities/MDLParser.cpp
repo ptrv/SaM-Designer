@@ -117,7 +117,7 @@ bool MDLParser::parseMDL()
 						paramsArray.addTokens(params, ",", "\"");
 						ValueTree paramsTree(Ids::parameters);
 						for (int param = 0; param < paramsArray.size(); ++param) {
-							float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
+							String paramVal = paramsArray[param].trimCharactersAtStart(" ");
 							paramsTree.setProperty(Ids::idx[param], paramVal, nullptr);
 						}
 						newTree.addChild(paramsTree, -1, nullptr);
@@ -277,7 +277,7 @@ bool MDLParser::parseMDL()
 				paramsArray.addTokens(params, ",", "\"");
 				ValueTree waveParams(Ids::parameters);
 				for (int param = 0; param < paramsArray.size(); ++param) {
-					float paramVal = paramsArray[param].trimCharactersAtStart(" ").getFloatValue();
+					String paramVal = paramsArray[param].trimCharactersAtStart(" ");
 					waveParams.setProperty(Ids::idx[param], paramVal, nullptr);
 				}
 				waveguideTree.addChild(waveParams, -1, nullptr);

@@ -157,9 +157,9 @@ public:
 	{
 		data.setProperty(Ids::identifier, teName.getText(), undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-		paramsTree.setProperty(Ids::idx[0], teMass.getText(), undoManager);
-		paramsTree.setProperty(Ids::idx[1], tePos.getText(), undoManager);
-		paramsTree.setProperty(Ids::idx[2], teVel.getText(), undoManager);
+		paramsTree.setProperty(Ids::idx[0], Utils::fixParameterValueIfNeeded(teMass.getText()), undoManager);
+		paramsTree.setProperty(Ids::idx[1], Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
+		paramsTree.setProperty(Ids::idx[2], Utils::fixParameterValueIfNeeded(teVel.getText()), undoManager);
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
 		String labelsString = teLabels.getText();
 		StringArray labelsArray;
