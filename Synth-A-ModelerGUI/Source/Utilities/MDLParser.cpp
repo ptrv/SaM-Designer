@@ -36,7 +36,7 @@ MDLParser::MDLParser(MDLFile& mdlFile_)
 static Point<int> getPos(const String& posStr)
 {
 	Point<int> p(0,0);
-	int pp = posStr.indexOf("# pos");
+	int pp = posStr.lastIndexOf("# pos");
 	if(pp != -1)
 	{
 		String tmp = posStr.substring(pp+5);
@@ -244,12 +244,12 @@ bool MDLParser::parseMDL()
 			{
 				StringArray audioOutAttributeList;
 
-				int indexSemicolon = line.length()-1;
+				Point<int> pos = getPos(line);
+				int indexSemicolon = line.indexOf(";");
 				String lineTmp = line.substring(0, indexSemicolon);
 				audioOutAttributeList.addTokens(lineTmp, ",", "\"");
 				if(audioOutAttributeList.size() > 2)
 				{
-					Point<int> pos = getPos(line);
 
 					ValueTree audioTree(Ids::audioout);
 					audioTree.setProperty(Ids::posX, pos.x, nullptr);
