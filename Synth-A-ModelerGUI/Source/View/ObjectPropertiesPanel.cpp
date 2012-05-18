@@ -23,12 +23,9 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Application/CommonHeaders.h"
 #include "../Controller/MDLController.h"
-#include "../Utilities/StoredSettings.h"
 #include "ObjectComponent.h"
-#include "../Models/ObjectIDs.h"
-#include "../Utilities/MiscUtilities.h"
 
 #include "ObjectPropertiesPanel.h"
 
@@ -73,15 +70,15 @@ public:
 		op->returnVal = 0;
 		if(button == &btOk)
 		{
-			DBG("OK");
 			undoManager->beginNewTransaction("Change object properties");
 			writeValues();
+			SAM_LOG("Change "+data.getType().toString()+" "+data[Ids::identifier].toString());
 			op->returnVal = 1;
 			op->closeButtonPressed();
 		}
 		else if( button == &btCancel)
 		{
-			DBG("Cancel");
+			SAM_LOG("Cancel change "+data.getType().toString()+" "+data[Ids::identifier].toString());
 			op->returnVal = 2;
 			op->closeButtonPressed();
 		}
@@ -145,7 +142,6 @@ public:
 
 	void readValues()
 	{
-		DBG("Read mass values");
 		teName.setText(data[Ids::identifier].toString());
 		teMass.setText(data.getChildWithName(Ids::parameters)[Ids::idx[0]].toString());
 		tePos.setText(data.getChildWithName(Ids::parameters)[Ids::idx[1]].toString());
@@ -171,7 +167,6 @@ public:
 		for (int i = 0; i < labelsArray.size(); ++i) {
 			labelsTree.setProperty(Ids::idx[i], labelsArray[i], undoManager);
 		}
-		DBG("Change value");
 	}
 private:
 	Label laMass;
