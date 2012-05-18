@@ -28,11 +28,20 @@
 
 
 class MDLFile;
-
+/**
+ * MDL writer class. Writes current oatch to a file.
+ */
 class MDLWriter
 {
 public:
 	MDLWriter(MDLFile& mdlFile_);
+
+	/**
+	 * Writes MDLFile to specified file.
+	 *
+	 * @param saveFile		File to write the MDLFile to
+	 * @return				true if writing succeeded
+	 */
 	bool writeMDL(const File& saveFile);
 private:
 	MDLFile& mdlFile;

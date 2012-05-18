@@ -26,21 +26,58 @@
 #ifndef __MISCUTILITIES_H_64FF5DE5__
 #define __MISCUTILITIES_H_64FF5DE5__
 
+/**
+ * Namespace for
+ */
 namespace Utils
 {
 
+/**
+ * Cancels any modal window.
+ * @return		true if any modal components were closed.
+ */
 bool cancelAnyModalComponents();
 
+/**
+ * The Synth-A-Modeler logger function.
+ *
+ * Writes log to a file and post to stdout when CONFIG is Debug.
+ *
+ * @param message		the message to log
+ */
 void SAMLogger(const String& message);
 
+/**
+ * Gets a FileLogger object.
+ *
+ * @return				FileLogger
+ */
 FileLogger* getLogger();
 
+/**
+ * Opens help webpage in default browser.
+ */
 void openHelpUrl();
 
+/**
+ * Opens data directory in file explorer.
+ */
 void openDataDir();
 
+/**
+ * Gets object type as String for using in property window title.
+ *
+ * @param objType 		An object id (i.e. Ids::mass)
+ * @return				Object Id string
+ */
 String getObjectTypeAsString(const Identifier& objType);
 
+/**
+ * Formats parameter value to have decmal point and zero.
+ *
+ * @param paramVal		the parameter value to format
+ * @return				return a formatted parameter value
+ */
 String fixParameterValueIfNeeded(const String& paramVal);
 };
 

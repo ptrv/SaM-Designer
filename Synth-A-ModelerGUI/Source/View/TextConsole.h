@@ -26,7 +26,9 @@
 #ifndef __TEXTCONSOLE_H_16CA25D5__
 #define __TEXTCONSOLE_H_16CA25D5__
 
-
+/**
+ * A JUCE TextEditor subclass which acts as a console windwow.
+ */
 class TextConsole : public TextEditor
 {
 public:
@@ -36,6 +38,11 @@ public:
 		setReadOnly (true);
 	}
 
+	/**
+	 * Inserts a text line inte the TextEditor.
+	 *
+	 * @param text		string to insert
+	 */
 	void addLine (const String& text)
 	{
 		setCaretPosition (getText ().length ());

@@ -26,18 +26,56 @@
 #ifndef __OUTPUTCMD_H_1206E4C5__
 #define __OUTPUTCMD_H_1206E4C5__
 
-
+/**
+ * This class encapsulates the external commands for generating FAUST code
+ * and other externals.
+ */
 class OutputCmd
 {
 public:
 	OutputCmd();
 	~OutputCmd();
 
+	/**
+	 * Checks wether the Synth-A-Modeler script is available.
+	 *
+	 * @return			true if Synth-A-Modeler is found
+	 */
 	bool isSynthAModelerCmdAvailable();
+	/**
+	 * Checks wether a specifdied command is available.
+	 *
+	 * @param cmdStr	command string
+	 * @return			true if specifdied command is available
+	 */
 	bool isCmdAvailable(const String& cmdStr);
+	/**
+	 * Checks wether perl is available.
+	 *
+	 * @return			true if the perl executable is found
+	 */
 	bool isPerlAvailable();
+	/**
+	 * Checks wether faust executable is available.
+	 *
+	 * @return			true if faust executable is found
+	 */
 	bool isFaustAvailable();
+	/**
+	 * Generates FAUST code for the current mdl file.
+	 *
+	 * @param inPath	path of the mdl file
+	 * @param outPath	path of the output file
+	 * @return			an empty string if generation of faust code succeeded,
+	 * 					else a string with the error message.
+	 */
 	const String generateFaustCode(const String& inPath, const String& outPath);
+	/**
+	 * Generates external using the FAUST compiler.
+	 *
+	 * @return			an empty string if generation succeeded, else a string
+	 * 					with error message
+	 */
 	const String generateExternal();
 };
 

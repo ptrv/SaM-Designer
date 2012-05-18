@@ -26,7 +26,9 @@
 #ifndef __STOREDSETTINGS_H_7CF20172__
 #define __STOREDSETTINGS_H_7CF20172__
 
-
+/**
+ * Singleton class which handles a property file for persistent user settings.
+ */
 class StoredSettings
 {
 public:

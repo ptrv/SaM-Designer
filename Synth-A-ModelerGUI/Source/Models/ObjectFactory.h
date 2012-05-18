@@ -26,10 +26,20 @@
 #ifndef __OBJECTFACTORY_H_2132166E__
 #define __OBJECTFACTORY_H_2132166E__
 
-
+/**
+ * Namespace for object creation functions.
+ */
 namespace ObjectFactory
 {
 
+	/**
+	 * Creates a new object value tree.
+	 *
+	 * @param objType			the object type id (i.e. Ids::mass)
+	 * @param x					initial x position
+	 * @param y					initial y position
+	 * @return					a new ValueTree with default values
+	 */
 	ValueTree createNewObjectTree(const Identifier& objType, int x, int y);
 
 }

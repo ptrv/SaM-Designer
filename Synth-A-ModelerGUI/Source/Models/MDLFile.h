@@ -29,7 +29,12 @@
 
 #include "../Application/CommonHeaders.h"
 
-
+/**
+ * The MDLFile class is the document which conatins an the contents of an mdl
+ * file. It mangaes also the handling of the file like open, close, save, saveAs
+ * and keeps track of changes. Every MDLFile has an UndoManager and the data
+ * ValueTree.
+ */
 class MDLFile : public FileBasedDocument,
 				public ValueTree::Listener
 {

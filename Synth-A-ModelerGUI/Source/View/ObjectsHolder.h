@@ -30,6 +30,9 @@ class ObjectComponent;
 class MDLFile;
 class ObjController;
 
+/**
+ * Component which contains all objects.
+ */
 class ObjectsHolder : public Component,
 						public ChangeListener
 {
@@ -37,8 +40,10 @@ public:
 	ObjectsHolder(ObjController& objController_);
 	~ObjectsHolder();
 
+	//==========================================================================
 	void paint(Graphics& g);
     void resized();
+
     void changeListenerCallback (ChangeBroadcaster*);
     void updateComponents();
 
@@ -55,14 +60,15 @@ public:
 
 	void editObjectProperties(ObjectComponent* oc);
 
+	//==========================================================================
 	void addSelectedObject(ObjectComponent* comp);
 	void removeSelectedObject(ObjectComponent* comp);
 	int getNumSelected() { return selectedObjects.size(); }
 	bool multipleObjectsSelected() { return isMultipleSelection; }
 	void deselectAllSelectedObjects();
 	ObjectComponent* getSelectedObject(int index);
-
 	void updateSelectedObjects();
+	//==========================================================================
 private:
 
 	void showContextMenu(const Point<int> mPos);

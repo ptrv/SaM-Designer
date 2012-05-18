@@ -26,7 +26,10 @@
 #ifndef __VARIABLESPANEL_H_684205E3__
 #define __VARIABLESPANEL_H_684205E3__
 
-
+/**
+ * Dialog window for editing defined variables.
+ *
+ */
 class VariablesPanel  : public DialogWindow
 {
 public:
@@ -35,6 +38,12 @@ public:
 
     void closeButtonPressed();
 
+    /**
+     * Opens the DialogWindow for editing defined variables.
+     *
+     * @param data 			the data of the editing object
+     * @param undoManager   the UndoManager of the MDLFile consisting this object.
+     */
     static void show(ValueTree data, UndoManager* undoManager);
 };
 

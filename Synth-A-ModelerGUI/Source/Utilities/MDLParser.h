@@ -26,13 +26,20 @@
 #ifndef __MDLPARSER_H_DC928BC0__
 #define __MDLPARSER_H_DC928BC0__
 
-
 class MDLFile;
-
+/**
+ * MDL parser class.
+ */
 class MDLParser
 {
 public:
 	MDLParser(MDLFile& mdlFile_);
+
+	/**
+	 * Parses the MDLFile
+	 *
+	 * @return		true if parsing succeeded
+	 */
 	bool parseMDL();
 private:
 	MDLFile& mdlFile;

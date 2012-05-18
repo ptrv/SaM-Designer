@@ -36,6 +36,11 @@ class ContentComp;
 class ObjController;
 class MDLFile;
 //==============================================================================
+/**
+ * The application's main window, which contains the main component with the
+ * MDLFile content. Here are the controllers instantiated and also the content
+ * component is created here.
+ */
 class MainAppWindow   : public DocumentWindow,
 						public ApplicationCommandTarget,
 						public ChangeListener

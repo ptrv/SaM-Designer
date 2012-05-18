@@ -27,6 +27,11 @@
 #define __DEBUGWINDOW_H_3A3F156F__
 
 class TextConsole;
+
+/**
+ * A window showing output of Synth-A-Modeler script, faust and other
+ * application activity.
+ */
 class OutputWindow : public DocumentWindow,
 					public ApplicationCommandTarget
 {
@@ -36,24 +41,54 @@ public:
 
 	void closeButtonPressed();
 
+	/**
+	 * Toggels visibility of OutputWindow.
+	 */
 	void toggleDebugWindow();
 
+	/**
+	 * prints a predefined text as header
+	 */
 	void printHeader();
 
+	/**
+	 * Clears the text in OutputWindow.
+	 */
 	void clear();
 
+	/**
+	 * Inserts text into the TextConsole.
+	 *
+	 * @param compilerText	string text to insert.
+	 */
 	void addText(const String& compilerText);
 
+	/**
+	 * Makes window visible.
+	 */
 	void makeVisible();
+
+	/**
+	 * Hides winidow.
+	 */
 	void makeHide();
 
+	/**
+	 * prints a predefined welcome message to OutputWindow when application starts.
+	 */
 	void printWelcomeMessage();
+
+	/**
+	 * Inserts a new line.
+	 */
 	void addNewLine();
 
+	//==========================================================================
     ApplicationCommandTarget* getNextCommandTarget();
     void getAllCommands (Array <CommandID>& commands);
     void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
     bool perform (const InvocationInfo& info);
+	//==========================================================================
 
 private:
 	TextConsole* console;

@@ -27,6 +27,9 @@
 #define __OBJECTIDS_H_C7C4C1BC__
 
 
+/**
+ * Namespace for Ids used for the ValueTrees.
+ */
 namespace Ids
 {
     #define DECLARE_ID(name)      const Identifier name (#name)

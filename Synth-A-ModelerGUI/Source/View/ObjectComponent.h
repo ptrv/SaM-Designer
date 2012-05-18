@@ -28,6 +28,10 @@
 
 class ObjectsHolder;
 class ObjController;
+
+/**
+ * The object component.
+ */
 class ObjectComponent : public Component
 {
 public:

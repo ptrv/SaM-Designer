@@ -33,6 +33,12 @@ class MainAppWindow;
 class OutputWindow;
 class SAMLookAndFeel;
 //==============================================================================
+/**
+ * The main class of the Synth-A-ModelerBUI application.
+ *
+ * Here happens all initialization on startup and all cleaning up on shutdown.
+ *
+ */
 class SynthAModelerApplication  : public JUCEApplication
 {
 public:
@@ -61,6 +67,10 @@ public:
     bool isCommandActive (const CommandID commandID);
 
     //==============================================================================
+    /**
+     * MainMenuModel is actually the menu bar.
+     *
+     */
     class MainMenuModel  : public MenuBarModel
     {
     public:
@@ -85,9 +95,7 @@ public:
     void writeToDebugConsole(const String& title, const String& textToWrite);
 
     private:
-
     OwnedArray<MainAppWindow> mainWindows;
-
     ScopedPointer<OutputWindow> outputWindow;
 
     MainAppWindow* getOrCreateFrontmostWindow();

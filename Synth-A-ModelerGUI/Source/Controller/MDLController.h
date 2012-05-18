@@ -31,6 +31,9 @@ class OutputCmd;
 class AppController;
 class MainAppWindow;
 
+/**
+ * The MDLController controlls all actions for the MDLFile.
+ */
 class MDLController
 {
 public:

@@ -26,7 +26,9 @@
 #ifndef __RESOURCELOADER_H_E0EF3E32__
 #define __RESOURCELOADER_H_E0EF3E32__
 
-
+/**
+ * Class for loading resources like icons.
+ */
 class ResourceLoader
 {
 public:
@@ -35,7 +37,18 @@ public:
 
 	juce_DeclareSingleton (ResourceLoader, false)
 
+	/**
+	 * Gets a Drawable for the object Id (i.e. Ids::mass)
+	 * @param objId		Id of object
+	 * @return			a Drawable
+	 */
 	Drawable* getDrawableForId(const Identifier& objId);
+	/**
+	 * Creates a SVG drawable from a zip file.
+	 *
+	 * @param filename	string filename of SVG image
+	 * @return			a Drawable
+	 */
 	Drawable* createSVGDrawable(const String& filename);
 
 private:

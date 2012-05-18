@@ -26,6 +26,9 @@
 #ifndef __ALERTS_H_2AC9A37F__
 #define __ALERTS_H_2AC9A37F__
 
+/**
+ * Static helper class for various alerts.
+ */
 class Alerts
 {
 private:

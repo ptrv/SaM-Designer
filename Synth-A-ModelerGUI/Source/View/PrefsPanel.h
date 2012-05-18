@@ -26,6 +26,9 @@
 #ifndef __PREFSPANEL_H_87C5CC8A__
 #define __PREFSPANEL_H_87C5CC8A__
 
+/**
+ * A preferences window.
+ */
 class PrefsPanel  : public DialogWindow
 {
 public:
@@ -34,6 +37,9 @@ public:
 
     void closeButtonPressed();
 
+    /**
+     * Show preferences panel.
+     */
     static void show();
 };
 

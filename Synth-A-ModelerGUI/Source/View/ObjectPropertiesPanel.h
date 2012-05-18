@@ -29,6 +29,9 @@
 
 class ObjectComponent;
 
+/**
+ * Panel for editing properties of an object.
+ */
 class ObjectPropertiesPanel  : public DialogWindow
 {
 public:
@@ -37,6 +40,15 @@ public:
 
     void closeButtonPressed();
 
+    /**
+     * opens the dialog for editing object properties.
+     *
+     * @param caller			ObjectComponent to edit
+     * @param undoManager_		the UndoManager of the MDLFile
+     * @return					1 for clicking Ok button,
+     * 							2 for clicking cancel button
+     * 							0 when close button was pressed
+     */
     static int show(ObjectComponent* caller, UndoManager* undoManager_);
 
     int returnVal;

@@ -31,24 +31,75 @@ class MDLController;
 class ObjectComponent;
 class ObjectsHolder;
 
+/**
+ * The ObjController controlls all ObjectComponents.
+ */
 class ObjController
 {
 public:
 	ObjController(MDLController& owner_);
 	~ObjController();
 
+	/**
+	 * Performs the action with the UndoManger.
+	 *
+	 * @param action		the action to perform
+	 * @param actionName	the action name
+	 * @return
+	 */
 	bool perform (UndoableAction* const action, const String& actionName);
 
+	/**
+	 * Adds and object to the patch.
+	 *
+	 * @param holder 		the holder conponent which consists the objects.
+	 * @param objId			object id (i.e. mass or link)
+	 * @param posX			initial x position of the object
+	 * @param posY			initial y position of the object
+	 */
 	void addObject(ObjectsHolder* holder, const Identifier& objId, int posX, int posY);
+
+	/**
+	 * Removes an object from the patch
+	 *
+	 * @param holder		the holder component which consists the objects.
+	 */
 	void removeObject(ObjectsHolder* holder);
 
+	/**
+	 * Loads the object components of a patch when a mdl file is opened.
+	 * @param holder
+	 */
 	void loadComponents(Component* holder);
 
+	/**
+	 * Marks objects within a specified rectangle as selected.
+	 *
+	 * @param rect 			the selection rectangle
+	 * @return				an array with pointers to the containing objects
+	 */
 	Array<ObjectComponent*> selectObjectsWithinRectagle(Rectangle<int> rect);
+	/**
+	 * Marks all object as selected or deselects.
+	 *
+	 * @param shouldBeSelected		true for selected, false for deselected
+	 */
 	void selectAll(bool shouldBeSelected);
 
+	/**
+	 * Moves object on canvas.
+	 *
+	 * @param holder		the component which contains all objects.
+	 * @param offset		the offset from the dragging start.
+	 */
 	void moveObjects(ObjectsHolder* holder, Point<int> offset);
 
+	/**
+	 * Edits the properties of an object.
+	 *
+	 * @param oc			the object component to edit
+	 * @param undoManager	the MDLFile's UndoManager
+	 */
 	void editObjectProperties(ObjectComponent* oc, UndoManager* undoManager);
 private:
 	Array<ValueTree> getSelectedChildrenData();
