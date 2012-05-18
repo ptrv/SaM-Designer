@@ -81,57 +81,31 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
 	// TODO: not perfect, implement shift click deselection
 
-//	if( isSelected && e.mods.isShiftDown())
-//	{
-//		setSelected(false);
-////		for (int i = getObjectsHolder()->getNumChildComponents(); --i >= 0;){
-////			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getObjectsHolder()->getChildComponent(i));
-////			oc->setOriginalPosition();
-////		}
-//
-//	}
-	if(! isSelected && ! e.mods.isShiftDown() )
+	if(! isSelected)// && ! e.mods.isShiftDown() )
 	{
 		setSelected(true);
-//		for (int i = getObjectsHolder()->getNumChildComponents(); --i >= 0;){
-//				ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getObjectsHolder()->getChildComponent(i));
-//				if(oc->selected() && oc != isLastClicked)
-//					oc->setSelected(false);
-//		}
-		for (int i = getObjectsHolder()->getNumSelected(); --i >= 0;){
-			if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
-				getObjectsHolder()->getSelectedObject(i)->setSelected(false);
+		if(! e.mods.isShiftDown())
+		{
+			for (int i = getObjectsHolder()->getNumSelected(); --i >= 0;){
+				if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
+					getObjectsHolder()->getSelectedObject(i)->setSelected(false);
+			}
 		}
 	}
-	else if(! isSelected && e.mods.isShiftDown())
+	else if(! e.mods.isShiftDown() && ! getObjectsHolder()->multipleObjectsSelected())
 	{
-		setSelected(true);
-	}
-	else if(e.mods.isShiftDown() || getObjectsHolder()->multipleObjectsSelected())
-	{
-//		if(isSelected)
-//		{
-//			setSelected(false);
-//		}
-		for (int i = getObjectsHolder()->getNumChildComponents(); --i >= 0;){
-			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getObjectsHolder()->getChildComponent(i));
-			oc->setOriginalPosition();
-		}
-//		getObjectsHolder()->isMultipleSelection = true;
-	}
-	else
-	{
-//		for (int i = getObjectsHolder()->getNumChildComponents(); --i >= 0;){
-//			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getObjectsHolder()->getChildComponent(i));
-//			if(oc->selected() && oc != isLastClicked)
-//				oc->setSelected(false);
-//		}
 		for (int i = getObjectsHolder()->getNumSelected(); --i >= 0;)
 		{
 			if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
 				getObjectsHolder()->getSelectedObject(i)->setSelected(false);
 		}
 
+	}
+
+	// set origianl position
+	for (int i = 0; i < getObjectsHolder()->getNumSelected(); ++i) {
+		if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
+			getObjectsHolder()->getSelectedObject(i)->setOriginalPosition();
 	}
 
 }
@@ -169,18 +143,12 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 	}
 	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
 	{
-		// nselect other sekected
-//		if(isSelected && e.mods.isShiftDown() && getObjectsHolder()->multipleObjectsSelected())
-//		{
-//			setSelected(false);
-//		}
-//
+
 	}
 	else if (! e.mouseWasClicked())
 	{
 		// object changed / mouse realeased after drag
 		getObjectsHolder()->moveObjectsData(e.getOffsetFromDragStart());
-
 	}
 }
 
