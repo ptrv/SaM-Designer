@@ -60,8 +60,8 @@ OutputWindow::~OutputWindow()
 	Rectangle<int> br = getBounds();
 	br.setX(getX()-1);
 	br.setY(getY()-28);
-//	br.setHeight(getHeight()-28);
-//	br.setWidth(getWidth()-2);
+	br.setHeight(getHeight()-28);
+	br.setWidth(getWidth()-2);
 	setBounds(br);
 #endif
 
