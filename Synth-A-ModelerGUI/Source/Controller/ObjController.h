@@ -44,7 +44,7 @@ public:
 
 	void loadComponents(Component* holder);
 
-	void selectObjectsWithinRectagle(Rectangle<int> rect);
+	Array<ObjectComponent*> selectObjectsWithinRectagle(Rectangle<int> rect);
 	void selectAll(bool shouldBeSelected);
 
 	void moveObjects(ObjectsHolder* holder, Point<int> offset);

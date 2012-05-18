@@ -35,7 +35,8 @@
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_),
   mdlFile(nullptr),
-  dragging(false)
+  dragging(false),
+  isMultipleSelection(false)
 {
 	setSize(100,100);
 }
@@ -100,10 +101,6 @@ void ObjectsHolder::mouseUp (const MouseEvent& e)
 {
 	if( e.mouseWasClicked())
 	{
-		for (int i = getNumChildComponents(); --i >= 0;){
-			ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
-			oc->setSelected(false);
-		}
 
 	}
 	else if (! e.mouseWasClicked())
@@ -115,7 +112,9 @@ void ObjectsHolder::mouseUp (const MouseEvent& e)
 		int h = draggingActual.y;// - y;
 
 		Rectangle<int> tmpRect(x, y, w, h);
-		objController.selectObjectsWithinRectagle(tmpRect);
+		selectedObjects = objController.selectObjectsWithinRectagle(tmpRect);
+		if(selectedObjects.size() > 0)
+			isMultipleSelection = true;
 		dragging = false;
 		repaint();
 	}
@@ -127,7 +126,12 @@ void ObjectsHolder::mouseDown (const MouseEvent& e)
 	draggingStart.y = e.getMouseDownY();
 //	dragging = true;
 
-
+	for (int i = getNumChildComponents(); --i >= 0;){
+		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
+		oc->setSelected(false);
+	}
+	isMultipleSelection = false;
+	selectedObjects.clear();
 }
 
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
@@ -147,13 +151,20 @@ void ObjectsHolder::moveObjectsData(Point<int> offset)
 
 void ObjectsHolder::moveObjectComponents(Point<int> offset)
 {
-	for (int i = 0; i < getNumChildComponents(); ++i) {
-		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
-		if(oc->selected() && oc != ObjectComponent::isLastClicked)
+//	for (int i = 0; i < getNumChildComponents(); ++i) {
+//		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
+//		if(oc->selected() && oc != ObjectComponent::isLastClicked)
+//		{
+//			oc->mouseDragPassive(offset);
+//		}
+//	}
+	for (int i = 0; i < selectedObjects.size(); ++i) {
+		if(selectedObjects[i] != ObjectComponent::isLastClicked)
 		{
-			oc->mouseDragPassive(offset);
+			selectedObjects[i]->mouseDragPassive(offset);
 		}
 	}
+
 }
 
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
@@ -181,10 +192,14 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 		// TODO: implement paste
 		break;
 	case StandardApplicationCommandIDs::selectAll:
+		selectedObjects.clear();
 		objController.selectAll(true);
+		isMultipleSelection = true;
 		break;
 	case StandardApplicationCommandIDs::deselectAll:
 		objController.selectAll(false);
+		isMultipleSelection = false;
+		selectedObjects.clear();
 		break;
 	case StandardApplicationCommandIDs::del:
 		objController.removeObject(this);
@@ -250,4 +265,32 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
 {
 	objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
+}
+
+void ObjectsHolder::addSelectedObject(ObjectComponent* comp)
+{
+	selectedObjects.add(comp);
+	if(selectedObjects.size() > 1)
+		isMultipleSelection = true;
+	else
+		isMultipleSelection = false;
+}
+void ObjectsHolder::removeSelectedObject(ObjectComponent* comp)
+{
+	selectedObjects.removeValue(comp);
+	if(selectedObjects.size() > 1)
+		isMultipleSelection = true;
+	else
+		isMultipleSelection = false;
+}
+
+void ObjectsHolder::deselectAllSelectedObjects()
+{
+	selectedObjects.clear();
+	isMultipleSelection = false;
+}
+
+ObjectComponent* ObjectsHolder::getSelectedObject(int index)
+{
+	return selectedObjects[index];
 }

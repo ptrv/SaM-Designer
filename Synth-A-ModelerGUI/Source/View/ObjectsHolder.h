@@ -55,6 +55,12 @@ public:
 
 	void editObjectProperties(ObjectComponent* oc);
 
+	void addSelectedObject(ObjectComponent* comp);
+	void removeSelectedObject(ObjectComponent* comp);
+	int getNumSelected() { return selectedObjects.size(); }
+	bool multipleObjectsSelected() { return isMultipleSelection; }
+	void deselectAllSelectedObjects();
+	ObjectComponent* getSelectedObject(int index);
 private:
 
 	ObjController& objController;
@@ -63,6 +69,10 @@ private:
 	bool dragging;
 	Point<int> draggingStart;
 	Point<int> draggingActual;
+
+	Array<ObjectComponent*> selectedObjects;
+
+	bool isMultipleSelection;
 };
 
 

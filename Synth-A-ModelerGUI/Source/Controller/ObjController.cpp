@@ -99,8 +99,9 @@ void ObjController::loadComponents(Component* holder)
 	}
 }
 
-void ObjController::selectObjectsWithinRectagle(Rectangle<int> rect)
+Array<ObjectComponent*> ObjController::selectObjectsWithinRectagle(Rectangle<int> rect)
 {
+	Array<ObjectComponent*> selectedObjects;
 	if(rect.getWidth() < 0)
 	{
 		rect.setX(rect.getX() + rect.getWidth());
@@ -117,8 +118,11 @@ void ObjController::selectObjectsWithinRectagle(Rectangle<int> rect)
 		if(rect.intersects(objects[i]->getBounds()))
 		{
 			objects[i]->toggleSelected();
+			objects[i]->setSelected(true);
+			selectedObjects.add(objects[i]);
 		}
 	}
+	return selectedObjects;
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
@@ -126,6 +130,7 @@ void ObjController::selectAll(bool shouldBeSelected)
 	for (int i = 0; i < objects.size(); ++i)
 	{
 		objects[i]->setSelected(shouldBeSelected);
+
 	}
 }
 
