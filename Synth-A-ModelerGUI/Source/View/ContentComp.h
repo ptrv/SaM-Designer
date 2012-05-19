@@ -56,6 +56,19 @@ public:
 
 	void setMDLFile(MDLFile* newMDLFile);
     void updateMainAppWindowTitle(const String& newTitle);
+
+    double getZoom() const;
+    void setZoom (double newScale);
+    void setZoom (double newScale, int anchorX, int anchorY);
+
+    // convert a pos relative to this component into a pos on the editor
+    void xyToTargetXY (int& x, int& y) const;
+
+    void dragKeyHeldDown (bool isKeyDown);
+
+//    void visibilityChanged();
+
+    class MagnifierComponent;
     //[/UserMethods]
 
     void paint (Graphics& g);
@@ -69,10 +82,12 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 
+    Viewport* viewport;
+    MagnifierComponent* magnifier;
 
     MainAppWindow& mainWindow;
     ObjController& objController;
-	ScopedPointer<ObjectsHolder> objectsHolder;
+	ObjectsHolder* objectsHolder;
 //	MDLFile* mdlFile;
     //[/UserVariables]
 
