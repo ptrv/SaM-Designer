@@ -12,12 +12,12 @@ ifeq ($(OSC),1)
  OSCLIB  := -L$(LIB)/faust/osclib -lOSCFaust -loscpack
 endif
 
-MYICCFLAGS := '-O3 -xHost -ftz -fno-alias -fp-model fast=2 $(OSCCTRL)' 
+MYICCFLAGS := '-O0 -xHost -ftz -fno-alias -fp-model fast=2 $(OSCCTRL)' 
 
 ifeq ($(system), Darwin)
-MYGCCFLAGS := '-O3 -m32 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
+MYGCCFLAGS := '-O0 -m32 -march=native -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
 else
-MYGCCFLAGS := '-O3 -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
+MYGCCFLAGS := '-O0 -mfpmath=sse -msse -msse2 -msse3 -ffast-math $(OSCCTRL)'
 endif
 
 VSIZE := 256

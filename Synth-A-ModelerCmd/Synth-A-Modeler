@@ -24,11 +24,19 @@ my $indx = 0;              # index variable used over and over again
 
 
 # First define the regular expressions that will be used for parsing the MDL file
-my $mylabel = qr/([a-zA-Z\d]+)/;       # for a single label
-my $mylabels = qr/([a-zA-Z,\d\s]+)/;   # for comma-separated labels with whitespaces
+my $mylabel = qr/([a-zA-Z\d]*)/;       # for a single label   # NOTE EARLIER THIS WAS + INSTEAD OF *, WHICH COULD POSSIBLE BREAK THE adjust COMMANDS
+my $mylabels = qr/([a-zA-Z,\d\s]*)/;   # for comma-separated labels with whitespaces
 
-my $myval = qr/([-\+Ee\.\d]+)/;              # A "floating-point" number can contain the characters +, -, e, E, ., and any digit and in any order
-my $myParams = qr/(\s*[-\+\.eE,\s\d]+\s*)/;  # To represent comma-represented lists of numbers  ... this was previously my $myParams = qr/([-\d\.eE,\s]+)?/;   
+#my $myval = qr/([-\+Ee\.\d]+)/;              # A "floating-point" number can contain the characters +, -, e, E, ., and any digit and in any order
+#my $myParams = qr/(\s*[-\+\.eE,\s\d]+\s*)/;  # To represent comma-represented lists of numbers  ... this was previously my $myParams = qr/([-\d\.eE,\s]+)?/;   
+# Actually, maybe we should just assume that any text included within parenthesis will both be parsable by Faust and by any "controladjust" commands (just disallow newlines, returns, alarms, escapes, and form feeds)
+my $myParams = qr/(\s*[^\n\r\a\e\f]*\s*)/;  
+
+#### Now I have changed my parameter lists to allow references to variable names, mathematical operations, really anything understood by Faust.
+#### Thus, each parameter is really just any non-zero text that doesn't include commas, newlines, returns, alarms, escapes, and form feeds
+####my $myParams = qr/(\s*[[^,\n\r\a\e\f]+,\s\d]+\s*)/;  
+####my $myParams = qr/(\s*[\w,\s\d]+\s*)/;  
+
 
 my $link = qr/(link|pluck|touch)/;
 my $linkline = qr/\A\s*${link}\(\s*${myParams}\s*\)\s*,\s*${mylabel}\s*,\s*${mylabel}\s*,\s*${mylabel}\s*,\s*\(\s*${mylabels}\s*\)\s*;\s*$/;
@@ -45,9 +53,8 @@ my $faustCode = qr/(.*)/;
 my $faustCodeLine = qr/\A\s*faustcode:\s*${faustCode}$/;
 
 my $adjustIndex = qr/([\d]+)/;
-#my $adjustline = qr/\A\s*adjustable\s*,\s*${mylabel}\s*,\s*${mylabel}\s*:\s*${adjustIndex}\s*;\s*$/;
-my $guiDefn = qr/(.+)/;
-my $adjustline = qr/\A\s*adjustable\s*,\s*${mylabel}\s*,\s*${mylabel}\s*:\s*${adjustIndex}\s*,\s*${guiDefn}\s*;\s*$/;
+#my $adjustline = qr/\A\s*controladjust\s*,\s*${mylabel}\s*,\s*${mylabel}\s*:\s*${adjustIndex}\s*;\s*$/;
+my $adjustline = qr/\A\s*controladjust\s*,\s*${mylabel}\s*,\s*${mylabel}\s*:\s*${adjustIndex}\s*;\s*$/;
 
 
 
@@ -190,11 +197,11 @@ while (<$filehandle>)
 	$audioOutputs = $audioOutputs . "," . $1;
 #	say "Read AUDIOOUT: " . $theline;
     }
-    if ($theline =~ qr/$adjustline/) {
-	say "ADJUST 1: " . $1 . ", 2: " . $2 . ", 3: " . $3 . ". 4: " . $4;
-	my $guiLine = $1 . " = " . $4 . ";";
-	say $fh_out $guiLine;
-    }
+    #if ($theline =~ qr/$adjustline/) {
+	#say "ADJUST 1: " . $1 . ", 2: " . $2 . ", 3: " . $3 . ". 4: " . $4;
+	#my $guiLine = $1 . " = " . $4 . ";";
+	#say $fh_out $guiLine;
+    #}
 }
 $outputs = $outputs . $audioOutputs;
 
@@ -267,7 +274,7 @@ while (<$filehandle>)
 	$linkLine = "\t" . $o3 . " = (" . $o4 . "p - " . $o5 . "p) : " . $o1 . "(" . $o2 . ");";
 	say $fh_out $linkLine;
 
-	$numBasicLinks++;
+	#$numBasicLinks++;
     }
 }
 say $fh_out "";

@@ -20,6 +20,10 @@
 // Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
+
+import("filter.lib");
+
+
 // Forward Euler differentiator
 differentiator = _ <: (_, mem) : - : *(fs) : _;
 
@@ -57,7 +61,7 @@ with {
   
 
 
-// Maybe this is actually getting the sampling rate
+// This makes it possible to get the current sampling rate.
 fs = min(192000, max(1, fconstant(int fSamplingFreq, <math.h>)));
 
 
@@ -65,3 +69,8 @@ mass(m) = (/(m*fs*fs) : ((_,_ : +) ~ _) : ((_,_ : +) ~ _));
 
 
 ground(g)=_:!:g;
+
+
+
+
+
