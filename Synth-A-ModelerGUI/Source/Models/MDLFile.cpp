@@ -94,11 +94,11 @@ void MDLFile::close()
 	newMDL();
 }
 
-const String MDLFile::getDocumentTitle()
+String MDLFile::getDocumentTitle()
 {
     return mdlRoot.getProperty(Ids::mdlName).toString();
 }
-const String MDLFile::loadDocument (const File& file)
+Result MDLFile::loadDocument (const File& file)
 {
 	destroyMDL();
 	initMDL();
@@ -109,17 +109,17 @@ const String MDLFile::loadDocument (const File& file)
 		SAM_LOG("Opened MDL file: "+getFilePath());
 		setFile(file);
 		setChangedFlag(false);
-		return String::empty;
+		return Result::ok();
 	}
 	else
 	{
 		// fail
 		String errorMsg = "ERROR: could not load mdl file.";
 		SAM_LOG(errorMsg);
-		return errorMsg;
+		return Result::fail(errorMsg);
 	}
 }
-const String MDLFile::saveDocument (const File& file)
+Result MDLFile::saveDocument (const File& file)
 {
 	this->setChangedFlag(false);
 	MDLWriter wr(*this);
@@ -128,18 +128,18 @@ const String MDLFile::saveDocument (const File& file)
 		SAM_LOG("Saved MDL file: "+file.getFullPathName());
         setFile(file);
         setChangedFlag(false);
-		return String::empty;
+		return Result::ok();
 	}
 	else
 	{
 		String errorMsg = "ERROR: could not save mdl file.";
 		SAM_LOG(errorMsg);
-		return errorMsg;
+		return Result::fail(errorMsg);
 	}
 }
 
 File MDLFile::lastDocumentOpened;
-const File MDLFile::getLastDocumentOpened()
+File MDLFile::getLastDocumentOpened()
 {
 	return lastDocumentOpened;
 }

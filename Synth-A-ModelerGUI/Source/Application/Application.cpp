@@ -420,7 +420,7 @@ SynthAModelerApplication::MainMenuModel::MainMenuModel()
 	setApplicationCommandManagerToWatch (commandManager);
 }
 
-const StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
+StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
 {
     const char* const names[] = { "File", "Edit", "Insert",
     		"Generate", "Tools", "Help", nullptr };
@@ -428,7 +428,7 @@ const StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
     return StringArray (names);
 }
 
-const PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/)
+PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/)
 {
 	PopupMenu menu;
     if (topLevelMenuIndex == 0)
