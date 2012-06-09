@@ -75,9 +75,9 @@ public:
     {
     public:
         MainMenuModel();
-        const StringArray getMenuBarNames();
+        StringArray getMenuBarNames();
 
-        const PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/);
+        PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/);
         void menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/);
     };
 

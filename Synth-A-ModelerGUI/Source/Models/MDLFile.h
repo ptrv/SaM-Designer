@@ -72,11 +72,12 @@ public:
     static const char* mdlFileExtension;
 
     bool isEmpty();
+
 protected:
-	const String getDocumentTitle();
-	const String loadDocument (const File& file);
-	const String saveDocument (const File& file);
-	const File getLastDocumentOpened();
+	String getDocumentTitle();
+	Result loadDocument (const File& file);
+	Result saveDocument (const File& file);
+	File getLastDocumentOpened();
 	void setLastDocumentOpened (const File& file);
 
 private:
