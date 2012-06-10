@@ -33,9 +33,10 @@ public:
 
 	void runTest()
 	{
-		String inPath = String(TESTSUITE_DATA_PATH) + "examplelinks.mdl";
-		String expectedPath = String(TESTSUITE_DATA_PATH) + "examplelinks_expected.dsp";
-		String outPath = String(TESTSUITE_DATA_PATH) + "examplelinks.dsp";
+		String inPath = String(TESTSUITE_DATA_PATH) + "test.mdl";
+		String expectedPath = String(TESTSUITE_DATA_PATH) + "test_expected.dsp";
+		String outPath = String(TESTSUITE_DATA_PATH) + "test.dsp";
+
 		OutputCmd cmd;
 		beginTest("isSynthAModelerCmdAvailable");
 		expect(cmd.isSynthAModelerCmdAvailable(), "");

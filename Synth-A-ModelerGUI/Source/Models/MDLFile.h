@@ -72,6 +72,7 @@ public:
     static const char* mdlFileExtension;
 
     bool isEmpty();
+
 protected:
 	String getDocumentTitle();
 	Result loadDocument (const File& file);

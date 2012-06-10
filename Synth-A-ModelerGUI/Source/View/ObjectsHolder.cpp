@@ -52,11 +52,12 @@ ObjectsHolder::~ObjectsHolder()
 
 void ObjectsHolder::paint(Graphics& g)
 {
-	g.fillAll (Colours::white);
+	g.fillAll (Colours::green);
 
 	g.setColour(Colours::black);
 	if(dragging)
 	{
+//		setAlwaysOnTop(true);
 		float x = draggingStart.x;
 		float y = draggingStart.y;
 		float w = draggingActual.x;// - x;
@@ -67,6 +68,8 @@ void ObjectsHolder::paint(Graphics& g)
 
 void ObjectsHolder::resized()
 {
+//	DBG(getBounds().toString());
+//	setBounds(0,0, getParentComponent()->getWidth(), getParentComponent()->getHeight());
 	updateComponents();
 }
 
@@ -215,15 +218,15 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     	// TODO: implement segmented connectors
     	StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
     	break;
-    case CommandIDs::zoomIn:
-    	// TODO: implement zoom in
-    	break;
-    case CommandIDs::zoomOut:
-    	// TODO: implement zoom out
-    	break;
-    case CommandIDs::zoomNormal:
-    	// TODO: implement zoom normal
-    	break;
+//    case CommandIDs::zoomIn:
+//    	// TODO: implement zoom in
+//    	break;
+//    case CommandIDs::zoomOut:
+//    	// TODO: implement zoom out
+//    	break;
+//    case CommandIDs::zoomNormal:
+//    	// TODO: implement zoom normal
+//    	break;
     case CommandIDs::reverseDirection:
     	// TODO: implement reverse direction
     	break;
@@ -242,13 +245,13 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     	break;
 
     case CommandIDs::insertLink:
-    	objController.addObject(this, Ids::link, mp.x, mp.y);
+//    	objController.addObject(this, Ids::link, mp.x, mp.y);
     	break;
     case CommandIDs::insertTouch:
-    	objController.addObject(this, Ids::touch, mp.x, mp.y);
+//    	objController.addObject(this, Ids::touch, mp.x, mp.y);
     	break;
     case CommandIDs::insertPluck:
-    	objController.addObject(this, Ids::pluck, mp.x, mp.y);
+//    	objController.addObject(this, Ids::pluck, mp.x, mp.y);
     	break;
 
     case CommandIDs::insertAudioOutput:

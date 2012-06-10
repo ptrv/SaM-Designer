@@ -31,6 +31,135 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+class ContentComp::MagnifierComponent  : public Component
+{
+public:
+    MagnifierComponent (Component* content_)
+        : scaleFactor (1.0), content (content_)
+    {
+        addAndMakeVisible (content);
+        childBoundsChanged (content);
+    }
+
+    void childBoundsChanged (Component* child)
+    {
+        const Rectangle<int> childArea (getLocalArea (child, child->getLocalBounds()));
+        setSize (childArea.getWidth(), childArea.getHeight());
+    }
+
+    double getScaleFactor() const   { return scaleFactor; }
+
+    void setScaleFactor (double newScale)
+    {
+        scaleFactor = newScale;
+        content->setTransform (AffineTransform::scale ((float) scaleFactor,
+                                                       (float) scaleFactor));
+    }
+
+private:
+    double scaleFactor;
+    ScopedPointer<Component> content;
+};
+
+//==============================================================================
+class ZoomingViewport   : public Viewport
+{
+public:
+    ZoomingViewport (ContentComp* const panel_)
+        : panel (panel_),
+          isSpaceDown (false)
+    {
+    }
+
+    ~ZoomingViewport() {}
+
+    void mouseWheelMove (const MouseEvent& e, const MouseWheelDetails& wheel)
+    {
+        if (e.mods.isCtrlDown() || e.mods.isAltDown())
+        {
+            const double factor = (wheel.deltaY > 0) ? 2.0 : 0.5;
+
+            panel->setZoom (panel->getZoom() * factor, wheel.deltaX, wheel.deltaY);
+        }
+        else
+        {
+            Viewport::mouseWheelMove (e, wheel);
+        }
+    }
+
+    void dragKeyHeldDown (const bool isKeyDown)
+    {
+        if (isSpaceDown != isKeyDown)
+        {
+            isSpaceDown = isKeyDown;
+
+            if (isSpaceDown)
+            {
+                DraggerOverlayComp* const dc = new DraggerOverlayComp();
+                addAndMakeVisible (dc);
+                dc->setBounds (0, 0, getWidth(), getHeight());
+            }
+            else
+            {
+                for (int i = getNumChildComponents(); --i >= 0;)
+                {
+                    if (dynamic_cast <DraggerOverlayComp*> (getChildComponent (i)) != 0)
+                    {
+                        delete getChildComponent (i);
+                    }
+                }
+            }
+        }
+    }
+
+private:
+    ContentComp* const panel;
+    bool isSpaceDown;
+
+    //==============================================================================
+    class DraggerOverlayComp    : public Component
+    {
+    public:
+        DraggerOverlayComp()
+        {
+            setMouseCursor (MouseCursor::DraggingHandCursor);
+            setAlwaysOnTop (true);
+        }
+
+        ~DraggerOverlayComp()
+        {
+        }
+
+        void mouseDown (const MouseEvent& e)
+        {
+            Viewport* viewport = findParentComponentOfClass<Viewport>();
+
+            if (viewport != 0)
+            {
+                startX = viewport->getViewPositionX();
+                startY = viewport->getViewPositionY();
+            }
+        }
+
+        void mouseDrag (const MouseEvent& e)
+        {
+            Viewport* viewport = findParentComponentOfClass<Viewport>();
+
+            if (viewport != 0)
+            {
+                viewport->setViewPosition (jlimit (0, jmax (0, viewport->getViewedComponent()->getWidth() - viewport->getViewWidth()),
+                                                   startX - e.getDistanceFromDragStartX()),
+                                           jlimit (0, jmax (0, viewport->getViewedComponent()->getHeight() - viewport->getViewHeight()),
+                                                   startY - e.getDistanceFromDragStartY()));
+//            	viewport->setViewPosition(e.getMouseDownPosition());
+            }
+        }
+
+    private:
+        int startX, startY;
+    };
+};
+
 //[/MiscUserDefs]
 
 //==============================================================================
@@ -43,11 +172,15 @@ ContentComp::ContentComp (MainAppWindow& mainWindow_, ObjController& objControll
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (600, 400);
-
+//    setSize (600, 600);
+    addAndMakeVisible (viewport = new ZoomingViewport (this));
 
     //[Constructor] You can add your own custom stuff here..
-    addAndMakeVisible (objectsHolder = new ObjectsHolder(objController));
+    objectsHolder = new ObjectsHolder(objController);
+//    addAndMakeVisible (objectsHolder);
+    viewport->setViewedComponent (magnifier = new MagnifierComponent (objectsHolder));
+
+//    objectsHolder->setVisible(true);
     setWantsKeyboardFocus(true);
     //[/Constructor]
 }
@@ -61,6 +194,7 @@ ContentComp::~ContentComp()
 
     //[Destructor]. You can add your own custom destruction code here..
 	objectsHolder = nullptr;
+	deleteAllChildren();
     //[/Destructor]
 }
 
@@ -70,7 +204,7 @@ void ContentComp::paint (Graphics& g)
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
 
-    g.fillAll (Colours::black);
+    g.fillAll (Colours::white);
 
     //[UserPaint] Add your own custom painting code here..
     //[/UserPaint]
@@ -79,8 +213,23 @@ void ContentComp::paint (Graphics& g)
 void ContentComp::resized()
 {
     //[UserResized] Add your own custom resize handling here..
-	if(objectsHolder != nullptr)
-		objectsHolder->setBounds(0, 0, getWidth(), getHeight());
+//    propsPanel->setBounds (contentW + 4, 4, jmax (100, getWidth() - contentW - 8), getHeight() - 8);
+
+    viewport->setBounds (4, 4, getWidth(), getHeight() - 8);
+
+//    if (document.isFixedSize())
+    	objectsHolder->setSize (jmax (mainWindow.getWidth()-8,
+                               roundToInt ((viewport->getWidth() - viewport->getScrollBarThickness()) / getZoom())),
+                         jmax (mainWindow.getHeight()-LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()-8,
+                               roundToInt ((viewport->getHeight() - viewport->getScrollBarThickness()) / getZoom())));
+//    else
+//        objectsHolder->setSize (viewport->getWidth(), viewport->getHeight());
+//        DBG(viewport->getBounds().toString());
+        DBG(String(viewport->getViewWidth())+ ", "+String(viewport->getViewHeight()));
+//    objectsHolder->setSize (mainWindow.getWidth(), mainWindow.getHeight());
+
+//	if(objectsHolder != nullptr)
+//		objectsHolder->setBounds(0, 0, getWidth(), getHeight());
     //[/UserResized]
 }
 
@@ -136,6 +285,7 @@ void ContentComp::getAllCommands (Array <CommandID>& commands)
 							CommandIDs::insertAudioOutput,
 							CommandIDs::insertWaveguide,
 							CommandIDs::insertTermination,
+							CommandIDs::spaceBarDrag,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -249,7 +399,13 @@ void ContentComp::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
     	result.setInfo("Termination", "", CommandCategories::inserting,0);
     	result.addDefaultKeypress('0', ModifierKeys::commandModifier);
     	break;
-
+    case CommandIDs::spaceBarDrag:
+        result.setInfo ("Scroll while dragging mouse",
+                        "When held down, this key lets you scroll around by dragging with the mouse.",
+                        CommandCategories::view, ApplicationCommandInfo::wantsKeyUpDownCallbacks);
+//        result.setActive (currentPaintRoutine != 0 || currentLayout != 0);
+        result.defaultKeypresses.add (KeyPress (KeyPress::spaceKey, 0, 0));
+        break;
     default:
         break;
     };
@@ -267,12 +423,94 @@ bool ContentComp::perform (const InvocationInfo& info)
 		mainWindow.getUndoManager()->redo();
 		break;
 
+	case CommandIDs::zoomIn:
+		setZoom (getZoom() * 2.0);
+		break;
+	case CommandIDs::zoomOut:
+		setZoom (getZoom() / 2.0);
+		break;
+    case CommandIDs::zoomNormal:
+    	setZoom (1.0);
+    	break;
+    case CommandIDs::spaceBarDrag:
+    	dragKeyHeldDown (info.isKeyDown);
+    	break;
+
     default:
     	return objectsHolder->dispatchMenuItemClick(info);
 	}
 	return true;
 }
 
+
+//void ContentComp::visibilityChanged()
+//{
+//    if (isVisible())
+//    {
+////        updatePropertiesList();
+//
+//        if (getParentComponent() != 0)
+//        {
+//            resized();
+//            JucerDocumentHolder* const cdh = dynamic_cast <JucerDocumentHolder*> (getParentComponent()->getParentComponent());
+//
+//            if (cdh != 0)
+//                cdh->setViewportToLastPos (viewport, *this);
+//
+//            resized();
+//        }
+//    }
+//    else
+//    {
+//        if (getParentComponent() != 0)
+//        {
+//            JucerDocumentHolder* const cdh = dynamic_cast <JucerDocumentHolder*> (getParentComponent()->getParentComponent());
+//
+//            if (cdh != 0)
+//                cdh->storeLastViewportPos (viewport, *this);
+//        }
+//    }
+//
+//    editor->setVisible (isVisible());
+//}
+double ContentComp::getZoom() const
+{
+    return magnifier->getScaleFactor();
+}
+
+void ContentComp::setZoom (double newScale)
+{
+    setZoom (jlimit (1.0 / 8.0, 16.0, newScale),
+             viewport->getWidth() / 2,
+             viewport->getHeight() / 2);
+}
+
+void ContentComp::setZoom (double newScale, int anchorX, int anchorY)
+{
+    Point<int> anchor (objectsHolder->getLocalPoint (viewport, Point<int> (anchorX, anchorY)));
+
+    magnifier->setScaleFactor (newScale);
+
+    resized();
+    anchor = viewport->getLocalPoint (objectsHolder, anchor);
+
+    viewport->setViewPosition (jlimit (0, jmax (0, viewport->getViewedComponent()->getWidth() - viewport->getViewWidth()),
+                                       viewport->getViewPositionX() + anchor.getX() - anchorX),
+                               jlimit (0, jmax (0, viewport->getViewedComponent()->getHeight() - viewport->getViewHeight()),
+                                       viewport->getViewPositionY() + anchor.getY() - anchorY));
+}
+
+void ContentComp::xyToTargetXY (int& x, int& y) const
+{
+    Point<int> pos (objectsHolder->getLocalPoint (this, Point<int> (x, y)));
+    x = pos.getX();
+    y = pos.getY();
+}
+
+void ContentComp::dragKeyHeldDown (bool isKeyDown)
+{
+    ((ZoomingViewport*) viewport)->dragKeyHeldDown (isKeyDown);
+}
 
 //[/MiscUserCode]
 
