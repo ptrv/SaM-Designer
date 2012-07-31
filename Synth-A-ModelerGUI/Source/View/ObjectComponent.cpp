@@ -20,7 +20,8 @@ ObjectComponent::ObjectComponent(const Identifier& objId_, int x, int y)
 : objId(objId_),
   isSelected(false)
 {
-	shadow.setShadowProperties (5.5f, 0.5f, -1, 0);
+	shadow.setShadowProperties (
+			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
 	setComponentEffect (&shadow);
 
 	setSize(50, 50);

@@ -330,7 +330,7 @@ void ObjectsHolder::addSelectedObject(ObjectComponent* comp)
 }
 void ObjectsHolder::removeSelectedObject(ObjectComponent* comp)
 {
-	selectedObjects.removeValue(comp);
+	selectedObjects.removeFirstMatchingValue(comp);
 	if(selectedObjects.size() > 1)
 		isMultipleSelection = true;
 	else

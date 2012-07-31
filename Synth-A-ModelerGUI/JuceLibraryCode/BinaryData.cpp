@@ -1,7 +1,6 @@
 /* ==================================== JUCER_BINARY_RESOURCE ====================================
 
-   This is an auto-generated file, created by The Introjucer 3.0.0
-   Do not edit anything in this file!
+   This is an auto-generated file: Any edits you make may be overwritten!
 
 */
 
@@ -694,7 +693,7 @@ const char* synthamodeler_icon_png = (const char*) temp_67472c40;
 const char* getNamedResource (const char*, int&) throw();
 const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw()
 {
-    int hash = 0;
+    unsigned int hash = 0;
     if (resourceNameUTF8 != 0)
         while (*resourceNameUTF8 != 0)
             hash = 31 * hash + *resourceNameUTF8++;
