@@ -21,10 +21,13 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-*/
+ */
 
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
+
+#include "ObjectComponent.h"
+
 
 class ObjectComponent;
 class MDLFile;
@@ -34,55 +37,69 @@ class ObjController;
  * Component which contains all objects.
  */
 class ObjectsHolder : public Component,
-						public ChangeListener
+                        public LassoSource <ObjectComponent*>,
+                       public ChangeListener
 {
 public:
-	ObjectsHolder(ObjController& objController_);
-	~ObjectsHolder();
+    ObjectsHolder(ObjController& objController_);
+    ~ObjectsHolder();
 
-	//==========================================================================
-	void paint(Graphics& g);
+    //==========================================================================
+    void paint(Graphics& g);
     void resized();
 
-    void changeListenerCallback (ChangeBroadcaster*);
+    void changeListenerCallback(ChangeBroadcaster*);
     void updateComponents();
 
-    void mouseDown (const MouseEvent& e);
-	void mouseDrag (const MouseEvent& e);
-	void mouseUp (const MouseEvent& e);
+    void mouseDown(const MouseEvent& e);
+    void mouseDrag(const MouseEvent& e);
+    void mouseUp(const MouseEvent& e);
 
-	bool dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info);
+    bool dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info);
 
-	void setMDLFile(MDLFile* newMDLFile);
+    void setMDLFile(MDLFile* newMDLFile);
 
-	void moveObjectsData(Point<int> offset);
-	void moveObjectComponents(Point<int> offset);
+    void moveObjectsData(Point<int> offset);
+    void moveObjectComponents(Point<int> offset);
 
-	void editObjectProperties(ObjectComponent* oc);
+    void editObjectProperties(ObjectComponent* oc);
 
-	//==========================================================================
-	void addSelectedObject(ObjectComponent* comp);
-	void removeSelectedObject(ObjectComponent* comp);
-	int getNumSelected() { return selectedObjects.size(); }
-	bool multipleObjectsSelected() { return isMultipleSelection; }
-	void deselectAllSelectedObjects();
-	ObjectComponent* getSelectedObject(int index);
-	void updateSelectedObjects();
-	//==========================================================================
+    void findLassoItemsInArea(Array <ObjectComponent*>& results, const Rectangle<int>& area);
+
+    SelectedItemSet <ObjectComponent*>& getLassoSelection();
+
+    //==========================================================================
+//    void addSelectedObject(ObjectComponent* comp);
+//    void removeSelectedObject(ObjectComponent* comp);
+
+//    int getNumSelected()
+//    {
+//        return selectedObjects.size();
+//    }
+//
+//    bool multipleObjectsSelected()
+//    {
+//        return isMultipleSelection;
+//    }
+    void deselectAllSelectedObjects();
+    ObjectComponent* getSelectedObject(int index);
+    void updateSelectedObjects();
+    //==========================================================================
 private:
 
-	void showContextMenu(const Point<int> mPos);
+    void showContextMenu(const Point<int> mPos);
 
-	ObjController& objController;
-	MDLFile* mdlFile;
+    ObjController& objController;
+    MDLFile* mdlFile;
 
-	bool dragging;
-	Point<int> draggingStart;
-	Point<int> draggingActual;
+    bool dragging;
+    Point<int> draggingStart;
+    Point<int> draggingActual;
 
-	Array<ObjectComponent*> selectedObjects;
+//    Array<ObjectComponent*> selectedObjects;
 
-	bool isMultipleSelection;
+    bool isMultipleSelection;
+    LassoComponent<ObjectComponent*> lassoComp;
 };
 
 

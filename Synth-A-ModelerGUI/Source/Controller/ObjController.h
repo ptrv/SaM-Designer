@@ -101,11 +101,18 @@ public:
 	 * @param undoManager	the MDLFile's UndoManager
 	 */
 	void editObjectProperties(ObjectComponent* oc, UndoManager* undoManager);
+    
+    SelectedItemSet <ObjectComponent*>& getSelectedElements() throw()
+    { 
+        return selectedObjects; 
+    }
 private:
 	Array<ValueTree> getSelectedChildrenData();
 	Array<ObjectComponent*> getSelectedChildrenComponents();
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
+    SelectedItemSet<ObjectComponent*> selectedObjects;
+
 
 };
 

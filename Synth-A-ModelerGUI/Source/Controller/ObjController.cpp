@@ -137,23 +137,33 @@ void ObjController::selectAll(bool shouldBeSelected)
 Array<ValueTree> ObjController::getSelectedChildrenData()
 {
 	Array<ValueTree> childrenSelected;
-	for (int i = 0; i < objects.size(); ++i) {
-		if(objects.getUnchecked(i)->selected())
-		{
-			childrenSelected.add(objects.getUnchecked(i)->getData());
-		}
-	}
+//	for (int i = 0; i < objects.size(); ++i) {
+//		if(objects.getUnchecked(i)->selected())
+//		{
+//			childrenSelected.add(objects.getUnchecked(i)->getData());
+//		}
+//	}
+    for (int i = 0; i < selectedObjects.getNumSelected(); i++)
+    {
+        childrenSelected.add(selectedObjects.getSelectedItem(i)->getData());
+    }
+
 	return childrenSelected;
 }
 Array<ObjectComponent*> ObjController::getSelectedChildrenComponents()
 {
 	Array<ObjectComponent*> childrenSelected;
-	for (int i = 0; i < objects.size(); ++i) {
-		if(objects.getUnchecked(i)->selected())
-		{
-			childrenSelected.add(objects.getUnchecked(i));
-		}
-	}
+//	for (int i = 0; i < objects.size(); ++i) {
+//		if(objects.getUnchecked(i)->selected())
+//		{
+//			childrenSelected.add(objects.getUnchecked(i));
+//		}
+//	}
+    for (int i = 0; i < selectedObjects.getNumSelected(); i++)
+    {
+        childrenSelected.add(selectedObjects.getSelectedItem(i));
+    }
+
 	return childrenSelected;
 }
 

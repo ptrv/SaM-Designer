@@ -145,8 +145,10 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 
 	actualPos.x = (pos.getX() + getWidth() /2);
 	actualPos.y = (pos.getY() + getHeight() /2);
-	getObjectsHolder()->moveObjectComponents(Point<int> (e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
-	getObjectsHolder()->updateComponents();
+//	getObjectsHolder()->moveObjectComponents(Point<int> (e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
+//	getObjectsHolder()->updateComponents();
+//    this->mouseDragPassive()
+    update();
 
 }
 

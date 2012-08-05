@@ -21,7 +21,7 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-*/
+ */
 
 #ifndef __BASEOBJECTCOMPONENT_H_4AC10D4B__
 #define __BASEOBJECTCOMPONENT_H_4AC10D4B__
@@ -32,48 +32,56 @@ class ObjController;
 /**
  * The object component.
  */
-class ObjectComponent : public Component
+class ObjectComponent : public Component, public ChangeBroadcaster
 {
 public:
-	ObjectComponent(const Identifier& objId_, int x, int y);
-	~ObjectComponent();
-    bool hitTest (int x, int y);
-	void paint(Graphics& g);
-	void mouseDown (const MouseEvent& e);
-	void mouseDragPassive (const Point<int> offset);
-	void mouseDrag (const MouseEvent& e);
-	void mouseUp (const MouseEvent& e);
-	void update();
-	void setData(ValueTree dataTree);
-	ValueTree getData();
+    ObjectComponent(const Identifier& objId_, int x, int y);
+    ~ObjectComponent();
+    bool hitTest(int x, int y);
+    void paint(Graphics& g);
+    void mouseDown(const MouseEvent& e);
+    void mouseDragPassive(const Point<int> offset);
+    void mouseDrag(const MouseEvent& e);
+    void mouseUp(const MouseEvent& e);
+    void update();
+    void setData(ValueTree dataTree);
+    ValueTree getData();
 
-	void setSelected(bool shouldBeSelected);
-	bool selected() const { return isSelected; }
-	void toggleSelected();
+    void setSelected(bool shouldBeSelected);
 
-	void setActualPosition(Point<int> pos);
+    bool selected() const
+    {
+        return isSelected;
+    }
+    void toggleSelected();
 
-	void setOriginalPosition();
+    void setActualPosition(Point<int> pos);
 
-	static ObjectComponent* isLastClicked;
+    void setOriginalPosition();
 
-	const Identifier& getId() const { return objId; }
+    static ObjectComponent* isLastClicked;
+
+    const Identifier& getId() const
+    {
+        return objId;
+    }
 private:
 
-	void showLinkPopupMenu();
-	void showContextMenu();
+    void showLinkPopupMenu();
+    void showContextMenu();
 
-	const Identifier& objId;
-	DrawableComposite* icon;
+    const Identifier& objId;
+    DrawableComposite* icon;
     DropShadowEffect shadow;
 
-	Point<int> actualPos;
-	Point<int> originalPos;
+    Point<int> actualPos;
+    Point<int> originalPos;
 
     ObjectsHolder* getObjectsHolder() const noexcept;
     ValueTree data;
 
     bool isSelected;
+    bool dragging, mouseDownSelectStatus;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
