@@ -108,7 +108,6 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
     {
 
     }
-    lassoComp.endLasso();
     
     if (e.mouseWasClicked() && ! e.mods.isAnyModifierKeyDown())
     {
@@ -125,9 +124,11 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
 //        dragging = false;
 //        repaint();
         
-        deselectAllSelectedObjects();
-        selectedObjects2.deselectAll();
+        objController.getSelectedElements().deselectAll();
+//        deselectAllSelectedObjects();
+//        selectedObjects2.deselectAll();
     }
+    lassoComp.endLasso();
 }
 
 void ObjectsHolder::mouseDown(const MouseEvent& e)
@@ -178,11 +179,11 @@ void ObjectsHolder::moveObjectComponents(Point<int> offset)
     //			oc->mouseDragPassive(offset);
     //		}
     //	}
-    for (int i = 0; i < selectedObjects.size(); ++i)
+    for (int i = 0; i < objController.getSelectedElements().getNumSelected(); ++i)
     {
-        if (selectedObjects[i] != ObjectComponent::isLastClicked)
+        if (objController.getSelectedElements().getItemArray()[i] != ObjectComponent::isLastClicked)
         {
-            selectedObjects[i]->mouseDragPassive(offset);
+            objController.getSelectedElements().getItemArray()[i]->mouseDragPassive(offset);
         }
     }
 
@@ -213,14 +214,14 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         // TODO: implement paste
         break;
     case StandardApplicationCommandIDs::selectAll:
-        selectedObjects.clear();
+//        objController.getSelectedElements().deselectAll();
         objController.selectAll(true);
         isMultipleSelection = true;
         break;
     case StandardApplicationCommandIDs::deselectAll:
         objController.selectAll(false);
         isMultipleSelection = false;
-        selectedObjects.clear();
+//        selectedObjects.clear();
         break;
     case StandardApplicationCommandIDs::del:
         objController.removeObject(this);
@@ -381,11 +382,34 @@ void ObjectsHolder::findLassoItemsInArea (Array <ObjectComponent*>& results, con
         ObjectComponent* const e = dynamic_cast <ObjectComponent*> (getChildComponent (i));
 
         if (e != 0 && e->getBounds().intersects (lasso))
+        {
+            e->setSelected(true);
             results.add (e);
+            
+        }
     }
 }
 
 SelectedItemSet <ObjectComponent*>& ObjectsHolder::getLassoSelection()
 {
-    return objController.;
+    return objController.getSelectedElements();
+}
+
+
+const Rectangle<int> ObjectsHolder::getComponentArea() const
+{
+//    if (document.isFixedSize())
+//    {
+//        return Rectangle<int> ((getWidth() - document.getInitialWidth()) / 2,
+//                               (getHeight() - document.getInitialHeight()) / 2,
+//                               document.getInitialWidth(),
+//                               document.getInitialHeight());
+//    }
+//    else
+//    {
+//        return Rectangle<int> (editorEdgeGap, editorEdgeGap,
+//                               getWidth() - editorEdgeGap * 2,
+//                               getHeight() - editorEdgeGap * 2);
+//    }
+    
 }

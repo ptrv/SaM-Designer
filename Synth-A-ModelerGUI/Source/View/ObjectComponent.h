@@ -32,10 +32,12 @@ class ObjController;
 /**
  * The object component.
  */
-class ObjectComponent : public Component, public ChangeBroadcaster
+class ObjectComponent : public Component, 
+                        public ChangeListener,
+                        public ChangeBroadcaster
 {
 public:
-    ObjectComponent(const Identifier& objId_, int x, int y);
+    ObjectComponent(ObjController& _owner, const Identifier& objId_, int x, int y);
     ~ObjectComponent();
     bool hitTest(int x, int y);
     void paint(Graphics& g);
@@ -58,7 +60,7 @@ public:
     void setActualPosition(Point<int> pos);
 
     void setOriginalPosition();
-
+    
     static ObjectComponent* isLastClicked;
 
     const Identifier& getId() const
@@ -70,6 +72,9 @@ private:
     void showLinkPopupMenu();
     void showContextMenu();
 
+    void changeListenerCallback (ChangeBroadcaster*);
+
+    ObjController& owner;
     const Identifier& objId;
     DrawableComposite* icon;
     DropShadowEffect shadow;
@@ -82,8 +87,9 @@ private:
 
     bool isSelected;
     bool dragging, mouseDownSelectStatus;
-
-
+    
+    ChangeBroadcaster selfChangeListenerList;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };
 

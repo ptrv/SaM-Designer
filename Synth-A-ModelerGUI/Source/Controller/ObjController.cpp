@@ -88,7 +88,7 @@ void ObjController::loadComponents(Component* holder)
 					|| obj.getType() == Ids::link || obj.getType() == Ids::touch
 					|| obj.getType() == Ids::pluck || obj.getType() == Ids::audioout)
 			{
-				ObjectComponent* objComp = new ObjectComponent(obj.getType(),
+				ObjectComponent* objComp = new ObjectComponent(*this, obj.getType(),
 						int(obj.getProperty(Ids::posX)), int(obj.getProperty(Ids::posY)));
 				objComp->setData(obj);
 				objects.add(objComp);
@@ -180,4 +180,61 @@ void ObjController::moveObjects(ObjectsHolder* holder, Point<int> offset)
 void ObjController::editObjectProperties(ObjectComponent* oc, UndoManager* undoManager)
 {
 	ObjectPropertiesPanel::show(oc, undoManager);
+}
+
+void ObjController::startDragging (const Rectangle<int>& parentArea)
+{
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        ObjectComponent* const c = objects[i];
+
+        Point<int> r (c->getPosition());
+
+        c->getProperties().set ("xDragStart", r.getX());
+        c->getProperties().set ("yDragStart", r.getY());
+    }
+
+    owner.getUndoManager()->beginNewTransaction();
+}
+
+void ObjController::dragSelectedComps (int dx, int dy, const Rectangle<int>& parentArea)
+{
+    owner.getUndoManager()->undoCurrentTransactionOnly();
+//
+//    if (document != 0 && selectedObjects.getNumSelected() > 1)
+//    {
+//        dx = document->snapPosition (dx);
+//        dy = document->snapPosition (dy);
+//    }
+
+    for (int i = 0; i < selectedObjects.getNumSelected(); ++i)
+    {
+        ObjectComponent* const c = selectedObjects.getSelectedItem (i);
+
+        const int startX = c->getProperties() ["xDragStart"];
+        const int startY = c->getProperties() ["yDragStart"];
+
+        Point<int> r (c->getPosition());
+
+//        if (document != 0 && selectedElements.getNumSelected() == 1)
+//        {
+//            r.setPosition (document->snapPosition (startX + dx),
+//                           document->snapPosition (startY + dy));
+//        }
+//        else
+//        {
+            r.setXY (startX + dx,
+                           startY + dy);
+//        }
+
+        c->setActualPosition (r);
+    }
+
+    owner.getMDLFile()->changed();
+//    changed();
+}
+
+void ObjController::endDragging()
+{
+    owner.getUndoManager()->beginNewTransaction();
 }

@@ -106,6 +106,11 @@ public:
     { 
         return selectedObjects; 
     }
+    
+    void startDragging (const Rectangle<int>& parentArea);
+    void dragSelectedComps (int dxFromDragStart, int dyFromDragStart, const Rectangle<int>& parentArea);
+    void endDragging();
+
 private:
 	Array<ValueTree> getSelectedChildrenData();
 	Array<ObjectComponent*> getSelectedChildrenComponents();

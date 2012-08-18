@@ -84,6 +84,10 @@ public:
     void deselectAllSelectedObjects();
     ObjectComponent* getSelectedObject(int index);
     void updateSelectedObjects();
+    
+    ObjController& getObjController() const { return objController; }
+    
+    const Rectangle<int> getComponentArea() const;
     //==========================================================================
 private:
 

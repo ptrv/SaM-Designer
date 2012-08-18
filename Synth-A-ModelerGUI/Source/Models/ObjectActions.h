@@ -51,12 +51,14 @@ public:
 	bool perform()
 	{
 		// Add new Object to mdlRoot and ObjectHolder
-		objComp = new ObjectComponent(objId, int(newValue[Ids::posX]), int(newValue[Ids::posY]));
+		objComp = new ObjectComponent(holderComp->getObjController(),
+                                     objId, int(newValue[Ids::posX]), 
+                                     int(newValue[Ids::posY]));
 		mdlSubTree.addChild(newValue,-1, nullptr);
 		objComp->setData(newValue);
 		objects.add(objComp);
 		holderComp->addAndMakeVisible(objComp);
-		holderComp->updateSelectedObjects();
+//		holderComp->updateSelectedObjects();
         String logText = "Add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -68,7 +70,7 @@ public:
 		holderComp->removeChildComponent(objComp);
 		objects.removeObject(objComp);
 		mdlSubTree.removeChild(newValue, nullptr);
-		holderComp->updateSelectedObjects();
+//		holderComp->updateSelectedObjects();
         String logText = "Undo add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -108,7 +110,7 @@ public:
 			holderComp->removeChildComponent(objComps[i]);
 			objects.removeObject(objComps[i]);
 			oldValue[i].getParent().removeChild(oldValue[i], nullptr);
-			holderComp->updateSelectedObjects();
+//			holderComp->updateSelectedObjects();
 		}
 		objComps.clear();
 		return true;
@@ -119,14 +121,15 @@ public:
 		for (int i = 0; i < oldValue.size(); ++i) {
 			SAM_LOG("Undo remove "+oldValue[i][Ids::identifier].toString());
 			oldValue[i].getParent().addChild(oldValue[i],-1, nullptr);
-			ObjectComponent* oc = new ObjectComponent(oldValue[i].getType(),
+			ObjectComponent* oc = new ObjectComponent(holderComp->getObjController(),
+                                                     oldValue[i].getType(),
 					int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
 			objComps.add(oc);
 			oc->setData(oldValue[i]);
 			oc->setCentrePosition(int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
 			objects.add(oc);
 			holderComp->addAndMakeVisible(oc);
-			holderComp->updateSelectedObjects();
+//			holderComp->updateSelectedObjects();
 		}
 
 		return true;
