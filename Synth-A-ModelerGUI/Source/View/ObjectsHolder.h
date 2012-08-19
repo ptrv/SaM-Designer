@@ -59,9 +59,6 @@ public:
 
     void setMDLFile(MDLFile* newMDLFile);
 
-//    void moveObjectsData(Point<int> offset);
-//    void moveObjectComponents(Point<int> offset);
-
     void editObjectProperties(ObjectComponent* oc);
 
     void findLassoItemsInArea(Array <ObjectComponent*>& results, const Rectangle<int>& area);
@@ -69,18 +66,6 @@ public:
     SelectedItemSet <ObjectComponent*>& getLassoSelection();
 
     //==========================================================================
-//    void addSelectedObject(ObjectComponent* comp);
-//    void removeSelectedObject(ObjectComponent* comp);
-
-//    int getNumSelected()
-//    {
-//        return selectedObjects.size();
-//    }
-//
-//    bool multipleObjectsSelected()
-//    {
-//        return isMultipleSelection;
-//    }
     void deselectAllSelectedObjects();
     ObjectComponent* getSelectedObject(int index);
     void updateSelectedObjects();

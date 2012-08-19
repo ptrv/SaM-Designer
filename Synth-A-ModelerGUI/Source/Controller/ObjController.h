@@ -88,14 +88,6 @@ public:
 	void selectAll(bool shouldBeSelected);
 
 	/**
-	 * Moves object on canvas.
-	 *
-	 * @param holder		the component which contains all objects.
-	 * @param offset		the offset from the dragging start.
-	 */
-	void moveObjects(ObjectsHolder* holder, Point<int> offset);
-
-	/**
 	 * Edits the properties of an object.
 	 *
 	 * @param oc			the object component to edit
@@ -115,8 +107,6 @@ public:
     UndoManager* getUndoManager();
 
 private:
-	Array<ValueTree> getSelectedChildrenData();
-	Array<ObjectComponent*> getSelectedChildrenComponents();
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     SelectedItemSet<ObjectComponent*> selectedObjects;

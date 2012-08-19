@@ -42,7 +42,6 @@ public:
     bool hitTest(int x, int y);
     void paint(Graphics& g);
     void mouseDown(const MouseEvent& e);
-//    void mouseDragPassive(const Point<int> offset);
     void mouseDrag(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
     void update();

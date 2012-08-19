@@ -78,7 +78,7 @@ void ObjectComponent::setOriginalPosition()
 	originalPos = localPointToGlobal (Point<int>());
 
 }
-//bool shouldBeUnselected = false;
+
 void ObjectComponent::mouseDown (const MouseEvent& e)
 {
 	originalPos = localPointToGlobal (Point<int>());
@@ -89,11 +89,6 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
     dragging = false;
 
-//    if (owner != 0)
-//    {
-//    }
-
-    DBG(owner.getSelectedElements().getNumSelected());
     if (e.mods.isPopupMenu() && owner.getSelectedElements().getNumSelected() == 2)
     {
     	showLinkPopupMenu();
@@ -107,77 +102,10 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
     if(! e.mods.isShiftDown())
     {
         owner.getSelectedElements().deselectAll();
-//        owner.getSelectedElements().addToSelectionBasedOnModifiers(this, e.mods);
     }
-//    else
-//    {
-    
-//    owner.getSelectedElements().addToSelectionBasedOnModifiers(this, e.mods);
     mouseDownSelectStatus = owner.getSelectedElements().addToSelectionOnMouseDown (this, e.mods);
-//    }
-//    owner.getSelectedElements().addToSelectionBasedOnModifiers (this, e.mods);
-    
-//    if (e.mods.isPopupMenu() && owner.getSelectedElements().getNumSelected() == 2)
-//    {
-//    	showLinkPopupMenu();
-//    }
-//    else if(e.mods.isPopupMenu())
-//    {
-//    	showContextMenu();
-//    }
-//	// TODO: not perfect, implement shift click deselection
-//
-//	if(! isSelected)// && ! e.mods.isShiftDown() )
-//	{
-//		setSelected(true);
-//		if(! e.mods.isShiftDown())
-//		{
-//			for (int i = owner.getSelectedElements().getNumSelected(); --i >= 0;){
-//                if(owner.getSelectedElements().getSelectedItem(i) != isLastClicked)
-//                    owner.getSelectedElements().getSelectedItem(i)->setSelected(false);
-////				if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
-////					getObjectsHolder()->getSelectedObject(i)->setSelected(false);
-//			}
-//		}
-//	}
-//	else if(! e.mods.isShiftDown() && ! owner.getSelectedElements().getNumSelected() > 1)
-//	{
-//		for (int i = owner.getSelectedElements().getNumSelected(); --i >= 0;)
-//		{
-//            if(owner.getSelectedElements().getSelectedItem(i) != isLastClicked)
-//                owner.getSelectedElements().getSelectedItem(i)->setSelected(false);
-////			if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
-////				getObjectsHolder()->getSelectedObject(i)->setSelected(false);
-//		}
-//
-//	}
-//	else if(e.mods.isShiftDown())// && ! getObjectsHolder()->multipleObjectsSelected())
-//	{
-////		setSelected(false);
-////		shouldBeUnselected = true;
-//	}
-//
-//	// set origianl position
-//	for (int i = 0; i < owner.getSelectedElements().getNumSelected(); ++i) {
-////		if(getObjectsHolder()->getSelectedObject(i) != isLastClicked)
-////			getObjectsHolder()->getSelectedObject(i)->setOriginalPosition();
-//        if(owner.getSelectedElements().getSelectedItem(i) != isLastClicked)
-//            owner.getSelectedElements().getSelectedItem(i)->setOriginalPosition();
-//
-//	}
 
 }
-
-//void ObjectComponent::mouseDragPassive(const Point<int> offset)
-//{
-//	Point<int> pos (originalPos + offset);
-//
-//	if (getParentComponent() != nullptr)
-//		pos = getParentComponent()->getLocalPoint (nullptr, pos);
-//
-//	actualPos.x = (pos.getX() + getWidth() /2);
-//	actualPos.y = (pos.getY() + getHeight() /2);
-//}
 
 void ObjectComponent::mouseDrag (const MouseEvent& e)
 {
@@ -193,32 +121,18 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 
             if (dragging)
             {
-//                getObjectsHolder()->moveObjectComponents(Point<int> (e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
                 owner.startDragging (area);
             }
         }
 
         if (dragging)
         {
-//            mouseDragPassive(Point<int>(e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
             owner.dragSelectedComps (e.getDistanceFromDragStartX(),
                                       e.getDistanceFromDragStartY(),
                                       area);
         }
         update();
     }
-//	Point<int> pos (originalPos + Point<int> (e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
-//
-//	if (getParentComponent() != nullptr)
-//		pos = getParentComponent()->getLocalPoint (nullptr, pos);
-//
-//	actualPos.x = (pos.getX() + getWidth() /2);
-//	actualPos.y = (pos.getY() + getHeight() /2);
-////	getObjectsHolder()->moveObjectComponents(Point<int> (e.getDistanceFromDragStartX(), e.getDistanceFromDragStartY()));
-////	getObjectsHolder()->updateComponents();
-////    this->mouseDragPassive()
-//    update();
-
 }
 
 void ObjectComponent::mouseUp (const MouseEvent& e)
@@ -232,17 +146,7 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 	}
     
     owner.getSelectedElements().addToSelectionOnMouseUp (this, e.mods, dragging, mouseDownSelectStatus);
-//	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
-//	{
-////		if(shouldBeUnselected && e.mods.isShiftDown())
-////			setSelected(false);
-////
-//	}
-//	else if (! e.mouseWasClicked())
-//	{
-//		// object changed / mouse realeased after drag
-//		getObjectsHolder()->moveObjectsData(e.getOffsetFromDragStart());
-//	}
+
     update();
 }
 
@@ -282,13 +186,12 @@ void ObjectComponent::setSelected(bool shouldBeSelected)
 	if(isSelected)
     {
         owner.getSelectedElements().addToSelection(this);
-//		getObjectsHolder()->addSelectedObject(this);
-        
     }
 	else
+    {
         owner.getSelectedElements().deselect(this);
-//		getObjectsHolder()->removeSelectedObject(this);
-	repaint();
+    }
+   	repaint();
 }
 
 void ObjectComponent::toggleSelected()
@@ -356,9 +259,6 @@ void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)
     if (isSelected != nowSelected)
     {
         isSelected = nowSelected;
-//        border->setVisible (nowSelected);
         repaint();
-
-//        selectionChanged (nowSelected);
     }
 }

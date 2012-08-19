@@ -69,13 +69,9 @@ public:
 
 	bool undo()
 	{
-//		holderComp->removeChildComponent(objComp);
-//		objects.removeObject(objComp);
-//		mdlSubTree.removeChild(newValue, nullptr);
         
         objController->removeObject(objComp, false, holderComp);
-//        objController
-//		holderComp->updateSelectedObjects();
+
         String logText = "Undo add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -132,8 +128,6 @@ public:
         objects.add(oc);
         holderComp->addAndMakeVisible(oc);
         objController->getSelectedElements().addToSelection(oc);
-//			holderComp->updateSelectedObjects();
-
 		return true;
 	}
 private:
@@ -144,70 +138,6 @@ private:
     ValueTree root;
     ObjController* objController;
 
-};
-
-class MoveObjectsAction : public UndoableAction {
-public:
-	MoveObjectsAction(OwnedArray<ObjectComponent>& objects_,
-			ObjectsHolder* objHolderComp_,
-			Array<ObjectComponent*> componentsToMove,
-			Array<ValueTree> childrenToMove,
-			Point<int> dragOffset_)
-	: objects(objects_),
-	  holderComp(objHolderComp_),
-	  objComps(componentsToMove),
-	  newValues(childrenToMove),
-	  moveOffset(dragOffset_)
-	{
-
-	}
-
-	~MoveObjectsAction()
-	{
-
-	}
-
-	bool perform()
-	{
-		for (int i = 0; i < newValues.size(); ++i)
-		{
-			Point<int> tmpP;
-			tmpP.x = int(newValues[i][Ids::posX]);
-			tmpP.y = int(newValues[i][Ids::posY]);
-			tmpP.setX(tmpP.getX() + moveOffset.getX());
-			tmpP.setY(tmpP.getY() + moveOffset.getY());
-			newValues[i].setProperty(Ids::posX, tmpP.getX(), nullptr);
-			newValues[i].setProperty(Ids::posY, tmpP.getY(), nullptr);
-			objComps[i]->setActualPosition(tmpP);
-			SAM_LOG("Move "+newValues[i][Ids::identifier].toString());
-		}
-		holderComp->updateComponents();
-		return true;
-	}
-
-	bool undo()
-	{
-		for (int i = 0; i < newValues.size(); ++i)
-		{
-			Point<int> tmpP;
-			tmpP.x = int(newValues[i][Ids::posX]);
-			tmpP.y = int(newValues[i][Ids::posY]);
-			tmpP.setX(tmpP.getX() - moveOffset.getX());
-			tmpP.setY(tmpP.getY() - moveOffset.getY());
-			newValues[i].setProperty(Ids::posX, tmpP.getX(), nullptr);
-			newValues[i].setProperty(Ids::posY, tmpP.getY(), nullptr);
-			objComps[i]->setActualPosition(tmpP);
-			SAM_LOG("Undo move "+newValues[i][Ids::identifier].toString());
-		}
-		holderComp->updateComponents();
-		return true;
-	}
-private:
-	OwnedArray<ObjectComponent>& objects;
-	ObjectsHolder* holderComp;
-	Array<ObjectComponent*> objComps;
-	Array<ValueTree> newValues;
-	Point<int> moveOffset;
 };
 
 class MoveObjectAction : public UndoableAction {
@@ -232,28 +162,19 @@ public:
         ValueTree objData = objComp->getData();
 		oldPos.x = int(objData[Ids::posX]);
 		oldPos.y = int(objData[Ids::posY]);
-
 		objData.setProperty(Ids::posX, newPos.getX(), nullptr);
 		objData.setProperty(Ids::posY, newPos.getY(), nullptr);
 		objComp->setActualPosition(newPos);
-//		SAM_LOG("Move "+objData[Ids::identifier].toString());
-
-//		holderComp->updateComponents();
 		return true;
 	}
 
 	bool undo()
 	{
         ValueTree objData = objComp->getData();
-
 		objData.setProperty(Ids::posX, oldPos.getX(), nullptr);
 		objData.setProperty(Ids::posY, oldPos.getY(), nullptr);
 		objComp->setActualPosition(oldPos);
-//		SAM_LOG("Move "+objData[Ids::identifier].toString());
-
-//		holderComp->updateComponents();
 		return true;
-
 	}
 private:
 	ObjectsHolder* holderComp;

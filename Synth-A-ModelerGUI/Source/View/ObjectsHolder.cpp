@@ -87,46 +87,24 @@ void ObjectsHolder::updateComponents()
         if (bobj != nullptr)
             bobj->update();
     }
-
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
 {
     lassoComp.toFront (false);
     lassoComp.dragLasso (e);
-//    
-//    draggingActual.x = e.getOffsetFromDragStart().x;
-//    draggingActual.y = e.getOffsetFromDragStart().y;
-//
-//    dragging = true;
-//    repaint();
 }
 
 void ObjectsHolder::mouseUp(const MouseEvent& e)
 {
     if (e.mouseWasClicked())
     {
-
     }
     
     if (e.mouseWasClicked() && ! e.mods.isAnyModifierKeyDown())
     {
         // object changed
-//        int x = draggingStart.x;
-//        int y = draggingStart.y;
-//        int w = draggingActual.x; // - x;
-//        int h = draggingActual.y; // - y;
-//
-//        Rectangle<int> tmpRect(x, y, w, h);
-//        selectedObjects = objController.selectObjectsWithinRectagle(tmpRect);
-//        if (selectedObjects.size() > 0)
-//            isMultipleSelection = true;
-//        dragging = false;
-//        repaint();
-        
         objController.getSelectedElements().deselectAll();
-//        deselectAllSelectedObjects();
-//        selectedObjects2.deselectAll();
     }
     lassoComp.endLasso();
 }
@@ -142,17 +120,6 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
         addAndMakeVisible(&lassoComp);
         lassoComp.beginLasso(e, this);
     }
-//    draggingStart.x = e.getMouseDownX();
-//    draggingStart.y = e.getMouseDownY();
-    //	dragging = true;
-
-//    for (int i = getNumChildComponents(); --i >= 0;)
-//    {
-//        ObjectComponent* oc = dynamic_cast<ObjectComponent*> (getChildComponent(i));
-//        oc->setSelected(false);
-//    }
-//    isMultipleSelection = false;
-//    selectedObjects.clear();
 }
 
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
@@ -164,30 +131,6 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
         objController.loadComponents(this);
     }
 }
-
-//void ObjectsHolder::moveObjectsData(Point<int> offset)
-//{
-//    objController.moveObjects(this, offset);
-//}
-
-//void ObjectsHolder::moveObjectComponents(Point<int> offset)
-//{
-//    //	for (int i = 0; i < getNumChildComponents(); ++i) {
-//    //		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
-//    //		if(oc->selected() && oc != ObjectComponent::isLastClicked)
-//    //		{
-//    //			oc->mouseDragPassive(offset);
-//    //		}
-//    //	}
-//    for (int i = 0; i < objController.getSelectedElements().getNumSelected(); ++i)
-//    {
-//        if (objController.getSelectedElements().getItemArray()[i] != ObjectComponent::isLastClicked)
-//        {
-//            objController.getSelectedElements().getItemArray()[i]->mouseDragPassive(offset);
-//        }
-//    }
-//
-//}
 
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
@@ -335,45 +278,6 @@ void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
     objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
 }
 
-//void ObjectsHolder::addSelectedObject(ObjectComponent* comp)
-//{
-//    selectedObjects.add(comp);
-//    if (selectedObjects.size() > 1)
-//        isMultipleSelection = true;
-//    else
-//        isMultipleSelection = false;
-//}
-//
-//void ObjectsHolder::removeSelectedObject(ObjectComponent* comp)
-//{
-//    selectedObjects.removeFirstMatchingValue(comp);
-//    if (selectedObjects.size() > 1)
-//        isMultipleSelection = true;
-//    else
-//        isMultipleSelection = false;
-//}
-//
-//void ObjectsHolder::deselectAllSelectedObjects()
-//{
-//    selectedObjects.clear();
-//    isMultipleSelection = false;
-//}
-//
-//ObjectComponent* ObjectsHolder::getSelectedObject(int index)
-//{
-//    return selectedObjects[index];
-//}
-//
-//void ObjectsHolder::updateSelectedObjects()
-//{
-//    selectedObjects.clear();
-//    for (int i = 0; i < getNumChildComponents(); ++i)
-//    {
-//        ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (getChildComponent(i));
-//        if (oc->selected())
-//            selectedObjects.add(oc);
-//    }
-//}
 
 void ObjectsHolder::findLassoItemsInArea (Array <ObjectComponent*>& results, const Rectangle<int>& lasso)
 {
@@ -411,5 +315,4 @@ const Rectangle<int> ObjectsHolder::getComponentArea() const
 //                               getWidth() - editorEdgeGap * 2,
 //                               getHeight() - editorEdgeGap * 2);
 //    }
-    
 }

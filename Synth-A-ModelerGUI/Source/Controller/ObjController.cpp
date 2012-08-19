@@ -164,50 +164,6 @@ void ObjController::selectAll(bool shouldBeSelected)
     }
 }
 
-Array<ValueTree> ObjController::getSelectedChildrenData()
-{
-    Array<ValueTree> childrenSelected;
-    //	for (int i = 0; i < objects.size(); ++i) {
-    //		if(objects.getUnchecked(i)->selected())
-    //		{
-    //			childrenSelected.add(objects.getUnchecked(i)->getData());
-    //		}
-    //	}
-    for (int i = 0; i < selectedObjects.getNumSelected(); i++)
-    {
-        childrenSelected.add(selectedObjects.getSelectedItem(i)->getData());
-    }
-
-    return childrenSelected;
-}
-
-Array<ObjectComponent*> ObjController::getSelectedChildrenComponents()
-{
-    Array<ObjectComponent*> childrenSelected;
-    //	for (int i = 0; i < objects.size(); ++i) {
-    //		if(objects.getUnchecked(i)->selected())
-    //		{
-    //			childrenSelected.add(objects.getUnchecked(i));
-    //		}
-    //	}
-    for (int i = 0; i < selectedObjects.getNumSelected(); i++)
-    {
-        childrenSelected.add(selectedObjects.getSelectedItem(i));
-    }
-
-    return childrenSelected;
-}
-
-void ObjController::moveObjects(ObjectsHolder* holder, Point<int> offset)
-{
-    Array<ValueTree> childrenDataMove = getSelectedChildrenData();
-    Array<ObjectComponent*> childrenComponentsToMove = getSelectedChildrenComponents();
-
-    this->perform(new MoveObjectsAction(objects, holder, childrenComponentsToMove,
-                                        childrenDataMove, offset), "Move objects");
-
-}
-
 void ObjController::editObjectProperties(ObjectComponent* oc, UndoManager* undoManager)
 {
     ObjectPropertiesPanel::show(oc, undoManager);
@@ -231,12 +187,6 @@ void ObjController::startDragging(const Rectangle<int>& parentArea)
 void ObjController::dragSelectedComps(int dx, int dy, const Rectangle<int>& parentArea)
 {
     owner.getUndoManager()->undoCurrentTransactionOnly();
-    //
-    //    if (document != 0 && selectedObjects.getNumSelected() > 1)
-    //    {
-    //        dx = document->snapPosition (dx);
-    //        dy = document->snapPosition (dy);
-    //    }
 
     for (int i = 0; i < selectedObjects.getNumSelected(); ++i)
     {
@@ -247,22 +197,9 @@ void ObjController::dragSelectedComps(int dx, int dy, const Rectangle<int>& pare
 
         Point<int> r(c->getPosition());
 
-        //        if (document != 0 && selectedElements.getNumSelected() == 1)
-        //        {
-        //            r.setPosition (document->snapPosition (startX + dx),
-        //                           document->snapPosition (startY + dy));
-        //        }
-        //        else
-        //        {
         r.setXY(startX + dx, startY + dy);
-        //        }
 
         c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2));
-        //        c->getData().setProperty(Ids::posX, c->getPosition().x, owner.getUndoManager());
-        //        c->getData().setProperty(Ids::posY, c->getPosition().y, owner.getUndoManager());
-        //        c->setActualPosition (Point<int>(r.x + c->getWidth()/2, r.y + c->getHeight()/2));
-
-
     }
 
     owner.getMDLFile()->changed();
