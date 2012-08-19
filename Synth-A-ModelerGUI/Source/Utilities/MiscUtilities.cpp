@@ -70,6 +70,14 @@ void openHelpUrl()
 	helpUrl.launchInDefaultBrowser();
 }
 
+void openHelpUrl(const Identifier& objId)
+{
+    String objStr = getObjectTypeAsString(objId).toLowerCase();
+    objStr.append("_object", 256);
+	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + objStr);
+	helpUrl.launchInDefaultBrowser();
+}
+
 void openDataDir()
 {
 #if JUCE_MAC

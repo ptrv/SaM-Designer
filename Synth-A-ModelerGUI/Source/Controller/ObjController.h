@@ -60,12 +60,13 @@ public:
 	void addObject(ObjectsHolder* holder, const Identifier& objId, int posX, int posY);
 
 	/**
-	 * Removes an object from the patch
+	 * Removes selected objects from the patch
 	 *
 	 * @param holder		the holder component which consists the objects.
 	 */
-	void removeObject(ObjectsHolder* holder);
+	void removeSelectedObjects(ObjectsHolder* holder);
 
+    void removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder);
 	/**
 	 * Loads the object components of a patch when a mdl file is opened.
 	 * @param holder
@@ -110,6 +111,8 @@ public:
     void startDragging (const Rectangle<int>& parentArea);
     void dragSelectedComps (int dxFromDragStart, int dyFromDragStart, const Rectangle<int>& parentArea);
     void endDragging();
+    
+    UndoManager* getUndoManager();
 
 private:
 	Array<ValueTree> getSelectedChildrenData();

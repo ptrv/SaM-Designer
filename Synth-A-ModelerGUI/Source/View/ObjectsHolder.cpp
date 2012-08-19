@@ -165,29 +165,29 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
     }
 }
 
-void ObjectsHolder::moveObjectsData(Point<int> offset)
-{
-    objController.moveObjects(this, offset);
-}
+//void ObjectsHolder::moveObjectsData(Point<int> offset)
+//{
+//    objController.moveObjects(this, offset);
+//}
 
-void ObjectsHolder::moveObjectComponents(Point<int> offset)
-{
-    //	for (int i = 0; i < getNumChildComponents(); ++i) {
-    //		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
-    //		if(oc->selected() && oc != ObjectComponent::isLastClicked)
-    //		{
-    //			oc->mouseDragPassive(offset);
-    //		}
-    //	}
-    for (int i = 0; i < objController.getSelectedElements().getNumSelected(); ++i)
-    {
-        if (objController.getSelectedElements().getItemArray()[i] != ObjectComponent::isLastClicked)
-        {
-            objController.getSelectedElements().getItemArray()[i]->mouseDragPassive(offset);
-        }
-    }
-
-}
+//void ObjectsHolder::moveObjectComponents(Point<int> offset)
+//{
+//    //	for (int i = 0; i < getNumChildComponents(); ++i) {
+//    //		ObjectComponent* oc = dynamic_cast<ObjectComponent*>(getChildComponent(i));
+//    //		if(oc->selected() && oc != ObjectComponent::isLastClicked)
+//    //		{
+//    //			oc->mouseDragPassive(offset);
+//    //		}
+//    //	}
+//    for (int i = 0; i < objController.getSelectedElements().getNumSelected(); ++i)
+//    {
+//        if (objController.getSelectedElements().getItemArray()[i] != ObjectComponent::isLastClicked)
+//        {
+//            objController.getSelectedElements().getItemArray()[i]->mouseDragPassive(offset);
+//        }
+//    }
+//
+//}
 
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
@@ -224,7 +224,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 //        selectedObjects.clear();
         break;
     case StandardApplicationCommandIDs::del:
-        objController.removeObject(this);
+        objController.removeSelectedObjects(this);
         break;
     case CommandIDs::defineVariables:
         VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());

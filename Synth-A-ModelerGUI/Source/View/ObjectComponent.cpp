@@ -12,6 +12,7 @@
 #include "../Controller/ObjController.h"
 #include "ObjectsHolder.h"
 #include "ObjectPropertiesPanel.h"
+#include "../Models/ObjectActions.h"
 
 #include "ObjectComponent.h"
 
@@ -35,6 +36,7 @@ ObjectComponent::ObjectComponent(ObjController& _owner, const Identifier& objId_
 }
 ObjectComponent::~ObjectComponent()
 {
+//    selfChangeListenerList.removeChangeListener(this);
 }
 
 bool ObjectComponent::hitTest (int x, int y)
@@ -166,16 +168,16 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
 }
 
-void ObjectComponent::mouseDragPassive(const Point<int> offset)
-{
-	Point<int> pos (originalPos + offset);
-
-	if (getParentComponent() != nullptr)
-		pos = getParentComponent()->getLocalPoint (nullptr, pos);
-
-	actualPos.x = (pos.getX() + getWidth() /2);
-	actualPos.y = (pos.getY() + getHeight() /2);
-}
+//void ObjectComponent::mouseDragPassive(const Point<int> offset)
+//{
+//	Point<int> pos (originalPos + offset);
+//
+//	if (getParentComponent() != nullptr)
+//		pos = getParentComponent()->getLocalPoint (nullptr, pos);
+//
+//	actualPos.x = (pos.getX() + getWidth() /2);
+//	actualPos.y = (pos.getY() + getHeight() /2);
+//}
 
 void ObjectComponent::mouseDrag (const MouseEvent& e)
 {
@@ -222,14 +224,14 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 void ObjectComponent::mouseUp (const MouseEvent& e)
 {
     if (dragging)
-        owner->endDragging();
+        owner.endDragging();
 
+	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
+	{
+		getObjectsHolder()->editObjectProperties(this);
+	}
     
     owner.getSelectedElements().addToSelectionOnMouseUp (this, e.mods, dragging, mouseDownSelectStatus);
-//	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
-//	{
-//		getObjectsHolder()->editObjectProperties(this);
-//	}
 //	else if( e.mouseWasClicked() && e.getNumberOfClicks() == 1)
 //	{
 ////		if(shouldBeUnselected && e.mods.isShiftDown())
@@ -241,6 +243,7 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 //		// object changed / mouse realeased after drag
 //		getObjectsHolder()->moveObjectsData(e.getOffsetFromDragStart());
 //	}
+    update();
 }
 
 void ObjectComponent::update()
@@ -248,6 +251,11 @@ void ObjectComponent::update()
 	setCentrePosition((float) actualPos.x, (float) actualPos.y);
 }
 
+void ObjectComponent::setPosition(Point<int> newPos)
+{
+    owner.getUndoManager()->perform(new MoveObjectAction(getObjectsHolder(), this, newPos), "Move object");
+//    owner.perform()
+}
 void ObjectComponent::setActualPosition(Point<int> pos)
 {
 	actualPos = pos;
@@ -335,7 +343,8 @@ void ObjectComponent::showContextMenu()
 	}
 	else if (r == 2)
 	{
-		DBG("Help is not implemented yet");
+        Utils::openHelpUrl(objId);
+		DBG("open help for " + objId.toString());
 	}
 
 }

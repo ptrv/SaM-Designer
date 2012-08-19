@@ -43,7 +43,8 @@ public:
 	  btOk("Ok"),
 	  btCancel("Cancel"),
 	  laName("laName", "Identifier"),
-	  teName("teName")
+	  teName("teName"),
+      laDebug("")
 	{
 		btOk.addListener(this);
 		addAndMakeVisible(&btOk);
@@ -51,6 +52,10 @@ public:
 		addAndMakeVisible(&btCancel);
 		addAndMakeVisible(&teName);
 		laName.attachToComponent(&teName, true);
+#ifdef _DEBUG
+        addAndMakeVisible(&laDebug);
+        laDebug.setText("Pos: " + data[Ids::posX].toString() + String(" ") + data[Ids::posY].toString(),false);
+#endif        
 	}
 
 	virtual ~ObjectPropertiesComponent()
@@ -62,7 +67,7 @@ public:
 		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
 		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
 		teName.setBounds(80 , 10, getWidth() -90, 22);
-
+        laDebug.setBounds(65, getHeight() - 60, 100, 22);
 	}
 
 	void buttonClicked(Button* button)
@@ -95,6 +100,7 @@ protected:
 	TextButton btCancel;
 	Label laName;
 	TextEditor teName;
+    Label laDebug;
 
 };
 

@@ -30,16 +30,18 @@
 #include "ObjectFactory.h"
 #include "../View/ObjectComponent.h"
 #include "../View/ObjectsHolder.h"
+#include "../Controller/ObjController.h"
 
 class AddObjectAction : public UndoableAction
 {
 public:
 	AddObjectAction(OwnedArray<ObjectComponent>& objects_, ObjectsHolder* objHolderComp_,
-			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY)
+			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY, ObjController* objController_)
 	: objects(objects_),
 	  mdlSubTree(mdlTree_),
       objId(objId_),
-      holderComp(objHolderComp_)
+      holderComp(objHolderComp_),
+        objController(objController_)
 	{
 		// create a ValueTree with default values.
 		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
@@ -67,9 +69,12 @@ public:
 
 	bool undo()
 	{
-		holderComp->removeChildComponent(objComp);
-		objects.removeObject(objComp);
-		mdlSubTree.removeChild(newValue, nullptr);
+//		holderComp->removeChildComponent(objComp);
+//		objects.removeObject(objComp);
+//		mdlSubTree.removeChild(newValue, nullptr);
+        
+        objController->removeObject(objComp, false, holderComp);
+//        objController
 //		holderComp->updateSelectedObjects();
         String logText = "Undo add ";
         logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
@@ -83,20 +88,23 @@ private:
 	const Identifier& objId;
 	ObjectsHolder* holderComp;
 	ObjectComponent* objComp;
+    ObjController* objController;
 };
 
 class RemoveObjectAction : public UndoableAction
 {
 public:
 	RemoveObjectAction(OwnedArray<ObjectComponent>& objects_,
-			ObjectsHolder* objHolderComp_,
-			Array<ObjectComponent*> componentsToRemove,
-			Array<ValueTree> childrenToRemove)
+                     ObjectsHolder* objHolderComp_,
+                    ObjectComponent* componentToRemove,
+                     ObjController* objController_)
 	: objects(objects_),
-	  holderComp(objHolderComp_),
-	  objComps(componentsToRemove),
-	  oldValue(childrenToRemove)
+      holderComp(objHolderComp_),
+	  objComp(componentToRemove),
+        objController(objController_)
 	{
+        oldValue = objComp->getData();
+        root = oldValue.getParent();
 	}
 	~RemoveObjectAction()
 	{
@@ -104,47 +112,43 @@ public:
 
 	bool perform()
 	{
-		for (int i = 0; i < oldValue.size(); ++i)
-		{
-			SAM_LOG("Remove "+oldValue[i][Ids::identifier].toString());
-			holderComp->removeChildComponent(objComps[i]);
-			objects.removeObject(objComps[i]);
-			oldValue[i].getParent().removeChild(oldValue[i], nullptr);
-//			holderComp->updateSelectedObjects();
-		}
-		objComps.clear();
+        SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
+        holderComp->removeChildComponent(objComp);
+        objects.removeObject(objComp, true);
+        root.removeChild(oldValue, nullptr);
+
 		return true;
 	}
 
 	bool undo()
 	{
-		for (int i = 0; i < oldValue.size(); ++i) {
-			SAM_LOG("Undo remove "+oldValue[i][Ids::identifier].toString());
-			oldValue[i].getParent().addChild(oldValue[i],-1, nullptr);
-			ObjectComponent* oc = new ObjectComponent(holderComp->getObjController(),
-                                                     oldValue[i].getType(),
-					int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
-			objComps.add(oc);
-			oc->setData(oldValue[i]);
-			oc->setCentrePosition(int(oldValue[i][Ids::posX]), int(oldValue[i][Ids::posY]));
-			objects.add(oc);
-			holderComp->addAndMakeVisible(oc);
+        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
+        root.addChild(oldValue,-1, nullptr);
+        ObjectComponent* oc = new ObjectComponent(holderComp->getObjController(),
+                                                 oldValue.getType(),
+                int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
+        oc->setData(oldValue);
+        oc->setCentrePosition(int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
+        objects.add(oc);
+        holderComp->addAndMakeVisible(oc);
+        objController->getSelectedElements().addToSelection(oc);
 //			holderComp->updateSelectedObjects();
-		}
 
 		return true;
 	}
 private:
-	OwnedArray<ObjectComponent>& objects;
+    OwnedArray<ObjectComponent>& objects;
 	ObjectsHolder* holderComp;
-	Array<ObjectComponent*> objComps;
-	Array<ValueTree> oldValue;
+	ObjectComponent* objComp;
+	ValueTree oldValue;
+    ValueTree root;
+    ObjController* objController;
 
 };
 
-class MoveObjectAction : public UndoableAction {
+class MoveObjectsAction : public UndoableAction {
 public:
-	MoveObjectAction(OwnedArray<ObjectComponent>& objects_,
+	MoveObjectsAction(OwnedArray<ObjectComponent>& objects_,
 			ObjectsHolder* objHolderComp_,
 			Array<ObjectComponent*> componentsToMove,
 			Array<ValueTree> childrenToMove,
@@ -158,7 +162,7 @@ public:
 
 	}
 
-	~MoveObjectAction()
+	~MoveObjectsAction()
 	{
 
 	}
@@ -205,4 +209,57 @@ private:
 	Array<ValueTree> newValues;
 	Point<int> moveOffset;
 };
+
+class MoveObjectAction : public UndoableAction {
+public:
+	MoveObjectAction(ObjectsHolder* objHolderComp_,
+			ObjectComponent* componentToMove,
+			Point<int> newPos_)
+	: holderComp(objHolderComp_),
+	  objComp(componentToMove),
+	  newPos(newPos_)
+	{
+
+	}
+
+	~MoveObjectAction()
+	{
+
+	}
+
+	bool perform()
+	{
+        ValueTree objData = objComp->getData();
+		oldPos.x = int(objData[Ids::posX]);
+		oldPos.y = int(objData[Ids::posY]);
+
+		objData.setProperty(Ids::posX, newPos.getX(), nullptr);
+		objData.setProperty(Ids::posY, newPos.getY(), nullptr);
+		objComp->setActualPosition(newPos);
+//		SAM_LOG("Move "+objData[Ids::identifier].toString());
+
+//		holderComp->updateComponents();
+		return true;
+	}
+
+	bool undo()
+	{
+        ValueTree objData = objComp->getData();
+
+		objData.setProperty(Ids::posX, oldPos.getX(), nullptr);
+		objData.setProperty(Ids::posY, oldPos.getY(), nullptr);
+		objComp->setActualPosition(oldPos);
+//		SAM_LOG("Move "+objData[Ids::identifier].toString());
+
+//		holderComp->updateComponents();
+		return true;
+
+	}
+private:
+	ObjectsHolder* holderComp;
+	ObjectComponent* objComp;
+	Point<int> newPos;
+    Point<int> oldPos;
+};
+
 #endif  // __OBJECTACTIONS_H_7C20FDA1__
