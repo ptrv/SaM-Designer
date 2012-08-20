@@ -25,6 +25,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
+#include "../Models/ObjectFactory.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
 #include "../Controller/ObjController.h"
@@ -190,16 +191,16 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
 
     case CommandIDs::insertMass:
-        objController.addObject(this, Ids::mass, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::mass, mp.x, mp.y));
         break;
     case CommandIDs::insertGround:
-        objController.addObject(this, Ids::ground, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::ground, mp.x, mp.y));
         break;
     case CommandIDs::insertResonator:
-        objController.addObject(this, Ids::resonator, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::resonator, mp.x, mp.y));
         break;
     case CommandIDs::insertPort:
-        objController.addObject(this, Ids::port, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::port, mp.x, mp.y));
         break;
 
     case CommandIDs::insertLink:
@@ -213,17 +214,18 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
 
     case CommandIDs::insertAudioOutput:
-        objController.addObject(this, Ids::audioout, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::audioout, mp.x, mp.y));
         break;
     case CommandIDs::insertWaveguide:
-        objController.addObject(this, Ids::waveguide, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::waveguide, mp.x, mp.y));
         break;
     case CommandIDs::insertTermination:
-        objController.addObject(this, Ids::termination, mp.x, mp.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::termination, mp.x, mp.y));
         break;
     default:
         return false;
     }
+    objController.getUndoManager()->beginNewTransaction();
     return true;
 }
 
@@ -245,31 +247,31 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
 
     if (r == 1)
     {
-        objController.addObject(this, Ids::mass, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::mass, mPos.x, mPos.y));
     }
     else if (r == 2)
     {
-        objController.addObject(this, Ids::ground, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::ground, mPos.x, mPos.y));
     }
     else if (r == 3)
     {
-        objController.addObject(this, Ids::resonator, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::resonator, mPos.x, mPos.y));
     }
     else if (r == 4)
     {
-        objController.addObject(this, Ids::port, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::port, mPos.x, mPos.y));
     }
     else if (r == 5)
     {
-        objController.addObject(this, Ids::audioout, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::audioout, mPos.x, mPos.y));
     }
     else if (r == 6)
     {
-        objController.addObject(this, Ids::waveguide, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::waveguide, mPos.x, mPos.y));
     }
     else if (r == 7)
     {
-        objController.addObject(this, Ids::termination, mPos.x, mPos.y);
+        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::termination, mPos.x, mPos.y));
     }
 }
 

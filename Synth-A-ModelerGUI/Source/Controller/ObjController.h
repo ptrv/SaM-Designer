@@ -57,8 +57,11 @@ public:
 	 * @param posX			initial x position of the object
 	 * @param posY			initial y position of the object
 	 */
-	void addObject(ObjectsHolder* holder, const Identifier& objId, int posX, int posY);
+	ObjectComponent* addObject(ObjectsHolder* holder, ValueTree objValues, bool undoable);
 
+    void addNewObject(ObjectsHolder* holder, ValueTree objValues);
+    
+    void addComponent(ObjectComponent* comp);
 	/**
 	 * Removes selected objects from the patch
 	 *
@@ -106,6 +109,9 @@ public:
     
     UndoManager* getUndoManager();
 
+    ObjectComponent* getObject(int index) const throw() { return objects[index]; }
+    int indexOfElement (ObjectComponent* e) const throw() { return objects.indexOf (e); }
+    
 private:
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;

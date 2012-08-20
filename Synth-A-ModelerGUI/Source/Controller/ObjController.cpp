@@ -26,6 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
+#include "../Models/ObjectFactory.h"
 #include "../View/ObjectComponent.h"
 #include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
@@ -48,20 +49,66 @@ bool ObjController::perform(UndoableAction * const action, const String& actionN
     return owner.perform(action, actionName);
 }
 
-void ObjController::addObject(ObjectsHolder* holder, const Identifier& objId,
-                              int posX, int posY)
+ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objValues, bool undoable)
 {
-    const Identifier& tmpIdent = Objects::getObjectType(objId);
-    if (tmpIdent != Objects::invalid)
+//    const Identifier& tmpIdent = Objects::getObjectType(objId);
+//    if (tmpIdent != Objects::invalid)
+//    {
+//        ValueTree mdl = owner.getMDLTree();
+//        ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
+//
+//    }
+//
+    selectedObjects.deselectAll();
+    
+//    if(objComp == nullptr)
+//    {
+//        objComp = new ObjectComponent(holder->getObjController(),
+//                             objValues.getType(), int(objValues[Ids::posX]), int(objValues[Ids::posY]));
+//
+//    }
+    
+    if(undoable)
     {
+        AddObjectAction* action = new AddObjectAction(this, objValues, holder);
+        owner.getUndoManager()->perform(action, "Add new Object");
+        
+        return objects[action->indexAdded];
+    }
+    else
+    {
+        const Identifier& tmpIdent = Objects::getObjectType(objValues.getType().toString());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
 
-        this->perform(new AddObjectAction(objects, holder, subTree, objId,
-                                          posX, posY, this), "Add new Object");
+////        ValueTree newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
+//        ObjectComponent* objComp = new ObjectComponent(holder->getObjController(),
+//                                                       objValues.getType(),
+//                                                       int(objValues[Ids::posX]),
+//                                                       int(objValues[Ids::posY]));
+
+		subTree.addChild(objValues,-1, nullptr);
+        ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues);
+
+//		objComp->setData(objValues);
+//		objects.add(objComp);
+		holder->addAndMakeVisible(objComp);
+        holder->updateComponents();
+        return objComp;
     }
+    return 0;
 }
 
+void ObjController::addNewObject(ObjectsHolder* holder, ValueTree objValues)
+{
+    
+    addObject(holder, objValues, true);
+}
+
+void ObjController::addComponent(ObjectComponent* comp)
+{
+    objects.add(comp);
+}
 void ObjController::removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder)
 {
     if (undoable)
@@ -71,17 +118,22 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
     }
     else
     {
+        DBG(selectedObjects.getNumSelected());
+        selectedObjects.deselect(objComp);
+        selectedObjects.changed(true);
+        
         ValueTree root = objComp->getData().getParent();
         ValueTree oldValue = objComp->getData();
-        holder->removeChildComponent(objComp);
-        objects.removeObject(objComp, true);
-        root.removeChild(oldValue, nullptr);
+//        holder->removeChildComponent(objComp);
+        objects.removeObject(objComp);
+//        root.removeChild(oldValue, nullptr);
     }
+    
 }
 
 void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 {
-    owner.getUndoManager()->beginNewTransaction();
+//    owner.getUndoManager()->beginNewTransaction();
 
     const SelectedItemSet <ObjectComponent*> temp(selectedObjects);
 
@@ -92,12 +144,10 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            ObjectComponent * const c = temp.getSelectedItem(i);
-
-            removeObject(c, true, holder);
+            removeObject(temp.getSelectedItem(i), true, holder);
         }
     }
-    owner.getUndoManager()->beginNewTransaction();
+//    owner.getUndoManager()->beginNewTransaction();
 
 }
 

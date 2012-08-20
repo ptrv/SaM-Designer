@@ -432,6 +432,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
 
 bool ContentComp::perform(const InvocationInfo& info)
 {
+    mainWindow.getUndoManager()->beginNewTransaction();
     switch (info.commandID)
     {
     case CommandIDs::undo:
@@ -457,6 +458,7 @@ bool ContentComp::perform(const InvocationInfo& info)
     default:
         return objectsHolder->dispatchMenuItemClick(info);
     }
+    mainWindow.getUndoManager()->beginNewTransaction();
     return true;
 }
 

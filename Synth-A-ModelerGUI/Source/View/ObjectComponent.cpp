@@ -36,7 +36,8 @@ ObjectComponent::ObjectComponent(ObjController& _owner, const Identifier& objId_
 }
 ObjectComponent::~ObjectComponent()
 {
-//    selfChangeListenerList.removeChangeListener(this);
+    selfChangeListenerList.removeChangeListener(this);
+    owner.getSelectedElements().removeChangeListener (this);
 }
 
 bool ObjectComponent::hitTest (int x, int y)

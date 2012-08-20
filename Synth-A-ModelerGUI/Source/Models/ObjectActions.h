@@ -35,16 +35,15 @@
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(OwnedArray<ObjectComponent>& objects_, ObjectsHolder* objHolderComp_,
-			ValueTree mdlTree_, const Identifier& objId_, int posX, int posY, ObjController* objController_)
-	: objects(objects_),
-	  mdlSubTree(mdlTree_),
-      objId(objId_),
-      holderComp(objHolderComp_),
+	AddObjectAction(ObjController* objController_, 
+                 ValueTree objTree_, ObjectsHolder* holder_)
+	: objTree(objTree_.createCopy()), 
+//        objComp(objComp_), 
+        holderComp(holder_), 
         objController(objController_)
 	{
 		// create a ValueTree with default values.
-		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
+//		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
 	}
 	~AddObjectAction()
 	{
@@ -53,16 +52,19 @@ public:
 	bool perform()
 	{
 		// Add new Object to mdlRoot and ObjectHolder
-		objComp = new ObjectComponent(holderComp->getObjController(),
-                                     objId, int(newValue[Ids::posX]), 
-                                     int(newValue[Ids::posY]));
-		mdlSubTree.addChild(newValue,-1, nullptr);
-		objComp->setData(newValue);
-		objects.add(objComp);
-		holderComp->addAndMakeVisible(objComp);
-//		holderComp->updateSelectedObjects();
+        
+//		ObjectComponent* objComp = new ObjectComponent(holderComp->getObjController(),
+//                                     objId, int(newValue[Ids::posX]), 
+//                                     int(newValue[Ids::posY]));
+        ObjectComponent* objComp = objController->addObject(holderComp, objTree, false);
+        indexAdded = objController->indexOfElement(objComp);
+//		mdlSubTree.addChild(newValue,-1, nullptr);
+//		objComp->setData(newValue);
+//		objects.add(objComp);
+//		holderComp->addAndMakeVisible(objComp);
+////		holderComp->updateSelectedObjects();
         String logText = "Add ";
-        logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
+        logText << objTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
 		return true;
 	}
@@ -70,21 +72,25 @@ public:
 	bool undo()
 	{
         
-        objController->removeObject(objComp, false, holderComp);
+        objController->removeObject(objController->getObject(indexAdded), false, holderComp);
 
         String logText = "Undo add ";
-        logText << objId.toString() << " number " << mdlSubTree.getNumChildren();
+        logText <<  objTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
 		return true;
 	}
+    int indexAdded;
 private:
-	OwnedArray<ObjectComponent>& objects;
-	ValueTree mdlSubTree;
-	ValueTree newValue;
-	const Identifier& objId;
+    ValueTree objTree;
+//	OwnedArray<ObjectComponent>& objects;
+//	ValueTree mdlSubTree;
+//	ValueTree newValue;
+//	const Identifier& objId;
 	ObjectsHolder* holderComp;
 	ObjectComponent* objComp;
     ObjController* objController;
+    
+    
 };
 
 class RemoveObjectAction : public UndoableAction
@@ -99,8 +105,8 @@ public:
 	  objComp(componentToRemove),
         objController(objController_)
 	{
-        oldValue = objComp->getData();
-        root = oldValue.getParent();
+        oldValue = objComp->getData().createCopy();
+        root = objComp->getData().getParent();
 	}
 	~RemoveObjectAction()
 	{
@@ -109,25 +115,37 @@ public:
 	bool perform()
 	{
         SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
-        holderComp->removeChildComponent(objComp);
-        objects.removeObject(objComp, true);
-        root.removeChild(oldValue, nullptr);
+////        holderComp->removeChildComponent(objComp);
+//        objects.removeObject(objComp, true);
+//        root.removeChild(oldValue, nullptr);
 
+        if(objController->getSelectedElements().getNumSelected() == 0)
+        {
+            objController->getSelectedElements().selectOnly(objComp);
+        }
+        objController->removeObject(objComp, false, holderComp);
 		return true;
 	}
 
 	bool undo()
 	{
         SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
+
+
         root.addChild(oldValue,-1, nullptr);
-        ObjectComponent* oc = new ObjectComponent(holderComp->getObjController(),
+        objComp = new ObjectComponent(holderComp->getObjController(),
                                                  oldValue.getType(),
                 int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
-        oc->setData(oldValue);
-        oc->setCentrePosition(int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
-        objects.add(oc);
-        holderComp->addAndMakeVisible(oc);
-        objController->getSelectedElements().addToSelection(oc);
+        objComp->setData(oldValue);
+        objComp->setCentrePosition(int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
+        objects.add(objComp);
+        holderComp->addAndMakeVisible(objComp);
+//        objController->getSelectedElements().addToSelection(oc);
+        if(objController->getSelectedElements().getNumSelected() == 0)
+        {
+            objController->getSelectedElements().selectOnly(objComp);
+        }
+
 		return true;
 	}
 private:

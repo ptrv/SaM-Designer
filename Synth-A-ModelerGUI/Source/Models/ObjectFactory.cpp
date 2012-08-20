@@ -24,7 +24,7 @@
 */
 
 #include "../Application/CommonHeaders.h"
-
+#include "../View/ObjectComponent.h"
 #include "ObjectFactory.h"
 
 namespace ObjectFactory
@@ -196,6 +196,17 @@ ValueTree createNewObjectTree(const Identifier& objType, int x, int y)
 		return ValueTree::invalid;
 }
 
+ObjectComponent* createNewObjectComponentFromTree(ObjController& owner, ValueTree objTree)
+{
+    ObjectComponent* const objComp = new ObjectComponent(owner, 
+                                                         objTree.getType(),
+                                                         int(objTree[Ids::posX]),
+                                                         int(objTree[Ids::posY]));
+    
+    owner.addComponent(objComp);
+    objComp->setData(objTree);
+    return objComp;
+}
 //BaseObjectComponent* createObjectComponent(const Identifier& objType, int x, int y)
 //{
 //}

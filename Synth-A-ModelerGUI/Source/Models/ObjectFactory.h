@@ -26,6 +26,7 @@
 #ifndef __OBJECTFACTORY_H_2132166E__
 #define __OBJECTFACTORY_H_2132166E__
 
+#include "../Controller/ObjController.h"
 /**
  * Namespace for object creation functions.
  */
@@ -41,6 +42,8 @@ namespace ObjectFactory
 	 * @return					a new ValueTree with default values
 	 */
 	ValueTree createNewObjectTree(const Identifier& objType, int x, int y);
+    ObjectComponent* createNewObjectComponentFromTree(ObjController& owner,
+                                                      ValueTree objTree);
 
 }
 
