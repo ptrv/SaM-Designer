@@ -213,3 +213,9 @@ void MDLController::setMDLFile(MDLFile* mdlFile)
 		StoredSettings::getInstance()->flush();
 	}
 }
+
+void MDLController::changed()
+{
+    currentMdl->changed();
+    mainAppWindow.updateTitle();
+}

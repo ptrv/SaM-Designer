@@ -250,6 +250,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     	break;
     case CommandIDs::saveDocumentAs:
     	mdlController->saveAs();
+        updateTitle();
     	break;
     case CommandIDs::generateFaust:
     {

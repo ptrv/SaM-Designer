@@ -59,6 +59,8 @@ public:
 	bool mdlCheckAndSaveIfNeeded();
 	MDLFile* getMDLFile() const;
 	void setMDLFile(MDLFile* mdlFile);
+    
+    void changed();
 private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;

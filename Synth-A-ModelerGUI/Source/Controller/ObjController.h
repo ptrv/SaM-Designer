@@ -112,6 +112,7 @@ public:
     ObjectComponent* getObject(int index) const throw() { return objects[index]; }
     int indexOfElement (ObjectComponent* e) const throw() { return objects.indexOf (e); }
     
+    void changed();
 private:
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;

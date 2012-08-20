@@ -73,6 +73,7 @@ public:
 
     bool isEmpty();
 
+    String toString();
 protected:
 	String getDocumentTitle();
 	Result loadDocument (const File& file);
@@ -88,6 +89,8 @@ private:
 	static File lastDocumentOpened;
 
 	UndoManager undoMgr;
+    
+    bool isUntitledFile;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLFile);
 

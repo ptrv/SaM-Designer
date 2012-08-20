@@ -94,6 +94,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
 //		objects.add(objComp);
 		holder->addAndMakeVisible(objComp);
         holder->updateComponents();
+        changed();
         return objComp;
     }
     return 0;
@@ -264,4 +265,9 @@ void ObjController::endDragging()
 UndoManager* ObjController::getUndoManager()
 {
     return owner.getUndoManager();
+}
+
+void ObjController::changed()
+{
+    owner.changed();
 }

@@ -33,7 +33,7 @@ const char* MDLFile::mdlFileExtension = ".mdl";
 
 MDLFile::MDLFile()
 : FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
-  mdlRoot(Objects::MDLROOT)
+  mdlRoot(Objects::MDLROOT), isUntitledFile(true)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -41,7 +41,7 @@ MDLFile::MDLFile()
 }
 MDLFile::MDLFile(const File& file)
 : FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
-  mdlRoot(Objects::MDLROOT)
+  mdlRoot(Objects::MDLROOT), isUntitledFile(false)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -86,8 +86,8 @@ void MDLFile::newMDL()
 {
 	destroyMDL();
 	initMDL();
+    isUntitledFile = true;
 }
-
 
 void MDLFile::close()
 {
@@ -121,6 +121,8 @@ Result MDLFile::loadDocument (const File& file)
 }
 Result MDLFile::saveDocument (const File& file)
 {
+    bool saveOk;
+    String errorMsg;
 	this->setChangedFlag(false);
 	MDLWriter wr(*this);
 	if(wr.writeMDL(file))
@@ -128,14 +130,27 @@ Result MDLFile::saveDocument (const File& file)
 		SAM_LOG("Saved MDL file: "+file.getFullPathName());
         setFile(file);
         setChangedFlag(false);
-		return Result::ok();
+        saveOk = true;
 	}
 	else
 	{
-		String errorMsg = "ERROR: could not save mdl file.";
+		errorMsg = "ERROR: could not save mdl file.";
 		SAM_LOG(errorMsg);
-		return Result::fail(errorMsg);
+        saveOk = false;
 	}
+    if(isUntitledFile)
+    {
+        loadDocument(file);
+        isUntitledFile = false;
+    }
+    if(saveOk)
+    {
+        return Result::ok();
+    }
+    else
+    {
+        return Result::fail(errorMsg);
+    }
 }
 
 File MDLFile::lastDocumentOpened;
@@ -193,7 +208,11 @@ ValueTree MDLFile::getObjectWithName(const String& objName)
 	return ValueTree::invalid;
 }
 
-
+String MDLFile::toString()
+{
+    String mdlStr = mdlRoot.toXmlString();
+    return mdlStr;
+}
 //==============================================================================
 #if UNIT_TESTS
 
