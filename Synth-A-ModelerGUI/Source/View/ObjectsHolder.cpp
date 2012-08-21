@@ -28,6 +28,7 @@
 #include "../Models/ObjectFactory.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
+#include "LinkComponent.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
 
@@ -64,6 +65,8 @@ void ObjectsHolder::paint(Graphics& g)
         float h = draggingActual.y; // - y;
         g.drawRect(x, y, w, h);
     }
+    
+     
 }
 
 void ObjectsHolder::resized()
@@ -88,6 +91,13 @@ void ObjectsHolder::updateComponents()
         if (bobj != nullptr)
             bobj->update();
     }
+    for (i = getNumChildComponents(); --i >= 0;)
+    {
+        LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i));
+
+        if (lobj != nullptr)
+            lobj->update();
+    }
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -105,14 +115,27 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
     if (e.mouseWasClicked() && ! e.mods.isAnyModifierKeyDown())
     {
         // object changed
-        objController.getSelectedElements().deselectAll();
+        objController.getSelectedObjects().deselectAll();
     }
     lassoComp.endLasso();
 }
 
 void ObjectsHolder::mouseDown(const MouseEvent& e)
 {
-    if (e.mods.isPopupMenu())
+    if (e.mods.isPopupMenu() && objController.getSelectedObjects().getNumSelected() == 2)
+    {
+        String startObj;
+        String endObj;
+        if (objController.getSelectedObjects().getNumSelected() == 2)
+        {
+            startObj = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
+            endObj = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
+            DBG(String("Link: ") + startObj + String(", ") + endObj);
+            showLinkPopupMenu(startObj, endObj);
+        }
+
+    }
+    else if (e.mods.isPopupMenu())
     {
         showContextMenu(e.getMouseDownPosition());
     }
@@ -146,6 +169,14 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     else if (mp.y > getHeight())
         mp.y = getHeight();
 
+    String startObj;
+    String endObj;
+    if(objController.getSelectedObjects().getNumSelected() == 2)
+    {
+        startObj = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
+        endObj = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
+        DBG(String("Link: ") + startObj + String(", ") + endObj);
+    }
     switch (info.commandID)
     {
     case StandardApplicationCommandIDs::cut:
@@ -204,13 +235,14 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
 
     case CommandIDs::insertLink:
-        //    	objController.addObject(this, Ids::link, mp.x, mp.y);
+        
+        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::link, startObj, endObj));
         break;
     case CommandIDs::insertTouch:
-        //    	objController.addObject(this, Ids::touch, mp.x, mp.y);
+        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::touch, startObj, endObj));
         break;
     case CommandIDs::insertPluck:
-        //    	objController.addObject(this, Ids::pluck, mp.x, mp.y);
+        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::pluck, startObj, endObj));
         break;
 
     case CommandIDs::insertAudioOutput:
@@ -275,6 +307,43 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     }
 }
 
+void ObjectsHolder::showLinkPopupMenu(String so, String eo)
+{
+	PopupMenu m;
+	m.addItem (1, "Add link");
+	m.addItem (2, "Add touch");
+	m.addItem (3, "Add pluck");
+	m.addSeparator();
+	m.addItem (4, "Connect");
+	const int r = m.show();
+
+//    String so = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
+//    String eo = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
+//    
+//    DBG(String("Link: ") + so + String(", ") + eo);
+	if (r == 1)
+	{
+		DBG("Add link");
+        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::link, so, eo));
+		return;
+	}
+	else if (r == 2)
+	{
+		DBG("Add touch");
+        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::touch, so, eo));
+	}
+	else if (r == 3)
+	{
+		DBG("Add pluck");
+        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::pluck, so, eo));
+	}
+	else if (r == 4)
+	{
+		DBG("Add connect");
+	}
+
+
+}
 void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
 {
     objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
@@ -298,7 +367,7 @@ void ObjectsHolder::findLassoItemsInArea (Array <ObjectComponent*>& results, con
 
 SelectedItemSet <ObjectComponent*>& ObjectsHolder::getLassoSelection()
 {
-    return objController.getSelectedElements();
+    return objController.getSelectedObjects();
 }
 
 

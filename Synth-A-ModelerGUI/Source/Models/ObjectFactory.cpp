@@ -25,6 +25,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../View/ObjectComponent.h"
+#include "../View/LinkComponent.h"
 #include "ObjectFactory.h"
 
 namespace ObjectFactory
@@ -102,19 +103,19 @@ static ValueTree createNewResonatorTree(int x, int y)
 	return newTree;
 }
 
-static ValueTree createNewLinkTree(int x, int y)
+static ValueTree createNewLinkTree(String startObject, String endObject)
 {
 	ValueTree newTree(Ids::link);
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
+//	newTree.setProperty(Ids::posX, x, nullptr);
+//	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], "", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier,"l_"+String(rnd), nullptr);
-	newTree.setProperty(Ids::startVertex, "", nullptr);
-	newTree.setProperty(Ids::endVertex, "", nullptr);
+	newTree.setProperty(Ids::startVertex, startObject, nullptr);
+	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
 	labelsTree.setProperty(Ids::idx[0], "laebl_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
@@ -122,38 +123,38 @@ static ValueTree createNewLinkTree(int x, int y)
 	return newTree;
 }
 
-static ValueTree createNewTouchTree(int x, int y)
+static ValueTree createNewTouchTree(String startObject, String endObject)
 {
 	ValueTree newTree(Ids::touch);
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
+//	newTree.setProperty(Ids::posX, x, nullptr);
+//	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], "", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier, "t_"+String(rnd), nullptr);
-	newTree.setProperty(Ids::startVertex, "", nullptr);
-	newTree.setProperty(Ids::endVertex, "", nullptr);
+	newTree.setProperty(Ids::startVertex, startObject, nullptr);
+	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
 	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
-static ValueTree createNewPluckTree(int x, int y)
+static ValueTree createNewPluckTree(String startObject, String endObject)
 {
 	ValueTree newTree(Ids::pluck);
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
+//	newTree.setProperty(Ids::posX, x, nullptr);
+//	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
 	paramsTree.setProperty(Ids::idx[0], "", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier,"p_"+String(rnd), nullptr);
-	newTree.setProperty(Ids::startVertex, "", nullptr);
-	newTree.setProperty(Ids::endVertex, "", nullptr);
+	newTree.setProperty(Ids::startVertex, startObject, nullptr);
+	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
 	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
@@ -184,15 +185,23 @@ ValueTree createNewObjectTree(const Identifier& objType, int x, int y)
 		return createNewGroundTree(x, y);
 	else if(objType == Ids::resonator)
 		return createNewResonatorTree(x, y);
-	else if(objType == Ids::link)
-		return createNewLinkTree(x, y);
-	else if(objType == Ids::touch)
-		return createNewTouchTree(x, y);
-	else if(objType == Ids::pluck)
-		return createNewPluckTree(x, y);
 	else if(objType == Ids::audioout)
 		return createNewAudioOutTree(x, y);
 	else
+		return ValueTree::invalid;
+}
+
+ValueTree createNewLinkObjectTree(const Identifier& linkType, 
+                                  String startObject, 
+                                  String endObject)
+{
+    if(linkType == Ids::link)
+        return createNewLinkTree(startObject, endObject);
+	else if(linkType == Ids::touch)
+		return createNewTouchTree(startObject, endObject);
+	else if(linkType == Ids::pluck)
+		return createNewPluckTree(startObject, endObject);
+    else
 		return ValueTree::invalid;
 }
 
@@ -206,6 +215,14 @@ ObjectComponent* createNewObjectComponentFromTree(ObjController& owner, ValueTre
     owner.addComponent(objComp);
     objComp->setData(objTree);
     return objComp;
+}
+LinkComponent* createNewLinkComponentFromTree(ObjController& owner, ValueTree linkTree)
+{
+    LinkComponent* const linkComp = new LinkComponent(owner, linkTree);
+    
+    owner.addLinkComponent(linkComp);
+//    linkComp->setData(linkTree);
+    return linkComp;
 }
 //BaseObjectComponent* createObjectComponent(const Identifier& objType, int x, int y)
 //{

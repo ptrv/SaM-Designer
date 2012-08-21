@@ -430,6 +430,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
 
 // this is the ApplicationCommandTarget method that is used to actually perform one of our commands..
 
+
 bool ContentComp::perform(const InvocationInfo& info)
 {
     mainWindow.getUndoManager()->beginNewTransaction();

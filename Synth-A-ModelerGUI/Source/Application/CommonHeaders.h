@@ -39,9 +39,12 @@
 #include "../Utilities/Alerts.h"
 #include "../Utilities/MiscUtilities.h"
 #include "../Utilities/ResourceLoader.h"
+#include "Application.h"
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 
 #define SAM_LOG(message) Utils::SAMLogger(message)
+
+#define SAM_CONSOLE(title, message) SynthAModelerApplication::getApp()->writeToDebugConsole(title, message)
 
 #endif  // __COMMONHEADERS_H_CA475C67__

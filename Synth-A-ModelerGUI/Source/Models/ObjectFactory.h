@@ -42,8 +42,13 @@ namespace ObjectFactory
 	 * @return					a new ValueTree with default values
 	 */
 	ValueTree createNewObjectTree(const Identifier& objType, int x, int y);
+    ValueTree createNewLinkObjectTree(const Identifier& linkType, 
+                                String startObject,
+                                String endObject);
     ObjectComponent* createNewObjectComponentFromTree(ObjController& owner,
                                                       ValueTree objTree);
+    LinkComponent* createNewLinkComponentFromTree(ObjController& owner,
+                                                      ValueTree linkTree);
 
 }
 

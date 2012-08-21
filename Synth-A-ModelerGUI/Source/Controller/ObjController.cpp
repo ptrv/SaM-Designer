@@ -28,6 +28,7 @@
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"
 #include "../View/ObjectComponent.h"
+#include "../View/LinkComponent.h"
 #include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
 
@@ -42,6 +43,7 @@ ObjController::ObjController(MDLController& owner_)
 ObjController::~ObjController()
 {
     objects.clear(true);
+    links.clear(true);
 }
 
 bool ObjController::perform(UndoableAction * const action, const String& actionName)
@@ -106,9 +108,58 @@ void ObjController::addNewObject(ObjectsHolder* holder, ValueTree objValues)
     addObject(holder, objValues, true);
 }
 
+LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValues, bool undoable)
+{
+    selectedLinks.deselectAll();
+    if(undoable)
+    {
+        AddLinkAction* action = new AddLinkAction(this, linkValues, holder);
+        owner.getUndoManager()->perform(action, "Add new Link");
+        
+        return links[action->indexAdded];
+    }
+    else
+    {
+        const Identifier& tmpIdent = Objects::getObjectType(linkValues.getType().toString());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
+		subTree.addChild(linkValues,-1, nullptr);
+        LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues);
+
+		holder->addAndMakeVisible(linkComp);
+        holder->updateComponents();
+        changed();
+        return linkComp;
+    }
+    return 0;
+}
+
+void ObjController::addNewLink(ObjectsHolder* holder, ValueTree linkValues)
+{
+    addLink(holder, linkValues, true);
+}
+
+void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
+{
+    if(selectedObjects.getNumSelected() == 2)
+    {
+        addLink(holder, linkValues, true);
+        holder->updateComponents();
+    }
+    else
+    {
+        SAM_CONSOLE("Error: ", "Please select 2 Objects");
+    }
+}
+
 void ObjController::addComponent(ObjectComponent* comp)
 {
     objects.add(comp);
+}
+
+void ObjController::addLinkComponent(LinkComponent* comp)
+{
+    links.add(comp);
 }
 void ObjController::removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder)
 {
@@ -150,6 +201,16 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
     }
 //    owner.getUndoManager()->beginNewTransaction();
 
+}
+
+void ObjController::removeSelectedLinks(ObjectsHolder* holder)
+{
+    
+}
+
+void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder)
+{
+    
 }
 
 void ObjController::loadComponents(Component* holder)
@@ -211,8 +272,12 @@ void ObjController::selectAll(bool shouldBeSelected)
     for (int i = 0; i < objects.size(); ++i)
     {
         objects[i]->setSelected(shouldBeSelected);
-
     }
+    for (int j = 0; j < links.size(); j++)
+    {
+        links[j]->setSelected(shouldBeSelected);
+    }
+
 }
 
 void ObjController::editObjectProperties(ObjectComponent* oc, UndoManager* undoManager)
@@ -270,4 +335,18 @@ UndoManager* ObjController::getUndoManager()
 void ObjController::changed()
 {
     owner.changed();
+}
+
+ObjectComponent* ObjController::getObjectForId(String idString) const throw()
+{
+    for (int i = 0; i < objects.size(); i++)
+    {
+        ObjectComponent* elem = objects[i];
+        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
+        {
+            return elem;
+        }
+    }
+    return nullptr;
+
 }

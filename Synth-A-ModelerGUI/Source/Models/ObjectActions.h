@@ -57,7 +57,7 @@ public:
 //                                     objId, int(newValue[Ids::posX]), 
 //                                     int(newValue[Ids::posY]));
         ObjectComponent* objComp = objController->addObject(holderComp, objTree, false);
-        indexAdded = objController->indexOfElement(objComp);
+        indexAdded = objController->indexOfObject(objComp);
 //		mdlSubTree.addChild(newValue,-1, nullptr);
 //		objComp->setData(newValue);
 //		objects.add(objComp);
@@ -119,9 +119,9 @@ public:
 //        objects.removeObject(objComp, true);
 //        root.removeChild(oldValue, nullptr);
 
-        if(objController->getSelectedElements().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedElements().selectOnly(objComp);
+            objController->getSelectedObjects().selectOnly(objComp);
         }
         objController->removeObject(objComp, false, holderComp);
 		return true;
@@ -141,9 +141,9 @@ public:
         objects.add(objComp);
         holderComp->addAndMakeVisible(objComp);
 //        objController->getSelectedElements().addToSelection(oc);
-        if(objController->getSelectedElements().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedElements().selectOnly(objComp);
+            objController->getSelectedObjects().selectOnly(objComp);
         }
 
 		return true;
@@ -200,5 +200,53 @@ private:
 	Point<int> newPos;
     Point<int> oldPos;
 };
+
+class AddLinkAction : public UndoableAction
+{
+public:
+	AddLinkAction(ObjController* objController_, 
+                 ValueTree linkTree_, ObjectsHolder* holder_)
+	: linkTree(linkTree_.createCopy()), 
+        holderComp(holder_), 
+        objController(objController_)
+	{
+		// create a ValueTree with default values.
+//		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
+	}
+	~AddLinkAction()
+	{
+	}
+
+	bool perform()
+	{
+        LinkComponent* linkComp = objController->addLink(holderComp, linkTree, false);
+        indexAdded = objController->indexOfLink(linkComp);
+
+        String logText = "Add ";
+        logText << linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
+		SAM_LOG(logText);
+		return true;
+	}
+
+	bool undo()
+	{
+        
+//        objController->removeObject(objController->getObject(indexAdded), false, holderComp);
+
+        String logText = "Undo add ";
+        logText <<  linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
+		SAM_LOG(logText);
+		return true;
+	}
+    int indexAdded;
+private:
+    ValueTree linkTree;
+	ObjectsHolder* holderComp;
+	LinkComponent* linkComp;
+    ObjController* objController;
+    
+    
+};
+
 
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

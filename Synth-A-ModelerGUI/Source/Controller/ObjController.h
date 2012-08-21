@@ -30,6 +30,7 @@
 class MDLController;
 class ObjectComponent;
 class ObjectsHolder;
+class LinkComponent;
 
 /**
  * The ObjController controlls all ObjectComponents.
@@ -62,6 +63,7 @@ public:
     void addNewObject(ObjectsHolder* holder, ValueTree objValues);
     
     void addComponent(ObjectComponent* comp);
+    
 	/**
 	 * Removes selected objects from the patch
 	 *
@@ -70,6 +72,18 @@ public:
 	void removeSelectedObjects(ObjectsHolder* holder);
 
     void removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder);
+
+    LinkComponent* addLink(ObjectsHolder* holder, ValueTree linkValues, bool undoable);
+    
+    void addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues);
+    
+    void addNewLink(ObjectsHolder* holder, ValueTree linkValues);
+    
+    void addLinkComponent(LinkComponent* comp);
+
+	void removeSelectedLinks(ObjectsHolder* holder);
+
+    void removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder);
 	/**
 	 * Loads the object components of a patch when a mdl file is opened.
 	 * @param holder
@@ -98,9 +112,13 @@ public:
 	 */
 	void editObjectProperties(ObjectComponent* oc, UndoManager* undoManager);
     
-    SelectedItemSet <ObjectComponent*>& getSelectedElements() throw()
+    SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
     { 
         return selectedObjects; 
+    }
+    SelectedItemSet <LinkComponent*>& getSelectedLinks() throw()
+    {
+        return selectedLinks;
     }
     
     void startDragging (const Rectangle<int>& parentArea);
@@ -110,13 +128,20 @@ public:
     UndoManager* getUndoManager();
 
     ObjectComponent* getObject(int index) const throw() { return objects[index]; }
-    int indexOfElement (ObjectComponent* e) const throw() { return objects.indexOf (e); }
+    int indexOfObject (ObjectComponent* e) const throw() { return objects.indexOf (e); }
+
+    LinkComponent* getLink(int index) const throw() { return links[index]; }
+    int indexOfLink (LinkComponent* e) const throw() { return links.indexOf (e); }
     
     void changed();
+    
+    ObjectComponent* getObjectForId(String idString) const throw();
 private:
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
+    OwnedArray<LinkComponent> links;
     SelectedItemSet<ObjectComponent*> selectedObjects;
+    SelectedItemSet<LinkComponent*> selectedLinks;
 
 
 };

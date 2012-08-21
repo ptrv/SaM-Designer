@@ -6,7 +6,22 @@
     Author:  peter
 
   ==============================================================================
-*/
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ */
 
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
@@ -31,13 +46,13 @@ ObjectComponent::ObjectComponent(ObjController& _owner, const Identifier& objId_
 	actualPos.setXY(x, y);
 	icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(objId));
     
-    owner.getSelectedElements().addChangeListener (this);
+    owner.getSelectedObjects().addChangeListener (this);
     selfChangeListenerList.addChangeListener (this);
 }
 ObjectComponent::~ObjectComponent()
 {
     selfChangeListenerList.removeChangeListener(this);
-    owner.getSelectedElements().removeChangeListener (this);
+    owner.getSelectedObjects().removeChangeListener (this);
 }
 
 bool ObjectComponent::hitTest (int x, int y)
@@ -90,11 +105,20 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
     dragging = false;
 
-    if (e.mods.isPopupMenu() && owner.getSelectedElements().getNumSelected() == 2)
+    if (e.mods.isPopupMenu() && owner.getSelectedObjects().getNumSelected() == 2)
     {
-    	showLinkPopupMenu();
+        String startObj;
+        String endObj;
+        if (owner.getSelectedObjects().getNumSelected() == 2)
+        {
+            startObj = owner.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
+            endObj = owner.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
+            DBG(String("Link: ") + startObj + String(", ") + endObj);
+            getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
+        }
+
     }
-    if (e.mods.isPopupMenu())
+    else if (e.mods.isPopupMenu())
     {
         showContextMenu();
         return; // this may be deleted now..
@@ -102,9 +126,9 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
     if(! e.mods.isShiftDown())
     {
-        owner.getSelectedElements().deselectAll();
+        owner.getSelectedObjects().deselectAll();
     }
-    mouseDownSelectStatus = owner.getSelectedElements().addToSelectionOnMouseDown (this, e.mods);
+    mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 
 }
 
@@ -146,7 +170,7 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 		getObjectsHolder()->editObjectProperties(this);
 	}
     
-    owner.getSelectedElements().addToSelectionOnMouseUp (this, e.mods, dragging, mouseDownSelectStatus);
+    owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging, mouseDownSelectStatus);
 
     update();
 }
@@ -169,6 +193,7 @@ void ObjectComponent::setActualPosition(Point<int> pos)
 void ObjectComponent::setData(ValueTree dataTree)
 {
 	data = dataTree;
+    DBG(data.toXmlString());
 }
 
 ValueTree ObjectComponent::getData()
@@ -186,11 +211,11 @@ void ObjectComponent::setSelected(bool shouldBeSelected)
 	isSelected = shouldBeSelected;
 	if(isSelected)
     {
-        owner.getSelectedElements().addToSelection(this);
+        owner.getSelectedObjects().addToSelection(this);
     }
 	else
     {
-        owner.getSelectedElements().deselect(this);
+        owner.getSelectedObjects().deselect(this);
     }
    	repaint();
 }
@@ -204,34 +229,7 @@ void ObjectComponent::toggleSelected()
 	repaint();
 }
 
-void ObjectComponent::showLinkPopupMenu()
-{
-	PopupMenu m;
-	m.addItem (1, "Add link");
-	m.addItem (2, "Add touch");
-	m.addItem (3, "Add pluck");
-	m.addSeparator();
-	m.addItem (4, "Connect");
-	const int r = m.show();
 
-	if (r == 1)
-	{
-		DBG("Add link");
-		return;
-	}
-	else if (r == 2)
-	{
-		DBG("Add touch");
-	}
-	else if (r == 3)
-	{
-		DBG("Add pluck");
-	}
-	else if (r == 4)
-	{
-		DBG("Add connect");
-	}
-}
 void ObjectComponent::showContextMenu()
 {
 	PopupMenu m;
@@ -255,7 +253,7 @@ void ObjectComponent::showContextMenu()
 
 void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)
 {
-    const bool nowSelected = owner.getSelectedElements().isSelected (this);
+    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
 
     if (isSelected != nowSelected)
     {

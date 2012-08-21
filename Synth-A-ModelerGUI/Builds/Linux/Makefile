@@ -58,6 +58,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/OutputCmd_1e28237d.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/LinkComponent_6a391d22.o \
   $(OBJDIR)/VariablesPanel_8104ce78.o \
   $(OBJDIR)/ObjectPropertiesPanel_99e3c0d1.o \
   $(OBJDIR)/ObjectComponent_96e7177d.o \
@@ -162,6 +163,11 @@ $(OBJDIR)/OutputCmd_1e28237d.o: ../../Source/Models/OutputCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/LinkComponent_6a391d22.o: ../../Source/View/LinkComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling LinkComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/VariablesPanel_8104ce78.o: ../../Source/View/VariablesPanel.cpp
