@@ -84,3 +84,39 @@ Drawable* ResourceLoader::createSVGDrawable(const String& filename)
 
     return iconsFromZipFile [iconNames.indexOf (filename)];//->createCopy();
 }
+Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
+{
+    Path linkPath;
+    
+    float step = w / 20.0f;
+    linkPath.startNewSubPath(0,0);
+    linkPath.addEllipse(0,0, w, h);
+    linkPath.addEllipse(step,step, w-step*2, h-step*2);
+    linkPath.addEllipse(step*2, step*2, w-step*4, h-step*4);
+    linkPath.addEllipse(step*3, step*3, w-step*6, h-step*6);
+//    linkPath.applyTransform(AffineTransform::translation(x, y));
+    return linkPath;
+}
+Path ResourceLoader::getPathForTouch()
+{
+    return Path();
+}
+Path ResourceLoader::getPathForPluck()
+{
+    
+}
+Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h)
+{
+    if(linkId == Ids::link)
+    {
+        return getPathForLink(x, y, w, h);
+    }
+    else if(linkId == Ids::touch)
+    {
+        
+    }
+    else if(linkId == Ids::pluck)
+    {
+        
+    }
+}

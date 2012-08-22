@@ -60,6 +60,7 @@ public:
     void setMDLFile(MDLFile* newMDLFile);
 
     void editObjectProperties(ObjectComponent* oc);
+    void editLinkProperties(LinkComponent* lc);
 
     void findLassoItemsInArea(Array <ObjectComponent*>& results, const Rectangle<int>& area);
 

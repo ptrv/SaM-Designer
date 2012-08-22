@@ -50,9 +50,15 @@ public:
 	 * @return			a Drawable
 	 */
 	Drawable* createSVGDrawable(const String& filename);
+    
+    Path getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h);
 
 private:
 	void initObjectIconMap();
+    Path getPathForLink(float x, float y, float w, float h);
+    Path getPathForTouch();
+    Path getPathForPluck();
+    
 	HashMap<String,String> objectIcons;
 	StringArray iconNames;
 	OwnedArray<Drawable> iconsFromZipFile;

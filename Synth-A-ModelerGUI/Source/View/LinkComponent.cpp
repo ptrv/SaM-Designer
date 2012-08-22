@@ -26,6 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
 #include "ObjectComponent.h"
+#include "ObjectsHolder.h"
 
 #include "LinkComponent.h"
 
@@ -43,20 +44,12 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
     
-    DBG(data.toXmlString());
-    
-    icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(linkId));
-    
+//    icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(linkId));
+        
     owner.getSelectedLinks().addChangeListener(this);
-    setAlwaysOnTop (true);
-    
-    DBG(startComp->getPosition().x);
-    DBG(startComp->getPosition().y);
+//    setAlwaysOnTop (true);
     
     update();
-//    toFront(false);
-    DBG(getBounds().toString());
-//    setVisible(true);
 }
 
 LinkComponent::~LinkComponent()
@@ -75,7 +68,6 @@ void LinkComponent::update()
     {
         resizeToFit();
     }
-    DBG(getBounds().toString());
 }
 
 void LinkComponent::resizeToFit()
@@ -83,10 +75,10 @@ void LinkComponent::resizeToFit()
     float x1, y1, x2, y2;
     getPoints(x1, y1, x2, y2);
 
-    const Rectangle<int> newBounds((int) jmin(x1, x2),
-                                   (int) jmin(y1, y2),
-                                   (int) fabsf(x1 - x2),
-                                   (int) fabsf(y1 - y2));
+    const Rectangle<int> newBounds((int) jmin(x1, x2) - 15,
+                                   (int) jmin(y1, y2) - 15,
+                                   (int) fabsf(x1 - x2) + 30,
+                                   (int) fabsf(y1 - y2) + 30);
 
     if (newBounds != getBounds())
         setBounds(newBounds);
@@ -110,45 +102,51 @@ void LinkComponent::resized()
     x2 -= getX();
     y2 -= getY();
     linePath.clear();
-//    linePath.
     linePath.startNewSubPath(x1, y1);
-//    linePath.cubicTo(x1, y1 + (y2 - y1) * 0.33f,
-//                     x2, y1 + (y2 - y1) * 0.66f,
-//                     x2, y2);
-
     linePath.lineTo(x2, y2);
-//    PathStrokeType wideStroke(8.0f);
-//    wideStroke.createStrokedPath(hitPath, linePath);
 
+    PathStrokeType wideStroke (8.0f);
+    wideStroke.createStrokedPath (hitPath, linePath);
+    
     PathStrokeType stroke(2.5f);
     stroke.createStrokedPath(linePath, linePath);
 
-//    linePath.setUsingNonZeroWinding (true);
+    Path iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
+                                                                    0,
+                                                                    0,
+                                                                    15,
+                                                                    15);
+    iconPath.applyTransform (AffineTransform::identity
+                                .rotated (float_Pi * 0.5f - (float) atan2 (x2 - x1, y2 - y1))
+                                .translated ((x1 + x2) * 0.5f,
+                                             (y1 + y2) * 0.5f));
     
-    linePath.addPath(new DrawablePath());
-    iconPos = linePath.getPointAlongPath(linePath.getLength()/2);
-    DBG(iconPos.toString());
+    PathStrokeType stroke2(0.4f);
+    stroke2.createStrokedPath(iconPath, iconPath);
+    
+    linePath.addPath(iconPath);
+
+    linePath.setUsingNonZeroWinding(true);
 }
 
 void LinkComponent::paint(Graphics& g)
 {
-    g.setColour(Colours::green);
-    
-//    g.strokePath(linePath, PathStrokeType (5.0f));
+    if(selected)
+    {
+        g.setColour(Colours::red);
+    }
+    else
+    {
+        g.setColour(Colours::green);
+
+    }
     g.fillPath (linePath);
-    
-    Rectangle<float> rect;
-    rect.setPosition(iconPos);
-    rect.setSize(20.0f, 20.0f);
-    icon->drawWithin(g, rect, RectanglePlacement::centred, 1.0f);
-    
-//    g.fillRect(20, 20, 100, 100);
-    
 }
 
 void LinkComponent::mouseDown(const MouseEvent& e)
 {
-    
+    DBG("clicked link");
+    mouseDownSelectStatus = owner.getSelectedLinks().addToSelectionOnMouseDown (this, e.mods);
 }
 
 void LinkComponent::mouseDrag(const MouseEvent& e)
@@ -158,7 +156,12 @@ void LinkComponent::mouseDrag(const MouseEvent& e)
 
 void LinkComponent::mouseUp(const MouseEvent& e)
 {
-    
+    if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
+	{
+		getObjectsHolder()->editLinkProperties(this);
+	}
+    owner.getSelectedLinks().addToSelectionOnMouseUp (this, e.mods, false, mouseDownSelectStatus);
+    update();
 }
 
 bool LinkComponent::hitTest(int x, int y)
@@ -197,20 +200,55 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
 
     if (startComp != nullptr)
     {
-        Point<int> startPos = startComp->getPosition();
-        x1 = startPos.x;
-        y1 = startPos.y;
+        x1 = startComp->getX() + startComp->getWidth()/2;
+        y1 = startComp->getY() + startComp->getHeight()/2;
     }
 
     if (endComp != nullptr)
     {
-        Point<int> endPos = endComp->getPosition();
-        x2 = endPos.x;
-        y2 = endPos.y;
+        x2 = endComp->getX() + endComp->getWidth()/2;
+        y2 = endComp->getY() + endComp->getHeight()/2;
     }
 }
 
+void LinkComponent::showContextMenu()
+{
+	PopupMenu m;
+	m.addItem (1, "Edit");
+	m.addSeparator();
+	m.addItem (2, "Help");
+
+	const int r = m.show();
+
+	if (r == 1)
+	{
+		getObjectsHolder()->editLinkProperties(this);
+	}
+	else if (r == 2)
+	{
+        Utils::openHelpUrl(linkId);
+		DBG("open help for " + linkId.toString());
+	}
+
+}
 void LinkComponent::changeListenerCallback (ChangeBroadcaster*)
 {
+    const bool nowSelected = owner.getSelectedLinks().isSelected (this);
+
+    if (selected != nowSelected)
+    {
+        selected = nowSelected;
+        repaint();
+    }
     update();
+}
+
+ObjectsHolder* LinkComponent::getObjectsHolder() const noexcept
+{
+    return findParentComponentOfClass<ObjectsHolder>();
+}
+
+bool LinkComponent::sameStartEnd(ValueTree linkTree)
+{
+    return linkTree.getProperty(Ids::startVertex) == data.getProperty(Ids::startVertex);
 }

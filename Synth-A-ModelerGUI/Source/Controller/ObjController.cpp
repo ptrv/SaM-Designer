@@ -138,13 +138,27 @@ void ObjController::addNewLink(ObjectsHolder* holder, ValueTree linkValues)
 {
     addLink(holder, linkValues, true);
 }
+bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
+{
+    for (int i = 0; i < links.size(); i++)
+    {
+        if(links[i]->sameStartEnd(linkTree))
+        {
+            return true;
+        }
+    }
+    return false;
 
+}
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
 {
     if(selectedObjects.getNumSelected() == 2)
     {
-        addLink(holder, linkValues, true);
-        holder->updateComponents();
+        if(! checkIfLinkExitsts(linkValues))
+        {
+            addLink(holder, linkValues, true);
+            holder->updateComponents();
+        }
     }
     else
     {
@@ -273,9 +287,10 @@ void ObjController::selectAll(bool shouldBeSelected)
     {
         objects[i]->setSelected(shouldBeSelected);
     }
-    for (int j = 0; j < links.size(); j++)
+    for (int j = 0; j < links.size(); ++j)
     {
-        links[j]->setSelected(shouldBeSelected);
+        selectedLinks.addToSelection(links[j]);
+//        links[j]->setSelected(shouldBeSelected);
     }
 
 }
@@ -283,6 +298,10 @@ void ObjController::selectAll(bool shouldBeSelected)
 void ObjController::editObjectProperties(ObjectComponent* oc, UndoManager* undoManager)
 {
     ObjectPropertiesPanel::show(oc, undoManager);
+}
+void ObjController::editLinkProperties(LinkComponent* oc, UndoManager* undoManager)
+{
+//    LinkPropertiesPanel::show(oc, undoManager);
 }
 
 void ObjController::startDragging(const Rectangle<int>& parentArea)

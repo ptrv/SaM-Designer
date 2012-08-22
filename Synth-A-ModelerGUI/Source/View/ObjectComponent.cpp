@@ -66,7 +66,8 @@ bool ObjectComponent::hitTest (int x, int y)
 
 void ObjectComponent::paint(Graphics& g)
 {
-	g.setColour (Colours::lightgrey);
+    Colour c(1.0f, 1.0f, 1.0f, 0.0f);
+	g.setColour (c);
 
 	const int x = 4;
 	const int y = 4;
@@ -75,8 +76,8 @@ void ObjectComponent::paint(Graphics& g)
 
 	g.fillRect (x, y, w, h);
 
-	g.setColour (Colours::grey);
-	g.drawRect (x, y, w, h);
+//	g.setColour (Colours::grey);
+//	g.drawRect (x, y, w, h);
 	Rectangle<float> rect(x+2, y+2, w-4, h-4);
 	icon->drawWithin(g, rect, RectanglePlacement::centred, 1.0f);
 

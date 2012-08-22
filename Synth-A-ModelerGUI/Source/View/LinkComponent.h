@@ -58,10 +58,16 @@ public:
     void getPoints (float& x1, float& y1, float& x2, float& y2) const;
     
     void changeListenerCallback (ChangeBroadcaster*);
+    
+    void showContextMenu();
+    
+    bool sameStartEnd(ValueTree linkTree);
+    
 private:
+    ObjectsHolder* getObjectsHolder() const noexcept;
     ObjController& owner;
     const Identifier& linkId;
-    DrawableComposite* icon;
+//    DrawableComposite* icon;
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     Path linePath, hitPath;
     
@@ -69,11 +75,14 @@ private:
     
     bool segmented;
     bool selected;
+    bool mouseDownSelectStatus;
     
     Point<float> iconPos;
     
     ObjectComponent* startComp;
     ObjectComponent* endComp;
+    
+//    Path iconPath;
     
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
     {

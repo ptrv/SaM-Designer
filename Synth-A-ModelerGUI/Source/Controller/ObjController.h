@@ -111,6 +111,7 @@ public:
 	 * @param undoManager	the MDLFile's UndoManager
 	 */
 	void editObjectProperties(ObjectComponent* oc, UndoManager* undoManager);
+	void editLinkProperties(LinkComponent* oc, UndoManager* undoManager);
     
     SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
     { 
@@ -137,6 +138,8 @@ public:
     
     ObjectComponent* getObjectForId(String idString) const throw();
 private:
+    
+    bool checkIfLinkExitsts(ValueTree linkTree);
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;

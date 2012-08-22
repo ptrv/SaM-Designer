@@ -96,7 +96,10 @@ void ObjectsHolder::updateComponents()
         LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i));
 
         if (lobj != nullptr)
+        {
+            lobj->toBack();
             lobj->update();
+        }
     }
 }
 
@@ -116,6 +119,7 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
     {
         // object changed
         objController.getSelectedObjects().deselectAll();
+        objController.getSelectedLinks().deselectAll();
     }
     lassoComp.endLasso();
 }
@@ -347,6 +351,10 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
 {
     objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
+}
+void ObjectsHolder::editLinkProperties(LinkComponent* oc)
+{
+    objController.editLinkProperties(oc, &mdlFile->getUndoMgr());
 }
 
 
