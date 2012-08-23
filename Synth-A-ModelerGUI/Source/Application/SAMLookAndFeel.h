@@ -14,7 +14,7 @@
 /**
  * This class is the theme fro the application's widgets (buttons, text, etc...)
  */
-class SAMLookAndFeel : public LookAndFeel {
+class SAMLookAndFeel : public OldSchoolLookAndFeel {
 public:
 	SAMLookAndFeel();
 	~SAMLookAndFeel();
