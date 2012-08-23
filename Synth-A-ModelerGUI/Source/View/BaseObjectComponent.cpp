@@ -24,6 +24,7 @@
  */
 
 #include "../Application/CommonHeaders.h"
+#include "ObjectsHolder.h"
 
 #include "BaseObjectComponent.h"
 
@@ -41,4 +42,29 @@ BaseObjectComponent::~BaseObjectComponent()
 ValueTree BaseObjectComponent::getData()
 {
     return data;
+}
+
+ObjectsHolder* BaseObjectComponent::getObjectsHolder() const noexcept
+{
+    return findParentComponentOfClass<ObjectsHolder>();
+}
+
+void BaseObjectComponent::showContextMenu()
+{
+	PopupMenu m;
+	m.addItem (1, "Edit");
+	m.addSeparator();
+	m.addItem (2, "Help");
+
+	const int r = m.show();
+
+	if (r == 1)
+	{
+		getObjectsHolder()->editObjectProperties(this);
+	}
+	else if (r == 2)
+	{
+        Utils::openHelpUrl(data.getType());
+		DBG("open help for " + data.getType().toString());
+	}
 }

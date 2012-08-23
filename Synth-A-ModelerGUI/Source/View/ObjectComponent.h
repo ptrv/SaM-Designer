@@ -50,10 +50,6 @@ public:
 
     void setSelected(bool shouldBeSelected);
 
-    bool selected() const
-    {
-        return isSelected;
-    }
     void toggleSelected();
 
     void setPosition(Point<int> newPos);
@@ -61,13 +57,9 @@ public:
 
     void setOriginalPosition();
     
-    static ObjectComponent* isLastClicked;
-
-    
 private:
 
     void showLinkPopupMenu();
-    void showContextMenu();
 
     void changeListenerCallback (ChangeBroadcaster*);
 
@@ -76,9 +68,6 @@ private:
 
     Point<int> actualPos;
     Point<int> originalPos;
-
-    ObjectsHolder* getObjectsHolder() const noexcept;
-//    ValueTree data;
 
     bool isSelected;
     bool dragging, mouseDownSelectStatus;

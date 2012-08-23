@@ -32,7 +32,6 @@
 #include "BaseObjectComponent.h"
 #include "ObjectComponent.h"
 
-ObjectComponent* ObjectComponent::isLastClicked = nullptr;
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_),
   isSelected(false)
@@ -102,8 +101,6 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
 	toFront (true);
 
-	isLastClicked = this;
-
     dragging = false;
 
     if (e.mods.isPopupMenu() && owner.getSelectedObjects().getNumSelected() == 2)
@@ -125,10 +122,10 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
         return; // this may be deleted now..
     }
 
-    if(! e.mods.isShiftDown())
-    {
-        owner.getSelectedObjects().deselectAll();
-    }
+//    if(! e.mods.isAnyModifierKeyDown())
+//    {
+//        owner.getSelectedObjects().deselectAll();
+//    }
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 
 }
@@ -170,7 +167,7 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 	{
 		getObjectsHolder()->editObjectProperties(this);
 	}
-    
+
     owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging, mouseDownSelectStatus);
 
     update();
@@ -197,11 +194,6 @@ void ObjectComponent::setData(ValueTree dataTree)
     DBG(data.toXmlString());
 }
 
-ObjectsHolder* ObjectComponent::getObjectsHolder() const noexcept
-{
-    return findParentComponentOfClass<ObjectsHolder>();
-}
-
 void ObjectComponent::setSelected(bool shouldBeSelected)
 {
 	isSelected = shouldBeSelected;
@@ -223,28 +215,6 @@ void ObjectComponent::toggleSelected()
 	else
 		setSelected(true);
 	repaint();
-}
-
-
-void ObjectComponent::showContextMenu()
-{
-	PopupMenu m;
-	m.addItem (1, "Edit");
-	m.addSeparator();
-	m.addItem (2, "Help");
-
-	const int r = m.show();
-
-	if (r == 1)
-	{
-		getObjectsHolder()->editObjectProperties(this);
-	}
-	else if (r == 2)
-	{
-        Utils::openHelpUrl(data.getType());
-		DBG("open help for " + data.getType().toString());
-	}
-
 }
 
 void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)

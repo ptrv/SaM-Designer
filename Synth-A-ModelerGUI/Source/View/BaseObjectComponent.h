@@ -27,6 +27,7 @@
 #define __BASEOBJECTCOMPONENT_H_ADAD1FA0__
 
 class ObjController;
+class ObjectsHolder;
 
 class BaseObjectComponent : public Component
 {
@@ -37,6 +38,10 @@ public:
     ValueTree getData();
     
 protected:
+    ObjectsHolder* getObjectsHolder() const noexcept;
+    void showContextMenu();
+
+
     ObjController& owner;
     ValueTree data;
 };

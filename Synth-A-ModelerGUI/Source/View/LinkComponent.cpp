@@ -135,6 +135,11 @@ void LinkComponent::mouseUp(const MouseEvent& e)
 	{
 		getObjectsHolder()->editObjectProperties(this);
 	}
+    else if (e.mods.isPopupMenu())
+    {
+        showContextMenu();
+        return; // this may be deleted now..
+    }
     owner.getSelectedLinks().addToSelectionOnMouseUp (this, e.mods, false, mouseDownSelectStatus);
     update();
 }
@@ -186,26 +191,6 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
     }
 }
 
-void LinkComponent::showContextMenu()
-{
-	PopupMenu m;
-	m.addItem (1, "Edit");
-	m.addSeparator();
-	m.addItem (2, "Help");
-
-	const int r = m.show();
-
-	if (r == 1)
-	{
-		getObjectsHolder()->editObjectProperties(this);
-	}
-	else if (r == 2)
-	{
-        Utils::openHelpUrl(data.getType());
-		DBG("open help for " + data.getType().toString());
-	}
-
-}
 void LinkComponent::changeListenerCallback (ChangeBroadcaster*)
 {
     const bool nowSelected = owner.getSelectedLinks().isSelected (this);
@@ -216,11 +201,6 @@ void LinkComponent::changeListenerCallback (ChangeBroadcaster*)
         repaint();
     }
     update();
-}
-
-ObjectsHolder* LinkComponent::getObjectsHolder() const noexcept
-{
-    return findParentComponentOfClass<ObjectsHolder>();
 }
 
 bool LinkComponent::sameStartEnd(ValueTree linkTree)

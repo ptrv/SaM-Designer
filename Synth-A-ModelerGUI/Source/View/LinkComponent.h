@@ -59,14 +59,11 @@ public:
     
     void changeListenerCallback (ChangeBroadcaster*);
     
-    void showContextMenu();
-    
     bool sameStartEnd(ValueTree linkTree);
     
     void reverseDirection();
     
 private:
-    ObjectsHolder* getObjectsHolder() const noexcept;
     void drawPath(float x1, float y1, float x2, float y2);
     
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
