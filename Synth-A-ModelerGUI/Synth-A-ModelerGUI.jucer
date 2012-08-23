@@ -93,6 +93,10 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="Ly1X8r" name="BaseObjectComponent.cpp" compile="1" resource="0"
+              file="Source/View/BaseObjectComponent.cpp"/>
+        <FILE id="uKPkvg" name="BaseObjectComponent.h" compile="0" resource="0"
+              file="Source/View/BaseObjectComponent.h"/>
         <FILE id="MSuPlG" name="LinkComponent.cpp" compile="1" resource="0"
               file="Source/View/LinkComponent.cpp"/>
         <FILE id="w7V0Xu" name="LinkComponent.h" compile="0" resource="0" file="Source/View/LinkComponent.h"/>

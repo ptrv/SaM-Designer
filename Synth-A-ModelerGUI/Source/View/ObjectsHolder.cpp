@@ -37,8 +37,7 @@
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_),
 mdlFile(nullptr),
-dragging(false),
-isMultipleSelection(false)
+dragging(false)
 {
     setSize(100, 100);
 }
@@ -193,14 +192,10 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         // TODO: implement paste
         break;
     case StandardApplicationCommandIDs::selectAll:
-//        objController.getSelectedElements().deselectAll();
         objController.selectAll(true);
-        isMultipleSelection = true;
         break;
     case StandardApplicationCommandIDs::deselectAll:
         objController.selectAll(false);
-        isMultipleSelection = false;
-//        selectedObjects.clear();
         break;
     case StandardApplicationCommandIDs::del:
         objController.removeSelectedObjects(this);
@@ -348,15 +343,10 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 
 
 }
-void ObjectsHolder::editObjectProperties(ObjectComponent* oc)
+void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
 {
     objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
 }
-void ObjectsHolder::editLinkProperties(LinkComponent* oc)
-{
-    objController.editLinkProperties(oc, &mdlFile->getUndoMgr());
-}
-
 
 void ObjectsHolder::findLassoItemsInArea (Array <ObjectComponent*>& results, const Rectangle<int>& lasso)
 {

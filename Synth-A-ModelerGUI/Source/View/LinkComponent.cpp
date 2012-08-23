@@ -31,8 +31,7 @@
 #include "LinkComponent.h"
 
 LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
-: owner(owner_),
-    data(linkTree),
+: BaseObjectComponent(owner_, linkTree),
     segmented(false),
     selected(false),
     lastInputX (0),
@@ -134,7 +133,7 @@ void LinkComponent::mouseUp(const MouseEvent& e)
 {
     if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
-		getObjectsHolder()->editLinkProperties(this);
+		getObjectsHolder()->editObjectProperties(this);
 	}
     owner.getSelectedLinks().addToSelectionOnMouseUp (this, e.mods, false, mouseDownSelectStatus);
     update();
@@ -198,7 +197,7 @@ void LinkComponent::showContextMenu()
 
 	if (r == 1)
 	{
-		getObjectsHolder()->editLinkProperties(this);
+		getObjectsHolder()->editObjectProperties(this);
 	}
 	else if (r == 2)
 	{

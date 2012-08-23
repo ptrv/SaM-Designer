@@ -23,21 +23,22 @@
 
  */
 
-#ifndef __BASEOBJECTCOMPONENT_H_4AC10D4B__
-#define __BASEOBJECTCOMPONENT_H_4AC10D4B__
+#ifndef __OBJECTCOMPONENT_H_4AC10D4B__
+#define __OBJECTCOMPONENT_H_4AC10D4B__
 
 class ObjectsHolder;
 class ObjController;
 
+#include "BaseObjectComponent.h"
 /**
  * The object component.
  */
-class ObjectComponent : public Component, 
+class ObjectComponent : public BaseObjectComponent, 
                         public ChangeListener,
                         public ChangeBroadcaster
 {
 public:
-    ObjectComponent(ObjController& _owner, const Identifier& objId_, int x, int y);
+    ObjectComponent(ObjController& _owner, ValueTree data_);
     ~ObjectComponent();
     bool hitTest(int x, int y);
     void paint(Graphics& g);
@@ -46,7 +47,6 @@ public:
     void mouseUp(const MouseEvent& e);
     void update();
     void setData(ValueTree dataTree);
-    ValueTree getData();
 
     void setSelected(bool shouldBeSelected);
 
@@ -63,10 +63,7 @@ public:
     
     static ObjectComponent* isLastClicked;
 
-    const Identifier& getId() const
-    {
-        return objId;
-    }
+    
 private:
 
     void showLinkPopupMenu();
@@ -74,8 +71,6 @@ private:
 
     void changeListenerCallback (ChangeBroadcaster*);
 
-    ObjController& owner;
-    const Identifier& objId;
     DrawableComposite* icon;
     DropShadowEffect shadow;
 
@@ -83,7 +78,7 @@ private:
     Point<int> originalPos;
 
     ObjectsHolder* getObjectsHolder() const noexcept;
-    ValueTree data;
+//    ValueTree data;
 
     bool isSelected;
     bool dragging, mouseDownSelectStatus;
@@ -94,4 +89,4 @@ private:
 };
 
 
-#endif  // __BASEOBJECTCOMPONENT_H_4AC10D4B__
+#endif  // __OBJECTCOMPONENT_H_4AC10D4B__

@@ -28,6 +28,7 @@
 
 
 class MDLController;
+class BaseObjectComponent;
 class ObjectComponent;
 class ObjectsHolder;
 class LinkComponent;
@@ -91,13 +92,6 @@ public:
 	void loadComponents(Component* holder);
 
 	/**
-	 * Marks objects within a specified rectangle as selected.
-	 *
-	 * @param rect 			the selection rectangle
-	 * @return				an array with pointers to the containing objects
-	 */
-	Array<ObjectComponent*> selectObjectsWithinRectagle(Rectangle<int> rect);
-	/**
 	 * Marks all object as selected or deselects.
 	 *
 	 * @param shouldBeSelected		true for selected, false for deselected
@@ -110,8 +104,7 @@ public:
 	 * @param oc			the object component to edit
 	 * @param undoManager	the MDLFile's UndoManager
 	 */
-	void editObjectProperties(ObjectComponent* oc, UndoManager* undoManager);
-	void editLinkProperties(LinkComponent* oc, UndoManager* undoManager);
+	void editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager);
     
     SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
     { 

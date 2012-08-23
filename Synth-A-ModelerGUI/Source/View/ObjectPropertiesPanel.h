@@ -28,6 +28,7 @@
 
 
 class ObjectComponent;
+class BaseObjectComponent;
 
 /**
  * Panel for editing properties of an object.
@@ -35,7 +36,7 @@ class ObjectComponent;
 class ObjectPropertiesPanel  : public DialogWindow
 {
 public:
-	ObjectPropertiesPanel(ObjectComponent* caller, UndoManager* undoManager_);
+	ObjectPropertiesPanel(BaseObjectComponent* caller, UndoManager* undoManager_);
     ~ObjectPropertiesPanel();
 
     void closeButtonPressed();
@@ -49,7 +50,7 @@ public:
      * 							2 for clicking cancel button
      * 							0 when close button was pressed
      */
-    static int show(ObjectComponent* caller, UndoManager* undoManager_);
+    static int show(BaseObjectComponent* caller, UndoManager* undoManager_);
 
     int returnVal;
 };

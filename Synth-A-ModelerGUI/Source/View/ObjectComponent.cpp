@@ -29,12 +29,12 @@
 #include "ObjectPropertiesPanel.h"
 #include "../Models/ObjectActions.h"
 
+#include "BaseObjectComponent.h"
 #include "ObjectComponent.h"
 
 ObjectComponent* ObjectComponent::isLastClicked = nullptr;
-ObjectComponent::ObjectComponent(ObjController& _owner, const Identifier& objId_, int x, int y)
-: owner(_owner),
-    objId(objId_),
+ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
+: BaseObjectComponent(owner_, data_),
   isSelected(false)
 {
 	shadow.setShadowProperties (
@@ -42,9 +42,9 @@ ObjectComponent::ObjectComponent(ObjController& _owner, const Identifier& objId_
 	setComponentEffect (&shadow);
 
 	setSize(50, 50);
-	originalPos.setXY(x, y);
-	actualPos.setXY(x, y);
-	icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(objId));
+	originalPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
+	actualPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
+	icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(data.getType()));
     
     owner.getSelectedObjects().addChangeListener (this);
     selfChangeListenerList.addChangeListener (this);
@@ -197,11 +197,6 @@ void ObjectComponent::setData(ValueTree dataTree)
     DBG(data.toXmlString());
 }
 
-ValueTree ObjectComponent::getData()
-{
-	return data;
-}
-
 ObjectsHolder* ObjectComponent::getObjectsHolder() const noexcept
 {
     return findParentComponentOfClass<ObjectsHolder>();
@@ -246,8 +241,8 @@ void ObjectComponent::showContextMenu()
 	}
 	else if (r == 2)
 	{
-        Utils::openHelpUrl(objId);
-		DBG("open help for " + objId.toString());
+        Utils::openHelpUrl(data.getType());
+		DBG("open help for " + data.getType().toString());
 	}
 
 }

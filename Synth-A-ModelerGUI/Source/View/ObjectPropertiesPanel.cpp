@@ -569,7 +569,7 @@ private:
 static String exportWindowPos;
 
 
-ObjectPropertiesPanel::ObjectPropertiesPanel(ObjectComponent* caller, UndoManager* undoManager_)
+ObjectPropertiesPanel::ObjectPropertiesPanel(BaseObjectComponent* caller, UndoManager* undoManager_)
     : DialogWindow (Utils::getObjectTypeAsString(caller->getData().getType())+ " properties",
     		Colour::greyLevel (0.92f), true),
       returnVal(0)
@@ -643,7 +643,7 @@ void ObjectPropertiesPanel::closeButtonPressed()
     setVisible (false);
 }
 
-int ObjectPropertiesPanel::show(ObjectComponent* caller, UndoManager* undoManager_)
+int ObjectPropertiesPanel::show(BaseObjectComponent* caller, UndoManager* undoManager_)
 {
 	ObjectPropertiesPanel ep(caller, undoManager_);
     ep.runModalLoop();

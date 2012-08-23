@@ -133,10 +133,7 @@ public:
 
 
         root.addChild(oldValue,-1, nullptr);
-        objComp = new ObjectComponent(holderComp->getObjController(),
-                                                 oldValue.getType(),
-                int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
-        objComp->setData(oldValue);
+        objComp = new ObjectComponent(holderComp->getObjController(), oldValue);
         objComp->setCentrePosition(int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
         objects.add(objComp);
         holderComp->addAndMakeVisible(objComp);

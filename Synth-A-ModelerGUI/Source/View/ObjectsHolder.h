@@ -59,8 +59,7 @@ public:
 
     void setMDLFile(MDLFile* newMDLFile);
 
-    void editObjectProperties(ObjectComponent* oc);
-    void editLinkProperties(LinkComponent* lc);
+    void editObjectProperties(BaseObjectComponent* oc);
 
     void findLassoItemsInArea(Array <ObjectComponent*>& results, const Rectangle<int>& area);
 
@@ -87,9 +86,7 @@ private:
     Point<int> draggingStart;
     Point<int> draggingActual;
 
-//    Array<ObjectComponent*> selectedObjects;
-
-    bool isMultipleSelection;
+//    bool isMultipleSelection;
     LassoComponent<ObjectComponent*> lassoComp;
 };
 

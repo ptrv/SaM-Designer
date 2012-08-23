@@ -26,13 +26,13 @@
 #ifndef __LINKCOMPONENT_H_4CCE4B86__
 #define __LINKCOMPONENT_H_4CCE4B86__
 
-#include "ObjectComponent.h"
+#include "BaseObjectComponent.h"
 
 
 class ObjController;
 class ObjectComponent;
 
-class LinkComponent : public Component,
+class LinkComponent : public BaseObjectComponent,
                       public ChangeListener,
                       public SettableTooltipClient
 {
@@ -69,11 +69,8 @@ private:
     ObjectsHolder* getObjectsHolder() const noexcept;
     void drawPath(float x1, float y1, float x2, float y2);
     
-    ObjController& owner;
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     Path linePath, hitPath;
-    
-    ValueTree data;
     
     bool segmented;
     bool selected;
@@ -83,8 +80,6 @@ private:
     
     ObjectComponent* startComp;
     ObjectComponent* endComp;
-    
-//    Path iconPath;
     
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
     {

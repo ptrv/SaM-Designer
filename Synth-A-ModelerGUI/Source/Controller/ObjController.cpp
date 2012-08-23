@@ -244,41 +244,13 @@ void ObjController::loadComponents(Component* holder)
                 || obj.getType() == Ids::link || obj.getType() == Ids::touch
                 || obj.getType() == Ids::pluck || obj.getType() == Ids::audioout)
             {
-                ObjectComponent* objComp = new ObjectComponent(*this, obj.getType(),
-                                                               int(obj.getProperty(Ids::posX)), int(obj.getProperty(Ids::posY)));
-                objComp->setData(obj);
+                ObjectComponent* objComp = new ObjectComponent(*this, obj);
                 objects.add(objComp);
                 holder->addAndMakeVisible(objComp);
                 SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             }
         }
     }
-}
-
-Array<ObjectComponent*> ObjController::selectObjectsWithinRectagle(Rectangle<int> rect)
-{
-    Array<ObjectComponent*> selectedObjects;
-    if (rect.getWidth() < 0)
-    {
-        rect.setX(rect.getX() + rect.getWidth());
-        rect.setWidth(-rect.getWidth());
-    }
-    if (rect.getHeight() < 0)
-    {
-        rect.setY(rect.getY() + rect.getHeight());
-        rect.setHeight(-rect.getHeight());
-    }
-
-    for (int i = 0; i < objects.size(); ++i)
-    {
-        if (rect.intersects(objects[i]->getBounds()))
-        {
-            objects[i]->toggleSelected();
-            objects[i]->setSelected(true);
-            selectedObjects.add(objects[i]);
-        }
-    }
-    return selectedObjects;
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
@@ -292,16 +264,11 @@ void ObjController::selectAll(bool shouldBeSelected)
         selectedLinks.addToSelection(links[j]);
 //        links[j]->setSelected(shouldBeSelected);
     }
-
 }
 
-void ObjController::editObjectProperties(ObjectComponent* oc, UndoManager* undoManager)
+void ObjController::editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager)
 {
     ObjectPropertiesPanel::show(oc, undoManager);
-}
-void ObjController::editLinkProperties(LinkComponent* oc, UndoManager* undoManager)
-{
-//    LinkPropertiesPanel::show(oc, undoManager);
 }
 
 void ObjController::startDragging(const Rectangle<int>& parentArea)
