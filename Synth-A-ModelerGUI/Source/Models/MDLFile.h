@@ -72,6 +72,7 @@ public:
     static const char* mdlFileExtension;
 
     bool isEmpty();
+    bool isUntiled();
 
     String toString();
 protected:

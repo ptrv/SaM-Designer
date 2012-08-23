@@ -77,6 +77,11 @@ bool MDLFile::isEmpty()
 	}
 	return false;
 }
+
+bool MDLFile::isUntiled()
+{
+    return isUntitledFile;
+}
 void MDLFile::destroyMDL()
 {
 	mdlRoot = ValueTree();

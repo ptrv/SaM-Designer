@@ -119,8 +119,9 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
     if (mdlFile->isEmpty() || mdlFile == nullptr)
         return true;
 
-    StoredSettings::getInstance()->getProps()
-        .setValue (getProjectWindowPosName(), getWindowStateAsString());
+    if(! mdlFile->isUntiled())
+        StoredSettings::getInstance()->getProps()
+            .setValue (getProjectWindowPosName(), getWindowStateAsString());
 
     FileBasedDocument::SaveResult r = mdlFile->saveIfNeededAndUserAgrees();
 
