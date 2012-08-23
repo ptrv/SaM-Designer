@@ -93,29 +93,36 @@ Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
     linkPath.addEllipse(step,step, w-step*2, h-step*2);
     linkPath.addEllipse(step*2, step*2, w-step*4, h-step*4);
     linkPath.addEllipse(step*3, step*3, w-step*6, h-step*6);
-//    linkPath.applyTransform(AffineTransform::translation(x, y));
+    linkPath.addEllipse(step*4, step*4, w-step*8, h-step*8);
+    linkPath.applyTransform(AffineTransform::translation(-w/2, 0));
     return linkPath;
 }
 Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
 {
     Path touchPath;
     float lineDist = w * 0.7f;
-    touchPath.startNewSubPath(0, 0-h/2);
-    touchPath.addRectangle(0, 0-h/2, w, h);
-    touchPath.startNewSubPath(lineDist, 0-h/2);
-    touchPath.lineTo(lineDist, h/2);
-//    touchPath.applyTransform(AffineTransform::translation(100, 10));
+    float nw = w/2.0f;
+    float nh = h/2.0f;
+    touchPath.startNewSubPath(0, 0);
+    touchPath.addRectangle(0, 0, w, h);
+    touchPath.startNewSubPath(lineDist, 0);
+    touchPath.lineTo(lineDist, h);
+    touchPath.applyTransform(AffineTransform::translation(-nw, -nh));
     return touchPath;
 }
 Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
 {
     Path pluckPath;
-    pluckPath.addRectangle(0, 0-h/2, 50, 50);
-    pluckPath.addEllipse(5, 5, 40, 40);
-    pluckPath.addEllipse(7.5, 7.5, 35, 35);
-    pluckPath.addEllipse(10, 10, 30, 30);
-    pluckPath.addLineSegment(Line<float>(0, 25, 5, 25), 10.0f);
-//    pluckPath.applyTransform(AffineTransform::translation(250, 10));
+    float step = w / 20.0f;
+    pluckPath.addRectangle(0, 0, w, h);
+//    PathStrokeType stroke2(0.4f);
+//    stroke2.createStrokedPath(pluckPath, pluckPath);
+    pluckPath.addEllipse(step, step, w-step*2, w-step*2);
+    pluckPath.addEllipse(step*2, step*2, w-step*4, w-step*4);
+    pluckPath.addEllipse(step*3, step*3, w-step*6, w-step*6);
+    pluckPath.addEllipse(step*4, step*4, w-step*8, w-step*8);
+//    pluckPath.addLineSegment(Line<float>(0, 25, 5, 25), 10.0f);
+    pluckPath.applyTransform(AffineTransform::translation(-w/2, -h/2));
     return pluckPath;
 }
 Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h)

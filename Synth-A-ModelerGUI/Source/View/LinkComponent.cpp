@@ -73,10 +73,10 @@ void LinkComponent::resizeToFit()
     float x1, y1, x2, y2;
     getPoints(x1, y1, x2, y2);
 
-    const Rectangle<int> newBounds((int) jmin(x1, x2) - 15,
-                                   (int) jmin(y1, y2) - 15,
-                                   (int) fabsf(x1 - x2) + 30,
-                                   (int) fabsf(y1 - y2) + 30);
+    const Rectangle<int> newBounds((int) jmin(x1, x2) - 25,
+                                   (int) jmin(y1, y2) - 25,
+                                   (int) fabsf(x1 - x2) + 50,
+                                   (int) fabsf(y1 - y2) + 50);
 
     if (newBounds != getBounds())
         setBounds(newBounds);
@@ -228,8 +228,8 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
                                                                    0,
                                                                    0,
-                                                                   15,
-                                                                   15);
+                                                                   25,
+                                                                   25);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,
@@ -260,8 +260,8 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
                                                                    0,
                                                                    0,
-                                                                   15,
-                                                                   15);
+                                                                   25,
+                                                                   25);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,
@@ -289,17 +289,17 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
 
         Path iconPath;
         //    DBG(linkId.toString());
-        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
                                                                    0,
                                                                    0,
-                                                                   15,
-                                                                   15);
+                                                                   25,
+                                                                   25);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,
                                             (y1 + y2) * 0.5f));
 
-        PathStrokeType stroke2(1.4f);
+        PathStrokeType stroke2(0.8f);
         stroke2.createStrokedPath(iconPath, iconPath);
 
         linePath.addPath(iconPath);

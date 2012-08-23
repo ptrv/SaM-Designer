@@ -227,7 +227,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
     
 }
 
-void ObjController::loadComponents(Component* holder)
+void ObjController::loadComponents(ObjectsHolder* holder)
 {
     MDLFile* mf = owner.getMDLFile();
     ValueTree mdl = mf->mdlRoot;
@@ -241,16 +241,23 @@ void ObjController::loadComponents(Component* holder)
             // TODO: Remove conditional when icons zip is complete
             if (obj.getType() == Ids::mass || obj.getType() == Ids::port
                 || obj.getType() == Ids::ground || obj.getType() == Ids::resonator
-                || obj.getType() == Ids::link || obj.getType() == Ids::touch
-                || obj.getType() == Ids::pluck || obj.getType() == Ids::audioout)
+                || obj.getType() == Ids::audioout)
             {
                 ObjectComponent* objComp = new ObjectComponent(*this, obj);
                 objects.add(objComp);
                 holder->addAndMakeVisible(objComp);
                 SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             }
+            else if(obj.getType() == Ids::link || obj.getType() == Ids::touch
+                    || obj.getType() == Ids::pluck)
+            {
+                LinkComponent* linkComp = new LinkComponent(*this, obj);
+                links.add(linkComp);
+                holder->addAndMakeVisible(linkComp);
+            }
         }
     }
+    holder->updateComponents();
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
@@ -343,5 +350,5 @@ void ObjController::reverseLinkDirection()
     {
         selectedLinks.getItemArray()[i]->reverseDirection();
     }
-
+    changed();
 }

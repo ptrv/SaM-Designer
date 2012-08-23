@@ -89,7 +89,7 @@ public:
 	 * Loads the object components of a patch when a mdl file is opened.
 	 * @param holder
 	 */
-	void loadComponents(Component* holder);
+	void loadComponents(ObjectsHolder* holder);
 
 	/**
 	 * Marks all object as selected or deselects.

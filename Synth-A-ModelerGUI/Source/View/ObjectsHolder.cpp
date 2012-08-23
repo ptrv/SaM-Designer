@@ -89,17 +89,25 @@ void ObjectsHolder::updateComponents()
 
         if (bobj != nullptr)
             bobj->update();
-    }
-    for (i = getNumChildComponents(); --i >= 0;)
-    {
+        
         LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i));
-
+        
         if (lobj != nullptr)
         {
             lobj->toBack();
             lobj->update();
         }
     }
+//    for (i = getNumChildComponents(); --i >= 0;)
+//    {
+//        LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i));
+//
+//        if (lobj != nullptr)
+//        {
+//            lobj->toBack();
+//            lobj->update();
+//        }
+//    }
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
