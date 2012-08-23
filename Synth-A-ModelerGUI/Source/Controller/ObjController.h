@@ -137,6 +137,8 @@ public:
     void changed();
     
     ObjectComponent* getObjectForId(String idString) const throw();
+    
+    void reverseLinkDirection();
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

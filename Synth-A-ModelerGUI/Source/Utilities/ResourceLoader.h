@@ -56,8 +56,8 @@ public:
 private:
 	void initObjectIconMap();
     Path getPathForLink(float x, float y, float w, float h);
-    Path getPathForTouch();
-    Path getPathForPluck();
+    Path getPathForTouch(float x, float y, float w, float h);
+    Path getPathForPluck(float x, float y, float w, float h);
     
 	HashMap<String,String> objectIcons;
 	StringArray iconNames;

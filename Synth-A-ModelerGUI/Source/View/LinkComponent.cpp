@@ -32,7 +32,6 @@
 
 LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 : owner(owner_),
-    linkId(linkTree.getType()),
     data(linkTree),
     segmented(false),
     selected(false),
@@ -101,32 +100,9 @@ void LinkComponent::resized()
     y1 -= getY();
     x2 -= getX();
     y2 -= getY();
-    linePath.clear();
-    linePath.startNewSubPath(x1, y1);
-    linePath.lineTo(x2, y2);
-
-    PathStrokeType wideStroke (8.0f);
-    wideStroke.createStrokedPath (hitPath, linePath);
     
-    PathStrokeType stroke(2.5f);
-    stroke.createStrokedPath(linePath, linePath);
-
-    Path iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
-                                                                    0,
-                                                                    0,
-                                                                    15,
-                                                                    15);
-    iconPath.applyTransform (AffineTransform::identity
-                                .rotated (float_Pi * 0.5f - (float) atan2 (x2 - x1, y2 - y1))
-                                .translated ((x1 + x2) * 0.5f,
-                                             (y1 + y2) * 0.5f));
+    drawPath(x1, y1, x2, y2);
     
-    PathStrokeType stroke2(0.4f);
-    stroke2.createStrokedPath(iconPath, iconPath);
-    
-    linePath.addPath(iconPath);
-
-    linePath.setUsingNonZeroWinding(true);
 }
 
 void LinkComponent::paint(Graphics& g)
@@ -226,8 +202,8 @@ void LinkComponent::showContextMenu()
 	}
 	else if (r == 2)
 	{
-        Utils::openHelpUrl(linkId);
-		DBG("open help for " + linkId.toString());
+        Utils::openHelpUrl(data.getType());
+		DBG("open help for " + data.getType().toString());
 	}
 
 }
@@ -250,5 +226,134 @@ ObjectsHolder* LinkComponent::getObjectsHolder() const noexcept
 
 bool LinkComponent::sameStartEnd(ValueTree linkTree)
 {
-    return linkTree.getProperty(Ids::startVertex) == data.getProperty(Ids::startVertex);
+    return linkTree.getProperty(Ids::startVertex) == data.getProperty(Ids::startVertex) 
+        && linkTree.getProperty(Ids::endVertex) == data.getProperty(Ids::endVertex);
+}
+
+void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
+{
+    if(data.getType() == Ids::link)
+    {
+        linePath.clear();
+        linePath.startNewSubPath(x1, y1);
+        linePath.lineTo(x2, y2);
+
+        PathStrokeType wideStroke(8.0f);
+        wideStroke.createStrokedPath(hitPath, linePath);
+
+        PathStrokeType stroke(2.5f);
+        stroke.createStrokedPath(linePath, linePath);
+
+        Path iconPath;
+        //    DBG(linkId.toString());
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
+                                                                   0,
+                                                                   0,
+                                                                   15,
+                                                                   15);
+        iconPath.applyTransform(AffineTransform::identity
+                                .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                .translated((x1 + x2) * 0.5f,
+                                            (y1 + y2) * 0.5f));
+
+        PathStrokeType stroke2(0.4f);
+        stroke2.createStrokedPath(iconPath, iconPath);
+
+        linePath.addPath(iconPath);
+    }
+    else if(data.getType() == Ids::touch)
+    {
+        linePath.clear();
+        linePath.startNewSubPath(x1, y1);
+        linePath.lineTo(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+        
+        linePath.startNewSubPath((x1 + (x2 - x1) / 2), (y1 + (y2 - y1) / 2));
+        linePath.lineTo(x2, y2);
+        
+        PathStrokeType wideStroke(8.0f);
+        wideStroke.createStrokedPath(hitPath, linePath);
+
+        PathStrokeType stroke(2.5f);
+        stroke.createStrokedPath(linePath, linePath);
+
+        Path iconPath;
+        //    DBG(linkId.toString());
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
+                                                                   0,
+                                                                   0,
+                                                                   15,
+                                                                   15);
+        iconPath.applyTransform(AffineTransform::identity
+                                .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                .translated((x1 + x2) * 0.5f,
+                                            (y1 + y2) * 0.5f));
+
+        PathStrokeType stroke2(1.4f);
+        stroke2.createStrokedPath(iconPath, iconPath);
+
+        linePath.addPath(iconPath);
+    }
+    else if(data.getType() == Ids::pluck)
+    {
+        linePath.clear();
+        linePath.startNewSubPath(x1, y1);
+        linePath.lineTo(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+        
+        linePath.startNewSubPath((x1 + (x2 - x1) / 2), (y1 + (y2 - y1) / 2));
+        linePath.lineTo(x2, y2);
+        
+        PathStrokeType wideStroke(8.0f);
+        wideStroke.createStrokedPath(hitPath, linePath);
+
+        PathStrokeType stroke(2.5f);
+        stroke.createStrokedPath(linePath, linePath);
+
+        Path iconPath;
+        //    DBG(linkId.toString());
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
+                                                                   0,
+                                                                   0,
+                                                                   15,
+                                                                   15);
+        iconPath.applyTransform(AffineTransform::identity
+                                .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                .translated((x1 + x2) * 0.5f,
+                                            (y1 + y2) * 0.5f));
+
+        PathStrokeType stroke2(1.4f);
+        stroke2.createStrokedPath(iconPath, iconPath);
+
+        linePath.addPath(iconPath);
+    }
+    const float arrowW = 5.0f;
+    const float arrowL = 4.0f;
+
+    Path arrow;
+    arrow.addTriangle(-arrowL, arrowW,
+                      -arrowL, -arrowW,
+                      arrowL, 0.0f);
+
+    arrow.applyTransform(AffineTransform::identity
+                         .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                         .translated((x1 + x2) * 0.5f,
+                                     (y1 + y2) * 0.5f));
+    arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
+
+    linePath.addPath(arrow);
+    linePath.setUsingNonZeroWinding(true);
+
+}
+
+void LinkComponent::reverseDirection()
+{
+    String tempStart = data.getProperty(Ids::startVertex);
+    String tempEnd = data.getProperty(Ids::endVertex);
+    
+    data.setProperty(Ids::startVertex, tempEnd, nullptr);
+    data.setProperty(Ids::endVertex, tempStart, nullptr);
+    
+    startComp = owner.getObjectForId(tempEnd);
+    endComp = owner.getObjectForId(tempStart);
+    
+    update();
 }

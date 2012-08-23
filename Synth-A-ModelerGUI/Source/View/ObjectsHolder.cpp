@@ -222,7 +222,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         //    	// TODO: implement zoom normal
         //    	break;
     case CommandIDs::reverseDirection:
-        // TODO: implement reverse direction
+        objController.reverseLinkDirection();
         break;
 
     case CommandIDs::insertMass:

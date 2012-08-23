@@ -369,3 +369,12 @@ ObjectComponent* ObjController::getObjectForId(String idString) const throw()
     return nullptr;
 
 }
+
+void ObjController::reverseLinkDirection()
+{
+    for (int i = 0; i < selectedLinks.getNumSelected(); ++i)
+    {
+        selectedLinks.getItemArray()[i]->reverseDirection();
+    }
+
+}

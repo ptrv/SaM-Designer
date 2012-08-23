@@ -87,7 +87,6 @@ Drawable* ResourceLoader::createSVGDrawable(const String& filename)
 Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
 {
     Path linkPath;
-    
     float step = w / 20.0f;
     linkPath.startNewSubPath(0,0);
     linkPath.addEllipse(0,0, w, h);
@@ -97,13 +96,27 @@ Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
 //    linkPath.applyTransform(AffineTransform::translation(x, y));
     return linkPath;
 }
-Path ResourceLoader::getPathForTouch()
+Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
 {
-    return Path();
+    Path touchPath;
+    float lineDist = w * 0.7f;
+    touchPath.startNewSubPath(0, 0-h/2);
+    touchPath.addRectangle(0, 0-h/2, w, h);
+    touchPath.startNewSubPath(lineDist, 0-h/2);
+    touchPath.lineTo(lineDist, h/2);
+//    touchPath.applyTransform(AffineTransform::translation(100, 10));
+    return touchPath;
 }
-Path ResourceLoader::getPathForPluck()
+Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
 {
-    
+    Path pluckPath;
+    pluckPath.addRectangle(0, 0-h/2, 50, 50);
+    pluckPath.addEllipse(5, 5, 40, 40);
+    pluckPath.addEllipse(7.5, 7.5, 35, 35);
+    pluckPath.addEllipse(10, 10, 30, 30);
+    pluckPath.addLineSegment(Line<float>(0, 25, 5, 25), 10.0f);
+//    pluckPath.applyTransform(AffineTransform::translation(250, 10));
+    return pluckPath;
 }
 Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h)
 {
@@ -113,10 +126,14 @@ Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y
     }
     else if(linkId == Ids::touch)
     {
-        
+        return getPathForTouch(x, y, w, h);
     }
     else if(linkId == Ids::pluck)
     {
-        
+        return getPathForPluck(x, y, w, h);
+    }
+    else
+    {
+        return Path();
     }
 }

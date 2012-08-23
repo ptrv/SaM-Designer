@@ -63,11 +63,13 @@ public:
     
     bool sameStartEnd(ValueTree linkTree);
     
+    void reverseDirection();
+    
 private:
     ObjectsHolder* getObjectsHolder() const noexcept;
+    void drawPath(float x1, float y1, float x2, float y2);
+    
     ObjController& owner;
-    const Identifier& linkId;
-//    DrawableComposite* icon;
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     Path linePath, hitPath;
     
