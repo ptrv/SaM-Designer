@@ -262,14 +262,22 @@ void ObjController::loadComponents(ObjectsHolder* holder)
 
 void ObjController::selectAll(bool shouldBeSelected)
 {
-    for (int i = 0; i < objects.size(); ++i)
+    if(shouldBeSelected)
     {
-        objects[i]->setSelected(shouldBeSelected);
+        selectedObjects.deselectAll();
+        for (int i = 0; i < objects.size(); ++i)
+        {
+            selectedObjects.addToSelection(objects[i]);
+        }
+        for (int j = 0; j < links.size(); ++j)
+        {
+            selectedLinks.addToSelection(links[j]);
+        }
     }
-    for (int j = 0; j < links.size(); ++j)
+    else
     {
-        selectedLinks.addToSelection(links[j]);
-//        links[j]->setSelected(shouldBeSelected);
+        selectedObjects.deselectAll();
+        selectedLinks.deselectAll();
     }
 }
 
