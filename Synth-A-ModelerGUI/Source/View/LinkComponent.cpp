@@ -32,12 +32,12 @@
 
 LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 : BaseObjectComponent(owner_, linkTree),
-    segmented(false),
-    selected(false),
     lastInputX (0),
     lastInputY (0),
     lastOutputX (0),
-    lastOutputY (0)
+    lastOutputY (0),
+    segmented(false),
+    selected(false)
 {
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());

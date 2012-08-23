@@ -62,9 +62,9 @@ public:
     
     void changed();
 private:
+	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<OutputCmd> outCmd;
-	MainAppWindow& mainAppWindow;
 };
 
 
