@@ -254,4 +254,49 @@ private:
     int oldIndex;
 };
 
+class ReverseLinkDirectionAction : public UndoableAction
+{
+public:
+    ReverseLinkDirectionAction(LinkComponent* linkToReverse,
+                               ObjController* objController_)
+    : 
+    objController(objController_)
+	{
+        linkIndex = objController->indexOfLink(linkToReverse);
+	}
+	~ReverseLinkDirectionAction()
+	{
+	}
+
+	bool perform()
+	{
+//        SAM_LOG("Reverse direction"+oldValue[Ids::identifier].toString());
+        LinkComponent* lc = objController->getLink(linkIndex);
+        if(objController->getSelectedLinks().getNumSelected() == 0)
+        {
+            objController->getSelectedLinks().selectOnly(lc);
+        }
+        lc->reverseDirection();
+		return true;
+	}
+
+	bool undo()
+	{
+//        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
+
+        LinkComponent* lc = objController->getLink(linkIndex);
+        if(objController->getSelectedLinks().getNumSelected() == 0)
+        {
+            objController->getSelectedLinks().selectOnly(lc);
+        }
+        lc->reverseDirection();
+		return true;
+	}
+private:
+	ValueTree linkTree;
+    ObjController* objController;
+    String oldStart;
+    String oldEnd;
+    int linkIndex;
+};
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

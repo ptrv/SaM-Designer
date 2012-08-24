@@ -369,11 +369,16 @@ ObjectComponent* ObjController::getObjectForId(String idString) const throw()
 
 void ObjController::reverseLinkDirection()
 {
+    owner.getUndoManager()->beginNewTransaction();
+
     for (int i = 0; i < selectedLinks.getNumSelected(); ++i)
     {
-        selectedLinks.getItemArray()[i]->reverseDirection();
+        ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(selectedLinks.getItemArray()[i],this);
+        owner.getUndoManager()->perform(action, "reverse link direction");
     }
     changed();
+    
+    owner.getUndoManager()->beginNewTransaction();
 }
 
 Array<int> ObjController::checkIfObjectHasLinks(ObjectComponent* objComp)
