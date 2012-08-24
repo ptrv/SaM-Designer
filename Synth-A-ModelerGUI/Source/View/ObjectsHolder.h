@@ -74,6 +74,8 @@ public:
     
     const Rectangle<int> getComponentArea() const;
     void showLinkPopupMenu(String so, String eo);
+    
+    void deleteSelectedObjects();
     //==========================================================================
 private:
 

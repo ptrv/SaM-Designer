@@ -53,8 +53,9 @@ void BaseObjectComponent::showContextMenu()
 {
 	PopupMenu m;
 	m.addItem (1, "Edit");
+    m.addItem (2, "Delete");
 	m.addSeparator();
-	m.addItem (2, "Help");
+	m.addItem (3, "Help");
 
 	const int r = m.show();
 
@@ -64,7 +65,10 @@ void BaseObjectComponent::showContextMenu()
 	}
 	else if (r == 2)
 	{
+        getObjectsHolder()->deleteSelectedObjects();
+	}
+	else if (r == 3)
+	{
         Utils::openHelpUrl(data.getType());
-		DBG("open help for " + data.getType().toString());
 	}
 }

@@ -192,8 +192,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         objController.selectAll(false);
         break;
     case StandardApplicationCommandIDs::del:
-        objController.removeSelectedObjects(this);
-        objController.removeSelectedLinks(this);
+        deleteSelectedObjects();
         break;
     case CommandIDs::defineVariables:
         VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());
@@ -371,4 +370,10 @@ const Rectangle<int> ObjectsHolder::getComponentArea() const
 //                               getWidth() - editorEdgeGap * 2,
 //                               getHeight() - editorEdgeGap * 2);
 //    }
+}
+
+void ObjectsHolder::deleteSelectedObjects()
+{
+    objController.removeSelectedObjects(this);
+    objController.removeSelectedLinks(this);
 }
