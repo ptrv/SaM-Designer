@@ -135,7 +135,7 @@ public:
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
-    bool checkIfObjectHasLink(ObjectComponent* objComp, int& linkIndex);
+    Array<int> checkIfObjectHasLinks(ObjectComponent* objComp);
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;

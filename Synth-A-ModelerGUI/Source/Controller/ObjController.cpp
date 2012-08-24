@@ -162,11 +162,13 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
     {
         selectedObjects.deselect(objComp);
         selectedObjects.changed(true);
-        int lIdx = -1;
-        if(checkIfObjectHasLink(objComp, lIdx))
+        Array<int> indices = checkIfObjectHasLinks(objComp);
+        if(indices.size() > 0)
+            selectedLinks.deselectAll();
+        for(int i = indices.size(); --i >= 0;)
         {
-            DBG("Object has link nr " + String(lIdx));
-            removeLink(getLink(lIdx), true, holder);
+//            DBG("Object has link nr " + String(lIdx));
+            removeLink(getLink(i), true, holder);
 //            links.remove(lIdx);
         }
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
@@ -374,8 +376,9 @@ void ObjController::reverseLinkDirection()
     changed();
 }
 
-bool ObjController::checkIfObjectHasLink(ObjectComponent* objComp, int& linkIndex)
+Array<int> ObjController::checkIfObjectHasLinks(ObjectComponent* objComp)
 {
+    Array<int> linkIndices;
     ValueTree objTree = objComp->getData();
     for (int i = 0; i < links.size(); i++)
     {
@@ -384,10 +387,8 @@ bool ObjController::checkIfObjectHasLink(ObjectComponent* objComp, int& linkInde
         if(linkTree.getProperty(Ids::startVertex) == objTree.getProperty(Ids::identifier)
             || linkTree.getProperty(Ids::endVertex) == objTree.getProperty(Ids::identifier))
         {
-            linkIndex = i;
-            return true;
+            linkIndices.add(i);
         }
     }
-    linkIndex = -1;
-    return false;
+    return linkIndices;
 }
