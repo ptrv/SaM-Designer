@@ -345,105 +345,176 @@ class LinkPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	LinkPropertiesComponent(ObjectPropertiesPanel* op_,
 	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
-	{
+	: ObjectPropertiesComponent(op_, data_, undoManager_),
+        laStiff("laStiff", "Stiffness (N/m)"),
+        teStiff("teStiff"),
+        laDamp("laDamp", "Damping (N/(m/s))"),
+        teDamp("teDamp"),
+        laPos("laPos", "Position (m)"),
+        tePos("tePos"),
+        laLabels("laLabels", "Labels"),
+        teLabels("teLabels"),
+        laStartVertex("laStartVertex", "Start Vertex"),
+        teStartVertex("teStartVertex"),
+        laEndVertex("laEndVertex", "End Vertex"),
+        teEndVertex("teEndVertex")
+    {
+        addAndMakeVisible(&teStiff);
+		laStiff.attachToComponent(&teStiff, true);
+		addAndMakeVisible(&teDamp);
+		laDamp.attachToComponent(&teDamp, true);
+		addAndMakeVisible(&tePos);
+		laPos.attachToComponent(&tePos, true);
+		addAndMakeVisible(&teLabels);
+		laLabels.attachToComponent(&teLabels, true);
+        teStartVertex.setReadOnly(true);
+        addAndMakeVisible(&teStartVertex);
+		laStartVertex.attachToComponent(&teStartVertex, true);
+        teEndVertex.setReadOnly(true);
+		addAndMakeVisible(&teEndVertex);
+		laEndVertex.attachToComponent(&teEndVertex, true);
 
 		readValues();
 	}
 	virtual ~LinkPropertiesComponent()
 	{
 
-	}
+    }
 
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
+        
+        teStiff.setBounds(80 , 40, getWidth() -90, 22);
+		teDamp.setBounds(80 , 70, getWidth() -90, 22);
+		tePos.setBounds(80 , 100, getWidth() -90, 22);
+		teLabels.setBounds(80, 130, getWidth() - 90, 22);
+        teStartVertex.setBounds(80, 160, getWidth() - 90, 22);
+        teEndVertex.setBounds(80, 190, getWidth() - 90, 22);
 	}
 
 	void readValues()
 	{
-
+		teName.setText(data[Ids::identifier].toString());
+		teStiff.setText(data.getChildWithName(Ids::parameters)[Ids::idx[0]].toString());
+		teDamp.setText(data.getChildWithName(Ids::parameters)[Ids::idx[1]].toString());
+		tePos.setText(data.getChildWithName(Ids::parameters)[Ids::idx[2]].toString());
+		String labelText;
+		StringArray labelsArray;
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumProperties(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels)[Ids::idx[i]].toString());
+		}
+		teLabels.setText(labelsArray.joinIntoString(","));
+        teStartVertex.setText(data[Ids::startVertex].toString());
+        teEndVertex.setText(data[Ids::endVertex].toString());
 	}
 
 	void writeValues()
 	{
-
+        data.setProperty(Ids::identifier, teName.getText(), undoManager);
+		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+		paramsTree.setProperty(Ids::idx[0], Utils::fixParameterValueIfNeeded(teStiff.getText()), undoManager);
+		paramsTree.setProperty(Ids::idx[1], Utils::fixParameterValueIfNeeded(teDamp.getText()), undoManager);
+		paramsTree.setProperty(Ids::idx[2], Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
+		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+		String labelsString = teLabels.getText();
+		StringArray labelsArray;
+		labelsArray.addTokens(labelsString, ",", "\"");
+		for (int i = 0; i < labelsArray.size(); ++i) {
+			labelsTree.setProperty(Ids::idx[i], labelsArray[i], undoManager);
+		}
 	}
 
 private:
+    Label laStiff;
+	TextEditor teStiff;
+	Label laDamp;
+	TextEditor teDamp;
+	Label laPos;
+	TextEditor tePos;
+	Label laLabels;
+	TextEditor teLabels;
+    Label laStartVertex;
+    TextEditor teStartVertex;
+    Label laEndVertex;
+    TextEditor teEndVertex;
 };
 
-class TouchPropertiesComponent : public ObjectPropertiesComponent {
-public:
-	TouchPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
-	{
-
-		readValues();
-	}
-	virtual ~TouchPropertiesComponent()
-	{
-
-	}
-
-	void resized()
-	{
-		ObjectPropertiesComponent::resized();
-	}
-
-	void readValues()
-	{
-
-	}
-
-	void writeValues()
-	{
-
-	}
-
-private:
-};
-
-class PluckPropertiesComponent : public ObjectPropertiesComponent {
-public:
-	PluckPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
-	{
-
-		readValues();
-	}
-	virtual ~PluckPropertiesComponent()
-	{
-
-	}
-
-	void resized()
-	{
-		ObjectPropertiesComponent::resized();
-	}
-
-	void readValues()
-	{
-
-	}
-
-	void writeValues()
-	{
-
-	}
-
-private:
-};
+//class TouchPropertiesComponent : public ObjectPropertiesComponent {
+//public:
+//	TouchPropertiesComponent(ObjectPropertiesPanel* op_,
+//	ValueTree data_, UndoManager* undoManager_)
+//	: ObjectPropertiesComponent(op_, data_, undoManager_)
+//    {
+//		
+//        readValues();
+//	}
+//	virtual ~TouchPropertiesComponent()
+//	{
+//
+//	}
+//
+//	void resized()
+//	{
+//		ObjectPropertiesComponent::resized();
+//	}
+//
+//	void readValues()
+//    {
+//
+//	}
+//
+//	void writeValues()
+//    {
+//
+//	}
+//
+//private:
+//};
+//
+//class PluckPropertiesComponent : public ObjectPropertiesComponent {
+//public:
+//	PluckPropertiesComponent(ObjectPropertiesPanel* op_,
+//	ValueTree data_, UndoManager* undoManager_)
+//	: ObjectPropertiesComponent(op_, data_, undoManager_)
+//	{
+//
+//		readValues();
+//	}
+//	virtual ~PluckPropertiesComponent()
+//	{
+//
+//	}
+//
+//	void resized()
+//	{
+//		ObjectPropertiesComponent::resized();
+//	}
+//
+//	void readValues()
+//	{
+//
+//	}
+//
+//	void writeValues()
+//	{
+//
+//	}
+//
+//private:
+//};
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	AudiooutPropertiesComponent(ObjectPropertiesPanel* op_,
 	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
+	: ObjectPropertiesComponent(op_, data_, undoManager_),
+        laSource("laSource", "Source"),
+        teSource("teSource")
 	{
-
+        addAndMakeVisible(&teSource);
+        laSource.attachToComponent(&teSource,true);
+        
 		readValues();
 	}
 	virtual ~AudiooutPropertiesComponent()
@@ -458,15 +529,19 @@ public:
 
 	void readValues()
 	{
-
+        teName.setText(data[Ids::identifier].toString());
+        teSource.setText(data[Ids::sources].toString());
 	}
 
 	void writeValues()
-	{
-
+    {
+        data.setProperty(Ids::identifier, teName.getText(), undoManager);
+        data.setProperty(Ids::sources, laSource.getText(), undoManager);
 	}
 
 private:
+    Label laSource;
+    TextEditor teSource;
 };
 
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
@@ -592,18 +667,20 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(BaseObjectComponent* caller, UndoMa
 	{
 		comp = new GroundPropertiesComponent(this, caller->getData(), undoManager_);
 	}
-	else if(caller->getData().getType() == Ids::link)
+	else if(caller->getData().getType() == Ids::link
+        || caller->getData().getType() == Ids::touch
+        || caller->getData().getType() == Ids::pluck)
 	{
 		comp = new LinkPropertiesComponent(this, caller->getData(), undoManager_);
 	}
-	else if(caller->getData().getType() == Ids::pluck)
-	{
-		comp = new PluckPropertiesComponent(this, caller->getData(), undoManager_);
-	}
-	else if(caller->getData().getType() == Ids::touch)
-	{
-		comp = new TouchPropertiesComponent(this, caller->getData(), undoManager_);
-	}
+//	else if(caller->getData().getType() == Ids::pluck)
+//	{
+//		comp = new LinkPropertiesComponent(this, caller->getData(), undoManager_);
+//	}
+//	else if(caller->getData().getType() == Ids::touch)
+//	{
+//		comp = new TouchPropertiesComponent(this, caller->getData(), undoManager_);
+//	}
 	else if(caller->getData().getType() == Ids::waveguide)
 	{
 		comp = new WaveguidePropertiesComponent(this, caller->getData(), undoManager_);

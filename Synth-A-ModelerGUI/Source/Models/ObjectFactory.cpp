@@ -110,14 +110,16 @@ static ValueTree createNewLinkTree(String startObject, String endObject)
 //	newTree.setProperty(Ids::posX, x, nullptr);
 //	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
-	paramsTree.setProperty(Ids::idx[0], "", nullptr);
+	paramsTree.setProperty(Ids::idx[0], "0", nullptr);
+    paramsTree.setProperty(Ids::idx[1], "0", nullptr);
+    paramsTree.setProperty(Ids::idx[2], "0", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier,"l_"+String(rnd), nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
-	labelsTree.setProperty(Ids::idx[0], "laebl_"+String(rnd), nullptr);
+	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
@@ -129,12 +131,12 @@ static ValueTree createNewTouchTree(String startObject, String endObject)
 
 //	newTree.setProperty(Ids::posX, x, nullptr);
 //	newTree.setProperty(Ids::posY, y, nullptr);
-	ValueTree paramsTree(Ids::parameters);
-	paramsTree.setProperty(Ids::idx[0], "", nullptr);
-	newTree.addChild(paramsTree, -1, nullptr);
-	int rnd = Random::getSystemRandom().nextInt(100000);
-	newTree.setProperty(Ids::identifier, "t_"+String(rnd), nullptr);
-	newTree.setProperty(Ids::startVertex, startObject, nullptr);
+    ValueTree paramsTree(Ids::parameters);
+    paramsTree.setProperty(Ids::idx[0], "", nullptr);
+    newTree.addChild(paramsTree, -1, nullptr);
+    int rnd = Random::getSystemRandom().nextInt(100000);
+    newTree.setProperty(Ids::identifier, "t_" + String(rnd), nullptr);
+    newTree.setProperty(Ids::startVertex, startObject, nullptr);
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
 	labelsTree.setProperty(Ids::idx[0], "label_"+String(rnd), nullptr);
@@ -207,23 +209,19 @@ ValueTree createNewLinkObjectTree(const Identifier& linkType,
 
 ObjectComponent* createNewObjectComponentFromTree(ObjController& owner, ValueTree objTree)
 {
-    ObjectComponent* const objComp = new ObjectComponent(owner, 
-                                                         objTree);
+    ObjectComponent* const objComp = new ObjectComponent(owner, objTree);
     
     owner.addComponent(objComp);
     return objComp;
 }
+
 LinkComponent* createNewLinkComponentFromTree(ObjController& owner, ValueTree linkTree)
 {
     LinkComponent* const linkComp = new LinkComponent(owner, linkTree);
     
     owner.addLinkComponent(linkComp);
-//    linkComp->setData(linkTree);
     return linkComp;
 }
-//BaseObjectComponent* createObjectComponent(const Identifier& objType, int x, int y)
-//{
-//}
 
 }
 

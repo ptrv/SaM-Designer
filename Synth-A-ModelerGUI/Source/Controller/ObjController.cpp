@@ -180,19 +180,13 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
     if (undoable)
     {
         owner.getUndoManager()->perform(new RemoveObjectAction(objects, holder, objComp, this));
-
     }
     else
     {
         DBG(selectedObjects.getNumSelected());
         selectedObjects.deselect(objComp);
         selectedObjects.changed(true);
-        
-        ValueTree root = objComp->getData().getParent();
-        ValueTree oldValue = objComp->getData();
-//        holder->removeChildComponent(objComp);
         objects.removeObject(objComp);
-//        root.removeChild(oldValue, nullptr);
     }
     
 }
@@ -269,6 +263,7 @@ void ObjController::selectAll(bool shouldBeSelected)
         {
             selectedObjects.addToSelection(objects[i]);
         }
+        selectedLinks.deselectAll();
         for (int j = 0; j < links.size(); ++j)
         {
             selectedLinks.addToSelection(links[j]);
