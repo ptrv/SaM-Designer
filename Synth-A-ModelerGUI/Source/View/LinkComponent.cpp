@@ -211,6 +211,9 @@ bool LinkComponent::sameStartEnd(ValueTree linkTree)
 
 void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
 {
+    int iconWidth = 25;
+    int iconHeight = 25;
+    
     if(data.getType() == Ids::link)
     {
         linePath.clear();
@@ -228,8 +231,8 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
                                                                    0,
                                                                    0,
-                                                                   25,
-                                                                   25);
+                                                                   iconWidth,
+                                                                   iconHeight);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,
@@ -242,11 +245,17 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
     }
     else if(data.getType() == Ids::touch)
     {
+        //This is the little bit of the path which covers the icon
+        float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) +  (y2 - y1)*(y2 - y1));
+
         linePath.clear();
         linePath.startNewSubPath(x1, y1);
-        linePath.lineTo(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+        linePath.lineTo(x1 + (x2 - x1) * (0.5f-c), 
+                        y1 + (y2 - y1) * (0.5f-c));
         
-        linePath.startNewSubPath((x1 + (x2 - x1) / 2), (y1 + (y2 - y1) / 2));
+        linePath.startNewSubPath(x1 + (x2 - x1)*(0.5f+c), 
+                                 y1 + (y2 - y1)*(0.5f+c));
+//        linePath.applyTransform(AffineTransform::translation(10, 10));
         linePath.lineTo(x2, y2);
         
         PathStrokeType wideStroke(8.0f);
@@ -260,8 +269,8 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
                                                                    0,
                                                                    0,
-                                                                   25,
-                                                                   25);
+                                                                   iconWidth,
+                                                                   iconHeight);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,
@@ -274,11 +283,17 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
     }
     else if(data.getType() == Ids::pluck)
     {
+        //This is the little bit of the path which covers the icon
+        float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) +  (y2 - y1)*(y2 - y1));
+        
         linePath.clear();
         linePath.startNewSubPath(x1, y1);
-        linePath.lineTo(x1 + (x2 - x1) / 2, y1 + (y2 - y1) / 2);
+        linePath.lineTo(x1 + (x2 - x1) * (0.5f-c), 
+                        y1 + (y2 - y1) * (0.5f-c));
         
-        linePath.startNewSubPath((x1 + (x2 - x1) / 2), (y1 + (y2 - y1) / 2));
+        linePath.startNewSubPath((x1 + (x2 - x1) *(0.5f+c)), 
+                                 (y1 + (y2 - y1) *(0.5f+c)));
+//        linePath.applyTransform(AffineTransform::translation(10,10));
         linePath.lineTo(x2, y2);
         
         PathStrokeType wideStroke(8.0f);
@@ -292,8 +307,8 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
                                                                    0,
                                                                    0,
-                                                                   25,
-                                                                   25);
+                                                                   iconWidth,
+                                                                   iconHeight);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,
