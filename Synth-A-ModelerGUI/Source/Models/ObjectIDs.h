@@ -103,7 +103,7 @@ namespace Objects
 
 	#undef DECLARE_ID
 
-	static const Identifier& getObjectType(const Identifier& ident)
+	static const Identifier& getObjectGroup(const Identifier& ident)
 	{
 		if(ident == Ids::mass || ident == Ids::port
 				|| ident == Ids::ground	|| ident == Ids::resonator)

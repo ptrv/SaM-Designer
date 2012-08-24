@@ -55,17 +55,6 @@ void ObjectsHolder::paint(Graphics& g)
     g.fillAll(Colours::white);
 
     g.setColour(Colours::black);
-    if (dragging)
-    {
-        //		setAlwaysOnTop(true);
-        float x = draggingStart.x;
-        float y = draggingStart.y;
-        float w = draggingActual.x; // - x;
-        float h = draggingActual.y; // - y;
-        g.drawRect(x, y, w, h);
-    }
-    
-     
 }
 
 void ObjectsHolder::resized()
@@ -82,7 +71,9 @@ void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 
 void ObjectsHolder::updateComponents()
 {
+    // TODO Find faster solution for updating componenans
     int i;
+    Array<LinkComponent*> links;
     for (i = getNumChildComponents(); --i >= 0;)
     {
         ObjectComponent * const bobj = dynamic_cast<ObjectComponent*> (getChildComponent(i));
@@ -94,20 +85,15 @@ void ObjectsHolder::updateComponents()
         
         if (lobj != nullptr)
         {
-            lobj->toBack();
-            lobj->update();
+            links.add(lobj);
         }
     }
-//    for (i = getNumChildComponents(); --i >= 0;)
-//    {
-//        LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i));
-//
-//        if (lobj != nullptr)
-//        {
-//            lobj->toBack();
-//            lobj->update();
-//        }
-//    }
+    for (i = 0; i < links.size(); i++)
+    {
+        links[i]->update();
+        links[i]->toBack();
+    }
+
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -207,6 +193,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case StandardApplicationCommandIDs::del:
         objController.removeSelectedObjects(this);
+        objController.removeSelectedLinks(this);
         break;
     case CommandIDs::defineVariables:
         VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());
@@ -320,8 +307,6 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	m.addItem (1, "Add link");
 	m.addItem (2, "Add touch");
 	m.addItem (3, "Add pluck");
-	m.addSeparator();
-	m.addItem (4, "Connect");
 	const int r = m.show();
 
 //    String so = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
@@ -344,12 +329,6 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 		DBG("Add pluck");
         objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::pluck, so, eo));
 	}
-	else if (r == 4)
-	{
-		DBG("Add connect");
-	}
-
-
 }
 void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
 {

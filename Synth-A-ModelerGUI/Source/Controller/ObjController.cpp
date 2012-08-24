@@ -51,24 +51,9 @@ bool ObjController::perform(UndoableAction * const action, const String& actionN
     return owner.perform(action, actionName);
 }
 
-ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objValues, bool undoable)
+ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objValues, int index, bool undoable)
 {
-//    const Identifier& tmpIdent = Objects::getObjectType(objId);
-//    if (tmpIdent != Objects::invalid)
-//    {
-//        ValueTree mdl = owner.getMDLTree();
-//        ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
-//
-//    }
-//
     selectedObjects.deselectAll();
-    
-//    if(objComp == nullptr)
-//    {
-//        objComp = new ObjectComponent(holder->getObjController(),
-//                             objValues.getType(), int(objValues[Ids::posX]), int(objValues[Ids::posY]));
-//
-//    }
     
     if(undoable)
     {
@@ -79,21 +64,13 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
     }
     else
     {
-        const Identifier& tmpIdent = Objects::getObjectType(objValues.getType().toString());
+        const Identifier& groupName = Objects::getObjectGroup(objValues.getType().toString());
         ValueTree mdl = owner.getMDLTree();
-        ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
-
-////        ValueTree newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
-//        ObjectComponent* objComp = new ObjectComponent(holder->getObjController(),
-//                                                       objValues.getType(),
-//                                                       int(objValues[Ids::posX]),
-//                                                       int(objValues[Ids::posY]));
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
 		subTree.addChild(objValues,-1, nullptr);
-        ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues);
+        ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues, index);
 
-//		objComp->setData(objValues);
-//		objects.add(objComp);
 		holder->addAndMakeVisible(objComp);
         holder->updateComponents();
         changed();
@@ -105,10 +82,10 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
 void ObjController::addNewObject(ObjectsHolder* holder, ValueTree objValues)
 {
     
-    addObject(holder, objValues, true);
+    addObject(holder, objValues, -1, true);
 }
 
-LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValues, bool undoable)
+LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValues, int index, bool undoable)
 {
     selectedLinks.deselectAll();
     if(undoable)
@@ -120,11 +97,11 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
     }
     else
     {
-        const Identifier& tmpIdent = Objects::getObjectType(linkValues.getType().toString());
+        const Identifier& gruopName = Objects::getObjectGroup(linkValues.getType());
         ValueTree mdl = owner.getMDLTree();
-        ValueTree subTree = mdl.getOrCreateChildWithName(tmpIdent, nullptr);
+        ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
-        LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues);
+        LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues, index);
 
 		holder->addAndMakeVisible(linkComp);
         holder->updateComponents();
@@ -136,7 +113,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
 
 void ObjController::addNewLink(ObjectsHolder* holder, ValueTree linkValues)
 {
-    addLink(holder, linkValues, true);
+    addLink(holder, linkValues, -1, true);
 }
 bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
 {
@@ -156,7 +133,7 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     {
         if(! checkIfLinkExitsts(linkValues))
         {
-            addLink(holder, linkValues, true);
+            addLink(holder, linkValues, -1, true);
             holder->updateComponents();
         }
     }
@@ -166,26 +143,36 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     }
 }
 
-void ObjController::addComponent(ObjectComponent* comp)
+void ObjController::addComponent(ObjectComponent* comp, int index)
 {
-    objects.add(comp);
+    objects.insert(index, comp);
 }
 
-void ObjController::addLinkComponent(LinkComponent* comp)
+void ObjController::addLinkComponent(LinkComponent* comp, int index)
 {
-    links.add(comp);
+    links.insert(index, comp);
 }
 void ObjController::removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder)
 {
     if (undoable)
     {
-        owner.getUndoManager()->perform(new RemoveObjectAction(objects, holder, objComp, this));
+        owner.getUndoManager()->perform(new RemoveObjectAction(holder, objComp, this));
     }
     else
     {
-        DBG(selectedObjects.getNumSelected());
         selectedObjects.deselect(objComp);
         selectedObjects.changed(true);
+        int lIdx = -1;
+        if(checkIfObjectHasLink(objComp, lIdx))
+        {
+            DBG("Object has link nr " + String(lIdx));
+            removeLink(getLink(lIdx), true, holder);
+//            links.remove(lIdx);
+        }
+        const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+        subTree.removeChild(objComp->getData(), nullptr);
         objects.removeObject(objComp);
     }
     
@@ -213,43 +200,73 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 
 void ObjController::removeSelectedLinks(ObjectsHolder* holder)
 {
-    
+    const SelectedItemSet <LinkComponent*> temp(selectedLinks);
+
+    if (temp.getNumSelected() > 0)
+    {
+        selectedLinks.deselectAll();
+        selectedLinks.changed(true);
+
+        for (int i = temp.getNumSelected(); --i >= 0;)
+        {
+            removeLink(temp.getSelectedItem(i), true, holder);
+        }
+    }
 }
 
 void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder)
 {
-    
+    if (undoable)
+    {
+        owner.getUndoManager()->perform(new RemoveLinkAction(holder, linkComp, this));
+    }
+    else
+    {
+        selectedLinks.deselect(linkComp);
+        selectedLinks.changed(true);
+        const Identifier& groupName = Objects::getObjectGroup(linkComp->getData().getType());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+        subTree.removeChild(linkComp->getData(), nullptr);
+        links.removeObject(linkComp);
+    }
 }
 
 void ObjController::loadComponents(ObjectsHolder* holder)
 {
     MDLFile* mf = owner.getMDLFile();
     ValueTree mdl = mf->mdlRoot;
-    for (int i = 0; i < mdl.getNumChildren(); ++i)
+    
+    ValueTree massObjects = mdl.getChildWithName(Objects::masses);
+    for (int i = 0; i < massObjects.getNumChildren(); i++)
     {
-        ValueTree objectGroup = mdl.getChild(i);
-        for (int j = 0; j < objectGroup.getNumChildren(); ++j)
-        {
-            ValueTree obj = objectGroup.getChild(j);
+        ValueTree obj = massObjects.getChild(i);
+        ObjectComponent* objComp = new ObjectComponent(*this, obj);
+        objects.add(objComp);
+        holder->addAndMakeVisible(objComp);
+        objComp->update();
+        SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+    }
+    ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
+    for (int i = 0; i < audioObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = audioObjects.getChild(i);
+        ObjectComponent* objComp = new ObjectComponent(*this, obj);
+        objects.add(objComp);
+        holder->addAndMakeVisible(objComp);
+        objComp->update();
+        SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+    }
 
-            // TODO: Remove conditional when icons zip is complete
-            if (obj.getType() == Ids::mass || obj.getType() == Ids::port
-                || obj.getType() == Ids::ground || obj.getType() == Ids::resonator
-                || obj.getType() == Ids::audioout)
-            {
-                ObjectComponent* objComp = new ObjectComponent(*this, obj);
-                objects.add(objComp);
-                holder->addAndMakeVisible(objComp);
-                SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            }
-            else if(obj.getType() == Ids::link || obj.getType() == Ids::touch
-                    || obj.getType() == Ids::pluck)
-            {
-                LinkComponent* linkComp = new LinkComponent(*this, obj);
-                links.add(linkComp);
-                holder->addAndMakeVisible(linkComp);
-            }
-        }
+    ValueTree linkObjects = mdl.getChildWithName(Objects::links);
+    for (int i = 0; i < linkObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = linkObjects.getChild(i);
+        LinkComponent* linkComp = new LinkComponent(*this, obj);
+        links.add(linkComp);
+        holder->addAndMakeVisible(linkComp);
+        linkComp->update();
+        SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
     }
     holder->updateComponents();
 }
@@ -311,9 +328,10 @@ void ObjController::dragSelectedComps(int dx, int dy, const Rectangle<int>& pare
 
         r.setXY(startX + dx, startY + dy);
 
-        c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2));
+        c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
     }
 
+    changed();
     owner.getMDLFile()->changed();
     //    changed();
 }
@@ -354,4 +372,22 @@ void ObjController::reverseLinkDirection()
         selectedLinks.getItemArray()[i]->reverseDirection();
     }
     changed();
+}
+
+bool ObjController::checkIfObjectHasLink(ObjectComponent* objComp, int& linkIndex)
+{
+    ValueTree objTree = objComp->getData();
+    for (int i = 0; i < links.size(); i++)
+    {
+        ValueTree linkTree = links[i]->getData();
+        
+        if(linkTree.getProperty(Ids::startVertex) == objTree.getProperty(Ids::identifier)
+            || linkTree.getProperty(Ids::endVertex) == objTree.getProperty(Ids::identifier))
+        {
+            linkIndex = i;
+            return true;
+        }
+    }
+    linkIndex = -1;
+    return false;
 }

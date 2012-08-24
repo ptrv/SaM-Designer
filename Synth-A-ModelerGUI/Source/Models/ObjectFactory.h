@@ -46,9 +46,11 @@ namespace ObjectFactory
                                 String startObject,
                                 String endObject);
     ObjectComponent* createNewObjectComponentFromTree(ObjController& owner,
-                                                      ValueTree objTree);
+                                                      ValueTree objTree,
+                                                      int index);
     LinkComponent* createNewLinkComponentFromTree(ObjController& owner,
-                                                      ValueTree linkTree);
+                                                  ValueTree linkTree,
+                                                  int index);
 
 }
 

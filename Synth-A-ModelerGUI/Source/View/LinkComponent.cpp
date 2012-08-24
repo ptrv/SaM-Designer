@@ -65,6 +65,7 @@ void LinkComponent::update()
         || lastOutputY != y2)
     {
         resizeToFit();
+//        repaint();
     }
 }
 
@@ -180,14 +181,16 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
 
     if (startComp != nullptr)
     {
-        x1 = startComp->getX() + startComp->getWidth()/2;
-        y1 = startComp->getY() + startComp->getHeight()/2;
+        Point<int> startPos = startComp->getActualPos();
+        x1 = startPos.x;
+        y1 = startPos.y;
     }
 
     if (endComp != nullptr)
     {
-        x2 = endComp->getX() + endComp->getWidth()/2;
-        y2 = endComp->getY() + endComp->getHeight()/2;
+        Point<int> endPos = endComp->getActualPos();
+        x2 = endPos.x;
+        y2 = endPos.y;
     }
 }
 

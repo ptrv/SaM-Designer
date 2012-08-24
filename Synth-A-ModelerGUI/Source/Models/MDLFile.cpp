@@ -114,6 +114,7 @@ Result MDLFile::loadDocument (const File& file)
 		SAM_LOG("Opened MDL file: "+getFilePath());
 		setFile(file);
 		setChangedFlag(false);
+        isUntitledFile = false;
 		return Result::ok();
 	}
 	else
@@ -171,6 +172,7 @@ void MDLFile::setLastDocumentOpened (const File& file)
 void MDLFile::mdlChanged()
 {
 	changed();
+//    DBG(mdlRoot.toXmlString());
 }
 //==============================================================================
 void MDLFile::valueTreePropertyChanged (ValueTree& tree, const Identifier& property)

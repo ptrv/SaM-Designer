@@ -29,6 +29,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "ObjectFactory.h"
 #include "../View/ObjectComponent.h"
+#include "../View/LinkComponent.h"
 #include "../View/ObjectsHolder.h"
 #include "../Controller/ObjController.h"
 
@@ -38,12 +39,9 @@ public:
 	AddObjectAction(ObjController* objController_, 
                  ValueTree objTree_, ObjectsHolder* holder_)
 	: objTree(objTree_.createCopy()), 
-//        objComp(objComp_), 
         holderComp(holder_), 
         objController(objController_)
 	{
-		// create a ValueTree with default values.
-//		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
 	}
 	~AddObjectAction()
 	{
@@ -51,18 +49,8 @@ public:
 
 	bool perform()
 	{
-		// Add new Object to mdlRoot and ObjectHolder
-        
-//		ObjectComponent* objComp = new ObjectComponent(holderComp->getObjController(),
-//                                     objId, int(newValue[Ids::posX]), 
-//                                     int(newValue[Ids::posY]));
-        ObjectComponent* objComp = objController->addObject(holderComp, objTree, false);
+        ObjectComponent* objComp = objController->addObject(holderComp, objTree, -1,false);
         indexAdded = objController->indexOfObject(objComp);
-//		mdlSubTree.addChild(newValue,-1, nullptr);
-//		objComp->setData(newValue);
-//		objects.add(objComp);
-//		holderComp->addAndMakeVisible(objComp);
-////		holderComp->updateSelectedObjects();
         String logText = "Add ";
         logText << objTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -71,7 +59,6 @@ public:
 
 	bool undo()
 	{
-        
         objController->removeObject(objController->getObject(indexAdded), false, holderComp);
 
         String logText = "Undo add ";
@@ -82,12 +69,7 @@ public:
     int indexAdded;
 private:
     ValueTree objTree;
-//	OwnedArray<ObjectComponent>& objects;
-//	ValueTree mdlSubTree;
-//	ValueTree newValue;
-//	const Identifier& objId;
 	ObjectsHolder* holderComp;
-	ObjectComponent* objComp;
     ObjController* objController;
     
     
@@ -96,17 +78,16 @@ private:
 class RemoveObjectAction : public UndoableAction
 {
 public:
-	RemoveObjectAction(OwnedArray<ObjectComponent>& objects_,
-                     ObjectsHolder* objHolderComp_,
-                    ObjectComponent* componentToRemove,
-                     ObjController* objController_)
-	: objects(objects_),
-      holderComp(objHolderComp_),
-	  objComp(componentToRemove),
-        objController(objController_)
+    RemoveObjectAction(ObjectsHolder* objHolderComp_,
+                       ObjectComponent* componentToRemove,
+                       ObjController* objController_)
+    : 
+    holderComp(objHolderComp_),
+    objController(objController_),
+    oldIndex(-1)
 	{
-        oldValue = objComp->getData().createCopy();
-        root = objComp->getData().getParent();
+        oldValue = componentToRemove->getData().createCopy();
+        oldIndex = objController->indexOfObject(componentToRemove);
 	}
 	~RemoveObjectAction()
 	{
@@ -115,15 +96,12 @@ public:
 	bool perform()
 	{
         SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
-////        holderComp->removeChildComponent(objComp);
-//        objects.removeObject(objComp, true);
-//        root.removeChild(oldValue, nullptr);
-
+        ObjectComponent* oc = objController->getObject(oldIndex);
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedObjects().selectOnly(objComp);
+            objController->getSelectedObjects().selectOnly(oc);
         }
-        objController->removeObject(objComp, false, holderComp);
+        objController->removeObject(oc, false, holderComp);
 		return true;
 	}
 
@@ -131,27 +109,20 @@ public:
 	{
         SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
-
-        root.addChild(oldValue,-1, nullptr);
-        objComp = new ObjectComponent(holderComp->getObjController(), oldValue);
-        objComp->setCentrePosition(int(oldValue[Ids::posX]), int(oldValue[Ids::posY]));
-        objects.add(objComp);
-        holderComp->addAndMakeVisible(objComp);
-//        objController->getSelectedElements().addToSelection(oc);
+        ObjectComponent* oc = objController->addObject(holderComp, oldValue, oldIndex, false);
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedObjects().selectOnly(objComp);
+            objController->getSelectedObjects().selectOnly(oc);
         }
 
 		return true;
 	}
 private:
-    OwnedArray<ObjectComponent>& objects;
 	ObjectsHolder* holderComp;
-	ObjectComponent* objComp;
 	ValueTree oldValue;
-    ValueTree root;
     ObjController* objController;
+    int oldIndex;
+    
 
 };
 
@@ -162,7 +133,8 @@ public:
 			Point<int> newPos_)
 	: holderComp(objHolderComp_),
 	  objComp(componentToMove),
-	  newPos(newPos_)
+	  newPos(newPos_),
+        oldPos(componentToMove->getActualPos())
 	{
 
 	}
@@ -174,21 +146,13 @@ public:
 
 	bool perform()
 	{
-        ValueTree objData = objComp->getData();
-		oldPos.x = int(objData[Ids::posX]);
-		oldPos.y = int(objData[Ids::posY]);
-		objData.setProperty(Ids::posX, newPos.getX(), nullptr);
-		objData.setProperty(Ids::posY, newPos.getY(), nullptr);
-		objComp->setActualPosition(newPos);
+        objComp->setPosition(newPos, false);
 		return true;
 	}
 
 	bool undo()
 	{
-        ValueTree objData = objComp->getData();
-		objData.setProperty(Ids::posX, oldPos.getX(), nullptr);
-		objData.setProperty(Ids::posY, oldPos.getY(), nullptr);
-		objComp->setActualPosition(oldPos);
+        objComp->setPosition(oldPos, false);
 		return true;
 	}
 private:
@@ -207,8 +171,6 @@ public:
         holderComp(holder_), 
         objController(objController_)
 	{
-		// create a ValueTree with default values.
-//		newValue = ObjectFactory::createNewObjectTree(objId, posX, posY);
 	}
 	~AddLinkAction()
 	{
@@ -216,7 +178,7 @@ public:
 
 	bool perform()
 	{
-        LinkComponent* linkComp = objController->addLink(holderComp, linkTree, false);
+        LinkComponent* linkComp = objController->addLink(holderComp, linkTree, -1, false);
         indexAdded = objController->indexOfLink(linkComp);
 
         String logText = "Add ";
@@ -228,8 +190,7 @@ public:
 	bool undo()
 	{
         
-//        objController->removeObject(objController->getObject(indexAdded), false, holderComp);
-
+        objController->removeLink(objController->getLink(indexAdded), false, holderComp);
         String logText = "Undo add ";
         logText <<  linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
 		SAM_LOG(logText);
@@ -239,11 +200,58 @@ public:
 private:
     ValueTree linkTree;
 	ObjectsHolder* holderComp;
-	LinkComponent* linkComp;
     ObjController* objController;
     
     
 };
 
+class RemoveLinkAction : public UndoableAction
+{
+public:
+    RemoveLinkAction(ObjectsHolder* objHolderComp_,
+                       LinkComponent* linkToRemove,
+                       ObjController* objController_)
+    : 
+    holderComp(objHolderComp_),
+    objController(objController_),
+    oldIndex(-1)
+	{
+        oldValue = linkToRemove->getData().createCopy();
+        oldIndex = objController->indexOfLink(linkToRemove);
+	}
+	~RemoveLinkAction()
+	{
+	}
+
+	bool perform()
+	{
+        SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
+        LinkComponent* lc = objController->getLink(oldIndex);
+        if(objController->getSelectedLinks().getNumSelected() == 0)
+        {
+            objController->getSelectedLinks().selectOnly(lc);
+        }
+        objController->removeLink(lc, false, holderComp);
+		return true;
+	}
+
+	bool undo()
+	{
+        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
+
+        LinkComponent* lc = objController->addLink(holderComp, oldValue, oldIndex, false);
+        if(objController->getSelectedLinks().getNumSelected() == 0)
+        {
+            objController->getSelectedLinks().selectOnly(lc);
+        }
+        
+		return true;
+	}
+private:
+	ObjectsHolder* holderComp;
+	ValueTree oldValue;
+    ObjController* objController;
+    int oldIndex;
+};
 
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

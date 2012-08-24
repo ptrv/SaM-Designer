@@ -52,8 +52,10 @@ public:
 
     void toggleSelected();
 
-    void setPosition(Point<int> newPos);
+    void setPosition(Point<int> newPos, bool undoable);
     void setActualPosition(Point<int> pos);
+    
+    Point<int> getActualPos() const { return actualPos; }
 
     void setOriginalPosition();
     

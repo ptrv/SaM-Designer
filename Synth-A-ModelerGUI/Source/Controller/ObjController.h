@@ -59,11 +59,11 @@ public:
 	 * @param posX			initial x position of the object
 	 * @param posY			initial y position of the object
 	 */
-	ObjectComponent* addObject(ObjectsHolder* holder, ValueTree objValues, bool undoable);
+	ObjectComponent* addObject(ObjectsHolder* holder, ValueTree objValues, int index, bool undoable);
 
     void addNewObject(ObjectsHolder* holder, ValueTree objValues);
     
-    void addComponent(ObjectComponent* comp);
+    void addComponent(ObjectComponent* comp, int index);
     
 	/**
 	 * Removes selected objects from the patch
@@ -74,13 +74,13 @@ public:
 
     void removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder);
 
-    LinkComponent* addLink(ObjectsHolder* holder, ValueTree linkValues, bool undoable);
+    LinkComponent* addLink(ObjectsHolder* holder, ValueTree linkValues, int index, bool undoable);
     
     void addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues);
     
     void addNewLink(ObjectsHolder* holder, ValueTree linkValues);
     
-    void addLinkComponent(LinkComponent* comp);
+    void addLinkComponent(LinkComponent* comp, int index);
 
 	void removeSelectedLinks(ObjectsHolder* holder);
 
@@ -135,6 +135,7 @@ public:
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
+    bool checkIfObjectHasLink(ObjectComponent* objComp, int& linkIndex);
 	MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;

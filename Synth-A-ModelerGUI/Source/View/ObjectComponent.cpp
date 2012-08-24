@@ -178,10 +178,24 @@ void ObjectComponent::update()
 	setCentrePosition((float) actualPos.x, (float) actualPos.y);
 }
 
-void ObjectComponent::setPosition(Point<int> newPos)
+void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
 {
-    owner.getUndoManager()->perform(new MoveObjectAction(getObjectsHolder(), this, newPos), "Move object");
-//    owner.perform()
+    if (actualPos != newPos)
+    {
+        if (undoable)
+        {
+            owner.getUndoManager()->perform(new MoveObjectAction(getObjectsHolder(),
+                                                                 this, newPos),
+                                            "Move object");
+        }
+        else
+        {
+            data.setProperty(Ids::posX, newPos.getX(), nullptr);
+            data.setProperty(Ids::posY, newPos.getY(), nullptr);
+            setActualPosition(newPos);
+            getObjectsHolder()->updateComponents();
+        }
+    }
 }
 void ObjectComponent::setActualPosition(Point<int> pos)
 {
@@ -191,7 +205,6 @@ void ObjectComponent::setActualPosition(Point<int> pos)
 void ObjectComponent::setData(ValueTree dataTree)
 {
 	data = dataTree;
-    DBG(data.toXmlString());
 }
 
 void ObjectComponent::setSelected(bool shouldBeSelected)

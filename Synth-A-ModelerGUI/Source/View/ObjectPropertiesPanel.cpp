@@ -525,6 +525,8 @@ public:
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
+        
+        teSource.setBounds(80 , 40, getWidth() -90, 22);
 	}
 
 	void readValues()

@@ -73,6 +73,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << ");";
 		mdlContent << " # pos " << mo.getProperty(Ids::posX, "0").toString() << "," << mo.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
+//        DBG(mo.toXmlString());
 	}
 
 	// write links
@@ -104,7 +105,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
-		mdlContent << " # pos " << li.getProperty(Ids::posX, "0").toString() << "," << li.getProperty(Ids::posY, "0").toString();
+//		mdlContent << " # pos " << li.getProperty(Ids::posX, "0").toString() << "," << li.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 	}
 
