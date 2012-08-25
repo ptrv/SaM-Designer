@@ -147,6 +147,7 @@ Result MDLFile::saveDocument (const File& file)
     if(isUntitledFile)
     {
         loadDocument(file);
+        StoredSettings::getInstance()->recentFiles.addFile(file);
         isUntitledFile = false;
     }
     if(saveOk)
