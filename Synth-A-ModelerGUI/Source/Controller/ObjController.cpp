@@ -413,6 +413,14 @@ void ObjController::copySelectedToClipboard()
             clip.addChildElement (e);
         }
     }
+    Array<int> linkIndices;
+    for (int i = 0; i < linkIndices.size(); ++i)
+    {
+        LinkComponent* const lc = links.getUnchecked(linkIndices[i]);
+        
+        XmlElement* const e = lc->getData().createXml();
+        clip.addChildElement (e);
+    }
 
     SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
 }
@@ -437,6 +445,13 @@ void ObjController::paste(ObjectsHolder* holder)
                 int posY = int(valTree.getProperty(Ids::posY));
                 valTree.setProperty(Ids::posX, posX + 10, nullptr);
                 valTree.setProperty(Ids::posY, posY + 10, nullptr);
+                
+                if(! didCut)
+                {
+                    String objName = valTree.getProperty(Ids::identifier).toString();
+                    objName.append("_copy", 10);
+                    valTree.setProperty(Ids::identifier, objName, nullptr);
+                }
                 ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
 
                 if (newObjectComp != 0)
@@ -448,6 +463,7 @@ void ObjController::paste(ObjectsHolder* holder)
             }
         }
     }
+    didCut = false;
 }
 
 void ObjController::cut(ObjectsHolder* holder)
