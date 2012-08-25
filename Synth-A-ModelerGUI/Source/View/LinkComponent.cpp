@@ -42,6 +42,14 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
     
+    if(startComp->getData().getType() == Ids::audioout)
+    {
+        startComp->getData().setProperty(Ids::sources, endComp->getData().getProperty(Ids::identifier).toString() + String("*0.1"), nullptr);
+    }
+    if(endComp->getData().getType() == Ids::audioout)
+    {
+        endComp->getData().setProperty(Ids::sources, startComp->getData().getProperty(Ids::identifier).toString() + String("*0.1"), nullptr);
+    }
     owner.getSelectedLinks().addChangeListener(this);
 
     update();
