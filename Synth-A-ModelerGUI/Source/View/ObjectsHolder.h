@@ -72,7 +72,7 @@ public:
     
     ObjController& getObjController() const { return objController; }
     
-    const Rectangle<int> getComponentArea() const;
+//    const Rectangle<int> getComponentArea() const;
     void showLinkPopupMenu(String so, String eo);
     
     void deleteSelectedObjects();
@@ -88,7 +88,6 @@ private:
     Point<int> draggingStart;
     Point<int> draggingActual;
 
-//    bool isMultipleSelection;
     LassoComponent<ObjectComponent*> lassoComp;
 };
 

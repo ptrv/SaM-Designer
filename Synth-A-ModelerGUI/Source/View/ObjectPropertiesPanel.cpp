@@ -675,14 +675,6 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(BaseObjectComponent* caller, UndoMa
 	{
 		comp = new LinkPropertiesComponent(this, caller->getData(), undoManager_);
 	}
-//	else if(caller->getData().getType() == Ids::pluck)
-//	{
-//		comp = new LinkPropertiesComponent(this, caller->getData(), undoManager_);
-//	}
-//	else if(caller->getData().getType() == Ids::touch)
-//	{
-//		comp = new TouchPropertiesComponent(this, caller->getData(), undoManager_);
-//	}
 	else if(caller->getData().getType() == Ids::waveguide)
 	{
 		comp = new WaveguidePropertiesComponent(this, caller->getData(), undoManager_);

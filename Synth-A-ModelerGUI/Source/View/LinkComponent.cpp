@@ -42,11 +42,8 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
     
-//    icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(linkId));
-        
     owner.getSelectedLinks().addChangeListener(this);
-//    setAlwaysOnTop (true);
-    
+
     update();
 }
 
@@ -65,7 +62,6 @@ void LinkComponent::update()
         || lastOutputY != y2)
     {
         resizeToFit();
-//        repaint();
     }
 }
 
@@ -121,7 +117,6 @@ void LinkComponent::paint(Graphics& g)
 
 void LinkComponent::mouseDown(const MouseEvent& e)
 {
-    DBG("clicked link");
     mouseDownSelectStatus = owner.getSelectedLinks().addToSelectionOnMouseDown (this, e.mods);
 }
 
@@ -230,7 +225,6 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         stroke.createStrokedPath(linePath, linePath);
 
         Path iconPath;
-        //    DBG(linkId.toString());
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
                                                                    0,
                                                                    0,
@@ -268,7 +262,6 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         stroke.createStrokedPath(linePath, linePath);
 
         Path iconPath;
-        //    DBG(linkId.toString());
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
                                                                    0,
                                                                    0,
@@ -306,7 +299,6 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         stroke.createStrokedPath(linePath, linePath);
 
         Path iconPath;
-        //    DBG(linkId.toString());
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
                                                                    0,
                                                                    0,
@@ -351,6 +343,6 @@ void LinkComponent::reverseDirection()
     
     startComp = owner.getObjectForId(tempEnd);
     endComp = owner.getObjectForId(tempStart);
-    
+
     update();
 }

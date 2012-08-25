@@ -82,8 +82,7 @@ void ObjectComponent::paint(Graphics& g)
 
 	if(isSelected)
 	{
-
-		Colour col(0x88228b22);
+//		Colour col(0x88228b22);
 		g.setColour(Colours::black);
 		g.drawRect(x, y, w, h, 2);
 	}
@@ -136,23 +135,22 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
     if (! e.mods.isPopupMenu())
     {
         jassert (dynamic_cast <ObjectsHolder*> (getParentComponent()) != 0);
-        const Rectangle<int> area (((ObjectsHolder*) getParentComponent())->getComponentArea());
-
+//        const Rectangle<int> area (((ObjectsHolder*) getParentComponent())->getComponentArea());
+        
         if (isSelected && ! dragging)
         {
             dragging = ! e.mouseWasClicked();
 
             if (dragging)
             {
-                owner.startDragging (area);
+                owner.startDragging ();
             }
         }
 
         if (dragging)
         {
             owner.dragSelectedComps (e.getDistanceFromDragStartX(),
-                                      e.getDistanceFromDragStartY(),
-                                      area);
+                                      e.getDistanceFromDragStartY());
         }
         update();
     }

@@ -59,8 +59,6 @@ void ObjectsHolder::paint(Graphics& g)
 
 void ObjectsHolder::resized()
 {
-    //	DBG(getBounds().toString());
-    //	setBounds(0,0, getParentComponent()->getWidth(), getParentComponent()->getHeight());
     updateComponents();
 }
 
@@ -201,15 +199,6 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         // TODO: implement segmented connectors
         StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
         break;
-        //    case CommandIDs::zoomIn:
-        //    	// TODO: implement zoom in
-        //    	break;
-        //    case CommandIDs::zoomOut:
-        //    	// TODO: implement zoom out
-        //    	break;
-        //    case CommandIDs::zoomNormal:
-        //    	// TODO: implement zoom normal
-        //    	break;
     case CommandIDs::reverseDirection:
         objController.reverseLinkDirection();
         break;
@@ -308,10 +297,6 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	m.addItem (3, "Add pluck");
 	const int r = m.show();
 
-//    String so = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
-//    String eo = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
-//    
-//    DBG(String("Link: ") + so + String(", ") + eo);
 	if (r == 1)
 	{
 		DBG("Add link");
@@ -344,7 +329,6 @@ void ObjectsHolder::findLassoItemsInArea (Array <ObjectComponent*>& results, con
         {
             e->setSelected(true);
             results.add (e);
-            
         }
     }
 }
@@ -355,22 +339,22 @@ SelectedItemSet <ObjectComponent*>& ObjectsHolder::getLassoSelection()
 }
 
 
-const Rectangle<int> ObjectsHolder::getComponentArea() const
-{
-//    if (document.isFixedSize())
-//    {
-//        return Rectangle<int> ((getWidth() - document.getInitialWidth()) / 2,
-//                               (getHeight() - document.getInitialHeight()) / 2,
-//                               document.getInitialWidth(),
-//                               document.getInitialHeight());
-//    }
-//    else
-//    {
-//        return Rectangle<int> (editorEdgeGap, editorEdgeGap,
-//                               getWidth() - editorEdgeGap * 2,
-//                               getHeight() - editorEdgeGap * 2);
-//    }
-}
+//const Rectangle<int> ObjectsHolder::getComponentArea() const
+//{
+////    if (document.isFixedSize())
+////    {
+////        return Rectangle<int> ((getWidth() - document.getInitialWidth()) / 2,
+////                               (getHeight() - document.getInitialHeight()) / 2,
+////                               document.getInitialWidth(),
+////                               document.getInitialHeight());
+////    }
+////    else
+////    {
+////        return Rectangle<int> (editorEdgeGap, editorEdgeGap,
+////                               getWidth() - editorEdgeGap * 2,
+////                               getHeight() - editorEdgeGap * 2);
+////    }
+//}
 
 void ObjectsHolder::deleteSelectedObjects()
 {

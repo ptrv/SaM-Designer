@@ -115,8 +115,8 @@ public:
         return selectedLinks;
     }
     
-    void startDragging (const Rectangle<int>& parentArea);
-    void dragSelectedComps (int dxFromDragStart, int dyFromDragStart, const Rectangle<int>& parentArea);
+    void startDragging();
+    void dragSelectedComps (int dxFromDragStart, int dyFromDragStart);
     void endDragging();
     
     UndoManager* getUndoManager();

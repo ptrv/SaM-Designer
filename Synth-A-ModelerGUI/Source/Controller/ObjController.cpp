@@ -169,9 +169,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
             selectedLinks.deselectAll();
         for(int i = indices.size(); --i >= 0;)
         {
-//            DBG("Object has link nr " + String(lIdx));
             removeLink(getLink(i), true, holder);
-//            links.remove(lIdx);
         }
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
@@ -184,8 +182,6 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
 
 void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 {
-//    owner.getUndoManager()->beginNewTransaction();
-
     const SelectedItemSet <ObjectComponent*> temp(selectedObjects);
 
     if (temp.getNumSelected() > 0)
@@ -198,8 +194,6 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
             removeObject(temp.getSelectedItem(i), true, holder);
         }
     }
-//    owner.getUndoManager()->beginNewTransaction();
-
 }
 
 void ObjController::removeSelectedLinks(ObjectsHolder* holder)
@@ -302,7 +296,7 @@ void ObjController::editObjectProperties(BaseObjectComponent* oc, UndoManager* u
     ObjectPropertiesPanel::show(oc, undoManager);
 }
 
-void ObjController::startDragging(const Rectangle<int>& parentArea)
+void ObjController::startDragging()
 {
     for (int i = 0; i < objects.size(); ++i)
     {
@@ -317,7 +311,7 @@ void ObjController::startDragging(const Rectangle<int>& parentArea)
     owner.getUndoManager()->beginNewTransaction();
 }
 
-void ObjController::dragSelectedComps(int dx, int dy, const Rectangle<int>& parentArea)
+void ObjController::dragSelectedComps(int dx, int dy)
 {
     owner.getUndoManager()->undoCurrentTransactionOnly();
 
@@ -337,7 +331,6 @@ void ObjController::dragSelectedComps(int dx, int dy, const Rectangle<int>& pare
 
     changed();
     owner.getMDLFile()->changed();
-    //    changed();
 }
 
 void ObjController::endDragging()
