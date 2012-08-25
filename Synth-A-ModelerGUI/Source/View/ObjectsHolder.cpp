@@ -172,18 +172,18 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     {
         startObj = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
         endObj = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
-        DBG(String("Link: ") + startObj + String(", ") + endObj);
+//        DBG(String("Link: ") + startObj + String(", ") + endObj);
     }
     switch (info.commandID)
     {
     case StandardApplicationCommandIDs::cut:
-        // TODO: implement cut
+        objController.cut(this);
         break;
     case StandardApplicationCommandIDs::copy:
-        // TODO: implement copy
+        objController.copySelectedToClipboard();
         break;
     case StandardApplicationCommandIDs::paste:
-        // TODO: implement paste
+        objController.paste(this);
         break;
     case StandardApplicationCommandIDs::selectAll:
         objController.selectAll(true);

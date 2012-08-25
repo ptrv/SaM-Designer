@@ -132,6 +132,11 @@ public:
     ObjectComponent* getObjectForId(String idString) const throw();
     
     void reverseLinkDirection();
+    
+    static const char* const clipboardXmlTag;
+    void copySelectedToClipboard();
+    void paste(ObjectsHolder* holder);
+    void cut(ObjectsHolder* holder);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

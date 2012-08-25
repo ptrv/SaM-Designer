@@ -53,7 +53,7 @@ bool ObjController::perform(UndoableAction * const action, const String& actionN
 
 ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objValues, int index, bool undoable)
 {
-    selectedObjects.deselectAll();
+//    selectedObjects.deselectAll();
     
     if(undoable)
     {
@@ -82,12 +82,14 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
 void ObjController::addNewObject(ObjectsHolder* holder, ValueTree objValues)
 {
     
-    addObject(holder, objValues, -1, true);
+    ObjectComponent* oc = addObject(holder, objValues, -1, true);
+    selectedObjects.selectOnly(oc);
+    
 }
 
 LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValues, int index, bool undoable)
 {
-    selectedLinks.deselectAll();
+//    selectedLinks.deselectAll();
     if(undoable)
     {
         AddLinkAction* action = new AddLinkAction(this, linkValues, holder);
@@ -396,4 +398,68 @@ Array<int> ObjController::checkIfObjectHasLinks(ObjectComponent* objComp)
         }
     }
     return linkIndices;
+}
+
+//==============================================================================
+const char* const ObjController::clipboardXmlTag = "SAMOBJECTS";
+
+void ObjController::copySelectedToClipboard()
+{
+    if (selectedObjects.getNumSelected() == 0)
+        return;
+
+    XmlElement clip (clipboardXmlTag);
+
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        ObjectComponent* const oc = objects.getUnchecked(i);
+
+        if (selectedObjects.isSelected (oc))
+        {
+            XmlElement* const e = oc->getData().createXml();
+            clip.addChildElement (e);
+        }
+    }
+
+    SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
+}
+
+bool didCut = false;
+void ObjController::paste(ObjectsHolder* holder)
+{
+    XmlDocument clip (SystemClipboard::getTextFromClipboard());
+    ScopedPointer<XmlElement> doc (clip.getDocumentElement());
+
+    if (doc != 0 && doc->hasTagName (clipboardXmlTag))
+    {
+        selectedObjects.deselectAll();
+        selectedLinks.deselectAll();
+
+        forEachXmlChildElement (*doc, e)
+        {
+            ValueTree valTree = ValueTree::fromXml(*e);
+            if(Objects::getObjectGroup(valTree.getType()) == Objects::masses)
+            {
+                int posX = int(valTree.getProperty(Ids::posX));
+                int posY = int(valTree.getProperty(Ids::posY));
+                valTree.setProperty(Ids::posX, posX + 10, nullptr);
+                valTree.setProperty(Ids::posY, posY + 10, nullptr);
+                ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
+
+                if (newObjectComp != 0)
+                    selectedObjects.addToSelection(newObjectComp);
+            }
+            else if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
+            {
+                
+            }
+        }
+    }
+}
+
+void ObjController::cut(ObjectsHolder* holder)
+{
+    copySelectedToClipboard();
+    removeSelectedObjects(holder);
+    didCut = true;
 }
