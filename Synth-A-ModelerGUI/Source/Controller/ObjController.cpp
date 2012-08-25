@@ -169,7 +169,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
             selectedLinks.deselectAll();
         for(int i = indices.size(); --i >= 0;)
         {
-            removeLink(getLink(i), true, holder);
+            removeLink(getLink(indices[i]), true, holder);
         }
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
