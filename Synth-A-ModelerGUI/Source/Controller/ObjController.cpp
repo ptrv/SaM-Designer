@@ -164,7 +164,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
     {
         selectedObjects.deselect(objComp);
         selectedObjects.changed(true);
-        Array<int> indices = checkIfObjectHasLinks(objComp);
+        Array<int> indices = checkIfObjectHasLinks(objComp->getData());
         if(indices.size() > 0)
             selectedLinks.deselectAll();
         for(int i = indices.size(); --i >= 0;)
@@ -376,10 +376,10 @@ void ObjController::reverseLinkDirection()
     owner.getUndoManager()->beginNewTransaction();
 }
 
-Array<int> ObjController::checkIfObjectHasLinks(ObjectComponent* objComp)
+Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
 {
     Array<int> linkIndices;
-    ValueTree objTree = objComp->getData();
+//    ValueTree objTree = objComp->getData();
     for (int i = 0; i < links.size(); i++)
     {
         ValueTree linkTree = links[i]->getData();
