@@ -63,3 +63,9 @@ bool Alerts::confirmExport(const String& text)
 	return AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, title, text);
 }
 
+void Alerts::nameAlreadyExists()
+{
+    String title = "Name error";
+    String msg = "Identifier already exists!";
+    AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
+}

@@ -40,6 +40,7 @@ public:
 	static void missingFaust();
 	static void wrongFileType();
 	static bool confirmExport(const String& text);
+    static void nameAlreadyExists();
 private:
 	static void missingAlert(const String& title, const String& msg);
 

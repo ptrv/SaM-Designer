@@ -138,6 +138,7 @@ public:
     void paste(ObjectsHolder* holder);
     void cut(ObjectsHolder* holder);
     
+    bool checkIfIdExists(const String& idStr);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

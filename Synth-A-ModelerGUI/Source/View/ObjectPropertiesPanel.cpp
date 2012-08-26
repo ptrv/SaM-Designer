@@ -25,6 +25,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Controller/MDLController.h"
+#include "../Controller/ObjController.h"
 #include "ObjectComponent.h"
 
 #include "ObjectPropertiesPanel.h"
@@ -36,8 +37,11 @@ class ObjectPropertiesComponent : public Component,
 {
 public:
 	ObjectPropertiesComponent(ObjectPropertiesPanel* op_,
-			ValueTree data_, UndoManager* undoManager_)
+                             ObjController* objController_,
+                             ValueTree data_, 
+                             UndoManager* undoManager_)
 	: op(op_),
+      objController(objController_),
 	  data(data_),
 	  undoManager(undoManager_),
 	  btOk("Ok"),
@@ -76,11 +80,19 @@ public:
 		if(button == &btOk)
 		{
 			undoManager->beginNewTransaction("Change object properties");
-			writeValues();
+			bool writeOk = writeValues();
             undoManager->beginNewTransaction();
-			SAM_LOG("Change "+data.getType().toString()+" "+data[Ids::identifier].toString());
-			op->returnVal = 1;
-			op->closeButtonPressed();
+			if(writeOk)
+            {
+    			SAM_LOG("Change "+data.getType().toString()+" "+data[Ids::identifier].toString());
+                op->returnVal = 1;
+                op->closeButtonPressed();
+            }
+            else
+            {
+                SAM_LOG("Name already exists");
+                Alerts::nameAlreadyExists();
+            }
 		}
 		else if( button == &btCancel)
 		{
@@ -90,11 +102,16 @@ public:
 		}
 	}
 
+    bool checkIfIdExists(const String& idStr)
+    {
+        return objController->checkIfIdExists(idStr);
+    }
 	virtual void readValues() = 0;
-	virtual void writeValues() = 0;
+	virtual bool writeValues() = 0;
 
 protected:
 	ObjectPropertiesPanel* op;
+    ObjController* objController;
 	ValueTree data;
 	UndoManager* undoManager;
 	TextButton btOk;
@@ -109,8 +126,10 @@ class MassPropertiesComponent : public ObjectPropertiesComponent
 {
 public:
 	MassPropertiesComponent(ObjectPropertiesPanel* op_,
-			ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_),
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
 	  laMass("laMass", "Mass (kg)"),
 	  teMass("teMass"),
 	  laPos("laPos", "Position (m)"),
@@ -160,26 +179,32 @@ public:
 		}
 		teLabels.setText(labelsArray.joinIntoString(","));
 	}
-	void writeValues()
+	bool writeValues()
 	{
-		data.setProperty(Ids::identifier, teName.getText(), undoManager);
-		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        String idName = teName.getText();
+        if (objController->checkIfIdExists(idName))
+            return false;
+
+        data.setProperty(Ids::identifier, idName, undoManager);
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
         ValueTree pa3 = paramsTree.getChild(2);
         pa1.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teMass.getText()), undoManager);
         pa2.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
         pa3.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teVel.getText()), undoManager);
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+        ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
+        String labelsString = teLabels.getText();
+        StringArray labelsArray;
+        labelsArray.addTokens(labelsString, ",", "\"");
+        for (int i = 0; i < labelsArray.size(); ++i)
+        {
             ValueTree label(Ids::label);
-			label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
             labelsTree.addChild(label, -1, undoManager);
-		}
+        }
+        return true;
 	}
 private:
 	Label laMass;
@@ -197,8 +222,10 @@ class PortPropertiesComponent : public ObjectPropertiesComponent
 {
 public:
 	PortPropertiesComponent(ObjectPropertiesPanel* op_,
-			ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_),
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
 	  laLabels("laLabels", "Labels"),
 	  teLabels("teLabels")
 	{
@@ -232,9 +259,13 @@ public:
 
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-		data.setProperty(Ids::identifier, teName.getText(), undoManager);
+        String idName = teName.getText();
+        if (objController->checkIfIdExists(idName))
+            return false;
+
+        data.setProperty(Ids::identifier, idName, undoManager);
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
 		String labelsString = teLabels.getText();
@@ -244,8 +275,8 @@ public:
             ValueTree label(Ids::label);
             label.setProperty(Ids::value, labelsArray[i], undoManager);
             labelsTree.addChild(label, -1, undoManager);
-		}
-
+        }
+        return true;
 	}
 	Label laLabels;
 	TextEditor teLabels;
@@ -257,8 +288,10 @@ private:
 class ResonatorPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	ResonatorPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
+                                 ObjController* objController_,
+                                 ValueTree data_,
+                                 UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
 	{
 
 		readValues();
@@ -278,9 +311,9 @@ public:
 
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-
+        return true;
 	}
 
 private:
@@ -289,8 +322,10 @@ private:
 class GroundPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	GroundPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_),
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
 	  laLabels("laLabels", "Labels"),
 	  teLabels("teLabels"),
 	  laPos("laPos", "Position (m)"),
@@ -329,9 +364,13 @@ public:
 
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-		data.setProperty(Ids::identifier, teName.getText(), undoManager);
+        String idName = teName.getText();
+        if (objController->checkIfIdExists(idName))
+            return false;
+
+        data.setProperty(Ids::identifier, idName, undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, tePos.getText(), undoManager);
@@ -344,6 +383,7 @@ public:
             label.setProperty(Ids::value, labelsArray[i], undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
+        return true;
 	}
 
 private:
@@ -357,8 +397,10 @@ private:
 class LinkPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	LinkPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_),
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
         laStiff("laStiff", "Stiffness (N/m)"),
         teStiff("teStiff"),
         laDamp("laDamp", "Damping (N/(m/s))"),
@@ -422,9 +464,13 @@ public:
         teEndVertex.setText(data[Ids::endVertex].toString());
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-        data.setProperty(Ids::identifier, teName.getText(), undoManager);
+        String idName = teName.getText();
+        if (objController->checkIfIdExists(idName))
+            return false;
+
+        data.setProperty(Ids::identifier, idName, undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
@@ -443,6 +489,7 @@ public:
             label.setProperty(Ids::value, labelsArray[i], undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
+        return true;
 	}
 
 private:
@@ -527,8 +574,10 @@ private:
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	AudiooutPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_),
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
         laSource("laSource", "Source"),
         teSource("teSource")
 	{
@@ -555,10 +604,16 @@ public:
         teSource.setText(data[Ids::sources].toString());
 	}
 
-	void writeValues()
+	bool writeValues()
     {
-        data.setProperty(Ids::identifier, teName.getText(), undoManager);
+        String idName = teName.getText();
+        if (objController->checkIfIdExists(idName))
+            return false;
+
+        data.setProperty(Ids::identifier, idName, undoManager);
         data.setProperty(Ids::sources, teSource.getText(), undoManager);
+        
+        return true;
 	}
 
 private:
@@ -569,8 +624,10 @@ private:
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
 public:
 	WaveguidePropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
 	{
 
 		readValues();
@@ -590,9 +647,9 @@ public:
 
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-
+        return true;
 	}
 
 private:
@@ -601,8 +658,10 @@ private:
 class TerminationPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	TerminationPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
 	{
 
 		readValues();
@@ -622,9 +681,9 @@ public:
 
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-
+        return true;
 	}
 
 private:
@@ -633,8 +692,10 @@ private:
 class JunctionPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	JunctionPropertiesComponent(ObjectPropertiesPanel* op_,
-	ValueTree data_, UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, data_, undoManager_)
+                         ObjController* objController_,
+                         ValueTree data_,
+                         UndoManager* undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
 	{
 
 		readValues();
@@ -654,9 +715,9 @@ public:
 
 	}
 
-	void writeValues()
+	bool writeValues()
 	{
-
+        return true;
 	}
 
 private:
@@ -666,7 +727,9 @@ private:
 static String exportWindowPos;
 
 
-ObjectPropertiesPanel::ObjectPropertiesPanel(BaseObjectComponent* caller, UndoManager* undoManager_)
+ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
+                                             BaseObjectComponent* caller, 
+                                             UndoManager* undoManager_)
     : DialogWindow (Utils::getObjectTypeAsString(caller->getData().getType())+ " properties",
     		Colour::greyLevel (0.92f), true),
       returnVal(0)
@@ -675,41 +738,41 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(BaseObjectComponent* caller, UndoMa
 	Component* comp;
 	if(caller->getData().getType() == Ids::mass)
 	{
-		comp = new MassPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new MassPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::port)
 	{
-		comp = new PortPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new PortPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::resonator)
 	{
-		comp = new ResonatorPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new ResonatorPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::ground)
 	{
-		comp = new GroundPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new GroundPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::link
         || caller->getData().getType() == Ids::touch
         || caller->getData().getType() == Ids::pluck)
 	{
-		comp = new LinkPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new LinkPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::waveguide)
 	{
-		comp = new WaveguidePropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new WaveguidePropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::junction)
 	{
-		comp = new JunctionPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new JunctionPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::termination)
 	{
-		comp = new TerminationPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new TerminationPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::audioout)
 	{
-		comp = new AudiooutPropertiesComponent(this, caller->getData(), undoManager_);
+		comp = new AudiooutPropertiesComponent(this, objController, caller->getData(), undoManager_);
 	}
 	else
 	{
@@ -734,9 +797,9 @@ void ObjectPropertiesPanel::closeButtonPressed()
     setVisible (false);
 }
 
-int ObjectPropertiesPanel::show(BaseObjectComponent* caller, UndoManager* undoManager_)
+int ObjectPropertiesPanel::show(ObjController* objController, BaseObjectComponent* caller, UndoManager* undoManager_)
 {
-	ObjectPropertiesPanel ep(caller, undoManager_);
+	ObjectPropertiesPanel ep(objController, caller, undoManager_);
     ep.runModalLoop();
     return ep.returnVal;
 }

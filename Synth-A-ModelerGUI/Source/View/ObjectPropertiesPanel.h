@@ -36,7 +36,7 @@ class BaseObjectComponent;
 class ObjectPropertiesPanel  : public DialogWindow
 {
 public:
-	ObjectPropertiesPanel(BaseObjectComponent* caller, UndoManager* undoManager_);
+	ObjectPropertiesPanel(ObjController* objController, BaseObjectComponent* caller, UndoManager* undoManager_);
     ~ObjectPropertiesPanel();
 
     void closeButtonPressed();
@@ -50,7 +50,7 @@ public:
      * 							2 for clicking cancel button
      * 							0 when close button was pressed
      */
-    static int show(BaseObjectComponent* caller, UndoManager* undoManager_);
+    static int show(ObjController* objController, BaseObjectComponent* caller, UndoManager* undoManager_);
 
     int returnVal;
 };

@@ -309,7 +309,7 @@ void ObjController::selectAll(bool shouldBeSelected)
 
 void ObjController::editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager)
 {
-    ObjectPropertiesPanel::show(oc, undoManager);
+    ObjectPropertiesPanel::show(this, oc, undoManager);
 }
 
 void ObjController::startDragging()
@@ -537,4 +537,9 @@ Array<int> ObjController::getLinksToCopy()
     }
 
     return linksToCopy;
+}
+
+bool ObjController::checkIfIdExists(const String& idStr)
+{
+    return objectIds.contains(idStr);
 }
