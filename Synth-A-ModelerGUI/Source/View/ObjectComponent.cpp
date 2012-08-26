@@ -183,7 +183,7 @@ void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
         if (undoable)
         {
             owner.getUndoManager()->perform(new MoveObjectAction(getObjectsHolder(),
-                                                                 this, newPos),
+                                                                 this, newPos, &owner),
                                             "Move object");
         }
         else

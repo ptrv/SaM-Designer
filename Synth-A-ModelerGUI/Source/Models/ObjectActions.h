@@ -130,13 +130,15 @@ class MoveObjectAction : public UndoableAction {
 public:
 	MoveObjectAction(ObjectsHolder* objHolderComp_,
 			ObjectComponent* componentToMove,
-			Point<int> newPos_)
+			Point<int> newPos_,
+            ObjController* objController_)
 	: holderComp(objHolderComp_),
-	  objComp(componentToMove),
+//	  objComp(componentToMove),
+      objController(objController_),
 	  newPos(newPos_),
-        oldPos(componentToMove->getActualPos())
+      oldPos(componentToMove->getActualPos())
 	{
-
+        indexOfObjectToMove = objController->indexOfObject(componentToMove);
 	}
 
 	~MoveObjectAction()
@@ -146,20 +148,24 @@ public:
 
 	bool perform()
 	{
-        objComp->setPosition(newPos, false);
+        ObjectComponent* oc = objController->getObject(indexOfObjectToMove);
+        oc->setPosition(newPos, false);
 		return true;
 	}
 
 	bool undo()
 	{
-        objComp->setPosition(oldPos, false);
+        ObjectComponent* oc = objController->getObject(indexOfObjectToMove);
+        oc->setPosition(oldPos, false);
 		return true;
 	}
 private:
 	ObjectsHolder* holderComp;
-	ObjectComponent* objComp;
+//	ObjectComponent* objComp;
 	Point<int> newPos;
     Point<int> oldPos;
+    int indexOfObjectToMove;
+    ObjController* objController;
 };
 
 class AddLinkAction : public UndoableAction
