@@ -42,14 +42,31 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
     
-    if(startComp->getData().getType() == Ids::audioout)
-    {
-        startComp->getData().setProperty(Ids::sources, endComp->getData().getProperty(Ids::identifier).toString() + String("*0.1"), nullptr);
-    }
-    if(endComp->getData().getType() == Ids::audioout)
-    {
-        endComp->getData().setProperty(Ids::sources, startComp->getData().getProperty(Ids::identifier).toString() + String("*0.1"), nullptr);
-    }
+    startComp->addLinkToObject(this);
+    endComp->addLinkToObject(this);
+
+    // TODO Better solution for this.
+//    if(startComp->getData().getType() == Ids::audioout)
+//    {
+//        String aoSourceName = endComp->getData().getProperty(Ids::identifier).toString();
+//        String aoSource = startComp->getData().getProperty(Ids::sources);
+//        if(aoSource != String::empty)
+//            aoSource.append("+", 1);
+//        aoSource.append("1.0*", 5);
+//        aoSource.append(aoSourceName, 256);
+//        startComp->getData().setProperty(Ids::sources, aoSource, nullptr);
+//    }
+//    else if(endComp->getData().getType() == Ids::audioout)
+//    {
+//        String aoSourceName = startComp->getData().getProperty(Ids::identifier).toString();
+//        String aoSource = endComp->getData().getProperty(Ids::sources);
+//        if(aoSource != String::empty)
+//            aoSource.append("+", 1);
+//        aoSource.append("1.0*", 5);
+//        aoSource.append(aoSourceName, 256);
+//        endComp->getData().setProperty(Ids::sources, aoSource, nullptr);
+//    }
+
     owner.getSelectedLinks().addChangeListener(this);
 
     update();
@@ -57,6 +74,9 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 
 LinkComponent::~LinkComponent()
 {
+    startComp->removeLinkFromObject(this);
+    endComp->removeLinkFromObject(this);
+    
     owner.getSelectedLinks().removeChangeListener(this);
 }
 void LinkComponent::update()

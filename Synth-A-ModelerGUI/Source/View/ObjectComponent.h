@@ -30,6 +30,7 @@ class ObjectsHolder;
 class ObjController;
 
 #include "BaseObjectComponent.h"
+#include "LinkComponent.h"
 /**
  * The object component.
  */
@@ -59,6 +60,11 @@ public:
 
     void setOriginalPosition();
     
+    void addLinkToObject(LinkComponent* link);
+    void removeLinkFromObject(LinkComponent* link);
+    
+    Array<LinkComponent*> getAttachedLinks() { return connectedLinks; }
+    
 private:
 
     void showLinkPopupMenu();
@@ -75,6 +81,8 @@ private:
     bool dragging, mouseDownSelectStatus;
     
     ChangeBroadcaster selfChangeListenerList;
+    
+    Array<LinkComponent*> connectedLinks;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };

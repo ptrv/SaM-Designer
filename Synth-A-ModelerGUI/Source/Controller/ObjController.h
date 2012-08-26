@@ -137,17 +137,18 @@ public:
     void copySelectedToClipboard();
     void paste(ObjectsHolder* holder);
     void cut(ObjectsHolder* holder);
+    
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
     Array<int> checkIfObjectHasLinks(ValueTree objTree);
-	MDLController& owner;
+    Array<int> getLinksToCopy();
+    MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
     SelectedItemSet<ObjectComponent*> selectedObjects;
     SelectedItemSet<LinkComponent*> selectedLinks;
-
-
+    SortedSet<String> objectIds;
 };
 
 

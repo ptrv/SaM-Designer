@@ -69,6 +69,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
 		subTree.addChild(objValues,-1, nullptr);
+        objectIds.add(objValues[Ids::identifier].toString());
         ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues, index);
 
 		holder->addAndMakeVisible(objComp);
@@ -174,6 +175,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+        objectIds.removeValue(objComp->getData()[Ids::identifier].toString());
         subTree.removeChild(objComp->getData(), nullptr);
         objects.removeObject(objComp);
     }
@@ -239,21 +241,35 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < massObjects.getNumChildren(); i++)
     {
         ValueTree obj = massObjects.getChild(i);
-        ObjectComponent* objComp = new ObjectComponent(*this, obj);
-        objects.add(objComp);
-        holder->addAndMakeVisible(objComp);
-        objComp->update();
-        SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        if(objectIds.add(obj[Ids::identifier].toString()))
+        {
+            ObjectComponent* objComp = new ObjectComponent(*this, obj);
+            objects.add(objComp);
+            holder->addAndMakeVisible(objComp);
+            objComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
     }
     ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
     for (int i = 0; i < audioObjects.getNumChildren(); i++)
     {
         ValueTree obj = audioObjects.getChild(i);
-        ObjectComponent* objComp = new ObjectComponent(*this, obj);
-        objects.add(objComp);
-        holder->addAndMakeVisible(objComp);
-        objComp->update();
-        SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        if(objectIds.add(obj[Ids::identifier].toString()))
+        {
+            ObjectComponent* objComp = new ObjectComponent(*this, obj);
+            objects.add(objComp);
+            holder->addAndMakeVisible(objComp);
+            objComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
     }
 
     ValueTree linkObjects = mdl.getChildWithName(Objects::links);
@@ -413,15 +429,16 @@ void ObjController::copySelectedToClipboard()
             clip.addChildElement (e);
         }
     }
-    Array<int> linkIndices;
-    for (int i = 0; i < linkIndices.size(); ++i)
-    {
-        LinkComponent* const lc = links.getUnchecked(linkIndices[i]);
-        
-        XmlElement* const e = lc->getData().createXml();
-        clip.addChildElement (e);
-    }
-
+//    Array<int> linkIndices = getLinksToCopy();
+////    selectedLinks.deselectAll();
+//    for (int i = 0; i < linkIndices.size(); ++i)
+//    {
+//        LinkComponent* const lc = links.getUnchecked(linkIndices[i]);
+//        
+//        XmlElement* const e = lc->getData().createXml();
+//        clip.addChildElement (e);
+//    }
+//
     SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
 }
 
@@ -446,21 +463,37 @@ void ObjController::paste(ObjectsHolder* holder)
                 valTree.setProperty(Ids::posX, posX + 10, nullptr);
                 valTree.setProperty(Ids::posY, posY + 10, nullptr);
                 
-                if(! didCut)
+                String objName = valTree.getProperty(Ids::identifier).toString();
+                if(objectIds.contains(objName))
                 {
-                    String objName = valTree.getProperty(Ids::identifier).toString();
                     objName.append("_copy", 10);
                     valTree.setProperty(Ids::identifier, objName, nullptr);
-                }
+                    ValueTree objLabels = valTree.getChildWithName(Ids::labels);
+                    for (int i = 0; i < objLabels.getNumProperties(); ++i)
+                    {
+                        String la = objLabels.getProperty(Ids::idx[i]).toString();
+                        la.append("_copy", 5);
+                        objLabels.setProperty(Ids::idx[i], la, nullptr);
+                    }
+                    }
                 ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
 
                 if (newObjectComp != 0)
                     selectedObjects.addToSelection(newObjectComp);
             }
-            else if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
-            {
-                
-            }
+//            else if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
+//            {
+//                if(! didCut)
+//                {
+//                    String linkName = valTree.getProperty(Ids::identifier).toString();
+//                    linkName.append("_copy", 10);
+//                    valTree.setProperty(Ids::identifier, linkName, nullptr);
+//                }
+//                LinkComponent* newLinkComp = addLink(holder, valTree, -1, true);
+//
+//                if (newLinkComp != 0)
+//                    selectedLinks.addToSelection(newLinkComp);
+//            }
         }
     }
     didCut = false;
@@ -471,4 +504,36 @@ void ObjController::cut(ObjectsHolder* holder)
     copySelectedToClipboard();
     removeSelectedObjects(holder);
     didCut = true;
+}
+
+Array<int> ObjController::getLinksToCopy()
+{
+    Array<int> linkIndices;
+    Array<int> linksToCopy;
+    linkIndices.clear();
+    for (int i = 0; i < links.size(); ++i)
+    {
+        linkIndices.add(0);
+    }
+
+    for (int j = 0; j < selectedObjects.getNumSelected(); ++j)
+    {
+        ObjectComponent* oc = selectedObjects.getItemArray()[j];
+        
+        Array<LinkComponent*> ocLinks = oc->getAttachedLinks();
+                
+        for (int k = 0; k < ocLinks.size(); ++k)
+        {
+            int idx = indexOfLink(ocLinks[k]);
+            int lIndex = linkIndices.getUnchecked(idx);
+            linkIndices.set(idx, ++lIndex);
+        }
+    }
+    for (int i = 0; i < linkIndices.size(); ++i)
+    {
+        if(linkIndices[i] >= 2)
+            linksToCopy.add(i);
+    }
+
+    return linksToCopy;
 }

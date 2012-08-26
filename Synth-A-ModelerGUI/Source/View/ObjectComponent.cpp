@@ -238,3 +238,12 @@ void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)
         repaint();
     }
 }
+
+void ObjectComponent::addLinkToObject(LinkComponent* link)
+{
+    connectedLinks.add(link);
+}
+void ObjectComponent::removeLinkFromObject(LinkComponent* link)
+{
+    connectedLinks.removeAllInstancesOf(link);
+}
