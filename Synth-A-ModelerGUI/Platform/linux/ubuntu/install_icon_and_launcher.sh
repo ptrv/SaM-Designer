@@ -17,6 +17,6 @@ cp $BASEDIR/synthamodeler.desktop $LAUNCHER_PATH
 
 echo "Install icon..."
 mkdir -p $ICON_PATH
-cp $BASEDIR/../../../BinaryData/synthamodeler_icon.png.desktop $ICON_PATH
+cp $BASEDIR/../../../BinaryData/synthamodeler_icon.png $ICON_PATH
 
 echo "Done."
