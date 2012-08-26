@@ -77,6 +77,7 @@ public:
 		{
 			undoManager->beginNewTransaction("Change object properties");
 			writeValues();
+            undoManager->beginNewTransaction();
 			SAM_LOG("Change "+data.getType().toString()+" "+data[Ids::identifier].toString());
 			op->returnVal = 1;
 			op->closeButtonPressed();
@@ -538,7 +539,7 @@ public:
 	void writeValues()
     {
         data.setProperty(Ids::identifier, teName.getText(), undoManager);
-        data.setProperty(Ids::sources, laSource.getText(), undoManager);
+        data.setProperty(Ids::sources, teSource.getText(), undoManager);
 	}
 
 private:
