@@ -198,6 +198,9 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
             					CommandIDs::saveDocumentAs,
                                 CommandIDs::generateFaust,
                                 CommandIDs::generateExternal,
+#ifdef _DEBUG
+                                CommandIDs::writeMDLFileAsXml,
+#endif
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -227,7 +230,11 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     	result.setInfo("External Object", "", CommandCategories::generation,0);
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
     	break;
-
+#if defined _DEBUG
+    case CommandIDs::writeMDLFileAsXml:
+        result.setInfo("MDL -> XML", "Write MDL file as XML", CommandCategories::tools, 0);
+        break;
+#endif
     default:
         break;
     };
@@ -267,7 +274,36 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
     }
     	break;
+#ifdef _DEBUG
+    case CommandIDs::writeMDLFileAsXml:
+    {
+        FileChooser fc ("Select XML file to save...",
+                               File::getSpecialLocation (File::userHomeDirectory),
+                               "*.xml");
 
+        if (fc.browseForFileToSave(true))
+        {
+            File xmlFile (fc.getResult());
+
+            TemporaryFile temp(xmlFile);
+
+            ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
+
+            if (out != nullptr)
+            {
+
+                String mdlXmlStr = mdlController->getMDLFile()->toString();
+                out->write(mdlXmlStr.toUTF8(),
+                           mdlXmlStr.getNumBytesAsUTF8());
+                out = nullptr; // (deletes the stream)
+
+                bool succeeded = temp.overwriteTargetFileWithTemporary();
+                return succeeded;
+            }
+        }
+    }
+        break;
+#endif
 	default:
         return false;
     };

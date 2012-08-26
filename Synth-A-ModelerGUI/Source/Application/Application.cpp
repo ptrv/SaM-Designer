@@ -503,6 +503,10 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     	menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
     	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::openDataDir);
+#ifdef _DEBUG
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::writeMDLFileAsXml);
+#endif
     }
     else if (topLevelMenuIndex == 5)
     {
