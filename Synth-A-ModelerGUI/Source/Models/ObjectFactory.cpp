@@ -110,8 +110,8 @@ static ValueTree createNewLinkTree(String startObject, String endObject)
 //	newTree.setProperty(Ids::posX, x, nullptr);
 //	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
-	paramsTree.setProperty(Ids::idx[0], "100.0f", nullptr);
-    paramsTree.setProperty(Ids::idx[1], "0.1f", nullptr);
+	paramsTree.setProperty(Ids::idx[0], "100.0", nullptr);
+    paramsTree.setProperty(Ids::idx[1], "0.1", nullptr);
     paramsTree.setProperty(Ids::idx[2], "0", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
@@ -132,9 +132,9 @@ static ValueTree createNewTouchTree(String startObject, String endObject)
 //	newTree.setProperty(Ids::posX, x, nullptr);
 //	newTree.setProperty(Ids::posY, y, nullptr);
     ValueTree paramsTree(Ids::parameters);
-    paramsTree.setProperty(Ids::idx[0], "100.0f", nullptr);
-    paramsTree.setProperty(Ids::idx[1], "0.1f", nullptr);
-    paramsTree.setProperty(Ids::idx[2], "0.0f", nullptr);
+    paramsTree.setProperty(Ids::idx[0], "100.0", nullptr);
+    paramsTree.setProperty(Ids::idx[1], "0.1", nullptr);
+    paramsTree.setProperty(Ids::idx[2], "0.0", nullptr);
     newTree.addChild(paramsTree, -1, nullptr);
     int rnd = Random::getSystemRandom().nextInt(100000);
     newTree.setProperty(Ids::identifier, "t_" + String(rnd), nullptr);
@@ -153,9 +153,9 @@ static ValueTree createNewPluckTree(String startObject, String endObject)
 //	newTree.setProperty(Ids::posX, x, nullptr);
 //	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
-    paramsTree.setProperty(Ids::idx[0], "300.0f", nullptr);
-    paramsTree.setProperty(Ids::idx[1], "0.1f", nullptr);
-    paramsTree.setProperty(Ids::idx[2], "0.005f", nullptr);
+    paramsTree.setProperty(Ids::idx[0], "300.0", nullptr);
+    paramsTree.setProperty(Ids::idx[1], "0.1", nullptr);
+    paramsTree.setProperty(Ids::idx[2], "0.005", nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier,"p_"+String(rnd), nullptr);
@@ -175,7 +175,7 @@ static ValueTree createNewAudioOutTree(int x, int y)
 	newTree.setProperty(Ids::posY, y, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier,"a_"+String(rnd), nullptr);
-	newTree.setProperty(Ids::sources, "1.0", nullptr);
+	newTree.setProperty(Ids::sources, "", nullptr);
 
 	return newTree;
 }
