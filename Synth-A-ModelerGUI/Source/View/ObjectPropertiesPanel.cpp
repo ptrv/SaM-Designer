@@ -150,13 +150,13 @@ public:
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		teMass.setText(data.getChildWithName(Ids::parameters)[Ids::idx[0]].toString());
-		tePos.setText(data.getChildWithName(Ids::parameters)[Ids::idx[1]].toString());
-		teVel.setText(data.getChildWithName(Ids::parameters)[Ids::idx[2]].toString());
+		teMass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+		tePos.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+		teVel.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
 		String labelText;
 		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumProperties(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels)[Ids::idx[i]].toString());
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
 		}
 		teLabels.setText(labelsArray.joinIntoString(","));
 	}
@@ -164,15 +164,21 @@ public:
 	{
 		data.setProperty(Ids::identifier, teName.getText(), undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-		paramsTree.setProperty(Ids::idx[0], Utils::fixParameterValueIfNeeded(teMass.getText()), undoManager);
-		paramsTree.setProperty(Ids::idx[1], Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
-		paramsTree.setProperty(Ids::idx[2], Utils::fixParameterValueIfNeeded(teVel.getText()), undoManager);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+        ValueTree pa3 = paramsTree.getChild(2);
+        pa1.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teMass.getText()), undoManager);
+        pa2.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
+        pa3.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teVel.getText()), undoManager);
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+        labelsTree.removeAllChildren(undoManager);
 		String labelsString = teLabels.getText();
 		StringArray labelsArray;
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
-			labelsTree.setProperty(Ids::idx[i], labelsArray[i], undoManager);
+            ValueTree label(Ids::label);
+			label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
 		}
 	}
 private:
@@ -219,8 +225,8 @@ public:
 		teName.setText(data[Ids::identifier].toString());
 		String labelText;
 		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumProperties(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels)[Ids::idx[i]].toString());
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
 		}
 		teLabels.setText(labelsArray.joinIntoString(","));
 
@@ -230,11 +236,14 @@ public:
 	{
 		data.setProperty(Ids::identifier, teName.getText(), undoManager);
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+        labelsTree.removeAllChildren(undoManager);
 		String labelsString = teLabels.getText();
 		StringArray labelsArray;
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
-			labelsTree.setProperty(Ids::idx[i], labelsArray[i], undoManager);
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
 		}
 
 	}
@@ -310,11 +319,11 @@ public:
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		tePos.setText(data.getChildWithName(Ids::parameters)[Ids::idx[0]].toString());
+		tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		String labelText;
 		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumProperties(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels)[Ids::idx[i]].toString());
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
 		}
 		teLabels.setText(labelsArray.joinIntoString(","));
 
@@ -324,13 +333,16 @@ public:
 	{
 		data.setProperty(Ids::identifier, teName.getText(), undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-		paramsTree.setProperty(Ids::idx[0], tePos.getText(), undoManager);
+        ValueTree param = paramsTree.getChild(0);
+        param.setProperty(Ids::value, tePos.getText(), undoManager);
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
 		String labelsString = teLabels.getText();
 		StringArray labelsArray;
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
-			labelsTree.setProperty(Ids::idx[i], labelsArray[i], undoManager);
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
 		}
 	}
 
@@ -397,13 +409,13 @@ public:
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		teStiff.setText(data.getChildWithName(Ids::parameters)[Ids::idx[0]].toString());
-		teDamp.setText(data.getChildWithName(Ids::parameters)[Ids::idx[1]].toString());
-		tePos.setText(data.getChildWithName(Ids::parameters)[Ids::idx[2]].toString());
+		teStiff.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+		teDamp.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
 		String labelText;
 		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumProperties(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels)[Ids::idx[i]].toString());
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
 		}
 		teLabels.setText(labelsArray.joinIntoString(","));
         teStartVertex.setText(data[Ids::startVertex].toString());
@@ -414,15 +426,22 @@ public:
 	{
         data.setProperty(Ids::identifier, teName.getText(), undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-		paramsTree.setProperty(Ids::idx[0], Utils::fixParameterValueIfNeeded(teStiff.getText()), undoManager);
-		paramsTree.setProperty(Ids::idx[1], Utils::fixParameterValueIfNeeded(teDamp.getText()), undoManager);
-		paramsTree.setProperty(Ids::idx[2], Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+        ValueTree pa3 = paramsTree.getChild(2);
+        pa1.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teStiff.getText()), undoManager);
+        pa2.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teDamp.getText()), undoManager);
+        pa3.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
+
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+        labelsTree.removeAllChildren(undoManager);
 		String labelsString = teLabels.getText();
 		StringArray labelsArray;
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
-			labelsTree.setProperty(Ids::idx[i], labelsArray[i], undoManager);
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
 		}
 	}
 

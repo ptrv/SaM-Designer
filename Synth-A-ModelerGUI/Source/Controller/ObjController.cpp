@@ -469,11 +469,12 @@ void ObjController::paste(ObjectsHolder* holder)
                     objName.append("_copy", 10);
                     valTree.setProperty(Ids::identifier, objName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
-                    for (int i = 0; i < objLabels.getNumProperties(); ++i)
+                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
                     {
-                        String la = objLabels.getProperty(Ids::idx[i]).toString();
+                        ValueTree label = objLabels.getChild(i);
+                        String la = label.getProperty(Ids::value).toString();
                         la.append("_copy", 5);
-                        objLabels.setProperty(Ids::idx[i], la, nullptr);
+                        label.setProperty(Ids::value, la, nullptr);
                     }
                     }
                 ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);

@@ -48,7 +48,8 @@ namespace Ids
 	DECLARE_ID (waveguide);
 	DECLARE_ID (termination);
 	DECLARE_ID (junction);
-	DECLARE_ID (parameters);
+	DECLARE_ID (parameter);
+    DECLARE_ID (parameters);
     DECLARE_ID (type);
     DECLARE_ID (identifier);
     DECLARE_ID (kg);
@@ -71,20 +72,11 @@ namespace Ids
     DECLARE_ID (initDisplace);
     DECLARE_ID (faustCode);
     DECLARE_ID (sources);
+    DECLARE_ID (value);
 
     const Identifier class_ ("class");
 
-
     #undef DECLARE_ID
-
-    const static Identifier idx[] = {
-    		Identifier("1"),
-    		Identifier("2"),
-    		Identifier("3"),
-    		Identifier("4"),
-    		Identifier("5")
-    };
-
 }
 
 namespace Objects

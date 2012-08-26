@@ -50,41 +50,41 @@ public:
 		// mass 1
 		expectEquals(m.getChild(0).getType().toString(), Ids::mass.toString());
 		ValueTree params = m.getChild(0).getChildWithName(Ids::parameters);
-		expectEquals(float(params[Ids::idx[0]]), 0.01f);
+		expectEquals(float(params.getChild(0)[Ids::value]), 0.01f);
 		expectEquals(m.getChild(0)[Ids::identifier].toString(), String("m1"));
 		ValueTree labels = m.getChild(0).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("mass1"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("mass1"));
 
 		// mass 2
 		expectEquals(m.getChild(1).getType().toString(), Ids::mass.toString());
 		params = m.getChild(1).getChildWithName(Ids::parameters);
-		expectEquals(float(params[Ids::idx[0]]), 0.01f);
+		expectEquals(float(params.getChild(0)[Ids::value]), 0.01f);
 		expectEquals(m.getChild(1)[Ids::identifier].toString(), String("m2"));
 		labels = m.getChild(1).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("mass2"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("mass2"));
 //		expectEquals(labels[Ids::idx[1]].toString(), String("mmiddle"));
 
 		// mass 3
 		expectEquals(m.getChild(2).getType().toString(), Ids::mass.toString());
 		params = m.getChild(2).getChildWithName(Ids::parameters);
-		expectEquals(float(params[Ids::idx[0]]), 0.03f);
+		expectEquals(float(params.getChild(0)[Ids::value]), 0.03f);
 		expectEquals(m.getChild(2)[Ids::identifier].toString(), String("m3"));
 		labels = m.getChild(2).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("mass3"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("mass3"));
 
 		// port
 		expectEquals(m.getChild(3).getType().toString(), Ids::port.toString());
 //		params = m.getChild(3).getChildWithName(Ids::parameters);
 		expectEquals(m.getChild(3)[Ids::identifier].toString(), String("dev1"));
 		labels = m.getChild(3).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("port1"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("port1"));
 
 		// ground
 		expectEquals(m.getChild(4).getType().toString(), Ids::ground.toString());
 //		params = m.getChild(4).getChildWithName(Ids::parameters);
 		expectEquals(m.getChild(4)[Ids::identifier].toString(), String("g"));
 		labels = m.getChild(4).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("ground1"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("ground1"));
 
 
 		beginTest("getLinks");
@@ -95,39 +95,39 @@ public:
 		// link 1
 		expectEquals(ls.getChild(0).getType().toString(), Ids::link.toString(), "");
 		ValueTree paramsStr = ls.getChild(0).getChildWithName(Ids::parameters);
-		expectEquals(paramsStr[Ids::idx[0]].toString(), String("2.0*adjStiffness"));
-		expectEquals(paramsStr[Ids::idx[1]].toString(), String("0.003"));
-		expectEquals(paramsStr[Ids::idx[2]].toString(), String("0.0"));
+		expectEquals(paramsStr.getChild(0)[Ids::value].toString(), String("2.0*adjStiffness"));
+		expectEquals(paramsStr.getChild(1)[Ids::value].toString(), String("0.003"));
+		expectEquals(paramsStr.getChild(2)[Ids::value].toString(), String("0.0"));
 		expectEquals(ls.getChild(0)[Ids::identifier].toString(), String("l1"));
 		expectEquals(ls.getChild(0)[Ids::startVertex].toString(), String("m1"));
 		expectEquals(ls.getChild(0)[Ids::endVertex].toString(), String("m2"));
 		labels = ls.getChild(0).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("link1"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("link1"));
 
 		// link 2
 		expectEquals(ls.getChild(1).getType().toString(), Ids::link.toString(), "");
 		paramsStr = ls.getChild(1).getChildWithName(Ids::parameters);
-		expectEquals(paramsStr[Ids::idx[0]].toString(), String("2.0*adjStiffness"));
-		expectEquals(paramsStr[Ids::idx[1]].toString(), String("0.004"));
-		expectEquals(paramsStr[Ids::idx[2]].toString(), String("0.0"));
+		expectEquals(paramsStr.getChild(0)[Ids::value].toString(), String("2.0*adjStiffness"));
+		expectEquals(paramsStr.getChild(1)[Ids::value].toString(), String("0.004"));
+		expectEquals(paramsStr.getChild(2)[Ids::value].toString(), String("0.0"));
 		expectEquals(ls.getChild(1)[Ids::identifier].toString(), String("l2"));
 		expectEquals(ls.getChild(1)[Ids::startVertex].toString(), String("m2"));
 		expectEquals(ls.getChild(1)[Ids::endVertex].toString(), String("m3"));
 		labels = ls.getChild(1).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("link2"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("link2"));
 //		expectEquals(labels[Ids::idx[1]].toString(), String("thisl"));
 
 		// link 3
 		expectEquals(ls.getChild(2).getType().toString(), Ids::link.toString(), "");
 		paramsStr = ls.getChild(2).getChildWithName(Ids::parameters);
-		expectEquals(paramsStr[Ids::idx[0]].toString(), String("2.0*adjStiffness"));
-		expectEquals(paramsStr[Ids::idx[1]].toString(), String("0.005"));
-		expectEquals(paramsStr[Ids::idx[2]].toString(), String("0.0"));
+		expectEquals(paramsStr.getChild(0)[Ids::value].toString(), String("2.0*adjStiffness"));
+		expectEquals(paramsStr.getChild(1)[Ids::value].toString(), String("0.005"));
+		expectEquals(paramsStr.getChild(2)[Ids::value].toString(), String("0.0"));
 		expectEquals(ls.getChild(2)[Ids::identifier].toString(), String("l3"));
 		expectEquals(ls.getChild(2)[Ids::startVertex].toString(), String("m2"));
 		expectEquals(ls.getChild(2)[Ids::endVertex].toString(), String("dev1"));
 		labels = ls.getChild(2).getChildWithName(Ids::labels);
-		expectEquals(labels[Ids::idx[0]].toString(), String("link3"));
+		expectEquals(labels.getChild(0)[Ids::value].toString(), String("link3"));
 
 		beginTest("getLabels");
 
