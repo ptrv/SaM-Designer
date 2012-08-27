@@ -103,7 +103,7 @@ void AudioOutConnector::paint(Graphics& g)
 {
     if(selected)
     {
-        g.setColour(Colours::darkred);
+        g.setColour(Colours::red);
     }
     else
     {
