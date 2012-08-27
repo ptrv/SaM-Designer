@@ -164,7 +164,8 @@ void LinkComponent::mouseUp(const MouseEvent& e)
         showContextMenu();
         return; // this may be deleted now..
     }
-    owner.getSelectedLinks().addToSelectionOnMouseUp (this, e.mods, false, mouseDownSelectStatus);
+    owner.getSelectedLinks().addToSelectionOnMouseUp (this, e.mods, false, 
+                                                      mouseDownSelectStatus);
     update();
 }
 

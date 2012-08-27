@@ -166,7 +166,8 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 		getObjectsHolder()->editObjectProperties(this);
 	}
 
-    owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging, mouseDownSelectStatus);
+    owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging, 
+                                                        mouseDownSelectStatus);
 
     update();
 }

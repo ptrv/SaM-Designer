@@ -58,7 +58,8 @@ public:
 		laName.attachToComponent(&teName, true);
 #ifdef _DEBUG
         addAndMakeVisible(&laDebug);
-        laDebug.setText("Pos: " + data[Ids::posX].toString() + String(" ") + data[Ids::posY].toString(),false);
+        laDebug.setText("Pos: " + data[Ids::posX].toString() + String(" ") + 
+                        data[Ids::posY].toString(),false);
 #endif        
 	}
 
@@ -84,7 +85,8 @@ public:
             undoManager->beginNewTransaction();
 			if(writeOk)
             {
-    			SAM_LOG("Change "+data.getType().toString()+" "+data[Ids::identifier].toString());
+    			SAM_LOG("Change "+data.getType().toString()+" " +
+                    data[Ids::identifier].toString());
                 op->returnVal = 1;
                 op->closeButtonPressed();
             }
@@ -96,7 +98,8 @@ public:
 		}
 		else if( button == &btCancel)
 		{
-			SAM_LOG("Cancel change "+data.getType().toString()+" "+data[Ids::identifier].toString());
+			SAM_LOG("Cancel change "+data.getType().toString()+" "+
+                data[Ids::identifier].toString());
 			op->returnVal = 2;
 			op->closeButtonPressed();
 		}
@@ -190,9 +193,15 @@ public:
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
         ValueTree pa3 = paramsTree.getChild(2);
-        pa1.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teMass.getText()), undoManager);
-        pa2.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
-        pa3.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teVel.getText()), undoManager);
+        pa1.setProperty(Ids::value, 
+                        Utils::fixParameterValueIfNeeded(teMass.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(tePos.getText()),
+                        undoManager);
+        pa3.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teVel.getText()), 
+                        undoManager);
         ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
         String labelsString = teLabels.getText();
@@ -475,9 +484,15 @@ public:
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
         ValueTree pa3 = paramsTree.getChild(2);
-        pa1.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teStiff.getText()), undoManager);
-        pa2.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(teDamp.getText()), undoManager);
-        pa3.setProperty(Ids::value, Utils::fixParameterValueIfNeeded(tePos.getText()), undoManager);
+        pa1.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teStiff.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teDamp.getText()),
+                        undoManager);
+        pa3.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(tePos.getText()),
+                        undoManager);
 
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
@@ -506,70 +521,6 @@ private:
     Label laEndVertex;
     TextEditor teEndVertex;
 };
-
-//class TouchPropertiesComponent : public ObjectPropertiesComponent {
-//public:
-//	TouchPropertiesComponent(ObjectPropertiesPanel* op_,
-//	ValueTree data_, UndoManager* undoManager_)
-//	: ObjectPropertiesComponent(op_, data_, undoManager_)
-//    {
-//		
-//        readValues();
-//	}
-//	virtual ~TouchPropertiesComponent()
-//	{
-//
-//	}
-//
-//	void resized()
-//	{
-//		ObjectPropertiesComponent::resized();
-//	}
-//
-//	void readValues()
-//    {
-//
-//	}
-//
-//	void writeValues()
-//    {
-//
-//	}
-//
-//private:
-//};
-//
-//class PluckPropertiesComponent : public ObjectPropertiesComponent {
-//public:
-//	PluckPropertiesComponent(ObjectPropertiesPanel* op_,
-//	ValueTree data_, UndoManager* undoManager_)
-//	: ObjectPropertiesComponent(op_, data_, undoManager_)
-//	{
-//
-//		readValues();
-//	}
-//	virtual ~PluckPropertiesComponent()
-//	{
-//
-//	}
-//
-//	void resized()
-//	{
-//		ObjectPropertiesComponent::resized();
-//	}
-//
-//	void readValues()
-//	{
-//
-//	}
-//
-//	void writeValues()
-//	{
-//
-//	}
-//
-//private:
-//};
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
 public:
@@ -737,42 +688,51 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 
 	Component* comp;
 	if(caller->getData().getType() == Ids::mass)
-	{
-		comp = new MassPropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new MassPropertiesComponent(this, objController,
+                                           caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::port)
-	{
-		comp = new PortPropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new PortPropertiesComponent(this, objController,
+                                           caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::resonator)
-	{
-		comp = new ResonatorPropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new ResonatorPropertiesComponent(this, objController,
+                                                caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::ground)
 	{
-		comp = new GroundPropertiesComponent(this, objController, caller->getData(), undoManager_);
+		comp = new GroundPropertiesComponent(this, objController, 
+                                             caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::link
         || caller->getData().getType() == Ids::touch
         || caller->getData().getType() == Ids::pluck)
-	{
-		comp = new LinkPropertiesComponent(this, objController, caller->getData(), undoManager_);
-	}
+    {
+        comp = new LinkPropertiesComponent(this, objController,
+                                           caller->getData(), undoManager_);
+    }
 	else if(caller->getData().getType() == Ids::waveguide)
-	{
-		comp = new WaveguidePropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new WaveguidePropertiesComponent(this, objController,
+                                                caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::junction)
-	{
-		comp = new JunctionPropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new JunctionPropertiesComponent(this, objController,
+                                               caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::termination)
-	{
-		comp = new TerminationPropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new TerminationPropertiesComponent(this, objController,
+                                                  caller->getData(), undoManager_);
 	}
 	else if(caller->getData().getType() == Ids::audioout)
-	{
-		comp = new AudiooutPropertiesComponent(this, objController, caller->getData(), undoManager_);
+    {
+        comp = new AudiooutPropertiesComponent(this, objController,
+                                               caller->getData(), undoManager_);
 	}
 	else
 	{
@@ -797,7 +757,9 @@ void ObjectPropertiesPanel::closeButtonPressed()
     setVisible (false);
 }
 
-int ObjectPropertiesPanel::show(ObjController* objController, BaseObjectComponent* caller, UndoManager* undoManager_)
+int ObjectPropertiesPanel::show(ObjController* objController, 
+                                BaseObjectComponent* caller,
+                                UndoManager* undoManager_)
 {
 	ObjectPropertiesPanel ep(objController, caller, undoManager_);
     ep.runModalLoop();

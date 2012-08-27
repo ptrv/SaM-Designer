@@ -61,7 +61,8 @@ public:
 
     void editObjectProperties(BaseObjectComponent* oc);
 
-    void findLassoItemsInArea(Array <ObjectComponent*>& results, const Rectangle<int>& area);
+    void findLassoItemsInArea(Array <ObjectComponent*>& results,
+                              const Rectangle<int>& area);
 
     SelectedItemSet <ObjectComponent*>& getLassoSelection();
 
