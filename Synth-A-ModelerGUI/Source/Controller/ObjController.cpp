@@ -476,7 +476,7 @@ void ObjController::paste(ObjectsHolder* holder)
                         la.append("_copy", 5);
                         label.setProperty(Ids::value, la, nullptr);
                     }
-                    }
+                }
                 ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
 
                 if (newObjectComp != 0)
@@ -542,4 +542,38 @@ Array<int> ObjController::getLinksToCopy()
 bool ObjController::checkIfIdExists(const String& idStr)
 {
     return objectIds.contains(idStr);
+}
+
+bool ObjController::renameId(const String& oldId, const String& newId)
+{
+    objectIds.removeValue(oldId);
+    return objectIds.add(newId);
+}
+
+bool ObjController::changeObjectNameInLink(const String& oldName, 
+                                           const String& newName,
+                                           UndoManager* undoManager)
+{
+    ObjectComponent* oc = getObjectForId(newName);
+    if(oc == nullptr)
+        oc = getObjectForId(oldName);
+    
+    if (oc != nullptr)
+    {
+        Array<LinkComponent*> links = oc->getAttachedLinks();
+        for (int i = 0; i < links.size(); ++i)
+        {
+            LinkComponent* elem = links[i];
+            if (elem->getData()[Ids::startVertex] == oldName)
+            {
+                elem->getData().setProperty(Ids::startVertex, newName, undoManager);
+            }
+            else if (elem->getData()[Ids::endVertex] == oldName)
+            {
+                elem->getData().setProperty(Ids::endVertex, newName, undoManager);
+            }
+        }
+
+    }
+
 }

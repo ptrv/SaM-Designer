@@ -184,11 +184,18 @@ public:
 	}
 	bool writeValues()
 	{
-        String idName = teName.getText();
-        if (objController->checkIfIdExists(idName))
-            return false;
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier];
+        if(newName != oldName)
+            if (objController->checkIfIdExists(newName))
+                return false;
+            else
+                if(! objController->renameId(oldName, newName))
+                    return false;
 
-        data.setProperty(Ids::identifier, idName, undoManager);
+        objController->changeObjectNameInLink(oldName, newName, undoManager);
+
+        data.setProperty(Ids::identifier, newName, undoManager);
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
@@ -213,6 +220,9 @@ public:
             label.setProperty(Ids::value, labelsArray[i], undoManager);
             labelsTree.addChild(label, -1, undoManager);
         }
+        
+        // Change object reference in attached links
+//        objController->changeObjectNameInLink(oldName, newName, undoManager);
         return true;
 	}
 private:
@@ -270,11 +280,19 @@ public:
 
 	bool writeValues()
 	{
-        String idName = teName.getText();
-        if (objController->checkIfIdExists(idName))
-            return false;
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier];
+        if(newName != oldName)
+            if (objController->checkIfIdExists(newName))
+                return false;
+            else
+                if(! objController->renameId(oldName, newName))
+                    return false;
 
-        data.setProperty(Ids::identifier, idName, undoManager);
+        objController->changeObjectNameInLink(oldName, newName, undoManager);
+
+        data.setProperty(Ids::identifier, newName, undoManager);
+
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
 		String labelsString = teLabels.getText();
@@ -375,11 +393,18 @@ public:
 
 	bool writeValues()
 	{
-        String idName = teName.getText();
-        if (objController->checkIfIdExists(idName))
-            return false;
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier];
+        if(newName != oldName)
+            if (objController->checkIfIdExists(newName))
+                return false;
+            else
+                if(! objController->renameId(oldName, newName))
+                    return false;
 
-        data.setProperty(Ids::identifier, idName, undoManager);
+        objController->changeObjectNameInLink(oldName, newName, undoManager);
+
+        data.setProperty(Ids::identifier, newName, undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, tePos.getText(), undoManager);

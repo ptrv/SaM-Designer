@@ -139,6 +139,10 @@ public:
     void cut(ObjectsHolder* holder);
     
     bool checkIfIdExists(const String& idStr);
+    bool renameId(const String& oldId, const String& newId);
+    bool changeObjectNameInLink(const String& oldName, 
+                                const String& newName,
+                                UndoManager* undManager);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
