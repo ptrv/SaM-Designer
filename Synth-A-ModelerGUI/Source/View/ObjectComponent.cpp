@@ -248,3 +248,23 @@ void ObjectComponent::removeLinkFromObject(LinkComponent* link)
 {
     connectedLinks.removeAllInstancesOf(link);
 }
+
+Point<int> ObjectComponent::getPinPos()
+{
+    Point<int> pinPos = getActualPos();
+    if (data.getType() == Ids::ground)
+    {
+        pinPos.x += 3;
+        pinPos.y -= 14;
+    }
+    else if (data.getType() == Ids::port)
+    {
+        pinPos.x -= 7;
+        pinPos.y -= 19;
+    }
+    else if (data.getType() == Ids::audioout)
+    {
+        pinPos.x -= 15;
+    }
+    return pinPos;
+}

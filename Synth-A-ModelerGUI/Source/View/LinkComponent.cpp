@@ -205,14 +205,14 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
 
     if (startComp != nullptr)
     {
-        Point<int> startPos = startComp->getActualPos();
+        Point<int> startPos = startComp->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
     }
 
     if (endComp != nullptr)
     {
-        Point<int> endPos = endComp->getActualPos();
+        Point<int> endPos = endComp->getPinPos();
         x2 = endPos.x;
         y2 = endPos.y;
     }

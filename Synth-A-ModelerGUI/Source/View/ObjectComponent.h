@@ -65,6 +65,7 @@ public:
     
     Array<LinkComponent*> getAttachedLinks() { return connectedLinks; }
     
+    Point<int> getPinPos();
 private:
 
     void showLinkPopupMenu();

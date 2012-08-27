@@ -169,14 +169,14 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
 
     if (objComp != nullptr)
     {
-        Point<int> startPos = objComp->getActualPos();
+        Point<int> startPos = objComp->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
     }
 
     if (audioOutComp != nullptr)
     {
-        Point<int> endPos = audioOutComp->getActualPos();
+        Point<int> endPos = audioOutComp->getPinPos();
         x2 = endPos.x;
         y2 = endPos.y;
     }
