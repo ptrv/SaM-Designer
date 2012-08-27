@@ -295,7 +295,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
                                                                    0,
                                                                    0,
                                                                    iconWidth,
-                                                                   iconHeight);
+                                                                   iconHeight/2);
         iconPath.applyTransform(AffineTransform::identity
                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
                                 .translated((x1 + x2) * 0.5f,

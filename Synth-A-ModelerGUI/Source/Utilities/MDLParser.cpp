@@ -258,14 +258,30 @@ bool MDLParser::parseMDL()
 				int indexSemicolon = line.indexOf(";");
 				String lineTmp = line.substring(0, indexSemicolon);
 				audioOutAttributeList.addTokens(lineTmp, ",", "\"");
+                
+                StringArray audioOutSourcesList;
+                audioOutSourcesList.addTokens(audioOutAttributeList[2], "+", "\"");
 				if(audioOutAttributeList.size() > 2)
 				{
-
 					ValueTree audioTree(Ids::audioout);
 					audioTree.setProperty(Ids::posX, pos.x, nullptr);
 					audioTree.setProperty(Ids::posY, pos.y, nullptr);
 					audioTree.setProperty(Ids::identifier, audioOutAttributeList[1], nullptr);
-					audioTree.setProperty(Ids::sources, audioOutAttributeList[2], nullptr);
+                    ValueTree audioSources(Ids::sources);
+                    for (int l = 0; l < audioOutSourcesList.size(); ++l)
+                    {
+                        StringArray audioOutSourcesParams;
+                        audioOutSourcesParams.addTokens(audioOutSourcesList[l], "*", "\"");
+                        if(audioOutSourcesParams.size() == 2)
+                        {
+                            ValueTree aoSource(Ids::audiosource);
+                            aoSource.setProperty(Ids::value, audioOutSourcesParams[0], nullptr);
+                            aoSource.setProperty(Ids::gain, audioOutSourcesParams[1], nullptr);
+                            audioSources.addChild(aoSource, -1, nullptr);
+                        }
+                    }
+                    audioTree.addChild(audioSources, -1, nullptr);
+//					audioTree.setProperty(Ids::sources, audioOutAttributeList[2], nullptr);
 					ValueTree audioObjectsTree = mdlTree.getOrCreateChildWithName(Objects::audioobjects, nullptr);
 					audioObjectsTree.addChild(audioTree, -1, nullptr);
 				}

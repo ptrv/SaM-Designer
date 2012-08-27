@@ -240,7 +240,19 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << ",";
 		mdlContent << ao[Ids::identifier].toString();
 		mdlContent << ",";
-		mdlContent << ao.getProperty(Ids::sources).toString();
+        ValueTree sources = ao.getChildWithName(Ids::sources);
+        for (int q = 0; q < sources.getNumChildren(); ++q)
+        {
+            ValueTree source = sources.getChild(q);
+            mdlContent << source.getProperty(Ids::value).toString();
+            mdlContent << "*";
+            mdlContent << source.getProperty(Ids::gain).toString();
+            
+            if(q != sources.getNumChildren()-1)
+				mdlContent << "+";
+        }
+
+//		mdlContent << ao.getProperty(Ids::sources).toString();
 		mdlContent << ";";
 		mdlContent << " # pos " << ao.getProperty(Ids::posX, "0").toString() << "," << ao.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";

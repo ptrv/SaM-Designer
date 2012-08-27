@@ -430,10 +430,10 @@ private:
 
 class LinkPropertiesComponent : public ObjectPropertiesComponent {
 public:
-	LinkPropertiesComponent(ObjectPropertiesPanel* op_,
-                         ObjController* objController_,
-                         ValueTree data_,
-                         UndoManager* undoManager_)
+    LinkPropertiesComponent(ObjectPropertiesPanel* op_,
+                            ObjController* objController_,
+                            ValueTree data_,
+                            UndoManager* undoManager_)
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
         laStiff("laStiff", "Stiffness (N/m)"),
         teStiff("teStiff"),
@@ -549,10 +549,10 @@ private:
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
 public:
-	AudiooutPropertiesComponent(ObjectPropertiesPanel* op_,
-                         ObjController* objController_,
-                         ValueTree data_,
-                         UndoManager* undoManager_)
+    AudiooutPropertiesComponent(ObjectPropertiesPanel* op_,
+                                ObjController* objController_,
+                                ValueTree data_,
+                                UndoManager* undoManager_)
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
         laSource("laSource", "Source"),
         teSource("teSource")
@@ -577,7 +577,20 @@ public:
 	void readValues()
 	{
         teName.setText(data[Ids::identifier].toString());
-        teSource.setText(data[Ids::sources].toString());
+        String sourceText;
+        ValueTree sourcesTree = data.getChildWithName(Ids::sources);
+        for (int i = 0; i < sourcesTree.getNumChildren(); ++i)
+        {
+            ValueTree source = sourcesTree.getChild(i);
+            sourceText << source[Ids::value].toString();
+            sourceText << "*";
+            sourceText << source[Ids::gain].toString();
+            if(i != sourcesTree.getNumChildren()-1)
+                sourceText << "+";
+        }
+
+        teSource.setText(sourceText);
+//        teSource.setText(data[Ids::sources].toString());
 	}
 
 	bool writeValues()
@@ -587,7 +600,26 @@ public:
             return false;
 
         data.setProperty(Ids::identifier, idName, undoManager);
-        data.setProperty(Ids::sources, teSource.getText(), undoManager);
+        
+        String sourceText = teSource.getText();
+        StringArray sourcesList;
+        sourcesList.addTokens(sourceText, "+", "\"");
+        ValueTree sourcesTree = data.getChildWithName(Ids::sources);
+        sourcesTree.removeAllChildren(undoManager);
+        for (int i = 0; i < sourcesList.size(); ++i)
+        {
+            ValueTree source(Ids::audiosource);
+            StringArray sourceParams;
+            sourceParams.addTokens(sourcesList[i], "*", "\"");
+            if(sourceParams.size() != 2)
+                return false;
+
+            source.setProperty(Ids::value, sourceParams[0], undoManager);
+            source.setProperty(Ids::gain, sourceParams[1], undoManager);
+            sourcesTree.addChild(source, -1, undoManager);
+        }
+        
+//        data.setProperty(Ids::sources, teSource.getText(), undoManager);
         
         return true;
 	}

@@ -33,6 +33,7 @@
 #include "VariablesPanel.h"
 
 #include "ObjectsHolder.h"
+#include "AudioOutConnector.h"
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_),
@@ -72,6 +73,7 @@ void ObjectsHolder::updateComponents()
     // TODO Find faster solution for updating componenans
     int i;
     Array<LinkComponent*> links;
+    Array<AudioOutConnector*> aocs;
     for (i = getNumChildComponents(); --i >= 0;)
     {
         ObjectComponent * const bobj = dynamic_cast<ObjectComponent*> (getChildComponent(i));
@@ -85,8 +87,19 @@ void ObjectsHolder::updateComponents()
         {
             links.add(lobj);
         }
+        AudioOutConnector * const aobj = dynamic_cast<AudioOutConnector*> (getChildComponent(i));
+        
+        if (aobj != nullptr)
+        {
+            aocs.add(aobj);
+        }
     }
-    for (i = 0; i < links.size(); i++)
+    for (i = 0; i < aocs.size(); ++i)
+    {
+        aocs[i]->update();
+        aocs[i]->toBack();
+    }
+    for (i = 0; i < links.size(); ++i)
     {
         links[i]->update();
         links[i]->toBack();
@@ -111,6 +124,7 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
         // object changed
         objController.getSelectedObjects().deselectAll();
         objController.getSelectedLinks().deselectAll();
+        objController.getSelectedAudioConnections().deselectAll();
     }
     lassoComp.endLasso();
 }
@@ -295,6 +309,8 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	m.addItem (1, "Add link");
 	m.addItem (2, "Add touch");
 	m.addItem (3, "Add pluck");
+    m.addSeparator();
+    m.addItem (4, "Add audio connection");
 	const int r = m.show();
 
 	if (r == 1)
@@ -313,6 +329,11 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 		DBG("Add pluck");
         objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::pluck, so, eo));
 	}
+    else if (r == 4)
+    {
+        DBG("Add audio connection");
+        objController.addNewAudioConnection(this);
+    }
 }
 void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
 {
@@ -360,4 +381,5 @@ void ObjectsHolder::deleteSelectedObjects()
 {
     objController.removeSelectedObjects(this);
     objController.removeSelectedLinks(this);
+    objController.removeSelectedAudioConnections(this);
 }

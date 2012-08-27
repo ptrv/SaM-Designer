@@ -29,6 +29,7 @@
 #include "../Models/ObjectFactory.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
+#include "../View/AudioOutConnector.h"
 #include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
 
@@ -44,6 +45,7 @@ ObjController::~ObjController()
 {
     objects.clear(true);
     links.clear(true);
+    audioConnections.clear(true);
 }
 
 bool ObjController::perform(UndoableAction * const action, const String& actionName)
@@ -134,10 +136,16 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
 {
     if(selectedObjects.getNumSelected() == 2)
     {
-        if(! checkIfLinkExitsts(linkValues))
+        if(selectedObjects.getSelectedItem(0)->getData().getType() != Ids::audioout
+            && selectedObjects.getSelectedItem(1)->getData().getType() != Ids::audioout
+            && ! checkIfLinkExitsts(linkValues))
         {
             addLink(holder, linkValues, -1, true);
             holder->updateComponents();
+        }
+        else
+        {
+            SAM_CONSOLE("Error: ", "Cannot connect links to audio outs");
         }
     }
     else
@@ -155,6 +163,66 @@ void ObjController::addLinkComponent(LinkComponent* comp, int index)
 {
     links.insert(index, comp);
 }
+
+AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
+                                                     ObjectComponent* objComp,
+                                                     ObjectComponent* audioOutComp,
+                                                     int index,
+                                                     bool undoable)
+{
+    if(undoable)
+    {
+        AddAudioConnectionAction* action = new AddAudioConnectionAction(this, 
+                                                                        objComp, 
+                                                                        audioOutComp, 
+                                                                        holder);
+        owner.getUndoManager()->perform(action, "Add new audio connection");
+        
+        return audioConnections[action->indexAdded];
+    }
+    else
+    {
+        AudioOutConnector* aoc = new AudioOutConnector(*this, objComp, audioOutComp);
+        ValueTree sources = aoc->getAudioObject()->getData().getChildWithName(Ids::sources);
+        ValueTree source(Ids::audiosource);
+        source.setProperty(Ids::value, aoc->getSourceObject()->getData()[Ids::identifier], nullptr);
+        source.setProperty(Ids::gain, "1.0", nullptr);
+        sources.addChild(source, -1, nullptr);
+        audioConnections.insert(index, aoc);
+        holder->addAndMakeVisible(aoc);
+        holder->updateComponents();
+        return aoc;
+    }
+    return nullptr;
+}
+
+void ObjController::addNewAudioConnection(ObjectsHolder* holder)
+{
+    if(selectedObjects.getNumSelected() == 2)
+    {
+        if((selectedObjects.getSelectedItem(0)->getData().getType() == Ids::audioout
+            && selectedObjects.getSelectedItem(1)->getData().getType() != Ids::audioout))
+        {
+            addAudioConnection(holder, 
+                               selectedObjects.getSelectedItem(1), 
+                               selectedObjects.getSelectedItem(0),
+                               -1, true);
+        }
+        else if(selectedObjects.getSelectedItem(0)->getData().getType() != Ids::audioout
+            && selectedObjects.getSelectedItem(1)->getData().getType() == Ids::audioout)
+        {
+            addAudioConnection(holder, 
+                               selectedObjects.getSelectedItem(0), 
+                               selectedObjects.getSelectedItem(1),
+                               -1, true);
+        }
+        else
+        {
+            SAM_CONSOLE("Error: ", "Cannot create audio connection");
+        }
+    }
+}
+
 void ObjController::removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder)
 {
     if (undoable)
@@ -214,6 +282,41 @@ void ObjController::removeSelectedLinks(ObjectsHolder* holder)
     }
 }
 
+void ObjController::removeSelectedAudioConnections(ObjectsHolder* holder)
+{
+    const SelectedItemSet <AudioOutConnector*> temp(selectedAudioConnections);
+
+    if (temp.getNumSelected() > 0)
+    {
+        selectedLinks.deselectAll();
+        selectedLinks.changed(true);
+
+        for (int i = temp.getNumSelected(); --i >= 0;)
+        {
+            removeAudioConnection(temp.getSelectedItem(i), true, holder);
+        }
+    }
+}
+
+void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
+                                          bool undoable, 
+                                          ObjectsHolder* holder)
+{
+    if(undoable)
+    {
+        owner.getUndoManager()->perform(new RemoveAudioConnectionAction(holder, aocComp, this));
+    }
+    else
+    {
+        selectedAudioConnections.deselect(aocComp);
+        selectedAudioConnections.changed(true);
+        ValueTree sources = aocComp->getAudioObject()->getData().getChildWithName(Ids::sources);
+        ValueTree source = sources.getChildWithProperty(Ids::value, aocComp->getSourceObject()->getData()[Ids::identifier]);
+        sources.removeChild(source, nullptr);
+        audioConnections.removeObject(aocComp);
+    }
+}
+
 void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder)
 {
     if (undoable)
@@ -265,6 +368,21 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            
+            ValueTree aoSources = obj.getChildWithName(Ids::sources);
+            for (int j = 0; j < aoSources.getNumChildren(); ++j)
+            {
+                ValueTree source = aoSources.getChild(j);
+                ObjectComponent* oc = getObjectForId(source[Ids::value]);
+                if( oc != nullptr )
+                {
+                    AudioOutConnector* aoc = new AudioOutConnector(*this, oc, objComp);
+                    audioConnections.add(aoc);
+                    holder->addAndMakeVisible(aoc);
+                    aoc->update();
+                }
+            }
+
         }
         else
         {

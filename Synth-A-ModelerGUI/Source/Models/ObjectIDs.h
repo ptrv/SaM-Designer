@@ -71,6 +71,8 @@ namespace Ids
     DECLARE_ID (termFilter);
     DECLARE_ID (initDisplace);
     DECLARE_ID (faustCode);
+    DECLARE_ID (audiosource);
+    DECLARE_ID (gain);
     DECLARE_ID (sources);
     DECLARE_ID (value);
 

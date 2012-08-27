@@ -32,6 +32,7 @@ class BaseObjectComponent;
 class ObjectComponent;
 class ObjectsHolder;
 class LinkComponent;
+class AudioOutConnector;
 
 /**
  * The ObjController controlls all ObjectComponents.
@@ -82,9 +83,24 @@ public:
     
     void addLinkComponent(LinkComponent* comp, int index);
 
+    AudioOutConnector* addAudioConnection(ObjectsHolder* holder,
+                                          ObjectComponent* objComp,
+                                          ObjectComponent* audioOutComp,
+                                          int index,
+                                          bool undoable);
+    
+    void addNewAudioConnection(ObjectsHolder* holder);
+    
 	void removeSelectedLinks(ObjectsHolder* holder);
 
     void removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder);
+    
+    void removeSelectedAudioConnections(ObjectsHolder* holder);
+    
+    void removeAudioConnection(AudioOutConnector* aocComp,
+                               bool undoable,
+                               ObjectsHolder* holder);
+
 	/**
 	 * Loads the object components of a patch when a mdl file is opened.
 	 * @param holder
@@ -114,6 +130,10 @@ public:
     {
         return selectedLinks;
     }
+    SelectedItemSet <AudioOutConnector*>& getSelectedAudioConnections() throw()
+    {
+        return selectedAudioConnections;
+    }
     
     void startDragging();
     void dragSelectedComps (int dxFromDragStart, int dyFromDragStart);
@@ -126,6 +146,11 @@ public:
 
     LinkComponent* getLink(int index) const throw() { return links[index]; }
     int indexOfLink (LinkComponent* e) const throw() { return links.indexOf (e); }
+    
+    AudioOutConnector* getAudioConnector(int index) const throw() 
+    { return audioConnections[index]; }
+    int indexOfAudioConnector (AudioOutConnector* e) const throw() 
+    { return audioConnections.indexOf (e); }
     
     void changed();
     
@@ -151,8 +176,10 @@ private:
     MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
+    OwnedArray<AudioOutConnector> audioConnections;
     SelectedItemSet<ObjectComponent*> selectedObjects;
     SelectedItemSet<LinkComponent*> selectedLinks;
+    SelectedItemSet<AudioOutConnector*> selectedAudioConnections;
     SortedSet<String> objectIds;
 };
 

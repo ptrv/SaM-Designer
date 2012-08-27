@@ -30,6 +30,7 @@
 #include "ObjectFactory.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
+#include "../View/AudioOutConnector.h"
 #include "../View/ObjectsHolder.h"
 #include "../Controller/ObjController.h"
 
@@ -276,13 +277,15 @@ public:
 
 	bool perform()
 	{
-//        SAM_LOG("Reverse direction"+oldValue[Ids::identifier].toString());
-        LinkComponent* lc = objController->getLink(linkIndex);
-        if(objController->getSelectedLinks().getNumSelected() == 0)
-        {
-            objController->getSelectedLinks().selectOnly(lc);
-        }
-        lc->reverseDirection();
+////        SAM_LOG("Reverse direction"+oldValue[Ids::identifier].toString());
+//        LinkComponent* lc = objController->getLink(linkIndex);
+//        if(objController->getSelectedLinks().getNumSelected() == 0)
+//        {
+//            objController->getSelectedLinks().selectOnly(lc);
+//        }
+//        lc->reverseDirection();
+        
+        reverse();
 		return true;
 	}
 
@@ -290,19 +293,135 @@ public:
 	{
 //        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
+//        LinkComponent* lc = objController->getLink(linkIndex);
+//        if(objController->getSelectedLinks().getNumSelected() == 0)
+//        {
+//            objController->getSelectedLinks().selectOnly(lc);
+//        }
+//        lc->reverseDirection();
+        reverse();
+		return true;
+	}
+private:
+    void reverse()
+    {
         LinkComponent* lc = objController->getLink(linkIndex);
         if(objController->getSelectedLinks().getNumSelected() == 0)
         {
             objController->getSelectedLinks().selectOnly(lc);
         }
         lc->reverseDirection();
-		return true;
-	}
-private:
+    }
+
 	ValueTree linkTree;
     ObjController* objController;
     String oldStart;
     String oldEnd;
     int linkIndex;
 };
+
+class AddAudioConnectionAction : public UndoableAction
+{
+public:
+	AddAudioConnectionAction(ObjController* objController_,
+                             ObjectComponent* source,
+                             ObjectComponent* audioOut,
+                             ObjectsHolder* holder_)
+	: 
+    holderComp(holder_), 
+    objController(objController_)
+	{
+        indexSource = objController->indexOfObject(source);
+        indexAudioOut = objController->indexOfObject(audioOut);
+	}
+	~AddAudioConnectionAction()
+	{
+	}
+
+	bool perform()
+	{
+        AudioOutConnector* aocComp = objController->addAudioConnection(holderComp, 
+                                                                       objController->getObject(indexSource),
+                                                                       objController->getObject(indexAudioOut),
+                                                                       -1, false);
+        indexAdded = objController->indexOfAudioConnector(aocComp);
+
+//        String logText = "Add ";
+//        logText << linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
+//		SAM_LOG(logText);
+		return true;
+	}
+
+	bool undo()
+	{
+        
+        objController->removeAudioConnection(objController->getAudioConnector(indexAdded), false, holderComp);
+//        String logText = "Undo add ";
+//        logText <<  linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
+//		SAM_LOG(logText);
+		return true;
+	}
+    int indexAdded;
+private:
+	ObjectsHolder* holderComp;
+    ObjController* objController;
+    int indexSource;
+    int indexAudioOut;
+    
+    
+};
+
+class RemoveAudioConnectionAction : public UndoableAction
+{
+public:
+    RemoveAudioConnectionAction(ObjectsHolder* objHolderComp_,
+                                AudioOutConnector* aocToRemove,
+                                ObjController* objController_)
+    : 
+    holderComp(objHolderComp_),
+    objController(objController_),
+    oldIndex(-1)
+	{
+        oldIndex = objController->indexOfAudioConnector(aocToRemove);
+        oldIndexSource = objController->indexOfObject(aocToRemove->getSourceObject());
+        oldIndexAudioOut = objController->indexOfObject(aocToRemove->getAudioObject());
+	}
+	~RemoveAudioConnectionAction()
+	{
+	}
+
+	bool perform()
+	{
+        AudioOutConnector* aoc = objController->getAudioConnector(oldIndex);
+        if(objController->getSelectedAudioConnections().getNumSelected() == 0)
+        {
+            objController->getSelectedAudioConnections().selectOnly(aoc);
+        }
+        objController->removeAudioConnection(aoc, false, holderComp);
+		return true;
+	}
+
+	bool undo()
+	{
+//        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
+
+        AudioOutConnector* aoc = objController->addAudioConnection(holderComp,
+                                                                   objController->getObject(oldIndexSource),
+                                                                   objController->getObject(oldIndexAudioOut),
+                                                                   oldIndex, false);
+        if(objController->getSelectedAudioConnections().getNumSelected() == 0)
+        {
+            objController->getSelectedAudioConnections().selectOnly(aoc);
+        }
+        
+		return true;
+	}
+private:
+	ObjectsHolder* holderComp;
+    ObjController* objController;
+    int oldIndex;
+    int oldIndexSource;
+    int oldIndexAudioOut;
+};
+
 #endif  // __OBJECTACTIONS_H_7C20FDA1__
