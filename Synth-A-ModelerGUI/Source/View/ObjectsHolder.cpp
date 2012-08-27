@@ -244,6 +244,9 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     case CommandIDs::insertAudioOutput:
         objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::audioout, mp.x, mp.y));
         break;
+    case CommandIDs::insertAudioConnection:
+        objController.addNewAudioConnection(this);
+        break;
     case CommandIDs::insertWaveguide:
         objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::waveguide, mp.x, mp.y));
         break;

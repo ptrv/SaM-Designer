@@ -300,6 +300,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::insertTouch,
         CommandIDs::insertPluck,
         CommandIDs::insertAudioOutput,
+        CommandIDs::insertAudioConnection,
         CommandIDs::insertWaveguide,
         CommandIDs::insertTermination,
         CommandIDs::spaceBarDrag,};
@@ -407,6 +408,9 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::insertAudioOutput:
         result.setInfo("Audio Output", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::insertAudioConnection:
+        result.setInfo("Audio connection", "", CommandCategories::inserting, 0);
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo("Waveguide", "", CommandCategories::inserting, 0);

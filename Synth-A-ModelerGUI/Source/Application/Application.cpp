@@ -488,6 +488,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     	menu.addCommandItem(commandManager, CommandIDs::insertPluck);
     	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::insertAudioOutput);
+        menu.addCommandItem(commandManager, CommandIDs::insertAudioConnection);
     	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::insertWaveguide);
     	menu.addCommandItem(commandManager, CommandIDs::insertTermination);
