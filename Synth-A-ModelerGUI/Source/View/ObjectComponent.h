@@ -31,12 +31,15 @@ class ObjController;
 
 #include "BaseObjectComponent.h"
 #include "LinkComponent.h"
+#include "SelectableObject.h"
+
 /**
  * The object component.
  */
 class ObjectComponent : public BaseObjectComponent, 
                         public ChangeListener,
-                        public ChangeBroadcaster
+                        public ChangeBroadcaster,
+                        public SelectableObject
 {
 public:
     ObjectComponent(ObjController& _owner, ValueTree data_);
@@ -78,7 +81,6 @@ private:
     Point<int> actualPos;
     Point<int> originalPos;
 
-    bool isSelected;
     bool dragging, mouseDownSelectStatus;
     
     ChangeBroadcaster selfChangeListenerList;

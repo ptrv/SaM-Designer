@@ -29,6 +29,7 @@
 #include "ContentComp.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
+#include "SelectableObject.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
 
@@ -123,8 +124,6 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
     {
         // object changed
         objController.getSelectedObjects().deselectAll();
-        objController.getSelectedLinks().deselectAll();
-        objController.getSelectedAudioConnections().deselectAll();
     }
     lassoComp.endLasso();
 }
@@ -137,10 +136,15 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
         String endObj;
         if (objController.getSelectedObjects().getNumSelected() == 2)
         {
-            startObj = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
-            endObj = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
-            DBG(String("Link: ") + startObj + String(", ") + endObj);
-            showLinkPopupMenu(startObj, endObj);
+            ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(objController.getSelectedObjects().getSelectedItem(0));
+            ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(objController.getSelectedObjects().getSelectedItem(1));
+            if(oc1 != nullptr && oc2 != nullptr)
+            {
+                startObj = oc1->getData().getProperty(Ids::identifier).toString();
+                endObj = oc2->getData().getProperty(Ids::identifier).toString();
+                DBG(String("Link: ") + startObj + String(", ") + endObj);
+                showLinkPopupMenu(startObj, endObj);
+            }
         }
 
     }
@@ -182,9 +186,13 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     String endObj;
     if(objController.getSelectedObjects().getNumSelected() == 2)
     {
-        startObj = objController.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
-        endObj = objController.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
-//        DBG(String("Link: ") + startObj + String(", ") + endObj);
+        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*> (objController.getSelectedObjects().getSelectedItem(0));
+        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*> (objController.getSelectedObjects().getSelectedItem(1));
+        if (oc1 != nullptr && oc2 != nullptr)
+        {
+            startObj = oc1->getData().getProperty(Ids::identifier).toString();
+            endObj = oc2->getData().getProperty(Ids::identifier).toString();
+        }
     }
     switch (info.commandID)
     {
@@ -343,21 +351,28 @@ void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
     objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
 }
 
-void ObjectsHolder::findLassoItemsInArea (Array <ObjectComponent*>& results, const Rectangle<int>& lasso)
+void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results, const Rectangle<int>& lasso)
 {
     for (int i = 0; i < getNumChildComponents(); ++i)
     {
-        ObjectComponent* const e = dynamic_cast <ObjectComponent*> (getChildComponent (i));
-
-        if (e != 0 && e->getBounds().intersects (lasso))
+        SelectableObject* const e = dynamic_cast <SelectableObject*> (getChildComponent (i));
+        LinkComponent* const lc = dynamic_cast<LinkComponent*>(e);
+        AudioOutConnector* const aoc = dynamic_cast<AudioOutConnector*>(e);
+        bool isIntersecting;
+        if(lc != nullptr)
+            isIntersecting = lasso.contains(lc->getIntersectioBounds());
+        else if(aoc != nullptr)
+            isIntersecting = lasso.contains(aoc->getIntersectioBounds());
+        else
+            isIntersecting = getChildComponent(i)->getBounds().intersects (lasso);
+        if (e != 0 && isIntersecting)
         {
-            e->setSelected(true);
             results.add (e);
         }
     }
 }
 
-SelectedItemSet <ObjectComponent*>& ObjectsHolder::getLassoSelection()
+SelectedItemSet <SelectableObject*>& ObjectsHolder::getLassoSelection()
 {
     return objController.getSelectedObjects();
 }
@@ -383,6 +398,4 @@ SelectedItemSet <ObjectComponent*>& ObjectsHolder::getLassoSelection()
 void ObjectsHolder::deleteSelectedObjects()
 {
     objController.removeSelectedObjects(this);
-    objController.removeSelectedLinks(this);
-    objController.removeSelectedAudioConnections(this);
 }

@@ -26,14 +26,16 @@
 #ifndef __AUDIOOUTCONNECTOR_H_D0DAD273__
 #define __AUDIOOUTCONNECTOR_H_D0DAD273__
 
-#include "ObjectComponent.h"
+//#include "ObjectComponent.h"
 
 
 class ObjController;
 class ObjectComponent;
+class SelectableObject;
 
 class AudioOutConnector : public Component,
-                          public ChangeListener
+                          public ChangeListener,
+                          public SelectableObject
 {
 public:
     AudioOutConnector(ObjController& owner_,
@@ -60,12 +62,14 @@ public:
 
     ObjectComponent* getSourceObject() { return objComp; }
     ObjectComponent* getAudioObject() { return audioOutComp; }
+    
+    Rectangle<int> getIntersectioBounds();
 private:
     ObjController& owner;
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     Path linePath, hitPath;
 
-    bool selected, mouseDownSelectStatus;
+    bool mouseDownSelectStatus;
     ObjectComponent* objComp;
     ObjectComponent* audioOutComp;
     

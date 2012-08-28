@@ -32,12 +32,13 @@
 class ObjectComponent;
 class MDLFile;
 class ObjController;
+class SelectableObject;
 
 /**
  * Component which contains all objects.
  */
 class ObjectsHolder : public Component,
-                        public LassoSource <ObjectComponent*>,
+                        public LassoSource <SelectableObject*>,
                        public ChangeListener
 {
 public:
@@ -61,11 +62,10 @@ public:
 
     void editObjectProperties(BaseObjectComponent* oc);
 
-    void findLassoItemsInArea(Array <ObjectComponent*>& results,
+    void findLassoItemsInArea(Array <SelectableObject*>& results,
                               const Rectangle<int>& area);
 
-    SelectedItemSet <ObjectComponent*>& getLassoSelection();
-
+    SelectedItemSet <SelectableObject*>& getLassoSelection();
     //==========================================================================
     void deselectAllSelectedObjects();
     ObjectComponent* getSelectedObject(int index);
@@ -89,7 +89,7 @@ private:
     Point<int> draggingStart;
     Point<int> draggingActual;
 
-    LassoComponent<ObjectComponent*> lassoComp;
+    LassoComponent<SelectableObject*> lassoComp;
 };
 
 

@@ -55,8 +55,6 @@ bool ObjController::perform(UndoableAction * const action, const String& actionN
 
 ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objValues, int index, bool undoable)
 {
-//    selectedObjects.deselectAll();
-    
     if(undoable)
     {
         AddObjectAction* action = new AddObjectAction(this, objValues, holder);
@@ -86,13 +84,12 @@ void ObjController::addNewObject(ObjectsHolder* holder, ValueTree objValues)
 {
     
     ObjectComponent* oc = addObject(holder, objValues, -1, true);
-    selectedObjects.selectOnly(oc);
+    sObjects.selectOnly(oc);
     
 }
 
 LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValues, int index, bool undoable)
 {
-//    selectedLinks.deselectAll();
     if(undoable)
     {
         AddLinkAction* action = new AddLinkAction(this, linkValues, holder);
@@ -134,11 +131,11 @@ bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
 }
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
 {
-    if(selectedObjects.getNumSelected() == 2)
+    if(sObjects.getNumSelected() == 2)
     {
-        if(selectedObjects.getSelectedItem(0)->getData().getType() != Ids::audioout
-            && selectedObjects.getSelectedItem(1)->getData().getType() != Ids::audioout
-            && ! checkIfLinkExitsts(linkValues))
+        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
+        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
+        if(oc1 != nullptr && oc2 != nullptr && (! checkIfLinkExitsts(linkValues)))
         {
             addLink(holder, linkValues, -1, true);
             holder->updateComponents();
@@ -198,23 +195,19 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
 
 void ObjController::addNewAudioConnection(ObjectsHolder* holder)
 {
-    if(selectedObjects.getNumSelected() == 2)
+    if(sObjects.getNumSelected() == 2)
     {
-        if((selectedObjects.getSelectedItem(0)->getData().getType() == Ids::audioout
-            && selectedObjects.getSelectedItem(1)->getData().getType() != Ids::audioout))
+        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
+        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
+        if((oc1->getData().getType() == Ids::audioout
+            && oc2->getData().getType() != Ids::audioout))
         {
-            addAudioConnection(holder, 
-                               selectedObjects.getSelectedItem(1), 
-                               selectedObjects.getSelectedItem(0),
-                               -1, true);
+            addAudioConnection(holder, oc2, oc1, -1, true);
         }
-        else if(selectedObjects.getSelectedItem(0)->getData().getType() != Ids::audioout
-            && selectedObjects.getSelectedItem(1)->getData().getType() == Ids::audioout)
+        else if(oc1->getData().getType() != Ids::audioout
+            && oc2->getData().getType() == Ids::audioout)
         {
-            addAudioConnection(holder, 
-                               selectedObjects.getSelectedItem(0), 
-                               selectedObjects.getSelectedItem(1),
-                               -1, true);
+            addAudioConnection(holder, oc1, oc2, -1, true);
         }
         else
         {
@@ -231,11 +224,14 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
     }
     else
     {
-        selectedObjects.deselect(objComp);
-        selectedObjects.changed(true);
+        sObjects.deselect(objComp);
+        sObjects.changed(true);
+
+        // Get link indices attached to this object and remove them.
+        // TODO needs better solution
         Array<int> indices = checkIfObjectHasLinks(objComp->getData());
-        if(indices.size() > 0)
-            selectedLinks.deselectAll();
+//        if(indices.size() > 0)
+//            sObjects.deselectAll();
         for(int i = indices.size(); --i >= 0;)
         {
             removeLink(getLink(indices[i]), true, holder);
@@ -252,48 +248,42 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
 
 void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 {
-    const SelectedItemSet <ObjectComponent*> temp(selectedObjects);
+    SelectedItemSet <SelectableObject*> temp(sObjects);
 
     if (temp.getNumSelected() > 0)
     {
-        selectedObjects.deselectAll();
-        selectedObjects.changed(true);
-
+        sObjects.deselectAll();
+        sObjects.changed(true);
+        // first remove all selected links
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            removeObject(temp.getSelectedItem(i), true, holder);
+            LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i));
+            if( lc != nullptr)
+            {
+                temp.deselect(lc);
+                removeLink(lc, true, holder);
+            }
         }
-    }
-}
-
-void ObjController::removeSelectedLinks(ObjectsHolder* holder)
-{
-    const SelectedItemSet <LinkComponent*> temp(selectedLinks);
-
-    if (temp.getNumSelected() > 0)
-    {
-        selectedLinks.deselectAll();
-        selectedLinks.changed(true);
-
+        // then objects and remaining links connected to the objects
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            removeLink(temp.getSelectedItem(i), true, holder);
-        }
-    }
-}
-
-void ObjController::removeSelectedAudioConnections(ObjectsHolder* holder)
-{
-    const SelectedItemSet <AudioOutConnector*> temp(selectedAudioConnections);
-
-    if (temp.getNumSelected() > 0)
-    {
-        selectedLinks.deselectAll();
-        selectedLinks.changed(true);
-
-        for (int i = temp.getNumSelected(); --i >= 0;)
-        {
-            removeAudioConnection(temp.getSelectedItem(i), true, holder);
+            ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i));
+            if(oc != nullptr)
+            {
+                removeObject(oc, true, holder);
+                continue;
+            }
+//            LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i));
+//            if(lc != nullptr)
+//            {
+//                removeLink(lc, true, holder);
+//                continue;
+//            }
+            AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i));
+            {
+                removeAudioConnection(aoc, true, holder);
+                continue;
+            }
         }
     }
 }
@@ -308,8 +298,8 @@ void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
     }
     else
     {
-        selectedAudioConnections.deselect(aocComp);
-        selectedAudioConnections.changed(true);
+        sObjects.deselect(aocComp);
+        sObjects.changed(true);
         ValueTree sources = aocComp->getAudioObject()->getData().getChildWithName(Ids::sources);
         ValueTree source = sources.getChildWithProperty(Ids::value, aocComp->getSourceObject()->getData()[Ids::identifier]);
         sources.removeChild(source, nullptr);
@@ -325,8 +315,8 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
     }
     else
     {
-        selectedLinks.deselect(linkComp);
-        selectedLinks.changed(true);
+        sObjects.deselect(linkComp);
+        sObjects.changed(true);
         const Identifier& groupName = Objects::getObjectGroup(linkComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
@@ -407,21 +397,23 @@ void ObjController::selectAll(bool shouldBeSelected)
 {
     if(shouldBeSelected)
     {
-        selectedObjects.deselectAll();
+        sObjects.deselectAll();
         for (int i = 0; i < objects.size(); ++i)
         {
-            selectedObjects.addToSelection(objects[i]);
+            sObjects.addToSelection(objects[i]);
         }
-        selectedLinks.deselectAll();
         for (int j = 0; j < links.size(); ++j)
         {
-            selectedLinks.addToSelection(links[j]);
+            sObjects.addToSelection(links[j]);
+        }
+        for (int k = 0; k < audioConnections.size(); ++k)
+        {
+            sObjects.addToSelection(audioConnections[k]);
         }
     }
     else
     {
-        selectedObjects.deselectAll();
-        selectedLinks.deselectAll();
+        sObjects.deselectAll();
     }
 }
 
@@ -449,18 +441,21 @@ void ObjController::dragSelectedComps(int dx, int dy)
 {
     owner.getUndoManager()->undoCurrentTransactionOnly();
 
-    for (int i = 0; i < selectedObjects.getNumSelected(); ++i)
+    for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
-        ObjectComponent * const c = selectedObjects.getSelectedItem(i);
+        ObjectComponent * const c = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i));
 
-        const int startX = c->getProperties() ["xDragStart"];
-        const int startY = c->getProperties() ["yDragStart"];
+        if(c != nullptr)
+        {
+            const int startX = c->getProperties() ["xDragStart"];
+            const int startY = c->getProperties() ["yDragStart"];
 
-        Point<int> r(c->getPosition());
+            Point<int> r(c->getPosition());
 
-        r.setXY(startX + dx, startY + dy);
+            r.setXY(startX + dx, startY + dy);
 
-        c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
+            c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
+        }
     }
 
     changed();
@@ -500,10 +495,14 @@ void ObjController::reverseLinkDirection()
 {
     owner.getUndoManager()->beginNewTransaction();
 
-    for (int i = 0; i < selectedLinks.getNumSelected(); ++i)
+    for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
-        ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(selectedLinks.getItemArray()[i],this);
-        owner.getUndoManager()->perform(action, "reverse link direction");
+        LinkComponent* lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i));
+        if(lc != nullptr)
+        {
+            ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(lc,this);
+            owner.getUndoManager()->perform(action, "reverse link direction");
+        }
     }
     changed();
     
@@ -532,7 +531,7 @@ const char* const ObjController::clipboardXmlTag = "SAMOBJECTS";
 
 void ObjController::copySelectedToClipboard()
 {
-    if (selectedObjects.getNumSelected() == 0)
+    if (sObjects.getNumSelected() == 0)
         return;
 
     XmlElement clip (clipboardXmlTag);
@@ -541,7 +540,7 @@ void ObjController::copySelectedToClipboard()
     {
         ObjectComponent* const oc = objects.getUnchecked(i);
 
-        if (selectedObjects.isSelected (oc))
+        if (oc != nullptr && sObjects.isSelected (oc))
         {
             XmlElement* const e = oc->getData().createXml();
             clip.addChildElement (e);
@@ -568,9 +567,7 @@ void ObjController::paste(ObjectsHolder* holder)
 
     if (doc != 0 && doc->hasTagName (clipboardXmlTag))
     {
-        selectedObjects.deselectAll();
-        selectedLinks.deselectAll();
-
+        sObjects.deselectAll();
         forEachXmlChildElement (*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
@@ -598,7 +595,7 @@ void ObjController::paste(ObjectsHolder* holder)
                 ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
 
                 if (newObjectComp != 0)
-                    selectedObjects.addToSelection(newObjectComp);
+                    sObjects.addToSelection(newObjectComp);
             }
 //            else if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
 //            {
@@ -635,17 +632,20 @@ Array<int> ObjController::getLinksToCopy()
         linkIndices.add(0);
     }
 
-    for (int j = 0; j < selectedObjects.getNumSelected(); ++j)
+    for (int j = 0; j < sObjects.getNumSelected(); ++j)
     {
-        ObjectComponent* oc = selectedObjects.getItemArray()[j];
+        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(j));
         
-        Array<LinkComponent*> ocLinks = oc->getAttachedLinks();
-                
-        for (int k = 0; k < ocLinks.size(); ++k)
+        if(oc != nullptr)
         {
-            int idx = indexOfLink(ocLinks[k]);
-            int lIndex = linkIndices.getUnchecked(idx);
-            linkIndices.set(idx, ++lIndex);
+            Array<LinkComponent*> ocLinks = oc->getAttachedLinks();
+                
+            for (int k = 0; k < ocLinks.size(); ++k)
+            {
+                int idx = indexOfLink(ocLinks[k]);
+                int lIndex = linkIndices.getUnchecked(idx);
+                linkIndices.set(idx, ++lIndex);
+            }
         }
     }
     for (int i = 0; i < linkIndices.size(); ++i)

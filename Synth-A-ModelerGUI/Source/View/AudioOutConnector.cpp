@@ -34,7 +34,6 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
                                      ObjectComponent* audioOutComp_)
     :
     owner(owner_),
-    selected(false),
     mouseDownSelectStatus(false),
     objComp(objComp_),
     audioOutComp(audioOutComp_)
@@ -45,12 +44,14 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
 //    source.setProperty(Ids::value, objComp->getData()[Ids::identifier], nullptr);
 //    source.setProperty(Ids::gain, "1.0", nullptr);
 //    auSources.addChild(source, -1, nullptr);
-    owner.getSelectedAudioConnections().addChangeListener(this);
+
+    owner.getSelectedObjects().addChangeListener(this);
+//    owner.getSelectedAudioConnections().addChangeListener(this);
 }
 
 AudioOutConnector::~AudioOutConnector()
 {
-    owner.getSelectedAudioConnections().removeChangeListener(this);
+    owner.getSelectedObjects().removeChangeListener(this);
 }
 
 void AudioOutConnector::resized()
@@ -184,7 +185,7 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
 
 void AudioOutConnector::changeListenerCallback (ChangeBroadcaster*)
 {
-    const bool nowSelected = owner.getSelectedAudioConnections().isSelected (this);
+    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
 
     if (selected != nowSelected)
     {
@@ -196,7 +197,7 @@ void AudioOutConnector::changeListenerCallback (ChangeBroadcaster*)
 
 void AudioOutConnector::mouseDown(const MouseEvent& e)
 {
-    mouseDownSelectStatus = owner.getSelectedAudioConnections().addToSelectionOnMouseDown (this, e.mods);
+    mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 
 void AudioOutConnector::mouseDrag(const MouseEvent& e)
@@ -206,7 +207,16 @@ void AudioOutConnector::mouseDrag(const MouseEvent& e)
 
 void AudioOutConnector::mouseUp(const MouseEvent& e)
 {
-    owner.getSelectedAudioConnections().addToSelectionOnMouseUp (this, e.mods, false,
-                                                                 mouseDownSelectStatus);
+    owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, false,
+                                                        mouseDownSelectStatus);
     update();
+}
+
+Rectangle<int> AudioOutConnector::getIntersectioBounds()
+{
+    const Rectangle<int> intersectionBounds((int) jmin(lastInputX, lastOutputX),
+                                            (int) jmin(lastInputY, lastOutputY),
+                                            (int) fabsf(lastInputX - lastOutputX),
+                                            (int) fabsf(lastInputY - lastOutputY));
+    return intersectionBounds;
 }

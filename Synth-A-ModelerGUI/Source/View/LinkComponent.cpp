@@ -36,8 +36,7 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     lastInputY (0),
     lastOutputX (0),
     lastOutputY (0),
-    segmented(false),
-    selected(false)
+    segmented(false)
 {
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
@@ -45,29 +44,7 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp->addLinkToObject(this);
     endComp->addLinkToObject(this);
 
-    // TODO Better solution for this.
-//    if(startComp->getData().getType() == Ids::audioout)
-//    {
-//        String aoSourceName = endComp->getData().getProperty(Ids::identifier).toString();
-//        String aoSource = startComp->getData().getProperty(Ids::sources);
-//        if(aoSource != String::empty)
-//            aoSource.append("+", 1);
-//        aoSource.append("1.0*", 5);
-//        aoSource.append(aoSourceName, 256);
-//        startComp->getData().setProperty(Ids::sources, aoSource, nullptr);
-//    }
-//    else if(endComp->getData().getType() == Ids::audioout)
-//    {
-//        String aoSourceName = startComp->getData().getProperty(Ids::identifier).toString();
-//        String aoSource = endComp->getData().getProperty(Ids::sources);
-//        if(aoSource != String::empty)
-//            aoSource.append("+", 1);
-//        aoSource.append("1.0*", 5);
-//        aoSource.append(aoSourceName, 256);
-//        endComp->getData().setProperty(Ids::sources, aoSource, nullptr);
-//    }
-
-    owner.getSelectedLinks().addChangeListener(this);
+    owner.getSelectedObjects().addChangeListener(this);
 
     update();
 }
@@ -77,7 +54,7 @@ LinkComponent::~LinkComponent()
     startComp->removeLinkFromObject(this);
     endComp->removeLinkFromObject(this);
     
-    owner.getSelectedLinks().removeChangeListener(this);
+    owner.getSelectedObjects().removeChangeListener(this);
 }
 void LinkComponent::update()
 {
@@ -145,7 +122,7 @@ void LinkComponent::paint(Graphics& g)
 
 void LinkComponent::mouseDown(const MouseEvent& e)
 {
-    mouseDownSelectStatus = owner.getSelectedLinks().addToSelectionOnMouseDown (this, e.mods);
+    mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 
 void LinkComponent::mouseDrag(const MouseEvent& e)
@@ -164,7 +141,7 @@ void LinkComponent::mouseUp(const MouseEvent& e)
         showContextMenu();
         return; // this may be deleted now..
     }
-    owner.getSelectedLinks().addToSelectionOnMouseUp (this, e.mods, false, 
+    owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, false, 
                                                       mouseDownSelectStatus);
     update();
 }
@@ -188,11 +165,11 @@ void LinkComponent::setSelected(bool shouldBeSelected)
     selected = shouldBeSelected;
     if(selected)
     {
-        owner.getSelectedLinks().addToSelection(this);
+        owner.getSelectedObjects().addToSelection(this);
     }
     else
     {
-        owner.getSelectedLinks().deselect(this);
+        owner.getSelectedObjects().deselect(this);
     }
 }
 
@@ -220,7 +197,7 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
 
 void LinkComponent::changeListenerCallback (ChangeBroadcaster*)
 {
-    const bool nowSelected = owner.getSelectedLinks().isSelected (this);
+    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
 
     if (selected != nowSelected)
     {
@@ -374,4 +351,13 @@ void LinkComponent::reverseDirection()
     endComp = owner.getObjectForId(tempStart);
 
     update();
+}
+
+Rectangle<int> LinkComponent::getIntersectioBounds()
+{
+    const Rectangle<int> intersectionBounds((int) jmin(lastInputX, lastOutputX),
+                                            (int) jmin(lastInputY, lastOutputY),
+                                            (int) fabsf(lastInputX - lastOutputX),
+                                            (int) fabsf(lastInputY - lastOutputY));
+    return intersectionBounds;
 }

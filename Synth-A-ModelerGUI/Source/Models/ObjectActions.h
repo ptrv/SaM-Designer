@@ -234,12 +234,13 @@ public:
 	{
         SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
         LinkComponent* lc = objController->getLink(oldIndex);
-        if(objController->getSelectedLinks().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedLinks().selectOnly(lc);
+            objController->getSelectedObjects().selectOnly(lc);
         }
         objController->removeLink(lc, false, holderComp);
-		return true;
+		
+        return true;
 	}
 
 	bool undo()
@@ -247,11 +248,11 @@ public:
         SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
         LinkComponent* lc = objController->addLink(holderComp, oldValue, oldIndex, false);
-        if(objController->getSelectedLinks().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedLinks().selectOnly(lc);
+            objController->getSelectedObjects().selectOnly(lc);
         }
-        
+
 		return true;
 	}
 private:
@@ -277,14 +278,7 @@ public:
 
 	bool perform()
 	{
-////        SAM_LOG("Reverse direction"+oldValue[Ids::identifier].toString());
-//        LinkComponent* lc = objController->getLink(linkIndex);
-//        if(objController->getSelectedLinks().getNumSelected() == 0)
-//        {
-//            objController->getSelectedLinks().selectOnly(lc);
-//        }
-//        lc->reverseDirection();
-        
+//        SAM_LOG("Reverse direction"+oldValue[Ids::identifier].toString());
         reverse();
 		return true;
 	}
@@ -292,13 +286,6 @@ public:
 	bool undo()
 	{
 //        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
-
-//        LinkComponent* lc = objController->getLink(linkIndex);
-//        if(objController->getSelectedLinks().getNumSelected() == 0)
-//        {
-//            objController->getSelectedLinks().selectOnly(lc);
-//        }
-//        lc->reverseDirection();
         reverse();
 		return true;
 	}
@@ -306,9 +293,9 @@ private:
     void reverse()
     {
         LinkComponent* lc = objController->getLink(linkIndex);
-        if(objController->getSelectedLinks().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedLinks().selectOnly(lc);
+            objController->getSelectedObjects().selectOnly(lc);
         }
         lc->reverseDirection();
     }
@@ -393,10 +380,11 @@ public:
 	bool perform()
 	{
         AudioOutConnector* aoc = objController->getAudioConnector(oldIndex);
-        if(objController->getSelectedAudioConnections().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedAudioConnections().selectOnly(aoc);
+            objController->getSelectedObjects().selectOnly(aoc);
         }
+
         objController->removeAudioConnection(aoc, false, holderComp);
 		return true;
 	}
@@ -409,9 +397,9 @@ public:
                                                                    objController->getObject(oldIndexSource),
                                                                    objController->getObject(oldIndexAudioOut),
                                                                    oldIndex, false);
-        if(objController->getSelectedAudioConnections().getNumSelected() == 0)
+        if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedAudioConnections().selectOnly(aoc);
+            objController->getSelectedObjects().selectOnly(aoc);
         }
         
 		return true;

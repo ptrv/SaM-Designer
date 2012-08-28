@@ -27,6 +27,7 @@
 #define __LINKCOMPONENT_H_4CCE4B86__
 
 #include "BaseObjectComponent.h"
+#include "SelectableObject.h"
 
 
 class ObjController;
@@ -34,7 +35,8 @@ class ObjectComponent;
 
 class LinkComponent : public BaseObjectComponent,
                       public ChangeListener,
-                      public SettableTooltipClient
+                      public SettableTooltipClient,
+                      public SelectableObject
 {
 public:
     LinkComponent(ObjController& owner_, ValueTree linkTree);
@@ -63,6 +65,7 @@ public:
     
     void reverseDirection();
     
+    Rectangle<int> getIntersectioBounds();
 private:
     void drawPath(float x1, float y1, float x2, float y2);
     
@@ -70,7 +73,6 @@ private:
     Path linePath, hitPath;
     
     bool segmented;
-    bool selected;
     bool mouseDownSelectStatus;
     
     Point<float> iconPos;

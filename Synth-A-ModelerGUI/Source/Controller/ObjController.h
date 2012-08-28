@@ -33,6 +33,7 @@ class ObjectComponent;
 class ObjectsHolder;
 class LinkComponent;
 class AudioOutConnector;
+class SelectableObject;
 
 /**
  * The ObjController controlls all ObjectComponents.
@@ -91,11 +92,7 @@ public:
     
     void addNewAudioConnection(ObjectsHolder* holder);
     
-	void removeSelectedLinks(ObjectsHolder* holder);
-
     void removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder);
-    
-    void removeSelectedAudioConnections(ObjectsHolder* holder);
     
     void removeAudioConnection(AudioOutConnector* aocComp,
                                bool undoable,
@@ -122,17 +119,21 @@ public:
 	 */
 	void editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager);
     
-    SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
-    { 
-        return selectedObjects; 
-    }
-    SelectedItemSet <LinkComponent*>& getSelectedLinks() throw()
+//    SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
+//    { 
+//        return selectedObjects; 
+//    }
+//    SelectedItemSet <LinkComponent*>& getSelectedLinks() throw()
+//    {
+//        return selectedLinks;
+//    }
+//    SelectedItemSet <AudioOutConnector*>& getSelectedAudioConnections() throw()
+//    {
+//        return selectedAudioConnections;
+//    }
+    SelectedItemSet <SelectableObject*>& getSelectedObjects() throw()
     {
-        return selectedLinks;
-    }
-    SelectedItemSet <AudioOutConnector*>& getSelectedAudioConnections() throw()
-    {
-        return selectedAudioConnections;
+        return sObjects;
     }
     
     void startDragging();
@@ -177,9 +178,7 @@ private:
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
     OwnedArray<AudioOutConnector> audioConnections;
-    SelectedItemSet<ObjectComponent*> selectedObjects;
-    SelectedItemSet<LinkComponent*> selectedLinks;
-    SelectedItemSet<AudioOutConnector*> selectedAudioConnections;
+    SelectedItemSet<SelectableObject*> sObjects;
     SortedSet<String> objectIds;
 };
 

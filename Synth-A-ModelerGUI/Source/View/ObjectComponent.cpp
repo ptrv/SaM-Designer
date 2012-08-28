@@ -33,8 +33,7 @@
 #include "ObjectComponent.h"
 
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
-: BaseObjectComponent(owner_, data_),
-  isSelected(false)
+: BaseObjectComponent(owner_, data_)
 {
 	shadow.setShadowProperties (
 			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
@@ -80,7 +79,7 @@ void ObjectComponent::paint(Graphics& g)
 	Rectangle<float> rect(x+2, y+2, w-4, h-4);
 	icon->drawWithin(g, rect, RectanglePlacement::centred, 1.0f);
 
-	if(isSelected)
+	if(selected)
 	{
 //		Colour col(0x88228b22);
 		g.setColour(Colours::black);
@@ -108,10 +107,15 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
         String endObj;
         if (owner.getSelectedObjects().getNumSelected() == 2)
         {
-            startObj = owner.getSelectedObjects().getItemArray()[0]->getData().getProperty(Ids::identifier).toString();
-            endObj = owner.getSelectedObjects().getItemArray()[1]->getData().getProperty(Ids::identifier).toString();
-            DBG(String("Link: ") + startObj + String(", ") + endObj);
-            getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
+            ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(owner.getSelectedObjects().getSelectedItem(0));
+            ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(owner.getSelectedObjects().getSelectedItem(1));
+            if(oc1 != nullptr && oc2 != nullptr)
+            {
+                startObj = oc1->getData().getProperty(Ids::identifier).toString();
+                endObj = oc2->getData().getProperty(Ids::identifier).toString();
+                DBG(String("Link: ") + startObj + String(", ") + endObj);
+                getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
+            }
         }
 
     }
@@ -137,7 +141,7 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
         jassert (dynamic_cast <ObjectsHolder*> (getParentComponent()) != 0);
 //        const Rectangle<int> area (((ObjectsHolder*) getParentComponent())->getComponentArea());
         
-        if (isSelected && ! dragging)
+        if (selected && ! dragging)
         {
             dragging = ! e.mouseWasClicked();
 
@@ -208,8 +212,8 @@ void ObjectComponent::setData(ValueTree dataTree)
 
 void ObjectComponent::setSelected(bool shouldBeSelected)
 {
-	isSelected = shouldBeSelected;
-	if(isSelected)
+	selected = shouldBeSelected;
+	if(selected)
     {
         owner.getSelectedObjects().addToSelection(this);
     }
@@ -222,7 +226,7 @@ void ObjectComponent::setSelected(bool shouldBeSelected)
 
 void ObjectComponent::toggleSelected()
 {
-	if(isSelected)
+	if(selected)
 		setSelected(false);
 	else
 		setSelected(true);
@@ -233,9 +237,9 @@ void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)
 {
     const bool nowSelected = owner.getSelectedObjects().isSelected (this);
 
-    if (isSelected != nowSelected)
+    if (selected != nowSelected)
     {
-        isSelected = nowSelected;
+        selected = nowSelected;
         repaint();
     }
 }
