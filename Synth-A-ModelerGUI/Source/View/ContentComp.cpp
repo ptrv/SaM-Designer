@@ -347,6 +347,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case StandardApplicationCommandIDs::del:
         result.setInfo("Delete", "", CommandCategories::editing, 0);
         result.addDefaultKeypress(KeyPress::deleteKey, 0);
+        result.addDefaultKeypress(KeyPress::backspaceKey, 0);
         break;
     case CommandIDs::segmentedConnectors:
         result.setInfo("Segmeted connectors", "", CommandCategories::editing, 0);
