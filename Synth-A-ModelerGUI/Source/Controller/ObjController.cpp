@@ -691,7 +691,11 @@ bool ObjController::changeObjectNameInLink(const String& oldName,
                 elem->getData().setProperty(Ids::endVertex, newName, undoManager);
             }
         }
-
+        return true;
+    }
+    else
+    {
+        return false;
     }
 
 }

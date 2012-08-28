@@ -163,10 +163,10 @@ public:
 private:
 	ObjectsHolder* holderComp;
 //	ObjectComponent* objComp;
+    ObjController* objController;
 	Point<int> newPos;
     Point<int> oldPos;
     int indexOfObjectToMove;
-    ObjController* objController;
 };
 
 class AddLinkAction : public UndoableAction

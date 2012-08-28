@@ -187,11 +187,17 @@ public:
         String newName = teName.getText();
         String oldName = data[Ids::identifier];
         if(newName != oldName)
+        {
             if (objController->checkIfIdExists(newName))
+            {
                 return false;
+            }
             else
+            {
                 if(! objController->renameId(oldName, newName))
                     return false;
+            }
+        }
 
         objController->changeObjectNameInLink(oldName, newName, undoManager);
 
@@ -283,11 +289,17 @@ public:
         String newName = teName.getText();
         String oldName = data[Ids::identifier];
         if(newName != oldName)
+        {
             if (objController->checkIfIdExists(newName))
+            {
                 return false;
+            }
             else
+            {
                 if(! objController->renameId(oldName, newName))
                     return false;
+            }
+        }
 
         objController->changeObjectNameInLink(oldName, newName, undoManager);
 
@@ -396,11 +408,17 @@ public:
         String newName = teName.getText();
         String oldName = data[Ids::identifier];
         if(newName != oldName)
+        {
             if (objController->checkIfIdExists(newName))
+            {
                 return false;
+            }
             else
+            {
                 if(! objController->renameId(oldName, newName))
                     return false;
+            }
+        }
 
         objController->changeObjectNameInLink(oldName, newName, undoManager);
 
