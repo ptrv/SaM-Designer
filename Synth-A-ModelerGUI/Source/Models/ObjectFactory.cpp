@@ -213,7 +213,8 @@ static ValueTree createNewAudioOutTree(int x, int y)
 	newTree.setProperty(Ids::posY, y, nullptr);
 	int rnd = Random::getSystemRandom().nextInt(100000);
 	newTree.setProperty(Ids::identifier,"a_"+String(rnd), nullptr);
-	newTree.setProperty(Ids::sources, "", nullptr);
+    ValueTree sources(Ids::sources);
+    newTree.addChild(sources, -1, nullptr);
 
 	return newTree;
 }
