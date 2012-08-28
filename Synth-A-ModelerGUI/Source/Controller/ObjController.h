@@ -140,6 +140,7 @@ public:
     void dragSelectedComps (int dxFromDragStart, int dyFromDragStart);
     void endDragging();
     
+    void moveSelectedComps (int dxFromMoveStart, int dyFromMoveStart);
     UndoManager* getUndoManager();
 
     ObjectComponent* getObject(int index) const throw() { return objects[index]; }

@@ -467,6 +467,13 @@ void ObjController::endDragging()
     owner.getUndoManager()->beginNewTransaction();
 }
 
+void ObjController::moveSelectedComps (int dxFromMoveStart, int dyFromMoveStart)
+{
+    startDragging();
+    dragSelectedComps(dxFromMoveStart, dyFromMoveStart);
+    endDragging();
+}
+
 UndoManager* ObjController::getUndoManager()
 {
     return owner.getUndoManager();

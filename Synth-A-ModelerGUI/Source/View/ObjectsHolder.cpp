@@ -42,6 +42,7 @@ mdlFile(nullptr),
 dragging(false)
 {
     setSize(100, 100);
+    setWantsKeyboardFocus(true);
 }
 
 ObjectsHolder::~ObjectsHolder()
@@ -157,6 +158,40 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
         addAndMakeVisible(&lassoComp);
         lassoComp.beginLasso(e, this);
     }
+}
+bool isShiftKeyDown = false;
+bool ObjectsHolder::keyPressed(const KeyPress& key)
+{
+    int dx = 20;
+    int dy = 20;
+//    if(ModifierKeys::shiftModifier)
+//    {
+//        dx /= 5;
+//        dy /= 5;
+//    }
+        
+    bool isKey = true;
+    if(key == KeyPress::upKey)
+    {
+        objController.moveSelectedComps(0, -dy);
+    }
+    else if(key == KeyPress::downKey)
+    {
+        objController.moveSelectedComps(0, dy);
+    }
+    else if(key == KeyPress::leftKey)
+    {
+        objController.moveSelectedComps(-dx, 0);
+    }
+    else if(key == KeyPress::rightKey)
+    {
+        objController.moveSelectedComps(dx, 0);
+    }
+    else
+    {
+        isKey = false;
+    }
+    return isKey;
 }
 
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
