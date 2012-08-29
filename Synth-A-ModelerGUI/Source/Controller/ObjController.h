@@ -144,10 +144,14 @@ public:
     UndoManager* getUndoManager();
 
     ObjectComponent* getObject(int index) const throw() { return objects[index]; }
+    ObjectComponent* getObjectUnchecked(int index) const throw() { return objects.getUnchecked(index); }
     int indexOfObject (ObjectComponent* e) const throw() { return objects.indexOf (e); }
+    int getNumObjects() const { return objects.size(); }
 
     LinkComponent* getLink(int index) const throw() { return links[index]; }
+    LinkComponent* getLinkUnchecked(int index) const throw() { return links.getUnchecked(index); }
     int indexOfLink (LinkComponent* e) const throw() { return links.indexOf (e); }
+    int getNumLinks() const { return links.size(); }
     
     AudioOutConnector* getAudioConnector(int index) const throw() 
     { return audioConnections[index]; }

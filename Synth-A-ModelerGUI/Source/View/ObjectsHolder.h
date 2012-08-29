@@ -92,6 +92,8 @@ private:
     Point<int> draggingActual;
 
     LassoComponent<SelectableObject*> lassoComp;
+    
+    bool isDrawingObjectNames;
 };
 
 

@@ -58,6 +58,23 @@ void ObjectsHolder::paint(Graphics& g)
     g.fillAll(Colours::white);
 
     g.setColour(Colours::black);
+    
+    if(isDrawingObjectNames)
+    {
+        for(int i = 0; i < objController.getNumObjects(); ++i)
+        {
+            ObjectComponent* oc = objController.getObjectUnchecked(i);
+            Point<int> tl = oc->getBounds().getTopLeft();
+            g.drawSingleLineText(oc->getData()[Ids::identifier].toString(), tl.x, tl.y, Justification::left);
+        }
+        for(int i = 0; i < objController.getNumLinks(); ++i)
+        {
+            LinkComponent* lc = objController.getLinkUnchecked(i);
+            Point<int> tl = lc->getBounds().getCentre();
+            g.drawSingleLineText(lc->getData()[Ids::identifier].toString(), tl.x, tl.y-5, Justification::left);
+        }
+
+    }
 }
 
 void ObjectsHolder::resized()
@@ -383,7 +400,13 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 }
 void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
 {
+    isDrawingObjectNames = true;
+    toFront(false);
+    repaint();
     objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
+    isDrawingObjectNames = false;
+    toBack();
+    repaint();
 }
 
 void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results, const Rectangle<int>& lasso)
