@@ -8,6 +8,7 @@ DEST			:= pddir/
 dspsrc  		:= $(wildcard *.mdl)
 cppsrc  		:= $(addprefix $(DEST), $(dspsrc:.mdl=.cpp))
 dspfile			:= $(dspsrc:.mdl=.dsp)
+mdxfile			:= $(dspsrc:.mdl=.mdx)
 patches			:= $(addprefix $(DEST),  $(dspsrc:.mdl=.pd))
 FAUST2PD 		:= faust2pd
 F2PDFLAGS 		:= -r 10 -s
@@ -51,9 +52,12 @@ endif
 ###--------------------------------------------
 
 
-allmodules: $(dspfile) $(todo)
+allmodules: $(mdxfile) $(dspfile) $(todo)
 
-%.dsp : %.mdl
+%.mdx : %.mdl
+	perl SAM-preprocessor $< $@
+
+%.dsp : %.mdx
 	perl Synth-A-Modeler $< $@
 
 $(DEST)%.cpp: %.dsp

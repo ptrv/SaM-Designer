@@ -30,7 +30,7 @@ faustcode:interactionStiffness=hslider("Interaction Stiffness", 300.0, 0.0, 500.
 faustcode:interactionDamping=hslider("Interaction Damping", 0.05, 0.0, 0.2, 0.005);
 
 
-mass(virtualMass),m1,(mlabel);
+mass(virtualMass,0.0,0.0),m1,(mlabel);
 resonator(218.0, 1.4, 0.00000001),r0,( );
 resonator(326.0, 1.0, 0.00000001),r1,( );
 resonator(500.0, 0.8, 0.00000001),r2,( );

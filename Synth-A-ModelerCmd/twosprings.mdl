@@ -27,7 +27,6 @@
 faustcode:stiffness=hslider("Stiffness", 50.0, 10.0, 500.0, 10.0);
 
 
-
 # mass-like objects
 ground( 0.0),g1,(mygrnd);
 port(),dev1,(hapticdev);
