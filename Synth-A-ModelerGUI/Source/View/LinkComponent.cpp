@@ -246,7 +246,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
 
         linePath.addPath(iconPath);
     }
-    else if(data.getType() == Ids::touch)
+    else if(data.getType() == Ids::pluck)
     {
         //This is the little bit of the path which covers the icon
         float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) +  (y2 - y1)*(y2 - y1));
@@ -283,7 +283,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
 
         linePath.addPath(iconPath);
     }
-    else if(data.getType() == Ids::pluck)
+    else if(data.getType() == Ids::touch)
     {
         //This is the little bit of the path which covers the icon
         float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) +  (y2 - y1)*(y2 - y1));
