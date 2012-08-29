@@ -270,12 +270,12 @@ Point<int> ObjectComponent::getPinPos()
     }
     else if (data.getType() == Ids::port)
     {
-        pinPos.x -= 7;
-        pinPos.y -= 19;
+        pinPos.x -= 11;
+        pinPos.y -= 29;
     }
     else if (data.getType() == Ids::audioout)
     {
-        pinPos.x -= 15;
+        pinPos.x -= 19;
     }
     return pinPos;
 }
