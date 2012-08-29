@@ -319,22 +319,23 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         stroke2.createStrokedPath(iconPath, iconPath);
 
         linePath.addPath(iconPath);
+
+        const float arrowW = 5.0f;
+        const float arrowL = 4.0f;
+
+        Path arrow;
+        arrow.addTriangle(-arrowL, arrowW,
+                          -arrowL, -arrowW,
+                          arrowL, 0.0f);
+
+        arrow.applyTransform(AffineTransform::identity
+                             .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                             .translated((x1 + x2) * 0.5f,
+                                         (y1 + y2) * 0.5f));
+        arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
+
+        linePath.addPath(arrow);
     }
-    const float arrowW = 5.0f;
-    const float arrowL = 4.0f;
-
-    Path arrow;
-    arrow.addTriangle(-arrowL, arrowW,
-                      -arrowL, -arrowW,
-                      arrowL, 0.0f);
-
-    arrow.applyTransform(AffineTransform::identity
-                         .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
-                         .translated((x1 + x2) * 0.5f,
-                                     (y1 + y2) * 0.5f));
-    arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
-
-    linePath.addPath(arrow);
     linePath.setUsingNonZeroWinding(true);
 
 }
