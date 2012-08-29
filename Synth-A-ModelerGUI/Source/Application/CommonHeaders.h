@@ -31,7 +31,7 @@
  * All common includes.
  */
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "../Utilities/StoredSettings.h"
 #include "CommandIDs.h"
