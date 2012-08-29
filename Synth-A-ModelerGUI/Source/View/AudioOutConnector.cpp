@@ -73,11 +73,11 @@ void AudioOutConnector::resized()
     linePath.startNewSubPath(x1, y1);
     linePath.lineTo(x2, y2);
 
-    PathStrokeType wideStroke(8.0f);
+    PathStrokeType wideStroke(4.0f);
     wideStroke.createStrokedPath(hitPath, linePath);
 
     float dashLengths[] = {5, 5};
-    PathStrokeType stroke(2.5f);
+    PathStrokeType stroke(1.5f);
     stroke.createDashedStroke(linePath, linePath, dashLengths, 2);
 //    stroke.createStrokedPath(linePath, linePath);
     
@@ -108,7 +108,7 @@ void AudioOutConnector::paint(Graphics& g)
     }
     else
     {
-        g.setColour(Colours::darkgrey);
+        g.setColour(Colours::grey);
     }
     
     g.fillPath(linePath);
