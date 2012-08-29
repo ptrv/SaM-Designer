@@ -39,7 +39,14 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
 	setComponentEffect (&shadow);
 
-	setSize(50, 50);
+    if(data.getType() == Ids::mass)
+        setSize(35, 35);
+    else if(data.getType() == Ids::port)
+        setSize(75, 75);
+    else if(data.getType() == Ids::audioout)
+        setSize(60,60);
+    else
+        setSize(50, 50);
 	originalPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
 	actualPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
 	icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(data.getType()));
