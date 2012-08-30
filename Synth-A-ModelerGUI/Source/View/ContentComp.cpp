@@ -548,7 +548,7 @@ double ContentComp::getZoom() const
 
 void ContentComp::setZoom(double newScale)
 {
-    setZoom(jlimit(1.0 / 8.0, 16.0, newScale),
+    setZoom(jlimit(1.0 / 16.0, 16.0, newScale),
             viewport->getWidth() / 2,
             viewport->getHeight() / 2);
 }
