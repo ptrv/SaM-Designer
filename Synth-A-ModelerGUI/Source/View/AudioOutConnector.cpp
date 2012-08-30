@@ -25,17 +25,18 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../View/ObjectComponent.h"
+#include "../View/LinkComponent.h"
 #include "../Controller/ObjController.h"
 
 #include "AudioOutConnector.h"
 
 AudioOutConnector::AudioOutConnector(ObjController& owner_, 
-                                     ObjectComponent* objComp_,
+                                     BaseObjectComponent* objComp_,
                                      ObjectComponent* audioOutComp_)
     :
     owner(owner_),
     mouseDownSelectStatus(false),
-    objComp(objComp_),
+    sourceComp(objComp_),
     audioOutComp(audioOutComp_)
 {
 //    audioOutComp
@@ -168,9 +169,15 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
     x2 = lastOutputX;
     y2 = lastOutputY;
 
-    if (objComp != nullptr)
+    if (sourceComp != nullptr)
     {
-        Point<int> startPos = objComp->getPinPos();
+        Point<int> startPos;
+        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp);
+        LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp);
+        if(oc != nullptr)
+            startPos = oc->getPinPos();
+        else
+            startPos = lc->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
     }

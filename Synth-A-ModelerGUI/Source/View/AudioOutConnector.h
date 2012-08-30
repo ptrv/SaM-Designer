@@ -39,7 +39,7 @@ class AudioOutConnector : public Component,
 {
 public:
     AudioOutConnector(ObjController& owner_,
-                      ObjectComponent* objComp_,
+                      BaseObjectComponent* objComp_,
                       ObjectComponent* audioOutComp_);
     virtual ~AudioOutConnector();
 
@@ -60,7 +60,7 @@ public:
     void mouseDrag(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
 
-    ObjectComponent* getSourceObject() { return objComp; }
+    BaseObjectComponent* getSourceObject() { return sourceComp; }
     ObjectComponent* getAudioObject() { return audioOutComp; }
     
     Rectangle<int> getIntersectioBounds();
@@ -70,7 +70,7 @@ private:
     Path linePath, hitPath;
 
     bool mouseDownSelectStatus;
-    ObjectComponent* objComp;
+    BaseObjectComponent* sourceComp;
     ObjectComponent* audioOutComp;
     
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const

@@ -362,3 +362,8 @@ Rectangle<int> LinkComponent::getIntersectioBounds()
                                             (int) fabsf(lastInputY - lastOutputY));
     return intersectionBounds;
 }
+
+Point<int> LinkComponent::getPinPos()
+{
+    return getIntersectioBounds().getCentre();
+}

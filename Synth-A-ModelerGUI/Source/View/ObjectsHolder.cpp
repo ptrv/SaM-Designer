@@ -391,6 +391,18 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
         objController.addNewAudioConnection(this);
     }
 }
+
+void ObjectsHolder::showAudioConnectionPopupMenu()
+{
+    PopupMenu m;
+	m.addItem (1, "Add audio connection");
+    const int r = m.show();
+    if( r == 1)
+    {
+        objController.addNewAudioConnection(this);
+    }
+}
+
 void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
 {
     isDrawingObjectNames = true;

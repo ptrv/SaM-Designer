@@ -165,7 +165,7 @@ void ObjController::addLinkComponent(LinkComponent* comp, int index)
 }
 
 AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
-                                                     ObjectComponent* objComp,
+                                                     BaseObjectComponent* objComp,
                                                      ObjectComponent* audioOutComp,
                                                      int index,
                                                      bool undoable)
@@ -201,20 +201,34 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
     if(sObjects.getNumSelected() == 2)
     {
         ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
+        LinkComponent* lc1 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
-        if((oc1->getData().getType() == Ids::audioout
-            && oc2->getData().getType() != Ids::audioout))
+        LinkComponent* lc2 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(1));
+        
+        if(oc1 != nullptr && oc2 != nullptr)
         {
-            addAudioConnection(holder, oc2, oc1, -1, true);
+            if ((oc1->getData().getType() == Ids::audioout
+                && oc2->getData().getType() != Ids::audioout))
+            {
+                addAudioConnection(holder, oc2, oc1, -1, true);
+            }
+            else if (oc1->getData().getType() != Ids::audioout
+                && oc2->getData().getType() == Ids::audioout)
+            {
+                addAudioConnection(holder, oc1, oc2, -1, true);
+            }
+            else
+            {
+                SAM_CONSOLE("Error: ", "Cannot create audio connection");
+            }
         }
-        else if(oc1->getData().getType() != Ids::audioout
-            && oc2->getData().getType() == Ids::audioout)
+        else if(oc1 == nullptr)
         {
-            addAudioConnection(holder, oc1, oc2, -1, true);
+            addAudioConnection(holder, lc1, oc2, -1, true);
         }
-        else
+        else if(oc2 == nullptr)
         {
-            SAM_CONSOLE("Error: ", "Cannot create audio connection");
+            addAudioConnection(holder, lc2, oc1, -1, true);
         }
     }
 }
@@ -350,39 +364,6 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
         }
     }
-    ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
-    for (int i = 0; i < audioObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = audioObjects.getChild(i);
-        if(objectIds.add(obj[Ids::identifier].toString()))
-        {
-            ObjectComponent* objComp = new ObjectComponent(*this, obj);
-            objects.add(objComp);
-            holder->addAndMakeVisible(objComp);
-            objComp->update();
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            
-            ValueTree aoSources = obj.getChildWithName(Ids::sources);
-            for (int j = 0; j < aoSources.getNumChildren(); ++j)
-            {
-                ValueTree source = aoSources.getChild(j);
-                ObjectComponent* oc = getObjectForId(source[Ids::value]);
-                if( oc != nullptr )
-                {
-                    AudioOutConnector* aoc = new AudioOutConnector(*this, oc, objComp);
-                    audioConnections.add(aoc);
-                    holder->addAndMakeVisible(aoc);
-                    aoc->update();
-                }
-            }
-
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-
     ValueTree linkObjects = mdl.getChildWithName(Objects::links);
     for (int i = 0; i < linkObjects.getNumChildren(); i++)
     {
@@ -393,6 +374,48 @@ void ObjController::loadComponents(ObjectsHolder* holder)
         linkComp->update();
         SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
     }
+    
+    ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
+    for (int i = 0; i < audioObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = audioObjects.getChild(i);
+        if(objectIds.add(obj[Ids::identifier].toString()))
+        {
+            ObjectComponent* audioOutComp = new ObjectComponent(*this, obj);
+            objects.add(audioOutComp);
+            holder->addAndMakeVisible(audioOutComp);
+            audioOutComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            
+            ValueTree aoSources = obj.getChildWithName(Ids::sources);
+            for (int j = 0; j < aoSources.getNumChildren(); ++j)
+            {
+                ValueTree source = aoSources.getChild(j);
+                ObjectComponent* oc = getObjectForId(source[Ids::value]);
+                LinkComponent* lc = getLinkForId(source[Ids::value]);
+                BaseObjectComponent* sourceComp = nullptr;
+                if(oc != nullptr)
+                    sourceComp = oc;
+                else if(lc != nullptr)
+                    sourceComp = lc;
+                
+                if( sourceComp != nullptr )
+                {
+                    AudioOutConnector* aoc = new AudioOutConnector(*this, 
+                                                                   sourceComp, 
+                                                                   audioOutComp);
+                    audioConnections.add(aoc);
+                    holder->addAndMakeVisible(aoc);
+                    aoc->update();
+                }
+            }
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
+
     holder->updateComponents();
 }
 
@@ -492,6 +515,20 @@ ObjectComponent* ObjController::getObjectForId(String idString) const throw()
     for (int i = 0; i < objects.size(); i++)
     {
         ObjectComponent* elem = objects[i];
+        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
+        {
+            return elem;
+        }
+    }
+    return nullptr;
+
+}
+
+LinkComponent* ObjController::getLinkForId(String idString) const throw()
+{
+    for (int i = 0; i < links.size(); i++)
+    {
+        LinkComponent* elem = links[i];
         if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
         {
             return elem;

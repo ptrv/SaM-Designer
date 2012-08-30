@@ -311,14 +311,25 @@ class AddAudioConnectionAction : public UndoableAction
 {
 public:
 	AddAudioConnectionAction(ObjController* objController_,
-                             ObjectComponent* source,
+                             BaseObjectComponent* source,
                              ObjectComponent* audioOut,
                              ObjectsHolder* holder_)
 	: 
     holderComp(holder_), 
     objController(objController_)
 	{
-        indexSource = objController->indexOfObject(source);
+        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(source);
+        LinkComponent* lc = dynamic_cast<LinkComponent*>(source);
+        if(oc != nullptr)
+        {
+            sourceIsLink = false;
+            indexSource = objController->indexOfObject(oc);
+        }
+        else
+        {
+            sourceIsLink = true;
+            indexSource = objController->indexOfLink(lc);
+        }
         indexAudioOut = objController->indexOfObject(audioOut);
 	}
 	~AddAudioConnectionAction()
@@ -327,8 +338,17 @@ public:
 
 	bool perform()
 	{
+        BaseObjectComponent* sourceComp;
+        if(sourceIsLink)
+        {
+            sourceComp = objController->getLink(indexSource);
+        }
+        else
+        {
+            sourceComp = objController->getObject(indexSource);
+        }
         AudioOutConnector* aocComp = objController->addAudioConnection(holderComp, 
-                                                                       objController->getObject(indexSource),
+                                                                       sourceComp,
                                                                        objController->getObject(indexAudioOut),
                                                                        -1, false);
         indexAdded = objController->indexOfAudioConnector(aocComp);
@@ -354,6 +374,7 @@ private:
     ObjController* objController;
     int indexSource;
     int indexAudioOut;
+    bool sourceIsLink;
     
     
 };
@@ -370,7 +391,18 @@ public:
     oldIndex(-1)
 	{
         oldIndex = objController->indexOfAudioConnector(aocToRemove);
-        oldIndexSource = objController->indexOfObject(aocToRemove->getSourceObject());
+        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject());
+        LinkComponent* lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject());
+        if(oc != nullptr)
+        {
+            sourceIsLink = false;
+            oldIndexSource = objController->indexOfObject(oc);
+        }
+        else
+        {
+            sourceIsLink = true;
+            oldIndexSource = objController->indexOfLink(lc);
+        }
         oldIndexAudioOut = objController->indexOfObject(aocToRemove->getAudioObject());
 	}
 	~RemoveAudioConnectionAction()
@@ -393,8 +425,13 @@ public:
 	{
 //        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
+        BaseObjectComponent* sourceComp;
+        if(sourceIsLink)
+            sourceComp = objController->getLink(oldIndexSource);
+        else
+            sourceComp = objController->getObject(oldIndexSource);
         AudioOutConnector* aoc = objController->addAudioConnection(holderComp,
-                                                                   objController->getObject(oldIndexSource),
+                                                                   sourceComp,
                                                                    objController->getObject(oldIndexAudioOut),
                                                                    oldIndex, false);
         if(objController->getSelectedObjects().getNumSelected() == 0)
@@ -410,6 +447,7 @@ private:
     int oldIndex;
     int oldIndexSource;
     int oldIndexAudioOut;
+    bool sourceIsLink;
 };
 
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

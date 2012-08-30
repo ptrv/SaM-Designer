@@ -123,6 +123,23 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
                 DBG(String("Link: ") + startObj + String(", ") + endObj);
                 getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
             }
+            else if(oc1 == nullptr)
+            {
+                LinkComponent* lc1 = dynamic_cast<LinkComponent*>(owner.getSelectedObjects().getSelectedItem(0));
+                if(lc1 != nullptr)
+                {
+                    getObjectsHolder()->showAudioConnectionPopupMenu();
+                }
+            }
+            else if(oc2 == nullptr)
+            {
+                LinkComponent* lc2 = dynamic_cast<LinkComponent*>(owner.getSelectedObjects().getSelectedItem(1));
+                if(lc2 != nullptr)
+                {
+                    getObjectsHolder()->showAudioConnectionPopupMenu();
+                }
+                
+            }
         }
 
     }

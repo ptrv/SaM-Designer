@@ -85,7 +85,7 @@ public:
     void addLinkComponent(LinkComponent* comp, int index);
 
     AudioOutConnector* addAudioConnection(ObjectsHolder* holder,
-                                          ObjectComponent* objComp,
+                                          BaseObjectComponent* objComp,
                                           ObjectComponent* audioOutComp,
                                           int index,
                                           bool undoable);
@@ -161,6 +161,7 @@ public:
     void changed();
     
     ObjectComponent* getObjectForId(String idString) const throw();
+    LinkComponent* getLinkForId(String idString) const throw();
     
     void reverseLinkDirection();
     
