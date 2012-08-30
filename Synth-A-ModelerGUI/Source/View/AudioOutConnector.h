@@ -82,6 +82,7 @@ private:
         distanceFromEnd = juce_hypot (x - (x2 - getX()), y - (y2 - getY()));
     }
     
+    void showGainPanel();
 };
 
 

@@ -575,6 +575,7 @@ public:
         laSource("laSource", "Source"),
         teSource("teSource")
 	{
+        teSource.setReadOnly(true);
         addAndMakeVisible(&teSource);
         laSource.attachToComponent(&teSource,true);
         

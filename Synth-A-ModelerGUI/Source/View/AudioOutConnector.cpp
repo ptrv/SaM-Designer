@@ -29,6 +29,123 @@
 #include "../Controller/ObjController.h"
 
 #include "AudioOutConnector.h"
+#include "ObjectsHolder.h"
+
+class GainPanel  : public DialogWindow
+{
+public:
+	GainPanel(AudioOutConnector* aoc, const String& sourceId, 
+             ValueTree data, UndoManager* undoManager)
+    : DialogWindow ("Gain", Colour::greyLevel (0.92f), true)
+    {
+        GainComponent * const gc = new GainComponent(*this, sourceId, 
+                                                     data, undoManager);
+        gc->setSize(200, 100);
+
+        setContentOwned(gc, true);
+
+//        if (!restoreWindowStateFromString(variablesWindowPos))
+//            centreWithSize(getWidth(), getHeight());
+        centreAroundComponent(aoc, getWidth(), getHeight());
+        setResizable(false, false);
+        setVisible(true);
+    }
+    ~GainPanel()
+    {
+        
+    }
+
+    void closeButtonPressed()
+    {
+        setVisible (false);
+    }
+
+    static int show(AudioOutConnector* aoc, const String& sourceId, 
+                    ValueTree data, UndoManager* undoManager)
+    {
+        GainPanel gp(aoc, sourceId, data, undoManager);
+        gp.runModalLoop();
+        return gp.returnVal;
+    }
+
+    int returnVal;
+private:
+    class GainComponent : public Component,
+    					  public Button::Listener
+    {
+    public:
+        GainComponent(GainPanel& parent_,
+                      const String& sourceId_,
+                      ValueTree data_,
+                      UndoManager* undoManager_)
+    	: parent(parent_),
+    	  labelGain("Gain", "Gain"),
+    	  teGain("Gain value"),
+          sourceId(sourceId_),
+    	  data(data_),
+    	  btOk("Ok"),
+    	  btCancel("Cancel"),
+    	  undoManager(undoManager_)
+        {
+            ValueTree sources = data.getChildWithName(Ids::sources);
+            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
+            oldGain = source[Ids::gain].toString();
+            teGain.setText(oldGain);
+    		addAndMakeVisible(&teGain);
+            labelGain.attachToComponent(&teGain, true);
+    		btOk.addListener(this);
+    		addAndMakeVisible(&btOk);
+    		btCancel.addListener(this);
+    		addAndMakeVisible(&btCancel);
+    	}
+
+    	~GainComponent()
+    	{
+    	}
+
+    	void resized()
+    	{
+    		labelGain.setBounds(0, 5, 60, 22);
+    		teGain.setBounds(60, 5, getWidth() - 65, 22);
+    		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
+    		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
+    	}
+
+    	void buttonClicked(Button* button)
+    	{
+            parent.returnVal = 0;
+    		if(button == &btOk)
+    		{
+                ValueTree sources = data.getChildWithName(Ids::sources);
+                ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
+                String newGain = teGain.getText();
+                if(oldGain.compare(newGain) != 0)
+                {
+        			undoManager->beginNewTransaction("Edit gain");
+                    source.setProperty(Ids::gain, newGain, undoManager);
+                    undoManager->beginNewTransaction();
+                }
+    			parent.returnVal = 1;
+				parent.closeButtonPressed();
+    		}
+    		else if(button == &btCancel)
+    		{
+    			parent.returnVal = 2;
+    			parent.closeButtonPressed();
+    		}
+    	}
+    private:
+    	GainPanel& parent;
+    	Label labelGain;
+    	TextEditor teGain;
+        String sourceId;
+    	ValueTree data;
+    	TextButton btOk;
+    	TextButton btCancel;
+    	UndoManager* undoManager;
+        String oldGain;
+    };
+};
 
 AudioOutConnector::AudioOutConnector(ObjController& owner_, 
                                      BaseObjectComponent* objComp_,
@@ -214,6 +331,12 @@ void AudioOutConnector::mouseDrag(const MouseEvent& e)
 
 void AudioOutConnector::mouseUp(const MouseEvent& e)
 {
+   	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
+	{
+        DBG("show gain panel");
+        showGainPanel();
+	}
+
     owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, false,
                                                         mouseDownSelectStatus);
     update();
@@ -226,4 +349,17 @@ Rectangle<int> AudioOutConnector::getIntersectioBounds()
                                             (int) fabsf(lastInputX - lastOutputX),
                                             (int) fabsf(lastInputY - lastOutputY));
     return intersectionBounds;
+}
+
+void AudioOutConnector::showGainPanel()
+{
+    String sourceId;
+    ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp);
+    LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp);
+    if(oc != nullptr)
+        sourceId = oc->getData()[Ids::identifier].toString();
+    else if( lc != nullptr)
+        sourceId = lc->getData()[Ids::identifier].toString();
+    
+    GainPanel::show(this, sourceId, audioOutComp->getData(), owner.getUndoManager());
 }
