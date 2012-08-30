@@ -135,7 +135,10 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     {
         ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
-        if(oc1 != nullptr && oc2 != nullptr && (! checkIfLinkExitsts(linkValues)))
+        
+        if(oc1 != nullptr && oc2 != nullptr && (! checkIfLinkExitsts(linkValues))
+            && oc1->getData().getType() != Ids::audioout
+            && oc2->getData().getType() != Ids::audioout)
         {
             addLink(holder, linkValues, -1, true);
             holder->updateComponents();
