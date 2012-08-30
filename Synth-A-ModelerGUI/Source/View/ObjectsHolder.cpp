@@ -36,10 +36,9 @@
 #include "ObjectsHolder.h"
 #include "AudioOutConnector.h"
 
-ObjectsHolder::ObjectsHolder(ObjController& objController_)
-: objController(objController_),
-mdlFile(nullptr),
-dragging(false)
+ObjectsHolder::ObjectsHolder(ObjController& objController_) 
+: objController(objController_), mdlFile(nullptr), 
+    dragging(false), isDrawingObjectNames(false)
 {
     setSize(100, 100);
     setWantsKeyboardFocus(true);
