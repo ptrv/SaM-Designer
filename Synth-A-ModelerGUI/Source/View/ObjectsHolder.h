@@ -56,8 +56,6 @@ public:
     void mouseDrag(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
 
-    bool keyPressed(const KeyPress& key);
-    
     bool dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info);
 
     void setMDLFile(MDLFile* newMDLFile);

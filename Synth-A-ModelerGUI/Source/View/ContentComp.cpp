@@ -303,7 +303,16 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::insertAudioConnection,
         CommandIDs::insertWaveguide,
         CommandIDs::insertTermination,
-        CommandIDs::spaceBarDrag,};
+        CommandIDs::spaceBarDrag,
+        CommandIDs::moveUp,
+        CommandIDs::moveDown,
+        CommandIDs::moveLeft,
+        CommandIDs::moveRight,
+        CommandIDs::moveUpFine,
+        CommandIDs::moveDownFine,
+        CommandIDs::moveLeftFine,
+        CommandIDs::moveRightFine,
+    };
 
     commands.addArray(ids, numElementsInArray(ids));
 }
@@ -427,6 +436,38 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
                        CommandCategories::view, ApplicationCommandInfo::wantsKeyUpDownCallbacks);
         //        result.setActive(currentPaintRoutine != 0 || currentLayout != 0);
         result.defaultKeypresses.add(KeyPress(KeyPress::spaceKey, 0, 0));
+        break;
+    case CommandIDs::moveUp:
+        result.setInfo("Move object up", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::upKey, 0);
+        break;
+    case CommandIDs::moveUpFine:
+        result.setInfo("Move object up fine", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::upKey, ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::moveDown:
+        result.setInfo("Move object down", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::downKey, 0);
+        break;
+    case CommandIDs::moveDownFine:
+        result.setInfo("Move object down fine", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::downKey, ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::moveLeft:
+        result.setInfo("Move object left", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::leftKey, 0);
+        break;
+    case CommandIDs::moveLeftFine:
+        result.setInfo("Move object left fine", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::leftKey, ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::moveRight:
+        result.setInfo("Move object right", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::rightKey, 0);
+        break;
+    case CommandIDs::moveRightFine:
+        result.setInfo("Move object right fine", "", CommandCategories::generation, 0);
+        result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::shiftModifier);
         break;
     default:
         break;

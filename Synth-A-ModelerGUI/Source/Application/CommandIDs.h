@@ -102,10 +102,14 @@ namespace CommandIDs
     static const int zoomNormal             = 0x202150;
     static const int spaceBarDrag           = 0x202160;
 
-    static const int compOverlay0           = 0x202200;
-    static const int compOverlay33          = 0x202210;
-    static const int compOverlay66          = 0x202220;
-    static const int compOverlay100         = 0x202230;
+    static const int moveUp                 = 0x202200;
+    static const int moveDown               = 0x202210;
+    static const int moveLeft               = 0x202220;
+    static const int moveRight              = 0x202230;
+    static const int moveUpFine             = 0x202400;
+    static const int moveDownFine           = 0x202410;
+    static const int moveLeftFine           = 0x202420;
+    static const int moveRightFine          = 0x202430;
 
     static const int newDocumentBase        = 0x322010;
     static const int newComponentBase       = 0x302010;

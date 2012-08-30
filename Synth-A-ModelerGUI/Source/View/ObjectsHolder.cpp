@@ -176,40 +176,6 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
         lassoComp.beginLasso(e, this);
     }
 }
-bool isShiftKeyDown = false;
-bool ObjectsHolder::keyPressed(const KeyPress& key)
-{
-    int dx = 20;
-    int dy = 20;
-//    if(ModifierKeys::shiftModifier)
-//    {
-//        dx /= 5;
-//        dy /= 5;
-//    }
-        
-    bool isKey = true;
-    if(key == KeyPress::upKey)
-    {
-        objController.moveSelectedComps(0, -dy);
-    }
-    else if(key == KeyPress::downKey)
-    {
-        objController.moveSelectedComps(0, dy);
-    }
-    else if(key == KeyPress::leftKey)
-    {
-        objController.moveSelectedComps(-dx, 0);
-    }
-    else if(key == KeyPress::rightKey)
-    {
-        objController.moveSelectedComps(dx, 0);
-    }
-    else
-    {
-        isKey = false;
-    }
-    return isKey;
-}
 
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 {
@@ -221,6 +187,10 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
     }
 }
 
+static const int dx = 20;
+static const int dy = 20;
+static const int dxfine = 5;
+static const int dyfine = 5;
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
     Point<int> mp = getMouseXYRelative();
@@ -312,6 +282,30 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case CommandIDs::insertTermination:
         objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::termination, mp.x, mp.y));
+        break;
+    case CommandIDs::moveUp:
+        objController.moveSelectedComps(0, -dy);
+        break;
+    case CommandIDs::moveUpFine:
+        objController.moveSelectedComps(0, -dyfine);
+        break;
+    case CommandIDs::moveDown:
+        objController.moveSelectedComps(0, dy);
+        break;
+    case CommandIDs::moveDownFine:
+        objController.moveSelectedComps(0, dyfine);
+        break;
+    case CommandIDs::moveLeft:
+        objController.moveSelectedComps(-dx, 0);
+        break;
+    case CommandIDs::moveLeftFine:
+        objController.moveSelectedComps(-dxfine, 0);
+        break;
+    case CommandIDs::moveRight:
+        objController.moveSelectedComps(dx, 0);
+        break;
+    case CommandIDs::moveRightFine:
+        objController.moveSelectedComps(dxfine, 0);
         break;
     default:
         return false;
