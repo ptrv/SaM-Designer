@@ -215,7 +215,7 @@ void AudioOutConnector::resized()
     linePath.startNewSubPath(x1, y1);
     linePath.lineTo(x2, y2);
 
-    PathStrokeType wideStroke(4.0f);
+    PathStrokeType wideStroke(8.0f);
     wideStroke.createStrokedPath(hitPath, linePath);
 
     float dashLengths[] = {5, 5};
