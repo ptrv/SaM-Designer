@@ -785,7 +785,8 @@ void ObjController::changeObjectNameInAudioSources(const String& oldName,
         ValueTree sources = aoData.getChildWithName(Ids::sources);
 
         ValueTree source = sources.getChildWithProperty(Ids::value, oldName);
-        source.setProperty(Ids::value, newName, undoManager);
+        if(source.isValid())
+            source.setProperty(Ids::value, newName, undoManager);
     }
 }
 
