@@ -765,7 +765,7 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
                                              BaseObjectComponent* caller, 
                                              UndoManager* undoManager_)
     : DialogWindow (Utils::getObjectTypeAsString(caller->getData().getType())+ " properties",
-    		Colour::greyLevel (0.92f), true),
+    		Colour::fromRGBA((uint8)200, (uint8)200, (uint8)200, (uint8)150), true),
       returnVal(0)
 {
 
@@ -822,7 +822,7 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 		comp = new Component();
 	}
 
-	comp->setSize (400, 300);
+	comp->setSize (260, 280);
 	setContentOwned (comp, true);
 
 	centreAroundComponent (caller, getWidth(), getHeight());

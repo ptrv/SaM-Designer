@@ -36,7 +36,7 @@ class GainPanel  : public DialogWindow
 public:
 	GainPanel(AudioOutConnector* aoc, const String& sourceId, 
              ValueTree data, UndoManager* undoManager)
-    : DialogWindow ("Gain", Colour::greyLevel (0.92f), true)
+    : DialogWindow ("Gain", Colour::fromRGBA((uint8)200, (uint8)200, (uint8)200, (uint8)150), true)
     {
         GainComponent * const gc = new GainComponent(*this, sourceId, 
                                                      data, undoManager);
