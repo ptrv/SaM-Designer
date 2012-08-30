@@ -33,7 +33,8 @@
 //==============================================================================
 
 class ObjectPropertiesComponent : public Component,
-								  public Button::Listener
+								  public Button::Listener,
+                                  public TextEditor::Listener
 {
 public:
 	ObjectPropertiesComponent(ObjectPropertiesPanel* op_,
@@ -48,19 +49,22 @@ public:
 	  btCancel("Cancel"),
 	  laName("laName", "Identifier"),
 	  teName("teName"),
-      laDebug("")
+      laDebug(""),
+      dataChanged(false)
 	{
 		btOk.addListener(this);
 		addAndMakeVisible(&btOk);
 		btCancel.addListener(this);
 		addAndMakeVisible(&btCancel);
 		addAndMakeVisible(&teName);
+        teName.addListener(this);
 		laName.attachToComponent(&teName, true);
 #ifdef _DEBUG
         addAndMakeVisible(&laDebug);
         laDebug.setText("Pos: " + data[Ids::posX].toString() + String(" ") + 
                         data[Ids::posY].toString(),false);
-#endif        
+#endif
+        op->returnVal = 0;
 	}
 
 	virtual ~ObjectPropertiesComponent()
@@ -77,31 +81,14 @@ public:
 
 	void buttonClicked(Button* button)
 	{
-		op->returnVal = 0;
+		
 		if(button == &btOk)
 		{
-			undoManager->beginNewTransaction("Change object properties");
-			bool writeOk = writeValues();
-            undoManager->beginNewTransaction();
-			if(writeOk)
-            {
-    			SAM_LOG("Change "+data.getType().toString()+" " +
-                    data[Ids::identifier].toString());
-                op->returnVal = 1;
-                op->closeButtonPressed();
-            }
-            else
-            {
-                SAM_LOG("Name already exists");
-                Alerts::nameAlreadyExists();
-            }
+			applyEditing();
 		}
 		else if( button == &btCancel)
 		{
-			SAM_LOG("Cancel change "+data.getType().toString()+" "+
-                data[Ids::identifier].toString());
-			op->returnVal = 2;
-			op->closeButtonPressed();
+			cancelEditing();
 		}
 	}
 
@@ -112,6 +99,54 @@ public:
 	virtual void readValues() = 0;
 	virtual bool writeValues() = 0;
 
+    void textEditorTextChanged(TextEditor& editor)
+    {
+        dataChanged = true;
+    }
+    void textEditorReturnKeyPressed(TextEditor& editor)
+    {
+        applyEditing();
+    }
+    void textEditorEscapeKeyPressed(TextEditor& editor)
+    {
+        cancelEditing();
+    }
+    void textEditorFocusLost(TextEditor& editor)
+    {
+    }
+    void applyEditing()
+    {
+        undoManager->beginNewTransaction("Change object properties");
+        if(dataChanged)
+        {
+            bool writeOk = writeValues();
+            undoManager->beginNewTransaction();
+            if (writeOk)
+            {
+                SAM_LOG("Change " + data.getType().toString() + " " +
+                        data[Ids::identifier].toString());
+                op->returnVal = 1;
+                op->closeButtonPressed();
+            }
+            else
+            {
+                SAM_LOG("Name already exists");
+                Alerts::nameAlreadyExists();
+            }
+        }
+        else
+        {
+            op->returnVal = 1;
+            op->closeButtonPressed();
+        }
+    }
+    void cancelEditing()
+    {
+        SAM_LOG("Cancel change " + data.getType().toString() + " " +
+                data[Ids::identifier].toString());
+        op->returnVal = 2;
+        op->closeButtonPressed();
+    }
 protected:
 	ObjectPropertiesPanel* op;
     ObjController* objController;
@@ -122,7 +157,7 @@ protected:
 	Label laName;
 	TextEditor teName;
     Label laDebug;
-
+    bool dataChanged;
 };
 
 class MassPropertiesComponent : public ObjectPropertiesComponent
@@ -142,12 +177,16 @@ public:
 	  laLabels("laLabels", "Labels"),
 	  teLabels("teLabels")
 	{
+        teMass.addListener(this);
 		addAndMakeVisible(&teMass);
 		laMass.attachToComponent(&teMass, true);
+        tePos.addListener(this);
 		addAndMakeVisible(&tePos);
 		laPos.attachToComponent(&tePos, true);
+        teVel.addListener(this);
 		addAndMakeVisible(&teVel);
 		laVel.attachToComponent(&teVel, true);
+        teLabels.addListener(this);
 		addAndMakeVisible(&teLabels);
 		laLabels.attachToComponent(&teLabels, true);
 
@@ -197,12 +236,12 @@ public:
                 if(! objController->renameId(oldName, newName))
                     return false;
             }
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
         }
 
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
@@ -255,6 +294,7 @@ public:
 	  laLabels("laLabels", "Labels"),
 	  teLabels("teLabels")
 	{
+        teLabels.addListener(this);
 		addAndMakeVisible(&teLabels);
 		laLabels.attachToComponent(&teLabels, true);
 
@@ -300,12 +340,11 @@ public:
                 if(! objController->renameId(oldName, newName))
                     return false;
             }
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
         }
-
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
 
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
@@ -372,8 +411,10 @@ public:
 	  laPos("laPos", "Position (m)"),
 	  tePos("tePos")
 	{
+        teLabels.addListener(this);
 		addAndMakeVisible(&teLabels);
 		laLabels.attachToComponent(&teLabels, true);
+        tePos.addListener(this);
 		addAndMakeVisible(&tePos);
 		laPos.attachToComponent(&tePos, true);
 
@@ -420,12 +461,12 @@ public:
                 if(! objController->renameId(oldName, newName))
                     return false;
             }
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
         }
 
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, tePos.getText(), undoManager);
@@ -469,18 +510,24 @@ public:
         laEndVertex("laEndVertex", "End Vertex"),
         teEndVertex("teEndVertex")
     {
+        teStiff.addListener(this);
         addAndMakeVisible(&teStiff);
 		laStiff.attachToComponent(&teStiff, true);
+        teDamp.addListener(this);
 		addAndMakeVisible(&teDamp);
 		laDamp.attachToComponent(&teDamp, true);
+        tePos.addListener(this);
 		addAndMakeVisible(&tePos);
 		laPos.attachToComponent(&tePos, true);
+        teLabels.addListener(this);
 		addAndMakeVisible(&teLabels);
 		laLabels.attachToComponent(&teLabels, true);
         teStartVertex.setReadOnly(true);
+        teStartVertex.addListener(this);
         addAndMakeVisible(&teStartVertex);
 		laStartVertex.attachToComponent(&teStartVertex, true);
         teEndVertex.setReadOnly(true);
+        teEndVertex.addListener(this);
 		addAndMakeVisible(&teEndVertex);
 		laEndVertex.attachToComponent(&teEndVertex, true);
 
@@ -524,12 +571,16 @@ public:
         String newName = teName.getText();
         String oldName = data[Ids::identifier].toString();
         
-        if (objController->checkIfIdExists(newName))
-            return false;
+        if (oldName != newName)
+        {
+            if (objController->checkIfIdExists(newName))
+                return false;
 
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
 
-        data.setProperty(Ids::identifier, newName, undoManager);
+            data.setProperty(Ids::identifier, newName, undoManager);
+        }
+        
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
@@ -583,6 +634,7 @@ public:
         teSource("teSource")
 	{
         teSource.setReadOnly(true);
+        teSource.addListener(this);
         addAndMakeVisible(&teSource);
         laSource.attachToComponent(&teSource,true);
         
@@ -621,12 +673,16 @@ public:
 
 	bool writeValues()
     {
-        String idName = teName.getText();
-        if (objController->checkIfIdExists(idName))
-            return false;
-
-        data.setProperty(Ids::identifier, idName, undoManager);
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier].toString();
         
+        if(newName != oldName)
+        {
+            if (objController->checkIfIdExists(newName))
+                return false;
+
+            data.setProperty(Ids::identifier, newName, undoManager);
+        }
         String sourceText = teSource.getText();
         StringArray sourcesList;
         sourcesList.addTokens(sourceText, "+", "\"");

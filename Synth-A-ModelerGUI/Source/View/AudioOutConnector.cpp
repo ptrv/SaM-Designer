@@ -71,7 +71,8 @@ public:
     int returnVal;
 private:
     class GainComponent : public Component,
-    					  public Button::Listener
+    					  public Button::Listener,
+                          public TextEditor::Listener
     {
     public:
         GainComponent(GainPanel& parent_,
@@ -91,6 +92,7 @@ private:
             ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
             oldGain = source[Ids::gain].toString();
             teGain.setText(oldGain);
+            teGain.addListener(this);
     		addAndMakeVisible(&teGain);
             labelGain.attachToComponent(&teGain, true);
     		btOk.addListener(this);
@@ -116,24 +118,46 @@ private:
             parent.returnVal = 0;
     		if(button == &btOk)
     		{
-                ValueTree sources = data.getChildWithName(Ids::sources);
-                ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
-                String newGain = teGain.getText();
-                if(oldGain.compare(newGain) != 0)
-                {
-        			undoManager->beginNewTransaction("Edit gain");
-                    source.setProperty(Ids::gain, newGain, undoManager);
-                    undoManager->beginNewTransaction();
-                }
-    			parent.returnVal = 1;
-				parent.closeButtonPressed();
+                applyEditing();
     		}
     		else if(button == &btCancel)
     		{
-    			parent.returnVal = 2;
-    			parent.closeButtonPressed();
+                cancelEditing();
     		}
-    	}
+        }
+        void textEditorTextChanged(TextEditor& editor)
+        {
+        }
+        void textEditorReturnKeyPressed(TextEditor& editor)
+        {
+            applyEditing();
+        }
+        void textEditorEscapeKeyPressed(TextEditor& editor)
+        {
+            cancelEditing();
+        }
+        void textEditorFocusLost(TextEditor& editor)
+        {
+        }
+        void cancelEditing()
+        {
+            parent.returnVal = 2;
+            parent.closeButtonPressed();
+        }
+        void applyEditing()
+        {
+            ValueTree sources = data.getChildWithName(Ids::sources);
+            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
+            String newGain = teGain.getText();
+            if (oldGain.compare(newGain) != 0)
+            {
+                undoManager->beginNewTransaction("Edit gain");
+                source.setProperty(Ids::gain, newGain, undoManager);
+                undoManager->beginNewTransaction();
+            }
+            parent.returnVal = 1;
+            parent.closeButtonPressed();
+        }
     private:
     	GainPanel& parent;
     	Label labelGain;
