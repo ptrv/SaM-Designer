@@ -41,10 +41,13 @@ namespace ObjectFactory
 	 * @param y					initial y position
 	 * @return					a new ValueTree with default values
 	 */
-	ValueTree createNewObjectTree(const Identifier& objType, int x, int y);
-    ValueTree createNewLinkObjectTree(const Identifier& linkType, 
-                                String startObject,
-                                String endObject);
+	ValueTree createNewObjectTree(const Identifier& objType, 
+                                  const String& newName,
+                                  int x, int y);
+    ValueTree createNewLinkObjectTree(const Identifier& linkType,
+                                      const String& newName,
+                                      const String& startObject,
+                                      const String& endObject);
     ObjectComponent* createNewObjectComponentFromTree(ObjController& owner,
                                                       ValueTree objTree,
                                                       int index);

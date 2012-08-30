@@ -178,6 +178,8 @@ public:
     void changeObjectNameInAudioSources(const String& oldName,
                                         const String& newName,
                                         UndoManager* undManager);
+    
+    String getNewNameForObject(const Identifier& objId);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

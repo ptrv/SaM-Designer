@@ -788,3 +788,29 @@ void ObjController::changeObjectNameInAudioSources(const String& oldName,
         source.setProperty(Ids::value, newName, undoManager);
     }
 }
+
+String ObjController::getNewNameForObject(const Identifier& objId)
+{
+    String name;
+ 	int rnd = Random::getSystemRandom().nextInt(100000);
+	if(objId == Ids::mass)
+		name = "m_" + String(rnd);
+	else if(objId == Ids::port)
+		name = "dev_" + String(rnd);
+	else if(objId == Ids::ground)
+		name = "g_" + String(rnd);
+	else if(objId == Ids::resonator)
+		name = "r_" + String(rnd);
+	else if(objId == Ids::audioout)
+		name = "a_" + String(rnd);
+    else if(objId == Ids::link)
+        name = "l_" + String(rnd);
+	else if(objId == Ids::touch)
+		name = "t_" + String(rnd);
+	else if(objId == Ids::pluck)
+        name = "p_" + String(rnd);
+	else
+		name = "";
+
+    return name;
+}

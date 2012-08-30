@@ -247,40 +247,70 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
 
     case CommandIDs::insertMass:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::mass, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::mass,
+                                                                      objController.getNewNameForObject(Ids::mass),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::insertGround:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::ground, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::ground,
+                                                                      objController.getNewNameForObject(Ids::ground),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::insertResonator:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::resonator, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::resonator,
+                                                                      objController.getNewNameForObject(Ids::resonator),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::insertPort:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::port, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::port,
+                                                                      objController.getNewNameForObject(Ids::port),
+                                                                      mp.x, mp.y));
         break;
 
     case CommandIDs::insertLink:
         
-        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::link, startObj, endObj));
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::link,
+                                                                                  objController.getNewNameForObject(Ids::link),
+                                                                                  startObj, endObj));
         break;
     case CommandIDs::insertTouch:
-        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::touch, startObj, endObj));
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::touch,
+                                                                                  objController.getNewNameForObject(Ids::touch),
+                                                                                  startObj, endObj));
         break;
     case CommandIDs::insertPluck:
-        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::pluck, startObj, endObj));
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::pluck,
+                                                                                  objController.getNewNameForObject(Ids::pluck),
+                                                                                  startObj, endObj));
         break;
 
     case CommandIDs::insertAudioOutput:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::audioout, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::audioout,
+                                                                      objController.getNewNameForObject(Ids::audioout),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::insertAudioConnection:
         objController.addNewAudioConnection(this);
         break;
     case CommandIDs::insertWaveguide:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::waveguide, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
+                                                                      objController.getNewNameForObject(Ids::waveguide),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::insertTermination:
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::termination, mp.x, mp.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::termination,
+                                                                      objController.getNewNameForObject(Ids::termination),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -dy);
@@ -331,31 +361,52 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
 
     if (r == 1)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::mass, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::mass,
+                                                                      objController.getNewNameForObject(Ids::mass),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 2)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::ground, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::ground,
+                                                                      objController.getNewNameForObject(Ids::ground),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 3)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::resonator, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::resonator,
+                                                                      objController.getNewNameForObject(Ids::resonator),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 4)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::port, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::port,
+                                                                      objController.getNewNameForObject(Ids::port),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 5)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::audioout, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::audioout,
+                                                                      objController.getNewNameForObject(Ids::audioout),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 6)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::waveguide, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
+                                                                      objController.getNewNameForObject(Ids::waveguide),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 7)
     {
-        objController.addNewObject(this, ObjectFactory::createNewObjectTree(Ids::termination, mPos.x, mPos.y));
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::termination,
+                                                                      objController.getNewNameForObject(Ids::termination),
+                                                                      mPos.x, mPos.y));
     }
 }
 
@@ -372,18 +423,27 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	if (r == 1)
 	{
 		DBG("Add link");
-        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::link, so, eo));
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::link,
+                                                                                  objController.getNewNameForObject(Ids::link),
+                                                                                  so, eo));
 		return;
 	}
 	else if (r == 2)
 	{
 		DBG("Add touch");
-        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::touch, so, eo));
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::touch,
+                                                                                  objController.getNewNameForObject(Ids::touch),
+                                                                                  so, eo));
 	}
 	else if (r == 3)
 	{
 		DBG("Add pluck");
-        objController.addNewLinkIfPossible(this, ObjectFactory::createNewLinkObjectTree(Ids::pluck, so, eo));
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::pluck,
+                                                                                        objController.getNewNameForObject(Ids::pluck),
+                                                                                        so, eo));
 	}
     else if (r == 4)
     {
