@@ -333,7 +333,6 @@ void AudioOutConnector::mouseUp(const MouseEvent& e)
 {
    	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
-        DBG("show gain panel");
         showGainPanel();
 	}
 

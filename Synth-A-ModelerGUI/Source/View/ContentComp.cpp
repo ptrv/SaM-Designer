@@ -242,7 +242,7 @@ void ContentComp::resized()
     //    else
     //        objectsHolder->setSize (viewport->getWidth(), viewport->getHeight());
     //        DBG(viewport->getBounds().toString());
-    DBG(String(viewport->getViewWidth()) + ", " + String(viewport->getViewHeight()));
+//    DBG(String(viewport->getViewWidth()) + ", " + String(viewport->getViewHeight()));
     //    objectsHolder->setSize (mainWindow.getWidth(), mainWindow.getHeight());
 
     //	if(objectsHolder != nullptr)
