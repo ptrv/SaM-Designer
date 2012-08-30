@@ -103,6 +103,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
+        objectIds.add(linkValues[Ids::identifier].toString());
         LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues, index);
 
 		holder->addAndMakeVisible(linkComp);
@@ -350,6 +351,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
         const Identifier& groupName = Objects::getObjectGroup(linkComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+        objectIds.removeValue(linkComp->getData()[Ids::identifier].toString());
         subTree.removeChild(linkComp->getData(), nullptr);
         links.removeObject(linkComp);
     }
@@ -381,11 +383,14 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < linkObjects.getNumChildren(); i++)
     {
         ValueTree obj = linkObjects.getChild(i);
-        LinkComponent* linkComp = new LinkComponent(*this, obj);
-        links.add(linkComp);
-        holder->addAndMakeVisible(linkComp);
-        linkComp->update();
-        SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        if(objectIds.add(obj[Ids::identifier].toString()))
+        {
+            LinkComponent* linkComp = new LinkComponent(*this, obj);
+            links.add(linkComp);
+            holder->addAndMakeVisible(linkComp);
+            linkComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
     }
     
     ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
@@ -610,30 +615,45 @@ void ObjController::copySelectedToClipboard()
 
     XmlElement clip (clipboardXmlTag);
 
-    for (int i = 0; i < objects.size(); ++i)
+    for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
-        ObjectComponent* const oc = objects.getUnchecked(i);
-
-        if (oc != nullptr && sObjects.isSelected (oc))
+        ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i));
+        LinkComponent * const lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i));
+        if(oc != nullptr)
         {
             XmlElement* const e = oc->getData().createXml();
             clip.addChildElement (e);
         }
+        else if( lc != nullptr)
+        {
+            XmlElement* const e = lc->getData().createXml();
+            clip.addChildElement (e);
+        }
     }
-//    Array<int> linkIndices = getLinksToCopy();
-////    selectedLinks.deselectAll();
-//    for (int i = 0; i < linkIndices.size(); ++i)
+
+//    for (int i = 0; i < objects.size(); ++i)
 //    {
-//        LinkComponent* const lc = links.getUnchecked(linkIndices[i]);
-//        
-//        XmlElement* const e = lc->getData().createXml();
-//        clip.addChildElement (e);
-//    }
+//        ObjectComponent* const oc = objects.getUnchecked(i);
 //
+//        if (oc != nullptr && sObjects.isSelected (oc))
+//        {
+//            XmlElement* const e = oc->getData().createXml();
+//            clip.addChildElement (e);
+//        }
+//    }
+////    Array<int> linkIndices = getLinksToCopy();
+//////    selectedLinks.deselectAll();
+////    for (int i = 0; i < linkIndices.size(); ++i)
+////    {
+////        LinkComponent* const lc = links.getUnchecked(linkIndices[i]);
+////        
+////        XmlElement* const e = lc->getData().createXml();
+////        clip.addChildElement (e);
+////    }
+////
     SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
 }
 
-bool didCut = false;
 void ObjController::paste(ObjectsHolder* holder)
 {
     XmlDocument clip (SystemClipboard::getTextFromClipboard());
@@ -642,6 +662,7 @@ void ObjController::paste(ObjectsHolder* holder)
     if (doc != 0 && doc->hasTagName (clipboardXmlTag))
     {
         sObjects.deselectAll();
+        HashMap<String, String> objectNamesOldNew;
         forEachXmlChildElement (*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
@@ -655,8 +676,10 @@ void ObjController::paste(ObjectsHolder* holder)
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(objectIds.contains(objName))
                 {
-                    objName.append("_copy", 10);
-                    valTree.setProperty(Ids::identifier, objName, nullptr);
+                    String newName = objName + "_copy";
+//                    objName.append("_copy", 10);
+                    objectNamesOldNew.set(objName, newName);
+                    valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
                     for (int i = 0; i < objLabels.getNumChildren(); ++i)
                     {
@@ -666,34 +689,62 @@ void ObjController::paste(ObjectsHolder* holder)
                         label.setProperty(Ids::value, la, nullptr);
                     }
                 }
+                else
+                {
+                    objectNamesOldNew.set(objName, objName);
+                }
                 ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
 
                 if (newObjectComp != 0)
                     sObjects.addToSelection(newObjectComp);
             }
-//            else if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
-//            {
-//                if(! didCut)
-//                {
-//                    String linkName = valTree.getProperty(Ids::identifier).toString();
-//                    linkName.append("_copy", 10);
-//                    valTree.setProperty(Ids::identifier, linkName, nullptr);
-//                }
-//                LinkComponent* newLinkComp = addLink(holder, valTree, -1, true);
-//
-//                if (newLinkComp != 0)
-//                    selectedLinks.addToSelection(newLinkComp);
-//            }
+        }
+        forEachXmlChildElement(*doc, e)
+        {
+            ValueTree valTree = ValueTree::fromXml(*e);
+            if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
+            {
+                String objName = valTree.getProperty(Ids::identifier).toString();
+                if(objectIds.contains(objName))
+                {
+                    String newName = objName + "_copy";
+//                    objName.append("_copy", 10);
+                    valTree.setProperty(Ids::identifier, newName, nullptr);
+                    ValueTree objLabels = valTree.getChildWithName(Ids::labels);
+                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
+                    {
+                        ValueTree label = objLabels.getChild(i);
+                        String la = label.getProperty(Ids::value).toString();
+                        la.append("_copy", 5);
+                        label.setProperty(Ids::value, la, nullptr);
+                    }
+                    String oldStartVertex = valTree[Ids::startVertex].toString();
+                    String oldEndVertex = valTree[Ids::endVertex].toString();
+                    
+                    if(objectNamesOldNew.contains(oldStartVertex))
+                    {
+                        valTree.setProperty(Ids::startVertex, objectNamesOldNew[oldStartVertex], nullptr);
+                    }
+                    if(objectNamesOldNew.contains(oldEndVertex))
+                    {
+                        valTree.setProperty(Ids::endVertex, objectNamesOldNew[oldEndVertex], nullptr);
+                    }
+                    
+                }
+                LinkComponent* newLinkComp = addLink(holder, valTree, -1, true);
+
+                if (newLinkComp != 0)
+                    sObjects.addToSelection(newLinkComp);
+
+            }
         }
     }
-    didCut = false;
 }
 
 void ObjController::cut(ObjectsHolder* holder)
 {
     copySelectedToClipboard();
     removeSelectedObjects(holder);
-    didCut = true;
 }
 
 Array<int> ObjController::getLinksToCopy()

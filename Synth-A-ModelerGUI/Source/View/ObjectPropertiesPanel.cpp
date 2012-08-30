@@ -574,7 +574,14 @@ public:
         if (oldName != newName)
         {
             if (objController->checkIfIdExists(newName))
+            {
                 return false;
+            }
+            else
+            {
+                if(! objController->renameId(oldName, newName))
+                    return false;
+            }
 
             objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
 
