@@ -175,10 +175,14 @@ public:
     bool changeObjectNameInLink(const String& oldName, 
                                 const String& newName,
                                 UndoManager* undManager);
+    void changeObjectNameInAudioSources(const String& oldName,
+                                        const String& newName,
+                                        UndoManager* undManager);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
     Array<int> checkIfObjectHasLinks(ValueTree objTree);
+    Array<int> checkIfObjectHasAudioConnections(ValueTree objTree);
     Array<int> getLinksToCopy();
     MDLController& owner;
 	OwnedArray<ObjectComponent> objects;

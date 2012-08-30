@@ -200,6 +200,7 @@ public:
         }
 
         objController->changeObjectNameInLink(oldName, newName, undoManager);
+        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
 
         data.setProperty(Ids::identifier, newName, undoManager);
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
@@ -302,6 +303,7 @@ public:
         }
 
         objController->changeObjectNameInLink(oldName, newName, undoManager);
+        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
 
         data.setProperty(Ids::identifier, newName, undoManager);
 
@@ -421,6 +423,7 @@ public:
         }
 
         objController->changeObjectNameInLink(oldName, newName, undoManager);
+        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
 
         data.setProperty(Ids::identifier, newName, undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
@@ -518,11 +521,15 @@ public:
 
 	bool writeValues()
 	{
-        String idName = teName.getText();
-        if (objController->checkIfIdExists(idName))
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier].toString();
+        
+        if (objController->checkIfIdExists(newName))
             return false;
 
-        data.setProperty(Ids::identifier, idName, undoManager);
+        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+        data.setProperty(Ids::identifier, newName, undoManager);
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);

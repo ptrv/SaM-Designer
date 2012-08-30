@@ -246,13 +246,19 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
 
         // Get link indices attached to this object and remove them.
         // TODO needs better solution
-        Array<int> indices = checkIfObjectHasLinks(objComp->getData());
+        Array<int> lIndices = checkIfObjectHasLinks(objComp->getData());
 //        if(indices.size() > 0)
 //            sObjects.deselectAll();
-        for(int i = indices.size(); --i >= 0;)
+        for(int i = lIndices.size(); --i >= 0;)
         {
-            removeLink(getLink(indices[i]), true, holder);
+            removeLink(getLink(lIndices[i]), true, holder);
         }
+        Array<int> aoIndices = checkIfObjectHasAudioConnections(objComp->getData());
+        for(int i = aoIndices.size(); --i >= 0;)
+        {
+            removeAudioConnection(getAudioConnector(aoIndices[i]), true, holder);
+        }
+        
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
@@ -334,6 +340,13 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
     {
         sObjects.deselect(linkComp);
         sObjects.changed(true);
+        
+        Array<int> aoIndices = checkIfObjectHasAudioConnections(linkComp->getData());
+        for(int i = aoIndices.size(); --i >= 0;)
+        {
+            removeAudioConnection(getAudioConnector(aoIndices[i]), true, holder);
+        }
+
         const Identifier& groupName = Objects::getObjectGroup(linkComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
@@ -573,6 +586,20 @@ Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
     return linkIndices;
 }
 
+Array<int> ObjController::checkIfObjectHasAudioConnections(ValueTree objTree)
+{
+    Array<int> aoIndices;
+    for (int i = 0; i < audioConnections.size(); ++i)
+    {
+        AudioOutConnector* aoc = audioConnections.getUnchecked(i);
+
+        ValueTree aoData = aoc->getSourceObject()->getData();
+        if(aoData[Ids::identifier] == objTree[Ids::identifier])
+            aoIndices.add(i);
+    }
+    return aoIndices;
+}
+
 //==============================================================================
 const char* const ObjController::clipboardXmlTag = "SAMOBJECTS";
 
@@ -744,5 +771,20 @@ bool ObjController::changeObjectNameInLink(const String& oldName,
     {
         return false;
     }
+}
 
+void ObjController::changeObjectNameInAudioSources(const String& oldName,
+                                                   const String& newName,
+                                                   UndoManager* undoManager)
+{
+    for (int i = 0; i < audioConnections.size(); ++i)
+    {
+        AudioOutConnector* aoc = audioConnections.getUnchecked(i);
+
+        ValueTree aoData = aoc->getAudioObject()->getData();
+        ValueTree sources = aoData.getChildWithName(Ids::sources);
+
+        ValueTree source = sources.getChildWithProperty(Ids::value, oldName);
+        source.setProperty(Ids::value, newName, undoManager);
+    }
 }
