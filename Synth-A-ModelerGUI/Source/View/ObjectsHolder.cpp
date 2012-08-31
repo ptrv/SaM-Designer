@@ -112,15 +112,15 @@ void ObjectsHolder::updateComponents()
             aocs.add(aobj);
         }
     }
-    for (i = 0; i < aocs.size(); ++i)
-    {
-        aocs[i]->update();
-        aocs[i]->toBack();
-    }
     for (i = 0; i < links.size(); ++i)
     {
         links[i]->update();
         links[i]->toBack();
+    }
+    for (i = 0; i < aocs.size(); ++i)
+    {
+        aocs[i]->update();
+        aocs[i]->toBack();
     }
 
 }
