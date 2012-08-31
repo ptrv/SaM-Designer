@@ -191,12 +191,15 @@ static ValueTree createNewPluckTree(const String& newName,
     ValueTree pa1(Ids::parameter);
     ValueTree pa2(Ids::parameter);
     ValueTree pa3(Ids::parameter);
+    ValueTree pa4(Ids::parameter);
     pa1.setProperty(Ids::value, "300.0", nullptr);
     pa2.setProperty(Ids::value, "0.1", nullptr);
-    pa3.setProperty(Ids::value, "0.005", nullptr);
+    pa3.setProperty(Ids::value, "0.003", nullptr);
+    pa4.setProperty(Ids::value, "0.005", nullptr);
     paramsTree.addChild(pa1, -1, nullptr);
     paramsTree.addChild(pa2, -1, nullptr);
     paramsTree.addChild(pa3, -1, nullptr);
+    paramsTree.addChild(pa4, -1, nullptr);
 
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);

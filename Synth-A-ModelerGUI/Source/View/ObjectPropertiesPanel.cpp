@@ -597,8 +597,14 @@ public:
         laStartVertex("laStartVertex", "Start Vertex"),
         teStartVertex("teStartVertex"),
         laEndVertex("laEndVertex", "End Vertex"),
-        teEndVertex("teEndVertex")
+        teEndVertex("teEndVertex"),
+        laMinDisplace("laMinDisplace", "Minimum displce diff"),
+        teMinDisplace("teMinDisplace"),
+        isPluck(false)
     {
+        if(data.getType() == Ids::pluck)
+            isPluck = true;
+
         teStiff.addListener(this);
         addAndMakeVisible(&teStiff);
 		laStiff.attachToComponent(&teStiff, true);
@@ -619,7 +625,12 @@ public:
         teEndVertex.addListener(this);
 		addAndMakeVisible(&teEndVertex);
 		laEndVertex.attachToComponent(&teEndVertex, true);
-
+        if(isPluck)
+        {
+            teMinDisplace.addListener(this);
+            addAndMakeVisible(&teMinDisplace);
+            laMinDisplace.attachToComponent(&teMinDisplace, true);
+        }
 		readValues();
 	}
 	virtual ~LinkPropertiesComponent()
@@ -630,13 +641,18 @@ public:
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
-        
+        int offset = 0;
         teStiff.setBounds(80 , 40, getWidth() -90, 22);
 		teDamp.setBounds(80 , 70, getWidth() -90, 22);
-		tePos.setBounds(80 , 100, getWidth() -90, 22);
-		teLabels.setBounds(80, 130, getWidth() - 90, 22);
-        teStartVertex.setBounds(80, 160, getWidth() - 90, 22);
-        teEndVertex.setBounds(80, 190, getWidth() - 90, 22);
+        if(isPluck)
+        {
+            teMinDisplace.setBounds(80 , 100, getWidth() -90, 22);
+            offset = 30;
+        }
+		tePos.setBounds(80 , 100+offset, getWidth() -90, 22);
+		teLabels.setBounds(80, 130+offset, getWidth() - 90, 22);
+        teStartVertex.setBounds(80, 160+offset, getWidth() - 90, 22);
+        teEndVertex.setBounds(80, 190+offset, getWidth() - 90, 22);
 	}
 
 	void readValues()
@@ -644,7 +660,13 @@ public:
 		teName.setText(data[Ids::identifier].toString());
 		teStiff.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		teDamp.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+        int offset = 0;
+        if(isPluck)
+        {
+            teMinDisplace.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+            ++offset;
+        }
+		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2+offset)[Ids::value].toString());
 		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
@@ -681,16 +703,29 @@ public:
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
         ValueTree pa3 = paramsTree.getChild(2);
+        ValueTree pa4 = paramsTree.getChild(3);
+        
         pa1.setProperty(Ids::value,
                         Utils::fixParameterValueIfNeeded(teStiff.getText()),
                         undoManager);
         pa2.setProperty(Ids::value,
                         Utils::fixParameterValueIfNeeded(teDamp.getText()),
                         undoManager);
-        pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePos.getText()),
-                        undoManager);
-
+        if(isPluck)
+        {
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(teMinDisplace.getText()),
+                            undoManager);
+            pa4.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+        }
+        else
+        {
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+        }
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
 		String labelsString = teLabels.getText();
@@ -717,6 +752,9 @@ private:
     TextEditor teStartVertex;
     Label laEndVertex;
     TextEditor teEndVertex;
+    Label laMinDisplace;
+    TextEditor teMinDisplace;
+    bool isPluck;
 };
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
@@ -974,7 +1012,7 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 		comp = new Component();
 	}
 
-	comp->setSize (260, 280);
+	comp->setSize (260, 300);
 	setContentOwned (comp, true);
 
 	centreAroundComponent (caller, getWidth(), getHeight());
