@@ -301,16 +301,18 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         objController.addNewAudioConnection(this);
         break;
     case CommandIDs::insertWaveguide:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
-                                                                      objController.getNewNameForObject(Ids::waveguide),
-                                                                      mp.x, mp.y));
+//        objController.addNewObject(this,
+//                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
+//                                                                      objController.getNewNameForObject(Ids::waveguide),
+//                                                                      mp.x, mp.y));
+        DBG("Waveguide not implemented!")
         break;
     case CommandIDs::insertTermination:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::termination,
-                                                                      objController.getNewNameForObject(Ids::termination),
-                                                                      mp.x, mp.y));
+//        objController.addNewObject(this,
+//                                   ObjectFactory::createNewObjectTree(Ids::termination,
+//                                                                      objController.getNewNameForObject(Ids::termination),
+//                                                                      mp.x, mp.y));
+        DBG("Termination not implemented!")
         break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -dy);
@@ -396,17 +398,19 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     }
     else if (r == 6)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
-                                                                      objController.getNewNameForObject(Ids::waveguide),
-                                                                      mPos.x, mPos.y));
+        DBG("Waveguide not implemented!")
+//        objController.addNewObject(this,
+//                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
+//                                                                      objController.getNewNameForObject(Ids::waveguide),
+//                                                                      mPos.x, mPos.y));
     }
     else if (r == 7)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::termination,
-                                                                      objController.getNewNameForObject(Ids::termination),
-                                                                      mPos.x, mPos.y));
+        DBG("Termination not implemented!")
+//        objController.addNewObject(this,
+//                                   ObjectFactory::createNewObjectTree(Ids::termination,
+//                                                                      objController.getNewNameForObject(Ids::termination),
+//                                                                      mPos.x, mPos.y));
     }
 }
 
