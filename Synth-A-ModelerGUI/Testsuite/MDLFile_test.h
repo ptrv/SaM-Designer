@@ -206,11 +206,33 @@ public:
 
 		expectEquals(aus.getChild(0).getType().toString(), Ids::audioout.toString());
 		expectEquals(aus.getChild(0)[Ids::identifier].toString(), String("a1"));
-		expectEquals(aus.getChild(0)[Ids::sources].toString(), String("m1*(1000.0)+l1*(100.0)"));
+        String actualSources1;
+        ValueTree sources1 = aus.getChild(0).getChildWithName(Ids::sources);
+        for (int i = 0; i < sources1.getNumChildren(); i++)
+        {
+            ValueTree src = sources1.getChild(i);
+            actualSources1 << src[Ids::value].toString();
+            actualSources1 << "*";
+            actualSources1 << src[Ids::gain].toString();
+            if(i != sources1.getNumChildren()-1)
+                actualSources1 << "+";
+        }
+		expectEquals(actualSources1, String("m1*(1000.0)+l1*(100.0)"));
+
 		expectEquals(aus.getChild(1).getType().toString(), Ids::audioout.toString());
 		expectEquals(aus.getChild(1)[Ids::identifier].toString(), String("a2"));
-		expectEquals(aus.getChild(1)[Ids::sources].toString(), String("l2*(1000.0)+l3*(-50.0)+l1*(0.01)"));
-
+        String actualSources2 = String::empty;
+        ValueTree sources2 = aus.getChild(1).getChildWithName(Ids::sources);
+        for (int i = 0; i < sources2.getNumChildren(); i++)
+        {
+            ValueTree src = sources2.getChild(i);
+            actualSources2 << src[Ids::value].toString();
+            actualSources2 << "*";
+            actualSources2 << src[Ids::gain].toString();
+            if(i != sources2.getNumChildren()-1)
+                actualSources2 << "+";
+        }
+		expectEquals(actualSources2, String("l2*(1000.0)+l3*(-50.0)+l1*(0.01)"));
 	}
 };
 

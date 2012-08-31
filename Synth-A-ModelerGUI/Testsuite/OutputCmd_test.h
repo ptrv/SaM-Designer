@@ -38,10 +38,12 @@ public:
 		String outPath = String(TESTSUITE_DATA_PATH) + "test.dsp";
 
 		OutputCmd cmd;
-		beginTest("isSynthAModelerCmdAvailable");
-		expect(cmd.isSynthAModelerCmdAvailable(), "");
 		beginTest("isPerlAvailable");
 		expect(cmd.isPerlAvailable(), "");
+		beginTest("isSAMpreprocessorCmdAvailable");
+		expect(cmd.isSAMpreprocessorCmdAvailable(), "");
+		beginTest("isSynthAModelerCmdAvailable");
+		expect(cmd.isSynthAModelerCmdAvailable(), "");
 		beginTest("generateFaustCode");
 		String inPathFull = File::getCurrentWorkingDirectory().getChildFile(inPath).getFullPathName();
 		String outPathFull = File::getCurrentWorkingDirectory().getChildFile(outPath).getFullPathName();
