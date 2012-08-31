@@ -51,7 +51,7 @@ static ValueTree createNewMassTree(const String& newName, int x, int y)
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -67,7 +67,7 @@ static ValueTree createNewPortTree(const String& newName, int x, int y)
     newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -88,7 +88,7 @@ static ValueTree createNewGroundTree(const String& newName, int x, int y)
     newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -115,7 +115,7 @@ static ValueTree createNewResonatorTree(const String& newName, int x, int y)
     newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -145,7 +145,7 @@ static ValueTree createNewLinkTree(const String& newName,
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -175,7 +175,7 @@ static ValueTree createNewTouchTree(const String& newName,
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -207,7 +207,7 @@ static ValueTree createNewPluckTree(const String& newName,
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
-	l1.setProperty(Ids::value, "label_"+newName, nullptr);
+	l1.setProperty(Ids::value, "label"+newName, nullptr);
     labelsTree.addChild(l1, -1, nullptr);
 	newTree.addChild(labelsTree, -1, nullptr);
 
@@ -219,8 +219,7 @@ static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
 
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
-	int rnd = Random::getSystemRandom().nextInt(100000);
-	newTree.setProperty(Ids::identifier,"a_"+String(rnd), nullptr);
+	newTree.setProperty(Ids::identifier,newName, nullptr);
     ValueTree sources(Ids::sources);
     newTree.addChild(sources, -1, nullptr);
 

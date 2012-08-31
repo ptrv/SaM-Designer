@@ -699,8 +699,8 @@ void ObjController::paste(ObjectsHolder* holder)
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(objectIds.contains(objName))
                 {
-                    String newName = objName + "_copy";
-//                    objName.append("_copy", 10);
+                    String newName = objName + "cpy";
+//                    objName.append("cpy", 10);
                     objectNamesOldNew.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
@@ -708,7 +708,7 @@ void ObjController::paste(ObjectsHolder* holder)
                     {
                         ValueTree label = objLabels.getChild(i);
                         String la = label.getProperty(Ids::value).toString();
-                        la.append("_copy", 5);
+                        la.append("cpy", 5);
                         label.setProperty(Ids::value, la, nullptr);
                     }
                 }
@@ -730,15 +730,15 @@ void ObjController::paste(ObjectsHolder* holder)
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(objectIds.contains(objName))
                 {
-                    String newName = objName + "_copy";
-//                    objName.append("_copy", 10);
+                    String newName = objName + "cpy";
+//                    objName.append("cpy", 10);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
                     for (int i = 0; i < objLabels.getNumChildren(); ++i)
                     {
                         ValueTree label = objLabels.getChild(i);
                         String la = label.getProperty(Ids::value).toString();
-                        la.append("_copy", 5);
+                        la.append("cpy", 5);
                         label.setProperty(Ids::value, la, nullptr);
                     }
                     String oldStartVertex = valTree[Ids::startVertex].toString();
@@ -833,21 +833,21 @@ String ObjController::getNewNameForObject(const Identifier& objId)
     String name;
  	int rnd = Random::getSystemRandom().nextInt(100000);
 	if(objId == Ids::mass)
-		name = "m_" + String(rnd);
+		name = "m" + String(rnd);
 	else if(objId == Ids::port)
-		name = "dev_" + String(rnd);
+		name = "dev" + String(rnd);
 	else if(objId == Ids::ground)
-		name = "g_" + String(rnd);
+		name = "g" + String(rnd);
 	else if(objId == Ids::resonator)
-		name = "r_" + String(rnd);
+		name = "r" + String(rnd);
 	else if(objId == Ids::audioout)
-		name = "a_" + String(rnd);
+		name = "a" + String(rnd);
     else if(objId == Ids::link)
-        name = "l_" + String(rnd);
+        name = "l" + String(rnd);
 	else if(objId == Ids::touch)
-		name = "t_" + String(rnd);
+		name = "t" + String(rnd);
 	else if(objId == Ids::pluck)
-        name = "p_" + String(rnd);
+        name = "p" + String(rnd);
 	else
 		name = "";
 
