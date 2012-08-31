@@ -320,12 +320,13 @@ public:
 	{
         ObjectComponent* oc = dynamic_cast<ObjectComponent*>(source);
         LinkComponent* lc = dynamic_cast<LinkComponent*>(source);
+        
         if(oc != nullptr)
         {
             sourceIsLink = false;
             indexSource = objController->indexOfObject(oc);
         }
-        else
+        else if(lc != nullptr)
         {
             sourceIsLink = true;
             indexSource = objController->indexOfLink(lc);
@@ -398,7 +399,7 @@ public:
             sourceIsLink = false;
             oldIndexSource = objController->indexOfObject(oc);
         }
-        else
+        else if(lc != nullptr)
         {
             sourceIsLink = true;
             oldIndexSource = objController->indexOfLink(lc);

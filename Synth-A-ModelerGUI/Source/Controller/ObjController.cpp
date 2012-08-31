@@ -130,6 +130,22 @@ bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
     return false;
 
 }
+
+bool ObjController::checkIfAudioConnectionExitsts(ValueTree source,
+                                                  ValueTree audioOut)
+{
+    for (int i = 0; i < audioConnections.size(); i++)
+    {
+        ValueTree sourceComp = audioConnections[i]->getSourceObject()->getData();
+        ValueTree aoComp = audioConnections[i]->getAudioObject()->getData();
+        if(sourceComp[Ids::identifier] == source[Ids::identifier]
+            && aoComp[Ids::identifier] == audioOut[Ids::identifier])
+        {
+            return true;
+        }
+    }
+    return false;
+}
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
 {
     if(sObjects.getNumSelected() == 2)
@@ -211,25 +227,29 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             if ((oc1->getData().getType() == Ids::audioout
                 && oc2->getData().getType() != Ids::audioout))
             {
-                addAudioConnection(holder, oc2, oc1, -1, true);
+                if(! checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
+                    addAudioConnection(holder, oc2, oc1, -1, true);
             }
             else if (oc1->getData().getType() != Ids::audioout
                 && oc2->getData().getType() == Ids::audioout)
             {
-                addAudioConnection(holder, oc1, oc2, -1, true);
+                if(! checkIfAudioConnectionExitsts(oc1->getData(), oc2->getData()))
+                    addAudioConnection(holder, oc1, oc2, -1, true);
             }
             else
             {
                 SAM_CONSOLE("Error: ", "Cannot create audio connection");
             }
         }
-        else if(oc1 == nullptr)
+        else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr)
         {
-            addAudioConnection(holder, lc1, oc2, -1, true);
+            if( ! checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
+                addAudioConnection(holder, lc1, oc2, -1, true);
         }
-        else if(oc2 == nullptr)
+        else if(oc2 == nullptr && oc1 != nullptr && lc2 != nullptr)
         {
-            addAudioConnection(holder, lc2, oc1, -1, true);
+            if( ! checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
+                addAudioConnection(holder, lc2, oc1, -1, true);
         }
     }
 }
@@ -304,6 +324,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 //                continue;
 //            }
             AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i));
+            if(aoc != nullptr)
             {
                 removeAudioConnection(aoc, true, holder);
                 continue;
@@ -737,7 +758,6 @@ void ObjController::paste(ObjectsHolder* holder)
 
                 if (newLinkComp != 0)
                     sObjects.addToSelection(newLinkComp);
-
             }
         }
     }
@@ -747,41 +767,6 @@ void ObjController::cut(ObjectsHolder* holder)
 {
     copySelectedToClipboard();
     removeSelectedObjects(holder);
-}
-
-Array<int> ObjController::getLinksToCopy()
-{
-    Array<int> linkIndices;
-    Array<int> linksToCopy;
-    linkIndices.clear();
-    for (int i = 0; i < links.size(); ++i)
-    {
-        linkIndices.add(0);
-    }
-
-    for (int j = 0; j < sObjects.getNumSelected(); ++j)
-    {
-        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(j));
-        
-        if(oc != nullptr)
-        {
-            Array<LinkComponent*> ocLinks = oc->getAttachedLinks();
-                
-            for (int k = 0; k < ocLinks.size(); ++k)
-            {
-                int idx = indexOfLink(ocLinks[k]);
-                int lIndex = linkIndices.getUnchecked(idx);
-                linkIndices.set(idx, ++lIndex);
-            }
-        }
-    }
-    for (int i = 0; i < linkIndices.size(); ++i)
-    {
-        if(linkIndices[i] >= 2)
-            linksToCopy.add(i);
-    }
-
-    return linksToCopy;
 }
 
 bool ObjController::checkIfIdExists(const String& idStr)

@@ -317,7 +317,7 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
         LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp);
         if(oc != nullptr)
             startPos = oc->getPinPos();
-        else
+        else if(lc != nullptr)
             startPos = lc->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;

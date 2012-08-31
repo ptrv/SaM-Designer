@@ -183,9 +183,9 @@ public:
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
+    bool checkIfAudioConnectionExitsts(ValueTree source, ValueTree audioOut);
     Array<int> checkIfObjectHasLinks(ValueTree objTree);
     Array<int> checkIfObjectHasAudioConnections(ValueTree objTree);
-    Array<int> getLinksToCopy();
     MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
