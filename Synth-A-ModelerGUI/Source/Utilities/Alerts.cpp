@@ -33,6 +33,13 @@ void Alerts::missingPerl()
 	String msg = "Please install perl >= 5.10";
 	missingAlert(title, msg);
 }
+void Alerts::missingSAMpreprocessor()
+{
+	String title = "Missing SAM-preprocessor compiler";
+	String msg = "Please set the path for the DATA_DIR which consists ";
+	msg << "the SAM-preprocessor script.";
+	missingAlert(title, msg);
+}
 void Alerts::missingSAM()
 {
 	String title = "Missing Synth-A-Modeler compiler";

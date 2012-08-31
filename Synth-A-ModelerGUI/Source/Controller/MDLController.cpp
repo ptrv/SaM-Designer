@@ -109,10 +109,15 @@ const String MDLController::generateFaust()
 		Alerts::missingPerl();
 		return "Missing Perl";
 	}
+	if(! outCmd->isSAMpreprocessorCmdAvailable())
+	{
+		Alerts::missingSAMpreprocessor();
+		return "Missing SAM-preprocessor";
+	}
 	if(! outCmd->isSynthAModelerCmdAvailable())
 	{
 		Alerts::missingSAM();
-		return "Missing Synth-A-Modeler.plx";
+		return "Missing Synth-A-Modeler";
 	}
 
 	bool r = true;

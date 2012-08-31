@@ -44,6 +44,14 @@ bool OutputCmd::isSynthAModelerCmdAvailable()
 	else
 		return false;
 }
+bool OutputCmd::isSAMpreprocessorCmdAvailable()
+{
+	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/SAM-preprocessor");
+	if(samCompiler.existsAsFile())
+		return true;
+	else
+		return false;
+}
 
 bool OutputCmd::isCmdAvailable(const String& cmdStr)
 {
@@ -113,13 +121,11 @@ static String execProcess(char* cmd) {
 }
 const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)
 {
-	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	String processStr = "/bin/bash -c \"";
-	processStr << cmdPerl << " " << StoredSettings::getInstance()->getDataDir();
-	processStr << "/Synth-A-Modeler " << inPath << " " << outPath << " 2>&1\" 2>&1";
-
-	SAM_LOG("Synth-A-Modeler command: " + processStr);
-	String processoutput = execProcess(processStr.toUTF8().getAddress());
+    File fileOut(outPath);
+    String pathMDX = StoredSettings::getInstance()->getDataDir();
+    pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
+	String processoutput = runPerlScript("SAM-preprocessor", inPath, pathMDX);
+    processoutput << runPerlScript("Synth-A-Modeler", pathMDX, outPath);
 	return processoutput;
 }
 
@@ -135,6 +141,21 @@ const String OutputCmd::generateExternal()
 	SAM_LOG("Export command: " + processStr);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
 	return processoutput;
+}
+
+const String OutputCmd::runPerlScript(const String& script,
+                                      const String& inPath,
+                                      const String& outPath)
+{
+    String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
+	String processStr = "/bin/bash -c \"";
+    processStr << "cd " << "\"" << StoredSettings::getInstance()->getDataDir() << "\";";
+	processStr << cmdPerl << " " << StoredSettings::getInstance()->getDataDir();
+	processStr << "/" << script << " " << inPath << " " << outPath << " 2>&1\" 2>&1";
+
+	SAM_LOG(script + " command: " + processStr);
+	return execProcess(processStr.toUTF8().getAddress());
+
 }
 
 //==============================================================================

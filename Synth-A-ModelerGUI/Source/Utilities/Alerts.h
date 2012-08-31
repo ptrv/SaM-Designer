@@ -36,6 +36,7 @@ private:
 	~Alerts();
 public:
 	static void missingPerl();
+    static void missingSAMpreprocessor();
 	static void missingSAM();
 	static void missingFaust();
 	static void wrongFileType();

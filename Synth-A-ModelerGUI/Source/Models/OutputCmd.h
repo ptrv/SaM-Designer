@@ -43,6 +43,12 @@ public:
 	 */
 	bool isSynthAModelerCmdAvailable();
 	/**
+	 * Checks wether the SAM-preprocessor script is available.
+	 *
+	 * @return			true if SAM-preprocessor is found
+	 */
+	bool isSAMpreprocessorCmdAvailable();
+	/**
 	 * Checks wether a specifdied command is available.
 	 *
 	 * @param cmdStr	command string
@@ -77,6 +83,11 @@ public:
 	 * 					with error message
 	 */
 	const String generateExternal();
+
+private:
+    const String runPerlScript(const String& script,
+                               const String& inPath,
+                               const String& outPath);
 };
 
 
