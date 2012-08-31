@@ -598,8 +598,10 @@ Array<int> ObjController::checkIfObjectHasAudioConnections(ValueTree objTree)
     {
         AudioOutConnector* aoc = audioConnections.getUnchecked(i);
 
-        ValueTree aoData = aoc->getSourceObject()->getData();
-        if(aoData[Ids::identifier] == objTree[Ids::identifier])
+        ValueTree aoDataSource = aoc->getSourceObject()->getData();
+        ValueTree aoDataAudioObject = aoc->getAudioObject()->getData();
+        if(aoDataSource[Ids::identifier] == objTree[Ids::identifier]
+            || aoDataAudioObject[Ids::identifier] == objTree[Ids::identifier])
             aoIndices.add(i);
     }
     return aoIndices;
