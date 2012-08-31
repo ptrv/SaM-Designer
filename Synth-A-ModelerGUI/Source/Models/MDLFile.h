@@ -47,10 +47,7 @@ public:
 	void close();
 
 	const String getFilePath() const { return mdlRoot.getProperty(Ids::mdlPath).toString(); }
-	const String getNameWithStatus() 
-    { 
-        return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle(); 
-    }
+	const String getNameWithStatus();
 	const String getName() { return getDocumentTitle(); }
 
 	bool perform (UndoableAction* const action, const String& actionName);

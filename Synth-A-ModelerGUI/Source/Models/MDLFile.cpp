@@ -56,6 +56,14 @@ MDLFile::~MDLFile()
 	destroyMDL();
 }
 
+const String MDLFile::getNameWithStatus()
+{
+    if(getDocumentTitle().startsWith("Untitled"))
+        return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle();
+    else
+        return hasChangedSinceSaved() ? getFilePath()+"*" : getFilePath();
+}
+
 bool MDLFile::perform (UndoableAction* const action, const String& actionName)
 {
 	return undoMgr.perform(action, actionName);
