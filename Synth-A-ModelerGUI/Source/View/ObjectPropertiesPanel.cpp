@@ -371,8 +371,29 @@ public:
                                  ObjController* objController_,
                                  ValueTree data_,
                                  UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
+      laFreq("laFreq", "Frequency (Hz)"),
+	  teFreq("teFreq"),
+	  laDecay("laDecay", "Decay (sec)"),
+	  teDecay("teDecay"),
+	  laEqMass("laEqMass", "Mass (kg)"),
+	  teEqMass("teEqMass"),
+	  laLabels("laLabels", "Labels"),
+	  teLabels("teLabels")
+
 	{
+        teFreq.addListener(this);
+		addAndMakeVisible(&teFreq);
+		laFreq.attachToComponent(&teFreq, true);
+        teDecay.addListener(this);
+		addAndMakeVisible(&teDecay);
+		laDecay.attachToComponent(&teDecay, true);
+        teEqMass.addListener(this);
+		addAndMakeVisible(&teEqMass);
+		laEqMass.attachToComponent(&teEqMass, true);
+        teLabels.addListener(this);
+		addAndMakeVisible(&teLabels);
+		laLabels.attachToComponent(&teLabels, true);
 
 		readValues();
 	}
@@ -384,19 +405,87 @@ public:
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
+
+		teFreq.setBounds(80 , 40, getWidth() -90, 22);
+		teDecay.setBounds(80 , 70, getWidth() -90, 22);
+		teEqMass.setBounds(80 , 100, getWidth() -90, 22);
+		teLabels.setBounds(80, 130, getWidth() - 90, 22);
+
 	}
 
 	void readValues()
 	{
+		teName.setText(data[Ids::identifier].toString());
+		teFreq.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+		teDecay.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+		teEqMass.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+		String labelText;
+		StringArray labelsArray;
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
+		}
+		teLabels.setText(labelsArray.joinIntoString(","));
 
 	}
 
 	bool writeValues()
 	{
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier];
+        if(newName != oldName)
+        {
+            if (objController->checkIfIdExists(newName))
+            {
+                return false;
+            }
+            else
+            {
+                if(! objController->renameId(oldName, newName))
+                    return false;
+            }
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
+        }
+
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+        ValueTree pa3 = paramsTree.getChild(2);
+        pa1.setProperty(Ids::value, 
+                        Utils::fixParameterValueIfNeeded(teFreq.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teDecay.getText()),
+                        undoManager);
+        pa3.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teEqMass.getText()), 
+                        undoManager);
+        ValueTree labelsTree = data.getChildWithName(Ids::labels);
+        labelsTree.removeAllChildren(undoManager);
+        String labelsString = teLabels.getText();
+        StringArray labelsArray;
+        labelsArray.addTokens(labelsString, ",", "\"");
+        for (int i = 0; i < labelsArray.size(); ++i)
+        {
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
+        }
+        
         return true;
 	}
 
 private:
+    Label laFreq;
+	TextEditor teFreq;
+	Label laDecay;
+	TextEditor teDecay;
+	Label laEqMass;
+	TextEditor teEqMass;
+	Label laLabels;
+	TextEditor teLabels;
 };
 
 class GroundPropertiesComponent : public ObjectPropertiesComponent {

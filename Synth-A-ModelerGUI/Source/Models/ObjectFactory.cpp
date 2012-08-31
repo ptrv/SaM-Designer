@@ -103,9 +103,15 @@ static ValueTree createNewResonatorTree(const String& newName, int x, int y)
 	newTree.setProperty(Ids::posY, y, nullptr);
 	ValueTree paramsTree(Ids::parameters);
     ValueTree pa1(Ids::parameter);
-	pa1.setProperty(Ids::value, "0.0", nullptr);
+    ValueTree pa2(Ids::parameter);
+    ValueTree pa3(Ids::parameter);
+	pa1.setProperty(Ids::value, "200.0", nullptr);
+    pa2.setProperty(Ids::value, "1.5", nullptr);
+    pa3.setProperty(Ids::value, "0.01", nullptr);
     paramsTree.addChild(pa1, -1, nullptr);
-	newTree.addChild(paramsTree, -1, nullptr);
+    paramsTree.addChild(pa2, -1, nullptr);
+    paramsTree.addChild(pa3, -1, nullptr);
+    newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
     ValueTree l1(Ids::label);
