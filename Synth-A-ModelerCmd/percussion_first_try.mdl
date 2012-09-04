@@ -39,8 +39,8 @@ faustcode:touchDamp=hslider("touchDamp",0.01,0.00,0.5,0.01);
 faustcode:gravParam=hslider("gravParam",30.0,1.0,100.0,1.0);
 
 
-mass(massL),msnr1,(mlabel);
-mass(massR),msnr2,(mlabel);
+	mass(massL,0.0,0.0),msnr1,(mlabel);
+	mass(massR,0.0,0.0),msnr2,(mlabel);
 resonator(freqMembrane, decayTimeMembrane, massMembrane),r1,( );
 ground(0.0),g,(glabel);
 #ground(-0.1),gunder,(glabel2);

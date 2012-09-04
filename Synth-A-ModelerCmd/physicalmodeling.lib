@@ -13,13 +13,14 @@ differentiator = _ <: (_, mem) : - : *(fs) : _;
 link(k,R,o) = _ : (_-o) <: (_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs))) : (_,_) : + : _;
 
 
-// Like BUT
-touch(k,R,o) = _ <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), (_>o)) : (_,_,_) : (+,_) : * : _;
+// Old version of touch
+//touch(k,R,o) = _ <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), (_>o)) : (_,_,_) : (+,_) : * : _;
+
+// Correct implementation of touch
+touch(k,R,o) = _ : -(o) <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), (_>0.0)) : (_,_,_) : (+,_) : * : _;
 
 
 
-// Like pluck-contact~
-//pluck(k,R,o) = _ <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), (_>o)) : (_,_,_) : (+,_) : * : _;
 
 // This plucking logic determines the new state for the state machine
 pluckingLogic(prevState,xthresh,xdiff) = (newState) with {
@@ -52,11 +53,11 @@ pluckingForceEnable(state,xthresh,xdiff) = enable with {
 
 calculatePluckingForceEnable = (_,_) <: (_,_,_,_) : (pluckingStateMachine, (_,_)) : pluckingForceEnable;
 
-pluck(k,R,o) = _ <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), calculatePluckingForceEnable(o)) : (_,_,_) : (+,_) : * : _;
+// This is the old implementation of pluck that doesn't implement the offset.
+//pluck(k,R,o) = _ <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), calculatePluckingForceEnable(o)) : (_,_,_) : (+,_) : * : _;
 
-
-
-
+// New implementation of pluck includes the offset
+pluck(k,R,pluckDistance,o) = _ : -(o) <: (_,_,_) : (*(k),  (_ <: (_,_) : (_, mem) : - : *(R*fs)), calculatePluckingForceEnable(pluckDistance)) : (_,_,_) : (+,_) : * : _;
 
 
 

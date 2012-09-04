@@ -348,8 +348,9 @@ while (<$filehandle>)
 		my $i1 = $1;  my $i2 = $2;  my $i3 = $3;
 		say "Found link 1=" . $1 . ", 2=" . $2 . ", 3=" . $3 . ", 4=" . $4 . ", 5=" . $5;
 		
-		$faustJunctionName = $faustJunctionName . $1;
+
 		if ($junctionIdentifier eq $4) {
+		    $faustJunctionName = $faustJunctionName . $1;
 		    $faustJunctionParams = $faustJunctionParams . ", " . $2;
 		    #$outline = "junction" . $1 . "(" . $junctionHeight . ", " . $2 . "), " . $junctionIdentifier . ", " . $5 . ",();";
 
@@ -362,6 +363,7 @@ while (<$filehandle>)
 		    #say $fh_out $outline;
 		    $numConnectingLinks++;
 		} elsif ($junctionIdentifier eq $5) {
+		    $faustJunctionName = $faustJunctionName . $1;
 		    $faustJunctionName = $faustJunctionName . "Underneath";
 		    $faustJunctionParams = $faustJunctionParams . ", " . $2;
 		    #$outline = "junction" . $1 . "Underneath" . "(" . $junctionHeight . ", " . $2 . "), " . $junctionIdentifier . ", " . $4 . ",();";
