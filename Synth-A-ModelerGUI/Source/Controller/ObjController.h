@@ -192,6 +192,7 @@ private:
     OwnedArray<AudioOutConnector> audioConnections;
     SelectedItemSet<SelectableObject*> sObjects;
     SortedSet<String> objectIds;
+    int timesPasted;
 };
 
 

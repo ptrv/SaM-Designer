@@ -36,7 +36,8 @@
 #include "ObjController.h"
 
 ObjController::ObjController(MDLController& owner_)
-: owner(owner_)
+: owner(owner_),
+  timesPasted(0)
 {
 
 }
@@ -636,6 +637,7 @@ void ObjController::copySelectedToClipboard()
     if (sObjects.getNumSelected() == 0)
         return;
 
+    timesPasted = 0;
     XmlElement clip (clipboardXmlTag);
 
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
@@ -684,6 +686,11 @@ void ObjController::paste(ObjectsHolder* holder)
 
     if (doc != 0 && doc->hasTagName (clipboardXmlTag))
     {
+        ++timesPasted;
+        String copySuffix = "cpy";
+        if(timesPasted > 1)
+            copySuffix << String(timesPasted - 1);
+        
         sObjects.deselectAll();
         HashMap<String, String> objectNamesOldNew;
         forEachXmlChildElement (*doc, e)
@@ -699,7 +706,7 @@ void ObjController::paste(ObjectsHolder* holder)
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(objectIds.contains(objName))
                 {
-                    String newName = objName + "cpy";
+                    String newName = objName + copySuffix;
 //                    objName.append("cpy", 10);
                     objectNamesOldNew.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
@@ -708,7 +715,7 @@ void ObjController::paste(ObjectsHolder* holder)
                     {
                         ValueTree label = objLabels.getChild(i);
                         String la = label.getProperty(Ids::value).toString();
-                        la.append("cpy", 5);
+                        la << copySuffix;
                         label.setProperty(Ids::value, la, nullptr);
                     }
                 }
@@ -730,7 +737,7 @@ void ObjController::paste(ObjectsHolder* holder)
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(objectIds.contains(objName))
                 {
-                    String newName = objName + "cpy";
+                    String newName = objName + copySuffix;
 //                    objName.append("cpy", 10);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
@@ -738,7 +745,7 @@ void ObjController::paste(ObjectsHolder* holder)
                     {
                         ValueTree label = objLabels.getChild(i);
                         String la = label.getProperty(Ids::value).toString();
-                        la.append("cpy", 5);
+                        la << copySuffix;
                         label.setProperty(Ids::value, la, nullptr);
                     }
                     String oldStartVertex = valTree[Ids::startVertex].toString();
