@@ -10,7 +10,7 @@
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        defines="UNIT_TESTS=1"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-ModelerGUI"
-                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
+                       osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="default"/>
       </CONFIGURATIONS>
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="../juce/modules" bigIcon="WodEAp">
