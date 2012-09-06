@@ -44,8 +44,6 @@ public:
 		centreAroundComponent (0, getWidth(), getHeight());
 
 		setResizable (false, false);
-		setVisible(true);
-
 	}
 
 	~VariableInputPanel()
