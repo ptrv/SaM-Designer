@@ -112,9 +112,12 @@ static String execProcess(char* cmd) {
     if (!pipe) return "ERROR";
     char buffer[128];
     String result = "";
-    while(!feof(pipe)) {
-        if(fgets(buffer, 128, pipe) != NULL)
-                result += buffer;
+    while(!feof(pipe))
+    {
+        if (fgets(buffer, 128, pipe) != NULL)
+        {
+            result += String (CharPointer_UTF8 (buffer));
+        }
     }
     pclose(pipe);
     return result;
