@@ -63,7 +63,9 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	LookAndFeel::setDefaultLookAndFeel(samLookAndFeel);
     if( StoredSettings::getInstance()->getIsLoggingOn() )
     {
+#ifdef DEBUG
         Logger::setCurrentLogger(Utils::getLogger(), true);
+#endif
     }
 
 	commandManager = new ApplicationCommandManager();

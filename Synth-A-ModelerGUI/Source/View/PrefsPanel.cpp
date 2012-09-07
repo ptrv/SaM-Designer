@@ -45,8 +45,10 @@ public:
 			"(select the directory which faust is in)"),
 		teCmdExport("CmdExport"),
 		tbExportConfirm("Confirm export"),
+#ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
-		labelDataDir (String::empty, "Data Dir"),
+#endif
+        labelDataDir (String::empty, "Data Dir"),
 		labelFaustDir (String::empty, "FAUST Dir"),
 		labelCmdExport(String::empty, "Exporter Command")
     {
@@ -60,9 +62,10 @@ public:
         teCmdExport.setText(StoredSettings::getInstance()->getCmdExporter());
         addAndMakeVisible(&tbExportConfirm);
         tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
+#ifdef DEBUG
         addAndMakeVisible(&tbLoggingOn);
         tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(), false);
-
+#endif
     }
 
     ~MiscPage()
@@ -71,7 +74,9 @@ public:
         StoredSettings::getInstance()->setFaustDir(fcFaustDir.getCurrentFile().getFullPathName());
         StoredSettings::getInstance()->setCmdExporter(teCmdExport.getText());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
+#ifdef DEBUG
         StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
+#endif
     }
 
     void resized()
@@ -80,7 +85,9 @@ public:
         fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
         teCmdExport.setBounds(10, 170, getWidth() -20, 22);
         tbExportConfirm.setBounds(10, 220, getWidth() - 20, 22);
+#ifdef DEBUG
         tbLoggingOn.setBounds(10, 270, getWidth() - 20, 22);
+#endif
     }
 
 private:
@@ -88,7 +95,9 @@ private:
     FilenameComponent fcFaustDir;
     TextEditor teCmdExport;
     ToggleButton tbExportConfirm;
+#ifdef DEBUG
     ToggleButton tbLoggingOn;
+#endif
     Label labelDataDir;
     Label labelFaustDir;
     Label labelCmdExport;

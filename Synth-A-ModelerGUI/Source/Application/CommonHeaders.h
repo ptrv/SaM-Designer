@@ -43,7 +43,11 @@
 
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 
+#ifdef DEBUG
 #define SAM_LOG(message) Utils::SAMLogger(message)
+#else
+#define SAM_LOG(message)
+#endif
 
 #define SAM_CONSOLE(title, message) SynthAModelerApplication::getApp()->writeToDebugConsole(title, message)
 
