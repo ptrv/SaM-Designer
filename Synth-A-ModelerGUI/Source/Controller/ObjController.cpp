@@ -757,7 +757,8 @@ void ObjController::paste(ObjectsHolder* holder)
                                                                timesPasted,
                                                                groupPaste);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
-                    ValueTree objLabels = valTree.getChildWithName(Ids::labels);
+                }
+                ValueTree objLabels = valTree.getChildWithName(Ids::labels);
 //                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
 //                    {
 //                        ValueTree label = objLabels.getChild(i);
@@ -765,19 +766,18 @@ void ObjController::paste(ObjectsHolder* holder)
 //                        la << copySuffix;
 //                        label.setProperty(Ids::value, la, nullptr);
 //                    }
-                    String oldStartVertex = valTree[Ids::startVertex].toString();
-                    String oldEndVertex = valTree[Ids::endVertex].toString();
-                    
-                    if(objectNamesOldNew.contains(oldStartVertex))
-                    {
-                        valTree.setProperty(Ids::startVertex, objectNamesOldNew[oldStartVertex], nullptr);
-                    }
-                    if(objectNamesOldNew.contains(oldEndVertex))
-                    {
-                        valTree.setProperty(Ids::endVertex, objectNamesOldNew[oldEndVertex], nullptr);
-                    }
-                    
+                String oldStartVertex = valTree[Ids::startVertex].toString();
+                String oldEndVertex = valTree[Ids::endVertex].toString();
+
+                if (objectNamesOldNew.contains(oldStartVertex))
+                {
+                    valTree.setProperty(Ids::startVertex, objectNamesOldNew[oldStartVertex], nullptr);
                 }
+                if (objectNamesOldNew.contains(oldEndVertex))
+                {
+                    valTree.setProperty(Ids::endVertex, objectNamesOldNew[oldEndVertex], nullptr);
+                }
+
                 LinkComponent* newLinkComp = addLink(holder, valTree, -1, true);
 
                 if (newLinkComp != 0)
