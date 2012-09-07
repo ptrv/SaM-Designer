@@ -72,6 +72,9 @@ public:
     bool isUntiled();
 
     String toString();
+
+    bool changedOutside();
+
 protected:
 	String getDocumentTitle();
 	Result loadDocument (const File& file);
@@ -84,11 +87,14 @@ private:
 	void initMDL();
 	void destroyMDL();
 
+    bool checkIfChecksumChanged();
 	static File lastDocumentOpened;
-
+    
 	UndoManager undoMgr;
     
     bool isUntitledFile;
+
+    MD5 md5;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLFile);
 

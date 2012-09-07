@@ -123,6 +123,7 @@ Result MDLFile::loadDocument (const File& file)
 		setFile(file);
 		setChangedFlag(false);
         isUntitledFile = false;
+        md5 = MD5(file);
 		return Result::ok();
 	}
 	else
@@ -145,6 +146,7 @@ Result MDLFile::saveDocument (const File& file)
         setFile(file);
         setChangedFlag(false);
         saveOk = true;
+        md5 = MD5(file);
 	}
 	else
 	{
@@ -228,6 +230,43 @@ String MDLFile::toString()
 {
     String mdlStr = mdlRoot.toXmlString();
     return mdlStr;
+}
+
+bool MDLFile::changedOutside()
+{
+    if(checkIfChecksumChanged())
+    {
+        int res = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+                                                  "MDL file changed outside!",
+                                                  "",
+                                                  "Load from disk",
+                                                  "Overwrite",
+                                                  "Cancel");
+        switch (res)
+        {
+        case 0:
+            return true;
+        case 1:
+            loadDocument(getFile());
+            return false;
+        case 2:
+            return false;
+            break;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool MDLFile::checkIfChecksumChanged()
+{
+    MD5 tmpMD5 = MD5(getFile());
+    if(md5 != tmpMD5)
+        return true;
+    else
+        return false;
 }
 //==============================================================================
 #if UNIT_TESTS

@@ -80,10 +80,17 @@ void MDLController::openFromFile(const File& mdlFile)
 }
 void MDLController::save()
 {
-	if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
-	{
-		SAM_LOG("Something went wrong saving the mdl file.");
-	}
+    if(currentMdl->changedOutside())
+    {
+        
+    }
+    else
+    {
+        if (currentMdl->save(true, true) != FileBasedDocument::savedOk)
+        {
+            SAM_LOG("Something went wrong saving the mdl file.");
+        }
+    }
 }
 void MDLController::saveAs()
 {
