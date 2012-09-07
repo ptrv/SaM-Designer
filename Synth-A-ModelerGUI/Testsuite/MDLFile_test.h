@@ -131,8 +131,8 @@ public:
 
 		beginTest("getLabels");
 
-		ValueTree labelObjs = mdlFile->mdlRoot.getChildWithName(Objects::labels);
-		expect(labelObjs.getNumChildren() == 1, "have "+String(labelObjs.getNumChildren())+" labels");
+		ValueTree labelObjs = mdlFile->mdlRoot.getChildWithName(Objects::variables);
+		expect(labelObjs.getNumChildren() == 1, "have "+String(labelObjs.getNumChildren())+" variables");
 		expectEquals(labelObjs.getChild(0)[Ids::identifier].toString(), String("adjStiffness"));
 		expectEquals(labelObjs.getChild(0)[Ids::faustCode].toString(), String("hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0)"));
 

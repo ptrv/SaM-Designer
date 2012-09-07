@@ -117,7 +117,7 @@ private:
     	{
     		if(button == &btOk)
     		{
-				ValueTree newData(Ids::label);
+                ValueTree newData(Ids::variable);
 				newData.setProperty(Ids::identifier, inputVarName.getText(), nullptr);
 				newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
     			if(edit)
@@ -186,7 +186,7 @@ public:
 	}
 	int getNumRows()
 	{
-		return data.getChildWithName(Objects::labels).getNumChildren();
+		return data.getChildWithName(Objects::variables).getNumChildren();
 	}
 
 	void paintRowBackground(Graphics& g, int rowNumber, int width, int height,
@@ -200,8 +200,8 @@ public:
 			int height, bool rowIsSelected)
 	{
 		g.setColour(Colours::black);
-		String varName = data.getChildWithName(Objects::labels).getChild(rowNumber)[Ids::identifier].toString();
-		String varValue = data.getChildWithName(Objects::labels).getChild(rowNumber)[Ids::faustCode].toString();
+		String varName = data.getChildWithName(Objects::variables).getChild(rowNumber)[Ids::identifier].toString();
+		String varValue = data.getChildWithName(Objects::variables).getChild(rowNumber)[Ids::faustCode].toString();
 		if(columnId == 1)
 		{
 			g.drawText(varName, 2, 0, width - 4, height, Justification::left, true);
@@ -215,7 +215,7 @@ public:
 	void addRow(UndoManager* undoManager)
 	{
 
-		int r = VariableInputPanel::show(data.getOrCreateChildWithName(Objects::labels, nullptr), false, undoManager);
+		int r = VariableInputPanel::show(data.getOrCreateChildWithName(Objects::variables, nullptr), false, undoManager);
 		table.updateContent();
 		if(r == 1)
 			SAM_LOG(data[Ids::mdlName].toString() + ": Add variable");
@@ -228,7 +228,7 @@ public:
 		int rowIndex = table.getSelectedRow();
 		if(rowIndex >= 0)
 		{
-			ValueTree editData = data.getChildWithName(Objects::labels).getChild(rowIndex);
+            ValueTree editData = data.getChildWithName(Objects::variables).getChild(rowIndex);
 			int r = VariableInputPanel::show(editData, true, undoManager);
 			table.updateContent();
 			table.repaintRow(rowIndex);
@@ -244,9 +244,9 @@ public:
 		int rowIndex = table.getLastRowSelected();
 		if(rowIndex >= 0)
 		{
-			String varName = data.getChildWithName(Objects::labels).getChild(rowIndex)[Ids::identifier].toString();
+            String varName = data.getChildWithName(Objects::variables).getChild(rowIndex)[Ids::identifier].toString();
 			undoManager->beginNewTransaction("Add variable");
-			data.getChildWithName(Objects::labels).removeChild(rowIndex, undoManager);
+            data.getChildWithName(Objects::variables).removeChild(rowIndex, undoManager);
 			table.updateContent();
 			SAM_LOG(data[Ids::mdlName].toString() + ": Remove variable " + varName);
 		}

@@ -220,9 +220,9 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	// write labels
 	mdlContent << "\n\n";
-	ValueTree labelsTree = mdlFile.mdlRoot.getChildWithName(Objects::labels);
-	for (int labIdx = 0; labIdx < labelsTree.getNumChildren(); ++labIdx) {
-		ValueTree la = labelsTree.getChild(labIdx);
+	ValueTree variablesTree = mdlFile.mdlRoot.getChildWithName(Objects::variables);
+	for (int varIdx = 0; varIdx < variablesTree.getNumChildren(); ++varIdx) {
+		ValueTree la = variablesTree.getChild(varIdx);
 		mdlContent << "faustcode: ";
 		mdlContent << la[Ids::identifier].toString();
 		mdlContent << "=";

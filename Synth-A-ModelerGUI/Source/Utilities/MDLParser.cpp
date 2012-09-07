@@ -238,17 +238,16 @@ bool MDLParser::parseMDL()
 			}
 			else if(line.startsWith("faustcode:"))
 			{
-				StringArray labelAttributeList;
 				int indexSemicolon = line.indexOf(";");
 				int indexColon = line.indexOf(":");
 				String lineTmp = line.substring(indexColon+1, indexSemicolon);
 				lineTmp = lineTmp.trimCharactersAtStart(" ");
 				int indexEquals = lineTmp.indexOf("=");
-				ValueTree labelTree(Ids::label);
-				labelTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals), nullptr);
-				labelTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1), nullptr);
-				ValueTree labelsTree = mdlTree.getOrCreateChildWithName(Objects::labels, nullptr);
-				labelsTree.addChild(labelTree, -1, nullptr);
+				ValueTree variableTree(Ids::variable);
+				variableTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals), nullptr);
+				variableTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1), nullptr);
+				ValueTree labelsTree = mdlTree.getOrCreateChildWithName(Objects::variables, nullptr);
+				labelsTree.addChild(variableTree, -1, nullptr);
 			}
 			else if(line.startsWith("audioout"))
 			{

@@ -75,6 +75,7 @@ namespace Ids
     DECLARE_ID (gain);
     DECLARE_ID (sources);
     DECLARE_ID (value);
+    DECLARE_ID (variable);
 
     const Identifier class_ ("class");
 
@@ -88,7 +89,7 @@ namespace Objects
 	DECLARE_ID(MDLROOT);
 	DECLARE_ID(masses);
 	DECLARE_ID(links);
-	DECLARE_ID(labels);
+    DECLARE_ID(variables);
 	DECLARE_ID(audioobjects);
 	DECLARE_ID(waveguides);
 	DECLARE_ID(terminations);
@@ -113,8 +114,8 @@ namespace Objects
 			return Objects::terminations;
 		else if(ident == Ids::junction)
 			return Objects::junctions;
-		else if(ident == Ids::label)
-			return Objects::labels;
+		else if(ident == Ids::variable)
+			return Objects::variables;
 
 		else
 			return Objects::invalid;
