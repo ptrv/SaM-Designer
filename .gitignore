@@ -1,6 +1,7 @@
 build
 *dir/
 *.dsp
+*.mdx
 
 # built docs
 */Docs/html
