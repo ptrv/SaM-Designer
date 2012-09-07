@@ -38,7 +38,7 @@ void SAMLookAndFeel::drawButtonBackground (Graphics& g,
     const float cornerSize = 4.0f;
 
     Colour baseColour (backgroundColour.withMultipliedSaturation (button.hasKeyboardFocus (true)
-                                                                      ? 1.3f : 0.9f)
+                                                                      ? 4.3f : 0.9f)
                                        .withMultipliedAlpha (button.isEnabled() ? 0.9f : 0.5f));
 
     if (isButtonDown)           baseColour = baseColour.contrasting (0.2f);
