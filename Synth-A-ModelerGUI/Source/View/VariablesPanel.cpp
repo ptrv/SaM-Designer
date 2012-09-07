@@ -69,7 +69,8 @@ public:
 private:
 	int returnVal;
     class VariableInputComponent : public Component,
-    								public Button::Listener
+                                   public Button::Listener,
+                                   public TextEditor::Listener
     {
     public:
     	VariableInputComponent(VariableInputPanel& parent_,
@@ -87,13 +88,16 @@ private:
     	  edit(edit_),
     	  btOk("Ok"),
     	  btCancel("Cancel"),
-    	  undoManager(undoManager_)
+    	  undoManager(undoManager_),
+          dataChanged(false)
     	{
     		labelVarName.setText("Variable", false);
     		addAndMakeVisible(&labelVarName);
     		labelVarValue.setText("Value", false);
     		addAndMakeVisible(&labelVarValue);
+            inputVarName.addListener(this);
     		addAndMakeVisible(&inputVarName);
+            inputVarValue.addListener(this);
     		addAndMakeVisible(&inputVarValue);
     		btOk.addListener(this);
     		addAndMakeVisible(&btOk);
@@ -135,39 +139,53 @@ private:
 
         void applyEdits()
         {
-            
-            if(! objController->checkIfIdExists(data.getType(), inputVarName.getText()))
+            if(! dataChanged)
+                return;
+
+            ValueTree newData(Ids::variable);
+            newData.setProperty(Ids::identifier, inputVarName.getText(), nullptr);
+            newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
+            if(data[Ids::identifier] != newData[Ids::identifier])
             {
-                ValueTree newData(Ids::variable);
-                newData.setProperty(Ids::identifier, inputVarName.getText(), nullptr);
-                newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
-                if (edit)
+                if(objController->checkIfIdExists(data.getType(), inputVarName.getText()))
                 {
-                    undoManager->beginNewTransaction("Edit variable");
-                    String oldName = data[Ids::identifier].toString();
-                    data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), undoManager);
-                    data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), undoManager);
-                    objController->getIdManager()->renameId(data.getType(),
-                                                            oldName,
-                                                            data[Ids::identifier].toString(), undoManager);
-                    DBG(undoManager->getNumActionsInCurrentTransaction());
+                    Alerts::nameAlreadyExists();
+                    return;
                 }
-                else
-                {
-                    undoManager->beginNewTransaction("Add variable");
-//                    data.addChild(newData, -1, undoManager);
-                    data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), undoManager);
-                    data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), undoManager);
-                    objController->getIdManager()->addId(newData.getType(), newData[Ids::identifier].toString(), undoManager);
-                }
-                parent.returnVal = 1;
-                parent.closeButtonPressed();
+            }
+
+            if (edit)
+            {
+                undoManager->beginNewTransaction("Edit variable");
+                String oldName = data[Ids::identifier].toString();
+                data.setProperty(Ids::identifier, 
+                                 newData[Ids::identifier].toString(),
+                                 undoManager);
+                data.setProperty(Ids::faustCode,
+                                 newData[Ids::faustCode].toString(),
+                                 undoManager);
+                objController->getIdManager()->renameId(data.getType(),
+                                                        oldName,
+                                                        data[Ids::identifier].toString(),
+                                                        undoManager);
+                DBG(undoManager->getNumActionsInCurrentTransaction());
             }
             else
             {
-                Alerts::nameAlreadyExists();
+                undoManager->beginNewTransaction("Add variable");
+                //                    data.addChild(newData, -1, undoManager);
+                data.setProperty(Ids::identifier,
+                                 newData[Ids::identifier].toString(),
+                                 undoManager);
+                data.setProperty(Ids::faustCode,
+                                 newData[Ids::faustCode].toString(),
+                                 undoManager);
+                objController->getIdManager()->addId(newData.getType(),
+                                                     newData[Ids::identifier].toString(),
+                                                     undoManager);
             }
-
+            parent.returnVal = 1;
+            parent.closeButtonPressed();
         }
 
         void cancelEdits()
@@ -175,6 +193,20 @@ private:
             parent.returnVal = 2;
             parent.closeButtonPressed();
         }
+
+        void textEditorTextChanged(TextEditor& editor)
+        {
+            dataChanged = true;
+        }
+        void textEditorReturnKeyPressed(TextEditor& editor)
+        {
+            applyEdits();
+        }
+        void textEditorEscapeKeyPressed(TextEditor& editor)
+        {
+            cancelEdits();
+        }
+
     private:
     	VariableInputPanel& parent;
         ObjController* objController;
@@ -187,6 +219,7 @@ private:
     	TextButton btOk;
     	TextButton btCancel;
     	UndoManager* undoManager;
+        bool dataChanged;
 
     };
 
