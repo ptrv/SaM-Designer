@@ -94,7 +94,7 @@ public:
 
     bool checkIfIdExists(const String& idStr)
     {
-        return objController->checkIfIdExists(idStr);
+        return objController->checkIfIdExists(data.getType(), idStr);
     }
 	virtual void readValues() = 0;
 	virtual bool writeValues() = 0;
@@ -227,13 +227,13 @@ public:
         String oldName = data[Ids::identifier];
         if(newName != oldName)
         {
-            if (objController->checkIfIdExists(newName))
+            if (objController->checkIfIdExists(data.getType(), newName))
             {
                 return false;
             }
             else
             {
-                if(! objController->renameId(oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -331,13 +331,13 @@ public:
         String oldName = data[Ids::identifier];
         if(newName != oldName)
         {
-            if (objController->checkIfIdExists(newName))
+            if (objController->checkIfIdExists(data.getType(), newName))
             {
                 return false;
             }
             else
             {
-                if(! objController->renameId(oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -434,13 +434,13 @@ public:
         String oldName = data[Ids::identifier];
         if(newName != oldName)
         {
-            if (objController->checkIfIdExists(newName))
+            if (objController->checkIfIdExists(data.getType(), newName))
             {
                 return false;
             }
             else
             {
-                if(! objController->renameId(oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -541,13 +541,13 @@ public:
         String oldName = data[Ids::identifier];
         if(newName != oldName)
         {
-            if (objController->checkIfIdExists(newName))
+            if (objController->checkIfIdExists(data.getType(), newName))
             {
                 return false;
             }
             else
             {
-                if(! objController->renameId(oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -684,13 +684,13 @@ public:
         
         if (oldName != newName)
         {
-            if (objController->checkIfIdExists(newName))
+            if (objController->checkIfIdExists(data.getType(), newName))
             {
                 return false;
             }
             else
             {
-                if(! objController->renameId(oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName))
                     return false;
             }
 
@@ -802,7 +802,6 @@ public:
         }
 
         teSource.setText(sourceText);
-//        teSource.setText(data[Ids::sources].toString());
 	}
 
 	bool writeValues()
@@ -812,8 +811,15 @@ public:
         
         if(newName != oldName)
         {
-            if (objController->checkIfIdExists(newName))
+            if (objController->checkIfIdExists(data.getType(), newName))
+            {
                 return false;
+            }
+            else
+            {
+                if(! objController->renameId(data.getType(), oldName, newName))
+                    return false;
+            }
 
             data.setProperty(Ids::identifier, newName, undoManager);
         }
@@ -834,8 +840,6 @@ public:
             source.setProperty(Ids::gain, sourceParams[1], undoManager);
             sourcesTree.addChild(source, -1, undoManager);
         }
-        
-//        data.setProperty(Ids::sources, teSource.getText(), undoManager);
         
         return true;
 	}

@@ -34,6 +34,7 @@ class ObjectsHolder;
 class LinkComponent;
 class AudioOutConnector;
 class SelectableObject;
+class IdManager;
 
 /**
  * The ObjController controlls all ObjectComponents.
@@ -170,8 +171,8 @@ public:
     void paste(ObjectsHolder* holder);
     void cut(ObjectsHolder* holder);
     
-    bool checkIfIdExists(const String& idStr);
-    bool renameId(const String& oldId, const String& newId);
+    bool checkIfIdExists(const Identifier& objId, const String& idStr);
+    bool renameId(const Identifier& objId, const String& oldId, const String& newId);
     bool changeObjectNameInLink(const String& oldName, 
                                 const String& newName,
                                 UndoManager* undManager);
@@ -191,7 +192,7 @@ private:
     OwnedArray<LinkComponent> links;
     OwnedArray<AudioOutConnector> audioConnections;
     SelectedItemSet<SelectableObject*> sObjects;
-    SortedSet<String> objectIds;
+    ScopedPointer<IdManager> idMgr;
     int timesPasted;
 };
 

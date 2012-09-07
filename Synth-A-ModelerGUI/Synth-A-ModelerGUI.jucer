@@ -55,6 +55,8 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="YEGmmo" name="IdManager.cpp" compile="1" resource="0" file="Source/Utilities/IdManager.cpp"/>
+        <FILE id="PeZsaI" name="IdManager.h" compile="0" resource="0" file="Source/Utilities/IdManager.h"/>
         <FILE id="e53h53" name="ResourceLoader.cpp" compile="1" resource="0"
               file="Source/Utilities/ResourceLoader.cpp"/>
         <FILE id="c1ZfA0" name="ResourceLoader.h" compile="0" resource="0"

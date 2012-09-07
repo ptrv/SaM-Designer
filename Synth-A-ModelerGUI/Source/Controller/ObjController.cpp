@@ -32,6 +32,7 @@
 #include "../View/AudioOutConnector.h"
 #include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
+#include "../Utilities/IdManager.h"
 
 #include "ObjController.h"
 
@@ -39,7 +40,7 @@ ObjController::ObjController(MDLController& owner_)
 : owner(owner_),
   timesPasted(0)
 {
-
+    idMgr = new IdManager();
 }
 
 ObjController::~ObjController()
@@ -47,6 +48,7 @@ ObjController::~ObjController()
     objects.clear(true);
     links.clear(true);
     audioConnections.clear(true);
+    idMgr = nullptr;
 }
 
 bool ObjController::perform(UndoableAction * const action, const String& actionName)
@@ -70,7 +72,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
 		subTree.addChild(objValues,-1, nullptr);
-        objectIds.add(objValues[Ids::identifier].toString());
+        idMgr->addId(objValues.getType(), objValues[Ids::identifier].toString());
         ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues, index);
 
 		holder->addAndMakeVisible(objComp);
@@ -104,7 +106,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
-        objectIds.add(linkValues[Ids::identifier].toString());
+        idMgr->addId(linkValues.getType(), linkValues[Ids::identifier].toString());
         LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues, index);
 
 		holder->addAndMakeVisible(linkComp);
@@ -284,7 +286,8 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
-        objectIds.removeValue(objComp->getData()[Ids::identifier].toString());
+        idMgr->removeId(objComp->getData().getType(),
+                        objComp->getData()[Ids::identifier].toString());
         subTree.removeChild(objComp->getData(), nullptr);
         objects.removeObject(objComp);
     }
@@ -373,7 +376,8 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
         const Identifier& groupName = Objects::getObjectGroup(linkComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
-        objectIds.removeValue(linkComp->getData()[Ids::identifier].toString());
+        idMgr->removeId(linkComp->getData().getType(),
+                        linkComp->getData()[Ids::identifier].toString());
         subTree.removeChild(linkComp->getData(), nullptr);
         links.removeObject(linkComp);
     }
@@ -388,7 +392,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < massObjects.getNumChildren(); i++)
     {
         ValueTree obj = massObjects.getChild(i);
-        if(objectIds.add(obj[Ids::identifier].toString()))
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString()))
         {
             ObjectComponent* objComp = new ObjectComponent(*this, obj);
             objects.add(objComp);
@@ -405,7 +409,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < linkObjects.getNumChildren(); i++)
     {
         ValueTree obj = linkObjects.getChild(i);
-        if(objectIds.add(obj[Ids::identifier].toString()))
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString()))
         {
             LinkComponent* linkComp = new LinkComponent(*this, obj);
             links.add(linkComp);
@@ -419,7 +423,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < audioObjects.getNumChildren(); i++)
     {
         ValueTree obj = audioObjects.getChild(i);
-        if(objectIds.add(obj[Ids::identifier].toString()))
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString()))
         {
             ObjectComponent* audioOutComp = new ObjectComponent(*this, obj);
             objects.add(audioOutComp);
@@ -687,10 +691,12 @@ void ObjController::paste(ObjectsHolder* holder)
     if (doc != 0 && doc->hasTagName (clipboardXmlTag))
     {
         ++timesPasted;
-        String copySuffix = "cpy";
-        if(timesPasted > 1)
-            copySuffix << String(timesPasted - 1);
-        
+
+        int numObjs = doc->getNumChildElements();
+        bool groupPaste = false;
+        if(numObjs > 1)
+            groupPaste = true;
+
         sObjects.deselectAll();
         HashMap<String, String> objectNamesOldNew;
         forEachXmlChildElement (*doc, e)
@@ -704,20 +710,22 @@ void ObjController::paste(ObjectsHolder* holder)
                 valTree.setProperty(Ids::posY, posY + 10, nullptr);
                 
                 String objName = valTree.getProperty(Ids::identifier).toString();
-                if(objectIds.contains(objName))
+                if(idMgr->contains(valTree.getType(), objName))
                 {
-                    String newName = objName + copySuffix;
-//                    objName.append("cpy", 10);
+                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
+                                                               objName,
+                                                               timesPasted,
+                                                               groupPaste);
                     objectNamesOldNew.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
-                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
-                    {
-                        ValueTree label = objLabels.getChild(i);
-                        String la = label.getProperty(Ids::value).toString();
-                        la << copySuffix;
-                        label.setProperty(Ids::value, la, nullptr);
-                    }
+//                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
+//                    {
+//                        ValueTree label = objLabels.getChild(i);
+//                        String la = label.getProperty(Ids::value).toString();
+//                        la << copySuffix;
+//                        label.setProperty(Ids::value, la, nullptr);
+//                    }
                 }
                 else
                 {
@@ -735,19 +743,21 @@ void ObjController::paste(ObjectsHolder* holder)
             if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
-                if(objectIds.contains(objName))
+                if(idMgr->contains(valTree.getType(), objName))
                 {
-                    String newName = objName + copySuffix;
-//                    objName.append("cpy", 10);
+                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
+                                                               objName,
+                                                               timesPasted,
+                                                               groupPaste);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
-                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
-                    {
-                        ValueTree label = objLabels.getChild(i);
-                        String la = label.getProperty(Ids::value).toString();
-                        la << copySuffix;
-                        label.setProperty(Ids::value, la, nullptr);
-                    }
+//                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
+//                    {
+//                        ValueTree label = objLabels.getChild(i);
+//                        String la = label.getProperty(Ids::value).toString();
+//                        la << copySuffix;
+//                        label.setProperty(Ids::value, la, nullptr);
+//                    }
                     String oldStartVertex = valTree[Ids::startVertex].toString();
                     String oldEndVertex = valTree[Ids::endVertex].toString();
                     
@@ -776,15 +786,14 @@ void ObjController::cut(ObjectsHolder* holder)
     removeSelectedObjects(holder);
 }
 
-bool ObjController::checkIfIdExists(const String& idStr)
+bool ObjController::checkIfIdExists(const Identifier& objId, const String& idStr)
 {
-    return objectIds.contains(idStr);
+    return idMgr->contains(objId, idStr);
 }
 
-bool ObjController::renameId(const String& oldId, const String& newId)
+bool ObjController::renameId(const Identifier& objId, const String& oldId, const String& newId)
 {
-    objectIds.removeValue(oldId);
-    return objectIds.add(newId);
+    return idMgr->renameId(objId, oldId, newId);
 }
 
 bool ObjController::changeObjectNameInLink(const String& oldName, 
@@ -837,26 +846,5 @@ void ObjController::changeObjectNameInAudioSources(const String& oldName,
 
 String ObjController::getNewNameForObject(const Identifier& objId)
 {
-    String name;
- 	int rnd = Random::getSystemRandom().nextInt(100000);
-	if(objId == Ids::mass)
-		name = "m" + String(rnd);
-	else if(objId == Ids::port)
-		name = "dev" + String(rnd);
-	else if(objId == Ids::ground)
-		name = "g" + String(rnd);
-	else if(objId == Ids::resonator)
-		name = "r" + String(rnd);
-	else if(objId == Ids::audioout)
-		name = "a" + String(rnd);
-    else if(objId == Ids::link)
-        name = "l" + String(rnd);
-	else if(objId == Ids::touch)
-		name = "t" + String(rnd);
-	else if(objId == Ids::pluck)
-        name = "p" + String(rnd);
-	else
-		name = "";
-
-    return name;
+    return idMgr->getNextId(objId);
 }
