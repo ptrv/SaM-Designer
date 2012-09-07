@@ -58,7 +58,8 @@ MDLFile::~MDLFile()
 
 const String MDLFile::getNameWithStatus()
 {
-    if(getDocumentTitle().startsWith("Untitled"))
+    if(getDocumentTitle().compare("Untitled") == 0 ||
+       getDocumentTitle().compare("Untitled*") == 0)
         return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle();
     else
         return hasChangedSinceSaved() ? getFilePath()+"*" : getFilePath();
