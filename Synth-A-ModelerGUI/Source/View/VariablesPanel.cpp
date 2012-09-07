@@ -24,6 +24,8 @@
 */
 
 #include "../Application/CommonHeaders.h"
+#include "../Controller/ObjController.h"
+#include "../Utilities/IdManager.h"
 
 #include "VariablesPanel.h"
 
@@ -31,12 +33,13 @@
 class VariableInputPanel : public DialogWindow
 {
 public:
-	VariableInputPanel(ValueTree data_, bool edit_, UndoManager* undoManager_)
+	VariableInputPanel(ObjController* objController_,
+                       ValueTree data_, bool edit_, UndoManager* undoManager_)
 	: DialogWindow("Variable", Colours::lightgrey, true),
 	  returnVal(0)
 	{
 		VariableInputComponent* const vic = new VariableInputComponent(*this,
-				data_, edit_, undoManager_);
+				objController_, data_, edit_, undoManager_);
 		vic->setSize(350, 100);
 
 		setContentOwned (vic, true);
@@ -55,9 +58,10 @@ public:
     	setVisible(false);
     }
 
-    static int show(ValueTree data, bool edit, UndoManager* undoManager)
+    static int show(ObjController* objController_,
+                    ValueTree data, bool edit, UndoManager* undoManager)
     {
-    	VariableInputPanel vip(data, edit, undoManager);
+    	VariableInputPanel vip(objController_, data, edit, undoManager);
         vip.runModalLoop();
         return vip.returnVal;
     }
@@ -68,9 +72,13 @@ private:
     								public Button::Listener
     {
     public:
-    	VariableInputComponent(VariableInputPanel& parent_, ValueTree data_,
-    			bool edit_,	UndoManager* undoManager_)
+    	VariableInputComponent(VariableInputPanel& parent_,
+                               ObjController* objController_,
+                               ValueTree data_,
+                               bool edit_,
+                               UndoManager* undoManager_)
     	: parent(parent_),
+          objController(objController_),
     	  labelVarName("Variable"),
     	  labelVarValue("Value"),
     	  inputVarName("Input variable"),
@@ -117,32 +125,59 @@ private:
     	{
     		if(button == &btOk)
     		{
-                ValueTree newData(Ids::variable);
-				newData.setProperty(Ids::identifier, inputVarName.getText(), nullptr);
-				newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
-    			if(edit)
-    			{
-    				undoManager->beginNewTransaction("Edit variable");
-					data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), undoManager);
-					data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), undoManager);
-					DBG(undoManager->getNumActionsInCurrentTransaction())	;
-    			}
-    			else
-    			{
-    				undoManager->beginNewTransaction("Add variable");
-					data.addChild(newData, -1, undoManager);
-    			}
-    			parent.returnVal = 1;
-				parent.closeButtonPressed();
+                applyEdits();
     		}
     		else if(button == &btCancel)
     		{
-    			parent.returnVal = 2;
-    			parent.closeButtonPressed();
+                cancelEdits();
     		}
     	}
+
+        void applyEdits()
+        {
+            
+            if(! objController->checkIfIdExists(data.getType(), inputVarName.getText()))
+            {
+                ValueTree newData(Ids::variable);
+                newData.setProperty(Ids::identifier, inputVarName.getText(), nullptr);
+                newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
+                if (edit)
+                {
+                    undoManager->beginNewTransaction("Edit variable");
+                    String oldName = data[Ids::identifier].toString();
+                    data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), undoManager);
+                    data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), undoManager);
+                    objController->getIdManager()->renameId(data.getType(),
+                                                            oldName,
+                                                            data[Ids::identifier].toString(), undoManager);
+                    DBG(undoManager->getNumActionsInCurrentTransaction());
+                }
+                else
+                {
+                    undoManager->beginNewTransaction("Add variable");
+//                    data.addChild(newData, -1, undoManager);
+                    data.setProperty(Ids::identifier, newData[Ids::identifier].toString(), undoManager);
+                    data.setProperty(Ids::faustCode, newData[Ids::faustCode].toString(), undoManager);
+                    objController->getIdManager()->addId(newData.getType(), newData[Ids::identifier].toString(), undoManager);
+                }
+                parent.returnVal = 1;
+                parent.closeButtonPressed();
+            }
+            else
+            {
+                Alerts::nameAlreadyExists();
+            }
+
+        }
+
+        void cancelEdits()
+        {
+            parent.returnVal = 2;
+            parent.closeButtonPressed();
+        }
     private:
     	VariableInputPanel& parent;
+        ObjController* objController;
     	Label labelVarName;
     	Label labelVarValue;
     	TextEditor inputVarName;
@@ -161,9 +196,11 @@ class VariablesTable :public Component,
 					public TableListBoxModel
 {
 public:
-	VariablesTable(ValueTree data_)
+	VariablesTable(ObjController* objController_, ValueTree data_)
 	: table("VariablesTable", this),
+        objController(objController_),
 		data(data_)
+        
 	{
 	    table.setColour (ListBox::outlineColourId, Colours::grey);
 	    table.setOutlineThickness (1);
@@ -215,12 +252,20 @@ public:
 	void addRow(UndoManager* undoManager)
 	{
 
-		int r = VariableInputPanel::show(data.getOrCreateChildWithName(Objects::variables, nullptr), false, undoManager);
-		table.updateContent();
+        ValueTree var(Ids::variable);
+		int r = VariableInputPanel::show(objController, var, false, undoManager);
 		if(r == 1)
+        {
 			SAM_LOG(data[Ids::mdlName].toString() + ": Add variable");
+            ValueTree variables = data.getOrCreateChildWithName(Objects::variables, 
+                                                                undoManager);
+            variables.addChild(var, -1, undoManager);
+        }
 		else if(r == 2)
+        {
 			SAM_LOG(data[Ids::mdlName].toString() + ": Canceled add variable");
+        }
+		table.updateContent();
 	}
 
 	void editRow(UndoManager* undoManager)
@@ -229,7 +274,7 @@ public:
 		if(rowIndex >= 0)
 		{
             ValueTree editData = data.getChildWithName(Objects::variables).getChild(rowIndex);
-			int r = VariableInputPanel::show(editData, true, undoManager);
+			int r = VariableInputPanel::show(objController, editData, true, undoManager);
 			table.updateContent();
 			table.repaintRow(rowIndex);
 			if(r == 1)
@@ -245,8 +290,11 @@ public:
 		if(rowIndex >= 0)
 		{
             String varName = data.getChildWithName(Objects::variables).getChild(rowIndex)[Ids::identifier].toString();
-			undoManager->beginNewTransaction("Add variable");
+			undoManager->beginNewTransaction("Remove variable");
+            objController->getIdManager()->removeId(data.getChildWithName(Objects::variables).getChild(rowIndex).getType(),
+                                                    varName, undoManager);
             data.getChildWithName(Objects::variables).removeChild(rowIndex, undoManager);
+
 			table.updateContent();
 			SAM_LOG(data[Ids::mdlName].toString() + ": Remove variable " + varName);
 		}
@@ -258,6 +306,7 @@ private:
 		return true;
 	}
 	TableListBox table;
+    ObjController* objController;
 	ValueTree data;
 };
 
@@ -265,11 +314,13 @@ class VariablesComponent : public Component,
 							public Button::Listener
 {
 public:
-	VariablesComponent(ValueTree data, UndoManager* undoManager_)
+    VariablesComponent(ObjController* objController,
+                       ValueTree data,
+                       UndoManager* undoManager_)
 	: btAdd("Add"),
 	  btRemove("Remove"),
 	  btEdit("Edit"),
-	  varTable(data),
+	  varTable(objController, data),
 	  undoManager(undoManager_)
 	{
 		btAdd.addListener(this);
@@ -320,10 +371,14 @@ private:
 static String variablesWindowPos;
 
 
-VariablesPanel::VariablesPanel(ValueTree data, UndoManager* undoManager)
+VariablesPanel::VariablesPanel(ObjController* objController, 
+                               ValueTree data,
+                               UndoManager* undoManager)
     : DialogWindow ("Define variables", Colour::greyLevel (0.92f), true)
 {
-	VariablesComponent* const vc = new VariablesComponent(data, undoManager);
+    VariablesComponent * const vc = new VariablesComponent(objController,
+                                                           data,
+                                                           undoManager);
     vc->setSize (600, 400);
 
     setContentOwned (vc, true);
@@ -344,10 +399,10 @@ void VariablesPanel::closeButtonPressed()
     setVisible (false);
 }
 
-void VariablesPanel::show(ValueTree data, UndoManager* undoManager)
+void VariablesPanel::show(ObjController* objController,
+                          ValueTree data,
+                          UndoManager* undoManager)
 {
-	VariablesPanel vp(data, undoManager);
+	VariablesPanel vp(objController, data, undoManager);
     vp.runModalLoop();
 }
-
-

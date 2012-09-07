@@ -236,7 +236,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         deleteSelectedObjects();
         break;
     case CommandIDs::defineVariables:
-        VariablesPanel::show(mdlFile->mdlRoot, &mdlFile->getUndoMgr());
+        VariablesPanel::show(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
         break;
     case CommandIDs::segmentedConnectors:
         // TODO: implement segmented connectors

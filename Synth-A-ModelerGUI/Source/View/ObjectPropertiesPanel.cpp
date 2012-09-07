@@ -233,7 +233,7 @@ public:
             }
             else
             {
-                if(! objController->renameId(data.getType(), oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -337,7 +337,7 @@ public:
             }
             else
             {
-                if(! objController->renameId(data.getType(), oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -440,7 +440,7 @@ public:
             }
             else
             {
-                if(! objController->renameId(data.getType(), oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -547,7 +547,7 @@ public:
             }
             else
             {
-                if(! objController->renameId(data.getType(), oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
                     return false;
             }
             objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -690,7 +690,7 @@ public:
             }
             else
             {
-                if(! objController->renameId(data.getType(), oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
                     return false;
             }
 
@@ -817,7 +817,7 @@ public:
             }
             else
             {
-                if(! objController->renameId(data.getType(), oldName, newName))
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
                     return false;
             }
 

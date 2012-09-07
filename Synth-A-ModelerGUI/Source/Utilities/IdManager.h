@@ -31,10 +31,13 @@ class IdManager
 public:
     IdManager();
     virtual ~IdManager();
-    bool addId(const Identifier& objId, const String& objName);
-    void removeId(const Identifier& objId, const String& objName);
+    bool addId(const Identifier& objId, const String& objName,
+               UndoManager* undoManager);
+    void removeId(const Identifier& objId, const String& objName,
+                  UndoManager* undoManager);
     bool contains(const Identifier& objId, const String& objName);
-    bool renameId(const Identifier& objId, const String& oldName, const String& newName);
+    bool renameId(const Identifier& objId, const String& oldName,
+                  const String& newName, UndoManager* undoManager);
     String getNextId(const Identifier& objId);
     String getObjNameForPaste(const Identifier& objId,
                                  const String& objName,
@@ -53,6 +56,7 @@ private:
     SortedSet<String> touchIds;
     SortedSet<String> pluckIds;
     SortedSet<String> audioOutIds;
+    SortedSet<String> variableIds;
 };
 
 

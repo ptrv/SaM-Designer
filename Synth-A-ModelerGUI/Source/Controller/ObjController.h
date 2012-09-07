@@ -172,7 +172,8 @@ public:
     void cut(ObjectsHolder* holder);
     
     bool checkIfIdExists(const Identifier& objId, const String& idStr);
-    bool renameId(const Identifier& objId, const String& oldId, const String& newId);
+    bool renameId(const Identifier& objId, const String& oldId,
+                  const String& newId, UndoManager* undoManager_);
     bool changeObjectNameInLink(const String& oldName, 
                                 const String& newName,
                                 UndoManager* undManager);
@@ -181,6 +182,8 @@ public:
                                         UndoManager* undManager);
     
     String getNewNameForObject(const Identifier& objId);
+
+    IdManager* getIdManager() { return idMgr; }
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

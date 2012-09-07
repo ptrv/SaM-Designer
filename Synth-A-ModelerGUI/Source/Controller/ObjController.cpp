@@ -72,7 +72,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
 		subTree.addChild(objValues,-1, nullptr);
-        idMgr->addId(objValues.getType(), objValues[Ids::identifier].toString());
+        idMgr->addId(objValues.getType(), objValues[Ids::identifier].toString(), nullptr);
         ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues, index);
 
 		holder->addAndMakeVisible(objComp);
@@ -106,7 +106,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
-        idMgr->addId(linkValues.getType(), linkValues[Ids::identifier].toString());
+        idMgr->addId(linkValues.getType(), linkValues[Ids::identifier].toString(), nullptr);
         LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues, index);
 
 		holder->addAndMakeVisible(linkComp);
@@ -287,7 +287,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(objComp->getData().getType(),
-                        objComp->getData()[Ids::identifier].toString());
+                        objComp->getData()[Ids::identifier].toString(), nullptr);
         subTree.removeChild(objComp->getData(), nullptr);
         objects.removeObject(objComp);
     }
@@ -377,7 +377,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(linkComp->getData().getType(),
-                        linkComp->getData()[Ids::identifier].toString());
+                        linkComp->getData()[Ids::identifier].toString(), nullptr);
         subTree.removeChild(linkComp->getData(), nullptr);
         links.removeObject(linkComp);
     }
@@ -392,7 +392,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < massObjects.getNumChildren(); i++)
     {
         ValueTree obj = massObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString()))
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
         {
             ObjectComponent* objComp = new ObjectComponent(*this, obj);
             objects.add(objComp);
@@ -409,7 +409,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < linkObjects.getNumChildren(); i++)
     {
         ValueTree obj = linkObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString()))
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
         {
             LinkComponent* linkComp = new LinkComponent(*this, obj);
             links.add(linkComp);
@@ -423,7 +423,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < audioObjects.getNumChildren(); i++)
     {
         ValueTree obj = audioObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString()))
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
         {
             ObjectComponent* audioOutComp = new ObjectComponent(*this, obj);
             objects.add(audioOutComp);
@@ -460,6 +460,19 @@ void ObjController::loadComponents(ObjectsHolder* holder)
         }
     }
 
+    ValueTree variables = mdl.getChildWithName(Objects::variables);
+    for (int i = 0; i < variables.getNumChildren(); i++)
+    {
+        ValueTree obj = variables.getChild(i);
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+        else
+        {
+            variables.removeChild(obj, nullptr);
+        }
+    }
     holder->updateComponents();
 }
 
@@ -791,9 +804,10 @@ bool ObjController::checkIfIdExists(const Identifier& objId, const String& idStr
     return idMgr->contains(objId, idStr);
 }
 
-bool ObjController::renameId(const Identifier& objId, const String& oldId, const String& newId)
+bool ObjController::renameId(const Identifier& objId, const String& oldId,
+                             const String& newId, UndoManager* undoManager_)
 {
-    return idMgr->renameId(objId, oldId, newId);
+    return idMgr->renameId(objId, oldId, newId, undoManager_);
 }
 
 bool ObjController::changeObjectNameInLink(const String& oldName, 

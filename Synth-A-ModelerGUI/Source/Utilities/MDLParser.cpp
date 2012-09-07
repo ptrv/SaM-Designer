@@ -246,8 +246,8 @@ bool MDLParser::parseMDL()
 				ValueTree variableTree(Ids::variable);
 				variableTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals), nullptr);
 				variableTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1), nullptr);
-				ValueTree labelsTree = mdlTree.getOrCreateChildWithName(Objects::variables, nullptr);
-				labelsTree.addChild(variableTree, -1, nullptr);
+				ValueTree variablesTree = mdlTree.getOrCreateChildWithName(Objects::variables, nullptr);
+				variablesTree.addChild(variableTree, -1, nullptr);
 			}
 			else if(line.startsWith("audioout"))
 			{

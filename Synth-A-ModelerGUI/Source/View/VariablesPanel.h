@@ -33,7 +33,9 @@
 class VariablesPanel  : public DialogWindow
 {
 public:
-	VariablesPanel(ValueTree data, UndoManager* undoManager);
+    VariablesPanel(ObjController* objController,
+                   ValueTree data,
+                   UndoManager* undoManager);
     ~VariablesPanel();
 
     void closeButtonPressed();
@@ -44,7 +46,9 @@ public:
      * @param data 			the data of the editing object
      * @param undoManager   the UndoManager of the MDLFile consisting this object.
      */
-    static void show(ValueTree data, UndoManager* undoManager);
+    static void show(ObjController* objController,
+                     ValueTree data,
+                     UndoManager* undoManager);
 };
 
 

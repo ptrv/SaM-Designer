@@ -60,27 +60,94 @@ SortedSet<String>* IdManager::getSet(const Identifier& objId)
         return &pluckIds;
     else if(objId == Ids::audioout)
         return &audioOutIds;
+    else if(objId == Ids::variable)
+        return &variableIds;
     else
         return nullptr;
 }
 
-bool IdManager::addId(const Identifier& objId, const String& objName)
+class AddIdAction : public UndoableAction
 {
-    SortedSet<String>* theSet = getSet(objId);
-    if(theSet != nullptr && objName != String::empty)
-        return theSet->add(objName) && allIds.add(objName);
+public:
+    AddIdAction(IdManager* idMgr_, const Identifier& objId_, const String& objName_)
+    : idMgr(idMgr_), objId(objId_), objName(objName_) {}
+    ~AddIdAction(){}
+
+    bool perform()
+    {
+        return idMgr->addId(objId, objName, nullptr);
+    }
+
+    bool undo()
+    {
+        idMgr->removeId(objId, objName, nullptr);
+        return true;
+    }
+private:
+    IdManager* idMgr;
+    Identifier objId;
+    String objName;
+};
+
+bool IdManager::addId(const Identifier& objId, const String& objName,
+                      UndoManager* undoManager)
+{
+    if( undoManager != nullptr)
+    {
+        AddIdAction* action = new AddIdAction(this, objId, objName);
+        return undoManager->perform(action, "Add Id");
+    }
     else
-        return false;
+    {
+        SortedSet<String>* theSet = getSet(objId);
+        if (theSet != nullptr && objName != String::empty)
+            return theSet->add(objName) && allIds.add(objName);
+        else
+            return false;
+    }
 //    return objectIds.add(objName);
 }
 
-void IdManager::removeId(const Identifier& objId, const String& objName)
+class RemoveIdAction : public UndoableAction
 {
-    SortedSet<String>* theSet = getSet(objId);
-    if (theSet != nullptr)
-        theSet->removeValue(objName);
+public:
+    RemoveIdAction(IdManager* idMgr_, const Identifier& objId_,
+                   const String& objName_)
+    : idMgr(idMgr_), objId(objId_), objName(objName_) {}
+    ~RemoveIdAction(){}
 
-    allIds.removeValue(objName);
+    bool perform()
+    {
+        idMgr->removeId(objId, objName, nullptr);
+        return true;
+    }
+
+    bool undo()
+    {
+        return idMgr->addId(objId, objName, nullptr);
+    }
+private:
+    IdManager* idMgr;
+    Identifier objId;
+    String objName;
+};
+
+void IdManager::removeId(const Identifier& objId, const String& objName,
+                         UndoManager* undoManager)
+{
+    if(undoManager != nullptr)
+    {
+        RemoveIdAction* action = new RemoveIdAction(this, objId, objName);
+        undoManager->perform(action, "Remove Id");
+    }
+    else
+    {
+        SortedSet<String>* theSet = getSet(objId);
+        if (theSet != nullptr)
+            theSet->removeValue(objName);
+
+        allIds.removeValue(objName);
+    }
 
 //    objectIds.removeValue(objName);
 }
@@ -96,18 +163,51 @@ bool IdManager::contains(const Identifier& objId, const String& objName)
 //    return objectIds.contains(objName);
 }
 
-bool IdManager::renameId(const Identifier& objId, const String& oldName, const String& newName)
+class RenameIdAction : public UndoableAction
 {
-    SortedSet<String>* theSet = getSet(objId);
-    if(theSet != nullptr)
+public:
+    RenameIdAction(IdManager* idMgr_, const Identifier& objId_,
+                   const String& oldName_, const String& newName_)
+    : idMgr(idMgr_), objId(objId_), oldName(oldName_), newName(newName_) {}
+    ~RenameIdAction(){}
+
+    bool perform()
     {
-        theSet->removeValue(oldName);
-        allIds.removeValue(oldName);
-        return theSet->add(newName) && allIds.add(newName);
+        return idMgr->renameId(objId, oldName, newName, nullptr);
+    }
+
+    bool undo()
+    {
+        return idMgr->renameId(objId, newName, oldName, nullptr);
+    }
+private:
+    IdManager* idMgr;
+    Identifier objId;
+    String oldName;
+    String newName;
+};
+
+bool IdManager::renameId(const Identifier& objId, const String& oldName,
+                         const String& newName, UndoManager* undoManager)
+{
+    if(undoManager != nullptr)
+    {
+        RenameIdAction* action = new RenameIdAction(this, objId, oldName, newName);
+        return undoManager->perform(action, "Rename Id");
     }
     else
     {
-        return false;
+        SortedSet<String>* theSet = getSet(objId);
+        if (theSet != nullptr)
+        {
+            theSet->removeValue(oldName);
+            allIds.removeValue(oldName);
+            return theSet->add(newName) && allIds.add(newName);
+        }
+        else
+        {
+            return false;
+        }
     }
 
 //    objectIds.removeValue(oldName);
