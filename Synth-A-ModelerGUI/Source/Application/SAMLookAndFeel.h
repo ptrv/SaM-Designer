@@ -12,16 +12,16 @@
 #define __SAMLOOKANDFEEL_H_F27BC606__
 
 /**
- * This class is the theme fro the application's widgets (buttons, text, etc...)
+ * This class is the theme for the application's widgets (buttons, text, etc...)
  */
 class SAMLookAndFeel : public LookAndFeel {
 public:
 	SAMLookAndFeel();
-	~SAMLookAndFeel();
+
+    void drawButtonBackground (Graphics& g, Button& button, const Colour& backgroundColour,
+                               bool isMouseOverButton, bool isButtonDown);
 
 private:
-
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SAMLookAndFeel);
 };
 
 
