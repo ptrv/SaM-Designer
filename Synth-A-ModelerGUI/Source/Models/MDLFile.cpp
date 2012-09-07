@@ -251,7 +251,8 @@ bool MDLFile::changedOutside()
             return false;
         case 2:
             return false;
-            break;
+        default:
+            return false;
         }
     }
     else
