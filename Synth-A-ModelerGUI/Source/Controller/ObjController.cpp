@@ -45,9 +45,9 @@ ObjController::ObjController(MDLController& owner_)
 
 ObjController::~ObjController()
 {
-    objects.clear(true);
-    links.clear(true);
     audioConnections.clear(true);
+    links.clear(true);
+    objects.clear(true);
     idMgr = nullptr;
 }
 
