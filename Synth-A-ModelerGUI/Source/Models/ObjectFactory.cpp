@@ -260,21 +260,5 @@ ValueTree createNewLinkObjectTree(const Identifier& linkType,
 		return ValueTree::invalid;
 }
 
-ObjectComponent* createNewObjectComponentFromTree(ObjController& owner, ValueTree objTree, int index)
-{
-    ObjectComponent* const objComp = new ObjectComponent(owner, objTree);
-    
-    owner.addComponent(objComp, index);
-    return objComp;
-}
-
-LinkComponent* createNewLinkComponentFromTree(ObjController& owner, ValueTree linkTree, int index)
-{
-    LinkComponent* const linkComp = new LinkComponent(owner, linkTree);
-    
-    owner.addLinkComponent(linkComp, index);
-    return linkComp;
-}
-
 }
 

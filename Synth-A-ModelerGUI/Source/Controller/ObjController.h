@@ -66,8 +66,6 @@ public:
 
     void addNewObject(ObjectsHolder* holder, ValueTree objValues);
     
-    void addComponent(ObjectComponent* comp, int index);
-    
 	/**
 	 * Removes selected objects from the patch
 	 *
@@ -83,8 +81,6 @@ public:
     
     void addNewLink(ObjectsHolder* holder, ValueTree linkValues);
     
-    void addLinkComponent(LinkComponent* comp, int index);
-
     AudioOutConnector* addAudioConnection(ObjectsHolder* holder,
                                           BaseObjectComponent* objComp,
                                           ObjectComponent* audioOutComp,

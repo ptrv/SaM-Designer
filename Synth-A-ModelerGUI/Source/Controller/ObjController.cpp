@@ -73,9 +73,11 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
 
 		subTree.addChild(objValues,-1, nullptr);
         idMgr->addId(objValues.getType(), objValues[Ids::identifier].toString(), nullptr);
-        ObjectComponent* objComp = ObjectFactory::createNewObjectComponentFromTree(*this, objValues, index);
 
-		holder->addAndMakeVisible(objComp);
+        ObjectComponent* objComp = new ObjectComponent(*this, objValues);
+        objects.insert(index, objComp);
+
+        holder->addAndMakeVisible(objComp);
         holder->updateComponents();
         changed();
         return objComp;
@@ -107,8 +109,10 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
         ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
         idMgr->addId(linkValues.getType(), linkValues[Ids::identifier].toString(), nullptr);
-        LinkComponent* linkComp = ObjectFactory::createNewLinkComponentFromTree(*this, linkValues, index);
 
+        LinkComponent* linkComp = new LinkComponent(*this, linkValues);
+        links.insert(index, linkComp);
+        
 		holder->addAndMakeVisible(linkComp);
         holder->updateComponents();
         changed();
@@ -172,16 +176,6 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     {
         SAM_CONSOLE("Error: ", "Please select 2 Objects");
     }
-}
-
-void ObjController::addComponent(ObjectComponent* comp, int index)
-{
-    objects.insert(index, comp);
-}
-
-void ObjController::addLinkComponent(LinkComponent* comp, int index)
-{
-    links.insert(index, comp);
 }
 
 AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,

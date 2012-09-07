@@ -48,13 +48,6 @@ namespace ObjectFactory
                                       const String& newName,
                                       const String& startObject,
                                       const String& endObject);
-    ObjectComponent* createNewObjectComponentFromTree(ObjController& owner,
-                                                      ValueTree objTree,
-                                                      int index);
-    LinkComponent* createNewLinkComponentFromTree(ObjController& owner,
-                                                  ValueTree linkTree,
-                                                  int index);
-
 }
 
 
