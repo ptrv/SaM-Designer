@@ -132,14 +132,12 @@ bool MDLWriter::writeMDL(const File& saveFile)
         mdlContent << waveParam.getProperty(Ids::value).toString();
         mdlContent << ",";
 
-        ValueTree strings = waveParams.getChild(1);
-        ValueTree sp1 = strings.getChild(0);
-        ValueTree sp2 = strings.getChild(1);
-        mdlContent << strings[Ids::stringType].toString();
+        ValueTree string = waveParams.getChild(1);
+        mdlContent << string[Ids::stringType].toString();
         mdlContent << "(";
-        mdlContent << sp1[Ids::value].toString();
+        mdlContent << string[Ids::maxtime].toString();
         mdlContent << ",";
-        mdlContent << sp2[Ids::value].toString();
+        mdlContent << string[Ids::curtime].toString();
         mdlContent << ")";
 
 //		for (int m = 0; m < waveParams.getNumChildren(); ++m) {
@@ -183,13 +181,11 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		ValueTree termParams = to.getChildWithName(Ids::parameters);
 
         ValueTree term = termParams.getChild(0);
-        ValueTree tp1 = term.getChild(0);
-        ValueTree tp2 = term.getChild(1);
         mdlContent << term[Ids::termType].toString();
         mdlContent << "(";
-        mdlContent << tp1[Ids::value].toString();
+        mdlContent << term[Ids::reflection].toString();
         mdlContent << ",";
-        mdlContent << tp2[Ids::value].toString();
+        mdlContent << term[Ids::lowpass].toString();
         mdlContent << ")";
 
 

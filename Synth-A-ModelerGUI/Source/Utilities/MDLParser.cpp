@@ -310,19 +310,15 @@ bool MDLParser::parseMDL()
                     value.setProperty(Ids::value, paramVal.trim(), nullptr);
                     waveParams.addChild(value, -1, nullptr);
                     
-                    ValueTree string(Ids::string);
+                    ValueTree string(Ids::parameter);
                     String stringValRaw =  paramsArray[1].trimCharactersAtStart(" ");
                     int idxPar = stringValRaw.indexOf("(");
                     String stringType = stringValRaw.substring(0, idxPar);
                     string.setProperty(Ids::stringType, stringType.trim(), nullptr);
                     String val1 = stringValRaw.substring(idxPar+1);
-                    ValueTree sp1(Ids::parameter);
-                    sp1.setProperty(Ids::value, val1.trim(), nullptr);
+                    string.setProperty(Ids::maxtime, val1.trim(), nullptr);
                     String val2 = paramsArray[2].upToFirstOccurrenceOf(")", false, true);
-                    ValueTree sp2(Ids::parameter);
-                    sp2.setProperty(Ids::value, val2.trim(), nullptr);
-                    string.addChild(sp1, -1, nullptr);
-                    string.addChild(sp2, -1, nullptr);
+                    string.setProperty(Ids::curtime, val2.trim(), nullptr);
                     waveParams.addChild(string, -1, nullptr);
                 }
 //				for (int param = 0; param < paramsArray.size(); ++param) {
@@ -392,22 +388,16 @@ bool MDLParser::parseMDL()
                 ValueTree termParams(Ids::parameters);
                 if(paramsArray.size() == 2)
                 {
-                    ValueTree termType(Ids::termType);
+                    ValueTree term(Ids::parameter);
                     int idxPar = paramsArray[0].indexOf("(");
                     String termT = paramsArray[0].substring(0, idxPar);
-                    termType.setProperty(Ids::termType, termT.trim(), nullptr);
+                    term.setProperty(Ids::termType, termT.trim(), nullptr);
                     String val1 = paramsArray[0].substring(idxPar+1);
-                    ValueTree tp1(Ids::parameter);
-                    tp1.setProperty(Ids::value, val1.trim(), nullptr);
-
+                    term.setProperty(Ids::reflection, val1.trim(), nullptr);
                     String val2 = paramsArray[1].upToFirstOccurrenceOf(")", false,true);
-                    ValueTree tp2(Ids::parameter);
-                    tp2.setProperty(Ids::value, val2.trim(), nullptr);
+                    term.setProperty(Ids::lowpass, val2.trim(), nullptr);
 
-                    termType.addChild(tp1, -1, nullptr);
-                    termType.addChild(tp2, -1, nullptr);
-
-                    termParams.addChild(termType, -1, nullptr);
+                    termParams.addChild(term, -1, nullptr);
                 }
 				
 

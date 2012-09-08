@@ -76,10 +76,12 @@ namespace Ids
     DECLARE_ID (sources);
     DECLARE_ID (value);
     DECLARE_ID (variable);
-    DECLARE_ID (string);
     DECLARE_ID (stringType);
-    DECLARE_ID (term);
+    DECLARE_ID (maxtime);
+    DECLARE_ID (curtime);
     DECLARE_ID (termType);
+    DECLARE_ID (reflection);
+    DECLARE_ID (lowpass);
 
     const Identifier class_ ("class");
 
