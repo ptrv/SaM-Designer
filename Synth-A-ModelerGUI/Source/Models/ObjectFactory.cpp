@@ -213,6 +213,62 @@ static ValueTree createNewPluckTree(const String& newName,
 
 	return newTree;
 }
+
+static ValueTree createNewWaveguideTree(const String& newName, int x, int y)
+{
+    ValueTree newTree(Ids::waveguide);
+
+    ValueTree paramsTree(Ids::parameters);
+    ValueTree pa1(Ids::parameter);
+    pa1.setProperty(Ids::value, "1.0", nullptr);
+    ValueTree stringType(Ids::string);
+    stringType.setProperty(Ids::stringType, "simpleString", nullptr);
+    ValueTree sp1(Ids::parameter);
+    ValueTree sp2(Ids::parameter);
+    sp1.setProperty(Ids::value, "0.033", nullptr);
+    sp2.setProperty(Ids::value, "0.017", nullptr);
+    stringType.addChild(sp1, -1, nullptr);
+    stringType.addChild(sp2, -1, nullptr);
+
+    paramsTree.addChild(pa1, -1, nullptr);
+    paramsTree.addChild(stringType, -1, nullptr);
+
+	newTree.addChild(paramsTree, -1, nullptr);
+
+    newTree.setProperty(Ids::identifier, newName, nullptr);
+    newTree.setProperty(Ids::objLeft, "", nullptr);
+    newTree.setProperty(Ids::objRight, "", nullptr);
+    ValueTree labelsTree(Ids::labels);
+    newTree.addChild(labelsTree, -1, nullptr);
+
+    return newTree;
+}
+
+static ValueTree createNewTerminationTree(const String& newName, int x, int y)
+{
+    ValueTree newTree(Ids::termination);
+
+    ValueTree paramsTree(Ids::parameters);
+    ValueTree termType(Ids::term);
+    termType.setProperty(Ids::termType, "simpleStringTerm", nullptr);
+//    ValueTree termParams(Ids::termParams);
+    ValueTree tp1(Ids::parameter);
+    ValueTree tp2(Ids::parameter);
+    tp1.setProperty(Ids::value, "-0.996", nullptr);
+    tp2.setProperty(Ids::value, "20", nullptr);
+    termType.addChild(tp1, -1, nullptr);
+    termType.addChild(tp2, -1, nullptr);
+//    termType.addChild(termParams, -1, nullptr);
+    paramsTree.addChild(termType, -1, nullptr);
+
+    newTree.addChild(paramsTree, -1, nullptr);
+    newTree.setProperty(Ids::identifier, newName, nullptr);
+    ValueTree labelsTree(Ids::labels);
+    newTree.addChild(labelsTree, -1, nullptr);
+
+    return newTree;
+}
+
 static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
 {
 	ValueTree newTree(Ids::audioout);
@@ -241,6 +297,10 @@ ValueTree createNewObjectTree(const Identifier& objType,
 		return createNewResonatorTree(newName, x, y);
 	else if(objType == Ids::audioout)
 		return createNewAudioOutTree(newName, x, y);
+    else if(objType == Ids::waveguide)
+        return createNewWaveguideTree(newName, x, y);
+    else if(objType == Ids::termination)
+        return createNewTerminationTree(newName, x, y);
 	else
 		return ValueTree::invalid;
 }

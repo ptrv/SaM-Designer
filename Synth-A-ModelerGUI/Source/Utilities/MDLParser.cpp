@@ -119,7 +119,7 @@ bool MDLParser::parseMDL()
 						for (int param = 0; param < paramsArray.size(); ++param) {
 							String paramVal = paramsArray[param].trimCharactersAtStart(" ");
                             ValueTree value(Ids::parameter);
-                            value.setProperty(Ids::value, paramVal, nullptr);
+                            value.setProperty(Ids::value, paramVal.trim(), nullptr);
                             paramsTree.addChild(value, -1, nullptr);
 						}
 						newTree.addChild(paramsTree, -1, nullptr);
@@ -132,7 +132,7 @@ bool MDLParser::parseMDL()
 					int commaIndex = line.indexOf(",");
 					if(commaIndex != -1)
 					{
-						newTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+						newTree.setProperty(Ids::identifier, line.substring(0, commaIndex).trim(), nullptr);
 					}
 
 					line = line.substring(commaIndex);
@@ -146,7 +146,7 @@ bool MDLParser::parseMDL()
 					for (int l = 0; l < labelsArray.size(); ++l)
                     {
                         ValueTree label(Ids::label);
-                        label.setProperty(Ids::value, labelsArray[l], nullptr);
+                        label.setProperty(Ids::value, labelsArray[l].trim(), nullptr);
                         labelsTree.addChild(label, -1, nullptr);
 					}
 					newTree.addChild(labelsTree, -1, nullptr);
@@ -197,7 +197,7 @@ bool MDLParser::parseMDL()
 					for (int param = 0; param < paramsArray.size(); ++param) {
 						String paramVal = paramsArray[param].trimCharactersAtStart(" ");
                         ValueTree value(Ids::parameter);
-                        value.setProperty(Ids::value, paramVal, nullptr);
+                        value.setProperty(Ids::value, paramVal.trim(), nullptr);
                         paramsTree.addChild(value, -1, nullptr);
 					}
 					linkTree.addChild(paramsTree, -1, nullptr);
@@ -214,9 +214,9 @@ bool MDLParser::parseMDL()
 					paramsArray2.addTokens(params2, ",", "\"");
 					if(paramsArray2.size() >= 3)
 					{
-						linkTree.setProperty(Ids::identifier, paramsArray2[0], nullptr);
-						linkTree.setProperty(Ids::startVertex, paramsArray2[1], nullptr);
-						linkTree.setProperty(Ids::endVertex, paramsArray2[2], nullptr);
+						linkTree.setProperty(Ids::identifier, paramsArray2[0].trim(), nullptr);
+						linkTree.setProperty(Ids::startVertex, paramsArray2[1].trim(), nullptr);
+						linkTree.setProperty(Ids::endVertex, paramsArray2[2].trim(), nullptr);
 					}
 					line = line.substring(indexParantese);
 					indexCloseParan = line.indexOf(")");
@@ -227,7 +227,7 @@ bool MDLParser::parseMDL()
 					for (int l = 0; l < labelsArray.size(); ++l)
                     {
                         ValueTree label(Ids::label);
-                        label.setProperty(Ids::value, labelsArray[l], nullptr);
+                        label.setProperty(Ids::value, labelsArray[l].trim(), nullptr);
                         labelsTree.addChild(label, -1, nullptr);
 					}
 					linkTree.addChild(labelsTree, -1, nullptr);
@@ -244,8 +244,8 @@ bool MDLParser::parseMDL()
 				lineTmp = lineTmp.trimCharactersAtStart(" ");
 				int indexEquals = lineTmp.indexOf("=");
 				ValueTree variableTree(Ids::variable);
-				variableTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals), nullptr);
-				variableTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1), nullptr);
+				variableTree.setProperty(Ids::identifier, lineTmp.substring(0,indexEquals).trim(), nullptr);
+				variableTree.setProperty(Ids::faustCode, lineTmp.substring(indexEquals+1).trim(), nullptr);
 				ValueTree variablesTree = mdlTree.getOrCreateChildWithName(Objects::variables, nullptr);
 				variablesTree.addChild(variableTree, -1, nullptr);
 			}
@@ -265,7 +265,7 @@ bool MDLParser::parseMDL()
 					ValueTree audioTree(Ids::audioout);
 					audioTree.setProperty(Ids::posX, pos.x, nullptr);
 					audioTree.setProperty(Ids::posY, pos.y, nullptr);
-					audioTree.setProperty(Ids::identifier, audioOutAttributeList[1], nullptr);
+					audioTree.setProperty(Ids::identifier, audioOutAttributeList[1].trim(), nullptr);
                     ValueTree audioSources(Ids::sources);
                     for (int l = 0; l < audioOutSourcesList.size(); ++l)
                     {
@@ -274,8 +274,8 @@ bool MDLParser::parseMDL()
                         if(audioOutSourcesParams.size() == 2)
                         {
                             ValueTree aoSource(Ids::audiosource);
-                            aoSource.setProperty(Ids::value, audioOutSourcesParams[0], nullptr);
-                            aoSource.setProperty(Ids::gain, audioOutSourcesParams[1], nullptr);
+                            aoSource.setProperty(Ids::value, audioOutSourcesParams[0].trim(), nullptr);
+                            aoSource.setProperty(Ids::gain, audioOutSourcesParams[1].trim(), nullptr);
                             audioSources.addChild(aoSource, -1, nullptr);
                         }
                     }
@@ -297,38 +297,63 @@ bool MDLParser::parseMDL()
 
 				String objType = line.substring(0, indexParantese);
 				int indexCloseParan = line.indexOf(")");
-				String params = line.substring(indexParantese+1, indexCloseParan);
+                int indexCloseParan2 = line.indexOf(indexCloseParan+1, ")");
+				String params = line.substring(indexParantese+1, indexCloseParan2);
 				StringArray paramsArray;
 				paramsArray.addTokens(params, ",", "\"");
 				ValueTree waveParams(Ids::parameters);
-				for (int param = 0; param < paramsArray.size(); ++param) {
-					String paramVal = paramsArray[param].trimCharactersAtStart(" ");
+
+                if(paramsArray.size() == 3)
+                {
+					String paramVal = paramsArray[0].trimCharactersAtStart(" ");
                     ValueTree value(Ids::parameter);
-                    value.setProperty(Ids::value, paramVal, nullptr);
+                    value.setProperty(Ids::value, paramVal.trim(), nullptr);
                     waveParams.addChild(value, -1, nullptr);
-				}
+                    
+                    ValueTree string(Ids::string);
+                    String stringValRaw =  paramsArray[1].trimCharactersAtStart(" ");
+                    int idxPar = stringValRaw.indexOf("(");
+                    String stringType = stringValRaw.substring(0, idxPar);
+                    string.setProperty(Ids::stringType, stringType.trim(), nullptr);
+                    String val1 = stringValRaw.substring(idxPar+1);
+                    ValueTree sp1(Ids::parameter);
+                    sp1.setProperty(Ids::value, val1.trim(), nullptr);
+                    String val2 = paramsArray[2].upToFirstOccurrenceOf(")", false, true);
+                    ValueTree sp2(Ids::parameter);
+                    sp2.setProperty(Ids::value, val2.trim(), nullptr);
+                    string.addChild(sp1, -1, nullptr);
+                    string.addChild(sp2, -1, nullptr);
+                    waveParams.addChild(string, -1, nullptr);
+                }
+//				for (int param = 0; param < paramsArray.size(); ++param) {
+//					String paramVal = paramsArray[param].trimCharactersAtStart(" ");
+//                    ValueTree value(Ids::parameter);
+//                    value.setProperty(Ids::value, paramVal, nullptr);
+//                    waveParams.addChild(value, -1, nullptr);
+//				}
 				waveguideTree.addChild(waveParams, -1, nullptr);
 
 				// get remaining line content
-				line = line.substring(indexCloseParan+1);
+				line = line.substring(indexCloseParan2+1);
+                line = line.trimCharactersAtStart(" ");
 				line = line.trimCharactersAtStart(",");
 
 				// get string till next comma
 				int commaIndex = line.indexOf(",");
 				if(commaIndex != -1)
 				{
-					waveguideTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+					waveguideTree.setProperty(Ids::identifier, line.substring(0, commaIndex).trim(), nullptr);
 				}
 
 				// get left object
 				line = line.substring(commaIndex+1);
 				commaIndex = line.indexOf(",");
-				waveguideTree.setProperty(Ids::objLeft, line.substring(0, commaIndex), nullptr);
+				waveguideTree.setProperty(Ids::objLeft, line.substring(0, commaIndex).trim(), nullptr);
 
 				// get right object
 				line = line.substring(commaIndex+1);
 				commaIndex = line.indexOf(",");
-				waveguideTree.setProperty(Ids::objRight, line.substring(0, commaIndex), nullptr);
+				waveguideTree.setProperty(Ids::objRight, line.substring(0, commaIndex).trim(), nullptr);
 
 				indexParantese = line.indexOf("(");
 				indexCloseParan = line.indexOf(")");
@@ -338,7 +363,7 @@ bool MDLParser::parseMDL()
 				ValueTree labelTree(Ids::labels);
 				for (int l = 0; l < labelsArray.size(); ++l) {
                     ValueTree label(Ids::label);
-                    label.setProperty(Ids::value, labelsArray[l], nullptr);
+                    label.setProperty(Ids::value, labelsArray[l].trim(), nullptr);
                     labelTree.addChild(label, -1, nullptr);
 				}
 				waveguideTree.addChild(labelTree, -1, nullptr);
@@ -358,22 +383,48 @@ bool MDLParser::parseMDL()
 				terminationTree.setProperty(Ids::posY, pos.y, nullptr);
 
 				int indexCloseParan = line.indexOf(")");
-				String params = line.substring(indexParantese+1, indexCloseParan+1);
-				ValueTree termParams(Ids::parameters);
-                ValueTree termParam(Ids::parameter);
-                termParam.setProperty(Ids::value, params, nullptr);
-                termParams.addChild(termParam, -1, nullptr);
+                int indexCloseParan2 = line.indexOf(indexCloseParan+1, ")");
+				String params = line.substring(indexParantese+1, indexCloseParan2+1);
+
+                StringArray paramsArray;
+				paramsArray.addTokens(params, ",", "\"");
+
+                ValueTree termParams(Ids::parameters);
+                if(paramsArray.size() == 2)
+                {
+                    ValueTree termType(Ids::termType);
+                    int idxPar = paramsArray[0].indexOf("(");
+                    String termT = paramsArray[0].substring(0, idxPar);
+                    termType.setProperty(Ids::termType, termT.trim(), nullptr);
+                    String val1 = paramsArray[0].substring(idxPar+1);
+                    ValueTree tp1(Ids::parameter);
+                    tp1.setProperty(Ids::value, val1.trim(), nullptr);
+
+                    String val2 = paramsArray[1].upToFirstOccurrenceOf(")", false,true);
+                    ValueTree tp2(Ids::parameter);
+                    tp2.setProperty(Ids::value, val2.trim(), nullptr);
+
+                    termType.addChild(tp1, -1, nullptr);
+                    termType.addChild(tp2, -1, nullptr);
+
+                    termParams.addChild(termType, -1, nullptr);
+                }
+				
+
+
+
 				terminationTree.addChild(termParams, -1, nullptr);
 
 				// get remaining line content
-				line = line.substring(indexCloseParan+2);
+				line = line.substring(indexCloseParan2+1);
+                line = line.trimCharactersAtStart(" ");
 				line = line.trimCharactersAtStart(",");
 
 				// get string till next comma
 				int commaIndex = line.indexOf(",");
 				if(commaIndex != -1)
 				{
-					terminationTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+					terminationTree.setProperty(Ids::identifier, line.substring(0, commaIndex).trim(), nullptr);
 				}
 
 				indexParantese = line.indexOf("(");
@@ -384,7 +435,7 @@ bool MDLParser::parseMDL()
 				ValueTree labelTree(Ids::labels);
 				for (int l = 0; l < labelsArray.size(); ++l) {
                     ValueTree label(Ids::label);
-                    label.setProperty(Ids::value, labelsArray[l], nullptr);
+                    label.setProperty(Ids::value, labelsArray[l].trim(), nullptr);
                     labelTree.addChild(label, -1, nullptr);
 				}
 				terminationTree.addChild(labelTree, -1, nullptr);
@@ -407,7 +458,7 @@ bool MDLParser::parseMDL()
 				String params = line.substring(indexParantese+1, indexCloseParan);
 				ValueTree junctParams(Ids::parameters);
                 ValueTree junctParam(Ids::parameter);
-                junctParam.setProperty(Ids::value, params, nullptr);
+                junctParam.setProperty(Ids::value, params.trim(), nullptr);
 				junctTree.addChild(junctParams, -1, nullptr);
 
 				// get remaining line content
@@ -418,7 +469,7 @@ bool MDLParser::parseMDL()
 				int commaIndex = line.indexOf(",");
 				if(commaIndex != -1)
 				{
-					junctTree.setProperty(Ids::identifier, line.substring(0, commaIndex), nullptr);
+					junctTree.setProperty(Ids::identifier, line.substring(0, commaIndex).trim(), nullptr);
 				}
 
 				indexParantese = line.indexOf("(");
@@ -429,7 +480,7 @@ bool MDLParser::parseMDL()
 				ValueTree labelTree(Ids::labels);
 				for (int l = 0; l < labelsArray.size(); ++l) {
                     ValueTree label(Ids::label);
-                    label.setProperty(Ids::value, labelsArray[l], nullptr);
+                    label.setProperty(Ids::value, labelsArray[l].trim(), nullptr);
                     labelTree.addChild(label, -1, nullptr);
 				}
 				junctTree.addChild(labelTree, -1, nullptr);

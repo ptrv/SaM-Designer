@@ -76,6 +76,10 @@ namespace Ids
     DECLARE_ID (sources);
     DECLARE_ID (value);
     DECLARE_ID (variable);
+    DECLARE_ID (string);
+    DECLARE_ID (stringType);
+    DECLARE_ID (term);
+    DECLARE_ID (termType);
 
     const Identifier class_ ("class");
 

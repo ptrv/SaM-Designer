@@ -127,15 +127,30 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << wo.getType().toString();
 		mdlContent << "(";
 		ValueTree waveParams = wo.getChildWithName(Ids::parameters);
-		for (int m = 0; m < waveParams.getNumChildren(); ++m) {
-//			mdlContent << String::formatted("%#f", float(waveParams[Ids::idx[m]]));
-            
-            ValueTree waveParam = waveParams.getChild(m);
-            mdlContent << waveParam.getProperty(Ids::value).toString();
-            
-			if(m != waveParams.getNumChildren()-1)
-				mdlContent << ",";
-		}
+
+        ValueTree waveParam = waveParams.getChild(0);
+        mdlContent << waveParam.getProperty(Ids::value).toString();
+        mdlContent << ",";
+
+        ValueTree strings = waveParams.getChild(1);
+        ValueTree sp1 = strings.getChild(0);
+        ValueTree sp2 = strings.getChild(1);
+        mdlContent << strings[Ids::stringType].toString();
+        mdlContent << "(";
+        mdlContent << sp1[Ids::value].toString();
+        mdlContent << ",";
+        mdlContent << sp2[Ids::value].toString();
+        mdlContent << ")";
+
+//		for (int m = 0; m < waveParams.getNumChildren(); ++m) {
+////			mdlContent << String::formatted("%#f", float(waveParams[Ids::idx[m]]));
+//
+//            ValueTree waveParam = waveParams.getChild(m);
+//            mdlContent << waveParam.getProperty(Ids::value).toString();
+//
+//			if(m != waveParams.getNumChildren()-1)
+//				mdlContent << ",";
+//		}
 		mdlContent << "),";
 		mdlContent << wo[Ids::identifier].toString();
 		mdlContent << ",";
@@ -166,18 +181,30 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << to.getType().toString();
 		mdlContent << "(";
 		ValueTree termParams = to.getChildWithName(Ids::parameters);
-		for (int o = 0; o < termParams.getNumChildren(); ++o) {
-//			mdlContent << String::formatted("%#f", float(termParams[Ids::idx[o]]));
-            
-            ValueTree termParam = termParams.getChild(o);
-            mdlContent << termParam.getProperty(Ids::value).toString();
-            
-			if(o != termParams.getNumChildren()-1)
-				mdlContent << ",";
-		}
+
+        ValueTree term = termParams.getChild(0);
+        ValueTree tp1 = term.getChild(0);
+        ValueTree tp2 = term.getChild(1);
+        mdlContent << term[Ids::termType].toString();
+        mdlContent << "(";
+        mdlContent << tp1[Ids::value].toString();
+        mdlContent << ",";
+        mdlContent << tp2[Ids::value].toString();
+        mdlContent << ")";
+
+
+//		for (int o = 0; o < termParams.getNumChildren(); ++o) {
+////			mdlContent << String::formatted("%#f", float(termParams[Ids::idx[o]]));
+//
+//            ValueTree termParam = termParams.getChild(o);
+//            mdlContent << termParam.getProperty(Ids::value).toString();
+//
+//			if(o != termParams.getNumChildren()-1)
+//				mdlContent << ",";
+//		}
 		mdlContent << "),";
 		mdlContent << to[Ids::identifier].toString();
-		mdlContent << ",";
+		mdlContent << ",(";
 		ValueTree labelTree = to.getChildWithName(Ids::labels);
 		for (int p = 0; p < labelTree.getNumChildren(); ++p) {
             ValueTree label = labelTree.getChild(p);
