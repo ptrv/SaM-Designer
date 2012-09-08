@@ -201,6 +201,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
 #ifdef _DEBUG
                                 CommandIDs::writeMDLFileAsXml,
 #endif
+                                CommandIDs::dumpMDL,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -235,6 +236,9 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo("MDL -> XML", "Write MDL file as XML", CommandCategories::tools, 0);
         break;
 #endif
+    case CommandIDs::dumpMDL:
+        result.setInfo("Dump MDL", "", CommandCategories::tools, 0);
+        break;
     default:
         break;
     };
@@ -304,6 +308,11 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     }
         break;
 #endif
+    case CommandIDs::dumpMDL:
+        SAM_CONSOLE(mdlController->getMDLName()+"\n\n",
+                    mdlController->getMDLFile()->toString());
+        break;
+
 	default:
         return false;
     };
