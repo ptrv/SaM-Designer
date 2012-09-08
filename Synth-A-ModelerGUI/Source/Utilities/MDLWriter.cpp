@@ -226,7 +226,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << junctP.getProperty(Ids::value).toString();
 		mdlContent << "),";
 		mdlContent << jo[Ids::identifier].toString();
-		mdlContent << ",";
+		mdlContent << ",(";
 		ValueTree labelTree = jo.getChildWithName(Ids::labels);
 		for (int q = 0; q < labelTree.getNumChildren(); ++q) {
             ValueTree label = labelTree.getChild(q);

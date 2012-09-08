@@ -449,6 +449,7 @@ bool MDLParser::parseMDL()
 				ValueTree junctParams(Ids::parameters);
                 ValueTree junctParam(Ids::parameter);
                 junctParam.setProperty(Ids::value, params.trim(), nullptr);
+                junctParams.addChild(junctParam, -1, nullptr);
 				junctTree.addChild(junctParams, -1, nullptr);
 
 				// get remaining line content
