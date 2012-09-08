@@ -251,8 +251,7 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::showOutputConsole:
-    	outputWindow->toFront(false);
-    	getOrCreateFrontmostWindow()->toFront(true);
+        outputWindow->toFront(true);
     	break;
     case CommandIDs::clearOutputConsole:
     	outputWindow->clear();
