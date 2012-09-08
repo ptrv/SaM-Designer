@@ -653,40 +653,18 @@ void ObjController::copySelectedToClipboard()
 
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
-        ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i));
-        LinkComponent * const lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i));
-        if(oc != nullptr)
+        if(ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i)))
         {
             XmlElement* const e = oc->getData().createXml();
             clip.addChildElement (e);
         }
-        else if( lc != nullptr)
+        else if(LinkComponent * const lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i)))
         {
             XmlElement* const e = lc->getData().createXml();
             clip.addChildElement (e);
         }
     }
 
-//    for (int i = 0; i < objects.size(); ++i)
-//    {
-//        ObjectComponent* const oc = objects.getUnchecked(i);
-//
-//        if (oc != nullptr && sObjects.isSelected (oc))
-//        {
-//            XmlElement* const e = oc->getData().createXml();
-//            clip.addChildElement (e);
-//        }
-//    }
-////    Array<int> linkIndices = getLinksToCopy();
-//////    selectedLinks.deselectAll();
-////    for (int i = 0; i < linkIndices.size(); ++i)
-////    {
-////        LinkComponent* const lc = links.getUnchecked(linkIndices[i]);
-////        
-////        XmlElement* const e = lc->getData().createXml();
-////        clip.addChildElement (e);
-////    }
-////
     SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
 }
 
@@ -706,10 +684,12 @@ void ObjController::paste(ObjectsHolder* holder)
 
         sObjects.deselectAll();
         HashMap<String, String> objectNamesOldNew;
+        HashMap<String, String> objectNamesOldNewForAudio;
         forEachXmlChildElement (*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if(Objects::getObjectGroup(valTree.getType()) == Objects::masses)
+            if(Objects::getObjectGroup(valTree.getType()) == Objects::masses ||
+               Objects::getObjectGroup(valTree.getType()) == Objects::audioobjects)
             {
                 int posX = int(valTree.getProperty(Ids::posX));
                 int posY = int(valTree.getProperty(Ids::posY));
@@ -724,6 +704,7 @@ void ObjController::paste(ObjectsHolder* holder)
                                                                timesPasted,
                                                                groupPaste);
                     objectNamesOldNew.set(objName, newName);
+                    objectNamesOldNewForAudio.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                     ValueTree objLabels = valTree.getChildWithName(Ids::labels);
 //                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
@@ -756,6 +737,7 @@ void ObjController::paste(ObjectsHolder* holder)
                                                                objName,
                                                                timesPasted,
                                                                groupPaste);
+                    objectNamesOldNewForAudio.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                 }
                 ValueTree objLabels = valTree.getChildWithName(Ids::labels);
@@ -782,6 +764,40 @@ void ObjController::paste(ObjectsHolder* holder)
 
                 if (newLinkComp != 0)
                     sObjects.addToSelection(newLinkComp);
+            }
+        }
+        for(int i = 0; i < sObjects.getNumSelected(); ++i)
+        {
+            ObjectComponent* ao = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i));
+            if(ao != nullptr && ao->getData().getType() == Ids::audioout)
+            {
+                ValueTree valTree = ao->getData();
+                ValueTree sources = valTree.getChildWithName(Ids::sources);
+                for (int j = 0; j < sources.getNumChildren(); ++j) {
+                    ValueTree source = sources.getChild(j);
+                    String oldSrcName = source[Ids::value].toString();
+                    if(objectNamesOldNewForAudio.contains(oldSrcName))
+                    {
+                        source.setProperty(Ids::value, objectNamesOldNewForAudio[oldSrcName], nullptr);
+                    }
+                    ObjectComponent* oc = getObjectForId(source[Ids::value]);
+                    LinkComponent* lc = getLinkForId(source[Ids::value]);
+                    BaseObjectComponent* sourceComp = nullptr;
+                    if(oc != nullptr)
+                        sourceComp = oc;
+                    else if(lc != nullptr)
+                        sourceComp = lc;
+                    
+                    if( sourceComp != nullptr )
+                    {
+                        AudioOutConnector* aoc = new AudioOutConnector(*this,
+                                                                       sourceComp,
+                                                                       ao);
+                        audioConnections.add(aoc);
+                        holder->addAndMakeVisible(aoc);
+                        aoc->update();
+                    }
+                }
             }
         }
     }
