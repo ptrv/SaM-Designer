@@ -184,9 +184,9 @@ bool MDLParser::parseMDL()
 						return false;
 					}
 
-					Point<int> pos = getPos(line);
-					linkTree.setProperty(Ids::posX, pos.x, nullptr);
-					linkTree.setProperty(Ids::posY, pos.y, nullptr);
+//					Point<int> pos = getPos(line);
+//					linkTree.setProperty(Ids::posX, pos.x, nullptr);
+//					linkTree.setProperty(Ids::posY, pos.y, nullptr);
 
 					//get values between first parantheses
 					int indexCloseParan = line.indexOf(")");
