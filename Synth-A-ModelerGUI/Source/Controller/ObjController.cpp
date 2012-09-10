@@ -309,6 +309,16 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
         // then objects and remaining links connected to the objects
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
+            AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i));
+            if(aoc != nullptr)
+            {
+                temp.deselect(aoc);
+                removeAudioConnection(aoc, true, holder);
+                continue;
+            }
+        }
+        for (int i = temp.getNumSelected(); --i >= 0;)
+        {
             ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i));
             if(oc != nullptr)
             {
@@ -321,12 +331,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 //                removeLink(lc, true, holder);
 //                continue;
 //            }
-            AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i));
-            if(aoc != nullptr)
-            {
-                removeAudioConnection(aoc, true, holder);
-                continue;
-            }
+            
         }
     }
 }
