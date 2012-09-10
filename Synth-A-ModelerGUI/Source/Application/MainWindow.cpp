@@ -266,8 +266,10 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     	break;
     case CommandIDs::generateFaust:
     {
-    	String consoleText = mdlController->generateFaust();
-    	String titleText = "Generating FAUST code...\n";
+    	String consoleText = "Start Synth-A-Modeler...";
+        consoleText << mdlController->generateFaust();
+        consoleText << "\nSynth-A-Modeler finished.";
+    	String titleText = "Generate FAUST code...\n\n";
     	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
     }
     	break;
@@ -275,6 +277,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     {
     	String consoleText = mdlController->generateExternal();
     	String titleText = "Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n";
+        consoleText << "\nFinished!";
     	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
     }
     	break;
