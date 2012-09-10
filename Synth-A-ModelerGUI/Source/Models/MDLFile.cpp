@@ -270,6 +270,37 @@ bool MDLFile::checkIfChecksumChanged()
     else
         return false;
 }
+
+bool MDLFile::saveAsXml()
+{
+    FileChooser fc ("Select XML file to save...",
+                    File::getSpecialLocation (File::userHomeDirectory),
+                    "*.xml");
+    
+    if (fc.browseForFileToSave(true))
+    {
+        File xmlFile (fc.getResult());
+        
+        TemporaryFile temp(xmlFile);
+        
+        ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
+        
+        if (out != nullptr)
+        {
+            
+            String mdlXmlStr = toString();
+            out->write(mdlXmlStr.toUTF8(),
+                       mdlXmlStr.getNumBytesAsUTF8());
+            out = nullptr; // (deletes the stream)
+            
+            bool succeeded = temp.overwriteTargetFileWithTemporary();
+            return succeeded;
+        }
+    }
+    return false;
+
+}
+
 //==============================================================================
 #if UNIT_TESTS
 

@@ -109,6 +109,11 @@ void MDLController::close()
 	}
 }
 
+bool MDLController::saveAsXml()
+{
+    return currentMdl->saveAsXml();
+}
+
 const String MDLController::generateFaust()
 {
 	if(! outCmd->isPerlAvailable())

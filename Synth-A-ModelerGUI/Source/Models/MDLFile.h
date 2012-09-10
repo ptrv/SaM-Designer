@@ -74,6 +74,8 @@ public:
     String toString();
 
     bool changedOutside();
+    
+    bool saveAsXml();
 
 protected:
 	String getDocumentTitle();

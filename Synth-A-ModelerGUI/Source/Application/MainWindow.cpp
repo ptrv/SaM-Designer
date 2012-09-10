@@ -283,33 +283,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     	break;
 #ifdef _DEBUG
     case CommandIDs::writeMDLFileAsXml:
-    {
-        FileChooser fc ("Select XML file to save...",
-                               File::getSpecialLocation (File::userHomeDirectory),
-                               "*.xml");
-
-        if (fc.browseForFileToSave(true))
-        {
-            File xmlFile (fc.getResult());
-
-            TemporaryFile temp(xmlFile);
-
-            ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
-
-            if (out != nullptr)
-            {
-
-                String mdlXmlStr = mdlController->getMDLFile()->toString();
-                out->write(mdlXmlStr.toUTF8(),
-                           mdlXmlStr.getNumBytesAsUTF8());
-                out = nullptr; // (deletes the stream)
-
-                bool succeeded = temp.overwriteTargetFileWithTemporary();
-                return succeeded;
-            }
-        }
-    }
-        break;
+        return mdlController->saveAsXml();
 #endif
     case CommandIDs::dumpMDL:
         SAM_CONSOLE(mdlController->getMDLName()+"\n\n",

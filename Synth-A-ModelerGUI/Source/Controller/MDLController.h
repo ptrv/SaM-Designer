@@ -46,6 +46,8 @@ public:
 	void save();
 	void saveAs();
 	void close();
+    
+    bool saveAsXml();
 
 	const String generateFaust();
 	const String generateExternal();
