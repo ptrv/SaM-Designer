@@ -222,7 +222,7 @@ static ValueTree createNewWaveguideTree(const String& newName, int x, int y)
     ValueTree pa1(Ids::parameter);
     pa1.setProperty(Ids::value, "1.0", nullptr);
     ValueTree pa2(Ids::parameter);
-    pa2.setProperty(Ids::stringType, "simpleString", nullptr);
+    pa2.setProperty(Ids::value, "simpleString", nullptr);
     pa2.setProperty(Ids::maxtime, "0.033", nullptr);
     pa2.setProperty(Ids::curtime, "0.017", nullptr);
 
@@ -246,7 +246,7 @@ static ValueTree createNewTerminationTree(const String& newName, int x, int y)
 
     ValueTree paramsTree(Ids::parameters);
     ValueTree term(Ids::parameter);
-    term.setProperty(Ids::termType, "simpleStringTerm", nullptr);
+    term.setProperty(Ids::value, "simpleStringTerm", nullptr);
     term.setProperty(Ids::reflection, "-0.996", nullptr);
     term.setProperty(Ids::lowpass, "20", nullptr);
     paramsTree.addChild(term, -1, nullptr);

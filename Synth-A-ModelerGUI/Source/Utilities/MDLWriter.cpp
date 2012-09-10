@@ -133,7 +133,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
         mdlContent << ",";
 
         ValueTree string = waveParams.getChild(1);
-        mdlContent << string[Ids::stringType].toString();
+        mdlContent << string[Ids::value].toString();
         mdlContent << "(";
         mdlContent << string[Ids::maxtime].toString();
         mdlContent << ",";
@@ -181,7 +181,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		ValueTree termParams = to.getChildWithName(Ids::parameters);
 
         ValueTree term = termParams.getChild(0);
-        mdlContent << term[Ids::termType].toString();
+        mdlContent << term[Ids::value].toString();
         mdlContent << "(";
         mdlContent << term[Ids::reflection].toString();
         mdlContent << ",";
@@ -282,6 +282,26 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
 	}
 
+    // ------------------------------------------------------------------------
+    // Diff file
+//    String originalMdlContent = mdlFile.getFile().loadFileAsString();
+//    TextDiff diff(mdlContent, originalMdlContent);
+//    for (int diffIdx = 0; diffIdx < diff.changes.size(); ++diffIdx) {
+//        TextDiff::Change ch = diff.changes.getUnchecked(diffIdx);
+//        DBG("Diff " + String(diffIdx));
+//        DBG("Change start: " + String(ch.start));
+//        DBG("Change length: " + String(ch.length));
+//        if(! ch.isDeletion())
+//        {
+//            DBG(ch.insertedText);
+//        }
+//        DBG(ch.appliedTo(mdlContent));
+//        String chText = ch.insertedText;
+//        if(chText.startsWithChar('#'))
+//        {
+//            mdlContent = ch.appliedTo(mdlContent);
+//        }
+//    }
 	// ------------------------------------------------------------------------
 
 	TemporaryFile temp (outFile);

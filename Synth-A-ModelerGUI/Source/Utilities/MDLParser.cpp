@@ -314,7 +314,7 @@ bool MDLParser::parseMDL()
                     String stringValRaw =  paramsArray[1].trimCharactersAtStart(" ");
                     int idxPar = stringValRaw.indexOf("(");
                     String stringType = stringValRaw.substring(0, idxPar);
-                    string.setProperty(Ids::stringType, stringType.trim(), nullptr);
+                    string.setProperty(Ids::value, stringType.trim(), nullptr);
                     String val1 = stringValRaw.substring(idxPar+1);
                     string.setProperty(Ids::maxtime, val1.trim(), nullptr);
                     String val2 = paramsArray[2].upToFirstOccurrenceOf(")", false, true);
@@ -391,7 +391,7 @@ bool MDLParser::parseMDL()
                     ValueTree term(Ids::parameter);
                     int idxPar = paramsArray[0].indexOf("(");
                     String termT = paramsArray[0].substring(0, idxPar);
-                    term.setProperty(Ids::termType, termT.trim(), nullptr);
+                    term.setProperty(Ids::value, termT.trim(), nullptr);
                     String val1 = paramsArray[0].substring(idxPar+1);
                     term.setProperty(Ids::reflection, val1.trim(), nullptr);
                     String val2 = paramsArray[1].upToFirstOccurrenceOf(")", false,true);

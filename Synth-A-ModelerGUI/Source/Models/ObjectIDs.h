@@ -76,10 +76,8 @@ namespace Ids
     DECLARE_ID (sources);
     DECLARE_ID (value);
     DECLARE_ID (variable);
-    DECLARE_ID (stringType);
     DECLARE_ID (maxtime);
     DECLARE_ID (curtime);
-    DECLARE_ID (termType);
     DECLARE_ID (reflection);
     DECLARE_ID (lowpass);
 
