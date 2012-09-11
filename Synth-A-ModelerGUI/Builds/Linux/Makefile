@@ -93,6 +93,10 @@ clean:
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
+strip:
+	@echo Stripping Synth-A-ModelerGUI
+	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
+
 $(OBJDIR)/SAMLookAndFeel_df6eec67.o: ../../Source/Application/SAMLookAndFeel.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling SAMLookAndFeel.cpp"
