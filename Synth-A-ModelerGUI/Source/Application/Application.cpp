@@ -493,6 +493,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::insertWaveguide);
     	menu.addCommandItem(commandManager, CommandIDs::insertTermination);
+        menu.addCommandItem(commandManager, CommandIDs::insertJunction);
     }
     else if (topLevelMenuIndex == 3)
     {

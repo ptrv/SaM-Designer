@@ -214,7 +214,9 @@ static ValueTree createNewPluckTree(const String& newName,
 	return newTree;
 }
 
-static ValueTree createNewWaveguideTree(const String& newName, int x, int y)
+static ValueTree createNewWaveguideTree(const String& newName,
+                                        const String& startObject,
+                                        const String& endObject)
 {
     ValueTree newTree(Ids::waveguide);
 
@@ -232,8 +234,10 @@ static ValueTree createNewWaveguideTree(const String& newName, int x, int y)
 	newTree.addChild(paramsTree, -1, nullptr);
 
     newTree.setProperty(Ids::identifier, newName, nullptr);
-    newTree.setProperty(Ids::objLeft, "", nullptr);
-    newTree.setProperty(Ids::objRight, "", nullptr);
+//    newTree.setProperty(Ids::objLeft, startObject, nullptr);
+//    newTree.setProperty(Ids::objRight, endObject, nullptr);
+    newTree.setProperty(Ids::startVertex, startObject, nullptr);
+    newTree.setProperty(Ids::endVertex, endObject, nullptr);
     ValueTree labelsTree(Ids::labels);
     newTree.addChild(labelsTree, -1, nullptr);
 
@@ -244,12 +248,33 @@ static ValueTree createNewTerminationTree(const String& newName, int x, int y)
 {
     ValueTree newTree(Ids::termination);
 
+	newTree.setProperty(Ids::posX, x, nullptr);
+	newTree.setProperty(Ids::posY, y, nullptr);
     ValueTree paramsTree(Ids::parameters);
     ValueTree term(Ids::parameter);
     term.setProperty(Ids::value, "simpleStringTerm", nullptr);
     term.setProperty(Ids::reflection, "-0.996", nullptr);
     term.setProperty(Ids::lowpass, "20", nullptr);
     paramsTree.addChild(term, -1, nullptr);
+
+    newTree.addChild(paramsTree, -1, nullptr);
+    newTree.setProperty(Ids::identifier, newName, nullptr);
+    ValueTree labelsTree(Ids::labels);
+    newTree.addChild(labelsTree, -1, nullptr);
+
+    return newTree;
+}
+
+static ValueTree createNewJunctionTree(const String& newName, int x, int y)
+{
+    ValueTree newTree(Ids::junction);
+
+	newTree.setProperty(Ids::posX, x, nullptr);
+	newTree.setProperty(Ids::posY, y, nullptr);
+    ValueTree paramsTree(Ids::parameters);
+    ValueTree pa(Ids::parameter);
+    pa.setProperty(Ids::value, "0.01", nullptr);
+    paramsTree.addChild(pa, -1, nullptr);
 
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
@@ -287,8 +312,8 @@ ValueTree createNewObjectTree(const Identifier& objType,
 		return createNewResonatorTree(newName, x, y);
 	else if(objType == Ids::audioout)
 		return createNewAudioOutTree(newName, x, y);
-    else if(objType == Ids::waveguide)
-        return createNewWaveguideTree(newName, x, y);
+    else if(objType == Ids::junction)
+        return createNewJunctionTree(newName, x, y);
     else if(objType == Ids::termination)
         return createNewTerminationTree(newName, x, y);
 	else
@@ -306,6 +331,8 @@ ValueTree createNewLinkObjectTree(const Identifier& linkType,
 		return createNewTouchTree(newName, startObject, endObject);
 	else if(linkType == Ids::pluck)
 		return createNewPluckTree(newName, startObject, endObject);
+	else if(linkType == Ids::waveguide)
+		return createNewWaveguideTree(newName, startObject, endObject);
     else
 		return ValueTree::invalid;
 }

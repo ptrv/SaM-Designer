@@ -75,7 +75,7 @@ public:
 	{
 		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
 		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
-		teName.setBounds(80 , 10, getWidth() -90, 22);
+		teName.setBounds(100 , 10, getWidth() - 110, 22);
         laDebug.setBounds(65, getHeight() - 60, 100, 22);
 	}
 
@@ -202,10 +202,10 @@ public:
 	{
 		ObjectPropertiesComponent::resized();
 
-		teMass.setBounds(80 , 40, getWidth() -90, 22);
-		tePos.setBounds(80 , 70, getWidth() -90, 22);
-		teVel.setBounds(80 , 100, getWidth() -90, 22);
-		teLabels.setBounds(80, 130, getWidth() - 90, 22);
+		teMass.setBounds(100 , 40, getWidth() - 110, 22);
+		tePos.setBounds(100 , 70, getWidth() - 110, 22);
+		teVel.setBounds(100 , 100, getWidth() - 110, 22);
+		teLabels.setBounds(100, 130, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -310,7 +310,7 @@ public:
 	{
 		ObjectPropertiesComponent::resized();
 
-		teLabels.setBounds(80, 40, getWidth() - 90, 22);
+		teLabels.setBounds(100, 40, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -364,7 +364,6 @@ public:
 private:
 };
 
-// TODO: implement ResonatorPropertiesComponent
 class ResonatorPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	ResonatorPropertiesComponent(ObjectPropertiesPanel* op_,
@@ -406,10 +405,10 @@ public:
 	{
 		ObjectPropertiesComponent::resized();
 
-		teFreq.setBounds(80 , 40, getWidth() -90, 22);
-		teDecay.setBounds(80 , 70, getWidth() -90, 22);
-		teEqMass.setBounds(80 , 100, getWidth() -90, 22);
-		teLabels.setBounds(80, 130, getWidth() - 90, 22);
+		teFreq.setBounds(100 , 40, getWidth() - 110, 22);
+		teDecay.setBounds(100 , 70, getWidth() - 110, 22);
+		teEqMass.setBounds(100 , 100, getWidth() - 110, 22);
+		teLabels.setBounds(100, 130, getWidth() - 110, 22);
 
 	}
 
@@ -518,8 +517,8 @@ public:
 	{
 		ObjectPropertiesComponent::resized();
 
-		tePos.setBounds(80 , 40, getWidth() -90, 22);
-		teLabels.setBounds(80, 70, getWidth() - 90, 22);
+		tePos.setBounds(100 , 40, getWidth() - 110, 22);
+		teLabels.setBounds(100, 70, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -642,17 +641,17 @@ public:
 	{
 		ObjectPropertiesComponent::resized();
         int offset = 0;
-        teStiff.setBounds(80 , 40, getWidth() -90, 22);
-		teDamp.setBounds(80 , 70, getWidth() -90, 22);
+        teStiff.setBounds(100 , 40, getWidth() - 110, 22);
+		teDamp.setBounds(100 , 70, getWidth() - 110, 22);
         if(isPluck)
         {
-            teMinDisplace.setBounds(80 , 100, getWidth() -90, 22);
+            teMinDisplace.setBounds(100 , 100, getWidth() - 110, 22);
             offset = 30;
         }
-		tePos.setBounds(80 , 100+offset, getWidth() -90, 22);
-		teLabels.setBounds(80, 130+offset, getWidth() - 90, 22);
-        teStartVertex.setBounds(80, 160+offset, getWidth() - 90, 22);
-        teEndVertex.setBounds(80, 190+offset, getWidth() - 90, 22);
+		tePos.setBounds(100 , 100+offset, getWidth() - 110, 22);
+		teLabels.setBounds(100, 130+offset, getWidth() - 110, 22);
+        teStartVertex.setBounds(100, 160+offset, getWidth() - 110, 22);
+        teEndVertex.setBounds(100, 190+offset, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -783,7 +782,7 @@ public:
 	{
 		ObjectPropertiesComponent::resized();
         
-        teSource.setBounds(80 , 40, getWidth() -90, 22);
+        teSource.setBounds(100 , 40, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -855,32 +854,147 @@ public:
                          ObjController* objController_,
                          ValueTree data_,
                          UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
-	{
-
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
+      laWaveImp("laWaveImp", "Wave impedance (N/(m/s))"),
+      teWaveImp("teWaveImp"),
+      laStringType("laStringType", "String type"),
+      teStringType("teStringType"),
+      laMaxTime("laMaxTime", "Max delay (s)"),
+      teMaxTime("teMaxTime"),
+      laCurrTime("laCurrTime", "Current delay (s)"),
+      teCurrTime("teCurrTime"),
+      laLabels("laLabels", "Labels"),
+      teLabels("teLabels"),
+      laLeftObj("laLeftObj", "Left object"),
+      teLeftObj("teLeftObj"),
+      laRightObj("laRightObj", "Right object"),
+      teRightObj("teRightObj")
+    {
+        teWaveImp.addListener(this);
+        addAndMakeVisible(&teWaveImp);
+		laWaveImp.attachToComponent(&teWaveImp, true);
+        teStringType.addListener(this);
+		addAndMakeVisible(&teStringType);
+		laStringType.attachToComponent(&teStringType, true);
+        teMaxTime.addListener(this);
+		addAndMakeVisible(&teMaxTime);
+		laMaxTime.attachToComponent(&teMaxTime, true);
+        teLabels.addListener(this);
+		addAndMakeVisible(&teLabels);
+		laLabels.attachToComponent(&teLabels, true);
+        teCurrTime.addListener(this);
+        addAndMakeVisible(&teCurrTime);
+		laCurrTime.attachToComponent(&teCurrTime, true);
+        teLeftObj.setReadOnly(true);
+        teLeftObj.addListener(this);
+		addAndMakeVisible(&teLeftObj);
+		laLeftObj.attachToComponent(&teLeftObj, true);
+        teRightObj.setReadOnly(true);
+        teRightObj.addListener(this);
+		addAndMakeVisible(&teRightObj);
+		laRightObj.attachToComponent(&teRightObj, true);
 		readValues();
 	}
 	virtual ~WaveguidePropertiesComponent()
-	{
-
+    {
 	}
 
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
+
+        teWaveImp.setBounds(100, 40, getWidth() - 110, 22);
+		teStringType.setBounds(100 , 70, getWidth() - 110, 22);
+		teMaxTime.setBounds(100 , 100, getWidth() - 110, 22);
+		teCurrTime.setBounds(100, 130, getWidth() - 110, 22);
+        teLabels.setBounds(100, 160, getWidth() - 110, 22);
+        teLeftObj.setBounds(100, 190, getWidth() - 110, 22);
+        teRightObj.setBounds(100, 220, getWidth() - 110, 22);
 	}
 
 	void readValues()
-	{
+    {
+        teName.setText(data[Ids::identifier].toString());
+		teWaveImp.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+		teStringType.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+        teMaxTime.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::maxtime].toString());
+        teCurrTime.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::curtime].toString());
 
+		String labelText;
+		StringArray labelsArray;
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
+		}
+		teLabels.setText(labelsArray.joinIntoString(","));
+        teLeftObj.setText(data[Ids::startVertex].toString());
+        teRightObj.setText(data[Ids::endVertex].toString());
 	}
 
 	bool writeValues()
 	{
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier].toString();
+
+        if (oldName != newName)
+        {
+            if (objController->checkIfIdExists(data.getType(), newName))
+            {
+                return false;
+            }
+            else
+            {
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
+                    return false;
+            }
+
+//            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
+        }
+
+		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+
+        pa1.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teWaveImp.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::value, teStringType.getText(), undoManager);
+        pa2.setProperty(Ids::maxtime, 
+                        Utils::fixParameterValueIfNeeded(teMaxTime.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::curtime,
+                        Utils::fixParameterValueIfNeeded(teCurrTime.getText()),
+                        undoManager);
+
+		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+        labelsTree.removeAllChildren(undoManager);
+		String labelsString = teLabels.getText();
+		StringArray labelsArray;
+		labelsArray.addTokens(labelsString, ",", "\"");
+		for (int i = 0; i < labelsArray.size(); ++i) {
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
+		}
         return true;
 	}
 
 private:
+    Label laWaveImp;
+	TextEditor teWaveImp;
+    Label laStringType;
+	TextEditor teStringType;
+	Label laMaxTime;
+	TextEditor teMaxTime;
+	Label laCurrTime;
+	TextEditor teCurrTime;
+    Label laLeftObj;
+    TextEditor teLeftObj;
+    Label laRightObj;
+    TextEditor teRightObj;
+	Label laLabels;
+	TextEditor teLabels;
 };
 
 class TerminationPropertiesComponent : public ObjectPropertiesComponent {
@@ -889,8 +1003,28 @@ public:
                          ObjController* objController_,
                          ValueTree data_,
                          UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
+      laTermType("laTermType", "Type"),
+	  teTermType("teTermType"),
+      laReflection("laReflection", "Reflection (-1 to 1)"),
+	  teReflection("teTermType"),
+      laLowPass("laLowPass", "Lowpass"),
+	  teLowPass("teLowPass"),
+      laLabels("laLabels", "Labels"),
+	  teLabels("teLabels")
 	{
+        teLabels.addListener(this);
+		addAndMakeVisible(&teLabels);
+		laLabels.attachToComponent(&teLabels, true);
+        teTermType.addListener(this);
+		addAndMakeVisible(&teTermType);
+		laTermType.attachToComponent(&teTermType, true);
+        teReflection.addListener(this);
+		addAndMakeVisible(&teReflection);
+		laReflection.attachToComponent(&teReflection, true);
+        teLowPass.addListener(this);
+		addAndMakeVisible(&teLowPass);
+		laLowPass.attachToComponent(&teLowPass, true);
 
 		readValues();
 	}
@@ -902,19 +1036,79 @@ public:
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
+
+        teTermType.setBounds(100, 40, getWidth() - 110, 22);
+		teReflection.setBounds(100, 70, getWidth() - 110, 22);
+        teLowPass.setBounds(100, 100, getWidth() - 110, 22);
+		teLabels.setBounds(100, 130, getWidth() - 110, 22);
 	}
 
 	void readValues()
-	{
+    {
+        teName.setText(data[Ids::identifier].toString());
+		teTermType.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+		teReflection.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::reflection].toString());
+		teLowPass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::lowpass].toString());
+		String labelText;
+		StringArray labelsArray;
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
+		}
+		teLabels.setText(labelsArray.joinIntoString(","));
 
 	}
 
 	bool writeValues()
-	{
+    {
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier];
+        if(newName != oldName)
+        {
+            if (objController->checkIfIdExists(data.getType(), newName))
+            {
+                return false;
+            }
+            else
+            {
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
+                    return false;
+            }
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+//            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
+        }
+
+		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree param = paramsTree.getChild(0);
+        param.setProperty(Ids::value, teTermType.getText(), undoManager);
+        param.setProperty(Ids::reflection, 
+                          Utils::fixParameterValueIfNeeded(teReflection.getText()),
+                          undoManager);
+        param.setProperty(Ids::lowpass,
+                          Utils::fixParameterValueIfNeeded(teLowPass.getText()),
+                          undoManager);
+		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+		String labelsString = teLabels.getText();
+		StringArray labelsArray;
+		labelsArray.addTokens(labelsString, ",", "\"");
+		for (int i = 0; i < labelsArray.size(); ++i) {
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
+		}
         return true;
 	}
 
 private:
+	Label laTermType;
+	TextEditor teTermType;
+   	Label laReflection;
+	TextEditor teReflection;
+	Label laLowPass;
+	TextEditor teLowPass;
+    Label laLabels;
+	TextEditor teLabels;
 };
 
 class JunctionPropertiesComponent : public ObjectPropertiesComponent {
@@ -923,8 +1117,18 @@ public:
                          ObjController* objController_,
                          ValueTree data_,
                          UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
+      laLabels("laLabels", "Labels"),
+	  teLabels("teLabels"),
+	  laPos("laPos", "Displacement (m)"),
+	  tePos("tePos")
 	{
+        teLabels.addListener(this);
+		addAndMakeVisible(&teLabels);
+		laLabels.attachToComponent(&teLabels, true);
+        tePos.addListener(this);
+		addAndMakeVisible(&tePos);
+		laPos.attachToComponent(&tePos, true);
 
 		readValues();
 	}
@@ -936,19 +1140,64 @@ public:
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
+
+        tePos.setBounds(100, 40, getWidth() - 110, 22);
+		teLabels.setBounds(100, 70, getWidth() - 110, 22);
 	}
 
 	void readValues()
-	{
-
+    {
+        teName.setText(data[Ids::identifier].toString());
+		tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+		String labelText;
+		StringArray labelsArray;
+		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
+			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
+		}
+		teLabels.setText(labelsArray.joinIntoString(","));
 	}
 
 	bool writeValues()
 	{
+        String newName = teName.getText();
+        String oldName = data[Ids::identifier];
+        if(newName != oldName)
+        {
+            if (objController->checkIfIdExists(data.getType(), newName))
+            {
+                return false;
+            }
+            else
+            {
+                if(! objController->renameId(data.getType(), oldName, newName, undoManager))
+                    return false;
+            }
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+//            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+
+            data.setProperty(Ids::identifier, newName, undoManager);
+        }
+
+		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree param = paramsTree.getChild(0);
+        param.setProperty(Ids::value, tePos.getText(), undoManager);
+		ValueTree labelsTree = data.getChildWithName(Ids::labels);
+		String labelsString = teLabels.getText();
+		StringArray labelsArray;
+		labelsArray.addTokens(labelsString, ",", "\"");
+		for (int i = 0; i < labelsArray.size(); ++i) {
+            ValueTree label(Ids::label);
+            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            labelsTree.addChild(label, -1, undoManager);
+		}
         return true;
 	}
 
 private:
+    Label laLabels;
+	TextEditor teLabels;
+	Label laPos;
+	TextEditor tePos;
 };
 
 //==============================================================================
@@ -1016,7 +1265,7 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 		comp = new Component();
 	}
 
-	comp->setSize (260, 300);
+	comp->setSize (280, 300);
 	setContentOwned (comp, true);
 
 	centreAroundComponent (caller, getWidth(), getHeight());

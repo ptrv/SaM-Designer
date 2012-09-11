@@ -290,6 +290,32 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                                                                                   objController.getNewNameForObject(Ids::pluck),
                                                                                   startObj, endObj));
         break;
+    case CommandIDs::insertWaveguide:
+    {
+//        DBG("Waveguide not implemented!");
+        ObjectComponent* oc1 = objController.getObjectForId(startObj);
+        ObjectComponent* oc2 = objController.getObjectForId(endObj);
+        String tmpSo, tmpEo;
+        if(oc1 != nullptr && oc2 != nullptr)
+        {
+            if (oc1->getPinPos().x < oc2->getPinPos().x)
+            {
+                tmpSo = oc1->getData()[Ids::identifier];
+                tmpEo = oc2->getData()[Ids::identifier];
+            }
+            else
+            {
+                tmpSo = oc2->getData()[Ids::identifier];
+                tmpEo = oc1->getData()[Ids::identifier];
+            }
+        }
+
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::waveguide,
+                                                                                  objController.getNewNameForObject(Ids::waveguide),
+                                                                                  tmpSo, tmpEo));
+    }
+        break;
 
     case CommandIDs::insertAudioOutput:
         objController.addNewObject(this,
@@ -300,19 +326,18 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     case CommandIDs::insertAudioConnection:
         objController.addNewAudioConnection(this);
         break;
-    case CommandIDs::insertWaveguide:
-//        objController.addNewObject(this,
-//                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
-//                                                                      objController.getNewNameForObject(Ids::waveguide),
-//                                                                      mp.x, mp.y));
-        DBG("Waveguide not implemented!")
+    case CommandIDs::insertJunction:
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::junction,
+                                                                      objController.getNewNameForObject(Ids::junction),
+                                                                      mp.x, mp.y));
         break;
     case CommandIDs::insertTermination:
-//        objController.addNewObject(this,
-//                                   ObjectFactory::createNewObjectTree(Ids::termination,
-//                                                                      objController.getNewNameForObject(Ids::termination),
-//                                                                      mp.x, mp.y));
-        DBG("Termination not implemented!")
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::termination,
+                                                                      objController.getNewNameForObject(Ids::termination),
+                                                                      mp.x, mp.y));
+//        DBG("Termination not implemented!")
         break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -dy);
@@ -356,7 +381,7 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     m.addSeparator();
     m.addItem(5, "audioout");
     m.addSeparator();
-    m.addItem(6, "waveguide");
+    m.addItem(6, "junction");
     m.addItem(7, "termination");
 
     const int r = m.show();
@@ -398,19 +423,19 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     }
     else if (r == 6)
     {
-        DBG("Waveguide not implemented!")
-//        objController.addNewObject(this,
-//                                   ObjectFactory::createNewObjectTree(Ids::waveguide,
-//                                                                      objController.getNewNameForObject(Ids::waveguide),
-//                                                                      mPos.x, mPos.y));
+//        DBG("Waveguide not implemented!")
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::junction,
+                                                                      objController.getNewNameForObject(Ids::junction),
+                                                                      mPos.x, mPos.y));
     }
     else if (r == 7)
     {
-        DBG("Termination not implemented!")
-//        objController.addNewObject(this,
-//                                   ObjectFactory::createNewObjectTree(Ids::termination,
-//                                                                      objController.getNewNameForObject(Ids::termination),
-//                                                                      mPos.x, mPos.y));
+//        DBG("Termination not implemented!")
+        objController.addNewObject(this,
+                                   ObjectFactory::createNewObjectTree(Ids::termination,
+                                                                      objController.getNewNameForObject(Ids::termination),
+                                                                      mPos.x, mPos.y));
     }
 }
 
@@ -421,7 +446,9 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	m.addItem (2, "Add touch");
 	m.addItem (3, "Add pluck");
     m.addSeparator();
-    m.addItem (4, "Add audio connection");
+    m.addItem (4, "Add waveguide");
+    m.addSeparator();
+    m.addItem (5, "Add audio connection");
 	const int r = m.show();
 
 	if (r == 1)
@@ -446,10 +473,35 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 		DBG("Add pluck");
         objController.addNewLinkIfPossible(this,
                                            ObjectFactory::createNewLinkObjectTree(Ids::pluck,
-                                                                                        objController.getNewNameForObject(Ids::pluck),
-                                                                                        so, eo));
+                                                                                  objController.getNewNameForObject(Ids::pluck),
+                                                                                  so, eo));
 	}
-    else if (r == 4)
+	else if (r == 4)
+	{
+//        DBG("Waveguide not implemented!")
+		DBG("Add waveguide");
+        ObjectComponent* oc1 = objController.getObjectForId(so);
+        ObjectComponent* oc2 = objController.getObjectForId(eo);
+        String tmpSo, tmpEo;
+        if(oc1 != nullptr && oc2 != nullptr)
+        {
+            if(oc1->getPinPos().x < oc2->getPinPos().x)
+            {
+                tmpSo = oc1->getData()[Ids::identifier];
+                tmpEo = oc2->getData()[Ids::identifier];
+            }
+            else
+            {
+                tmpSo = oc2->getData()[Ids::identifier];
+                tmpEo = oc1->getData()[Ids::identifier];
+            }
+        }
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::waveguide,
+                                                                                  objController.getNewNameForObject(Ids::waveguide),
+                                                                                  tmpSo, tmpEo));
+	}
+    else if (r == 5)
     {
         DBG("Add audio connection");
         objController.addNewAudioConnection(this);

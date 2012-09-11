@@ -110,11 +110,17 @@ void LinkComponent::paint(Graphics& g)
 {
     if(selected)
     {
-        g.setColour(Colours::red);
+        if(data.getType() == Ids::waveguide)
+            g.setColour(Colours::violet);
+        else
+            g.setColour(Colours::red);
     }
     else
     {
-        g.setColour(Colours::green);
+        if(data.getType() == Ids::waveguide)
+            g.setColour(Colours::blue);
+        else
+            g.setColour(Colours::green);
 
     }
     g.fillPath (linePath);
@@ -335,6 +341,18 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
 
         linePath.addPath(arrow);
+    }
+    else if(data.getType() == Ids::waveguide)
+    {
+        linePath.clear();
+        linePath.startNewSubPath(x1, y1);
+        linePath.lineTo(x2, y2);
+
+        PathStrokeType wideStroke(8.0f);
+        wideStroke.createStrokedPath(hitPath, linePath);
+
+        PathStrokeType stroke(5.0f);
+        stroke.createStrokedPath(linePath, linePath);
     }
     linePath.setUsingNonZeroWinding(true);
 

@@ -45,6 +45,10 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
         setSize(75, 75);
     else if(data.getType() == Ids::audioout)
         setSize(60,60);
+    else if(data.getType() == Ids::termination)
+        setSize(55,55);
+    else if(data.getType() == Ids::junction)
+        setSize(25,25);
     else
         setSize(50, 50);
 	originalPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
@@ -294,5 +298,46 @@ Point<int> ObjectComponent::getPinPos()
     {
         pinPos.x -= 19;
     }
+    else if (data.getType() == Ids::termination)
+    {
+        pinPos.y -=10;
+    }
     return pinPos;
+}
+
+bool ObjectComponent::canBeConnected(const Identifier& objId)
+{
+    if(objId == Ids::link || objId == Ids::touch || objId == Ids::pluck)
+        return canBeConnectedToLinks();
+    else if(objId == Ids::waveguide)
+        return canBeConnectedToWaveguides();
+    else
+        return false;
+}
+bool ObjectComponent::canBeConnectedToLinks()
+{
+    if(data.getType() == Ids::mass || data.getType() == Ids::ground ||
+        data.getType() == Ids::port || data.getType() == Ids::resonator)
+        return true;
+    else if(data.getType() == Ids::junction)
+    {
+        // only 1 link allowed for junctions.
+        int connections = 0;
+        for (int i = 0; i < connectedLinks.size(); ++i)
+        {
+            if(connectedLinks.getUnchecked(i)->getData().getType() != Ids::waveguide)
+                ++connections;
+
+        }
+        return connections == 0 ? true : false;
+    }
+    else
+        return false;
+}
+bool ObjectComponent::canBeConnectedToWaveguides()
+{
+    if(data.getType() == Ids::termination || data.getType() == Ids::junction)
+        return true;
+    else
+        return false;
 }

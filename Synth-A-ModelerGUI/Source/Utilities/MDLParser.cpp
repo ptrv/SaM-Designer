@@ -292,8 +292,8 @@ bool MDLParser::parseMDL()
 				Point<int> pos = getPos(line);
 
 				ValueTree waveguideTree(Ids::waveguide);
-				waveguideTree.setProperty(Ids::posX, pos.x, nullptr);
-				waveguideTree.setProperty(Ids::posY, pos.y, nullptr);
+//				waveguideTree.setProperty(Ids::posX, pos.x, nullptr);
+//				waveguideTree.setProperty(Ids::posY, pos.y, nullptr);
 
 				String objType = line.substring(0, indexParantese);
 				int indexCloseParan = line.indexOf(")");
@@ -344,12 +344,14 @@ bool MDLParser::parseMDL()
 				// get left object
 				line = line.substring(commaIndex+1);
 				commaIndex = line.indexOf(",");
-				waveguideTree.setProperty(Ids::objLeft, line.substring(0, commaIndex).trim(), nullptr);
+//				waveguideTree.setProperty(Ids::objLeft, line.substring(0, commaIndex).trim(), nullptr);
+				waveguideTree.setProperty(Ids::startVertex, line.substring(0, commaIndex).trim(), nullptr);
 
 				// get right object
 				line = line.substring(commaIndex+1);
 				commaIndex = line.indexOf(",");
-				waveguideTree.setProperty(Ids::objRight, line.substring(0, commaIndex).trim(), nullptr);
+//				waveguideTree.setProperty(Ids::objRight, line.substring(0, commaIndex).trim(), nullptr);
+                waveguideTree.setProperty(Ids::endVertex, line.substring(0, commaIndex).trim(), nullptr);
 
 				indexParantese = line.indexOf("(");
 				indexCloseParan = line.indexOf(")");

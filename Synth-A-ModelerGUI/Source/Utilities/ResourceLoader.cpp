@@ -47,14 +47,12 @@ void ResourceLoader::initObjectIconMap()
 	objectIcons.set(Ids::resonator.toString(), "resonator.svg");
 	objectIcons.set(Ids::ground.toString(), "ground.svg");
 	objectIcons.set(Ids::link.toString(), "link.svg");
-//	objectIcons.set(Ids::link.toString(), "link-no-connectors.svg");
 	objectIcons.set(Ids::touch.toString(), "touch.svg");
 	objectIcons.set(Ids::pluck.toString(), "pluck.svg");
 	objectIcons.set(Ids::termination.toString(), "termination.svg");
 	objectIcons.set(Ids::waveguide.toString(), "waveguide.svg");
-	objectIcons.set(Ids::audioout.toString(), "audioout.svg");
-//	objectIcons.set(Ids::junction.toString(), "waveguide.svg");
-//	objectIcons.set(Ids::label.toString(), "waveguide.svg");
+	objectIcons.set(Ids::junction.toString(), "junction.svg");
+    objectIcons.set(Ids::audioout.toString(), "audioout.svg");
 }
 Drawable* ResourceLoader::getDrawableForId(const Identifier& objId)
 {

@@ -35,11 +35,20 @@ IdManager::IdManager()
 IdManager::~IdManager()
 {
 //    objectIds.clear();
+    allIds.clear();
     massIds.clear();
+    groundIds.clear();
+    portIds.clear();
+    resonatorIds.clear();
     linkIds.clear();
     touchIds.clear();
     pluckIds.clear();
     audioOutIds.clear();
+    variableIds.clear();
+    waveguideIds.clear();
+    terminationIds.clear();
+    junctionIds.clear();
+
 }
 
 SortedSet<String>* IdManager::getSet(const Identifier& objId)
@@ -62,6 +71,12 @@ SortedSet<String>* IdManager::getSet(const Identifier& objId)
         return &audioOutIds;
     else if(objId == Ids::variable)
         return &variableIds;
+    else if(objId == Ids::waveguide)
+        return &waveguideIds;
+    else if(objId == Ids::termination)
+        return &terminationIds;
+    else if(objId == Ids::junction)
+        return &junctionIds;
     else
         return nullptr;
 }
@@ -237,7 +252,7 @@ String IdManager::getNextId(const Identifier& objId)
 
 String IdManager::getObjNamePrefix(const Identifier& objId)
 {
-if(objId == Ids::mass)
+    if (objId == Ids::mass)
         return "m";
     else if(objId == Ids::ground)
         return "g";
@@ -253,6 +268,13 @@ if(objId == Ids::mass)
         return "p";
     else if(objId == Ids::audioout)
         return "a";
+    else if (objId == Ids::waveguide)
+        return "wg";
+    else if(objId == Ids::termination)
+        return "term";
+    else if(objId == Ids::junction)
+        return "junct";
+
     else
         return String::empty;
 }

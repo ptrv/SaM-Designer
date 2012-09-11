@@ -152,9 +152,11 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << "),";
 		mdlContent << wo[Ids::identifier].toString();
 		mdlContent << ",";
-		mdlContent << wo[Ids::objLeft].toString();
+//		mdlContent << wo[Ids::objLeft].toString();
+		mdlContent << wo[Ids::startVertex].toString();
 		mdlContent << ",";
-		mdlContent << wo[Ids::objRight].toString();
+//		mdlContent << wo[Ids::objRight].toString();
+		mdlContent << wo[Ids::endVertex].toString();
 		mdlContent << ",(";
 		ValueTree labelTree = wo.getChildWithName(Ids::labels);
 		for (int n = 0; n < labelTree.getNumChildren(); ++n) {
@@ -166,7 +168,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
-		mdlContent << " # pos " << wo.getProperty(Ids::posX, "0").toString() << "," << wo.getProperty(Ids::posY, "0").toString();
+//		mdlContent << " # pos " << wo.getProperty(Ids::posX, "0").toString() << "," << wo.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 
 	}

@@ -160,16 +160,24 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
         ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
         
-        if(oc1 != nullptr && oc2 != nullptr && (! checkIfLinkExitsts(linkValues))
-            && oc1->getData().getType() != Ids::audioout
-            && oc2->getData().getType() != Ids::audioout)
+        if(oc1 != nullptr && oc2 != nullptr 
+            && oc1->canBeConnected(linkValues.getType())
+            && oc2->canBeConnected(linkValues.getType())
+            && (! checkIfLinkExitsts(linkValues)))
         {
             addLink(holder, linkValues, -1, true);
             holder->updateComponents();
         }
         else
         {
-            SAM_CONSOLE("Error: ", "Cannot connect links to audio outs");
+            String msg = "Cannot connect ";
+            msg << oc1->getData().getType().toString();
+            msg << " and ";
+            msg << oc2->getData().getType().toString();
+            msg << " with ";
+            msg << linkValues.getType().toString();
+            msg << ".";
+            SAM_CONSOLE("Error: ", msg);
         }
     }
     else
@@ -404,6 +412,40 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
         }
     }
+    ValueTree termObjects = mdl.getChildWithName(Objects::terminations);
+    for (int i = 0; i < termObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = termObjects.getChild(i);
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            ObjectComponent* objComp = new ObjectComponent(*this, obj);
+            objects.add(objComp);
+            holder->addAndMakeVisible(objComp);
+            objComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
+    ValueTree junctObjects = mdl.getChildWithName(Objects::junctions);
+    for (int i = 0; i < junctObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = junctObjects.getChild(i);
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            ObjectComponent* objComp = new ObjectComponent(*this, obj);
+            objects.add(objComp);
+            holder->addAndMakeVisible(objComp);
+            objComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
     ValueTree linkObjects = mdl.getChildWithName(Objects::links);
     for (int i = 0; i < linkObjects.getNumChildren(); i++)
     {
@@ -417,7 +459,20 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
         }
     }
-    
+    ValueTree waveguideObjects = mdl.getChildWithName(Objects::waveguides);
+    for (int i = 0; i < waveguideObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = waveguideObjects.getChild(i);
+        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            LinkComponent* linkComp = new LinkComponent(*this, obj);
+            links.add(linkComp);
+            holder->addAndMakeVisible(linkComp);
+            linkComp->update();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+    }
+
     ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
     for (int i = 0; i < audioObjects.getNumChildren(); i++)
     {
@@ -694,7 +749,9 @@ void ObjController::paste(ObjectsHolder* holder)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
             if(Objects::getObjectGroup(valTree.getType()) == Objects::masses ||
-               Objects::getObjectGroup(valTree.getType()) == Objects::audioobjects)
+               Objects::getObjectGroup(valTree.getType()) == Objects::audioobjects ||
+               Objects::getObjectGroup(valTree.getType()) == Objects::terminations ||
+               Objects::getObjectGroup(valTree.getType()) == Objects::junctions)
             {
                 int posX = int(valTree.getProperty(Ids::posX));
                 int posY = int(valTree.getProperty(Ids::posY));
@@ -733,7 +790,8 @@ void ObjController::paste(ObjectsHolder* holder)
         forEachXmlChildElement(*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if(Objects::getObjectGroup(valTree.getType()) == Objects::links)
+            if(Objects::getObjectGroup(valTree.getType()) == Objects::links ||
+               Objects::getObjectGroup(valTree.getType()) == Objects::waveguides)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(idMgr->contains(valTree.getType(), objName))

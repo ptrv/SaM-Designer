@@ -69,11 +69,15 @@ public:
     Array<LinkComponent*> getAttachedLinks() { return connectedLinks; }
     
     Point<int> getPinPos();
-private:
 
+    bool canBeConnected(const Identifier& objId);
+private:
     void showLinkPopupMenu();
 
     void changeListenerCallback (ChangeBroadcaster*);
+
+    bool canBeConnectedToLinks();
+    bool canBeConnectedToWaveguides();
 
     DrawableComposite* icon;
     DropShadowEffect shadow;

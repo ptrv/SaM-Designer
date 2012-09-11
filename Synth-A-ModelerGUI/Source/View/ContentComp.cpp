@@ -303,6 +303,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::insertAudioConnection,
         CommandIDs::insertWaveguide,
         CommandIDs::insertTermination,
+        CommandIDs::insertJunction,
         CommandIDs::spaceBarDrag,
         CommandIDs::moveUp,
         CommandIDs::moveDown,
@@ -421,6 +422,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::insertAudioConnection:
         result.setInfo("Audio connection", "", CommandCategories::inserting, 0);
+        result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo("Waveguide", "", CommandCategories::inserting, 0);
@@ -429,6 +431,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::insertTermination:
         result.setInfo("Termination", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('0', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::insertJunction:
+        result.setInfo("Junction", "", CommandCategories::inserting, 0);
+        result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::spaceBarDrag:
         result.setInfo("Scroll while dragging mouse",
