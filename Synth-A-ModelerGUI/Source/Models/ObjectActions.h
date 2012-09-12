@@ -318,15 +318,12 @@ public:
     holderComp(holder_), 
     objController(objController_)
 	{
-        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(source);
-        LinkComponent* lc = dynamic_cast<LinkComponent*>(source);
-        
-        if(oc != nullptr)
+        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(source))
         {
             sourceIsLink = false;
             indexSource = objController->indexOfObject(oc);
         }
-        else if(lc != nullptr)
+        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(source))
         {
             sourceIsLink = true;
             indexSource = objController->indexOfLink(lc);
@@ -392,14 +389,12 @@ public:
     oldIndex(-1)
 	{
         oldIndex = objController->indexOfAudioConnector(aocToRemove);
-        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject());
-        LinkComponent* lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject());
-        if(oc != nullptr)
+        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject()))
         {
             sourceIsLink = false;
             oldIndexSource = objController->indexOfObject(oc);
         }
-        else if(lc != nullptr)
+        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject()))
         {
             sourceIsLink = true;
             oldIndexSource = objController->indexOfLink(lc);

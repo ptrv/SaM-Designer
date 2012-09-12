@@ -989,12 +989,12 @@ private:
 	TextEditor teMaxTime;
 	Label laCurrTime;
 	TextEditor teCurrTime;
+	Label laLabels;
+	TextEditor teLabels;
     Label laLeftObj;
     TextEditor teLeftObj;
     Label laRightObj;
     TextEditor teRightObj;
-	Label laLabels;
-	TextEditor teLabels;
 };
 
 class TerminationPropertiesComponent : public ObjectPropertiesComponent {

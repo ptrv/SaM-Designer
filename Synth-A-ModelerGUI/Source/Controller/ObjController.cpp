@@ -307,8 +307,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
         // first remove all selected links
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i));
-            if( lc != nullptr)
+            if(LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i)))
             {
                 temp.deselect(lc);
                 removeLink(lc, true, holder);
@@ -317,8 +316,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
         // then objects and remaining links connected to the objects
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i));
-            if(aoc != nullptr)
+            if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i)))
             {
                 temp.deselect(aoc);
                 removeAudioConnection(aoc, true, holder);
@@ -327,8 +325,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
         }
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i));
-            if(oc != nullptr)
+            if(ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i)))
             {
                 removeObject(oc, true, holder);
                 continue;
@@ -580,9 +577,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
-        ObjectComponent * const c = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i));
-
-        if(c != nullptr)
+        if(ObjectComponent * const c = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i)))
         {
             const int startX = c->getProperties() ["xDragStart"];
             const int startY = c->getProperties() ["yDragStart"];
@@ -655,8 +650,7 @@ void ObjController::reverseLinkDirection()
 
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
-        LinkComponent* lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i));
-        if(lc != nullptr)
+        if(LinkComponent* lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i)))
         {
             ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(lc,this);
             owner.getUndoManager()->perform(action, "reverse link direction");

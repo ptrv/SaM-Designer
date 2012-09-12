@@ -313,11 +313,9 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
     if (sourceComp != nullptr)
     {
         Point<int> startPos;
-        ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp);
-        LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp);
-        if(oc != nullptr)
+        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(sourceComp))
             startPos = oc->getPinPos();
-        else if(lc != nullptr)
+        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(sourceComp))
             startPos = lc->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
@@ -377,11 +375,9 @@ Rectangle<int> AudioOutConnector::getIntersectioBounds()
 void AudioOutConnector::showGainPanel()
 {
     String sourceId;
-    ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp);
-    LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp);
-    if(oc != nullptr)
+    if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(sourceComp))
         sourceId = oc->getData()[Ids::identifier].toString();
-    else if( lc != nullptr)
+    else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(sourceComp))
         sourceId = lc->getData()[Ids::identifier].toString();
     
     GainPanel::show(this, sourceId, audioOutComp->getData(), owner.getUndoManager());

@@ -94,20 +94,15 @@ void ObjectsHolder::updateComponents()
     Array<AudioOutConnector*> aocs;
     for (i = getNumChildComponents(); --i >= 0;)
     {
-        ObjectComponent * const bobj = dynamic_cast<ObjectComponent*> (getChildComponent(i));
-
-        if (bobj != nullptr)
+        if (ObjectComponent * const bobj = dynamic_cast<ObjectComponent*> (getChildComponent(i)))
+        {
             bobj->update();
-        
-        LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i));
-        
-        if (lobj != nullptr)
+        }
+        else if (LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i)))
         {
             links.add(lobj);
         }
-        AudioOutConnector * const aobj = dynamic_cast<AudioOutConnector*> (getChildComponent(i));
-        
-        if (aobj != nullptr)
+        else if (AudioOutConnector * const aobj = dynamic_cast<AudioOutConnector*> (getChildComponent(i)))
         {
             aocs.add(aobj);
         }
@@ -122,7 +117,6 @@ void ObjectsHolder::updateComponents()
         aocs[i]->update();
         aocs[i]->toBack();
     }
-
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -535,12 +529,10 @@ void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results, co
     for (int i = 0; i < getNumChildComponents(); ++i)
     {
         SelectableObject* const e = dynamic_cast <SelectableObject*> (getChildComponent (i));
-        LinkComponent* const lc = dynamic_cast<LinkComponent*>(e);
-        AudioOutConnector* const aoc = dynamic_cast<AudioOutConnector*>(e);
         bool isIntersecting;
-        if(lc != nullptr)
+        if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(e))
             isIntersecting = lasso.contains(lc->getIntersectioBounds());
-        else if(aoc != nullptr)
+        else if(AudioOutConnector* const aoc = dynamic_cast<AudioOutConnector*>(e))
             isIntersecting = lasso.contains(aoc->getIntersectioBounds());
         else
             isIntersecting = getChildComponent(i)->getBounds().intersects (lasso);
