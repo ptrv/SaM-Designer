@@ -84,6 +84,7 @@ public:
 private:
 
     String getProjectWindowPosName() const;
+    String getProjectWindowZoomName() const;
 
 //    AppController& appController;
     ScopedPointer<MDLController> mdlController;

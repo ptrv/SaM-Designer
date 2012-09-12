@@ -120,8 +120,12 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
         return true;
 
     if(! mdlFile->isUntiled())
+    {
         StoredSettings::getInstance()->getProps()
             .setValue (getProjectWindowPosName(), getWindowStateAsString());
+        StoredSettings::getInstance()->getProps()
+            .setValue(getProjectWindowZoomName(), getMDLFileContentComponent()->getZoom());
+    }
 
     FileBasedDocument::SaveResult r = mdlFile->saveIfNeededAndUserAgrees();
 
@@ -166,7 +170,11 @@ void MainAppWindow::restoreWindowPosition()
     String windowState;
 
     if (mdlController->getMDLFile() != nullptr)
+    {
         windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName());
+        double newZoomFactor = StoredSettings::getInstance()->getProps().getDoubleValue (getProjectWindowZoomName(), 1.0);
+        getMDLFileContentComponent()->setZoom(newZoomFactor);
+    }
 
     if (windowState.isEmpty())
         windowState = StoredSettings::getInstance()->getProps().getValue ("lastMainWindowPos");
@@ -322,4 +330,12 @@ String MainAppWindow::getProjectWindowPosName() const
         return String::empty;
 
     return "projectWindowPos_" + mdlController->getMDLFile()->getName();
+}
+String MainAppWindow::getProjectWindowZoomName() const
+{
+    jassert (mdlController->getMDLFile() != nullptr);
+    if (mdlController->getMDLFile() == nullptr)
+        return String::empty;
+    
+    return "projectWindowZoom_" + mdlController->getMDLFile()->getName();
 }
