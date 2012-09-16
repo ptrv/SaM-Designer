@@ -932,5 +932,36 @@ String ObjController::getNewNameForObject(const Identifier& objId)
 
 void ObjController::tidyUp()
 {
-    DBG("Tidying objects not implemented!");
+    startDragging();
+    int YTOLERANCE = 10;
+    bool all = (sObjects.getNumSelected() == 0);
+
+    // tidy horizontally
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        ObjectComponent* obj1 = objects[i];
+        if(obj1->isSelected() || all)
+        {
+            for (int j = 0; j < objects.size(); ++j)
+            {
+                ObjectComponent* obj2 = objects[j];
+                if(obj2 != obj1 && (obj2->isSelected() || all))
+                {
+                    if (obj2->getPinPos().y <= obj1->getPinPos().y + YTOLERANCE &&
+                        obj2->getPinPos().y >= obj1->getPinPos().y - YTOLERANCE &&
+                        obj2->getPinPos().y !=  obj1->getPinPos().y)
+                    {
+                        int dx = 0;
+                        int dy = obj1->getPinPos().y - obj2->getPinPos().y;
+                        const int startX = obj2->getProperties() ["xDragStart"];
+                        const int startY = obj2->getProperties() ["yDragStart"];
+                        Point<int> r(obj2->getPosition());
+                        r.setXY(startX + dx, startY + dy);
+                        obj2->setPosition(Point<int>(r.x + obj2->getWidth() / 2, r.y + obj2->getHeight() / 2), true);
+                    }
+                }
+            }
+        }
+    }
+    endDragging();
 }
