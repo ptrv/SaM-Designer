@@ -180,6 +180,8 @@ public:
     String getNewNameForObject(const Identifier& objId);
 
     IdManager* getIdManager() { return idMgr; }
+
+    void tidyUp();
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

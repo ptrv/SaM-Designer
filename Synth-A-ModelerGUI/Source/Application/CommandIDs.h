@@ -103,6 +103,7 @@ namespace CommandIDs
     static const int zoomOut                = 0x202140;
     static const int zoomNormal             = 0x202150;
     static const int spaceBarDrag           = 0x202160;
+    static const int tidyObjects            = 0x202170;
 
     static const int moveUp                 = 0x202200;
     static const int moveDown               = 0x202210;

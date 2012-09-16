@@ -239,7 +239,9 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     case CommandIDs::reverseDirection:
         objController.reverseLinkDirection();
         break;
-
+    case CommandIDs::tidyObjects:
+        objController.tidyUp();
+        break;
     case CommandIDs::insertMass:
         objController.addNewObject(this,
                                    ObjectFactory::createNewObjectTree(Ids::mass,

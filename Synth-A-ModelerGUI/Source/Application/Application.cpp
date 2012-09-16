@@ -475,6 +475,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem (commandManager, CommandIDs::zoomOut);
         menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::tidyObjects);
 
     }
     else if (topLevelMenuIndex == 2)

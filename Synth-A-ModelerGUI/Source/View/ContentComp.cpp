@@ -292,6 +292,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::zoomNormal,
         CommandIDs::reverseDirection,
         CommandIDs::defineVariables,
+        CommandIDs::tidyObjects,
         CommandIDs::insertMass,
         CommandIDs::insertGround,
         CommandIDs::insertResonator,
@@ -384,7 +385,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.setInfo("Define variable", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('d', ModifierKeys::commandModifier);
         break;
-
+    case CommandIDs::tidyObjects:
+        result.setInfo("Tidy up", "", CommandCategories::editing, 0);
+        result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
 
     case CommandIDs::insertMass:
         result.setInfo("Mass", "", CommandCategories::inserting, 0);

@@ -929,3 +929,8 @@ String ObjController::getNewNameForObject(const Identifier& objId)
 {
     return idMgr->getNextId(objId);
 }
+
+void ObjController::tidyUp()
+{
+    DBG("Tidying objects not implemented!");
+}
