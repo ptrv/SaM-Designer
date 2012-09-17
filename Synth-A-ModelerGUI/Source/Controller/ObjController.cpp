@@ -1064,3 +1064,12 @@ void ObjController::tidyUp()
 
     endDragging();
 }
+
+void ObjController::setLinksSegmented(bool isSegmented)
+{
+    for (int i = 0; i < links.size(); ++i)
+    {
+        LinkComponent* lc = links.getUnchecked(i);
+        lc->setSegemented(isSegmented);
+    }
+}

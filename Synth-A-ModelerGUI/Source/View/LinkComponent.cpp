@@ -46,6 +46,11 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 
     owner.getSelectedObjects().addChangeListener(this);
 
+    segmented = StoredSettings::getInstance()->getIsSegmentedConnectors();
+
+    iconWidth = 25;
+    iconHeight = 25;
+
     update();
 }
 
@@ -101,7 +106,7 @@ void LinkComponent::resized()
     y1 -= getY();
     x2 -= getX();
     y2 -= getY();
-    
+
     drawPath(x1, y1, x2, y2);
     
 }
@@ -221,126 +226,156 @@ bool LinkComponent::sameStartEnd(ValueTree linkTree)
 
 void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
 {
-    int iconWidth = 25;
-    int iconHeight = 25;
-    
     if(data.getType() == Ids::link)
     {
-        linePath.clear();
-        linePath.startNewSubPath(x1, y1);
-        linePath.lineTo(x2, y2);
-
-        PathStrokeType wideStroke(8.0f);
-        wideStroke.createStrokedPath(hitPath, linePath);
-
-        PathStrokeType stroke(2.5f);
-        stroke.createStrokedPath(linePath, linePath);
-
         Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
                                                                    0,
                                                                    0,
                                                                    iconWidth,
                                                                    iconHeight);
-        iconPath.applyTransform(AffineTransform::identity
-                                .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
-                                .translated((x1 + x2) * 0.5f,
-                                            (y1 + y2) * 0.5f));
+        if(segmented)
+        {
+            linePath.clear();
+            linePath.startNewSubPath(x1, y1);
+            linePath.lineTo(x1, (y2 - y1)/2 + y1);
+            linePath.lineTo(x2, (y2 - y1)/2 + y1);
+            linePath.lineTo(x2, y2);
 
+            PathStrokeType wideStroke(8.0f);
+            wideStroke.createStrokedPath(hitPath, linePath);
+
+            PathStrokeType stroke(2.5f);
+            stroke.createStrokedPath(linePath, linePath);
+
+            iconPath.applyTransform(AffineTransform::identity
+                                    .rotated(float_Pi * (x2 - x1 < 0 ? -1.0f: 2.0f))
+                                    .translated((x1 + x2) * 0.5f,
+                                                (y1 + y2) * 0.5f));
+        }
+        else
+        {
+            linePath.clear();
+            linePath.startNewSubPath(x1, y1);
+            linePath.lineTo(x2, y2);
+
+            PathStrokeType wideStroke(8.0f);
+            wideStroke.createStrokedPath(hitPath, linePath);
+
+            PathStrokeType stroke(2.5f);
+            stroke.createStrokedPath(linePath, linePath);
+
+            iconPath.applyTransform(AffineTransform::identity
+                                    .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                    .translated((x1 + x2) * 0.5f,
+                                                (y1 + y2) * 0.5f));
+
+        }
         PathStrokeType stroke2(0.4f);
         stroke2.createStrokedPath(iconPath, iconPath);
-
         linePath.addPath(iconPath);
     }
     else if(data.getType() == Ids::pluck)
     {
-        //This is the little bit of the path which covers the icon
-        float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) +  (y2 - y1)*(y2 - y1));
-
-        linePath.clear();
-        linePath.startNewSubPath(x1, y1);
-        linePath.lineTo(x1 + (x2 - x1) * (0.5f-c), 
-                        y1 + (y2 - y1) * (0.5f-c));
-        
-        linePath.startNewSubPath(x1 + (x2 - x1)*(0.5f+c), 
-                                 y1 + (y2 - y1)*(0.5f+c));
-//        linePath.applyTransform(AffineTransform::translation(10, 10));
-        linePath.lineTo(x2, y2);
-        
-        PathStrokeType wideStroke(8.0f);
-        wideStroke.createStrokedPath(hitPath, linePath);
-
-        PathStrokeType stroke(2.5f);
-        stroke.createStrokedPath(linePath, linePath);
-
         Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
                                                                    0,
                                                                    0,
                                                                    iconWidth,
-                                                                   iconHeight/2);
-        iconPath.applyTransform(AffineTransform::identity
-                                .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
-                                .translated((x1 + x2) * 0.5f,
-                                            (y1 + y2) * 0.5f));
+                                                                   iconHeight / 2);
+        if(segmented)
+        {
 
+        }
+        else
+        {
+            //This is the little bit of the path which covers the icon
+            float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+
+            linePath.clear();
+            linePath.startNewSubPath(x1, y1);
+            linePath.lineTo(x1 + (x2 - x1) * (0.5f - c),
+                            y1 + (y2 - y1) * (0.5f - c));
+
+            linePath.startNewSubPath(x1 + (x2 - x1)*(0.5f + c),
+                                     y1 + (y2 - y1)*(0.5f + c));
+            //        linePath.applyTransform(AffineTransform::translation(10, 10));
+            linePath.lineTo(x2, y2);
+
+            PathStrokeType wideStroke(8.0f);
+            wideStroke.createStrokedPath(hitPath, linePath);
+
+            PathStrokeType stroke(2.5f);
+            stroke.createStrokedPath(linePath, linePath);
+
+            iconPath.applyTransform(AffineTransform::identity
+                                    .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                    .translated((x1 + x2) * 0.5f,
+                                                (y1 + y2) * 0.5f));
+        }
         PathStrokeType stroke2(1.4f);
         stroke2.createStrokedPath(iconPath, iconPath);
-
         linePath.addPath(iconPath);
     }
     else if(data.getType() == Ids::touch)
     {
-        //This is the little bit of the path which covers the icon
-        float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) +  (y2 - y1)*(y2 - y1));
-        
-        linePath.clear();
-        linePath.startNewSubPath(x1, y1);
-        linePath.lineTo(x1 + (x2 - x1) * (0.5f-c), 
-                        y1 + (y2 - y1) * (0.5f-c));
-        
-        linePath.startNewSubPath((x1 + (x2 - x1) *(0.5f+c)), 
-                                 (y1 + (y2 - y1) *(0.5f+c)));
-//        linePath.applyTransform(AffineTransform::translation(10,10));
-        linePath.lineTo(x2, y2);
-        
-        PathStrokeType wideStroke(8.0f);
-        wideStroke.createStrokedPath(hitPath, linePath);
-
-        PathStrokeType stroke(2.5f);
-        stroke.createStrokedPath(linePath, linePath);
-
         Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
                                                                    0,
                                                                    0,
                                                                    iconWidth,
                                                                    iconHeight);
-        iconPath.applyTransform(AffineTransform::identity
-                                .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
-                                .translated((x1 + x2) * 0.5f,
-                                            (y1 + y2) * 0.5f));
+        if (segmented)
+        {
 
-        PathStrokeType stroke2(0.8f);
-        stroke2.createStrokedPath(iconPath, iconPath);
+        }
+        else
+        {
+            //This is the little bit of the path which covers the icon
+            float c = (iconWidth / 2.0f) / sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 
-        linePath.addPath(iconPath);
+            linePath.clear();
+            linePath.startNewSubPath(x1, y1);
+            linePath.lineTo(x1 + (x2 - x1) * (0.5f - c),
+                            y1 + (y2 - y1) * (0.5f - c));
 
-        const float arrowW = 5.0f;
-        const float arrowL = 4.0f;
+            linePath.startNewSubPath((x1 + (x2 - x1) *(0.5f + c)),
+                                     (y1 + (y2 - y1) *(0.5f + c)));
+            //        linePath.applyTransform(AffineTransform::translation(10,10));
+            linePath.lineTo(x2, y2);
 
-        Path arrow;
-        arrow.addTriangle(-arrowL, arrowW,
-                          -arrowL, -arrowW,
-                          arrowL, 0.0f);
+            PathStrokeType wideStroke(8.0f);
+            wideStroke.createStrokedPath(hitPath, linePath);
 
-        arrow.applyTransform(AffineTransform::identity
-                             .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
-                             .translated((x1 + x2) * 0.5f,
-                                         (y1 + y2) * 0.5f));
-        arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
+            PathStrokeType stroke(2.5f);
+            stroke.createStrokedPath(linePath, linePath);
 
-        linePath.addPath(arrow);
+            iconPath.applyTransform(AffineTransform::identity
+                                    .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                    .translated((x1 + x2) * 0.5f,
+                                                (y1 + y2) * 0.5f));
+
+            PathStrokeType stroke2(0.8f);
+            stroke2.createStrokedPath(iconPath, iconPath);
+
+            linePath.addPath(iconPath);
+
+            const float arrowW = 5.0f;
+            const float arrowL = 4.0f;
+
+            Path arrow;
+            arrow.addTriangle(-arrowL, arrowW,
+                              -arrowL, -arrowW,
+                              arrowL, 0.0f);
+
+            arrow.applyTransform(AffineTransform::identity
+                                 .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                                 .translated((x1 + x2) * 0.5f,
+                                             (y1 + y2) * 0.5f));
+            arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
+
+            linePath.addPath(arrow);
+        }
     }
     else if(data.getType() == Ids::waveguide)
     {

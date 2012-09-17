@@ -182,6 +182,8 @@ public:
     IdManager* getIdManager() { return idMgr; }
 
     void tidyUp();
+
+    void setLinksSegmented(bool isSegmented);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

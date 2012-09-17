@@ -68,9 +68,11 @@ public:
     Rectangle<int> getIntersectioBounds();
     
     Point<int> getPinPos();
+
+    void setSegemented(bool isSegmented) { segmented = isSegmented; resized(); }
 private:
     void drawPath(float x1, float y1, float x2, float y2);
-    
+
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     Path linePath, hitPath;
     
@@ -78,6 +80,8 @@ private:
     bool mouseDownSelectStatus;
     
     Point<float> iconPos;
+    int iconWidth;
+    int iconHeight;
     
     ObjectComponent* startComp;
     ObjectComponent* endComp;
