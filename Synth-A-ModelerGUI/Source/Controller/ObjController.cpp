@@ -933,7 +933,9 @@ String ObjController::getNewNameForObject(const Identifier& objId)
 void ObjController::tidyUp()
 {
     startDragging();
-    int YTOLERANCE = 10;
+    int YTOLERANCE = 30;
+    int XTOLERANCE = 100;
+    int NHIST = 350;
     bool all = (sObjects.getNumSelected() == 0);
 
     // tidy horizontally
@@ -963,5 +965,93 @@ void ObjController::tidyUp()
             }
         }
     }
+
+    // tidy vertically
+    int histogram[NHIST], besthist = 0, bestdist = 50;
+    for (int i = 0; i < NHIST; ++i)
+        histogram[i] = 0;
+
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        ObjectComponent* obj1 = objects[i];
+        Rectangle<int> obj1rect = obj1->getBounds();
+        if(obj1->isSelected() || all)
+        {
+            for (int j = 0; j < objects.size(); ++j)
+            {
+                ObjectComponent* obj2 = objects[j];
+                if(obj2 != obj1 && (obj2->isSelected() || all))
+                {
+
+//                    Rectangle<int> obj2rect = obj2->getBounds();
+//                    if (obj2rect.getX() <= obj1rect.getRight() + XTOLERANCE &&
+//                        obj2rect.getX() >= obj1->getPinPos().x - XTOLERANCE)
+//
+//                    int px2 = obj2->getPinPos().x;
+//                    int px1 = obj1->getPinPos().x;
+                    if (obj2->getPinPos().x <= obj1->getPinPos().x + XTOLERANCE &&
+                        obj2->getPinPos().x >= obj1->getPinPos().x - XTOLERANCE)
+                    {
+                        int distance = obj2->getPinPos().y - obj1->getPinPos().y;
+                        if (distance >= 0 && distance < NHIST)
+                            histogram[distance]++;
+                    }
+                }
+            }
+        }
+    }
+    for (int i = 2; i < (NHIST - 2); ++i)
+    {
+        int hit = 0.5 * histogram[i-2] + histogram[i-1] + 2 * histogram[i] + histogram[i+1] + 0.5 * histogram[i+2];
+        if (hit > besthist)
+        {
+            besthist = hit;
+            bestdist = i;
+        }
+    }
+    DBG("best vertical distance " << bestdist);
+    
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        bool keep = true;
+        ObjectComponent* obj1 = objects[i];
+        int ax = obj1->getPinPos().x;
+        int ay = obj1->getPinPos().y;
+        if(obj1->isSelected() || all)
+        {
+            for (int j = 0; j < objects.size(); ++j)
+            {
+                ObjectComponent* obj2 = objects[j];
+                int bx = obj2->getPinPos().x;
+                int by = obj2->getPinPos().y;
+                if(obj2 != obj1 && (obj2->isSelected() || all))
+                {
+                    while (keep)
+                    {
+                        keep = false;
+
+                        if (bx <= ax + XTOLERANCE && bx >= ax - XTOLERANCE &&
+                            by > ay && by < ay + NHIST)
+                        {
+                            int vmove = ay + bestdist - by;
+                            int dx = ax - bx;
+                            int dy = vmove;
+                            const int startX = obj2->getProperties() ["xDragStart"];
+                            const int startY = obj2->getProperties() ["yDragStart"];
+                            Point<int> r(obj2->getPosition());
+                            r.setXY(startX + dx, startY + dy);
+                            obj2->setPosition(Point<int>(r.x + obj2->getWidth() / 2, r.y + obj2->getHeight() / 2), true);
+
+                            ay = by + vmove;
+
+                            keep = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     endDragging();
 }
