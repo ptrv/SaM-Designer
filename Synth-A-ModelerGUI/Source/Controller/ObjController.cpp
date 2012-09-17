@@ -1000,9 +1000,18 @@ void ObjController::tidyUp()
             }
         }
     }
-    for (int i = 2; i < (NHIST - 2); ++i)
+//    for (int i = 2; i < (NHIST - 2); ++i)
+//    {
+//        int hit = 0.5 * histogram[i-2] + histogram[i-1] + 2 * histogram[i] + histogram[i+1] + 0.5 * histogram[i+2];
+//        if (hit > besthist)
+//        {
+//            besthist = hit;
+//            bestdist = i;
+//        }
+//    }
+    for (int i = 1; i < (NHIST - 1); ++i)
     {
-        int hit = 0.5 * histogram[i-2] + histogram[i-1] + 2 * histogram[i] + histogram[i+1] + 0.5 * histogram[i+2];
+        int hit = histogram[i-1] + 2 * histogram[i] + histogram[i+1];
         if (hit > besthist)
         {
             besthist = hit;
