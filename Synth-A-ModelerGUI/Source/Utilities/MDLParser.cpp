@@ -278,6 +278,13 @@ bool MDLParser::parseMDL()
                             aoSource.setProperty(Ids::gain, audioOutSourcesParams[1].trim(), nullptr);
                             audioSources.addChild(aoSource, -1, nullptr);
                         }
+                        else if(audioOutSourcesParams.size() == 1)
+                        {
+                            ValueTree aoSource(Ids::audiosource);
+                            aoSource.setProperty(Ids::value, audioOutSourcesParams[0].trim(), nullptr);
+                            aoSource.setProperty(Ids::gain, "1.0", nullptr);
+                            audioSources.addChild(aoSource, -1, nullptr);
+                        }
                     }
                     audioTree.addChild(audioSources, -1, nullptr);
 //					audioTree.setProperty(Ids::sources, audioOutAttributeList[2], nullptr);
