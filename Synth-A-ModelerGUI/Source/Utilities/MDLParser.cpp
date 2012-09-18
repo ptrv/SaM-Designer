@@ -64,8 +64,10 @@ bool MDLParser::parseMDL()
 		String line = lines[i];
 
 		line = line.trimCharactersAtStart(" ");
+        line = line.trimCharactersAtStart("\t");
+        line = line.trimStart();
 
-		if(line[0] != '#')
+		if(line[0] != '#' && ! line.isEmpty())
 		{
 			if(line.startsWith("mass")
 					|| line.startsWith("port")
