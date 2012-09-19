@@ -23,11 +23,16 @@
 
  */
 
+#include <vector>
+
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 
 #include "MDLParser.h"
 
+#include "re2/re2.h"
+
+using namespace re2;
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {
@@ -498,4 +503,135 @@ bool MDLParser::parseMDL()
 	return true;
 }
 
+static const char* rePos = "(\\s*#\\s*pos\\s*\\d+,\\s*\\d+\\s*)?";
+static const char* reLabel = "([a-zA-Z\\d]*)";
+static const char* reLabels = "([a-zA-Z,\\d\\s]*)";
+static const char* reParam = "(\\s*[^\\n\\r\\a\\033\\f,]*\\s*)";
+static const char* reParams = "(\\s*[^\\n\\r\\a\\033\\f]*\\s*)";
+static const char* reVertex = "(mass|port|ground|resonator)";
+static const char* reLink = "(link|pluck|touch)";
+static const char* reAudioOutDetails = "(.+)";
+static const char* reFaustCode = "(.+)\\s*=\\s*(.+)";
 
+static String getVertexLine()
+{
+    String vertexLine;
+    vertexLine << "\\A\\s*" << reVertex << "\\(\\s*" << reParams << "\\s*\\)\\s*,\\s*";
+    vertexLine << reLabel << "\\s*,\\s*\\(\\s*" << reLabels << "\\s*\\)\\s*;" << rePos << "\\s*$";
+    return vertexLine;
+}
+
+static String getLinkLine()
+{
+    String linkLine;
+    linkLine << "\\A\\s*" << reLink << "\\(\\s*" << reParams << "\\s*\\)\\s*,\\s*";
+    linkLine << reLabel << "\\s*,\\s*" << reLabel << "\\s*,\\s*" << reLabel;
+    linkLine << "\\s*,\\s*\\(\\s*" << reLabels << "\\s*\\)\\s*;\\s*$";
+    return linkLine;
+}
+
+static String getAudioOutLine()
+{
+    String aoLine;
+    aoLine << "\\A\\s*(audioout)\\s*,\\s*" << reLabel << "\\s*,";
+    aoLine << reAudioOutDetails << ";\\s*$";
+    return aoLine;
+}
+
+static String getFaustLine()
+{
+    String faustLine;
+    faustLine << "\\A\\s*(faustcode):\\s*" << reFaustCode << "$";
+    return faustLine;
+}
+
+static bool matchesRegex(const String& regex, const String& source)
+{
+    RE2 pattern(regex.toUTF8().getAddress());
+    return RE2::FullMatch(source.toUTF8().getAddress(), pattern);
+}
+
+static StringArray getAllValues(const String& regex, const String& source, int numValues)
+{
+    StringArray values;
+
+    std::vector<std::string> vals(numValues, "");
+    RE2::Arg* args[numValues];
+    OwnedArray<RE2::Arg> ownedArgs;
+    for (int i = 0; i < numValues; ++i)
+    {
+        RE2::Arg* newArg = new RE2::Arg(&vals[i]);
+        ownedArgs.add(newArg);
+        args[i] = ownedArgs[i];
+    }
+    if(RE2::FullMatchN(source.toUTF8().getAddress(),
+                       regex.toUTF8().getAddress(),
+                       args, numValues))
+    {
+        
+    }
+    for (int i = 0; i < numValues; ++i)
+    {
+        values.add(vals[i].c_str());
+    }
+
+    return values;
+}
+bool MDLParser::parseMDLRE()
+{
+    const File& in = mdlFile.getFile();
+	String mdlContent = in.loadFileAsString();
+
+	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
+
+	mdlTree.setProperty(Ids::mdlName, in.getFileName(), nullptr);
+	mdlTree.setProperty(Ids::mdlPath, in.getFullPathName(), nullptr);
+
+	StringArray lines;
+	lines.addTokens(mdlContent, "\n", "\"");
+	for (int i = 0; i < lines.size(); ++i) {
+		String line = lines[i];
+
+        if(matchesRegex(reVertex, line))
+        {
+            StringArray values = getAllValues(reVertex, line, 7);
+
+            if(values.size() != 7)
+                break;
+
+            ValueTree newTree;
+            if (values[0].compare("mass") == 0)
+            {
+                newTree = ValueTree(Ids::mass);
+            }
+            else if (values[0].compare("port") == 0)
+            {
+                newTree = ValueTree(Ids::port);
+            }
+            else if (values[0].compare("ground") == 0)
+            {
+                newTree = ValueTree(Ids::ground);
+            }
+            else if (values[0].compare("resonator") == 0)
+            {
+                newTree = ValueTree(Ids::resonator);
+            }
+            else
+            {
+                DBG("Something went really wrong!");
+                return false;
+            }
+
+            Point<int> pos = getPos(line);
+            newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+            newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+        }
+        else if(matchesRegex(reLink, line))
+        {
+
+        }
+
+    }
+    mdlFile.mdlRoot = mdlTree;
+	return true;
+}

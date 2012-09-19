@@ -13,7 +13,8 @@
                        osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="default"/>
       </CONFIGURATIONS>
     </XCODE_MAC>
-    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="../juce/modules" bigIcon="WodEAp">
+    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="../juce/modules" bigIcon="WodEAp"
+                extraLinkerFlags="-L../../Libs/re2/obj -lre2" extraCompilerFlags="-I../../Libs/re2">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
                        targetName="Synth-A-ModelerGUI" defines="UNIT_TESTS=1"/>
