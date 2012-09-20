@@ -1619,6 +1619,7 @@
 				SDKROOT_ppc = macosx10.5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				COMBINE_HIDPI_IMAGES = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1637,6 +1638,7 @@
 				SDKROOT_ppc = macosx10.5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1727,7 +1729,7 @@
 				3384ABAD25EA8B932B29EB62,
 				5CEEA72CF2CEE6733802848B,
 				F9162813323517D0F2A5FE6D ); buildRules = ( ); dependencies = ( ); name = "Synth-A-ModelerGUI"; productName = "Synth-A-ModelerGUI"; productReference = 1D7A5AC47520D28066A971E0; productInstallPath = "$(HOME)/Applications"; productType = "com.apple.product-type.application"; };
-		7A4EA1072089224BA580C8C5 = { isa = PBXProject; buildConfigurationList = E06CEDCE05EB0F43F76924E8; compatibilityVersion = "Xcode 3.2"; hasScannedForEncodings = 0; mainGroup = 55A50953C9250DCBED9B2127; projectDirPath = ""; projectRoot = ""; targets = ( E1071EF7FE75823DE4AFFA2A ); };
+		7A4EA1072089224BA580C8C5 = { isa = PBXProject; buildConfigurationList = E06CEDCE05EB0F43F76924E8; attributes = { LastUpgradeCheck = 0440; }; compatibilityVersion = "Xcode 3.2"; hasScannedForEncodings = 0; mainGroup = 55A50953C9250DCBED9B2127; projectDirPath = ""; projectRoot = ""; targets = ( E1071EF7FE75823DE4AFFA2A ); };
 	};
 	rootObject = 7A4EA1072089224BA580C8C5;
 }
