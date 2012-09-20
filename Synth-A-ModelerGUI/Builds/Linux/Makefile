@@ -47,6 +47,7 @@ OBJECTS := \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Application_7b202ed2.o \
   $(OBJDIR)/Main_70df61c1.o \
+  $(OBJDIR)/RegularExpression_7b2cba50.o \
   $(OBJDIR)/IdManager_97f65d0e.o \
   $(OBJDIR)/ResourceLoader_4c525f0f.o \
   $(OBJDIR)/MiscUtilities_c4d90fa.o \
@@ -115,6 +116,11 @@ $(OBJDIR)/Application_7b202ed2.o: ../../Source/Application/Application.cpp
 $(OBJDIR)/Main_70df61c1.o: ../../Source/Application/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/RegularExpression_7b2cba50.o: ../../Source/Utilities/RegularExpression.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling RegularExpression.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/IdManager_97f65d0e.o: ../../Source/Utilities/IdManager.cpp

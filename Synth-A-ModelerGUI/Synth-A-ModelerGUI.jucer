@@ -35,6 +35,8 @@
             file="BinaryData/synthamodeler_icon.png"/>
     </GROUP>
     <GROUP id="{335554E1-26F8-DC02-DBE7-A8EECB870A14}" name="Testsuite">
+      <FILE id="J05nAI" name="MDLParser_test.h" compile="0" resource="0"
+            file="Testsuite/MDLParser_test.h"/>
       <FILE id="LIATDU" name="MDLFile_test.h" compile="0" resource="0" file="Testsuite/MDLFile_test.h"/>
       <FILE id="f4Xh6K" name="TestUtils.h" compile="0" resource="0" file="Testsuite/TestUtils.h"/>
       <FILE id="XMa5Xv" name="OutputCmd_test.h" compile="0" resource="0"
@@ -56,6 +58,10 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="B931w7" name="RegularExpression.cpp" compile="1" resource="0"
+              file="Source/Utilities/RegularExpression.cpp"/>
+        <FILE id="ug7dWq" name="RegularExpression.h" compile="0" resource="0"
+              file="Source/Utilities/RegularExpression.h"/>
         <FILE id="YEGmmo" name="IdManager.cpp" compile="1" resource="0" file="Source/Utilities/IdManager.cpp"/>
         <FILE id="PeZsaI" name="IdManager.h" compile="0" resource="0" file="Source/Utilities/IdManager.h"/>
         <FILE id="e53h53" name="ResourceLoader.cpp" compile="1" resource="0"

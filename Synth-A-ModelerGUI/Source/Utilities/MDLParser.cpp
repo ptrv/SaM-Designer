@@ -30,9 +30,8 @@
 
 #include "MDLParser.h"
 
-#include "re2/re2.h"
+#include "RegularExpression.h"
 
-using namespace re2;
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {
@@ -503,80 +502,33 @@ bool MDLParser::parseMDL()
 	return true;
 }
 
-static const char* rePos = "(\\s*#\\s*pos\\s*\\d+,\\s*\\d+\\s*)?";
-static const char* reLabel = "([a-zA-Z\\d]*)";
-static const char* reLabels = "([a-zA-Z,\\d\\s]*)";
-static const char* reParam = "(\\s*[^\\n\\r\\a\\033\\f,]*\\s*)";
-static const char* reParams = "(\\s*[^\\n\\r\\a\\033\\f]*\\s*)";
-static const char* reVertex = "(mass|port|ground|resonator)";
-static const char* reLink = "(link|pluck|touch)";
-static const char* reAudioOutDetails = "(.+)";
-static const char* reFaustCode = "(.+)\\s*=\\s*(.+)";
-
-static String getVertexLine()
-{
-    String vertexLine;
-    vertexLine << "\\A\\s*" << reVertex << "\\(\\s*" << reParams << "\\s*\\)\\s*,\\s*";
-    vertexLine << reLabel << "\\s*,\\s*\\(\\s*" << reLabels << "\\s*\\)\\s*;" << rePos << "\\s*$";
-    return vertexLine;
-}
-
-static String getLinkLine()
-{
-    String linkLine;
-    linkLine << "\\A\\s*" << reLink << "\\(\\s*" << reParams << "\\s*\\)\\s*,\\s*";
-    linkLine << reLabel << "\\s*,\\s*" << reLabel << "\\s*,\\s*" << reLabel;
-    linkLine << "\\s*,\\s*\\(\\s*" << reLabels << "\\s*\\)\\s*;\\s*$";
-    return linkLine;
-}
-
-static String getAudioOutLine()
-{
-    String aoLine;
-    aoLine << "\\A\\s*(audioout)\\s*,\\s*" << reLabel << "\\s*,";
-    aoLine << reAudioOutDetails << ";\\s*$";
-    return aoLine;
-}
-
-static String getFaustLine()
-{
-    String faustLine;
-    faustLine << "\\A\\s*(faustcode):\\s*" << reFaustCode << "$";
-    return faustLine;
-}
-
-static bool matchesRegex(const String& regex, const String& source)
-{
-    RE2 pattern(regex.toUTF8().getAddress());
-    return RE2::FullMatch(source.toUTF8().getAddress(), pattern);
-}
-
-static StringArray getAllValues(const String& regex, const String& source, int numValues)
-{
-    StringArray values;
-
-    std::vector<std::string> vals(numValues, "");
-    RE2::Arg* args[numValues];
-    OwnedArray<RE2::Arg> ownedArgs;
-    for (int i = 0; i < numValues; ++i)
-    {
-        RE2::Arg* newArg = new RE2::Arg(&vals[i]);
-        ownedArgs.add(newArg);
-        args[i] = ownedArgs[i];
-    }
-    if(RE2::FullMatchN(source.toUTF8().getAddress(),
-                       regex.toUTF8().getAddress(),
-                       args, numValues))
-    {
-        
-    }
-    for (int i = 0; i < numValues; ++i)
-    {
-        values.add(vals[i].c_str());
-    }
-
-    return values;
-}
+//static StringArray getAllValues(const String& regex, const String& source, int numValues)
+//{
+//    StringArray values;
+//
+//    std::vector<std::string> vals(numValues, "");
+//    RE2::Arg* args[numValues];
+//    OwnedArray<RE2::Arg> ownedArgs;
+//    for (int i = 0; i < numValues; ++i)
+//    {
+//        RE2::Arg* newArg = new RE2::Arg(&vals[i]);
+//        ownedArgs.add(newArg);
+//        args[i] = ownedArgs[i];
+//    }
+//    if(RE2::FullMatchN(source.toUTF8().getAddress(),
+//                       regex.toUTF8().getAddress(),
+//                       args, numValues))
+//    {
+//
+//    }
+//    for (int i = 0; i < numValues; ++i)
+//    {
+//        values.add(vals[i].c_str());
+//    }
+//
+//    ownedArgs.clear();
+//    return values;
+//}
 bool MDLParser::parseMDLRE()
 {
     const File& in = mdlFile.getFile();
@@ -592,9 +544,13 @@ bool MDLParser::parseMDLRE()
 	for (int i = 0; i < lines.size(); ++i) {
 		String line = lines[i];
 
-        if(matchesRegex(reVertex, line))
+        RegularExpression re;
+        RegularExpression reParams = SAMRegex::paramsDetail;
+        if(re.fullMatch(SAMRegex::vertex, line))
         {
-            StringArray values = getAllValues(reVertex, line, 7);
+
+            StringArray values;
+            re.fullMatchValues(line, values, 7);
 
             if(values.size() != 7)
                 break;
@@ -625,8 +581,79 @@ bool MDLParser::parseMDLRE()
             Point<int> pos = getPos(line);
             newTree.setProperty(Ids::posX, pos.getX(), nullptr);
             newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+
+
+            if(newTree.getType() != Ids::port)
+//					if(mass->getType() != PortType)
+            {
+                String params = values[1];
+                StringArray paramsArray;
+                
+                paramsArray.addTokens(params, ",", "\"");
+                ValueTree paramsTree(Ids::parameters);
+                for (int param = 0; param < paramsArray.size(); ++param)
+                {
+                    String paramVal = paramsArray[param].trimCharactersAtStart(" ");
+                    ValueTree value(Ids::parameter);
+                    value.setProperty(Ids::value, paramVal.trim(), nullptr);
+                    paramsTree.addChild(value, -1, nullptr);
+                }
+                newTree.addChild(paramsTree, -1, nullptr);
+            }
+//            					Point<int> pos = getPos(line);
+//					newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+//					newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+//
+//					//get values between first parantheses
+//					int indexCloseParan = line.indexOf(")");
+//
+//					if(newTree.getType() != Ids::port)
+////					if(mass->getType() != PortType)
+//					{
+//						String params = line.substring(indexParantese+1, indexCloseParan);
+//						StringArray paramsArray;
+//						paramsArray.addTokens(params, ",", "\"");
+//						ValueTree paramsTree(Ids::parameters);
+//						for (int param = 0; param < paramsArray.size(); ++param) {
+//							String paramVal = paramsArray[param].trimCharactersAtStart(" ");
+//                            ValueTree value(Ids::parameter);
+//                            value.setProperty(Ids::value, paramVal.trim(), nullptr);
+//                            paramsTree.addChild(value, -1, nullptr);
+//						}
+//						newTree.addChild(paramsTree, -1, nullptr);
+//					}
+//					// get remaining line content
+//					line = line.substring(indexCloseParan+1);
+//					line = line.trimCharactersAtStart(",");
+//
+//					// get string till next comma
+//					int commaIndex = line.indexOf(",");
+//					if(commaIndex != -1)
+//					{
+//						newTree.setProperty(Ids::identifier, line.substring(0, commaIndex).trim(), nullptr);
+//					}
+//
+//					line = line.substring(commaIndex);
+//
+//					indexParantese = line.indexOf("(");
+//					indexCloseParan = line.indexOf(")");
+//					String labels = line.substring(indexParantese+1, indexCloseParan);
+//					StringArray labelsArray;
+//					labelsArray.addTokens(labels, ",", "\"");
+//					ValueTree labelsTree(Ids::labels);
+//					for (int l = 0; l < labelsArray.size(); ++l)
+//                    {
+//                        ValueTree label(Ids::label);
+//                        label.setProperty(Ids::value, labelsArray[l].trim(), nullptr);
+//                        labelsTree.addChild(label, -1, nullptr);
+//					}
+//					newTree.addChild(labelsTree, -1, nullptr);
+//
+//					ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::masses, nullptr);
+//					masses.addChild(newTree, -1, nullptr);
+
         }
-        else if(matchesRegex(reLink, line))
+        else if(re.fullMatch(SAMRegex::link, line))
         {
 
         }
@@ -635,3 +662,10 @@ bool MDLParser::parseMDLRE()
     mdlFile.mdlRoot = mdlTree;
 	return true;
 }
+
+//==============================================================================
+#if UNIT_TESTS
+
+#include "../../Testsuite/MDLParser_test.h"
+
+#endif

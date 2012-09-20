@@ -82,4 +82,27 @@ String getObjectTypeAsString(const Identifier& objType);
 String fixParameterValueIfNeeded(const String& paramVal);
 };
 
+namespace SAMRegex
+{
+static const char* pos = "(\\s*#\\s*pos\\s*\\d+,\\s*\\d+\\s*)?";
+static const char* label = "([a-zA-Z\\d]*)";
+static const char* labels = "([a-zA-Z,\\d\\s]*)";
+static const char* param = "(\\s*[^\\n\\r\\a\\033\\f,]*\\s*)";
+static const char* params = "(\\s*[^\\n\\r\\a\\033\\f]*\\s*)";
+static const char* vertex = "(mass|port|ground|resonator)";
+static const char* link = "(link|pluck|touch)";
+static const char* audioOutDetails = "(.+)";
+static const char* faustCode = "(.+)\\s*=\\s*(.+)";
+static const char* paramsDetail = "(.*?),(.*?),(.*?)";
+
+String getVertexLine();
+String getLinkLine();
+String getAudioOutLine();
+String getFaustLine();
+String getTerminationLine();
+String getJunctionLine();
+String getWaveguideLine();
+
+};
+
 #endif  // __MISCUTILITIES_H_64FF5DE5__

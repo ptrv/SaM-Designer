@@ -129,3 +129,70 @@ String fixParameterValueIfNeeded(const String& paramVal)
 }
 
 }
+
+namespace SAMRegex
+{
+
+String getVertexLine()
+{
+    String vertexLine;
+    vertexLine << "\\A\\s*" << vertex << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
+    vertexLine << label << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;";
+    vertexLine << pos << "\\s*$";
+    return vertexLine;
+}
+
+String getLinkLine()
+{
+    String linkLine;
+    linkLine << "\\A\\s*" << link << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
+    linkLine << label << "\\s*,\\s*" << label << "\\s*,\\s*" << label;
+    linkLine << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;\\s*$";
+    return linkLine;
+}
+
+String getAudioOutLine()
+{
+    String aoLine;
+    aoLine << "\\A\\s*(audioout)\\s*,\\s*" << label << "\\s*,";
+    aoLine << audioOutDetails << ";" << pos << "\\s*$";
+    return aoLine;
+}
+
+String getFaustLine()
+{
+    String faustLine;
+    faustLine << "\\A\\s*(faustcode):\\s*" << faustCode << "$";
+    return faustLine;
+}
+
+String getTerminationLine()
+{
+    String termLine;
+    termLine << "\\A\\s*(termination)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
+    termLine << label << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;";
+    termLine << pos << "\\s*$";
+    return termLine;
+}
+
+String getJunctionLine()
+{
+    String junctLine;
+    junctLine << "\\A\\s*(junction)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
+    junctLine << label << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;";
+    junctLine << pos << "\\s*$";
+    return junctLine;
+}
+
+String getWaveguideLine()
+{
+    String waveguideLine;
+    waveguideLine << "\\A\\s*(waveguide)\\(\\s*" << param << "\\s*,\\s*";
+    waveguideLine << params << "\\s*\\)\\s*,\\s*" << label << "\\s*,\\s*";
+    waveguideLine << label << "\\s*,\\s*" << label << "\\s*,\\s*\\(\\s*";
+    waveguideLine << labels << "\\s*\\)\\s*;\\s*$";
+    return waveguideLine;
+}
+
+
+}
