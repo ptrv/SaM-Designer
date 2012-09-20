@@ -545,7 +545,7 @@ bool MDLParser::parseMDLRE()
 		String line = lines[i];
 
         RegularExpression re;
-        RegularExpression reParams = SAMRegex::paramsDetail;
+        RegularExpression reParams(SAMRegex::paramsDetail);
         if(re.fullMatch(SAMRegex::vertex, line))
         {
 

@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    RegularExpression.h
-    Created: 20 Sep 2012 7:14:35pm
+    SAMRegex.h
+    Created: 21 Sep 2012 12:52:17am
     Author:  Peter Vasil
 
   ==============================================================================
@@ -23,29 +23,35 @@
  
 */
 
-#ifndef __REGULAREXPRESSION_H_197041BB__
-#define __REGULAREXPRESSION_H_197041BB__
+#ifndef __SAMREGEX_H_36A909E0__
+#define __SAMREGEX_H_36A909E0__
 
-//==============================================================================
-class RegularExpression
+
+class SAMRegex
 {
-public:
-
-	RegularExpression();
-	RegularExpression( const String& pattern );
-	~RegularExpression();
-
-    bool fullMatch(const String& subject);
-    bool fullMatch(const String& pattern, const String& subject);
-    bool fullMatchValues(const String& subject, StringArray& result, int numResults);
-    bool fullMatchValues(const String& pattern, const String& subject,
-                         StringArray& result, int numResults);
-
 private:
-
-	String pattern;
-	String subject;
-
+    SAMRegex(){}
+    ~SAMRegex(){}
+public:
+    static const char* pos;
+    static const char* label;
+    static const char* labels;
+    static const char* param;
+    static const char* params;
+    static const char* vertex;
+    static const char* link;
+    static const char* audioOutDetails;
+    static const char* faustCode;
+    static const char* paramsDetail;
+    
+    static String getVertexLine();
+    static String getLinkLine();
+    static String getAudioOutLine();
+    static String getFaustLine();
+    static String getTerminationLine();
+    static String getJunctionLine();
+    static String getWaveguideLine();
 };
 
-#endif  // __REGULAREXPRESSION_H_197041BB__
+
+#endif  // __SAMREGEX_H_36A909E0__

@@ -4,7 +4,8 @@
               bundleIdentifier="de.tu-berlin.SynthAModelerGUI" jucerVersion="3.0.0">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
-               bigIcon="WodEAp" documentExtensions=".mdl">
+               bigIcon="WodEAp" documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
+               extraLinkerFlags="-L../../Libs/re2/obj -lre2">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
@@ -58,6 +59,8 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="wRkKvF" name="SAMRegex.cpp" compile="1" resource="0" file="Source/Utilities/SAMRegex.cpp"/>
+        <FILE id="SaedNO" name="SAMRegex.h" compile="0" resource="0" file="Source/Utilities/SAMRegex.h"/>
         <FILE id="B931w7" name="RegularExpression.cpp" compile="1" resource="0"
               file="Source/Utilities/RegularExpression.cpp"/>
         <FILE id="ug7dWq" name="RegularExpression.h" compile="0" resource="0"
