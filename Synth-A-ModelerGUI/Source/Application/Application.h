@@ -111,6 +111,9 @@ public:
     };
 
     ScopedPointer<SAMLookAndFeel> samLookAndFeel;
+#ifdef DEBUG
+    ScopedPointer<Logger> samLogger;
+#endif
     //==============================================================================
 
 };

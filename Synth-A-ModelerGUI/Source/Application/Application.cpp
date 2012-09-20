@@ -64,7 +64,8 @@ void SynthAModelerApplication::initialise (const String& commandLine)
     if( StoredSettings::getInstance()->getIsLoggingOn() )
     {
 #ifdef DEBUG
-        Logger::setCurrentLogger(Utils::getLogger(), true);
+        samLogger = Utils::getLogger();
+        Logger::setCurrentLogger(samLogger);
 #endif
     }
 
@@ -106,8 +107,11 @@ void SynthAModelerApplication::shutdown()
 	mainWindows.clear();
 
 	commandManager = nullptr;
-
-	Logger::setCurrentLogger(nullptr, true);
+    
+    Logger::setCurrentLogger(nullptr);
+#ifdef DEBUG
+    samLogger = nullptr;
+#endif
 
 	ResourceLoader::deleteInstance();
 
