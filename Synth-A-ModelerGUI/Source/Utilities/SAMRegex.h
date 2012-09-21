@@ -51,6 +51,7 @@ public:
     static String getTerminationLine();
     static String getJunctionLine();
     static String getWaveguideLine();
+    static String getParamsLine(int numParams);
 };
 
 

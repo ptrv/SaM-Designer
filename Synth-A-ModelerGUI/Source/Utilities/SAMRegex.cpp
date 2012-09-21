@@ -37,7 +37,7 @@ const char* SAMRegex::vertex = "(mass|port|ground|resonator)";
 const char* SAMRegex::link = "(link|pluck|touch)";
 const char* SAMRegex::audioOutDetails = "(.+)";
 const char* SAMRegex::faustCode = "(.+)\\s*=\\s*(.+)";
-const char* SAMRegex::paramsDetail = "(.*?),(.*?),(.*?)";
+const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*\\(\\),\\s*]+)";
 
 String SAMRegex::getVertexLine()
 {
@@ -98,4 +98,16 @@ String SAMRegex::getWaveguideLine()
     waveguideLine << label << "\\s*,\\s*" << label << "\\s*,\\s*\\(\\s*";
     waveguideLine << labels << "\\s*\\)\\s*;\\s*$";
     return waveguideLine;
+}
+
+String SAMRegex::getParamsLine(int numParams)
+{
+    String paramsLine;
+    for (int i = 0; i < numParams; ++i)
+    {
+        paramsLine << "\\s*" << paramsDetail << "\\s*";
+        if(i != numParams - 1)
+            paramsLine << ",";
+    }
+    return paramsLine;
 }

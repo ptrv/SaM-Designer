@@ -31,6 +31,7 @@
 #include "MDLParser.h"
 
 #include "RegularExpression.h"
+#include "../Utilities/SAMRegex.h"
 
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)

@@ -92,7 +92,24 @@ public:
         // test 18
         expect(re.fullMatch(SAMRegex::getVertexLine(),
                             "resonator(200.0,1.5,0.01),r0,();"));
-
+        // test 19
+        expect(re.fullMatch(SAMRegex::getParamsLine(3),
+                            "200.0,1.5,0.01"));
+        // test 20
+        expect(re.fullMatch(SAMRegex::getParamsLine(3),
+                            "200.0*adjStiffness,1.5,0.01"));
+        // test 21
+        expect(re.fullMatch(SAMRegex::getParamsLine(2),
+                            "8.0,simpleString(1.0,0.001)"));
+        // test 22
+        expect(re.fullMatch(SAMRegex::getParamsLine(1),
+                            "simpleString(1.0,0.001,0.1)"));
+        // test 23
+        expect(re.fullMatch(SAMRegex::getParamsLine(1),
+                            "1.0"));
+        // test 21
+        expect(re.fullMatch(SAMRegex::getParamsLine(2),
+                            "simpleString(1.0,0.001,3.0), 8.0"));
     }
 };
 
