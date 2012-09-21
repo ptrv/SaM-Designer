@@ -109,13 +109,27 @@ public:
                             "1.0"));
         // test 24
         expect(re.fullMatch(SAMRegex::getParamsLine(2),
-                            "simpleString(1.0,0.001,3.0), 8.0"));
+                            "simpleString(1.0, 0.001,3.0) , 8.0"));
         // test 25
         StringArray labelArray;
         re.findAndConsume("(\\w+)", "label_1, label2, label3", labelArray);
         expect(labelArray[0].compare("label_1") == 0 &&
                labelArray[1].compare("label2") == 0 &&
                labelArray[2].compare("label3") == 0);
+        // test 26
+        StringArray paramsArray;
+        expect(re.fullMatchValues(SAMRegex::getParamsLine(5),
+                                  "8.0,simpleString(1.0, 0.001),4.0,simpleString(1.0,0.001),1.0",
+                                  paramsArray, 5));
+        // test 27
+        expect(paramsArray[0].compare("8.0") == 0 &&
+               paramsArray[1].compare("simpleString(1.0, 0.001)") == 0 &&
+               paramsArray[2].compare("4.0") == 0 &&
+               paramsArray[3].compare("simpleString(1.0,0.001)") == 0 &&
+               paramsArray[4].compare("1.0") == 0 );
+//        for (int i = 0; i < paramsArray.size(); ++i) {
+//            DBG(paramsArray[i]);
+//        }
     }
 };
 

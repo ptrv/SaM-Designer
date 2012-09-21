@@ -37,7 +37,7 @@ const char* SAMRegex::vertex = "(mass|port|ground|resonator)";
 const char* SAMRegex::link = "(link|pluck|touch)";
 const char* SAMRegex::audioOutDetails = "(.+)";
 const char* SAMRegex::faustCode = "(.+)\\s*=\\s*(.+)";
-const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*\\(\\),\\s*]+)";
+const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*]+|[a-zA-Z]*\\([a-zA-Z\\.\\d,\\s*]*\\))";
 
 String SAMRegex::getVertexLine()
 {
