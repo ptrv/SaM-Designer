@@ -40,7 +40,9 @@ public:
     bool fullMatchValues(const String& subject, StringArray& result, int numResults);
     bool fullMatchValues(const String& pattern, const String& subject,
                          StringArray& result, int numResults);
-
+    void findAndConsume(const String& subject, StringArray& result);
+    void findAndConsume(const String& pattern, const String& subject,
+                        StringArray& result);
 private:
 
 	String pattern;

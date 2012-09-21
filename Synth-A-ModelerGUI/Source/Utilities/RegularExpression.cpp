@@ -98,3 +98,28 @@ bool RegularExpression::fullMatchValues(const String& subject_, StringArray& res
     ownedArgs.clear();
     return isMatch;
 }
+
+void RegularExpression::findAndConsume(const String& pattern_, const String& subject_,
+                                       StringArray& result)
+{
+    pattern = pattern_;
+    findAndConsume(subject_, result);
+}
+
+void RegularExpression::findAndConsume(const String& subject_, StringArray& result)
+{
+    subject = subject_;
+    RE2 regex(pattern.toUTF8().getAddress());
+    
+    re2::StringPiece input(subject.toUTF8().getAddress());
+
+    bool match = true;
+    
+    while (match)
+    {
+        std::string word;
+        match = RE2::FindAndConsume(&input, regex, &word);
+        if(match)
+            result.add(word.c_str());
+    }
+}

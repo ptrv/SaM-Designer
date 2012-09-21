@@ -107,9 +107,15 @@ public:
         // test 23
         expect(re.fullMatch(SAMRegex::getParamsLine(1),
                             "1.0"));
-        // test 21
+        // test 24
         expect(re.fullMatch(SAMRegex::getParamsLine(2),
                             "simpleString(1.0,0.001,3.0), 8.0"));
+        // test 25
+        StringArray labelArray;
+        re.findAndConsume("(\\w+)", "label_1, label2, label3", labelArray);
+        expect(labelArray[0].compare("label_1") == 0 &&
+               labelArray[1].compare("label2") == 0 &&
+               labelArray[2].compare("label3") == 0);
     }
 };
 
