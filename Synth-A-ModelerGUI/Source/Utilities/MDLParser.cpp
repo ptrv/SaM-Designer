@@ -227,7 +227,7 @@ bool MDLParser::parseMDL()
             }
 
             // remove surrounding paranthese if there are some.
-            RegularExpression rePar("\\((.+)\\)|(.+)");
+            RegularExpression rePar("\\(?(.+)\\)?|(.+)");
             StringArray audioLineClean;
             rePar.fullMatchValues(audioLine, audioLineClean, 1);
             

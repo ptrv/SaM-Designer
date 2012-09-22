@@ -184,9 +184,9 @@ void setGainForSourceId(ValueTree& sources, const String& sourceId,
         int srcIdx = -1;
         for (int j = 0; j < vals.size(); ++j)
         {
-            if(vals[i].compare(sourceId) == 0)
+            if(vals[j].compare(sourceId) == 0)
             {
-                srcIdx = i;
+                srcIdx = j;
                 break;
             }
         }
@@ -196,7 +196,6 @@ void setGainForSourceId(ValueTree& sources, const String& sourceId,
             gainStr << gainVal;
             source.setProperty(Ids::value, gainStr, undoManager);
             break;
-
         }
     }
 }
