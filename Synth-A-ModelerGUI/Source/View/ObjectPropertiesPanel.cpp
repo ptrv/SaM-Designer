@@ -316,7 +316,6 @@ public:
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
@@ -418,7 +417,6 @@ public:
 		teFreq.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		teDecay.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
 		teEqMass.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
@@ -525,7 +523,6 @@ public:
 	{
 		teName.setText(data[Ids::identifier].toString());
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
@@ -666,7 +663,6 @@ public:
             ++offset;
         }
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2+offset)[Ids::value].toString());
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
@@ -906,8 +902,6 @@ public:
         teName.setText(data[Ids::identifier].toString());
 		teWaveImp.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		teStringType.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
@@ -1012,7 +1006,6 @@ public:
     {
         teName.setText(data[Ids::identifier].toString());
 		teTermType.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
@@ -1102,7 +1095,6 @@ public:
     {
         teName.setText(data[Ids::identifier].toString());
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
 			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
