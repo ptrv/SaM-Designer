@@ -250,9 +250,6 @@ bool MDLParser::parseMDL()
             StringArray values;
             re.fullMatchValues(line, values, 6);
 
-
-            Point<int> pos = getPos(line);
-
             ValueTree waveguideTree(Ids::waveguide);
 
             String params = values[1];
@@ -334,7 +331,6 @@ bool MDLParser::parseMDL()
             ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
             junctsTree.addChild(junctTree, -1, nullptr);
         }
-//        DBG(mdlTree.toXmlString());
     }
     mdlFile.mdlRoot = mdlTree;
 	return true;

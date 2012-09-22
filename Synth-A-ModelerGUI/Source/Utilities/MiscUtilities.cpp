@@ -162,8 +162,6 @@ String getGainForSourceId(ValueTree& sources, const String& sourceId)
                     gainStr << vals[j];
                     ++ gainVals;
                 }
-//                if(j != vals.size()-1 && gainVals > 1)
-//                    gainStr << "*";
             }
             break;
 

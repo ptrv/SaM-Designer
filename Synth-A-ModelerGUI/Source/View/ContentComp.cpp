@@ -234,13 +234,17 @@ void ContentComp::resized()
 
     viewport->setBounds(4, 4, getWidth(), getHeight() - 8);
 
-    //    if (document.isFixedSize())
+    if (false)
     objectsHolder->setSize(jmax(mainWindow.getWidth() - 8,
                                 roundToInt((viewport->getWidth() - viewport->getScrollBarThickness()) / getZoom())),
                            jmax(mainWindow.getHeight() - LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight() - 8,
                                 roundToInt((viewport->getHeight() - viewport->getScrollBarThickness()) / getZoom())));
-    //    else
-    //        objectsHolder->setSize (viewport->getWidth(), viewport->getHeight());
+    else
+    {
+        Rectangle<int> rect = objectsHolder->getObjectsExtent();
+        objectsHolder->setSize(jmax(roundToInt((viewport->getWidth() - viewport->getScrollBarThickness()) / getZoom()), rect.getRight()),
+                               jmax(roundToInt((viewport->getHeight() - viewport->getScrollBarThickness()) / getZoom()), rect.getBottom()));
+    }
     //        DBG(viewport->getBounds().toString());
 //    DBG(String(viewport->getViewWidth()) + ", " + String(viewport->getViewHeight()));
     //    objectsHolder->setSize (mainWindow.getWidth(), mainWindow.getHeight());

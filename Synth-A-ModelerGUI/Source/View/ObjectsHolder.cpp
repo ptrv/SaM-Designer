@@ -38,7 +38,7 @@
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_) 
 : objController(objController_), mdlFile(nullptr), 
-    dragging(false), isDrawingObjectNames(false)
+    dragging(false), isDrawingObjectNames(false), maxX(0), maxY(0)
 {
     setSize(100, 100);
     setWantsKeyboardFocus(true);
@@ -84,6 +84,8 @@ void ObjectsHolder::resized()
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 {
     updateComponents();
+    if(ContentComp* const cp = findParentComponentOfClass<ContentComp>())
+        cp->resized();
 }
 
 void ObjectsHolder::updateComponents()
@@ -96,6 +98,7 @@ void ObjectsHolder::updateComponents()
     {
         if (ObjectComponent * const bobj = dynamic_cast<ObjectComponent*> (getChildComponent(i)))
         {
+            checkExtent(bobj->getBounds());
             bobj->update();
         }
         else if (LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i)))
@@ -573,4 +576,31 @@ SelectedItemSet <SelectableObject*>& ObjectsHolder::getLassoSelection()
 void ObjectsHolder::deleteSelectedObjects()
 {
     objController.removeSelectedObjects(this);
+}
+
+const Rectangle<int> ObjectsHolder::getObjectsExtent() const
+{
+//    int maxX = 0;
+//    int maxY = 0;
+//    for (int i = 0; i < getNumChildComponents(); ++i)
+//    {
+//        Component* const comp = getChildComponent(i);
+//        Rectangle<int> rect = comp->getBounds();
+//        int x = rect.getRight();
+//        int y = rect.getBottom();
+//        if(x > maxX)
+//            maxX = x;
+//        if(y > maxY)
+//            maxY = y;
+//    }
+    return Rectangle<int>(0,0, maxX, maxY);
+}
+
+void ObjectsHolder::checkExtent(const Rectangle<int>& r)
+{
+    if(r.getRight() > maxX)
+        maxX = r.getRight();
+    if(r.getBottom() > maxY)
+        maxY = r.getBottom();
+    
 }

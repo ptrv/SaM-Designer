@@ -78,11 +78,14 @@ public:
     void showAudioConnectionPopupMenu();
     
     void deleteSelectedObjects();
+
+    const Rectangle<int> getObjectsExtent() const;
     //==========================================================================
 private:
 
     void showContextMenu(const Point<int> mPos);
 
+    void checkExtent(const Rectangle<int>& r);
     ObjController& objController;
     MDLFile* mdlFile;
 
@@ -93,6 +96,9 @@ private:
     LassoComponent<SelectableObject*> lassoComp;
     
     bool isDrawingObjectNames;
+
+    int maxX, maxY;
+    
 };
 
 
