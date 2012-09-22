@@ -40,6 +40,8 @@ public:
     bool fullMatchValues(const String& subject, StringArray& result, int numResults);
     bool fullMatchValues(const String& pattern, const String& subject,
                          StringArray& result, int numResults);
+    bool partialMatch(const String& subject);
+    bool partialMatch(const String& pattern, const String& subject);
     void findAndConsume(const String& subject, StringArray& result);
     void findAndConsume(const String& pattern, const String& subject,
                         StringArray& result);

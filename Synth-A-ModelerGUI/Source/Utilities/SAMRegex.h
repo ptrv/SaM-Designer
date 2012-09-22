@@ -41,8 +41,10 @@ public:
     static const char* vertex;
     static const char* link;
     static const char* audioOutDetails;
+    static const char* faustName;
     static const char* faustCode;
     static const char* paramsDetail;
+    static const char* word;
     
     static String getVertexLine();
     static String getLinkLine();

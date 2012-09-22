@@ -26,6 +26,8 @@
 #ifndef __MISCUTILITIES_H_64FF5DE5__
 #define __MISCUTILITIES_H_64FF5DE5__
 
+class BaseObjectComponent;
+class ObjController;
 /**
  * Namespace for
  */
@@ -80,6 +82,12 @@ String getObjectTypeAsString(const Identifier& objType);
  * @return				return a formatted parameter value
  */
 String fixParameterValueIfNeeded(const String& paramVal);
+
+String getGainForSourceId(ValueTree& sources, const String& sourceId);
+void setGainForSourceId(ValueTree& sources, const String& sourceId,
+                        const String& gainVal, UndoManager* undoManager);
+
+BaseObjectComponent* getSourceIdFromSource(ObjController* objController, ValueTree& source);
 };
 
 

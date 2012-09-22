@@ -56,10 +56,8 @@ bool RegularExpression::fullMatch( const String& subject_ )
 	subject = subject_;
     RE2 regexPattern(pattern.toUTF8().getAddress());
 
-    bool isMatch = RE2::FullMatch(subject.toUTF8().getAddress(),
-                                  regexPattern);
-
-	return isMatch;
+    return RE2::FullMatch(subject.toUTF8().getAddress(),
+                          regexPattern);
 }
 
 bool RegularExpression::fullMatchValues(const String& pattern_, const String& subject_,
@@ -99,6 +97,20 @@ bool RegularExpression::fullMatchValues(const String& subject_, StringArray& res
     return isMatch;
 }
 
+bool RegularExpression::partialMatch( const String& pattern_, const String& subject_ )
+{
+	pattern = pattern_;
+	return fullMatch(subject_);
+}
+
+bool RegularExpression::partialMatch( const String& subject_ )
+{
+	subject = subject_;
+    RE2 regexPattern(pattern.toUTF8().getAddress());
+
+    return RE2::PartialMatch(subject.toUTF8().getAddress(),
+                             regexPattern);
+}
 void RegularExpression::findAndConsume(const String& pattern_, const String& subject_,
                                        StringArray& result)
 {

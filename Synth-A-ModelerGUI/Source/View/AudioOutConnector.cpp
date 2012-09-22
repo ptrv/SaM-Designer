@@ -89,8 +89,9 @@ private:
     	  undoManager(undoManager_)
         {
             ValueTree sources = data.getChildWithName(Ids::sources);
-            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
-            oldGain = source[Ids::gain].toString();
+//            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
+//            oldGain = source[Ids::gain].toString();
+            oldGain = Utils::getGainForSourceId(sources, sourceId);
             teGain.setText(oldGain);
             teGain.addListener(this);
     		addAndMakeVisible(&teGain);
@@ -146,13 +147,15 @@ private:
         }
         void applyEditing()
         {
-            ValueTree sources = data.getChildWithName(Ids::sources);
-            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
+//            ValueTree sources = data.getChildWithName(Ids::sources);
+//            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
             String newGain = teGain.getText();
             if (oldGain.compare(newGain) != 0)
             {
                 undoManager->beginNewTransaction("Edit gain");
-                source.setProperty(Ids::gain, newGain, undoManager);
+                ValueTree sources = data.getChildWithName(Ids::sources);
+                Utils::setGainForSourceId(sources, sourceId, newGain, undoManager);
+//                source.setProperty(Ids::gain, newGain, undoManager);
                 undoManager->beginNewTransaction();
             }
             parent.returnVal = 1;

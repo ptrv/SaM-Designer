@@ -764,12 +764,17 @@ public:
                                 UndoManager* undoManager_)
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
         laSource("laSource", "Source"),
-        teSource("teSource")
+        teSource("teSource"),
+        laOpt("laOpt", "Optional"),
+        teOpt("teopt")
 	{
         teSource.setReadOnly(true);
         teSource.addListener(this);
         addAndMakeVisible(&teSource);
         laSource.attachToComponent(&teSource,true);
+        teOpt.addListener(this);
+        addAndMakeVisible(&teOpt);
+        laOpt.attachToComponent(&teOpt, true);
         
 		readValues();
 	}
@@ -783,6 +788,7 @@ public:
 		ObjectPropertiesComponent::resized();
         
         teSource.setBounds(100 , 40, getWidth() - 110, 22);
+        teOpt.setBounds(100 , 70, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -794,12 +800,10 @@ public:
         {
             ValueTree source = sourcesTree.getChild(i);
             sourceText << source[Ids::value].toString();
-            sourceText << "*";
-            sourceText << source[Ids::gain].toString();
             if(i != sourcesTree.getNumChildren()-1)
                 sourceText << "+";
         }
-
+        sourceText << data.getProperty(Ids::optional).toString();
         teSource.setText(sourceText);
 	}
 
@@ -830,15 +834,17 @@ public:
         for (int i = 0; i < sourcesList.size(); ++i)
         {
             ValueTree source(Ids::audiosource);
-            StringArray sourceParams;
-            sourceParams.addTokens(sourcesList[i], "*", "\"");
-            if(sourceParams.size() != 2)
-                return false;
-
-            source.setProperty(Ids::value, sourceParams[0], undoManager);
-            source.setProperty(Ids::gain, sourceParams[1], undoManager);
+//            StringArray sourceParams;
+//            sourceParams.addTokens(sourcesList[i], "*", "\"");
+//            if(sourceParams.size() != 2)
+//                return false;
+//
+//            source.setProperty(Ids::value, sourceParams[0], undoManager);
+//            source.setProperty(Ids::gain, sourceParams[1], undoManager);
+            source.setProperty(Ids::value, sourcesList[i], undoManager);
             sourcesTree.addChild(source, -1, undoManager);
         }
+        data.setProperty(Ids::optional, teOpt.getText(), undoManager);
         
         return true;
 	}
@@ -846,6 +852,8 @@ public:
 private:
     Label laSource;
     TextEditor teSource;
+    Label laOpt;
+    TextEditor teOpt;
 };
 
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
@@ -859,10 +867,10 @@ public:
       teWaveImp("teWaveImp"),
       laStringType("laStringType", "String type"),
       teStringType("teStringType"),
-      laMaxTime("laMaxTime", "Max delay (s)"),
-      teMaxTime("teMaxTime"),
-      laCurrTime("laCurrTime", "Current delay (s)"),
-      teCurrTime("teCurrTime"),
+//      laMaxTime("laMaxTime", "Max delay (s)"),
+//      teMaxTime("teMaxTime"),
+//      laCurrTime("laCurrTime", "Current delay (s)"),
+//      teCurrTime("teCurrTime"),
       laLabels("laLabels", "Labels"),
       teLabels("teLabels"),
       laLeftObj("laLeftObj", "Left object"),
@@ -876,15 +884,15 @@ public:
         teStringType.addListener(this);
 		addAndMakeVisible(&teStringType);
 		laStringType.attachToComponent(&teStringType, true);
-        teMaxTime.addListener(this);
-		addAndMakeVisible(&teMaxTime);
-		laMaxTime.attachToComponent(&teMaxTime, true);
+//        teMaxTime.addListener(this);
+//		addAndMakeVisible(&teMaxTime);
+//		laMaxTime.attachToComponent(&teMaxTime, true);
         teLabels.addListener(this);
 		addAndMakeVisible(&teLabels);
 		laLabels.attachToComponent(&teLabels, true);
-        teCurrTime.addListener(this);
-        addAndMakeVisible(&teCurrTime);
-		laCurrTime.attachToComponent(&teCurrTime, true);
+//        teCurrTime.addListener(this);
+//        addAndMakeVisible(&teCurrTime);
+//		laCurrTime.attachToComponent(&teCurrTime, true);
         teLeftObj.setReadOnly(true);
         teLeftObj.addListener(this);
 		addAndMakeVisible(&teLeftObj);
@@ -905,8 +913,8 @@ public:
 
         teWaveImp.setBounds(100, 40, getWidth() - 110, 22);
 		teStringType.setBounds(100 , 70, getWidth() - 110, 22);
-		teMaxTime.setBounds(100 , 100, getWidth() - 110, 22);
-		teCurrTime.setBounds(100, 130, getWidth() - 110, 22);
+//		teMaxTime.setBounds(100 , 100, getWidth() - 110, 22);
+//		teCurrTime.setBounds(100, 130, getWidth() - 110, 22);
         teLabels.setBounds(100, 160, getWidth() - 110, 22);
         teLeftObj.setBounds(100, 190, getWidth() - 110, 22);
         teRightObj.setBounds(100, 220, getWidth() - 110, 22);
@@ -917,8 +925,8 @@ public:
         teName.setText(data[Ids::identifier].toString());
 		teWaveImp.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		teStringType.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-        teMaxTime.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::maxtime].toString());
-        teCurrTime.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::curtime].toString());
+//        teMaxTime.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::maxtime].toString());
+//        teCurrTime.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::curtime].toString());
 
 		String labelText;
 		StringArray labelsArray;
@@ -960,12 +968,12 @@ public:
                         Utils::fixParameterValueIfNeeded(teWaveImp.getText()),
                         undoManager);
         pa2.setProperty(Ids::value, teStringType.getText(), undoManager);
-        pa2.setProperty(Ids::maxtime, 
-                        Utils::fixParameterValueIfNeeded(teMaxTime.getText()),
-                        undoManager);
-        pa2.setProperty(Ids::curtime,
-                        Utils::fixParameterValueIfNeeded(teCurrTime.getText()),
-                        undoManager);
+//        pa2.setProperty(Ids::maxtime,
+//                        Utils::fixParameterValueIfNeeded(teMaxTime.getText()),
+//                        undoManager);
+//        pa2.setProperty(Ids::curtime,
+//                        Utils::fixParameterValueIfNeeded(teCurrTime.getText()),
+//                        undoManager);
 
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
         labelsTree.removeAllChildren(undoManager);
@@ -985,10 +993,10 @@ private:
 	TextEditor teWaveImp;
     Label laStringType;
 	TextEditor teStringType;
-	Label laMaxTime;
-	TextEditor teMaxTime;
-	Label laCurrTime;
-	TextEditor teCurrTime;
+//	Label laMaxTime;
+//	TextEditor teMaxTime;
+//	Label laCurrTime;
+//	TextEditor teCurrTime;
 	Label laLabels;
 	TextEditor teLabels;
     Label laLeftObj;
@@ -1006,10 +1014,10 @@ public:
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
       laTermType("laTermType", "Type"),
 	  teTermType("teTermType"),
-      laReflection("laReflection", "Reflection (-1 to 1)"),
-	  teReflection("teTermType"),
-      laLowPass("laLowPass", "Lowpass"),
-	  teLowPass("teLowPass"),
+//      laReflection("laReflection", "Reflection (-1 to 1)"),
+//	  teReflection("teTermType"),
+//      laLowPass("laLowPass", "Lowpass"),
+//	  teLowPass("teLowPass"),
       laLabels("laLabels", "Labels"),
 	  teLabels("teLabels")
 	{
@@ -1019,12 +1027,12 @@ public:
         teTermType.addListener(this);
 		addAndMakeVisible(&teTermType);
 		laTermType.attachToComponent(&teTermType, true);
-        teReflection.addListener(this);
-		addAndMakeVisible(&teReflection);
-		laReflection.attachToComponent(&teReflection, true);
-        teLowPass.addListener(this);
-		addAndMakeVisible(&teLowPass);
-		laLowPass.attachToComponent(&teLowPass, true);
+//        teReflection.addListener(this);
+//		addAndMakeVisible(&teReflection);
+//		laReflection.attachToComponent(&teReflection, true);
+//        teLowPass.addListener(this);
+//		addAndMakeVisible(&teLowPass);
+//		laLowPass.attachToComponent(&teLowPass, true);
 
 		readValues();
 	}
@@ -1038,8 +1046,8 @@ public:
 		ObjectPropertiesComponent::resized();
 
         teTermType.setBounds(100, 40, getWidth() - 110, 22);
-		teReflection.setBounds(100, 70, getWidth() - 110, 22);
-        teLowPass.setBounds(100, 100, getWidth() - 110, 22);
+//		teReflection.setBounds(100, 70, getWidth() - 110, 22);
+//        teLowPass.setBounds(100, 100, getWidth() - 110, 22);
 		teLabels.setBounds(100, 130, getWidth() - 110, 22);
 	}
 
@@ -1047,8 +1055,8 @@ public:
     {
         teName.setText(data[Ids::identifier].toString());
 		teTermType.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		teReflection.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::reflection].toString());
-		teLowPass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::lowpass].toString());
+//		teReflection.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::reflection].toString());
+//		teLowPass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::lowpass].toString());
 		String labelText;
 		StringArray labelsArray;
 		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
@@ -1082,12 +1090,12 @@ public:
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, teTermType.getText(), undoManager);
-        param.setProperty(Ids::reflection, 
-                          Utils::fixParameterValueIfNeeded(teReflection.getText()),
-                          undoManager);
-        param.setProperty(Ids::lowpass,
-                          Utils::fixParameterValueIfNeeded(teLowPass.getText()),
-                          undoManager);
+//        param.setProperty(Ids::reflection,
+//                          Utils::fixParameterValueIfNeeded(teReflection.getText()),
+//                          undoManager);
+//        param.setProperty(Ids::lowpass,
+//                          Utils::fixParameterValueIfNeeded(teLowPass.getText()),
+//                          undoManager);
 		ValueTree labelsTree = data.getChildWithName(Ids::labels);
 		String labelsString = teLabels.getText();
 		StringArray labelsArray;
@@ -1103,10 +1111,10 @@ public:
 private:
 	Label laTermType;
 	TextEditor teTermType;
-   	Label laReflection;
-	TextEditor teReflection;
-	Label laLowPass;
-	TextEditor teLowPass;
+//   	Label laReflection;
+//	TextEditor teReflection;
+//	Label laLowPass;
+//	TextEditor teLowPass;
     Label laLabels;
 	TextEditor teLabels;
 };

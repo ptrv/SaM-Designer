@@ -207,8 +207,10 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
         AudioOutConnector* aoc = new AudioOutConnector(*this, objComp, audioOutComp);
         ValueTree sources = aoc->getAudioObject()->getData().getChildWithName(Ids::sources);
         ValueTree source(Ids::audiosource);
-        source.setProperty(Ids::value, aoc->getSourceObject()->getData()[Ids::identifier], nullptr);
-        source.setProperty(Ids::gain, "1.0", nullptr);
+        String aSrc;
+        aSrc << aoc->getSourceObject()->getData()[Ids::identifier].toString();
+        aSrc << "*1.0";
+        source.setProperty(Ids::value, aSrc, nullptr);
         sources.addChild(source, -1, nullptr);
         audioConnections.insert(index, aoc);
         holder->addAndMakeVisible(aoc);
@@ -486,13 +488,13 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             for (int j = 0; j < aoSources.getNumChildren(); ++j)
             {
                 ValueTree source = aoSources.getChild(j);
-                ObjectComponent* oc = getObjectForId(source[Ids::value]);
-                LinkComponent* lc = getLinkForId(source[Ids::value]);
-                BaseObjectComponent* sourceComp = nullptr;
-                if(oc != nullptr)
-                    sourceComp = oc;
-                else if(lc != nullptr)
-                    sourceComp = lc;
+//                ObjectComponent* oc = getObjectForId(src);
+//                LinkComponent* lc = getLinkForId(src);
+                BaseObjectComponent* sourceComp = Utils::getSourceIdFromSource(this, source);
+//                if(oc != nullptr)
+//                    sourceComp = oc;
+//                else if(lc != nullptr)
+//                    sourceComp = lc;
                 
                 if( sourceComp != nullptr )
                 {
@@ -832,18 +834,19 @@ void ObjController::paste(ObjectsHolder* holder)
                 ValueTree sources = valTree.getChildWithName(Ids::sources);
                 for (int j = 0; j < sources.getNumChildren(); ++j) {
                     ValueTree source = sources.getChild(j);
-                    String oldSrcName = source[Ids::value].toString();
+                    BaseObjectComponent* sourceComp = Utils::getSourceIdFromSource(this, source);
+                    String oldSrcName = sourceComp->getData()[Ids::identifier];
                     if(objectNamesOldNewForAudio.contains(oldSrcName))
                     {
                         source.setProperty(Ids::value, objectNamesOldNewForAudio[oldSrcName], nullptr);
                     }
-                    ObjectComponent* oc = getObjectForId(source[Ids::value]);
-                    LinkComponent* lc = getLinkForId(source[Ids::value]);
-                    BaseObjectComponent* sourceComp = nullptr;
-                    if(oc != nullptr)
-                        sourceComp = oc;
-                    else if(lc != nullptr)
-                        sourceComp = lc;
+//                    ObjectComponent* oc = getObjectForId(source[Ids::value]);
+//                    LinkComponent* lc = getLinkForId(source[Ids::value]);
+//                    BaseObjectComponent* sourceComp = nullptr;
+//                    if(oc != nullptr)
+//                        sourceComp = oc;
+//                    else if(lc != nullptr)
+//                        sourceComp = lc;
                     
                     if( sourceComp != nullptr )
                     {

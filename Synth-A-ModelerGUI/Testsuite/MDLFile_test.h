@@ -55,7 +55,7 @@ public:
 		expectEquals(m.getChild(0).getType().toString(), Ids::mass.toString());
 		ValueTree params = m.getChild(0).getChildWithName(Ids::parameters);
         // test 3
-		expectEquals(float(params.getChild(0)[Ids::value]), 0.01f);
+		expectEquals(params.getChild(0)[Ids::value].toString(), String("0.01"));
         // test 4
 		expectEquals(m.getChild(0)[Ids::identifier].toString(), String("m1"));
 		ValueTree labels = m.getChild(0).getChildWithName(Ids::labels);
@@ -69,7 +69,7 @@ public:
 		expectEquals(m.getChild(1).getType().toString(), Ids::mass.toString());
 		params = m.getChild(1).getChildWithName(Ids::parameters);
         // test 7
-		expectEquals(float(params.getChild(0)[Ids::value]), 0.01f);
+		expectEquals(params.getChild(0)[Ids::value].toString(), String("0.01"));
         // test 8
 		expectEquals(m.getChild(1)[Ids::identifier].toString(), String("m2"));
 		labels = m.getChild(1).getChildWithName(Ids::labels);
@@ -84,7 +84,7 @@ public:
 		expectEquals(m.getChild(2).getType().toString(), Ids::mass.toString());
 		params = m.getChild(2).getChildWithName(Ids::parameters);
         // test 11
-		expectEquals(float(params.getChild(0)[Ids::value]), 0.03f);
+		expectEquals(params.getChild(0)[Ids::value].toString(), String("0.03"));
         // test 12
 		expectEquals(m.getChild(2)[Ids::identifier].toString(), String("m3"));
 		labels = m.getChild(2).getChildWithName(Ids::labels);
@@ -278,11 +278,10 @@ public:
         {
             ValueTree src = sources1.getChild(i);
             actualSources1 << src[Ids::value].toString();
-            actualSources1 << "*";
-            actualSources1 << src[Ids::gain].toString();
             if(i != sources1.getNumChildren()-1)
                 actualSources1 << "+";
         }
+        actualSources1 << aus.getChild(0).getProperty(Ids::optional, "").toString();
         // test 4
 		expectEquals(actualSources1, String("m1*(1000.0)+l1*(100.0)"));
 
@@ -296,8 +295,6 @@ public:
         {
             ValueTree src = sources2.getChild(i);
             actualSources2 << src[Ids::value].toString();
-            actualSources2 << "*";
-            actualSources2 << src[Ids::gain].toString();
             if(i != sources2.getNumChildren()-1)
                 actualSources2 << "+";
         }

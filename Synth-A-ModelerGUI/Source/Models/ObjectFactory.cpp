@@ -37,16 +37,12 @@ static ValueTree createNewMassTree(const String& newName, int x, int y)
 
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
-	ValueTree paramsTree(Ids::parameters);
-    ValueTree pa1(Ids::parameter);
-    ValueTree pa2(Ids::parameter);
-    ValueTree pa3(Ids::parameter);
-	pa1.setProperty(Ids::value, "0.001", nullptr);
-	pa2.setProperty(Ids::value, "0.0", nullptr);
-	pa3.setProperty(Ids::value, "0.0", nullptr);
-    paramsTree.addChild(pa1, -1, nullptr);
-    paramsTree.addChild(pa2, -1, nullptr);
-    paramsTree.addChild(pa3, -1, nullptr);
+
+    StringArray p;
+    p.add("0.001");
+    p.add("0.0");
+    p.add("0.0");
+	ValueTree paramsTree = createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
@@ -101,16 +97,12 @@ static ValueTree createNewResonatorTree(const String& newName, int x, int y)
 
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
-	ValueTree paramsTree(Ids::parameters);
-    ValueTree pa1(Ids::parameter);
-    ValueTree pa2(Ids::parameter);
-    ValueTree pa3(Ids::parameter);
-	pa1.setProperty(Ids::value, "200.0", nullptr);
-    pa2.setProperty(Ids::value, "1.5", nullptr);
-    pa3.setProperty(Ids::value, "0.01", nullptr);
-    paramsTree.addChild(pa1, -1, nullptr);
-    paramsTree.addChild(pa2, -1, nullptr);
-    paramsTree.addChild(pa3, -1, nullptr);
+
+    StringArray p;
+    p.add("200.0");
+    p.add("1.5");
+    p.add("0.01");
+	ValueTree paramsTree = createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
@@ -127,18 +119,11 @@ static ValueTree createNewLinkTree(const String& newName,
                                    const String& endObject)
 {
 	ValueTree newTree(Ids::link);
-
-	ValueTree paramsTree(Ids::parameters);
-    ValueTree pa1(Ids::parameter);
-    ValueTree pa2(Ids::parameter);
-    ValueTree pa3(Ids::parameter);
-    pa1.setProperty(Ids::value, "100.0", nullptr);
-    pa2.setProperty(Ids::value, "0.1", nullptr);
-    pa3.setProperty(Ids::value, "0.0", nullptr);
-    paramsTree.addChild(pa1, -1, nullptr);
-    paramsTree.addChild(pa2, -1, nullptr);
-    paramsTree.addChild(pa3, -1, nullptr);
-
+    StringArray p;
+    p.add("100.0");
+    p.add("0.1");
+    p.add("0.0");
+	ValueTree paramsTree = createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -157,18 +142,11 @@ static ValueTree createNewTouchTree(const String& newName,
                                     const String& endObject)
 {
 	ValueTree newTree(Ids::touch);
-
-    ValueTree paramsTree(Ids::parameters);
-        ValueTree pa1(Ids::parameter);
-    ValueTree pa2(Ids::parameter);
-    ValueTree pa3(Ids::parameter);
-    pa1.setProperty(Ids::value, "100.0", nullptr);
-    pa2.setProperty(Ids::value, "0.1", nullptr);
-    pa3.setProperty(Ids::value, "0.0", nullptr);
-    paramsTree.addChild(pa1, -1, nullptr);
-    paramsTree.addChild(pa2, -1, nullptr);
-    paramsTree.addChild(pa3, -1, nullptr);
-
+    StringArray p;
+    p.add("100.0");
+    p.add("0.1");
+    p.add("0.0");
+    ValueTree paramsTree = createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -187,20 +165,12 @@ static ValueTree createNewPluckTree(const String& newName,
 {
 	ValueTree newTree(Ids::pluck);
 
-	ValueTree paramsTree(Ids::parameters);
-    ValueTree pa1(Ids::parameter);
-    ValueTree pa2(Ids::parameter);
-    ValueTree pa3(Ids::parameter);
-    ValueTree pa4(Ids::parameter);
-    pa1.setProperty(Ids::value, "300.0", nullptr);
-    pa2.setProperty(Ids::value, "0.1", nullptr);
-    pa3.setProperty(Ids::value, "0.003", nullptr);
-    pa4.setProperty(Ids::value, "0.005", nullptr);
-    paramsTree.addChild(pa1, -1, nullptr);
-    paramsTree.addChild(pa2, -1, nullptr);
-    paramsTree.addChild(pa3, -1, nullptr);
-    paramsTree.addChild(pa4, -1, nullptr);
-
+    StringArray p;
+    p.add("300.0");
+    p.add("0.1");
+    p.add("0.003");
+    p.add("0.005");
+    ValueTree paramsTree = createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -220,17 +190,10 @@ static ValueTree createNewWaveguideTree(const String& newName,
 {
     ValueTree newTree(Ids::waveguide);
 
-    ValueTree paramsTree(Ids::parameters);
-    ValueTree pa1(Ids::parameter);
-    pa1.setProperty(Ids::value, "1.0", nullptr);
-    ValueTree pa2(Ids::parameter);
-    pa2.setProperty(Ids::value, "simpleString", nullptr);
-    pa2.setProperty(Ids::maxtime, "0.033", nullptr);
-    pa2.setProperty(Ids::curtime, "0.017", nullptr);
-
-    paramsTree.addChild(pa1, -1, nullptr);
-    paramsTree.addChild(pa2, -1, nullptr);
-
+    StringArray p;
+    p.add("1.0");
+    p.add("simpleString(0.033,0.017)");
+    ValueTree paramsTree = createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 
     newTree.setProperty(Ids::identifier, newName, nullptr);
@@ -252,9 +215,7 @@ static ValueTree createNewTerminationTree(const String& newName, int x, int y)
 	newTree.setProperty(Ids::posY, y, nullptr);
     ValueTree paramsTree(Ids::parameters);
     ValueTree term(Ids::parameter);
-    term.setProperty(Ids::value, "simpleStringTerm", nullptr);
-    term.setProperty(Ids::reflection, "-0.996", nullptr);
-    term.setProperty(Ids::lowpass, "20", nullptr);
+    term.setProperty(Ids::value, "simpleStringTerm(-0.996, 20)", nullptr);
     paramsTree.addChild(term, -1, nullptr);
 
     newTree.addChild(paramsTree, -1, nullptr);
@@ -335,6 +296,29 @@ ValueTree createNewLinkObjectTree(const Identifier& linkType,
 		return createNewWaveguideTree(newName, startObject, endObject);
     else
 		return ValueTree::invalid;
+}
+ValueTree createParamsTree(StringArray p)
+{
+    ValueTree paramsTree(Ids::parameters);
+    for (int i = 0; i < p.size(); ++i)
+    {
+        ValueTree value(Ids::parameter);
+        value.setProperty(Ids::value, p[i].trim(), nullptr);
+        paramsTree.addChild(value, -1, nullptr);
+    }
+    return paramsTree;
+}
+
+ValueTree createLabelsTree(StringArray p)
+{
+    ValueTree labelsTree(Ids::labels);
+    for (int i = 0; i < p.size(); ++i)
+    {
+        ValueTree label(Ids::label);
+        label.setProperty(Ids::value, p[i].trim(), nullptr);
+        labelsTree.addChild(label, -1, nullptr);
+    }
+    return labelsTree;
 }
 
 }

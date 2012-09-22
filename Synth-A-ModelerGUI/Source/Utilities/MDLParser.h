@@ -41,7 +41,6 @@ public:
 	 * @return		true if parsing succeeded
 	 */
 	bool parseMDL();
-    bool parseMDLRE();
 private:
 	MDLFile& mdlFile;
 };

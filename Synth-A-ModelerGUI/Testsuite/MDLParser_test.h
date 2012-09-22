@@ -58,7 +58,7 @@ public:
                             "audioout,a3,(bounceme*1.0):filter;"));
         // test 7
         expect(re.fullMatch(SAMRegex::getFaustLine(),
-                            "faustcode:frequencyScaler = 0.3;"));
+                            "faustcode: frequencyScaler = 0.3;"));
         // test 8
         expect(re.fullMatch(SAMRegex::getTerminationLine(),
                             "termination(simpleStringTerm(-0.991,30) ),t1 ,(); #pos 100, 100"));
@@ -130,6 +130,14 @@ public:
 //        for (int i = 0; i < paramsArray.size(); ++i) {
 //            DBG(paramsArray[i]);
 //        }
+        // test 28
+        expect(re.partialMatch("\\A\\s*(faustcode):.*",
+                               "faustcode: adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0);"));
+        // test29
+        StringArray vals;
+        expect(re.fullMatchValues(SAMRegex::getVertexLine(),
+                                  "mass(0.003,0.0,0.0),mass,(mass1);",
+                                  vals, 4));
     }
 };
 

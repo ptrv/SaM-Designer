@@ -48,6 +48,8 @@ namespace ObjectFactory
                                       const String& newName,
                                       const String& startObject,
                                       const String& endObject);
+    ValueTree createParamsTree(StringArray p);
+    ValueTree createLabelsTree(StringArray p);
 }
 
 

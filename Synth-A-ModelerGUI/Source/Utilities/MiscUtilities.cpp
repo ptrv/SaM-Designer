@@ -25,8 +25,13 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "StoredSettings.h"
 #include "../Models/ObjectIDs.h"
+#include "../View/BaseObjectComponent.h"
+#include "../View/ObjectComponent.h"
+#include "../View/LinkComponent.h"
+#include "../Controller/ObjController.h"
 
 #include "MiscUtilities.h"
+#include "RegularExpression.h"
 
 namespace Utils
 {
@@ -126,6 +131,94 @@ String fixParameterValueIfNeeded(const String& paramVal)
 		tmpVal << ".0";
 
 	return tmpVal;
+}
+
+String getGainForSourceId(ValueTree& sources, const String& sourceId)
+{
+    String gainStr;
+    for (int i = 0; i < sources.getNumChildren(); ++i)
+    {
+        ValueTree source = sources.getChild(i);
+        StringArray vals;
+        vals.addTokens(source[Ids::value].toString(), "*", "\"");
+        int srcIdx = -1;
+        for (int j = 0; j < vals.size(); ++j)
+        {
+            if(vals[j].compare(sourceId) == 0)
+            {
+                srcIdx = j;
+                break;
+            }
+        }
+        if(srcIdx != -1)
+        {
+            int gainVals = 0;
+            for (int j = 0; j < vals.size(); ++j)
+            {
+                if(j != srcIdx)
+                {
+                    if (gainVals >= 1)
+                        gainStr << "*";
+                    gainStr << vals[j];
+                    ++ gainVals;
+                }
+//                if(j != vals.size()-1 && gainVals > 1)
+//                    gainStr << "*";
+            }
+            break;
+
+        }
+    }
+    return gainStr;
+}
+
+void setGainForSourceId(ValueTree& sources, const String& sourceId,
+                        const String& gainVal, UndoManager* undoManager)
+{
+    String gainStr;
+    for (int i = 0; i < sources.getNumChildren(); ++i)
+    {
+        ValueTree source = sources.getChild(i);
+        StringArray vals;
+        vals.addTokens(source[Ids::value].toString(), "*", "\"");
+        int srcIdx = -1;
+        for (int j = 0; j < vals.size(); ++j)
+        {
+            if(vals[i].compare(sourceId) == 0)
+            {
+                srcIdx = i;
+                break;
+            }
+        }
+        if(srcIdx != -1)
+        {
+            gainStr << sourceId << "*";
+            gainStr << gainVal;
+            source.setProperty(Ids::value, gainStr, undoManager);
+            break;
+
+        }
+    }
+}
+
+BaseObjectComponent* getSourceIdFromSource(ObjController* objController, ValueTree& source)
+{
+    String srcVal = source[Ids::value].toString();
+    StringArray srcArray;
+    srcArray.addTokens(srcVal, "*", "\"");
+    int srcIdx = -1;
+    for (int i = 0; i < srcArray.size(); ++i)
+    {
+        if (ObjectComponent* oc = objController->getObjectForId(srcArray[i]))
+        {
+            return oc;
+        }
+        else if(LinkComponent* lc = objController->getLinkForId(srcArray[i]))
+        {
+            return lc;
+        }
+    }
+    return nullptr;
 }
 
 }

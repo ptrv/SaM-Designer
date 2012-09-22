@@ -72,14 +72,15 @@ namespace Ids
     DECLARE_ID (initDisplace);
     DECLARE_ID (faustCode);
     DECLARE_ID (audiosource);
-    DECLARE_ID (gain);
+//    DECLARE_ID (gain);
     DECLARE_ID (sources);
+    DECLARE_ID (optional);
     DECLARE_ID (value);
     DECLARE_ID (variable);
-    DECLARE_ID (maxtime);
-    DECLARE_ID (curtime);
-    DECLARE_ID (reflection);
-    DECLARE_ID (lowpass);
+//    DECLARE_ID (maxtime);
+//    DECLARE_ID (curtime);
+//    DECLARE_ID (reflection);
+//    DECLARE_ID (lowpass);
 
     const Identifier class_ ("class");
 
