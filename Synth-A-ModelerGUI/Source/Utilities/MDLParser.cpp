@@ -212,8 +212,7 @@ bool MDLParser::parseMDL()
             audioTree.setProperty(Ids::posY, pos.y, nullptr);
             audioTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
 
-
-//            RegularExpression aoRe1("((\\w+)\\+(\\d+)|(\\d+)\\+(\\w+)");
+            // split everything from line starting with first colon
             int posColon = values[2].indexOf(":");
             String audioLine;
             if(posColon > 0)
@@ -224,11 +223,16 @@ bool MDLParser::parseMDL()
             else
             {
                 audioTree.setProperty(Ids::optional, "", nullptr);
+                audioLine = values[2];
             }
 
-
+            // remove surrounding paranthese if there are some.
+            RegularExpression rePar("\\((.+)\\)|(.+)");
+            StringArray audioLineClean;
+            rePar.fullMatchValues(audioLine, audioLineClean, 1);
+            
             StringArray audioOutSourcesList;
-            audioOutSourcesList.addTokens(values[2], "+", "\"");
+            audioOutSourcesList.addTokens(audioLineClean[0], "+", "\"");
             ValueTree audioSources(Ids::sources);
             for (int l = 0; l < audioOutSourcesList.size(); ++l)
             {

@@ -197,8 +197,6 @@ static ValueTree createNewWaveguideTree(const String& newName,
 	newTree.addChild(paramsTree, -1, nullptr);
 
     newTree.setProperty(Ids::identifier, newName, nullptr);
-//    newTree.setProperty(Ids::objLeft, startObject, nullptr);
-//    newTree.setProperty(Ids::objRight, endObject, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
     newTree.setProperty(Ids::endVertex, endObject, nullptr);
     ValueTree labelsTree(Ids::labels);

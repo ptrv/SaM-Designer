@@ -54,12 +54,9 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		ValueTree massParams = mo.getChildWithName(Ids::parameters);
 		for (int i = 0; i < massParams.getNumChildren(); ++i)
 		{
-//			mdlContent << String::formatted("%#f", float(massParams[Ids::idx[i]]));
-//			mdlContent << float(massParams[Ids::idx[i]]);
             ValueTree massParam = massParams.getChild(i);
             mdlContent << massParam.getProperty(Ids::value).toString();
             
-//			mdlContent << massParams[Ids::idx[i]].toString();
 			if(i != massParams.getNumChildren()-1)
 				mdlContent << ",";
 		}
@@ -78,7 +75,6 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << ");";
 		mdlContent << " # pos " << mo.getProperty(Ids::posX, "0").toString() << "," << mo.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
-//        DBG(mo.toXmlString());
 	}
 
 	// write links
@@ -91,7 +87,6 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << "(";
 		ValueTree linkParams = li.getChildWithName(Ids::parameters);
 		for (int k = 0; k < linkParams.getNumChildren(); ++k) {
-//			mdlContent << String::formatted("%#f", float(linkParams[Ids::idx[k]]));
             ValueTree link = linkParams.getChild(k);
             mdlContent << link.getProperty(Ids::value).toString();
 
@@ -115,7 +110,6 @@ bool MDLWriter::writeMDL(const File& saveFile)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
-//		mdlContent << " # pos " << li.getProperty(Ids::posX, "0").toString() << "," << li.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 	}
 
@@ -135,22 +129,11 @@ bool MDLWriter::writeMDL(const File& saveFile)
         ValueTree string = waveParams.getChild(1);
         mdlContent << string[Ids::value].toString();
 
-//		for (int m = 0; m < waveParams.getNumChildren(); ++m) {
-////			mdlContent << String::formatted("%#f", float(waveParams[Ids::idx[m]]));
-//
-//            ValueTree waveParam = waveParams.getChild(m);
-//            mdlContent << waveParam.getProperty(Ids::value).toString();
-//
-//			if(m != waveParams.getNumChildren()-1)
-//				mdlContent << ",";
-//		}
 		mdlContent << "),";
 		mdlContent << wo[Ids::identifier].toString();
 		mdlContent << ",";
-//		mdlContent << wo[Ids::objLeft].toString();
 		mdlContent << wo[Ids::startVertex].toString();
 		mdlContent << ",";
-//		mdlContent << wo[Ids::objRight].toString();
 		mdlContent << wo[Ids::endVertex].toString();
 		mdlContent << ",(";
 		ValueTree labelTree = wo.getChildWithName(Ids::labels);
@@ -158,12 +141,10 @@ bool MDLWriter::writeMDL(const File& saveFile)
             ValueTree label = labelTree.getChild(n);
             mdlContent << label.getProperty(Ids::value).toString();
             
-//			mdlContent << labelTree[Ids::idx[n]].toString();
 			if(n != labelTree.getNumChildren()-1)
 				mdlContent << ",";
 		}
 		mdlContent << ");";
-//		mdlContent << " # pos " << wo.getProperty(Ids::posX, "0").toString() << "," << wo.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 
 	}
@@ -180,15 +161,6 @@ bool MDLWriter::writeMDL(const File& saveFile)
         ValueTree term = termParams.getChild(0);
         mdlContent << term[Ids::value].toString();
 
-//		for (int o = 0; o < termParams.getNumChildren(); ++o) {
-////			mdlContent << String::formatted("%#f", float(termParams[Ids::idx[o]]));
-//
-//            ValueTree termParam = termParams.getChild(o);
-//            mdlContent << termParam.getProperty(Ids::value).toString();
-//
-//			if(o != termParams.getNumChildren()-1)
-//				mdlContent << ",";
-//		}
 		mdlContent << "),";
 		mdlContent << to[Ids::identifier].toString();
 		mdlContent << ",(";
@@ -255,18 +227,22 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << ao[Ids::identifier].toString();
 		mdlContent << ",";
         ValueTree sources = ao.getChildWithName(Ids::sources);
+        bool isOpt = ao[Ids::optional].toString() != String::empty;
+        if(isOpt)
+            mdlContent << "(";
         for (int q = 0; q < sources.getNumChildren(); ++q)
         {
             ValueTree source = sources.getChild(q);
             mdlContent << source.getProperty(Ids::value).toString();
-//            mdlContent << "*";
-//            mdlContent << source.getProperty(Ids::gain).toString();
             
             if(q != sources.getNumChildren()-1)
 				mdlContent << "+";
         }
+        if(isOpt)
+            mdlContent << ")";
 
-//		mdlContent << ao.getProperty(Ids::sources).toString();
+        mdlContent << ao[Ids::optional].toString();
+
 		mdlContent << ";";
 		mdlContent << " # pos " << ao.getProperty(Ids::posX, "0").toString() << "," << ao.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
@@ -274,26 +250,6 @@ bool MDLWriter::writeMDL(const File& saveFile)
 	}
 
     // ------------------------------------------------------------------------
-    // Diff file
-//    String originalMdlContent = mdlFile.getFile().loadFileAsString();
-//    TextDiff diff(mdlContent, originalMdlContent);
-//    for (int diffIdx = 0; diffIdx < diff.changes.size(); ++diffIdx) {
-//        TextDiff::Change ch = diff.changes.getUnchecked(diffIdx);
-//        DBG("Diff " + String(diffIdx));
-//        DBG("Change start: " + String(ch.start));
-//        DBG("Change length: " + String(ch.length));
-//        if(! ch.isDeletion())
-//        {
-//            DBG(ch.insertedText);
-//        }
-//        DBG(ch.appliedTo(mdlContent));
-//        String chText = ch.insertedText;
-//        if(chText.startsWithChar('#'))
-//        {
-//            mdlContent = ch.appliedTo(mdlContent);
-//        }
-//    }
-	// ------------------------------------------------------------------------
 
 	TemporaryFile temp (outFile);
 
