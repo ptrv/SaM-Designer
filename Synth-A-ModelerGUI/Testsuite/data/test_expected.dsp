@@ -8,9 +8,9 @@ bigBlock(m1p,m2p,m3p,gp,dev1p) = (m1,m2,m3,g,dev1,a1,a2) with {
 	// For waveguide terminations:
 	// For junctions:
 	// For mass-like objects:
-	m1 = (0.0-l1) : mass(0.01);
-	m2 = (0.0+l1-l2-l3) : mass(1e-2);
-	m3 = (0.0+l2) : mass(0.03);
+	m1 = (0.0-l1) : mass(0.01,0.0,0.0);
+	m2 = (0.0+l1-l2-l3) : mass(0.01,0.0,0.0);
+	m3 = (0.0+l2) : mass(0.03,0.0,0.0);
 	dev1 = (0.0+l3);
 	g = (0.0) : ground(0.0);
 
