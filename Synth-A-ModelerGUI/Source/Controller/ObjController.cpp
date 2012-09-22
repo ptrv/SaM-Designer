@@ -840,6 +840,7 @@ void ObjController::paste(ObjectsHolder* holder)
                     {
                         source.setProperty(Ids::value, objectNamesOldNewForAudio[oldSrcName], nullptr);
                     }
+                    sourceComp = Utils::getSourceIdFromSource(this, source);
 //                    ObjectComponent* oc = getObjectForId(source[Ids::value]);
 //                    LinkComponent* lc = getLinkForId(source[Ids::value]);
 //                    BaseObjectComponent* sourceComp = nullptr;
