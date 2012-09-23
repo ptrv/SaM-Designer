@@ -263,7 +263,7 @@ public:
         for (int i = 0; i < labelsArray.size(); ++i)
         {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
         }
         
@@ -352,7 +352,7 @@ public:
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
         }
         return true;
@@ -467,7 +467,7 @@ public:
         for (int i = 0; i < labelsArray.size(); ++i)
         {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
         }
         
@@ -561,7 +561,7 @@ public:
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
         return true;
@@ -728,7 +728,7 @@ public:
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
         return true;
@@ -949,7 +949,7 @@ public:
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
         return true;
@@ -1044,7 +1044,7 @@ public:
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
         return true;
@@ -1132,7 +1132,7 @@ public:
 		labelsArray.addTokens(labelsString, ",", "\"");
 		for (int i = 0; i < labelsArray.size(); ++i) {
             ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i], undoManager);
+            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
             labelsTree.addChild(label, -1, undoManager);
 		}
         return true;
