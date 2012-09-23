@@ -65,9 +65,9 @@ static const String getDefaultPathDataDir()
 		return infile.getFullPathName();
 	}
 #if JUCE_MAC
-	String relDataDir = "../../../../../Synth-A-ModelerCmd";
+	String relDataDir = "../../../../../cmd";
 #else
-	String relDataDir = "../../../../Synth-A-ModelerCmd";
+	String relDataDir = "../../../../cmd";
 #endif
 	infile = File::getCurrentWorkingDirectory().getChildFile(relDataDir);
 	if(infile.isDirectory())
