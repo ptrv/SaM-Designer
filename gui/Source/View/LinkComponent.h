@@ -69,7 +69,7 @@ public:
     
     Point<int> getPinPos();
 
-    void setSegemented(bool isSegmented) { segmented = isSegmented; resized(); }
+    void setSegmented(bool isSegmented) { segmented = isSegmented; resized(); }
 private:
     void drawPath(float x1, float y1, float x2, float y2);
 

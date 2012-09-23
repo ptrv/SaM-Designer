@@ -164,7 +164,6 @@ String getGainForSourceId(ValueTree& sources, const String& sourceId)
                 }
             }
             break;
-
         }
     }
     return gainStr;
@@ -203,7 +202,6 @@ BaseObjectComponent* getSourceIdFromSource(ObjController* objController, ValueTr
     String srcVal = source[Ids::value].toString();
     StringArray srcArray;
     srcArray.addTokens(srcVal, "*", "\"");
-    int srcIdx = -1;
     for (int i = 0; i < srcArray.size(); ++i)
     {
         if (ObjectComponent* oc = objController->getObjectForId(srcArray[i]))

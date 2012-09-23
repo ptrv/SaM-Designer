@@ -117,7 +117,7 @@ bool MDLParser::parseMDL()
                 String params = values[1];
                 StringArray paramsArray;
 
-                bool isMatch = reParams.fullMatchValues(SAMRegex::getParamsLine(3),
+                reParams.fullMatchValues(SAMRegex::getParamsLine(3),
                                          params, paramsArray, 3);
                 newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                  -1, nullptr);

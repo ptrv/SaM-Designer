@@ -95,7 +95,7 @@ Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
     linkPath.applyTransform(AffineTransform::translation(-w/2, 0));
     return linkPath;
 }
-Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
+Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
 {
     Path touchPath;
     float lineDist = w * 0.7f;
@@ -108,7 +108,7 @@ Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
     touchPath.applyTransform(AffineTransform::translation(-nw, -nh));
     return touchPath;
 }
-Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
+Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
 {
     Path pluckPath;
     float step = w / 20.0f;
@@ -121,6 +121,25 @@ Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
     pluckPath.addEllipse(step*4, step*4, w-step*8, w-step*8);
 //    pluckPath.addLineSegment(Line<float>(0, 25, 5, 25), 10.0f);
     pluckPath.applyTransform(AffineTransform::translation(-w/2, -h/2));
+
+    const float arrowW = 3.0f;
+    const float arrowL = 2.0f;
+
+    Path arrow;
+    arrow.addTriangle(-arrowL, arrowW,
+                      -arrowL, -arrowW,
+                      arrowL, 0.0f);
+
+    arrow.applyTransform(AffineTransform::translation((-w/2)+arrowW,0));
+
+    PathStrokeType stroke(0.8f);
+    stroke.createStrokedPath(pluckPath, pluckPath);
+
+    PathStrokeType stroke2(3.0f);
+    stroke2.createStrokedPath(arrow, arrow);
+
+    pluckPath.addPath(arrow);
+
     return pluckPath;
 }
 Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h)
