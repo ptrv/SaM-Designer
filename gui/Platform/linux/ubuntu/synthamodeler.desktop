@@ -2,8 +2,8 @@
 Encoding=UTF-8
 Name=Synth-A-Modeler GUI
 Comment=Synth-A-Modeler GUI
-Exec=/home/peter/projects/Synth-A-Modeler/Synth-A-ModelerGUI/Builds/Linux/build/Synth-A-ModelerGUI
-Icon=/home/peter/projects/Synth-A-Modeler/Synth-A-ModelerGUI/BinaryData/synthamodeler_icon.png
+Exec=Synth-A-ModelerGUI
+Icon=synthamodeler_icon.png
 Terminal=false
 Type=Application
 Categories=Application;Multimedia;
