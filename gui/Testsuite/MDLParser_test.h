@@ -118,15 +118,13 @@ public:
                labelArray[2].compare("label3") == 0);
         // test 26
         StringArray paramsArray;
-        expect(re.fullMatchValues(SAMRegex::getParamsLine(5),
-                                  "8.0,simpleString(1.0, 0.001),4.0,simpleString(1.0,0.001),1.0",
-                                  paramsArray, 5));
+        expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
+                                  "(1.0 + randomTweak * (-0.799939)),0.0,0.0",
+                                  paramsArray, 3));
         // test 27
-        expect(paramsArray[0].compare("8.0") == 0 &&
-               paramsArray[1].compare("simpleString(1.0, 0.001)") == 0 &&
-               paramsArray[2].compare("4.0") == 0 &&
-               paramsArray[3].compare("simpleString(1.0,0.001)") == 0 &&
-               paramsArray[4].compare("1.0") == 0 );
+        expect(paramsArray[0].compare("(1.0 + randomTweak * (-0.799939))") == 0 &&
+               paramsArray[1].compare("0.0") == 0 &&
+               paramsArray[2].compare("0.0") == 0);
 //        for (int i = 0; i < paramsArray.size(); ++i) {
 //            DBG(paramsArray[i]);
 //        }
@@ -138,6 +136,40 @@ public:
         expect(re.fullMatchValues(SAMRegex::getVertexLine(),
                                   "mass(0.003,0.0,0.0),mass,(mass1);",
                                   vals, 4));
+        // test 30
+        expect(re.fullMatch(SAMRegex::params, "0.5, simpleString(0.033, 0.033*frequencyScaler)"));
+
+        // test 31
+        StringArray vals2;
+        expect(re.fullMatchValues(SAMRegex::getWaveguideLine(), "waveguide(0.5, simpleString(0.033, 0.033*frequencyScaler)),w3,t3 ,junct1,();",
+                                  vals2, 6));
+        // test 32
+        expect(vals2[0].compare("waveguide") == 0 &&
+               vals2[1].compare("0.5, simpleString(0.033, 0.033*frequencyScaler)") == 0 &&
+               vals2[2].compare("w3") == 0 &&
+               vals2[3].compare("t3") == 0 &&
+               vals2[4].compare("junct1") == 0 &&
+               vals2[5].compare("") == 0);
+        // test 33
+        StringArray vals3;
+        expect(re.fullMatchValues(SAMRegex::getVertexLine(),
+                                  "mass(massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0),mn0xn20y,();",
+                                  vals3, 5));
+        // test 34
+        expect(vals3[0].compare("mass") == 0 &&
+               vals3[1].compare("massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0") == 0 &&
+               vals3[2].compare("mn0xn20y") == 0 &&
+               vals3[3].compare("") == 0 &&
+               vals3[4].compare("") == 0);
+        // test 35
+        StringArray vals4;
+        expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
+                                  "massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0",
+                                  vals4, 3));
+        // test 36
+        expect(vals4[0].compare("massMembrane*(1.0 + randomTweak*(-0.799939))") == 0 &&
+               vals4[1].compare("0.0") == 0 &&
+               vals4[2].compare("0.0") == 0);
     }
 };
 
