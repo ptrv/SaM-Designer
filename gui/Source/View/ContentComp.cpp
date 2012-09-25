@@ -487,6 +487,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::showObjectNames:
         result.setInfo("Show variable names", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('i', ModifierKeys::commandModifier);
+        result.setTicked(objectsHolder->getShowObjectNames());
         break;
     default:
         break;

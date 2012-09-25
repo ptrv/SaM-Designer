@@ -366,6 +366,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         if(! isDrawingObjectNames)
             showObjectNames = !showObjectNames;
         repaint();
+        break;
     default:
         return false;
     }

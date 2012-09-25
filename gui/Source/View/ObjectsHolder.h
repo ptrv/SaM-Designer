@@ -80,6 +80,7 @@ public:
     void deleteSelectedObjects();
 
     const Rectangle<int> getObjectsExtent() const;
+    const bool getShowObjectNames() const { return showObjectNames; }
     //==========================================================================
 private:
 

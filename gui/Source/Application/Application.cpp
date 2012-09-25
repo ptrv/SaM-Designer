@@ -481,6 +481,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::tidyObjects);
+        menu.addCommandItem(commandManager, CommandIDs::showObjectNames);
 
     }
     else if (topLevelMenuIndex == 2)
