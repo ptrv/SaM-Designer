@@ -190,6 +190,7 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
 //    source.setProperty(Ids::gain, "1.0", nullptr);
 //    auSources.addChild(source, -1, nullptr);
 
+    segmented = StoredSettings::getInstance()->getIsSegmentedConnectors();
     owner.getSelectedObjects().addChangeListener(this);
 //    owner.getSelectedAudioConnections().addChangeListener(this);
 }
@@ -214,18 +215,31 @@ void AudioOutConnector::resized()
     x2 -= getX();
     y2 -= getY();
 
+    float rotatVal;
     linePath.clear();
-    linePath.startNewSubPath(x1, y1);
-    linePath.lineTo(x2, y2);
+    if(segmented)
+    {
+        linePath.clear();
+        linePath.startNewSubPath(x1, y1);
+        linePath.lineTo(x1, (y2 - y1) / 2 + y1);
+        linePath.lineTo(x2, (y2 - y1) / 2 + y1);
+        linePath.lineTo(x2, y2);
 
+        rotatVal = float_Pi * (x2 - x1 < 0 ? -1.0f: 2.0f);
+    }
+    else
+    {
+        linePath.startNewSubPath(x1, y1);
+        linePath.lineTo(x2, y2);
+        rotatVal = float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1);
+    }
     PathStrokeType wideStroke(8.0f);
     wideStroke.createStrokedPath(hitPath, linePath);
 
     float dashLengths[] = {5, 5};
     PathStrokeType stroke(1.5f);
     stroke.createDashedStroke(linePath, linePath, dashLengths, 2);
-//    stroke.createStrokedPath(linePath, linePath);
-    
+    //    stroke.createStrokedPath(linePath, linePath);
     const float arrowW = 7.0f;
     const float arrowL = 5.0f;
 
@@ -235,12 +249,13 @@ void AudioOutConnector::resized()
                       arrowL, 0.0f);
 
     arrow.applyTransform(AffineTransform::identity
-                         .rotated(float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1))
+                         .rotated(rotatVal)
                          .translated((x1 + x2) * 0.5f,
                                      (y1 + y2) * 0.5f));
-//    arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
+    //    arrow.applyTransform(AffineTransform::translation((x2 - x1) * 0.3f, (y2 - y1) * 0.3f));
 
     linePath.addPath(arrow);
+
     linePath.setUsingNonZeroWinding(true);
 
 }

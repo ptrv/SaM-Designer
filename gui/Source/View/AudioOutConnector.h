@@ -64,11 +64,14 @@ public:
     ObjectComponent* getAudioObject() { return audioOutComp; }
     
     Rectangle<int> getIntersectioBounds();
+
+    void setSegmented(bool isSegmented) { segmented = isSegmented; resized(); }
 private:
     ObjController& owner;
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     Path linePath, hitPath;
 
+    bool segmented;
     bool mouseDownSelectStatus;
     BaseObjectComponent* sourceComp;
     ObjectComponent* audioOutComp;

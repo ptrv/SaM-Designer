@@ -1073,7 +1073,12 @@ void ObjController::setLinksSegmented(bool isSegmented)
 {
     for (int i = 0; i < links.size(); ++i)
     {
-        LinkComponent* lc = links.getUnchecked(i);
-        lc->setSegemented(isSegmented);
+        LinkComponent* const lc = links.getUnchecked(i);
+        lc->setSegmented(isSegmented);
+    }
+    for (int i = 0; i < audioConnections.size(); ++i)
+    {
+        AudioOutConnector* const aoc = audioConnections.getUnchecked(i);
+        aoc->setSegmented(isSegmented);
     }
 }

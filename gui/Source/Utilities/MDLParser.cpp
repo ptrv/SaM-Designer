@@ -117,7 +117,7 @@ bool MDLParser::parseMDL()
                 String params = values[1];
                 StringArray paramsArray;
 
-                bool isMatch = reParams.fullMatchValues(SAMRegex::getParamsLine(3),
+                reParams.fullMatchValues(SAMRegex::getParamsLine(3),
                                          params, paramsArray, 3);
                 newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                  -1, nullptr);
@@ -227,12 +227,16 @@ bool MDLParser::parseMDL()
             }
 
             // remove surrounding paranthese if there are some.
-            RegularExpression rePar("\\(?(.+)\\)?|(.+)");
-            StringArray audioLineClean;
-            rePar.fullMatchValues(audioLine, audioLineClean, 1);
+            String audioLineClean = audioLine.trim();
+            if(audioLineClean.startsWithChar('(') &&
+               audioLineClean.endsWithChar(')'))
+            {
+                audioLineClean = audioLineClean.trimCharactersAtStart("(");
+                audioLineClean = audioLineClean.trimCharactersAtEnd(")");
+            }
             
             StringArray audioOutSourcesList;
-            audioOutSourcesList.addTokens(audioLineClean[0], "+", "\"");
+            audioOutSourcesList.addTokens(audioLineClean, "+", "\"");
             ValueTree audioSources(Ids::sources);
             for (int l = 0; l < audioOutSourcesList.size(); ++l)
             {
