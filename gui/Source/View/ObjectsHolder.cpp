@@ -38,7 +38,8 @@
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_) 
 : objController(objController_), mdlFile(nullptr), 
-    dragging(false), isDrawingObjectNames(false), maxX(0), maxY(0)
+  dragging(false), isDrawingObjectNames(false), showObjectNames(false),
+  maxX(0), maxY(0)
 {
     setSize(100, 100);
     setWantsKeyboardFocus(true);
@@ -58,7 +59,7 @@ void ObjectsHolder::paint(Graphics& g)
 
     g.setColour(Colours::black);
     
-    if(isDrawingObjectNames)
+    if(isDrawingObjectNames || showObjectNames)
     {
         for(int i = 0; i < objController.getNumObjects(); ++i)
         {
@@ -236,7 +237,6 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         VariablesPanel::show(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
         break;
     case CommandIDs::segmentedConnectors:
-        // TODO: implement segmented connectors
         StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
         objController.setLinksSegmented(StoredSettings::getInstance()->getIsSegmentedConnectors());
         updateComponents();
@@ -293,7 +293,6 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case CommandIDs::insertWaveguide:
     {
-//        DBG("Waveguide not implemented!");
         ObjectComponent* oc1 = objController.getObjectForId(startObj);
         ObjectComponent* oc2 = objController.getObjectForId(endObj);
         String tmpSo, tmpEo;
@@ -338,7 +337,6 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                                    ObjectFactory::createNewObjectTree(Ids::termination,
                                                                       objController.getNewNameForObject(Ids::termination),
                                                                       mp.x, mp.y));
-//        DBG("Termination not implemented!")
         break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -dy);
@@ -364,6 +362,10 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     case CommandIDs::moveRightFine:
         objController.moveSelectedComps(dxfine, 0);
         break;
+    case CommandIDs::showObjectNames:
+        if(! isDrawingObjectNames)
+            showObjectNames = !showObjectNames;
+        repaint();
     default:
         return false;
     }

@@ -96,6 +96,7 @@ private:
     LassoComponent<SelectableObject*> lassoComp;
     
     bool isDrawingObjectNames;
+    bool showObjectNames;
 
     int maxX, maxY;
     

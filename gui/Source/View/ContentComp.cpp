@@ -318,6 +318,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::moveDownFine,
         CommandIDs::moveLeftFine,
         CommandIDs::moveRightFine,
+        CommandIDs::showObjectNames,
     };
 
     commands.addArray(ids, numElementsInArray(ids));
@@ -482,6 +483,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::moveRightFine:
         result.setInfo("Move object right fine", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::showObjectNames:
+        result.setInfo("Show variable names", "", CommandCategories::editing, 0);
+        result.addDefaultKeypress('i', ModifierKeys::commandModifier);
         break;
     default:
         break;
