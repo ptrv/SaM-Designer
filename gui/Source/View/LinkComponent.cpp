@@ -256,7 +256,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         PathStrokeType wideStroke(8.0f);
         wideStroke.createStrokedPath(hitPath, linePath);
 
-        PathStrokeType stroke(2.5f);
+        PathStrokeType stroke(1.5f);
         stroke.createStrokedPath(linePath, linePath);
 
         iconPath.applyTransform(AffineTransform::identity
@@ -307,7 +307,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         PathStrokeType wideStroke(8.0f);
         wideStroke.createStrokedPath(hitPath, linePath);
 
-        PathStrokeType stroke(2.5f);
+        PathStrokeType stroke(1.5f);
         stroke.createStrokedPath(linePath, linePath);
 
         iconPath.applyTransform(AffineTransform::identity
@@ -358,7 +358,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         PathStrokeType wideStroke(8.0f);
         wideStroke.createStrokedPath(hitPath, linePath);
 
-        PathStrokeType stroke(2.5f);
+        PathStrokeType stroke(1.5f);
         stroke.createStrokedPath(linePath, linePath);
 
         iconPath.applyTransform(AffineTransform::identity
