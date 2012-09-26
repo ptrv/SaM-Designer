@@ -94,6 +94,8 @@ private:
         distanceFromStart = juce_hypot (x - (x1 - getX()), y - (y1 - getY()));
         distanceFromEnd = juce_hypot (x - (x2 - getX()), y - (y2 - getY()));
     }
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LinkComponent);
 };
 
 

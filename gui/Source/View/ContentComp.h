@@ -77,7 +77,7 @@ public:
 
 
     //==============================================================================
-    juce_UseDebuggingNewOperator
+//    juce_UseDebuggingNewOperator
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
@@ -93,11 +93,7 @@ private:
 
     //==============================================================================
 
-
-    //==============================================================================
-    // (prevent copy constructor and operator= being generated..)
-    ContentComp (const ContentComp&);
-    const ContentComp& operator= (const ContentComp&);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ContentComp);
 };
 
 

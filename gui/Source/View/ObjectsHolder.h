@@ -100,7 +100,8 @@ private:
     bool showObjectNames;
 
     int maxX, maxY;
-    
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };
 
 
