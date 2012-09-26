@@ -232,8 +232,8 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
                                                                    0,
                                                                    0,
-                                                                   iconWidth,
-                                                                   iconHeight);
+                                                                   iconWidth*0.7,
+                                                                   iconHeight*0.7);
         float rotateVal;
         if(segmented)
         {
