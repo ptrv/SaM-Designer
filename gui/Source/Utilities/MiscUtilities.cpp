@@ -78,7 +78,7 @@ void openHelpUrl()
 void openHelpUrl(const Identifier& objId)
 {
     String objStr = getObjectTypeAsString(objId).toLowerCase();
-    objStr.append("_object", 256);
+    //objStr.append("_object", 256);
 	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + objStr);
 	helpUrl.launchInDefaultBrowser();
 }
