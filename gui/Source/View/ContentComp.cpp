@@ -209,7 +209,7 @@ ContentComp::~ContentComp()
 
 
     //[Destructor]. You can add your own custom destruction code here..
-    objectsHolder = nullptr;
+//    objectsHolder = nullptr;
     deleteAllChildren();
     //[/Destructor]
 }

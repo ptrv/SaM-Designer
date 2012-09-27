@@ -129,7 +129,7 @@ bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
 {
     for (int i = 0; i < links.size(); i++)
     {
-        if(links[i]->sameStartEnd(linkTree))
+        if(links.getUnchecked(i)->sameStartEnd(linkTree))
         {
             return true;
         }
@@ -143,8 +143,8 @@ bool ObjController::checkIfAudioConnectionExitsts(ValueTree source,
 {
     for (int i = 0; i < audioConnections.size(); i++)
     {
-        ValueTree sourceComp = audioConnections[i]->getSourceObject()->getData();
-        ValueTree aoComp = audioConnections[i]->getAudioObject()->getData();
+        ValueTree sourceComp = audioConnections.getUnchecked(i)->getSourceObject()->getData();
+        ValueTree aoComp = audioConnections.getUnchecked(i)->getAudioObject()->getData();
         if(sourceComp[Ids::identifier] == source[Ids::identifier]
             && aoComp[Ids::identifier] == audioOut[Ids::identifier])
         {
@@ -536,15 +536,15 @@ void ObjController::selectAll(bool shouldBeSelected)
         sObjects.deselectAll();
         for (int i = 0; i < objects.size(); ++i)
         {
-            sObjects.addToSelection(objects[i]);
+            sObjects.addToSelection(objects.getUnchecked(i));
         }
         for (int j = 0; j < links.size(); ++j)
         {
-            sObjects.addToSelection(links[j]);
+            sObjects.addToSelection(links.getUnchecked(j));
         }
         for (int k = 0; k < audioConnections.size(); ++k)
         {
-            sObjects.addToSelection(audioConnections[k]);
+            sObjects.addToSelection(audioConnections.getUnchecked(k));
         }
     }
     else
@@ -562,7 +562,7 @@ void ObjController::startDragging()
 {
     for (int i = 0; i < objects.size(); ++i)
     {
-        ObjectComponent * const c = objects[i];
+        ObjectComponent * const c = objects.getUnchecked(i);
 
         Point<int> r(c->getPosition());
 
@@ -622,7 +622,7 @@ ObjectComponent* ObjController::getObjectForId(String idString) const throw()
 {
     for (int i = 0; i < objects.size(); i++)
     {
-        ObjectComponent* elem = objects[i];
+        ObjectComponent* elem = objects.getUnchecked(i);
         if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
         {
             return elem;
@@ -636,7 +636,7 @@ LinkComponent* ObjController::getLinkForId(String idString) const throw()
 {
     for (int i = 0; i < links.size(); i++)
     {
-        LinkComponent* elem = links[i];
+        LinkComponent* elem = links.getUnchecked(i);
         if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
         {
             return elem;
@@ -669,7 +669,7 @@ Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
 //    ValueTree objTree = objComp->getData();
     for (int i = 0; i < links.size(); i++)
     {
-        ValueTree linkTree = links[i]->getData();
+        ValueTree linkTree = links.getUnchecked(i)->getData();
         
         if(linkTree.getProperty(Ids::startVertex) == objTree.getProperty(Ids::identifier)
             || linkTree.getProperty(Ids::endVertex) == objTree.getProperty(Ids::identifier))
@@ -945,12 +945,12 @@ void ObjController::tidyUp()
     // tidy horizontally
     for (int i = 0; i < objects.size(); ++i)
     {
-        ObjectComponent* obj1 = objects[i];
+        ObjectComponent* obj1 = objects.getUnchecked(i);
         if(obj1->isSelected() || all)
         {
             for (int j = 0; j < objects.size(); ++j)
             {
-                ObjectComponent* obj2 = objects[j];
+                ObjectComponent* obj2 = objects.getUnchecked(j);
                 if(obj2 != obj1 && (obj2->isSelected() || all))
                 {
                     if (obj2->getPinPos().y <= obj1->getPinPos().y + YTOLERANCE &&
@@ -977,13 +977,13 @@ void ObjController::tidyUp()
 
     for (int i = 0; i < objects.size(); ++i)
     {
-        ObjectComponent* obj1 = objects[i];
+        ObjectComponent* obj1 = objects.getUnchecked(i);
         Rectangle<int> obj1rect = obj1->getBounds();
         if(obj1->isSelected() || all)
         {
             for (int j = 0; j < objects.size(); ++j)
             {
-                ObjectComponent* obj2 = objects[j];
+                ObjectComponent* obj2 = objects.getUnchecked(j);
                 if(obj2 != obj1 && (obj2->isSelected() || all))
                 {
 
@@ -1027,14 +1027,14 @@ void ObjController::tidyUp()
     for (int i = 0; i < objects.size(); ++i)
     {
         bool keep = true;
-        ObjectComponent* obj1 = objects[i];
+        ObjectComponent* obj1 = objects.getUnchecked(i);
         int ax = obj1->getPinPos().x;
         int ay = obj1->getPinPos().y;
         if(obj1->isSelected() || all)
         {
             for (int j = 0; j < objects.size(); ++j)
             {
-                ObjectComponent* obj2 = objects[j];
+                ObjectComponent* obj2 = objects.getUnchecked(j);
                 int bx = obj2->getPinPos().x;
                 int by = obj2->getPinPos().y;
                 if(obj2 != obj1 && (obj2->isSelected() || all))
