@@ -118,8 +118,9 @@ public:
         text1.append (infoTxt, Font (13.0f));
 
         text2.setJustification (Justification::centred);
+        String buildDate = " (Build: " + String(__DATE__) + " " + String(__TIME__) + ")";
         text2.append ("Synth-A-Modeler v" + JUCEApplication::getInstance()->getApplicationVersion()
-                        + ", " + SystemStats::getJUCEVersion(), Font (12.0f, Font::bold));
+                        + buildDate + ", " + SystemStats::getJUCEVersion(), Font (12.0f, Font::bold));
 
         addAndMakeVisible (&link);
         link.setFont (Font (10.0f, Font::bold | Font::underlined), true);
