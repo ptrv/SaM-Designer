@@ -67,6 +67,8 @@ void openHelpUrl(const Identifier& objId);
  */
 void openDataDir();
 
+void openFileNative(const String& path);
+
 /**
  * Gets object type as String for using in property window title.
  *

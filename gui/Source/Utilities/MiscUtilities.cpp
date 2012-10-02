@@ -93,6 +93,23 @@ void openDataDir()
 
 }
 
+void openFileNative(const String& path)
+{
+    File f(path);
+    if(f.existsAsFile())
+    {
+#if JUCE_MAC
+        Process::openDocument("/usr/bin/open", f.getFullPathName());
+#else
+        Process::openDocument("file:"+f.getFullPathName(), "");
+#endif
+    }
+    else
+    {
+        DBG("The file " << f.getFullPathName() << " does not exist");
+    }
+}
+
 String getObjectTypeAsString(const Identifier& objType)
 {
 	if(objType == Ids::mass)

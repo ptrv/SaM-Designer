@@ -144,7 +144,10 @@ const String MDLController::generateFaust()
 
 		String outPath = StoredSettings::getInstance()->getDataDir();
 		outPath << "/" << outFileName;
-		return outCmd->generateFaustCode(currentMdl->getFilePath(), outPath);
+		String processText = outCmd->generateFaustCode(currentMdl->getFilePath(), outPath);
+        if(StoredSettings::getInstance()->getOpenFaustExport())
+            Utils::openFileNative(outPath);
+        return processText;
 	}
 	return String::empty;
 }

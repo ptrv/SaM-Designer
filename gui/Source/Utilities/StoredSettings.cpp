@@ -242,9 +242,18 @@ void StoredSettings::setIsExportConfirm (bool isExportConfirm)
 
 const bool StoredSettings::getIsLoggingOn() const
 {
-    return props->getBoolValue("loggingon", true);
+    return props->getBoolValue("loggingon", false);
 }
 void StoredSettings::setIsLoggingOn (bool isLoggingOn)
 {
     props->setValue("loggingon", isLoggingOn);
+}
+
+const bool StoredSettings::getOpenFaustExport() const
+{
+    return props->getBoolValue("openfaustexport", false);
+}
+void StoredSettings::setOpenFaustExport(bool isOpenMdlAfterExport)
+{
+    props->setValue("openfaustexport", isOpenMdlAfterExport);
 }

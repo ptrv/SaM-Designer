@@ -210,6 +210,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
                                 CommandIDs::writeMDLFileAsXml,
 #endif
                                 CommandIDs::dumpMDL,
+                                CommandIDs::openMdlFileExtern,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -246,6 +247,10 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
 #endif
     case CommandIDs::dumpMDL:
         result.setInfo("Dump MDL", "", CommandCategories::tools, 0);
+        break;
+    case CommandIDs::openMdlFileExtern:
+        result.setInfo("Open MDL file extern", "", CommandCategories::tools, 0);
+        result.addDefaultKeypress('l', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     default:
         break;
@@ -296,6 +301,9 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     case CommandIDs::dumpMDL:
         SAM_CONSOLE(mdlController->getMDLName()+"\n\n",
                     mdlController->getMDLFile()->toString());
+        break;
+    case CommandIDs::openMdlFileExtern:
+        Utils::openFileNative(mdlController->getMDLFile()->getFile().getFullPathName());
         break;
 
 	default:

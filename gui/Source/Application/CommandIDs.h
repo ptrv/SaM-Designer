@@ -55,6 +55,7 @@ namespace CommandIDs
 //    static const int audioOutput            = 0x200067;
 
     static const int saveProjectAs          = 0x200070;
+    static const int openMdlFileExtern      = 0x200071;
     static const int openDataDir			= 0x200072;
     static const int writeMDLFileAsXml      = 0x200073;
     static const int showProjectSettings    = 0x200074;

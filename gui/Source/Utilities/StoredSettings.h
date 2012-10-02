@@ -79,6 +79,8 @@ public:
     const bool getIsLoggingOn() const;
     void setIsLoggingOn (bool isLoggingOn);
 
+    const bool getOpenFaustExport() const;
+    void setOpenFaustExport (bool isOpenMdlAfterExport);
     //==============================================================================
 //    Image getFallbackImage();
 //    const Drawable* getImageFileIcon();

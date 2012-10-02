@@ -513,6 +513,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     	menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
     	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::openDataDir);
+        menu.addCommandItem(commandManager, CommandIDs::openMdlFileExtern);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::dumpMDL);
 #ifdef _DEBUG
