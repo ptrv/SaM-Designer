@@ -39,6 +39,7 @@ public:
     juce_DeclareSingleton (StoredSettings, false)
 
     PropertiesFile& getProps();
+    PropertiesFile& getExporters();
     void flush();
 
     //==============================================================================
@@ -81,6 +82,10 @@ public:
 
     const bool getOpenFaustExport() const;
     void setOpenFaustExport (bool isOpenMdlAfterExport);
+
+//    Array<File> getExporters() const;
+//    void setExporters (const Array<File>& files);
+
     //==============================================================================
 //    Image getFallbackImage();
 //    const Drawable* getImageFileIcon();
@@ -88,6 +93,7 @@ public:
 
 private:
     ScopedPointer<PropertiesFile> props;
+    ScopedPointer<PropertiesFile> exporters;
     StringArray fontNames;
 
 //    ScopedPointer<Drawable> imageFileIcon;

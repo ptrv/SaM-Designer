@@ -110,6 +110,139 @@ private:
 };
 
 //==============================================================================
+class ExporterTable : public Component,
+                      public TableListBoxModel
+{
+public:
+    ExporterTable()
+    : table("Exporter table", this)
+    {
+        StoredSettings* settings = StoredSettings::getInstance();
+        data = &settings->getExporters().getAllProperties();
+
+        if(data->size() == 0)
+        {
+            XmlDocument xml(String::createStringFromData(BinaryData::default_exporters_xml,
+                                                         BinaryData::default_exporters_xmlSize));
+            ScopedPointer<XmlElement> elem(xml.getDocumentElement());
+            for (int i = 0; i < elem->getNumChildElements(); ++i)
+            {
+                XmlElement* c = elem->getChildElement(i);
+                settings->getExporters().setValue(c->getStringAttribute("name"),
+                                                  c->getStringAttribute("val"));
+
+            }
+            elem = nullptr;
+        }
+        table.setColour (ListBox::outlineColourId, Colours::grey);
+	    table.setOutlineThickness (1);
+
+	    table.getHeader().addColumn("name",1,100);
+	    table.getHeader().addColumn("value",2,300);
+
+	    table.setMultipleSelectionEnabled(false);
+		addAndMakeVisible(&table);
+    }
+
+    void resized()
+	{
+		table.setBounds(0, 0, getWidth(), getHeight());
+	}
+	int getNumRows()
+	{
+		return data->size();
+	}
+    void paintRowBackground(Graphics& g, int rowNumber, int width, int height,
+			bool rowIsSelected)
+	{
+		if(rowIsSelected)
+			g.fillAll(Colours::lightseagreen);
+	}
+
+	void paintCell(Graphics& g, int rowNumber, int columnId, int width,
+			int height, bool rowIsSelected)
+	{
+		g.setColour(Colours::black);
+        StringArray keys = data->getAllKeys();
+		String varName = keys[rowNumber];
+		String varValue = data->getValue(varName, "");
+		if(columnId == 1)
+		{
+			g.drawText(varName, 2, 0, width - 4, height, Justification::left, true);
+		}
+		else if(columnId == 2)
+		{
+			g.drawText(varValue, 2, 0, width -4, height, Justification::left, true);
+		}
+	}
+
+	void addRow()
+	{
+
+       
+		table.updateContent();
+	}
+
+	void editRow()
+	{
+		int rowIndex = table.getSelectedRow();
+		if(rowIndex >= 0)
+		{
+			table.updateContent();
+			table.repaintRow(rowIndex);
+		}
+	}
+
+	void removeSelectedRow()
+	{
+		int rowIndex = table.getLastRowSelected();
+		if(rowIndex >= 0)
+		{
+			table.updateContent();
+		}
+	}
+    void cellDoubleClicked (int rowNumber, int columnId, const MouseEvent& e)
+    {
+        table.updateContent();
+    }
+private:
+    TableListBox table;
+    StringPairArray* data;
+};
+class ExporterPage : public Component,
+                     public Button::Listener
+{
+public:
+    ExporterPage()
+    : btAdd("+"),
+	  btRemove("-")
+    {
+        btAdd.addListener(this);
+        addAndMakeVisible(&btAdd);
+        btRemove.addListener(this);
+        addAndMakeVisible(&btRemove);
+        addAndMakeVisible(&exporterTable);
+
+    }
+
+    void resized()
+    {
+        exporterTable.setBounds(5, 10, getWidth() - 20, getHeight() - 50);
+        btAdd.setBounds(5, getHeight() - 30, 22, 22);
+		btRemove.setBounds(30, getHeight() - 30, 22, 22);
+    }
+
+    void buttonClicked(Button* button)
+	{
+        
+    }
+private:
+  	TextButton btAdd;
+	TextButton btRemove;
+    ExporterTable exporterTable;
+};
+
+//==============================================================================
 class AboutPage   : public Component
 {
 public:
@@ -159,6 +292,7 @@ private:
 
 //==============================================================================
 static const char* miscPage = "Misc";
+static const char* exporterPage = "Exporter";
 static const char* aboutPage = "About";
 
 class PrefsTabComp  : public PreferencesPanel
@@ -166,8 +300,15 @@ class PrefsTabComp  : public PreferencesPanel
 public:
     PrefsTabComp()
     {
-        addSettingsPage (miscPage, BinaryData::prefs_misc_png, BinaryData::prefs_misc_pngSize);
-        addSettingsPage (aboutPage, BinaryData::prefs_about_png, BinaryData::prefs_about_pngSize);
+        addSettingsPage (miscPage,
+                         BinaryData::prefs_misc_png,
+                         BinaryData::prefs_misc_pngSize);
+        addSettingsPage (exporterPage,
+                         BinaryData::prefs_export_png,
+                         BinaryData::prefs_export_pngSize);
+        addSettingsPage (aboutPage,
+                         BinaryData::prefs_about_png,
+                         BinaryData::prefs_about_pngSize);
     }
 
     ~PrefsTabComp()
@@ -184,6 +325,10 @@ public:
         else if (pageName == aboutPage)
         {
             return new AboutPage();
+        }
+        else if (pageName == exporterPage)
+        {
+            return new ExporterPage();
         }
 
         return new Component();

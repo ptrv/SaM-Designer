@@ -87,6 +87,7 @@ StoredSettings::~StoredSettings()
 {
     flush();
     props = nullptr;
+    exporters = nullptr;
     clearSingletonInstance();
 }
 
@@ -98,6 +99,12 @@ PropertiesFile& StoredSettings::getProps()
 {
     jassert (props != nullptr);
     return *props;
+}
+
+PropertiesFile& StoredSettings::getExporters()
+{
+    jassert (exporters != nullptr);
+    return *exporters;
 }
 
 void StoredSettings::flush()
@@ -125,6 +132,13 @@ void StoredSettings::flush()
     // recent files...
     recentFiles.restoreFromString (props->getValue ("recentFiles"));
     recentFiles.removeNonExistentFiles();
+
+    exporters = nullptr;
+    
+    PropertiesFile::Options exporterOptions = options;
+    exporterOptions.filenameSuffix      = "exporters";
+
+    exporters = new PropertiesFile(exporterOptions);
 
 }
 
