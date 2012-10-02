@@ -372,15 +372,15 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::zoomIn:
         result.setInfo("Zoom In", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('+', ModifierKeys::commandModifier);
+        result.addDefaultKeypress('9', ModifierKeys::altModifier);
         break;
     case CommandIDs::zoomOut:
         result.setInfo("Zoom Out", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('-', ModifierKeys::commandModifier);
+        result.addDefaultKeypress('8', ModifierKeys::altModifier);
         break;
     case CommandIDs::zoomNormal:
         result.setInfo("Zoom Normal", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('=', ModifierKeys::commandModifier);
+        result.addDefaultKeypress('0', ModifierKeys::altModifier);
         break;
     case CommandIDs::reverseDirection:
         result.setInfo("Reverse direction", "", CommandCategories::editing, 0);
@@ -431,7 +431,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::insertAudioConnection:
         result.setInfo("Audio connection", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo("Waveguide", "", CommandCategories::inserting, 0);
@@ -443,7 +443,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::insertJunction:
         result.setInfo("Junction", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::spaceBarDrag:
         result.setInfo("Scroll while dragging mouse",
