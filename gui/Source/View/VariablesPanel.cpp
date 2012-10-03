@@ -229,11 +229,11 @@ class VariablesTable :public Component,
 					public TableListBoxModel
 {
 public:
-	VariablesTable(ObjController* objController_, ValueTree data_)
+	VariablesTable(ObjController* objController_, ValueTree data_, UndoManager* undoManager_)
 	: table("VariablesTable", this),
         objController(objController_),
-		data(data_)
-        
+		data(data_),
+        undoManager(undoManager_)
 	{
 	    table.setColour (ListBox::outlineColourId, Colours::grey);
 	    table.setOutlineThickness (1);
@@ -282,7 +282,7 @@ public:
 		}
 	}
 
-	void addRow(UndoManager* undoManager)
+	void addRow()
 	{
 
         ValueTree var(Ids::variable);
@@ -301,23 +301,23 @@ public:
 		table.updateContent();
 	}
 
-	void editRow(UndoManager* undoManager)
-	{
-		int rowIndex = table.getSelectedRow();
-		if(rowIndex >= 0)
-		{
-            ValueTree editData = data.getChildWithName(Objects::variables).getChild(rowIndex);
-			int r = VariableInputPanel::show(objController, editData, true, undoManager);
-			table.updateContent();
-			table.repaintRow(rowIndex);
-			if(r == 1)
-				SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
-			else if(r == 2)
-				SAM_LOG(data[Ids::mdlName].toString() + ": Canceled edit variable");
-		}
-	}
+//	void editRow()
+//	{
+//		int rowIndex = table.getSelectedRow();
+//		if(rowIndex >= 0)
+//		{
+//            ValueTree editData = data.getChildWithName(Objects::variables).getChild(rowIndex);
+//			int r = VariableInputPanel::show(objController, editData, true, undoManager);
+//			table.updateContent();
+//			table.repaintRow(rowIndex);
+//			if(r == 1)
+//				SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
+//			else if(r == 2)
+//				SAM_LOG(data[Ids::mdlName].toString() + ": Canceled edit variable");
+//		}
+//	}
 
-	void removeSelectedRow(UndoManager* undoManager)
+	void removeSelectedRow()
 	{
 		int rowIndex = table.getLastRowSelected();
 		if(rowIndex >= 0)
@@ -332,6 +332,17 @@ public:
 			SAM_LOG(data[Ids::mdlName].toString() + ": Remove variable " + varName);
 		}
 	}
+    void cellDoubleClicked (int rowNumber, int columnId, const MouseEvent& e)
+    {
+        ValueTree editData = data.getChildWithName(Objects::variables).getChild(rowNumber);
+        int r = VariableInputPanel::show(objController, editData, true, undoManager);
+        table.updateContent();
+        table.repaintRow(rowNumber);
+        if (r == 1)
+            SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
+        else if (r == 2)
+            SAM_LOG(data[Ids::mdlName].toString() + ": Canceled edit variable");
+    }
 	ValueTree getData() { return data; }
 private:
 	bool checkVariableCorrectness(const String& varText)
@@ -341,6 +352,7 @@ private:
 	TableListBox table;
     ObjController* objController;
 	ValueTree data;
+    UndoManager* undoManager;
 };
 
 class VariablesComponent : public Component,
@@ -350,18 +362,14 @@ public:
     VariablesComponent(ObjController* objController,
                        ValueTree data,
                        UndoManager* undoManager_)
-	: btAdd("Add"),
-	  btRemove("Remove"),
-	  btEdit("Edit"),
-	  varTable(objController, data),
-	  undoManager(undoManager_)
+	: btAdd("+"),
+	  btRemove("-"),
+	  varTable(objController, data, undoManager_)
 	{
 		btAdd.addListener(this);
 		addAndMakeVisible(&btAdd);
 		btRemove.addListener(this);
 		addAndMakeVisible(&btRemove);
-		btEdit.addListener(this);
-		addAndMakeVisible(&btEdit);
 		addAndMakeVisible(&varTable);
 	}
 
@@ -371,34 +379,27 @@ public:
 
 	void resized()
 	{
-		btAdd.setBounds(5, 5, 70, 22);
-		btRemove.setBounds(getWidth()- 75, 5, 70, 22);
-		btEdit.setBounds(getWidth() / 2 - 35, 5, 70, 22);
-		varTable.setBounds(5, 60, getWidth()-10, getHeight() - 60);
+		varTable.setBounds(5, 5, getWidth()-10, getHeight() - 40);
+		btAdd.setBounds(5, getHeight() - 30, 22, 22);
+		btRemove.setBounds(30, getHeight() - 30, 22, 22);
 	}
 
 	void buttonClicked(Button* button)
 	{
 		if(button == &btAdd)
 		{
-			varTable.addRow(undoManager);
+			varTable.addRow();
 		}
 		else if( button == &btRemove)
 		{
-			varTable.removeSelectedRow(undoManager);
-		}
-		else if( button == &btEdit)
-		{
-			varTable.editRow(undoManager);
+			varTable.removeSelectedRow();
 		}
 	}
 
 private:
 	TextButton btAdd;
 	TextButton btRemove;
-	TextButton btEdit;
 	VariablesTable varTable;
-	UndoManager* undoManager;
 };
 
 static String variablesWindowPos;
