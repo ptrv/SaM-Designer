@@ -90,6 +90,9 @@ void setGainForSourceId(ValueTree& sources, const String& sourceId,
                         const String& gainVal, UndoManager* undoManager);
 
 BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, ValueTree& source);
+
+const Identifier& getObjectGroup(const Identifier& ident);
+
 };
 
 

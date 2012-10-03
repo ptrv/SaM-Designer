@@ -233,4 +233,27 @@ BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, Value
     return nullptr;
 }
 
+const Identifier& getObjectGroup(const Identifier& ident)
+{
+    if(ident == Ids::mass || ident == Ids::port
+            || ident == Ids::ground	|| ident == Ids::resonator)
+        return Objects::masses;
+    else if(ident == Ids::link || ident == Ids::touch
+            || ident == Ids::pluck)
+        return Objects::links;
+    else if(ident == Ids::audioout)
+        return Objects::audioobjects;
+    else if(ident == Ids::waveguide)
+        return Objects::waveguides;
+    else if(ident == Ids::termination)
+        return Objects::terminations;
+    else if(ident == Ids::junction)
+        return Objects::junctions;
+    else if(ident == Ids::variable)
+        return Objects::variables;
+
+    else
+        return Objects::invalid;
+}
+
 }

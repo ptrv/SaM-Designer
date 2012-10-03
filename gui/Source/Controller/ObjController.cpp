@@ -67,7 +67,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
     }
     else
     {
-        const Identifier& groupName = Objects::getObjectGroup(objValues.getType().toString());
+        const Identifier& groupName = Utils::getObjectGroup(objValues.getType().toString());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
@@ -104,7 +104,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
     }
     else
     {
-        const Identifier& gruopName = Objects::getObjectGroup(linkValues.getType());
+        const Identifier& gruopName = Utils::getObjectGroup(linkValues.getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
@@ -287,7 +287,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
             removeAudioConnection(getAudioConnector(aoIndices[i]), true, holder);
         }
 
-        const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
+        const Identifier& groupName = Utils::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(objComp->getData().getType(),
@@ -379,7 +379,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
             removeAudioConnection(getAudioConnector(aoIndices[i]), true, holder);
         }
 
-        const Identifier& groupName = Objects::getObjectGroup(linkComp->getData().getType());
+        const Identifier& groupName = Utils::getObjectGroup(linkComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(linkComp->getData().getType(),
@@ -744,10 +744,10 @@ void ObjController::paste(ObjectsHolder* holder)
         forEachXmlChildElement (*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if(Objects::getObjectGroup(valTree.getType()) == Objects::masses ||
-               Objects::getObjectGroup(valTree.getType()) == Objects::audioobjects ||
-               Objects::getObjectGroup(valTree.getType()) == Objects::terminations ||
-               Objects::getObjectGroup(valTree.getType()) == Objects::junctions)
+            if(Utils::getObjectGroup(valTree.getType()) == Objects::masses ||
+               Utils::getObjectGroup(valTree.getType()) == Objects::audioobjects ||
+               Utils::getObjectGroup(valTree.getType()) == Objects::terminations ||
+               Utils::getObjectGroup(valTree.getType()) == Objects::junctions)
             {
                 int posX = int(valTree.getProperty(Ids::posX));
                 int posY = int(valTree.getProperty(Ids::posY));
@@ -786,8 +786,8 @@ void ObjController::paste(ObjectsHolder* holder)
         forEachXmlChildElement(*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if(Objects::getObjectGroup(valTree.getType()) == Objects::links ||
-               Objects::getObjectGroup(valTree.getType()) == Objects::waveguides)
+            if(Utils::getObjectGroup(valTree.getType()) == Objects::links ||
+               Utils::getObjectGroup(valTree.getType()) == Objects::waveguides)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(idMgr->contains(valTree.getType(), objName))
