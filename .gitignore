@@ -6,4 +6,4 @@ build
 # built docs
 */Docs/html
 */Docs/latex
-/Synth-A-ModelerGUI/Builds/Linux/Synth-A-ModelerGUI/
+gui/Builds/Linux/Synth-A-ModelerGUI/
