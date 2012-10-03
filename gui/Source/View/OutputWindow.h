@@ -83,6 +83,8 @@ public:
 	 */
 	void addNewLine();
 
+    void setTextColour(const Colour& textColour);
+
 	//==========================================================================
     ApplicationCommandTarget* getNextCommandTarget();
     void getAllCommands (Array <CommandID>& commands);

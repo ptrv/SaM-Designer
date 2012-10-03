@@ -125,7 +125,7 @@ void SynthAModelerApplication::shutdown()
 	mainWindows.clear();
 
 	commandManager = nullptr;
-    
+
     Logger::setCurrentLogger(nullptr);
 #ifdef DEBUG
     samLogger = nullptr;
@@ -581,10 +581,15 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title, const St
 {
 	if(textToWrite.compare("") != 0)
 	{
+        Colour color = Colours::black;
+        if(title.contains("Error"))
+            color = Colours::red;
 		outputWindow->printHeader();
+        outputWindow->setTextColour(color);
 		outputWindow->addText(title);
 		outputWindow->addText(textToWrite);
 		outputWindow->addNewLine();
+        outputWindow->setTextColour(Colours::black);
 	}
 	else
 	{

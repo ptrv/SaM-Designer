@@ -145,3 +145,8 @@ bool OutputWindow::perform (const InvocationInfo& info)
 {
 	return false;
 }
+
+void OutputWindow::setTextColour(const Colour& textColour)
+{
+    console->setColour(TextEditor::textColourId, textColour);
+}
