@@ -62,7 +62,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
     {
         AddObjectAction* action = new AddObjectAction(this, objValues, holder);
         owner.getUndoManager()->perform(action, "Add new Object");
-        
+
         return objects[action->indexAdded];
     }
     else
@@ -87,10 +87,10 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
 
 void ObjController::addNewObject(ObjectsHolder* holder, ValueTree objValues)
 {
-    
+
     ObjectComponent* oc = addObject(holder, objValues, -1, true);
     sObjects.selectOnly(oc);
-    
+
 }
 
 LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValues, int index, bool undoable)
@@ -99,7 +99,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
     {
         AddLinkAction* action = new AddLinkAction(this, linkValues, holder);
         owner.getUndoManager()->perform(action, "Add new Link");
-        
+
         return links[action->indexAdded];
     }
     else
@@ -112,7 +112,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
 
         LinkComponent* linkComp = new LinkComponent(*this, linkValues);
         links.insert(index, linkComp);
-        
+
 		holder->addAndMakeVisible(linkComp);
         holder->updateComponents();
         changed();
@@ -159,8 +159,8 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     {
         ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
-        
-        if(oc1 != nullptr && oc2 != nullptr 
+
+        if(oc1 != nullptr && oc2 != nullptr
             && oc1->canBeConnected(linkValues.getType())
             && oc2->canBeConnected(linkValues.getType())
             && (! checkIfLinkExitsts(linkValues)))
@@ -194,12 +194,12 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
 {
     if(undoable)
     {
-        AddAudioConnectionAction* action = new AddAudioConnectionAction(this, 
-                                                                        objComp, 
-                                                                        audioOutComp, 
+        AddAudioConnectionAction* action = new AddAudioConnectionAction(this,
+                                                                        objComp,
+                                                                        audioOutComp,
                                                                         holder);
         owner.getUndoManager()->perform(action, "Add new audio connection");
-        
+
         return audioConnections[action->indexAdded];
     }
     else
@@ -228,7 +228,7 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
         LinkComponent* lc1 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
         LinkComponent* lc2 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(1));
-        
+
         if(oc1 != nullptr && oc2 != nullptr)
         {
             if ((oc1->getData().getType() == Ids::audioout
@@ -286,7 +286,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
         {
             removeAudioConnection(getAudioConnector(aoIndices[i]), true, holder);
         }
-        
+
         const Identifier& groupName = Objects::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
@@ -295,7 +295,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
         subTree.removeChild(objComp->getData(), nullptr);
         objects.removeObject(objComp);
     }
-    
+
 }
 
 void ObjController::removeSelectedObjects(ObjectsHolder* holder)
@@ -338,13 +338,13 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 //                removeLink(lc, true, holder);
 //                continue;
 //            }
-            
+
         }
     }
 }
 
 void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
-                                          bool undoable, 
+                                          bool undoable,
                                           ObjectsHolder* holder)
 {
     if(undoable)
@@ -372,7 +372,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
     {
         sObjects.deselect(linkComp);
         sObjects.changed(true);
-        
+
         Array<int> aoIndices = checkIfObjectHasAudioConnections(linkComp->getData());
         for(int i = aoIndices.size(); --i >= 0;)
         {
@@ -393,7 +393,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
 {
     MDLFile* mf = owner.getMDLFile();
     ValueTree mdl = mf->mdlRoot;
-    
+
     ValueTree massObjects = mdl.getChildWithName(Objects::masses);
     for (int i = 0; i < massObjects.getNumChildren(); i++)
     {
@@ -483,23 +483,23 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(audioOutComp);
             audioOutComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            
+
             ValueTree aoSources = obj.getChildWithName(Ids::sources);
             for (int j = 0; j < aoSources.getNumChildren(); ++j)
             {
                 ValueTree source = aoSources.getChild(j);
 //                ObjectComponent* oc = getObjectForId(src);
 //                LinkComponent* lc = getLinkForId(src);
-                BaseObjectComponent* sourceComp = Utils::getSourceIdFromSource(this, source);
+                BaseObjectComponent* sourceComp = Utils::getBaseObjectFromSource(this, source);
 //                if(oc != nullptr)
 //                    sourceComp = oc;
 //                else if(lc != nullptr)
 //                    sourceComp = lc;
-                
+
                 if( sourceComp != nullptr )
                 {
-                    AudioOutConnector* aoc = new AudioOutConnector(*this, 
-                                                                   sourceComp, 
+                    AudioOutConnector* aoc = new AudioOutConnector(*this,
+                                                                   sourceComp,
                                                                    audioOutComp);
                     audioConnections.add(aoc);
                     holder->addAndMakeVisible(aoc);
@@ -659,7 +659,7 @@ void ObjController::reverseLinkDirection()
         }
     }
     changed();
-    
+
     owner.getUndoManager()->beginNewTransaction();
 }
 
@@ -670,7 +670,7 @@ Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
     for (int i = 0; i < links.size(); i++)
     {
         ValueTree linkTree = links.getUnchecked(i)->getData();
-        
+
         if(linkTree.getProperty(Ids::startVertex) == objTree.getProperty(Ids::identifier)
             || linkTree.getProperty(Ids::endVertex) == objTree.getProperty(Ids::identifier))
         {
@@ -753,7 +753,7 @@ void ObjController::paste(ObjectsHolder* holder)
                 int posY = int(valTree.getProperty(Ids::posY));
                 valTree.setProperty(Ids::posX, posX + 10, nullptr);
                 valTree.setProperty(Ids::posY, posY + 10, nullptr);
-                
+
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if(idMgr->contains(valTree.getType(), objName))
                 {
@@ -834,13 +834,13 @@ void ObjController::paste(ObjectsHolder* holder)
                 ValueTree sources = valTree.getChildWithName(Ids::sources);
                 for (int j = 0; j < sources.getNumChildren(); ++j) {
                     ValueTree source = sources.getChild(j);
-                    BaseObjectComponent* sourceComp = Utils::getSourceIdFromSource(this, source);
+                    BaseObjectComponent* sourceComp = Utils::getBaseObjectFromSource(this, source);
                     String oldSrcName = sourceComp->getData()[Ids::identifier];
                     if(objectNamesOldNewForAudio.contains(oldSrcName))
                     {
                         source.setProperty(Ids::value, objectNamesOldNewForAudio[oldSrcName], nullptr);
                     }
-                    sourceComp = Utils::getSourceIdFromSource(this, source);
+                    sourceComp = Utils::getBaseObjectFromSource(this, source);
 //                    ObjectComponent* oc = getObjectForId(source[Ids::value]);
 //                    LinkComponent* lc = getLinkForId(source[Ids::value]);
 //                    BaseObjectComponent* sourceComp = nullptr;
@@ -848,7 +848,7 @@ void ObjController::paste(ObjectsHolder* holder)
 //                        sourceComp = oc;
 //                    else if(lc != nullptr)
 //                        sourceComp = lc;
-                    
+
                     if( sourceComp != nullptr )
                     {
                         AudioOutConnector* aoc = new AudioOutConnector(*this,
@@ -881,14 +881,14 @@ bool ObjController::renameId(const Identifier& objId, const String& oldId,
     return idMgr->renameId(objId, oldId, newId, undoManager_);
 }
 
-bool ObjController::changeObjectNameInLink(const String& oldName, 
+bool ObjController::changeObjectNameInLink(const String& oldName,
                                            const String& newName,
                                            UndoManager* undoManager)
 {
     ObjectComponent* oc = getObjectForId(newName);
     if(oc == nullptr)
         oc = getObjectForId(oldName);
-    
+
     if (oc != nullptr)
     {
         Array<LinkComponent*> links = oc->getAttachedLinks();
@@ -1023,7 +1023,7 @@ void ObjController::tidyUp()
         }
     }
     DBG("best vertical distance " << bestdist);
-    
+
     for (int i = 0; i < objects.size(); ++i)
     {
         bool keep = true;

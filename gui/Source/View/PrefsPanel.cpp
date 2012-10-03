@@ -207,6 +207,9 @@ private:
                 {
                     if(i == exporterIndex)
                     {
+                        String currExporter = spa.getAllKeys()[i];
+                        if(currExporter.compare(StoredSettings::getInstance()->getCurrentExporter()) == 0)
+                            StoredSettings::getInstance()->setCurrentExporter(inputVarName.getText());
                         other.set(inputVarName.getText(), inputVarValue.getText());
                     }
                     else
@@ -331,7 +334,11 @@ public:
 		if(rowIndex >= 0)
 		{
             StringPairArray& spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+            String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
+            if(currentExporter.compare(spa.getAllKeys()[rowIndex]) == 0)
+                StoredSettings::getInstance()->setCurrentExporter(String::empty);
             StoredSettings::getInstance()->getExporters().removeValue(spa.getAllKeys()[rowIndex]);
+
 			table.updateContent();
 		}
 	}

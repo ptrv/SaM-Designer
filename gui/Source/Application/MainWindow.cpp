@@ -283,15 +283,23 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         consoleText << mdlController->generateFaust();
         consoleText << "\nSynth-A-Modeler finished.";
     	String titleText = "Generate FAUST code...\n\n";
-    	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
+    	SAM_CONSOLE(titleText, consoleText);
     }
     	break;
     case CommandIDs::generateExternal:
     {
-    	String consoleText = mdlController->generateExternal();
-        String titleText = "Generating "+StoredSettings::getInstance()->getCurrentExporter()+" external...\n\n";
-        consoleText << "\nFinished!";
-    	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
+        if(StoredSettings::getInstance()->getExporters().getAllProperties().size() > 0
+            || StoredSettings::getInstance()->getCurrentExporter() != String::empty)
+    	{
+            String consoleText = mdlController->generateExternal();
+            String titleText = "Generating " + StoredSettings::getInstance()->getCurrentExporter() + " external...\n\n";
+            consoleText << "\nFinished!";
+            SAM_CONSOLE(titleText, consoleText);
+        }
+        else
+        {
+            SAM_CONSOLE("Error: ", "There are no exporters defined!");
+        }
     }
     	break;
 #ifdef _DEBUG
@@ -344,6 +352,6 @@ String MainAppWindow::getProjectWindowZoomName() const
     jassert (mdlController->getMDLFile() != nullptr);
     if (mdlController->getMDLFile() == nullptr)
         return String::empty;
-    
+
     return "projectWindowZoom_" + mdlController->getMDLFile()->getName();
 }

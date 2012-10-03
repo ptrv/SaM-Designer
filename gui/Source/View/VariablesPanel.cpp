@@ -158,7 +158,7 @@ private:
             {
                 undoManager->beginNewTransaction("Edit variable");
                 String oldName = data[Ids::identifier].toString();
-                data.setProperty(Ids::identifier, 
+                data.setProperty(Ids::identifier,
                                  newData[Ids::identifier].toString(),
                                  undoManager);
                 data.setProperty(Ids::faustCode,
@@ -284,13 +284,12 @@ public:
 
 	void addRow()
 	{
-
         ValueTree var(Ids::variable);
 		int r = VariableInputPanel::show(objController, var, false, undoManager);
 		if(r == 1)
         {
 			SAM_LOG(data[Ids::mdlName].toString() + ": Add variable");
-            ValueTree variables = data.getOrCreateChildWithName(Objects::variables, 
+            ValueTree variables = data.getOrCreateChildWithName(Objects::variables,
                                                                 undoManager);
             variables.addChild(var, -1, undoManager);
         }
@@ -300,22 +299,6 @@ public:
         }
 		table.updateContent();
 	}
-
-//	void editRow()
-//	{
-//		int rowIndex = table.getSelectedRow();
-//		if(rowIndex >= 0)
-//		{
-//            ValueTree editData = data.getChildWithName(Objects::variables).getChild(rowIndex);
-//			int r = VariableInputPanel::show(objController, editData, true, undoManager);
-//			table.updateContent();
-//			table.repaintRow(rowIndex);
-//			if(r == 1)
-//				SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
-//			else if(r == 2)
-//				SAM_LOG(data[Ids::mdlName].toString() + ": Canceled edit variable");
-//		}
-//	}
 
 	void removeSelectedRow()
 	{
@@ -405,7 +388,7 @@ private:
 static String variablesWindowPos;
 
 
-VariablesPanel::VariablesPanel(ObjController* objController, 
+VariablesPanel::VariablesPanel(ObjController* objController,
                                ValueTree data,
                                UndoManager* undoManager)
     : DialogWindow ("Define variables", Colour::greyLevel (0.92f), true)

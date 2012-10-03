@@ -214,7 +214,7 @@ void setGainForSourceId(ValueTree& sources, const String& sourceId,
     }
 }
 
-BaseObjectComponent* getSourceIdFromSource(ObjController* objController, ValueTree& source)
+BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, ValueTree& source)
 {
     String srcVal = source[Ids::value].toString();
     StringArray srcArray;
