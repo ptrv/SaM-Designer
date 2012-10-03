@@ -289,7 +289,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     case CommandIDs::generateExternal:
     {
     	String consoleText = mdlController->generateExternal();
-    	String titleText = "Generating "+StoredSettings::getInstance()->getCmdExporter()+" external...\n\n";
+        String titleText = "Generating "+StoredSettings::getInstance()->getCurrentExporter()+" external...\n\n";
         consoleText << "\nFinished!";
     	SynthAModelerApplication::getApp()->writeToDebugConsole(titleText, consoleText);
     }

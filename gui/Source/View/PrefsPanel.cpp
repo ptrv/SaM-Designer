@@ -43,24 +43,18 @@ public:
 			true, true, false,
 			"*.*", String::empty,
 			"(select the directory which faust is in)"),
-		teCmdExport("CmdExport"),
 		tbExportConfirm("Confirm export"),
         tbOpenFaustExport("Open Faust file after export"),
 #ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
 #endif
         labelDataDir (String::empty, "Data Dir"),
-		labelFaustDir (String::empty, "FAUST Dir"),
-		labelCmdExport(String::empty, "Exporter Command")
+		labelFaustDir (String::empty, "FAUST Dir")
     {
         addAndMakeVisible (&fcDataDir);
         labelDataDir.attachToComponent (&fcDataDir, false);
         addAndMakeVisible (&fcFaustDir);
         labelFaustDir.attachToComponent (&fcFaustDir, false);
-        addAndMakeVisible (&teCmdExport);
-        labelCmdExport.attachToComponent (&teCmdExport, false);
-        teCmdExport.setMultiLine(false);
-        teCmdExport.setText(StoredSettings::getInstance()->getCmdExporter());
         addAndMakeVisible(&tbExportConfirm);
         tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
         addAndMakeVisible(&tbOpenFaustExport);
@@ -75,7 +69,6 @@ public:
     {
         StoredSettings::getInstance()->setDataDir(fcDataDir.getCurrentFile().getFullPathName());
         StoredSettings::getInstance()->setFaustDir(fcFaustDir.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setCmdExporter(teCmdExport.getText());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
         StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
 #ifdef DEBUG
@@ -87,7 +80,6 @@ public:
     {
         fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
         fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
-        teCmdExport.setBounds(10, 170, getWidth() -20, 22);
         tbExportConfirm.setBounds(10, 220, getWidth() - 20, 22);
         tbOpenFaustExport.setBounds(10, 270, getWidth() - 20, 22);
 #ifdef DEBUG
@@ -98,7 +90,6 @@ public:
 private:
     FilenameComponent fcDataDir;
     FilenameComponent fcFaustDir;
-    TextEditor teCmdExport;
     ToggleButton tbExportConfirm;
     ToggleButton tbOpenFaustExport;
 #ifdef DEBUG
@@ -106,10 +97,166 @@ private:
 #endif
     Label labelDataDir;
     Label labelFaustDir;
-    Label labelCmdExport;
 };
 
 //==============================================================================
+class ExporterInputPanel : public DialogWindow
+{
+public:
+	ExporterInputPanel(int exporterIndex)
+	: DialogWindow("Exporter", Colours::lightgrey, true)
+	{
+		ExporterInputComponent* const eic = new ExporterInputComponent(*this, exporterIndex);
+		eic->setSize(350, 100);
+
+		setContentOwned (eic, true);
+
+		centreAroundComponent (0, getWidth(), getHeight());
+
+		setResizable (false, false);
+	}
+
+	~ExporterInputPanel()
+	{
+
+	}
+    void closeButtonPressed()
+    {
+    	setVisible(false);
+    }
+
+    static void show(int exporterIndex)
+    {
+    	ExporterInputPanel eip(exporterIndex);
+        eip.runModalLoop();
+    }
+
+private:
+	int returnVal;
+    class ExporterInputComponent : public Component,
+                                   public Button::Listener,
+                                   public TextEditor::Listener
+    {
+    public:
+    	ExporterInputComponent(ExporterInputPanel& parent_, int exporterIndex_)
+    	: parent(parent_),
+    	  labelVarName("Variable"),
+    	  labelVarValue("Value"),
+    	  inputVarName("Input variable"),
+    	  inputVarValue("Input value"),
+    	  btOk("Ok"),
+    	  btCancel("Cancel"),
+          exporterIndex(exporterIndex_)
+    	{
+    		labelVarName.setText("Variable", false);
+    		addAndMakeVisible(&labelVarName);
+    		labelVarValue.setText("Value", false);
+    		addAndMakeVisible(&labelVarValue);
+            inputVarName.addListener(this);
+    		addAndMakeVisible(&inputVarName);
+            inputVarValue.addListener(this);
+    		addAndMakeVisible(&inputVarValue);
+    		btOk.addListener(this);
+    		addAndMakeVisible(&btOk);
+    		btCancel.addListener(this);
+    		addAndMakeVisible(&btCancel);
+
+            if(exporterIndex >= 0)
+            {
+                StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+                inputVarName.setText(spa.getAllKeys()[exporterIndex], false);
+                inputVarValue.setText(spa.getAllValues()[exporterIndex], false);
+            }
+
+    	}
+
+    	~ExporterInputComponent()
+    	{
+    	}
+
+    	void resized()
+    	{
+    		labelVarName.setBounds(0, 5, 60, 22);
+    		inputVarName.setBounds(60, 5, getWidth() - 65, 22);
+    		labelVarValue.setBounds(0, 40, 60, 22);
+    		inputVarValue.setBounds(60, 40, getWidth() - 65, 22);
+    		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
+    		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
+    	}
+
+    	void buttonClicked(Button* button)
+    	{
+    		if(button == &btOk)
+    		{
+                applyEdits();
+    		}
+    		else if(button == &btCancel)
+    		{
+                cancelEdits();
+    		}
+    	}
+
+        void applyEdits()
+        {
+            StringPairArray& spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+            if(exporterIndex >= 0)
+            {
+                // we have to copy the array first to keep order when editing a value.
+                StringPairArray other;
+                for (int i = 0; i < spa.size(); ++i)
+                {
+                    if(i == exporterIndex)
+                    {
+                        other.set(inputVarName.getText(), inputVarValue.getText());
+                    }
+                    else
+                    {
+                        other.set(spa.getAllKeys()[i], spa.getAllValues()[i]);
+                    }
+                }
+
+                spa.clear();
+                spa.addArray(other);
+            }
+            else
+            {
+                spa.set(inputVarName.getText(), inputVarValue.getText());
+            }
+            StoredSettings::getInstance()->getExporters().save();
+            parent.closeButtonPressed();
+        }
+
+        void cancelEdits()
+        {
+            parent.closeButtonPressed();
+        }
+
+        void textEditorTextChanged(TextEditor& editor)
+        {
+        }
+        void textEditorReturnKeyPressed(TextEditor& editor)
+        {
+            applyEdits();
+        }
+        void textEditorEscapeKeyPressed(TextEditor& editor)
+        {
+            cancelEdits();
+        }
+
+    private:
+    	ExporterInputPanel& parent;
+    	Label labelVarName;
+    	Label labelVarValue;
+    	TextEditor inputVarName;
+    	TextEditor inputVarValue;
+    	TextButton btOk;
+    	TextButton btCancel;
+        int exporterIndex;
+    };
+
+};
+
+
 class ExporterTable : public Component,
                       public TableListBoxModel
 {
@@ -117,27 +264,12 @@ public:
     ExporterTable()
     : table("Exporter table", this)
     {
-        StoredSettings* settings = StoredSettings::getInstance();
-        data = &settings->getExporters().getAllProperties();
+        data = &StoredSettings::getInstance()->getExporters().getAllProperties();
 
-        if(data->size() == 0)
-        {
-            XmlDocument xml(String::createStringFromData(BinaryData::default_exporters_xml,
-                                                         BinaryData::default_exporters_xmlSize));
-            ScopedPointer<XmlElement> elem(xml.getDocumentElement());
-            for (int i = 0; i < elem->getNumChildElements(); ++i)
-            {
-                XmlElement* c = elem->getChildElement(i);
-                settings->getExporters().setValue(c->getStringAttribute("name"),
-                                                  c->getStringAttribute("val"));
-
-            }
-            elem = nullptr;
-        }
         table.setColour (ListBox::outlineColourId, Colours::grey);
 	    table.setOutlineThickness (1);
 
-	    table.getHeader().addColumn("name",1,100);
+	    table.getHeader().addColumn("exporter",1,100);
 	    table.getHeader().addColumn("value",2,300);
 
 	    table.setMultipleSelectionEnabled(false);
@@ -178,9 +310,8 @@ public:
 
 	void addRow()
 	{
-
-       
-		table.updateContent();
+        ExporterInputPanel::show(-1);
+        table.updateContent();
 	}
 
 	void editRow()
@@ -188,6 +319,7 @@ public:
 		int rowIndex = table.getSelectedRow();
 		if(rowIndex >= 0)
 		{
+            ExporterInputPanel::show(rowIndex);
 			table.updateContent();
 			table.repaintRow(rowIndex);
 		}
@@ -198,12 +330,16 @@ public:
 		int rowIndex = table.getLastRowSelected();
 		if(rowIndex >= 0)
 		{
+            StringPairArray& spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+            StoredSettings::getInstance()->getExporters().removeValue(spa.getAllKeys()[rowIndex]);
 			table.updateContent();
 		}
 	}
     void cellDoubleClicked (int rowNumber, int columnId, const MouseEvent& e)
     {
+        ExporterInputPanel::show(rowNumber);
         table.updateContent();
+        table.repaintRow(rowNumber);
     }
 private:
     TableListBox table;
@@ -234,7 +370,14 @@ public:
 
     void buttonClicked(Button* button)
 	{
-        
+        if(button == &btAdd)
+		{
+			exporterTable.addRow();
+		}
+		else if( button == &btRemove)
+		{
+			exporterTable.removeSelectedRow();
+		}
     }
 private:
   	TextButton btAdd;

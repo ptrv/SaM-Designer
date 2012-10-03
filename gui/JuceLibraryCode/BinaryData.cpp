@@ -12,7 +12,7 @@ static const unsigned char temp_fb5cda14[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
 "\r\n"
 "<PROPERTIES>\r\n"
-"  <VALUE name=\"puredata1\" val=\"make -C $(DATA_DIR) puredata\"/>\r\n"
+"  <VALUE name=\"puredata\" val=\"make -C $(DATA_DIR) puredata\"/>\r\n"
 "</PROPERTIES>\r\n";
 
 const char* default_exporters_xml = (const char*) temp_fb5cda14;
@@ -790,7 +790,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
 
     switch (hash)
     {
-        case 0xd0e7a20c:  numBytes = 135; return default_exporters_xml;
+        case 0xd0e7a20c:  numBytes = 134; return default_exporters_xml;
         case 0x9a64200d:  numBytes = 3839; return prefs_export_png;
         case 0xe7d611d7:  numBytes = 875; return mdl_file_header_txt;
         case 0xb02b86be:  numBytes = 407; return about_txt;

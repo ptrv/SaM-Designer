@@ -7,7 +7,7 @@
 namespace BinaryData
 {
     extern const char*   default_exporters_xml;
-    const int            default_exporters_xmlSize = 135;
+    const int            default_exporters_xmlSize = 134;
 
     extern const char*   prefs_export_png;
     const int            prefs_export_pngSize = 3839;

@@ -227,15 +227,6 @@ void StoredSettings::setDataDir (const String& folder)
 	props->setValue("datadir", folder);
 }
 
-const String StoredSettings::getCmdExporter() const
-{
-	return props->getValue("cmdexporter", "make -C $(DATA_DIR) puredata");
-}
-void StoredSettings::setCmdExporter(const String& exporters)
-{
-	props->setValue("cmdexporter", exporters);
-}
-
 const bool StoredSettings::getIsSegmentedConnectors() const
 {
 	return props->getBoolValue("segmentedconnectors", false);
@@ -270,4 +261,13 @@ const bool StoredSettings::getOpenFaustExport() const
 void StoredSettings::setOpenFaustExport(bool isOpenMdlAfterExport)
 {
     props->setValue("openfaustexport", isOpenMdlAfterExport);
+}
+
+const String StoredSettings::getCurrentExporter() const
+{
+    return props->getValue("currentexporter", "");
+}
+void StoredSettings::setCurrentExporter(const String& currentExporter)
+{
+    props->setValue("currentexporter", currentExporter);
 }

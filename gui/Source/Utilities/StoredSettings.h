@@ -68,9 +68,6 @@ public:
 
     const StringArray& getFontNames();
 
-    const String getCmdExporter() const;
-    void setCmdExporter(const String& exporters);
-
 	const bool getIsSegmentedConnectors() const;
     void setIsSegmentedConnectors (bool isSegmentedConnectors);
 
@@ -82,6 +79,9 @@ public:
 
     const bool getOpenFaustExport() const;
     void setOpenFaustExport (bool isOpenMdlAfterExport);
+
+    const String getCurrentExporter() const;
+    void setCurrentExporter(const String& currentExporter);
 
 //    Array<File> getExporters() const;
 //    void setExporters (const Array<File>& files);

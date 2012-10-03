@@ -80,6 +80,24 @@ void SynthAModelerApplication::initialise (const String& commandLine)
     for (int i = 0; i < mdls.size(); ++ i)
         openFile (mdls.getReference(i));
 
+    // get all exporters
+    if(StoredSettings::getInstance()->getExporters().getAllProperties().size() == 0)
+    {
+        XmlDocument xml(String::createStringFromData(BinaryData::default_exporters_xml,
+                                                     BinaryData::default_exporters_xmlSize));
+        ScopedPointer<XmlElement> elem(xml.getDocumentElement());
+        for (int i = 0; i < elem->getNumChildElements(); ++i)
+        {
+            XmlElement* c = elem->getChildElement(i);
+            StoredSettings::getInstance()->getExporters().setValue(c->getStringAttribute("name"),
+                                                                   c->getStringAttribute("val"));
+
+        }
+        elem = nullptr;
+        String currentExporter = StoredSettings::getInstance()->getExporters().getAllProperties().getAllKeys()[0];
+        StoredSettings::getInstance()->setCurrentExporter(currentExporter);
+    }
+
     if (mainWindows.size() == 0)
         createNewMainWindow()->makeVisible();
 
@@ -505,7 +523,19 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     else if (topLevelMenuIndex == 3)
     {
     	menu.addCommandItem(commandManager, CommandIDs::generateFaust);
+        menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::generateExternal);
+        menu.addSeparator();
+        StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+        String currExporter = StoredSettings::getInstance()->getCurrentExporter();
+        for (int i = 0; i < spa.size(); ++i)
+        {
+            bool isTicked = false;
+            if(spa.getAllKeys()[i].compare(currExporter) == 0)
+                isTicked = true;
+            menu.addItem(1000 + i, spa.getAllKeys()[i],true,isTicked);
+        }
+
     }
     else if (topLevelMenuIndex == 4)
     {
@@ -540,7 +570,11 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
 		getApp()->openFile(file);
 		StoredSettings::getInstance()->recentFiles.addFile(file);
     }
-
+    if(menuItemID >= 1000 && menuItemID < 1100)
+    {
+        StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+        StoredSettings::getInstance()->setCurrentExporter(spa.getAllKeys()[menuItemID - 1000]);
+    }
 }
 
 void SynthAModelerApplication::writeToDebugConsole(const String& title, const String& textToWrite)

@@ -134,10 +134,12 @@ const String OutputCmd::generateFaustCode(const String& inPath, const String& ou
 
 const String OutputCmd::generateExternal()
 {
+    String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
+    String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
 	String processStr = "/bin/bash -c \"export PATH=${PATH}:";
 	processStr << StoredSettings::getInstance()->getFaustDir();
 	processStr << " ; ";
-	processStr << StoredSettings::getInstance()->getCmdExporter();
+    processStr << exporterValue;
 	processStr = processStr.replace("$(DATA_DIR)", StoredSettings::getInstance()->getDataDir(), true);
 	processStr << " 2>&1\" 2>&1";
 
