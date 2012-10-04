@@ -494,10 +494,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::defineVariables);
         menu.addSeparator();
-        menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
-        menu.addCommandItem (commandManager, CommandIDs::zoomIn);
-        menu.addCommandItem (commandManager, CommandIDs::zoomOut);
-        menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::tidyObjects);
@@ -553,8 +549,13 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     }
     else if (topLevelMenuIndex == 5)
     {
+        menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::zoomIn);
+        menu.addCommandItem (commandManager, CommandIDs::zoomOut);
+        menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
+        menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::showObjectNames);
-
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::showGrid);
         menu.addCommandItem (commandManager, CommandIDs::enableSnapToGrid);
