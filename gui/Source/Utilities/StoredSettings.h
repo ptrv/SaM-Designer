@@ -90,6 +90,12 @@ public:
 //    Image getFallbackImage();
 //    const Drawable* getImageFileIcon();
 
+    const bool getIsSnapGridEnabled() const;
+    void setSnapGridEnabled (bool snapGridActive);
+    const bool getIsSnapGridShow() const;
+    void setSnapGridShow (bool snapGridShow);
+    const int getSnapGridPixels() const;
+    void setSnapGridPixels (int snapGridPixels);
 
 private:
     ScopedPointer<PropertiesFile> props;

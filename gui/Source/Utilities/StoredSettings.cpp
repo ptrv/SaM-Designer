@@ -134,7 +134,7 @@ void StoredSettings::flush()
     recentFiles.removeNonExistentFiles();
 
     exporters = nullptr;
-    
+
     PropertiesFile::Options exporterOptions = options;
     exporterOptions.filenameSuffix      = "exporters";
 
@@ -270,4 +270,29 @@ const String StoredSettings::getCurrentExporter() const
 void StoredSettings::setCurrentExporter(const String& currentExporter)
 {
     props->setValue("currentexporter", currentExporter);
+}
+
+const bool StoredSettings::getIsSnapGridEnabled() const
+{
+    return props->getBoolValue("snapgridenabled", true);
+}
+void StoredSettings::setSnapGridEnabled (bool snapGridActive)
+{
+    props->setValue("snapgridenabled", snapGridActive);
+}
+const bool StoredSettings::getIsSnapGridShow() const
+{
+    return props->getBoolValue("snapgridshow", true);
+}
+void StoredSettings::setSnapGridShow (bool snapGridShow)
+{
+    props->setValue("snapgridshow", snapGridShow);
+}
+const int StoredSettings::getSnapGridPixels() const
+{
+    return props->getIntValue("snapgridpixels", 8);
+}
+void StoredSettings::setSnapGridPixels (int snapGridPixels)
+{
+    props->setValue("snapgridpixels", snapGridPixels);
 }

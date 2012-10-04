@@ -40,11 +40,12 @@
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
   dragging(false), isDrawingObjectNames(false), showObjectNames(false),
-  maxX(0), maxY(0),
-  snapGridPixels (8),
-  snapActive (true),
-  snapShown (true)
+  maxX(0), maxY(0)
 {
+    snapGridPixels = StoredSettings::getInstance()->getSnapGridPixels();
+    snapActive = StoredSettings::getInstance()->getIsSnapGridEnabled();
+    snapShown = StoredSettings::getInstance()->getIsSnapGridShow();
+
     grid = new SnapGridPainter();
 
     setSize(100, 100);
@@ -385,14 +386,12 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         setSnappingGrid(getSnappingGridSize(),
                         !isSnapActive(false),
                         isSnapShown());
-        updateComponents();
         break;
 
     case CommandIDs::showGrid:
         setSnappingGrid(getSnappingGridSize(),
                         isSnapActive(false),
                         !isSnapShown());
-        updateComponents();
         break;
     default:
         return false;
@@ -661,6 +660,9 @@ void ObjectsHolder::setSnappingGrid (const int numPixels, const bool active, con
         snapGridPixels = numPixels;
         snapActive = active;
         snapShown = shown;
+        StoredSettings::getInstance()->setSnapGridPixels(snapGridPixels);
+        StoredSettings::getInstance()->setSnapGridEnabled(snapActive);
+        StoredSettings::getInstance()->setSnapGridShow(snapShown);
         if(grid->updateFromDesign(*this))
             repaint();
 
