@@ -45,15 +45,6 @@ namespace CommandIDs
     static const int defineVariables        = 0x200053;
     static const int showObjectNames        = 0x200054;
 
-//    static const int insertMass             = 0x200060;
-//    static const int insertGround           = 0x200061;
-//    static const int insertResonator        = 0x200062;
-//    static const int insertPort             = 0x200063;
-//    static const int linkLinear             = 0x200064;
-//    static const int linkTouch              = 0x200065;
-//    static const int linkPluck              = 0x200066;
-//    static const int audioOutput            = 0x200067;
-
     static const int saveProjectAs          = 0x200070;
     static const int openMdlFileExtern      = 0x200071;
     static const int openDataDir			= 0x200072;
@@ -85,7 +76,6 @@ namespace CommandIDs
 
     static const int generateFaust			= 0x2030c5;
     static const int generateExternal		= 0x2030c6;
-//    static const int pointModeSymmetric     = 0x2030c5;
 
     static const int group                  = 0x202170;
     static const int ungroup                = 0x202180;
@@ -95,11 +85,6 @@ namespace CommandIDs
 
     static const int showGrid               = 0x2020e0;
     static const int enableSnapToGrid       = 0x2020f0;
-
-    static const int editCompLayout         = 0x202100;
-    static const int editCompGraphics       = 0x202110;
-
-    static const int bringBackLostItems     = 0x202120;
 
     static const int zoomIn                 = 0x202130;
     static const int zoomOut                = 0x202140;
@@ -115,10 +100,6 @@ namespace CommandIDs
     static const int moveDownFine           = 0x202410;
     static const int moveLeftFine           = 0x202420;
     static const int moveRightFine          = 0x202430;
-
-    static const int newDocumentBase        = 0x322010;
-    static const int newComponentBase       = 0x302010;
-    static const int newElementBase         = 0x312010;
 }
 
 namespace CommandCategories
@@ -130,7 +111,7 @@ namespace CommandCategories
     static const char* const tools		   = "Tools";
     static const char* const view          = "View";
     static const char* const windows       = "Windows";
-    static const char* const help = "help";
+    static const char* const help          = "help";
 }
 
 #endif  // __COMMANDIDS_H_5D051BD1__
