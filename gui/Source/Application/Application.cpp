@@ -446,7 +446,7 @@ SynthAModelerApplication::MainMenuModel::MainMenuModel()
 StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
 {
     const char* const names[] = { "File", "Edit", "Insert",
-    		"Generate", "Tools", "Help", nullptr };
+    		"Generate", "Tools", "View", "Help", nullptr };
 
     return StringArray (names);
 }
@@ -499,8 +499,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::tidyObjects);
-        menu.addCommandItem(commandManager, CommandIDs::showObjectNames);
-
     }
     else if (topLevelMenuIndex == 2)
     {
@@ -552,6 +550,10 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
 #endif
     }
     else if (topLevelMenuIndex == 5)
+    {
+        menu.addCommandItem(commandManager, CommandIDs::showObjectNames);
+    }
+    else if (topLevelMenuIndex == 6)
     {
     	menu.addCommandItem(commandManager, CommandIDs::showHelp);
     }
