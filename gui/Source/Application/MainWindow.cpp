@@ -31,6 +31,7 @@
 #include "../Controller/ObjController.h"
 #include "../Controller/MDLController.h"
 #include "../Models/MDLFile.h"
+#include "../View/ObjectsHolder.h"
 
 #include "MainWindow.h"
 
@@ -354,4 +355,9 @@ String MainAppWindow::getProjectWindowZoomName() const
         return String::empty;
 
     return "projectWindowZoom_" + mdlController->getMDLFile()->getName();
+}
+
+ObjectsHolder* MainAppWindow::getHolderComponent()
+{
+    return getMDLFileContentComponent()->getHolderComponent();
 }

@@ -33,6 +33,7 @@ class ObjectComponent;
 class MDLFile;
 class ObjController;
 class SelectableObject;
+class SnapGridPainter;
 
 /**
  * Component which contains all objects.
@@ -70,17 +71,26 @@ public:
     void deselectAllSelectedObjects();
     ObjectComponent* getSelectedObject(int index);
     void updateSelectedObjects();
-    
+
     ObjController& getObjController() const { return objController; }
-    
+
 //    const Rectangle<int> getComponentArea() const;
     void showLinkPopupMenu(String so, String eo);
     void showAudioConnectionPopupMenu();
-    
+
     void deleteSelectedObjects();
 
     const Rectangle<int> getObjectsExtent() const;
     const bool getShowObjectNames() const { return showObjectNames; }
+    //==========================================================================
+    void setSnappingGrid (const int numPixels, const bool active, const bool shown);
+
+    int getSnappingGridSize() const throw() { return snapGridPixels; }
+    bool isSnapActive (const bool disableIfCtrlKeyDown) const throw();
+    bool isSnapShown() const throw() { return snapShown; }
+
+    int snapPosition (int pos) const throw();
+
     //==========================================================================
 private:
 
@@ -95,11 +105,15 @@ private:
     Point<int> draggingActual;
 
     LassoComponent<SelectableObject*> lassoComp;
-    
+    ScopedPointer<SnapGridPainter> grid;
+
     bool isDrawingObjectNames;
     bool showObjectNames;
 
     int maxX, maxY;
+
+    int snapGridPixels;
+    bool snapActive, snapShown;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };

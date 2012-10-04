@@ -61,6 +61,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/OutputCmd_1e28237d.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/SnapGridPainter_bcfdcdba.o \
   $(OBJDIR)/AudioOutConnector_995cd494.o \
   $(OBJDIR)/BaseObjectComponent_eac867ec.o \
   $(OBJDIR)/LinkComponent_6a391d22.o \
@@ -187,6 +188,11 @@ $(OBJDIR)/OutputCmd_1e28237d.o: ../../Source/Models/OutputCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/SnapGridPainter_bcfdcdba.o: ../../Source/View/SnapGridPainter.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SnapGridPainter.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/AudioOutConnector_995cd494.o: ../../Source/View/AudioOutConnector.cpp

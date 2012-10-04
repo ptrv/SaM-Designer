@@ -32,6 +32,7 @@
 class MainAppWindow;
 class OutputWindow;
 class SAMLookAndFeel;
+class ObjectsHolder;
 //==============================================================================
 /**
  * The main class of the Synth-A-ModelerBUI application.
@@ -66,6 +67,7 @@ public:
     bool perform (const InvocationInfo& info);
     bool isCommandActive (const CommandID commandID);
 
+    ObjectsHolder* getActiveHolderComponent();
     //==============================================================================
     /**
      * MainMenuModel is actually the menu bar.

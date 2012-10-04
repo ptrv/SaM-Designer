@@ -584,11 +584,16 @@ void ObjController::dragSelectedComps(int dx, int dy)
             const int startX = c->getProperties() ["xDragStart"];
             const int startY = c->getProperties() ["yDragStart"];
 
+//            const int startX = c->getPinPos().x;
+//            const int startY = c->getPinPos().y;
+
             Point<int> r(c->getPosition());
 
-            r.setXY(startX + dx, startY + dy);
+            r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
+                    owner.getHolderComponent()->snapPosition(startY + dy));
 
             c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
+//            c->setPosition(Point<int>(r.x, r.y), true);
         }
     }
 

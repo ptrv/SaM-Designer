@@ -82,7 +82,7 @@ void MDLController::save()
 {
     if(currentMdl->changedOutside())
     {
-        
+
     }
     else
     {
@@ -238,4 +238,9 @@ void MDLController::changed()
 {
     currentMdl->changed();
     mainAppWindow.updateTitle();
+}
+
+ObjectsHolder* MDLController::getHolderComponent()
+{
+    return mainAppWindow.getHolderComponent();
 }

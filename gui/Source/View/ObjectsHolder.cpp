@@ -32,17 +32,24 @@
 #include "SelectableObject.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
+#include "SnapGridPainter.h"
 
 #include "ObjectsHolder.h"
 #include "AudioOutConnector.h"
 
-ObjectsHolder::ObjectsHolder(ObjController& objController_) 
-: objController(objController_), mdlFile(nullptr), 
+ObjectsHolder::ObjectsHolder(ObjController& objController_)
+: objController(objController_), mdlFile(nullptr),
   dragging(false), isDrawingObjectNames(false), showObjectNames(false),
-  maxX(0), maxY(0)
+  maxX(0), maxY(0),
+  snapGridPixels (8),
+  snapActive (true),
+  snapShown (true)
 {
+    grid = new SnapGridPainter();
+
     setSize(100, 100);
     setWantsKeyboardFocus(true);
+
 }
 
 ObjectsHolder::~ObjectsHolder()
@@ -51,6 +58,8 @@ ObjectsHolder::~ObjectsHolder()
     {
         mdlFile->removeChangeListener(this);
     }
+
+    grid = nullptr;
 }
 
 void ObjectsHolder::paint(Graphics& g)
@@ -58,7 +67,7 @@ void ObjectsHolder::paint(Graphics& g)
     g.fillAll(Colours::white);
 
     g.setColour(Colours::black);
-    
+
     if(isDrawingObjectNames || showObjectNames)
     {
         for(int i = 0; i < objController.getNumObjects(); ++i)
@@ -75,11 +84,14 @@ void ObjectsHolder::paint(Graphics& g)
         }
 
     }
+    grid->draw(g);
 }
 
 void ObjectsHolder::resized()
 {
     updateComponents();
+    if(grid->updateFromDesign(*this))
+        repaint();
 }
 
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
@@ -121,6 +133,8 @@ void ObjectsHolder::updateComponents()
         aocs[i]->update();
         aocs[i]->toBack();
     }
+//    if(grid->updateFromDesign(*this))
+//        repaint();
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -134,7 +148,7 @@ void ObjectsHolder::mouseUp(const MouseEvent& e)
     if (e.mouseWasClicked())
     {
     }
-    
+
     if (e.mouseWasClicked() && ! e.mods.isAnyModifierKeyDown())
     {
         // object changed
@@ -273,7 +287,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
 
     case CommandIDs::insertLink:
-        
+
         objController.addNewLinkIfPossible(this,
                                            ObjectFactory::createNewLinkObjectTree(Ids::link,
                                                                                   objController.getNewNameForObject(Ids::link),
@@ -366,6 +380,19 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         if(! isDrawingObjectNames)
             showObjectNames = !showObjectNames;
         repaint();
+        break;
+    case CommandIDs::enableSnapToGrid:
+        setSnappingGrid(getSnappingGridSize(),
+                        !isSnapActive(false),
+                        isSnapShown());
+        updateComponents();
+        break;
+
+    case CommandIDs::showGrid:
+        setSnappingGrid(getSnappingGridSize(),
+                        isSnapActive(false),
+                        !isSnapShown());
+        updateComponents();
         break;
     default:
         return false;
@@ -605,5 +632,40 @@ void ObjectsHolder::checkExtent(const Rectangle<int>& r)
         maxX = r.getRight();
     if(r.getBottom() > maxY)
         maxY = r.getBottom();
-    
+
 }
+
+//==============================================================================
+bool ObjectsHolder::isSnapActive (const bool disableIfCtrlKeyDown) const throw()
+{
+    return snapActive != (disableIfCtrlKeyDown && ModifierKeys::getCurrentModifiers().isCtrlDown());
+}
+
+int ObjectsHolder::snapPosition (int pos) const throw()
+{
+    if (isSnapActive (true))
+    {
+        jassert (snapGridPixels > 0);
+        pos = ((pos + snapGridPixels * 1024 + snapGridPixels / 2) / snapGridPixels - 1024) * snapGridPixels;
+    }
+
+    return pos;
+}
+
+void ObjectsHolder::setSnappingGrid (const int numPixels, const bool active, const bool shown)
+{
+    if (numPixels != snapGridPixels
+         || active != snapActive
+         || shown != snapShown)
+    {
+        snapGridPixels = numPixels;
+        snapActive = active;
+        snapShown = shown;
+        if(grid->updateFromDesign(*this))
+            repaint();
+
+    }
+}
+
+
+//==============================================================================

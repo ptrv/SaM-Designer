@@ -46,7 +46,7 @@ public:
 	void save();
 	void saveAs();
 	void close();
-    
+
     bool saveAsXml();
 
 	const String generateFaust();
@@ -61,8 +61,10 @@ public:
 	bool mdlCheckAndSaveIfNeeded();
 	MDLFile* getMDLFile() const;
 	void setMDLFile(MDLFile* mdlFile);
-    
+
     void changed();
+
+    ObjectsHolder* getHolderComponent();
 private:
 	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;

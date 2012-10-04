@@ -29,6 +29,7 @@
 #include "MainWindow.h"
 #include "../Models/MDLFile.h"
 #include "SAMLookAndFeel.h"
+#include "../View/ObjectsHolder.h"
 
 #include "Application.h"
 
@@ -36,6 +37,7 @@
 #include "../../Testsuite/TestRunner.h"
 #endif
 
+static const int snapSizes[] = { 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32 };
 //==============================================================================
 
 SynthAModelerApplication::SynthAModelerApplication()
@@ -531,7 +533,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
             bool isTicked = false;
             if(spa.getAllKeys()[i].compare(currExporter) == 0)
                 isTicked = true;
-            menu.addItem(1000 + i, spa.getAllKeys()[i],true,isTicked);
+            menu.addItem(200 + i, spa.getAllKeys()[i],true,isTicked);
         }
 
     }
@@ -552,6 +554,18 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     else if (topLevelMenuIndex == 5)
     {
         menu.addCommandItem(commandManager, CommandIDs::showObjectNames);
+
+        menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::showGrid);
+        menu.addCommandItem (commandManager, CommandIDs::enableSnapToGrid);
+
+        const int currentSnapSize = getApp()->getActiveHolderComponent() != 0 ? getApp()->getActiveHolderComponent()->getSnappingGridSize() : 0;
+
+        PopupMenu m;
+        for (int i = 0; i < numElementsInArray (snapSizes); ++i)
+            m.addItem (300 + i, String (snapSizes[i]) + " pixels", true, snapSizes[i] == currentSnapSize);
+
+        menu.addSubMenu ("Grid size", m, getApp()->getActiveHolderComponent() != 0);
     }
     else if (topLevelMenuIndex == 6)
     {
@@ -572,10 +586,19 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
 		getApp()->openFile(file);
 		StoredSettings::getInstance()->recentFiles.addFile(file);
     }
-    if(menuItemID >= 1000 && menuItemID < 1100)
+    if(menuItemID >= 200 && menuItemID < 300)
     {
         StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
         StoredSettings::getInstance()->setCurrentExporter(spa.getAllKeys()[menuItemID - 1000]);
+    }
+    else if (menuItemID >= 300 && menuItemID < 400)
+    {
+        if (getApp()->getActiveHolderComponent() != 0)
+        {
+            getApp()->getActiveHolderComponent()->setSnappingGrid (snapSizes [menuItemID - 300],
+                                                                   getApp()->getActiveHolderComponent()->isSnapActive(false),
+                                                                   getApp()->getActiveHolderComponent()->isSnapShown());
+        }
     }
 }
 
@@ -598,4 +621,19 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title, const St
 		outputWindow->addText("Nothing...\n\n");
 	}
 
+}
+
+ObjectsHolder* SynthAModelerApplication::getActiveHolderComponent()
+{
+    if (mainWindows.size() == 0)
+        return nullptr;
+
+    for (int i = Desktop::getInstance().getNumComponents(); --i >= 0;)
+    {
+        MainAppWindow* mw = dynamic_cast<MainAppWindow*> (Desktop::getInstance().getComponent(i));
+        if (mainWindows.contains(mw))
+            return mw->getHolderComponent();
+    }
+
+    return mainWindows.getLast()->getHolderComponent();
 }

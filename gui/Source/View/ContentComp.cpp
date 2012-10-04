@@ -319,6 +319,8 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::moveLeftFine,
         CommandIDs::moveRightFine,
         CommandIDs::showObjectNames,
+        CommandIDs::enableSnapToGrid,
+        CommandIDs::showGrid,
     };
 
     commands.addArray(ids, numElementsInArray(ids));
@@ -489,6 +491,23 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress('i', ModifierKeys::commandModifier);
         result.setTicked(objectsHolder->getShowObjectNames());
         break;
+
+    case CommandIDs::enableSnapToGrid:
+        result.setInfo("Enable snap-to-grid",
+                       "Toggles whether components' positions are aligned to a grid.",
+                       CommandCategories::view, 0);
+        result.setTicked(objectsHolder->isSnapActive(false));
+//        result.defaultKeypresses.add(KeyPress('g', cmd, 0));
+        break;
+
+    case CommandIDs::showGrid:
+        result.setInfo("Show snap-to-grid",
+                       "Toggles whether the snapping grid is displayed on-screen.",
+                       CommandCategories::view, 0);
+        result.setTicked(objectsHolder->isSnapShown());
+//        result.defaultKeypresses.add(KeyPress('g', cmd | shift, 0));
+        break;
+
     default:
         break;
     };
