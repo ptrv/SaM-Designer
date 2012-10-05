@@ -26,7 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Application/MainWindow.h"
 #include "../Models/MDLFile.h"
-#include "../Models/OutputCmd.h"
+#include "../Models/SAMCmd.h"
 
 #include "MDLController.h"
 
@@ -138,15 +138,33 @@ const String MDLController::generateFaust()
 
 	if (r)
 	{
-		File result(currentMdl->getFilePath());
-		String outFileName= result.getFileNameWithoutExtension();
+        String inPath = currentMdl->getFilePath();
+		File in(inPath);
+		String outFileName= in.getFileNameWithoutExtension();
 		outFileName << ".dsp";
 
-		String outPath = StoredSettings::getInstance()->getDataDir();
+        String dataDir = StoredSettings::getInstance()->getDataDir();
+		String outPath = dataDir;
 		outPath << "/" << outFileName;
-		String processText = outCmd->generateFaustCode(currentMdl->getFilePath(), outPath);
+        File inDataDir(dataDir + "/" + in.getFileName());
+        bool saveInDataDir = false;
+        if (in != inDataDir)
+        {
+            saveInDataDir = true;
+            currentMdl->saveAs(inDataDir, false, false, true);
+            inPath = inDataDir.getFullPathName();
+        }
+		String processText = outCmd->generateFaustCode(inPath, outPath);
         if(StoredSettings::getInstance()->getOpenFaustExport())
             Utils::openFileNative(outPath);
+
+        if(saveInDataDir)
+        {
+            if(! inDataDir.deleteFile())
+            {
+                DBG("Deleting temp file failed!");
+            }
+        }
         return processText;
 	}
 	return String::empty;
