@@ -43,7 +43,7 @@ public:
 			true, true, false,
 			"*.*", String::empty,
 			"(select the directory which faust is in)"),
-		tbExportConfirm("Confirm export"),
+		tbExportConfirm("Confirm before exporting"),
         tbOpenFaustExport("Open Faust file after export"),
 #ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
