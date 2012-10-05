@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    OutputCmd.cpp
+    SAMCmd.cpp
     Created: 11 Apr 2012 3:17:58pm
     Author:  Peter Vasil
 
@@ -24,19 +24,20 @@
 */
 
 #include "../Application/CommonHeaders.h"
+#include "../Models/MDLFile.h"
 
-#include "OutputCmd.h"
+#include "SAMCmd.h"
 
-OutputCmd::OutputCmd()
+SAMCmd::SAMCmd()
 {
 
 }
 
-OutputCmd::~OutputCmd()
+SAMCmd::~SAMCmd()
 {
 }
 
-bool OutputCmd::isSynthAModelerCmdAvailable()
+bool SAMCmd::isSynthAModelerCmdAvailable()
 {
 	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/Synth-A-Modeler");
 	if(samCompiler.existsAsFile())
@@ -44,7 +45,7 @@ bool OutputCmd::isSynthAModelerCmdAvailable()
 	else
 		return false;
 }
-bool OutputCmd::isSAMpreprocessorCmdAvailable()
+bool SAMCmd::isSAMpreprocessorCmdAvailable()
 {
 	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/SAM-preprocessor");
 	if(samCompiler.existsAsFile())
@@ -53,7 +54,7 @@ bool OutputCmd::isSAMpreprocessorCmdAvailable()
 		return false;
 }
 
-bool OutputCmd::isCmdAvailable(const String& cmdStr)
+bool SAMCmd::isCmdAvailable(const String& cmdStr)
 {
 	String cmdStrTmp = cmdStr;
 #if JUCE_LINUX
@@ -80,13 +81,13 @@ bool OutputCmd::isCmdAvailable(const String& cmdStr)
 #endif
 }
 
-bool OutputCmd::isPerlAvailable()
+bool SAMCmd::isPerlAvailable()
 {
 	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
 	return isCmdAvailable(cmdPerl);
 }
 
-bool OutputCmd::isFaustAvailable()
+bool SAMCmd::isFaustAvailable()
 {
 	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust";
 	return isCmdAvailable(cmdFaust);
@@ -122,17 +123,18 @@ static String execProcess(char* cmd) {
     pclose(pipe);
     return result;
 }
-const String OutputCmd::generateFaustCode(const String& inPath, const String& outPath)
+const String SAMCmd::generateFaustCode(const String& inPath, const String& outPath)
 {
     File fileOut(outPath);
-    String pathMDX = StoredSettings::getInstance()->getDataDir();
+    String dataDir = StoredSettings::getInstance()->getDataDir();
+    String pathMDX = dataDir;
     pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
 	String processoutput = runPerlScript("SAM-preprocessor", inPath, pathMDX);
     processoutput << runPerlScript("Synth-A-Modeler", pathMDX, outPath);
 	return processoutput;
 }
 
-const String OutputCmd::generateExternal()
+const String SAMCmd::generateExternal()
 {
     String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
     String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
@@ -148,7 +150,7 @@ const String OutputCmd::generateExternal()
 	return processoutput;
 }
 
-const String OutputCmd::runPerlScript(const String& script,
+const String SAMCmd::runPerlScript(const String& script,
                                       const String& inPath,
                                       const String& outPath)
 {
@@ -166,6 +168,6 @@ const String OutputCmd::runPerlScript(const String& script,
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../../Testsuite/OutputCmd_test.h"
+#include "../../Testsuite/SAMCmd_test.h"
 
 #endif

@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    OutputCmd.h
+    SAMCmd.h
     Created: 11 Apr 2012 3:17:58pm
     Author:  Peter Vasil
 
@@ -23,18 +23,19 @@
 
 */
 
-#ifndef __OUTPUTCMD_H_1206E4C5__
-#define __OUTPUTCMD_H_1206E4C5__
+#ifndef __SAMCMD_H_1206E4C5__
+#define __SAMCMD_H_1206E4C5__
 
+class MDLFile;
 /**
  * This class encapsulates the external commands for generating FAUST code
  * and other externals.
  */
-class OutputCmd
+class SAMCmd
 {
 public:
-	OutputCmd();
-	~OutputCmd();
+	SAMCmd();
+	~SAMCmd();
 
 	/**
 	 * Checks wether the Synth-A-Modeler script is available.
@@ -91,4 +92,4 @@ private:
 };
 
 
-#endif  // __OUTPUTCMD_H_1206E4C5__
+#endif  // __SAMCMD_H_1206E4C5__

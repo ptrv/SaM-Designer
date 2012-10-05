@@ -44,8 +44,7 @@
             file="Testsuite/MDLParser_test.h"/>
       <FILE id="LIATDU" name="MDLFile_test.h" compile="0" resource="0" file="Testsuite/MDLFile_test.h"/>
       <FILE id="f4Xh6K" name="TestUtils.h" compile="0" resource="0" file="Testsuite/TestUtils.h"/>
-      <FILE id="XMa5Xv" name="OutputCmd_test.h" compile="0" resource="0"
-            file="Testsuite/OutputCmd_test.h"/>
+      <FILE id="XMa5Xv" name="SAMCmd_test.h" compile="0" resource="0" file="Testsuite/SAMCmd_test.h"/>
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
@@ -103,8 +102,8 @@
         <FILE id="Z559dG" name="ObjectFactory.h" compile="0" resource="0" file="Source/Models/ObjectFactory.h"/>
         <FILE id="u30khk" name="ObjectActions.h" compile="0" resource="0" file="Source/Models/ObjectActions.h"/>
         <FILE id="NrcNFQ" name="ObjectIDs.h" compile="0" resource="0" file="Source/Models/ObjectIDs.h"/>
-        <FILE id="IQfEQd" name="OutputCmd.cpp" compile="1" resource="0" file="Source/Models/OutputCmd.cpp"/>
-        <FILE id="D0k5Mg" name="OutputCmd.h" compile="0" resource="0" file="Source/Models/OutputCmd.h"/>
+        <FILE id="IQfEQd" name="SAMCmd.cpp" compile="1" resource="0" file="Source/Models/SAMCmd.cpp"/>
+        <FILE id="D0k5Mg" name="SAMCmd.h" compile="0" resource="0" file="Source/Models/SAMCmd.h"/>
         <FILE id="geNURR" name="MDLFile.cpp" compile="1" resource="0" file="Source/Models/MDLFile.cpp"/>
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>

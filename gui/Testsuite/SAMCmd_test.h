@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    OutputCmd_test.h
+    SAMCmd_test.h
     Created: 11 Apr 2012 11:55:25pm
     Author:  Peter Vasil
 
@@ -23,13 +23,13 @@
 
 */
 
-#ifndef __OUTPUTCMD_TEST_H_E0BDB8A1__
-#define __OUTPUTCMD_TEST_H_E0BDB8A1__
+#ifndef __SAMCMD_TEST_H_E0BDB8A1__
+#define __SAMCMD_TEST_H_E0BDB8A1__
 
 #include "TestUtils.h"
-class OutputCmdTest : public UnitTest {
+class SAMCmdTest : public UnitTest {
 public:
-	OutputCmdTest() : UnitTest("OutputCmdTest") {}
+	SAMCmdTest() : UnitTest("OutputCmdTest") {}
 
 	void runTest()
 	{
@@ -37,7 +37,7 @@ public:
 		String expectedPath = String(TESTSUITE_DATA_PATH) + "test_expected.dsp";
 		String outPath = String(TESTSUITE_DATA_PATH) + "test.dsp";
 
-		OutputCmd cmd;
+		SAMCmd cmd;
 		beginTest("isPerlAvailable");
 		expect(cmd.isPerlAvailable(), "");
 		beginTest("isSAMpreprocessorCmdAvailable");
@@ -61,6 +61,6 @@ public:
 	}
 };
 
-static OutputCmdTest outputCmdTest;
+static SAMCmdTest samCmdTest;
 
-#endif  // __OUTPUTCMD_TEST_H_E0BDB8A1__
+#endif  // __SAMCMD_TEST_H_E0BDB8A1__

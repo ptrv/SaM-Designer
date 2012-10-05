@@ -27,7 +27,7 @@
 #define __MDLCONTROLLER_H_8A72BC7D__
 
 class MDLFile;
-class OutputCmd;
+class SAMCmd;
 class AppController;
 class MainAppWindow;
 
@@ -68,7 +68,7 @@ public:
 private:
 	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;
-	ScopedPointer<OutputCmd> outCmd;
+	ScopedPointer<SAMCmd> samCmd;
 };
 
 

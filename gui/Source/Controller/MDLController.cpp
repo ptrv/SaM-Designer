@@ -35,13 +35,13 @@ MDLController::MDLController(MainAppWindow& mainAppWindow_)
 : mainAppWindow(mainAppWindow_),
   currentMdl(nullptr)
 {
-	outCmd = new OutputCmd();
+	samCmd = new SAMCmd();
 }
 
 MDLController::~MDLController()
 {
 	currentMdl = nullptr;
-	outCmd = nullptr;
+	samCmd = nullptr;
 }
 
 void MDLController::newFile()
@@ -116,17 +116,17 @@ bool MDLController::saveAsXml()
 
 const String MDLController::generateFaust()
 {
-	if(! outCmd->isPerlAvailable())
+	if(! samCmd->isPerlAvailable())
 	{
 		Alerts::missingPerl();
 		return "Missing Perl";
 	}
-	if(! outCmd->isSAMpreprocessorCmdAvailable())
+	if(! samCmd->isSAMpreprocessorCmdAvailable())
 	{
 		Alerts::missingSAMpreprocessor();
 		return "Missing SAM-preprocessor";
 	}
-	if(! outCmd->isSynthAModelerCmdAvailable())
+	if(! samCmd->isSynthAModelerCmdAvailable())
 	{
 		Alerts::missingSAM();
 		return "Missing Synth-A-Modeler";
@@ -154,7 +154,7 @@ const String MDLController::generateFaust()
             currentMdl->saveAs(inDataDir, false, false, true);
             inPath = inDataDir.getFullPathName();
         }
-		String processText = outCmd->generateFaustCode(inPath, outPath);
+		String processText = samCmd->generateFaustCode(inPath, outPath);
         if(StoredSettings::getInstance()->getOpenFaustExport())
             Utils::openFileNative(outPath);
 
@@ -175,7 +175,7 @@ const String MDLController::generateExternal()
 	if(currentMdl->getName().compare("Untitled") == 0)
 		return "No mdl file\n\n";
 
-	if(! outCmd->isFaustAvailable())
+	if(! samCmd->isFaustAvailable())
 	{
 		Alerts::missingFaust();
 		return "Missing faust executable";
@@ -190,7 +190,7 @@ const String MDLController::generateExternal()
         String outStr;
         if(StoredSettings::getInstance()->getRunSAMBeforeExternal())
             outStr << generateFaust();
-        outStr << outCmd->generateExternal();
+        outStr << samCmd->generateExternal();
         return outStr;
 	}
 	return String::empty;

@@ -59,7 +59,7 @@ OBJECTS := \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
-  $(OBJDIR)/OutputCmd_1e28237d.o \
+  $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
   $(OBJDIR)/SnapGridPainter_bcfdcdba.o \
   $(OBJDIR)/AudioOutConnector_995cd494.o \
@@ -180,9 +180,9 @@ $(OBJDIR)/ObjectFactory_a170b74f.o: ../../Source/Models/ObjectFactory.cpp
 	@echo "Compiling ObjectFactory.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/OutputCmd_1e28237d.o: ../../Source/Models/OutputCmd.cpp
+$(OBJDIR)/SAMCmd_cf7547a1.o: ../../Source/Models/SAMCmd.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling OutputCmd.cpp"
+	@echo "Compiling SAMCmd.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
