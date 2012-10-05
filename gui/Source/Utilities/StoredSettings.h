@@ -97,6 +97,9 @@ public:
     const int getSnapGridPixels() const;
     void setSnapGridPixels (int snapGridPixels);
 
+    const bool getRunSAMBeforeExternal() const;
+    void setRunSAMBeforeExternal (bool runSAMBeforeExternal);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

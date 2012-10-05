@@ -169,7 +169,11 @@ const String MDLController::generateExternal()
 
 	if (r)
 	{
-		return outCmd->generateExternal();
+        String outStr;
+        if(StoredSettings::getInstance()->getRunSAMBeforeExternal())
+            outStr << generateFaust();
+        outStr << outCmd->generateExternal();
+        return outStr;
 	}
 	return String::empty;
 }

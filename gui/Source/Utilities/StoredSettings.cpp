@@ -298,3 +298,12 @@ void StoredSettings::setSnapGridPixels (int snapGridPixels)
 {
     props->setValue("snapgridpixels", snapGridPixels);
 }
+
+const bool StoredSettings::getRunSAMBeforeExternal() const
+{
+    return props->getBoolValue("runsambeforeexternal", true);
+}
+void StoredSettings::setRunSAMBeforeExternal (bool runSAMBeforeExternal)
+{
+    props->setValue("runsambeforeexternal", runSAMBeforeExternal);
+}

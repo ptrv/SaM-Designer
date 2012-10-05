@@ -43,6 +43,7 @@ public:
 			true, true, false,
 			"*.*", String::empty,
 			"(select the directory which faust is in)"),
+		tbRunSAMBeforeExport("Run Synth-A-Modeler before exporting"),
 		tbExportConfirm("Confirm before exporting"),
         tbOpenFaustExport("Open Faust file after export"),
 #ifdef DEBUG
@@ -55,6 +56,8 @@ public:
         labelDataDir.attachToComponent (&fcDataDir, false);
         addAndMakeVisible (&fcFaustDir);
         labelFaustDir.attachToComponent (&fcFaustDir, false);
+        addAndMakeVisible(&tbRunSAMBeforeExport);
+        tbRunSAMBeforeExport.setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(), false);
         addAndMakeVisible(&tbExportConfirm);
         tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
         addAndMakeVisible(&tbOpenFaustExport);
@@ -69,6 +72,7 @@ public:
     {
         StoredSettings::getInstance()->setDataDir(fcDataDir.getCurrentFile().getFullPathName());
         StoredSettings::getInstance()->setFaustDir(fcFaustDir.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setRunSAMBeforeExternal(tbRunSAMBeforeExport.getToggleState());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
         StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
 #ifdef DEBUG
@@ -80,6 +84,7 @@ public:
     {
         fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
         fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
+        tbRunSAMBeforeExport.setBounds(10, 170, getWidth() - 20, 22);
         tbExportConfirm.setBounds(10, 220, getWidth() - 20, 22);
         tbOpenFaustExport.setBounds(10, 270, getWidth() - 20, 22);
 #ifdef DEBUG
@@ -90,6 +95,7 @@ public:
 private:
     FilenameComponent fcDataDir;
     FilenameComponent fcFaustDir;
+    ToggleButton tbRunSAMBeforeExport;
     ToggleButton tbExportConfirm;
     ToggleButton tbOpenFaustExport;
 #ifdef DEBUG
