@@ -78,7 +78,7 @@ void SnapGridPainter::draw (Graphics& g)
             g.drawRect (0, 0, snapGridSize + 1, snapGridSize + 1);
         }
 
-        g.setColour (col.withAlpha (0.35f));
+        g.setColour (col.withAlpha (0.2f));
         g.setPixel (0, 0);
     }
 
