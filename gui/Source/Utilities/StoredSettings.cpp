@@ -220,7 +220,9 @@ void StoredSettings::setLastDocument(const String& docName)
 
 const String StoredSettings::getDataDir() const
 {
-	return props->getValue("datadir", getDefaultPathDataDir());
+    String p = File::getSpecialLocation(File::currentApplicationFile)
+                                    .getParentDirectory().getFullPathName();
+	return props->getValue("datadir", p);
 }
 void StoredSettings::setDataDir (const String& folder)
 {
