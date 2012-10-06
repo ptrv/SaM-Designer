@@ -356,7 +356,17 @@ void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
         sObjects.deselect(aocComp);
         sObjects.changed(true);
         ValueTree sources = aocComp->getAudioObject()->getData().getChildWithName(Ids::sources);
-        ValueTree source = sources.getChildWithProperty(Ids::value, aocComp->getSourceObject()->getData()[Ids::identifier]);
+        ValueTree source;
+        for (int i = 0; i < sources.getNumChildren(); ++i)
+        {
+            String val = sources.getChild(i)[Ids::value];
+            DBG(aocComp->getSourceObject()->getData()[Ids::identifier].toString());
+            if(val.contains(aocComp->getSourceObject()->getData()[Ids::identifier].toString()))
+            {
+                source = sources.getChild(i);
+                break;
+            }
+        }
         sources.removeChild(source, nullptr);
         audioConnections.removeObject(aocComp);
     }
