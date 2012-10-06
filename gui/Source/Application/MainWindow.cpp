@@ -285,7 +285,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         SAM_CONSOLE("COMMAND: ", titleText, false);
         consoleText << mdlController->generateFaust();
     	SAM_CONSOLE("OUTPUT: \n", consoleText, false);
-        SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.", false);
+        SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.\n\n\n", false);
     }
     	break;
     case CommandIDs::generateExternal:
@@ -297,7 +297,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
             SAM_CONSOLE("COMMAND: ", titleText, false);
             String consoleText = mdlController->generateExternal();
             SAM_CONSOLE("OUTPUT: \n", consoleText, false);
-            SAM_CONSOLE_ADD_LINE("\nFinished!", false);
+            SAM_CONSOLE_ADD_LINE("\nFinished!\n\n\n", false);
         }
         else
         {
