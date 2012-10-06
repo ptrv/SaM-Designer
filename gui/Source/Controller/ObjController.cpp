@@ -853,7 +853,39 @@ void ObjController::paste(ObjectsHolder* holder)
                     String oldSrcName = sourceComp->getData()[Ids::identifier];
                     if(objectNamesOldNewForAudio.contains(oldSrcName))
                     {
-                        source.setProperty(Ids::value, objectNamesOldNewForAudio[oldSrcName], nullptr);
+                        String sVal = source.getProperty(Ids::value);
+                        StringArray sVals;
+                        sVals.addTokens(sVal, "*", "\"");
+                        String newVal;
+                        int srcIdx = -1;
+                        for (int k = 0; k < sVals.size(); ++k)
+                        {
+                            if(sVals[k].compare(oldSrcName) == 0)
+                            {
+                                srcIdx = k;
+                                break;
+                            }
+                        }
+                        if (srcIdx != -1)
+                        {
+                            int gainVals = 0;
+                            for (int k = 0; k < sVals.size(); ++k)
+                            {
+                                if (k != srcIdx)
+                                {
+                                    if (gainVals >= 1)
+                                        newVal << "*";
+                                    newVal << sVals[k];
+                                    ++gainVals;
+                                }
+                                else
+                                {
+                                    newVal << objectNamesOldNewForAudio[oldSrcName];
+                                    ++gainVals;
+                                }
+                            }
+                        }
+                        source.setProperty(Ids::value, newVal, nullptr);
                     }
                     sourceComp = Utils::getBaseObjectFromSource(this, source);
 //                    ObjectComponent* oc = getObjectForId(source[Ids::value]);
