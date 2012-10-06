@@ -169,7 +169,7 @@ static ValueTree createNewPluckTree(const String& newName,
     p.add("300.0");
     p.add("0.1");
     p.add("0.003");
-    p.add("0.005");
+    p.add("0.0");
     ValueTree paramsTree = createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
