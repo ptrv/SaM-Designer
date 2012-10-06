@@ -44,7 +44,7 @@ public:
 			"*.*", String::empty,
 			"(select the directory which faust is in)"),
 		tbRunSAMBeforeExport("Run Synth-A-Modeler before exporting"),
-		tbExportConfirm("Confirm before exporting"),
+		tbExportConfirm("Confirm before generating code"),
         tbOpenFaustExport("Open Faust file after export"),
 #ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
