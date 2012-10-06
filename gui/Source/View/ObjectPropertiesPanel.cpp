@@ -1153,7 +1153,7 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
                                              BaseObjectComponent* caller, 
                                              UndoManager* undoManager_)
     : DialogWindow (Utils::getObjectTypeAsString(caller->getData().getType())+ " properties",
-    		Colour::fromRGBA((uint8)200, (uint8)200, (uint8)200, (uint8)150), true),
+                    Colour::fromRGBA((uint8)200, (uint8)200, (uint8)200, (uint8)200), true),
       returnVal(0)
 {
 
