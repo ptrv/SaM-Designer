@@ -138,6 +138,9 @@ const String MDLController::generateFaust()
 
 	if (r)
 	{
+        if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
+            return "Canceled";
+
         String inPath = currentMdl->getFilePath();
 		File in(inPath);
 		String outFileName= in.getFileNameWithoutExtension();
@@ -187,6 +190,9 @@ const String MDLController::generateExternal()
 
 	if (r)
 	{
+        if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
+            return "Canceled";
+
         String outStr;
         if(StoredSettings::getInstance()->getRunSAMBeforeExternal())
             outStr << generateFaust();
