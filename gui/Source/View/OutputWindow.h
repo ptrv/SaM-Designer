@@ -61,7 +61,7 @@ public:
 	 *
 	 * @param compilerText	string text to insert.
 	 */
-	void addText(const String& compilerText);
+	void addText(const String& compilerText, bool isBold=false);
 
 	/**
 	 * Makes window visible.

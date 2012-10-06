@@ -603,7 +603,9 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
     }
 }
 
-void SynthAModelerApplication::writeToDebugConsole(const String& title, const String& textToWrite)
+void SynthAModelerApplication::writeToDebugConsole(const String& title,
+                                                   const String& textToWrite,
+                                                   bool isBold)
 {
 	if(textToWrite.compare("") != 0)
 	{
@@ -612,14 +614,29 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title, const St
             color = Colours::red;
 		outputWindow->printHeader();
         outputWindow->setTextColour(color);
-		outputWindow->addText(title);
-		outputWindow->addText(textToWrite);
+		outputWindow->addText(title, false);
+		outputWindow->addText(textToWrite, isBold);
 		outputWindow->addNewLine();
         outputWindow->setTextColour(Colours::black);
 	}
 	else
 	{
-		outputWindow->addText("Nothing...\n\n");
+		outputWindow->addText("Nothing...\n\n", false);
+	}
+
+}
+
+void SynthAModelerApplication::writeToDebugConsole(const String& textToWrite,
+                                                   bool isBold)
+{
+	if(textToWrite.compare("") != 0)
+	{
+		outputWindow->addText(textToWrite, isBold);
+		outputWindow->addNewLine();
+	}
+	else
+	{
+		outputWindow->addText("Nothing...\n\n", false);
 	}
 
 }

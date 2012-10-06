@@ -177,12 +177,12 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
             msg << " with ";
             msg << linkValues.getType().toString();
             msg << ".";
-            SAM_CONSOLE("Error: ", msg);
+            SAM_CONSOLE("Error: ", msg, false);
         }
     }
     else
     {
-        SAM_CONSOLE("Error: ", "Please select 2 Objects");
+        SAM_CONSOLE("Error: ", "Please select 2 Objects", false);
     }
 }
 
@@ -245,7 +245,7 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             }
             else
             {
-                SAM_CONSOLE("Error: ", "Cannot create audio connection");
+                SAM_CONSOLE("Error: ", "Cannot create audio connection", false);
             }
         }
         else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr)

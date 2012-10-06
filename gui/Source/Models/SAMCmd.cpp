@@ -146,6 +146,7 @@ const String SAMCmd::generateExternal()
 	processStr << " 2>&1\" 2>&1";
 
 	SAM_LOG("Export command: " + processStr);
+    SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
 	return processoutput;
 }
@@ -161,6 +162,7 @@ const String SAMCmd::runPerlScript(const String& script,
 	processStr << "/" << script << " " << Utils::fixPath(inPath) << " " << Utils::fixPath(outPath) << " 2>&1\" 2>&1";
 
 	SAM_LOG(script + " command: " + processStr);
+    SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
 	return execProcess(processStr.toUTF8().getAddress());
 //	return runChildProcess(processStr.toUTF8().getAddress());
 

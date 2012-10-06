@@ -84,10 +84,12 @@ void OutputWindow::clear()
 		console->clear();
 }
 
-void OutputWindow::addText(const String& compilerText)
+void OutputWindow::addText(const String& compilerText, bool isBold)
 {
 	SAM_LOG(compilerText);
+    console->setBold(isBold);
 	console->addLine(compilerText);
+    console->setBold(!isBold);
 }
 
 void OutputWindow::printWelcomeMessage()
@@ -107,7 +109,7 @@ void OutputWindow::printHeader()
 	debugText << Time::getCurrentTime().toString(true,true, true, true);
 	debugText << "]: " << newLine;
 	debugText << newLine;
-	console->addLine(debugText);
+	addText(debugText, false);
 }
 
 void OutputWindow::addNewLine()

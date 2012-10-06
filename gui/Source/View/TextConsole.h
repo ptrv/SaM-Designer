@@ -49,7 +49,15 @@ public:
 		insertTextAtCaret(text);
 	}
 
-
+    void setBold(bool ib)
+    {
+        Font f(14.f);
+        if(ib)
+            f.setStyleFlags(Font::bold);
+        else
+            f.setStyleFlags(Font::plain);
+        setFont(f);
+    }
 private:
 };
 

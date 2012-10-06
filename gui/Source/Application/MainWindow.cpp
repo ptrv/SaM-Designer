@@ -281,10 +281,11 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     case CommandIDs::generateFaust:
     {
     	String consoleText = "Start Synth-A-Modeler...";
-        consoleText << mdlController->generateFaust();
-        consoleText << "\nSynth-A-Modeler finished.";
     	String titleText = "Generate FAUST code...\n\n";
-    	SAM_CONSOLE(titleText, consoleText);
+        SAM_CONSOLE("COMMAND: ", titleText, false);
+        consoleText << mdlController->generateFaust();
+    	SAM_CONSOLE("OUTPUT: \n", consoleText, false);
+        SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.", false);
     }
     	break;
     case CommandIDs::generateExternal:
@@ -292,14 +293,15 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         if(StoredSettings::getInstance()->getExporters().getAllProperties().size() > 0
             || StoredSettings::getInstance()->getCurrentExporter() != String::empty)
     	{
-            String consoleText = mdlController->generateExternal();
             String titleText = "Generating " + StoredSettings::getInstance()->getCurrentExporter() + " external...\n\n";
-            consoleText << "\nFinished!";
-            SAM_CONSOLE(titleText, consoleText);
+            SAM_CONSOLE("COMMAND: ", titleText, false);
+            String consoleText = mdlController->generateExternal();
+            SAM_CONSOLE("OUTPUT: \n", consoleText, false);
+            SAM_CONSOLE_ADD_LINE("\nFinished!", false);
         }
         else
         {
-            SAM_CONSOLE("Error: ", "There are no exporters defined!");
+            SAM_CONSOLE("Error: ", "There are no exporters defined!", false);
         }
     }
     	break;
@@ -309,7 +311,8 @@ bool MainAppWindow::perform (const InvocationInfo& info)
 #endif
     case CommandIDs::dumpMDL:
         SAM_CONSOLE(mdlController->getMDLName()+"\n\n",
-                    mdlController->getMDLFile()->toString());
+                    mdlController->getMDLFile()->toString(),
+                    false);
         break;
     case CommandIDs::openMdlFileExtern:
         Utils::openFileNative(mdlController->getMDLFile()->getFile().getFullPathName());

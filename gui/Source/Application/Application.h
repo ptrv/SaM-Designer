@@ -94,7 +94,8 @@ public:
     bool closeAllDocuments (bool askUserToSave);
     void updateRecentProjectList();
 
-    void writeToDebugConsole(const String& title, const String& textToWrite);
+    void writeToDebugConsole(const String& title, const String& textToWrite, bool isBold);
+    void writeToDebugConsole(const String& textToWrite, bool isBold);
 
     private:
     OwnedArray<MainAppWindow> mainWindows;
