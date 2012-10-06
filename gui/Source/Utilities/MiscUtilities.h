@@ -93,6 +93,8 @@ BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, Value
 
 const Identifier& getObjectGroup(const Identifier& ident);
 
+String fixPath(const String& path);
+
 };
 
 

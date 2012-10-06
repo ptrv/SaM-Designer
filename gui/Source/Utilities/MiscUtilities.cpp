@@ -49,7 +49,7 @@ bool cancelAnyModalComponents()
 
 void SAMLogger(const String& message)
 {
-	String timeString;
+String timeString;
 //	timeString << "[" << Time::getCurrentTime().formatted("%H:%M:%S")
 	timeString << "[" << Time::getCurrentTime().formatted("%c") << "]: ";
 	String tmp;
@@ -254,6 +254,23 @@ const Identifier& getObjectGroup(const Identifier& ident)
 
     else
         return Objects::invalid;
+}
+
+// escapes particular characters
+String fixPath(const String& path)
+{
+    if(path.containsAnyOf(" ()*?!"))
+    {
+        String tmp = path;
+        tmp = tmp.replace(" ", "\\ ", true);
+        tmp = tmp.replace("(", "\\(", true);
+        tmp = tmp.replace(")", "\\)", true);
+        tmp = tmp.replace("*", "\\*", true);
+        tmp = tmp.replace("?", "\\?", true);
+        tmp = tmp.replace("!", "\\!", true);
+        return tmp;
+    }
+    return path;
 }
 
 }

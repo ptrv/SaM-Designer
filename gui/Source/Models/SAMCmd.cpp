@@ -139,10 +139,10 @@ const String SAMCmd::generateExternal()
     String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
     String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
 	String processStr = "/bin/bash -c \"export PATH=${PATH}:";
-	processStr << StoredSettings::getInstance()->getFaustDir();
+	processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
 	processStr << " ; ";
     processStr << exporterValue;
-	processStr = processStr.replace("$(DATA_DIR)", StoredSettings::getInstance()->getDataDir(), true);
+	processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
 	processStr << " 2>&1\" 2>&1";
 
 	SAM_LOG("Export command: " + processStr);
@@ -156,12 +156,13 @@ const String SAMCmd::runPerlScript(const String& script,
 {
     String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
 	String processStr = "/bin/bash -c \"";
-    processStr << "cd " << "\"" << StoredSettings::getInstance()->getDataDir() << "\";";
-	processStr << cmdPerl << " " << StoredSettings::getInstance()->getDataDir();
-	processStr << "/" << script << " " << inPath << " " << outPath << " 2>&1\" 2>&1";
+    processStr << "cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir()) << ";";
+	processStr << cmdPerl << " " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
+	processStr << "/" << script << " " << Utils::fixPath(inPath) << " " << Utils::fixPath(outPath) << " 2>&1\" 2>&1";
 
 	SAM_LOG(script + " command: " + processStr);
 	return execProcess(processStr.toUTF8().getAddress());
+//	return runChildProcess(processStr.toUTF8().getAddress());
 
 }
 
