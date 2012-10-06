@@ -151,7 +151,7 @@ const String MDLController::generateFaust()
         if (in != inDataDir)
         {
             saveInDataDir = true;
-            currentMdl->saveAs(inDataDir, false, false, true);
+            currentMdl->getFile().copyFileTo(inDataDir);
             inPath = inDataDir.getFullPathName();
         }
 		String processText = samCmd->generateFaustCode(inPath, outPath);
