@@ -7,3 +7,6 @@ build
 */Docs/html
 */Docs/latex
 gui/Builds/Linux/Synth-A-ModelerGUI/
+gui/Builds/VisualStudio2010/Debug
+gui/Builds/VisualStudio2010/Release
+gui/Builds/VisualStudio2010/ipch

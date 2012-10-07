@@ -47,7 +47,7 @@ bool SAMCmd::isSynthAModelerCmdAvailable()
 }
 bool SAMCmd::isSAMpreprocessorCmdAvailable()
 {
-	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/SAM-preprocessor");
+	File samCompiler(StoredSettings::getInstance()->getDataDir()+ "/SAM-preprocessor");
 	if(samCompiler.existsAsFile())
 		return true;
 	else
@@ -66,13 +66,17 @@ bool SAMCmd::isCmdAvailable(const String& cmdStr)
 
 	child.waitForProcessToFinish (60 * 1000);
 	return ok;
-#elif JUCE_MAC
+#elif JUCE_MAC || JUCE_WINDOWS
 	if(! File::isAbsolutePath(cmdStr))
 	{
 		cmdStrTmp = File::getCurrentWorkingDirectory().getChildFile(cmdStr).getFullPathName();
 	}
 	File cmdFile(cmdStrTmp);
+#ifdef JUCE_WINDOWS
+	if(cmdFile.exists())
+#else
 	if(cmdFile.existsAsFile())
+#endif
 		return true;
 	else
 		return false;
@@ -89,7 +93,11 @@ bool SAMCmd::isPerlAvailable()
 
 bool SAMCmd::isFaustAvailable()
 {
+#ifdef JUCE_WINDOWS
+	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust.exe";
+#else
 	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust";
+#endif
 	return isCmdAvailable(cmdFaust);
 }
 //const String OutputCmd::runChildProcess(const String& processStr)
@@ -109,10 +117,22 @@ bool SAMCmd::isFaustAvailable()
 //	}
 //}
 static String execProcess(char* cmd) {
+    String result = "";
+#ifdef JUCE_WINDOWS
+	ChildProcess child;
+	if(child.start(cmd))
+	{
+		result = child.readAllProcessOutput();
+		child.waitForProcessToFinish (60 * 1000);
+	}
+	else
+	{
+		return "failed to start process";
+	}
+#else
     FILE* pipe = popen(cmd, "r");
     if (!pipe) return "ERROR";
     char buffer[128];
-    String result = "";
     while(!feof(pipe))
     {
         if (fgets(buffer, 128, pipe) != NULL)
@@ -121,6 +141,7 @@ static String execProcess(char* cmd) {
         }
     }
     pclose(pipe);
+#endif
     return result;
 }
 const String SAMCmd::generateFaustCode(const String& inPath, const String& outPath)
@@ -138,13 +159,19 @@ const String SAMCmd::generateExternal()
 {
     String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
     String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
-	String processStr = "/bin/bash -c \"export PATH=${PATH}:";
+	String processStr;
+#ifdef JUCE_WINDOWS
+	String msg = "Genarating external code is not implemented yet!";
+	SAM_CONSOLE("MSG:", msg, true);
+	return "";
+#else
+	processStr = "/bin/bash -c \"export PATH=${PATH}:";
 	processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
 	processStr << " ; ";
     processStr << exporterValue;
 	processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
 	processStr << " 2>&1\" 2>&1";
-
+#endif
 	SAM_LOG("Export command: " + processStr);
     SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
@@ -156,16 +183,22 @@ const String SAMCmd::runPerlScript(const String& script,
                                       const String& outPath)
 {
     String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	String processStr = "/bin/bash -c \"";
+	String processStr;
+#ifdef JUCE_WINDOWS
+	processStr << "cmd.exe \\/C cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir()) << " & ";
+	processStr << cmdPerl << " " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
+	processStr << "/" << script << " " << Utils::fixPath(inPath) << " " << Utils::fixPath(outPath);// << "'";
+#else
+	processStr = "/bin/bash -c \"";
     processStr << "cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir()) << ";";
 	processStr << cmdPerl << " " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
 	processStr << "/" << script << " " << Utils::fixPath(inPath) << " " << Utils::fixPath(outPath) << " 2>&1\" 2>&1";
 
+#endif
 	SAM_LOG(script + " command: " + processStr);
     SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
 	return execProcess(processStr.toUTF8().getAddress());
 //	return runChildProcess(processStr.toUTF8().getAddress());
-
 }
 
 //==============================================================================

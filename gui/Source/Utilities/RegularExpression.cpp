@@ -77,23 +77,23 @@ bool RegularExpression::fullMatchValues(const String& subject_, StringArray& res
     RE2 regexPattern(pattern.toUTF8().getAddress());
 
     std::vector<std::string> vals(numResults, "");
-    RE2::Arg* args[numResults];
-    OwnedArray<RE2::Arg> ownedArgs;
+	std::vector<RE2::Arg const*> args;
     for (int i = 0; i < numResults; ++i)
     {
         RE2::Arg* newArg = new RE2::Arg(&vals[i]);
-        ownedArgs.add(newArg);
-        args[i] = ownedArgs[i];
+        args.push_back(newArg);
     }
-    bool isMatch = RE2::FullMatchN(subject.toUTF8().getAddress(),
-                                   regexPattern, args, numResults);
+
+	bool isMatch = RE2::FullMatchN(subject.toUTF8().getAddress(),
+                                   regexPattern, &args[0], numResults);
 
     for (int i = 0; i < numResults; ++i)
     {
         result.add(vals[i].c_str());
+		delete args[i];
+		args[i] = nullptr;
     }
 
-    ownedArgs.clear();
     return isMatch;
 }
 

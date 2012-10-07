@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{C832C843-8DAF-E1DF-33DC-697C950F457E}") = "Synth-A-ModelerGUI", "Synth-A-ModelerGUI.vcxproj", "{D9CA3016-E563-38BD-1869-389E254F74EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9CA3016-E563-38BD-1869-389E254F74EA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D9CA3016-E563-38BD-1869-389E254F74EA}.Debug|Win32.Build.0 = Debug|Win32
+		{D9CA3016-E563-38BD-1869-389E254F74EA}.Release|Win32.ActiveCfg = Release|Win32
+		{D9CA3016-E563-38BD-1869-389E254F74EA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

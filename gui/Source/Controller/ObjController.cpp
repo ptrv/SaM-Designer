@@ -984,9 +984,9 @@ String ObjController::getNewNameForObject(const Identifier& objId)
 void ObjController::tidyUp()
 {
     startDragging();
-    int YTOLERANCE = 30;
-    int XTOLERANCE = 100;
-    int NHIST = 350;
+    const int YTOLERANCE = 30;
+    const int XTOLERANCE = 100;
+    const int NHIST = 350;
     bool all = (sObjects.getNumSelected() == 0);
 
     // tidy horizontally

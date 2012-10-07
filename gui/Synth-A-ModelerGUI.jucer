@@ -23,6 +23,18 @@
                        targetName="Synth-A-ModelerGUI"/>
       </CONFIGURATIONS>
     </LINUX_MAKE>
+    <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder="..\juce\modules"
+            extraCompilerFlags="/I ..\..\..\Libs\re2win\include" extraLinkerFlags="re2.lib"
+            bigIcon="WodEAp" extraDefs="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
+                       libraryPath="..\..\..\Libs\re2win\lib\debug"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="Synth-A-ModelerGUI"
+                       libraryPath="..\..\..\Libs\re2win\lib\release"/>
+      </CONFIGURATIONS>
+    </VS2010>
   </EXPORTFORMATS>
   <MAINGROUP id="RyljMx" name="Synth-A-ModelerGUI">
     <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">

@@ -29,6 +29,14 @@
 
 static const String getDefaultPathFaustDir()
 {
+#ifdef JUCE_WINDOWS
+	File infile("C:/Program Files/Faust/Faust.exe");
+	if(infile.exists())
+	{
+		return infile.getParentDirectory().getFullPathName();
+	}
+
+#else
 	File infile("/usr/local/bin/faust");
 	if(infile.existsAsFile())
 	{
@@ -39,10 +47,18 @@ static const String getDefaultPathFaustDir()
 	{
 		return infile.getParentDirectory().getFullPathName();
 	}
+#endif
 	return "";
 }
 static const String getDefaultPathPerl()
 {
+#ifdef JUCE_WINDOWS
+	File infile("C:/strawberry/perl/bin/perl.exe");
+	if(infile.exists())
+	{
+		return infile.getFullPathName();
+	}
+#else
 	File infile("/usr/bin/perl");
 	if(infile.existsAsFile())
 	{
@@ -53,6 +69,7 @@ static const String getDefaultPathPerl()
 	{
 		return infile.getFullPathName();
 	}
+#endif
 	return "";
 }
 
