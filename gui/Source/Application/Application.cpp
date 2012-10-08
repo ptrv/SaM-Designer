@@ -82,6 +82,17 @@ void SynthAModelerApplication::initialise (const String& commandLine)
     for (int i = 0; i < mdls.size(); ++ i)
         openFile (mdls.getReference(i));
 
+	if (commandLine.trim().isNotEmpty() && ! commandLine.trim().startsWithChar ('-'))
+	{
+		 DBG(commandLine);
+		 anotherInstanceStarted (commandLine);
+	}
+	else
+	{
+		Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
+		for (int i = 0; i < mdls.size(); ++ i)
+			openFile (mdls.getReference(i));
+	}
     // get all exporters
     if(StoredSettings::getInstance()->getExporters().getAllProperties().size() == 0)
     {
