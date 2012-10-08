@@ -196,7 +196,9 @@ bool SynthAModelerApplication::moreThanOneInstanceAllowed()
 
 void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
 {
-
+    File f(commandLine);
+    if(f.getFileExtension().compare(".mdl") == 0)
+        openFile(f);
 }
 
 SynthAModelerApplication* SynthAModelerApplication::getApp()
