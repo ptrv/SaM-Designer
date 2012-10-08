@@ -13,10 +13,10 @@ namespace BinaryData
     const int            prefs_export_pngSize = 3839;
 
     extern const char*   mdl_file_header_txt;
-    const int            mdl_file_header_txtSize = 897;
+    const int            mdl_file_header_txtSize = 875;
 
     extern const char*   about_txt;
-    const int            about_txtSize = 409;
+    const int            about_txtSize = 407;
 
     extern const char*   prefs_about_png;
     const int            prefs_about_pngSize = 1819;

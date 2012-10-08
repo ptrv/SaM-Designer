@@ -1633,7 +1633,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				COMBINE_HIDPI_IMAGES = YES;
-				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2";
+				OTHER_LDFLAGS = "-L../../Libs/re2osx/lib -lre2";
 				ONLY_ACTIVE_ARCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1654,7 +1654,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				COMBINE_HIDPI_IMAGES = YES;
-				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2";
+				OTHER_LDFLAGS = "-L../../Libs/re2osx/lib -lre2";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (

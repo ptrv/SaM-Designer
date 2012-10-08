@@ -5,7 +5,7 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
                bigIcon="WodEAp" documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
-               extraLinkerFlags="-L../../Libs/re2/obj -lre2">
+               extraLinkerFlags="-L../../Libs/re2osx/lib -lre2">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
