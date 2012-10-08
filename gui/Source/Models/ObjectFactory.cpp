@@ -232,7 +232,7 @@ static ValueTree createNewJunctionTree(const String& newName, int x, int y)
 	newTree.setProperty(Ids::posY, y, nullptr);
     ValueTree paramsTree(Ids::parameters);
     ValueTree pa(Ids::parameter);
-    pa.setProperty(Ids::value, "0.01", nullptr);
+    pa.setProperty(Ids::value, "0.0", nullptr);
     paramsTree.addChild(pa, -1, nullptr);
 
     newTree.addChild(paramsTree, -1, nullptr);
