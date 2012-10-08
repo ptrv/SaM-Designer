@@ -766,6 +766,7 @@ public:
 	{
         teSource.setReadOnly(true);
         teSource.addListener(this);
+        teSource.setTextToShowWhenEmpty("0.0", Colours::black);
         addAndMakeVisible(&teSource);
         laSource.attachToComponent(&teSource,true);
         teOpt.addListener(this);

@@ -240,9 +240,12 @@ bool MDLParser::parseMDL()
             ValueTree audioSources(Ids::sources);
             for (int l = 0; l < audioOutSourcesList.size(); ++l)
             {
-                ValueTree aoSource(Ids::audiosource);
-                aoSource.setProperty(Ids::value, audioOutSourcesList[l].trim(), nullptr);
-                audioSources.addChild(aoSource, -1, nullptr);
+                if(audioOutSourcesList[l].trim().compare("0.0") != 0)
+                {
+                    ValueTree aoSource(Ids::audiosource);
+                    aoSource.setProperty(Ids::value, audioOutSourcesList[l].trim(), nullptr);
+                    audioSources.addChild(aoSource, -1, nullptr);
+                }
             }
             audioTree.addChild(audioSources, -1, nullptr);
             ValueTree audioObjectsTree = mdlTree.getOrCreateChildWithName(Objects::audioobjects, nullptr);

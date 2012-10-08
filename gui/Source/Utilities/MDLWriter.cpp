@@ -230,10 +230,17 @@ bool MDLWriter::writeMDL(const File& saveFile)
         bool isOpt = ao[Ids::optional].toString() != String::empty;
         if(isOpt)
             mdlContent << "(";
+        if(sources.getNumChildren() == 0)
+        {
+            mdlContent << "0.0";
+        }
         for (int q = 0; q < sources.getNumChildren(); ++q)
         {
             ValueTree source = sources.getChild(q);
-            mdlContent << source.getProperty(Ids::value).toString();
+            if(source.getProperty(Ids::value).toString() == String::empty)
+                mdlContent << "0.0";
+            else
+                mdlContent << source.getProperty(Ids::value).toString();
             
             if(q != sources.getNumChildren()-1)
 				mdlContent << "+";
