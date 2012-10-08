@@ -306,7 +306,7 @@ void SynthAModelerApplication::creatNewMDLDocument()
 
 void SynthAModelerApplication::askUserToOpenFile()
 {
-    FileChooser fc ("Open MDL File");
+    FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl");
 
     if (fc.browseForFileToOpen())
         openFile (fc.getResult());
