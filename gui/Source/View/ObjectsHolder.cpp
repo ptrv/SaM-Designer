@@ -255,6 +255,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
         objController.setLinksSegmented(StoredSettings::getInstance()->getIsSegmentedConnectors());
         updateComponents();
+        repaint();
         break;
     case CommandIDs::reverseDirection:
         objController.reverseLinkDirection();
