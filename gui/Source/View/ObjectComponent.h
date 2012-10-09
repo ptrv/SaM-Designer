@@ -58,7 +58,7 @@ public:
 
     void setPosition(Point<int> newPos, bool undoable);
     void setActualPosition(Point<int> pos);
-    
+
     Point<int> getActualPos() const { return actualPos; }
 
     void setOriginalPosition();
@@ -69,6 +69,7 @@ public:
     Array<LinkComponent*> getAttachedLinks() { return connectedLinks; }
     
     Point<int> getPinPos();
+    Point<int> getPinOffset();
 
     bool canBeConnected(const Identifier& objId);
 private:

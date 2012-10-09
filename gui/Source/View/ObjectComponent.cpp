@@ -284,6 +284,12 @@ void ObjectComponent::removeLinkFromObject(LinkComponent* link)
 Point<int> ObjectComponent::getPinPos()
 {
     Point<int> pinPos = getActualPos();
+    return pinPos + getPinOffset();
+}
+
+Point<int> ObjectComponent::getPinOffset()
+{
+    Point<int> pinPos(0,0);
     if (data.getType() == Ids::ground)
     {
         pinPos.x += 3;
