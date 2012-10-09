@@ -36,6 +36,10 @@ public:
 	{
 		setMultiLine (true);
 		setReadOnly (true);
+        fRegular.setHeight(14);
+        fRegular.setStyleFlags(Font::plain);
+        fBold.setHeight(14);
+        fBold.setStyleFlags(Font::bold);
 	}
 
 	/**
@@ -51,14 +55,13 @@ public:
 
     void setBold(bool ib)
     {
-        Font f(14.f);
         if(ib)
-            f.setStyleFlags(Font::bold);
+            setFont(fBold);
         else
-            f.setStyleFlags(Font::plain);
-        setFont(f);
+            setFont(fRegular);
     }
 private:
+    Font fBold, fRegular;
 };
 
 
