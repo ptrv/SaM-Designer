@@ -615,10 +615,12 @@ public:
 		laLabels.attachToComponent(&teLabels, true);
         teStartVertex.setReadOnly(true);
         teStartVertex.addListener(this);
+        teStartVertex.setColour(TextEditor::textColourId, Colours::darkgrey);
         addAndMakeVisible(&teStartVertex);
 		laStartVertex.attachToComponent(&teStartVertex, true);
         teEndVertex.setReadOnly(true);
         teEndVertex.addListener(this);
+        teEndVertex.setColour(TextEditor::textColourId, Colours::darkgrey);
 		addAndMakeVisible(&teEndVertex);
 		laEndVertex.attachToComponent(&teEndVertex, true);
         if(isPluck)
@@ -766,7 +768,8 @@ public:
 	{
         teSource.setReadOnly(true);
         teSource.addListener(this);
-        teSource.setTextToShowWhenEmpty("0.0", Colours::black);
+        teSource.setTextToShowWhenEmpty("0.0", Colours::darkgrey);
+        teSource.setColour(TextEditor::textColourId, Colours::darkgrey);
         addAndMakeVisible(&teSource);
         laSource.attachToComponent(&teSource,true);
         teOpt.addListener(this);
@@ -875,10 +878,12 @@ public:
 		laLabels.attachToComponent(&teLabels, true);
         teLeftObj.setReadOnly(true);
         teLeftObj.addListener(this);
+        teLeftObj.setColour(TextEditor::textColourId, Colours::darkgrey);
 		addAndMakeVisible(&teLeftObj);
 		laLeftObj.attachToComponent(&teLeftObj, true);
         teRightObj.setReadOnly(true);
         teRightObj.addListener(this);
+        teRightObj.setColour(TextEditor::textColourId, Colours::darkgrey);
 		addAndMakeVisible(&teRightObj);
 		laRightObj.attachToComponent(&teRightObj, true);
 		readValues();
