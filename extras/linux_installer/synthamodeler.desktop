@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=Synth-A-Modeler GUI
 Comment=Synth-A-Modeler GUI
-Exec=Synth-A-ModelerGUI
+Exec=Synth-A-ModelerGUI %f
 Icon=synthamodeler_icon.png
 Terminal=false
 Type=Application

@@ -84,6 +84,7 @@ public:
     AudioOutConnector* addAudioConnection(ObjectsHolder* holder,
                                           BaseObjectComponent* objComp,
                                           ObjectComponent* audioOutComp,
+                                          ValueTree source,
                                           int index,
                                           bool undoable);
     

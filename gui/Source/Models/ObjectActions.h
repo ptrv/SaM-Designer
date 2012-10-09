@@ -33,6 +33,7 @@
 #include "../View/AudioOutConnector.h"
 #include "../View/ObjectsHolder.h"
 #include "../Controller/ObjController.h"
+#include "ObjectIDs.h"
 
 class AddObjectAction : public UndoableAction
 {
@@ -114,6 +115,22 @@ public:
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
             objController->getSelectedObjects().selectOnly(oc);
+        }
+        if(oc->getData().getType() == Ids::audioout)
+        {
+            ValueTree sources = oc->getData().getChildWithName(Ids::sources);
+            if(sources.isValid())
+            {
+                for (int i = 0; i < sources.getNumChildren(); ++i)
+                {
+                    ValueTree src = sources.getChild(i);
+                    BaseObjectComponent* boc = Utils::getBaseObjectFromSource(objController, src);
+
+                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
+//                    if(aoc != nullptr)
+//                        aoc->repaint();
+                }
+            }
         }
 
 		return true;
@@ -312,11 +329,13 @@ class AddAudioConnectionAction : public UndoableAction
 public:
 	AddAudioConnectionAction(ObjController* objController_,
                              BaseObjectComponent* source,
+                             ValueTree sourceTree_,
                              ObjectComponent* audioOut,
                              ObjectsHolder* holder_)
 	: 
     holderComp(holder_), 
-    objController(objController_)
+    objController(objController_),
+    sourceTree(sourceTree_.createCopy())
 	{
         if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(source))
         {
@@ -348,6 +367,7 @@ public:
         AudioOutConnector* aocComp = objController->addAudioConnection(holderComp, 
                                                                        sourceComp,
                                                                        objController->getObject(indexAudioOut),
+                                                                       sourceTree,
                                                                        -1, false);
         indexAdded = objController->indexOfAudioConnector(aocComp);
 
@@ -370,6 +390,7 @@ public:
 private:
 	ObjectsHolder* holderComp;
     ObjController* objController;
+    ValueTree sourceTree;
     int indexSource;
     int indexAudioOut;
     bool sourceIsLink;
@@ -389,17 +410,29 @@ public:
     oldIndex(-1)
 	{
         oldIndex = objController->indexOfAudioConnector(aocToRemove);
+        String srcName;
         if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject()))
         {
             sourceIsLink = false;
             oldIndexSource = objController->indexOfObject(oc);
+            srcName = oc->getData()[Ids::identifier];
         }
         else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject()))
         {
             sourceIsLink = true;
             oldIndexSource = objController->indexOfLink(lc);
+            srcName = lc->getData()[Ids::identifier];
         }
         oldIndexAudioOut = objController->indexOfObject(aocToRemove->getAudioObject());
+
+        ValueTree sources = aocToRemove->getAudioObject()->getData().getOrCreateChildWithName(Ids::sources, nullptr);
+        for (int i = 0; i < sources.getNumChildren(); ++i)
+        {
+            ValueTree src = sources.getChild(i);
+            if(src[Ids::value].toString().contains(srcName))
+                sourceTree = src.createCopy();
+        }
+
 	}
 	~RemoveAudioConnectionAction()
 	{
@@ -429,6 +462,7 @@ public:
         AudioOutConnector* aoc = objController->addAudioConnection(holderComp,
                                                                    sourceComp,
                                                                    objController->getObject(oldIndexAudioOut),
+                                                                   sourceTree,
                                                                    oldIndex, false);
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
@@ -440,6 +474,7 @@ public:
 private:
 	ObjectsHolder* holderComp;
     ObjController* objController;
+    ValueTree sourceTree;
     int oldIndex;
     int oldIndexSource;
     int oldIndexAudioOut;
