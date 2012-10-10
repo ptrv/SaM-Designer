@@ -238,8 +238,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
 
         if(oc1 != nullptr && oc2 != nullptr)
         {
-            if ((oc1->getData().getType() == Ids::audioout
-                && oc2->getData().getType() != Ids::audioout))
+            if (oc1->getData().getType() == Ids::audioout
+                && oc2->getData().getType() != Ids::audioout)
             {
                 if(! checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
                 {
@@ -264,7 +264,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
                 SAM_CONSOLE("Error: ", "Cannot create audio connection", false);
             }
         }
-        else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr)
+        else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr
+            && lc1->getData().getType() != Ids::waveguide)
         {
             if( ! checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
             {
@@ -273,7 +274,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
                 addAudioConnection(holder, lc1, oc2, src, -1, true);
             }
         }
-        else if(oc2 == nullptr && oc1 != nullptr && lc2 != nullptr)
+        else if(oc2 == nullptr && oc1 != nullptr && lc2 != nullptr
+            && lc2->getData().getType() != Ids::waveguide)
         {
             if( ! checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
             {
@@ -281,6 +283,10 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
                                                       "*1.0");
                 addAudioConnection(holder, lc2, oc1, src, -1, true);
             }
+        }
+        else
+        {
+            SAM_CONSOLE("Error: ", "Cannot create audio connection", false);
         }
     }
 }
