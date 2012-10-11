@@ -154,6 +154,8 @@ const String MDLController::generateFaust()
         String dataDir = StoredSettings::getInstance()->getDataDir();
 		String outPath = dataDir;
 		outPath << "/" << outFileName;
+
+        // if current MDL file is not in data dir make a temp copy in data dir
         File inDataDir(dataDir + "/" + in.getFileName());
         bool saveInDataDir = false;
         if (in != inDataDir)
@@ -166,6 +168,7 @@ const String MDLController::generateFaust()
         if(StoredSettings::getInstance()->getOpenFaustExport())
             Utils::openFileNative(outPath);
 
+        // delete temp MDL file
         if(saveInDataDir)
         {
             if(! inDataDir.deleteFile())
@@ -201,7 +204,28 @@ const String MDLController::generateExternal()
         String outStr;
         if(StoredSettings::getInstance()->getRunSAMBeforeExternal())
             outStr << generateFaust();
+
+        // if current MDL file is not in data dir make a temp copy in data dir
+        String dataDir = StoredSettings::getInstance()->getDataDir();
+        File inDataDir(dataDir + "/" + currentMdl->getFile().getFileName());
+        bool saveInDataDir = false;
+        if (currentMdl->getFile() != inDataDir)
+        {
+            saveInDataDir = true;
+            currentMdl->getFile().copyFileTo(inDataDir);
+        }
+
         outStr << samCmd->generateExternal();
+
+        // delete temp MDL file
+        if(saveInDataDir)
+        {
+            if(! inDataDir.deleteFile())
+            {
+                DBG("Deleting temp file failed!");
+            }
+        }
+        
         return outStr;
 	}
 	return String::empty;
