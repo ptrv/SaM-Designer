@@ -21,6 +21,17 @@ public:
     void drawButtonBackground (Graphics& g, Button& button, const Colour& backgroundColour,
                                bool isMouseOverButton, bool isButtonDown);
 
+    void drawPopupMenuItem (Graphics& g,
+                            int width, int height,
+                            bool isSeparator,
+                            bool isActive,
+                            bool isHighlighted,
+                            bool isTicked,
+                            bool hasSubMenu,
+                            const String& text,
+                            const String& shortcutKeyText,
+                            Image* image,
+                            const Colour * const textColour);
 private:
 };
 
