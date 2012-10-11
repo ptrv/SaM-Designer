@@ -548,9 +548,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     }
     else if (topLevelMenuIndex == 4)
     {
-    	menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
-    	menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
-    	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::openDataDir);
         menu.addCommandItem(commandManager, CommandIDs::openMdlFileExtern);
         menu.addSeparator();
@@ -562,6 +559,9 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     }
     else if (topLevelMenuIndex == 5)
     {
+        menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
+        menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
+        menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::zoomIn);
