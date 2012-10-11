@@ -51,6 +51,26 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     iconWidth = 25;
     iconHeight = 25;
 
+    color = Colours::green;
+    colorSelected = Colours::red;
+
+    if(data.getType() == Ids::link)
+    {
+        color = Colour(0xff00b700);
+    }
+    else if(data.getType() == Ids::touch)
+    {
+        color = Colour(0xff006f00);
+    }
+    else if(data.getType() == Ids::pluck)
+    {
+        color = Colour(0xff006f00);
+    }
+    else if(data.getType() == Ids::waveguide)
+    {
+        color = Colour(0xff000090);
+        colorSelected = Colours::violet;
+    }
     update();
 }
 
@@ -114,20 +134,9 @@ void LinkComponent::resized()
 void LinkComponent::paint(Graphics& g)
 {
     if(selected)
-    {
-        if(data.getType() == Ids::waveguide)
-            g.setColour(Colours::violet);
-        else
-            g.setColour(Colours::red);
-    }
+        g.setColour(colorSelected);
     else
-    {
-        if(data.getType() == Ids::waveguide)
-            g.setColour(Colours::blue);
-        else
-            g.setColour(Colours::green);
-
-    }
+        g.setColour(color);
     g.fillPath (linePath);
 }
 

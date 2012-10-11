@@ -85,7 +85,9 @@ private:
     
     ObjectComponent* startComp;
     ObjectComponent* endComp;
-    
+
+    Colour color;
+    Colour colorSelected;
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
     {
         float x1, y1, x2, y2;
