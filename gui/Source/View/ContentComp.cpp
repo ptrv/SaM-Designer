@@ -432,7 +432,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress('8', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertAudioConnection:
-        result.setInfo("Audio connection", "", CommandCategories::inserting, 0);
+        result.setInfo("Audio Connection", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::insertWaveguide:

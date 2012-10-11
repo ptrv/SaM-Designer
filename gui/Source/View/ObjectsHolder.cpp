@@ -405,15 +405,15 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
 {
     PopupMenu m;
     m.addSectionHeader("Insert...");
-    m.addItem(1, "mass");
-    m.addItem(2, "ground");
-    m.addItem(3, "resonator");
-    m.addItem(4, "port");
+    m.addItem(1, "Mass");
+    m.addItem(2, "Ground");
+    m.addItem(3, "Resonator");
+    m.addItem(4, "Port");
     m.addSeparator();
-    m.addItem(5, "audioout");
+    m.addItem(5, "Audio Out");
     m.addSeparator();
-    m.addItem(6, "junction");
-    m.addItem(7, "termination");
+    m.addItem(6, "Junction");
+    m.addItem(7, "Termination");
 
     const int r = m.show();
 
@@ -473,13 +473,14 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
 void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 {
 	PopupMenu m;
-	m.addItem (1, "Add link");
-	m.addItem (2, "Add touch");
-	m.addItem (3, "Add pluck");
+    m.addSectionHeader("Add...");
+	m.addItem (1, "Linear Link");
+	m.addItem (2, "Touch Link");
+	m.addItem (3, "Pluck Link");
     m.addSeparator();
-    m.addItem (4, "Add waveguide");
+    m.addItem (4, "Waveguide");
     m.addSeparator();
-    m.addItem (5, "Add audio connection");
+    m.addItem (5, "Audio Connection");
 	const int r = m.show();
 
 	if (r == 1)
@@ -542,7 +543,8 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 void ObjectsHolder::showAudioConnectionPopupMenu()
 {
     PopupMenu m;
-	m.addItem (1, "Add audio connection");
+    m.addSectionHeader("Add...");
+	m.addItem (1, "Audio Connection");
     const int r = m.show();
     if( r == 1)
     {
