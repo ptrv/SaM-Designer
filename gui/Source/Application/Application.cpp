@@ -606,7 +606,7 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
     if(menuItemID >= 200 && menuItemID < 300)
     {
         StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
-        StoredSettings::getInstance()->setCurrentExporter(spa.getAllKeys()[menuItemID - 1000]);
+        StoredSettings::getInstance()->setCurrentExporter(spa.getAllKeys()[menuItemID - 200]);
     }
     else if (menuItemID >= 300 && menuItemID < 400)
     {
