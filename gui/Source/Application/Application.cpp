@@ -626,7 +626,8 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title,
 	if(textToWrite.compare("") != 0)
 	{
         Colour color = Colours::black;
-        if(title.contains("Error"))
+        if(title.containsIgnoreCase("Error")
+            || textToWrite.containsIgnoreCase("error"))
             color = Colours::red;
 		outputWindow->printHeader();
         outputWindow->setTextColour(color);
