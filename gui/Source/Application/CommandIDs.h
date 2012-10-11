@@ -76,6 +76,8 @@ namespace CommandIDs
 
     static const int generateFaust			= 0x2030c5;
     static const int generateExternal		= 0x2030c6;
+    static const int cleanDataDir           = 0x2030c7;
+    static const int cleanDataDirAll        = 0x2030c8;
 
     static const int group                  = 0x202170;
     static const int ungroup                = 0x202180;

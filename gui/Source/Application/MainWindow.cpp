@@ -207,6 +207,8 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
             					CommandIDs::saveDocumentAs,
                                 CommandIDs::generateFaust,
                                 CommandIDs::generateExternal,
+                                CommandIDs::cleanDataDir,
+                                CommandIDs::cleanDataDirAll,
 #ifdef _DEBUG
                                 CommandIDs::writeMDLFileAsXml,
 #endif
@@ -240,6 +242,12 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     case CommandIDs::generateExternal:
     	result.setInfo("External Object", "", CommandCategories::generation,0);
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
+    	break;
+    case CommandIDs::cleanDataDir:
+    	result.setInfo("Clean Data Dir", "", CommandCategories::tools,0);
+    	break;
+    case CommandIDs::cleanDataDirAll:
+    	result.setInfo("Clean All in Data Dir", "", CommandCategories::generation,0);
     	break;
 #if defined _DEBUG
     case CommandIDs::writeMDLFileAsXml:
@@ -305,6 +313,12 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         }
     }
     	break;
+    case CommandIDs::cleanDataDir:
+        mdlController->cleanDataDir();
+        break;
+    case CommandIDs::cleanDataDirAll:
+        mdlController->cleanDataDirAll();
+        break;
 #ifdef _DEBUG
     case CommandIDs::writeMDLFileAsXml:
         return mdlController->saveAsXml();

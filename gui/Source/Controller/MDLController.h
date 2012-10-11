@@ -53,6 +53,9 @@ public:
 	const String generateExternal();
 	const String getMDLName();
 
+    void cleanDataDir();
+    void cleanDataDirAll();
+    
 	UndoManager* getUndoManager();
 
 	bool perform (UndoableAction* const action, const String& actionName);

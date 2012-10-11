@@ -301,3 +301,72 @@ ObjectsHolder* MDLController::getHolderComponent()
 {
     return mainAppWindow.getHolderComponent();
 }
+
+static const char* fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
+
+void MDLController::cleanDataDir()
+{
+    File f = getMDLFile()->getFile();
+
+    String dataDir = StoredSettings::getInstance()->getDataDir();
+    String mdlName = f.getFileNameWithoutExtension();
+
+    String outStrOk;
+    String outStrError;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        String filePathToDelete = dataDir+"/"+mdlName+fileTypesToDelete[i];
+        File ftd(filePathToDelete);
+        if(! ftd.existsAsFile())
+            continue;
+        if(ftd.moveToTrash())
+            outStrOk << filePathToDelete << "\n";
+        else
+            outStrError << filePathToDelete << "\n";
+    }
+    if(outStrOk.isEmpty() && outStrError.isEmpty())
+    {
+        SAM_CONSOLE("MSG: ", "No files were deleted.", false);
+        return;
+    }
+    if(outStrOk.isNotEmpty())
+        SAM_CONSOLE("Delete OK:\n", outStrOk, false);
+    if(outStrError.isNotEmpty())
+        SAM_CONSOLE("Error: ", "Could not delete\n" + outStrError, false);
+}
+
+void MDLController::cleanDataDirAll()
+{
+    StringArray filePathsToDelete;
+    for (int i = 0; i < 4; ++i)
+    {
+        DirectoryIterator iter(StoredSettings::getInstance()->getDataDir(),
+                               false, "*"+String(fileTypesToDelete[i]));
+        while (iter.next())
+        {
+            filePathsToDelete.add(iter.getFile().getFullPathName());
+        }
+    }
+    String outStrOk;
+    String outStrError;
+    for (int j = 0; j < filePathsToDelete.size(); ++j)
+    {
+        File f(filePathsToDelete[j]);
+        if(! f.existsAsFile())
+            continue;
+        if (f.moveToTrash())
+            outStrOk << filePathsToDelete[j] << "\n";
+        else
+            outStrError << filePathsToDelete[j] << "\n";
+    }
+    if(outStrOk.isEmpty() && outStrError.isEmpty())
+    {
+        SAM_CONSOLE("MSG: ", "No files were deleted.", false);
+        return;
+    }
+    if(outStrOk.isNotEmpty())
+        SAM_CONSOLE("Delete OK:\n", outStrOk, false);
+    if(outStrError.isNotEmpty())
+        SAM_CONSOLE("Error: ", "Could not delete\n" + outStrError, false);
+}
