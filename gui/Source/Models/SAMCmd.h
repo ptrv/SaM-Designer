@@ -83,7 +83,7 @@ public:
 	 * @return			an empty string if generation succeeded, else a string
 	 * 					with error message
 	 */
-	const String generateExternal();
+	const String generateExternal(const String& mdlPath);
 
 private:
     const String runPerlScript(const String& script,

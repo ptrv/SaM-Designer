@@ -155,7 +155,7 @@ const String SAMCmd::generateFaustCode(const String& inPath, const String& outPa
 	return processoutput;
 }
 
-const String SAMCmd::generateExternal()
+const String SAMCmd::generateExternal(const String& mdlPath)
 {
     String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
     String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
@@ -167,9 +167,13 @@ const String SAMCmd::generateExternal()
 #else
 	processStr = "/bin/bash -c \"export PATH=${PATH}:";
 	processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
-	processStr << " ; ";
+	processStr << " ; cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
+    processStr << " ; ";
     processStr << exporterValue;
 	processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
+    File mdlFile(mdlPath);
+    processStr = processStr.replace("$(MDL_NAME)", mdlFile.getFileNameWithoutExtension(), true);
+    processStr = processStr.replace("$(FAUST_DIR)", Utils::fixPath(StoredSettings::getInstance()->getFaustDir()), true);
 	processStr << " 2>&1\" 2>&1";
 #endif
 	SAM_LOG("Export command: " + processStr);

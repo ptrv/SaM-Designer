@@ -215,7 +215,7 @@ const String MDLController::generateExternal()
             currentMdl->getFile().copyFileTo(inDataDir);
         }
 
-        outStr << samCmd->generateExternal();
+        outStr << samCmd->generateExternal(inDataDir.getFullPathName());
 
         // delete temp MDL file
         if(saveInDataDir)
