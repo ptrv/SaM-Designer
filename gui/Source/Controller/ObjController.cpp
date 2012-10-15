@@ -1196,3 +1196,14 @@ void ObjController::setLinksSegmented(bool isSegmented)
         aoc->setSegmented(isSegmented);
     }
 }
+
+void ObjController::destroy()
+{
+    objects.clear();
+    links.clear();
+    audioConnections.clear();
+    sObjects.deselectAll();
+    idMgr = nullptr;
+    idMgr = new IdManager();
+
+}

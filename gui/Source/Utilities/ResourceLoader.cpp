@@ -112,33 +112,25 @@ Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
 {
     Path pluckPath;
     float step = w / 20.0f;
+    float offset = w / 6;
     pluckPath.addRectangle(0, 0, w, h);
 //    PathStrokeType stroke2(0.4f);
 //    stroke2.createStrokedPath(pluckPath, pluckPath);
-    pluckPath.addEllipse(step, step, w-step*2, w-step*2);
-    pluckPath.addEllipse(step*2, step*2, w-step*4, w-step*4);
-    pluckPath.addEllipse(step*3, step*3, w-step*6, w-step*6);
-    pluckPath.addEllipse(step*4, step*4, w-step*8, w-step*8);
+    pluckPath.addEllipse(offset+step, offset+step, w-(offset*2+step*2), w-(offset*2+step*2));
+    pluckPath.addEllipse(offset+step*2, offset+step*2, w-(offset*2+step*4), w-(offset*2+step*4));
+    pluckPath.addEllipse(offset+step*3, offset+step*3, w-(offset*2+step*6), w-(offset*2+step*6));
+    pluckPath.addEllipse(offset+step*4, offset+step*4, w-(offset*2+step*8), w-(offset*2+step*8));
 //    pluckPath.addLineSegment(Line<float>(0, 25, 5, 25), 10.0f);
     pluckPath.applyTransform(AffineTransform::translation(-w/2, -h/2));
 
-    const float arrowW = 3.0f;
-    const float arrowL = 2.0f;
-
-    Path arrow;
-    arrow.addTriangle(-arrowL, arrowW,
-                      -arrowL, -arrowW,
-                      arrowL, 0.0f);
-
-    arrow.applyTransform(AffineTransform::translation((-w/2)+arrowW,0));
+    Path line;
+    line.addLineSegment(Line<float>(Point<float>(w/2+(offset*2-step), h/2),
+                                    Point<float>(w, h/2)), 0.8f);
+    line.applyTransform(AffineTransform::translation((-w/2), -h/2));
+    pluckPath.addPath(line);
 
     PathStrokeType stroke(0.8f);
     stroke.createStrokedPath(pluckPath, pluckPath);
-
-    PathStrokeType stroke2(3.0f);
-    stroke2.createStrokedPath(arrow, arrow);
-
-    pluckPath.addPath(arrow);
 
     return pluckPath;
 }

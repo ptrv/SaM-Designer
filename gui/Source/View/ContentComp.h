@@ -58,6 +58,7 @@ public:
 	bool perform(const InvocationInfo& info);
 
 	void setMDLFile(MDLFile* newMDLFile);
+    void reloadMDLFile(MDLFile* newMDLFile);
     void updateMainAppWindowTitle(const String& newTitle);
 
     double getZoom() const;

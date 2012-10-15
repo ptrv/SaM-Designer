@@ -98,11 +98,11 @@ void MDLController::saveAs()
 	{
 		SAM_LOG("Something went wrong saving the mdl file.");
 	}
-    else
-    {
-        close();
-        openFromFile(currentMdl->getFile());
-    }
+//    else
+//    {
+//        close();
+//        openFromFile(currentMdl->getFile());
+//    }
 }
 
 void MDLController::close()

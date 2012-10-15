@@ -60,6 +60,7 @@ public:
     bool dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info);
 
     void setMDLFile(MDLFile* newMDLFile);
+    void reloadMDLFile();
 
     void editObjectProperties(BaseObjectComponent* oc);
 
