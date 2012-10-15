@@ -347,12 +347,15 @@ public:
                        UndoManager* undoManager_)
 	: btAdd("+"),
 	  btRemove("-"),
+      btHelp("?"),
 	  varTable(objController, data, undoManager_)
 	{
 		btAdd.addListener(this);
 		addAndMakeVisible(&btAdd);
 		btRemove.addListener(this);
 		addAndMakeVisible(&btRemove);
+        btHelp.addListener(this);
+        addAndMakeVisible(&btHelp);
 		addAndMakeVisible(&varTable);
 	}
 
@@ -365,6 +368,7 @@ public:
 		varTable.setBounds(5, 5, getWidth()-10, getHeight() - 40);
 		btAdd.setBounds(5, getHeight() - 30, 22, 22);
 		btRemove.setBounds(30, getHeight() - 30, 22, 22);
+        btHelp.setBounds(getWidth() - 30, getHeight() - 30, 22, 22);
 	}
 
 	void buttonClicked(Button* button)
@@ -377,11 +381,16 @@ public:
 		{
 			varTable.removeSelectedRow();
 		}
+        else if( button == &btHelp)
+        {
+            Utils::openHelpUrl("variables");
+        }
 	}
 
 private:
 	TextButton btAdd;
 	TextButton btRemove;
+    TextButton btHelp;
 	VariablesTable varTable;
 };
 
