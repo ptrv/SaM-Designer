@@ -383,7 +383,15 @@ public:
 		}
         else if( button == &btHelp)
         {
-            Utils::openHelpUrl("variables");
+//            Utils::openHelpUrl("variables");
+            HintComponent* content = new HintComponent();
+            content->setSize(550, 50);
+
+            CallOutBox& callout = CallOutBox::launchAsynchronously(content, button->getScreenBounds(), nullptr);
+//            Rectangle<int> r = content->getScreenBounds();
+//            r.setX(getScreenBounds().getRight()- 550);
+//            r.setY(r.getY() - 200);
+//            callout.updatePosition(button->getScreenBounds(), r);
         }
 	}
 
@@ -392,6 +400,29 @@ private:
 	TextButton btRemove;
     TextButton btHelp;
 	VariablesTable varTable;
+
+    class HintComponent : public Component{
+    public:
+        HintComponent()
+        {
+
+        }
+        ~HintComponent()
+        {
+
+        }
+        void paint(Graphics& g)
+        {
+//            g.fillAll(Colours::white);
+            g.setColour(Colours::white);
+            g.drawText("Example:",0, 0, getWidth(), 20,Justification::left, false);
+            g.drawMultiLineText("hslider(\"DescriptiveLabelForVariable\",defaultValue,minimumValue,maximumValue,stepSize)",
+                       0, 30, 550);
+        }
+    private:
+
+    };
+
 };
 
 static String variablesWindowPos;
