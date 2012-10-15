@@ -290,8 +290,27 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         {
             linePath.clear();
             linePath.startNewSubPath(x1, y1);
-            linePath.lineTo(x1, (y2 - y1) / 2 + y1);
-            linePath.lineTo(x2, (y2 - y1) / 2 + y1);
+
+            if(abs(x2 - x1) < iconWidth)
+            {
+                linePath.lineTo(x1, (y2 - y1) / 2 + y1 - iconHeight / 4);
+                linePath.startNewSubPath(x2, (y2 - y1) / 2 + y1 + iconHeight / 4);
+            }
+            else
+            {
+                linePath.lineTo(x1, (y2 - y1) / 2 + y1);
+                if (x2 - x1 > 0)
+                {
+                    linePath.lineTo(x1 + ((x2 - x1) / 2) - iconWidth / 2, (y2 - y1) / 2 + y1);
+                    linePath.startNewSubPath(x1 + ((x2 - x1) / 2) + iconWidth / 2, (y2 - y1) / 2 + y1);
+                }
+                else
+                {
+                    linePath.lineTo(x1 + ((x2 - x1) / 2) + iconWidth / 2, (y2 - y1) / 2 + y1);
+                    linePath.startNewSubPath(x1 + ((x2 - x1) / 2) - iconWidth / 2, (y2 - y1) / 2 + y1);
+                }
+                linePath.lineTo(x2, (y2 - y1) / 2 + y1);
+            }
             linePath.lineTo(x2, y2);
 
             rotateVal = float_Pi * (x2 - x1 < 0 ? -1.0f : 2.0f);
@@ -340,8 +359,27 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
         {
             linePath.clear();
             linePath.startNewSubPath(x1, y1);
-            linePath.lineTo(x1, (y2 - y1) / 2 + y1);
-            linePath.lineTo(x2, (y2 - y1) / 2 + y1);
+
+            if(abs(x2 - x1) < iconWidth)
+            {
+                linePath.lineTo(x1, (y2 - y1) / 2 + y1 - iconHeight / 2);
+                linePath.startNewSubPath(x2, (y2 - y1) / 2 + y1 + iconHeight / 2);
+            }
+            else
+            {
+                linePath.lineTo(x1, (y2 - y1) / 2 + y1);
+                if (x2 - x1 > 0)
+                {
+                    linePath.lineTo(x1 + ((x2 - x1) / 2) - iconWidth / 2, (y2 - y1) / 2 + y1);
+                    linePath.startNewSubPath(x1 + ((x2 - x1) / 2) + iconWidth / 2, (y2 - y1) / 2 + y1);
+                }
+                else
+                {
+                    linePath.lineTo(x1 + ((x2 - x1) / 2) + iconWidth / 2, (y2 - y1) / 2 + y1);
+                    linePath.startNewSubPath(x1 + ((x2 - x1) / 2) - iconWidth / 2, (y2 - y1) / 2 + y1);
+                }
+                linePath.lineTo(x2, (y2 - y1) / 2 + y1);
+            }
             linePath.lineTo(x2, y2);
 
             rotateVal = float_Pi * (x2 - x1 < 0 ? -1.0f : 2.0f);
