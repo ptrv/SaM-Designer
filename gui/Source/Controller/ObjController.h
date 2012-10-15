@@ -185,6 +185,8 @@ public:
     void tidyUp();
 
     void setLinksSegmented(bool isSegmented);
+
+    void destroy();
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

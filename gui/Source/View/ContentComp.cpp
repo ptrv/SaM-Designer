@@ -262,6 +262,10 @@ void ContentComp::setMDLFile(MDLFile* newMDLFile)
 {
     objectsHolder->setMDLFile(newMDLFile);
 }
+void ContentComp::reloadMDLFile(MDLFile* newMDLFile)
+{
+    objectsHolder->reloadMDLFile();
+}
 
 void ContentComp::updateMainAppWindowTitle(const String& newTitle)
 {

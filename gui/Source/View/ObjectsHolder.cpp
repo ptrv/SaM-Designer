@@ -199,6 +199,13 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
     }
 }
 
+void ObjectsHolder::reloadMDLFile()
+{
+    objController.destroy();
+    deleteAllChildren();
+    objController.loadComponents(this);
+}
+
 static const int dx = 20;
 static const int dy = 20;
 static const int dxfine = 5;

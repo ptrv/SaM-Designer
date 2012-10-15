@@ -283,8 +283,17 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         updateTitle();
     	break;
     case CommandIDs::saveDocumentAs:
+    {
     	mdlController->saveAs();
+        String newFilePath = mdlController->getMDLFile()->getFile().getFullPathName();
+        File newFile(newFilePath);
+        StoredSettings::getInstance()->recentFiles.addFile(newFile);
+        mdlController->close();
+        mdlController->openFromFile(newFile);
+        getMDLFileContentComponent()->reloadMDLFile(mdlController->getMDLFile());
+        SynthAModelerApplication::getApp()->updateRecentProjectList();
         updateTitle();
+    }
     	break;
     case CommandIDs::generateFaust:
     {
