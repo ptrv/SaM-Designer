@@ -71,13 +71,15 @@ FileLogger* getLogger()
 
 void openHelpUrl()
 {
-	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+//	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/");
 	helpUrl.launchInDefaultBrowser();
 }
 
 void openHelpUrl(const String& helpId)
 {
-	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
+//	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
+	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/" + helpId + ".html");
 	helpUrl.launchInDefaultBrowser();
 }
 
