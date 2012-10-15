@@ -372,7 +372,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress(KeyPress::backspaceKey, 0);
         break;
     case CommandIDs::segmentedConnectors:
-        result.setInfo("Segmeted connectors", "", CommandCategories::editing, 0);
+        result.setInfo("Segmented connectors", "", CommandCategories::editing, 0);
         result.setTicked(StoredSettings::getInstance()->getIsSegmentedConnectors());
         result.addDefaultKeypress('t', ModifierKeys::commandModifier);
         break;
@@ -491,7 +491,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showObjectNames:
-        result.setInfo("Show variable names", "", CommandCategories::editing, 0);
+        result.setInfo("Show identifiers", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('i', ModifierKeys::commandModifier);
         result.setTicked(objectsHolder->getShowObjectNames());
         break;
@@ -505,7 +505,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
 
     case CommandIDs::showGrid:
-        result.setInfo("Show snap-to-grid",
+        result.setInfo("Show grid",
                        "Toggles whether the snapping grid is displayed on-screen.",
                        CommandCategories::view, 0);
         result.setTicked(objectsHolder->isSnapShown());

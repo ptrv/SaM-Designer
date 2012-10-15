@@ -146,17 +146,17 @@ private:
     public:
     	ExporterInputComponent(ExporterInputPanel& parent_, int exporterIndex_)
     	: parent(parent_),
-    	  labelVarName("Variable"),
-    	  labelVarValue("Value"),
+    	  labelVarName("Exporter"),
+    	  labelVarValue("Command"),
     	  inputVarName("Input variable"),
     	  inputVarValue("Input value"),
     	  btOk("Ok"),
     	  btCancel("Cancel"),
           exporterIndex(exporterIndex_)
     	{
-    		labelVarName.setText("Variable", false);
+    		labelVarName.setText("Exporter", false);
     		addAndMakeVisible(&labelVarName);
-    		labelVarValue.setText("Value", false);
+    		labelVarValue.setText("Command", false);
     		addAndMakeVisible(&labelVarValue);
             inputVarName.addListener(this);
     		addAndMakeVisible(&inputVarName);
@@ -278,8 +278,8 @@ public:
         table.setColour (ListBox::outlineColourId, Colours::grey);
 	    table.setOutlineThickness (1);
 
-	    table.getHeader().addColumn("exporter",1,100);
-	    table.getHeader().addColumn("value",2,300);
+	    table.getHeader().addColumn("Exporter",1,100);
+	    table.getHeader().addColumn("Command",2,300);
 
 	    table.setMultipleSelectionEnabled(false);
 		addAndMakeVisible(&table);

@@ -240,14 +240,14 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     	result.addDefaultKeypress('g', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::generateExternal:
-    	result.setInfo("External Object", "", CommandCategories::generation,0);
+    	result.setInfo("Binary", "", CommandCategories::generation,0);
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::cleanDataDir:
     	result.setInfo("Clean Data Dir", "", CommandCategories::tools,0);
     	break;
     case CommandIDs::cleanDataDirAll:
-    	result.setInfo("Clean All in Data Dir", "", CommandCategories::generation,0);
+    	result.setInfo("Clean all in Data Dir", "", CommandCategories::generation,0);
     	break;
 #if defined _DEBUG
     case CommandIDs::writeMDLFileAsXml:
