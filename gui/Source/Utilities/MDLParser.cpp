@@ -55,9 +55,9 @@ static Point<int> getPos(const String& posStr)
 	return p;
 }
 
-bool MDLParser::parseMDL()
+bool MDLParser::parseMDL(const File& f)
 {
-    const File& in = mdlFile.getFile();
+    const File& in = f;//mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
 
 	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
@@ -341,6 +341,11 @@ bool MDLParser::parseMDL()
     }
     mdlFile.mdlRoot = mdlTree;
 	return true;
+}
+
+bool MDLParser::parseMDLX(const File& f)
+{
+    return true;
 }
 
 //==============================================================================

@@ -273,4 +273,24 @@ String fixPath(const String& path)
     return path;
 }
 
+bool writeStringToFile(const String& s, const File& f)
+{
+	TemporaryFile temp (f);
+
+	ScopedPointer <FileOutputStream> out (temp.getFile().createOutputStream());
+
+	if (out != nullptr)
+	{
+		out->write(s.toUTF8(), s.getNumBytesAsUTF8());
+		out = nullptr; // (deletes the stream)
+
+		bool succeeded = temp.overwriteTargetFileWithTemporary();
+		return succeeded;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 }

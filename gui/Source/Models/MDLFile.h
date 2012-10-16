@@ -54,8 +54,9 @@ public:
 
 	UndoManager& getUndoMgr() throw() { return undoMgr; }
 
+//    ValueTree getMDLRoot() { return mdlRoot; }
 	ValueTree mdlRoot;
-
+    
     void valueTreePropertyChanged (ValueTree& tree, const Identifier& property);
     void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
     void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved);
@@ -75,8 +76,6 @@ public:
 
     bool changedOutside();
     
-    bool saveAsXml();
-
 protected:
 	String getDocumentTitle();
 	Result loadDocument (const File& file);

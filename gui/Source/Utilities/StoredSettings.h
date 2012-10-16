@@ -100,6 +100,9 @@ public:
     const bool getRunSAMBeforeExternal() const;
     void setRunSAMBeforeExternal (bool runSAMBeforeExternal);
 
+    const bool getIsUsingMDLX() const;
+    void setIsUsingMDLX (bool isUsingMDLX);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

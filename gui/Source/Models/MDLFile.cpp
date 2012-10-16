@@ -117,7 +117,7 @@ Result MDLFile::loadDocument (const File& file)
 	destroyMDL();
 	initMDL();
 	MDLParser pa(*this);
-	if(pa.parseMDL())
+	if(pa.parseMDL(file))
 	{
 		// success
 		SAM_LOG("Opened MDL file: "+getFilePath());
@@ -155,6 +155,21 @@ Result MDLFile::saveDocument (const File& file)
 		SAM_LOG(errorMsg);
         saveOk = false;
 	}
+    if(StoredSettings::getInstance()->getIsUsingMDLX())
+    {
+        String savePath = file.getParentDirectory().getFullPathName() + "/"
+            + file.getFileNameWithoutExtension() + ".mdlx";
+        File f(savePath);
+        if(wr.writeMDLX(f))
+        {
+            SAM_LOG("Saved MDLX file: " + f.getFullPathName());
+        }
+        else
+        {
+            errorMsg = "ERROR: could not save mdl file.";
+            SAM_LOG(errorMsg);
+        }
+    }
     if(isUntitledFile)
     {
         loadDocument(file);
@@ -269,36 +284,6 @@ bool MDLFile::checkIfChecksumChanged()
         return true;
     else
         return false;
-}
-
-bool MDLFile::saveAsXml()
-{
-    FileChooser fc ("Select XML file to save...",
-                    File::getSpecialLocation (File::userHomeDirectory),
-                    "*.xml");
-    
-    if (fc.browseForFileToSave(true))
-    {
-        File xmlFile (fc.getResult());
-        
-        TemporaryFile temp(xmlFile);
-        
-        ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
-        
-        if (out != nullptr)
-        {
-            
-            String mdlXmlStr = toString();
-            out->write(mdlXmlStr.toUTF8(),
-                       mdlXmlStr.getNumBytesAsUTF8());
-            out = nullptr; // (deletes the stream)
-            
-            bool succeeded = temp.overwriteTargetFileWithTemporary();
-            return succeeded;
-        }
-    }
-    return false;
-
 }
 
 //==============================================================================

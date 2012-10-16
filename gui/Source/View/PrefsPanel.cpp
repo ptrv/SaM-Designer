@@ -46,6 +46,7 @@ public:
 		tbRunSAMBeforeExport("Run Synth-A-Modeler before generating code"),
 		tbExportConfirm("Confirm before generating code"),
         tbOpenFaustExport("Open Faust file after export"),
+        tbUseMDLX("Use MDLX file"),
 #ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
 #endif
@@ -62,6 +63,8 @@ public:
         tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
         addAndMakeVisible(&tbOpenFaustExport);
         tbOpenFaustExport.setToggleState(StoredSettings::getInstance()->getOpenFaustExport(), false);
+        addAndMakeVisible(&tbUseMDLX);
+        tbUseMDLX.setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(), false);
 #ifdef DEBUG
         addAndMakeVisible(&tbLoggingOn);
         tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(), false);
@@ -75,6 +78,7 @@ public:
         StoredSettings::getInstance()->setRunSAMBeforeExternal(tbRunSAMBeforeExport.getToggleState());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
         StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
+        StoredSettings::getInstance()->setIsUsingMDLX(tbUseMDLX.getToggleState());
 #ifdef DEBUG
         StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
 #endif
@@ -87,8 +91,9 @@ public:
         tbRunSAMBeforeExport.setBounds(10, 170, getWidth() - 20, 22);
         tbExportConfirm.setBounds(10, 220, getWidth() - 20, 22);
         tbOpenFaustExport.setBounds(10, 270, getWidth() - 20, 22);
+        tbUseMDLX.setBounds(10, 320, getWidth() - 20, 22);
 #ifdef DEBUG
-        tbLoggingOn.setBounds(10, 320, getWidth() - 20, 22);
+        tbLoggingOn.setBounds(10, 370, getWidth() - 20, 22);
 #endif
     }
 
@@ -98,6 +103,7 @@ private:
     ToggleButton tbRunSAMBeforeExport;
     ToggleButton tbExportConfirm;
     ToggleButton tbOpenFaustExport;
+    ToggleButton tbUseMDLX;
 #ifdef DEBUG
     ToggleButton tbLoggingOn;
 #endif

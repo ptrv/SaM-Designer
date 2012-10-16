@@ -95,6 +95,8 @@ const Identifier& getObjectGroup(const Identifier& ident);
 
 String fixPath(const String& path);
 
+bool writeStringToFile(const String& s, const File& f);
+
 };
 
 
