@@ -40,7 +40,7 @@
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
   dragging(false), isDrawingObjectNames(false), showObjectNames(false),
-  maxX(0), maxY(0)
+  maxX(0), maxY(0), vpanel(nullptr)
 {
     snapGridPixels = StoredSettings::getInstance()->getSnapGridPixels();
     snapActive = StoredSettings::getInstance()->getIsSnapGridEnabled();
