@@ -61,6 +61,7 @@ ObjectsHolder::~ObjectsHolder()
     }
 
     grid = nullptr;
+    vpanel = nullptr;
 }
 
 void ObjectsHolder::paint(Graphics& g)
@@ -193,6 +194,7 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 {
     if (newMDLFile != mdlFile && newMDLFile != nullptr)
     {
+        vpanel = nullptr;
         mdlFile = newMDLFile;
         mdlFile->addChangeListener(this);
         objController.loadComponents(this);
@@ -201,8 +203,8 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 
 void ObjectsHolder::reloadMDLFile()
 {
+    vpanel = nullptr;
     objController.destroy();
-    deleteAllChildren();
     objController.loadComponents(this);
 }
 
@@ -256,7 +258,14 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         deleteSelectedObjects();
         break;
     case CommandIDs::defineVariables:
-        VariablesPanel::show(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
+    {
+        if(vpanel == nullptr)
+        {
+            vpanel = new VariablesPanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
+        }
+        vpanel->setVisible(true);
+        vpanel->toFront(true);
+    }
         break;
     case CommandIDs::segmentedConnectors:
         StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());

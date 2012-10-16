@@ -27,6 +27,7 @@
 #define __OBJCOMP_H_F3604232__
 
 #include "ObjectComponent.h"
+#include "VariablesPanel.h"
 
 
 class ObjectComponent;
@@ -115,6 +116,8 @@ private:
 
     int snapGridPixels;
     bool snapActive, snapShown;
+
+    ScopedPointer<VariablesPanel> vpanel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };

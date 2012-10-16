@@ -49,6 +49,8 @@ public:
     static void show(ObjController* objController,
                      ValueTree data,
                      UndoManager* undoManager);
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VariablesPanel)
 };
 
 

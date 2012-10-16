@@ -431,7 +431,8 @@ static String variablesWindowPos;
 VariablesPanel::VariablesPanel(ObjController* objController,
                                ValueTree data,
                                UndoManager* undoManager)
-    : DialogWindow ("Define variables", Colour::greyLevel (0.92f), true)
+    : DialogWindow ("Define variables for "+data[Ids::mdlName].toString(),
+                    Colour::greyLevel (0.92f), true)
 {
     VariablesComponent * const vc = new VariablesComponent(objController,
                                                            data,
