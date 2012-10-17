@@ -26,16 +26,13 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
-#include "ObjectComponent.h"
-#include "VariablesPanel.h"
-
-
+class BaseObjectComponent;
 class ObjectComponent;
 class MDLFile;
 class ObjController;
 class SelectableObject;
 class SnapGridPainter;
-
+class VariablesPanel;
 /**
  * Component which contains all objects.
  */

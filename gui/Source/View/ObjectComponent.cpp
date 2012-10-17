@@ -25,11 +25,12 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
+#include "SelectableObject.h"
+#include "BaseObjectComponent.h"
 #include "ObjectsHolder.h"
 #include "ObjectPropertiesPanel.h"
 #include "../Models/ObjectActions.h"
 
-#include "BaseObjectComponent.h"
 #include "ObjectComponent.h"
 
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)

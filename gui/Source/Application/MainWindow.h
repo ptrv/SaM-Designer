@@ -29,12 +29,10 @@
 #define __MAINWINDOW_H_3C77CBD5__
 
 
-#include "../Application/CommonHeaders.h"
-#include "../Controller/MDLController.h"
-
 class ContentComp;
 class ObjController;
 class MDLFile;
+class MDLController;
 //==============================================================================
 /**
  * The application's main window, which contains the main component with the

@@ -27,8 +27,6 @@
 #define __MDLFILE_H_70428F9D__
 
 
-#include "../Application/CommonHeaders.h"
-
 /**
  * The MDLFile class is the document which conatins an the contents of an mdl
  * file. It mangaes also the handling of the file like open, close, save, saveAs
@@ -46,8 +44,8 @@ public:
 	void newMDL();
 	void close();
 
-	const String getFilePath() const { return mdlRoot.getProperty(Ids::mdlPath).toString(); }
-	const String getNameWithStatus();
+	const String getFilePath() const;
+    const String getNameWithStatus();
 	const String getName() { return getDocumentTitle(); }
 
 	bool perform (UndoableAction* const action, const String& actionName);

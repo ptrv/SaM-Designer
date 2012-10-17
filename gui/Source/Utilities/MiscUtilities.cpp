@@ -26,6 +26,7 @@
 #include "StoredSettings.h"
 #include "../Models/ObjectIDs.h"
 #include "../View/BaseObjectComponent.h"
+#include "../View/SelectableObject.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../Controller/ObjController.h"
@@ -71,15 +72,15 @@ FileLogger* getLogger()
 
 void openHelpUrl()
 {
-//	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
-	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/");
+	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+//	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/");
 	helpUrl.launchInDefaultBrowser();
 }
 
 void openHelpUrl(const String& helpId)
 {
-//	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
-	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/" + helpId + ".html");
+	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
+//	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/" + helpId + ".html");
 	helpUrl.launchInDefaultBrowser();
 }
 

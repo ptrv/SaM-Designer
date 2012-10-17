@@ -26,16 +26,16 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"
+#include "SelectableObject.h"
+#include "BaseObjectComponent.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
-#include "SelectableObject.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
 #include "SnapGridPainter.h"
-
-#include "ObjectsHolder.h"
 #include "AudioOutConnector.h"
+#include "ObjectsHolder.h"
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),

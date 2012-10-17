@@ -28,11 +28,13 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "ObjectFactory.h"
+#include "../View/BaseObjectComponent.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../View/AudioOutConnector.h"
 #include "../View/ObjectsHolder.h"
 #include "../Controller/ObjController.h"
+#include "../View/SelectableObject.h"
 #include "ObjectIDs.h"
 
 class AddObjectAction : public UndoableAction

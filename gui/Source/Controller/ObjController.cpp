@@ -24,6 +24,7 @@
  */
 
 #include "../Application/CommonHeaders.h"
+#include "../View/SelectableObject.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"

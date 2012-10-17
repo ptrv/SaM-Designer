@@ -25,12 +25,15 @@
 
 */
 
-#include "../Application/Application.h"
+#include "CommonHeaders.h"
+#include "Application.h"
+#include "CommandIDs.h"
 #include "../View/OutputWindow.h"
 #include "../View/ContentComp.h"
 #include "../Controller/ObjController.h"
 #include "../Controller/MDLController.h"
 #include "../Models/MDLFile.h"
+#include "../View/SelectableObject.h"
 #include "../View/ObjectsHolder.h"
 
 #include "MainWindow.h"

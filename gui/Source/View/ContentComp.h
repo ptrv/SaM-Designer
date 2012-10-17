@@ -22,8 +22,6 @@
 #ifndef __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_20A12D4E__
 #define __JUCER_HEADER_CONTENTCOMP_CONTENTCOMP_20A12D4E__
 
-#include "ObjectsHolder.h"
-
 
 //[Headers]     -- You can add your own extra header files here --
 class MainAppWindow;

@@ -56,6 +56,11 @@ MDLFile::~MDLFile()
 	destroyMDL();
 }
 
+const String MDLFile::getFilePath() const
+{
+    return mdlRoot.getProperty(Ids::mdlPath).toString();
+}
+
 const String MDLFile::getNameWithStatus()
 {
     if(getDocumentTitle().compare("Untitled") == 0 ||
