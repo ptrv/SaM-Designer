@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp"/>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp"/>
+    <ClCompile Include="..\..\Source\View\CommentComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\SnapGridPainter.cpp"/>
     <ClCompile Include="..\..\Source\View\AudioOutConnector.cpp"/>
     <ClCompile Include="..\..\Source\View\BaseObjectComponent.cpp"/>
@@ -989,6 +990,7 @@
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>
     <ClInclude Include="..\..\Source\Models\SAMCmd.h"/>
     <ClInclude Include="..\..\Source\Models\MDLFile.h"/>
+    <ClInclude Include="..\..\Source\View\CommentComponent.h"/>
     <ClInclude Include="..\..\Source\View\SnapGridPainter.h"/>
     <ClInclude Include="..\..\Source\View\SelectableObject.h"/>
     <ClInclude Include="..\..\Source\View\AudioOutConnector.h"/>
