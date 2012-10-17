@@ -343,8 +343,27 @@ bool MDLParser::parseMDL(const File& f)
 	return true;
 }
 
-bool MDLParser::parseMDLX(const File& f)
+bool MDLParser::parseMDLX(const File& f, bool onlyMDLX)
 {
+    if(onlyMDLX)
+    {
+
+    }
+    else
+    {
+        XmlElement* xml = XmlDocument::parse(f);
+        ValueTree mdlxTree = ValueTree::fromXml(*xml);
+        ValueTree mdlTree = mdlFile.mdlRoot;
+
+        DBG(mdlxTree.toXmlString());
+        ValueTree comments = mdlxTree.getChildWithName(Objects::comments);
+        if(comments.isValid())
+        {
+            mdlTree.addChild(comments.createCopy(), -1, nullptr);
+            mdlFile.setChangedFlag(false);
+        }
+        delete xml;
+    }
     return true;
 }
 

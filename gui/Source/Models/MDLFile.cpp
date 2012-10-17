@@ -117,23 +117,47 @@ Result MDLFile::loadDocument (const File& file)
 	destroyMDL();
 	initMDL();
 	MDLParser pa(*this);
-	if(pa.parseMDL(file))
-	{
-		// success
-		SAM_LOG("Opened MDL file: "+getFilePath());
-		setFile(file);
-		setChangedFlag(false);
-        isUntitledFile = false;
-        md5 = MD5(file);
-		return Result::ok();
-	}
-	else
-	{
-		// fail
-		String errorMsg = "ERROR: could not load mdl file.";
-		SAM_LOG(errorMsg);
-		return Result::fail(errorMsg);
-	}
+    if(file.getFileExtension().compare(".mdl") == 0)
+    {
+        if (pa.parseMDL(file))
+        {
+            // success
+            SAM_LOG("Opened MDL file: " + getFilePath());
+            setFile(file);
+            setChangedFlag(false);
+            isUntitledFile = false;
+            md5 = MD5(file);
+
+            // Load MDLX file if present
+            String mdlxPath = file.getParentDirectory().getFullPathName() + "/"
+                + file.getFileNameWithoutExtension() + ".mdlx";
+            File mdlxFile(mdlxPath);
+            if(mdlxFile.existsAsFile())
+            {
+                pa.parseMDLX(mdlxFile, false);
+            }
+
+            return Result::ok();
+        }
+        else
+        {
+            // fail
+            String errorMsg = "ERROR: could not load mdl file.";
+            SAM_LOG(errorMsg);
+            return Result::fail(errorMsg);
+        }
+    }
+    else if(file.getFileExtension().compare(".mdlx") == 0)
+    {
+        if(pa.parseMDLX(file, true))
+        {
+
+        }
+        else
+        {
+
+        }
+    }
 }
 Result MDLFile::saveDocument (const File& file)
 {
