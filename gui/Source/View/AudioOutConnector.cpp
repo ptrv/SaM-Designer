@@ -24,12 +24,14 @@
  */
 
 #include "../Application/CommonHeaders.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
+#include "../View/SelectableObject.h"
+#include "BaseObjectComponent.h"
+#include "ObjectComponent.h"
+#include "LinkComponent.h"
 #include "../Controller/ObjController.h"
+#include "ObjectsHolder.h"
 
 #include "AudioOutConnector.h"
-#include "ObjectsHolder.h"
 
 class GainPanel  : public DialogWindow
 {

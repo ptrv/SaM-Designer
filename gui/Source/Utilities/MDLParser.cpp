@@ -55,9 +55,9 @@ static Point<int> getPos(const String& posStr)
 	return p;
 }
 
-bool MDLParser::parseMDL()
+bool MDLParser::parseMDL(const File& f)
 {
-    const File& in = mdlFile.getFile();
+    const File& in = f;//mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
 
 	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
@@ -341,6 +341,30 @@ bool MDLParser::parseMDL()
     }
     mdlFile.mdlRoot = mdlTree;
 	return true;
+}
+
+bool MDLParser::parseMDLX(const File& f, bool onlyMDLX)
+{
+    if(onlyMDLX)
+    {
+
+    }
+    else
+    {
+        XmlElement* xml = XmlDocument::parse(f);
+        ValueTree mdlxTree = ValueTree::fromXml(*xml);
+        ValueTree mdlTree = mdlFile.mdlRoot;
+
+        DBG(mdlxTree.toXmlString());
+        ValueTree comments = mdlxTree.getChildWithName(Objects::comments);
+        if(comments.isValid())
+        {
+            mdlTree.addChild(comments.createCopy(), -1, nullptr);
+            mdlFile.setChangedFlag(false);
+        }
+        delete xml;
+    }
+    return true;
 }
 
 //==============================================================================

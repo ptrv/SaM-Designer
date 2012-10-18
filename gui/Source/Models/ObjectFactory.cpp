@@ -24,6 +24,8 @@
 */
 
 #include "../Application/CommonHeaders.h"
+#include "../View/SelectableObject.h"
+#include "../View/BaseObjectComponent.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "ObjectFactory.h"

@@ -27,8 +27,6 @@
 #define __APPLICATION_H_BBAD6F5C__
 
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
 class MainAppWindow;
 class OutputWindow;
 class SAMLookAndFeel;

@@ -26,10 +26,9 @@
 #ifndef __LINKCOMPONENT_H_4CCE4B86__
 #define __LINKCOMPONENT_H_4CCE4B86__
 
-#include "BaseObjectComponent.h"
-#include "SelectableObject.h"
 
-
+class SelectableObject;
+class BaseObjectComponent;
 class ObjController;
 class ObjectComponent;
 

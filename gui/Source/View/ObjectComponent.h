@@ -28,10 +28,8 @@
 
 class ObjectsHolder;
 class ObjController;
-
-#include "BaseObjectComponent.h"
-#include "LinkComponent.h"
-#include "SelectableObject.h"
+class LinkComponent;
+class SelectableObject;
 
 /**
  * The object component.

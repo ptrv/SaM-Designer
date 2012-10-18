@@ -26,6 +26,8 @@
 #include "../Application/CommonHeaders.h"
 #include "../Controller/MDLController.h"
 #include "../Controller/ObjController.h"
+#include "../View/BaseObjectComponent.h"
+#include "../View/SelectableObject.h"
 #include "ObjectComponent.h"
 
 #include "ObjectPropertiesPanel.h"

@@ -26,7 +26,6 @@
 #ifndef __OBJECTFACTORY_H_2132166E__
 #define __OBJECTFACTORY_H_2132166E__
 
-#include "../Controller/ObjController.h"
 /**
  * Namespace for object creation functions.
  */

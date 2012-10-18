@@ -116,7 +116,19 @@ void MDLController::close()
 
 bool MDLController::saveAsXml()
 {
-    return currentMdl->saveAsXml();
+    bool saveOk = false;
+    FileChooser fc("Select XML file to save...",
+                   File::getSpecialLocation(File::userHomeDirectory),
+                   "*.xml");
+
+    if (fc.browseForFileToSave(true))
+    {
+        File xmlFile (fc.getResult());
+        String mdlXmlStr = currentMdl->toString();
+
+        saveOk = Utils::writeStringToFile(mdlXmlStr, xmlFile);
+    }
+    return saveOk;
 }
 
 const String MDLController::generateFaust()

@@ -56,6 +56,11 @@ MDLFile::~MDLFile()
 	destroyMDL();
 }
 
+const String MDLFile::getFilePath() const
+{
+    return mdlRoot.getProperty(Ids::mdlPath).toString();
+}
+
 const String MDLFile::getNameWithStatus()
 {
     if(getDocumentTitle().compare("Untitled") == 0 ||
@@ -117,23 +122,47 @@ Result MDLFile::loadDocument (const File& file)
 	destroyMDL();
 	initMDL();
 	MDLParser pa(*this);
-	if(pa.parseMDL())
-	{
-		// success
-		SAM_LOG("Opened MDL file: "+getFilePath());
-		setFile(file);
-		setChangedFlag(false);
-        isUntitledFile = false;
-        md5 = MD5(file);
-		return Result::ok();
-	}
-	else
-	{
-		// fail
-		String errorMsg = "ERROR: could not load mdl file.";
-		SAM_LOG(errorMsg);
-		return Result::fail(errorMsg);
-	}
+    if(file.getFileExtension().compare(".mdl") == 0)
+    {
+        if (pa.parseMDL(file))
+        {
+            // success
+            SAM_LOG("Opened MDL file: " + getFilePath());
+            setFile(file);
+            setChangedFlag(false);
+            isUntitledFile = false;
+            md5 = MD5(file);
+
+            // Load MDLX file if present
+            String mdlxPath = file.getParentDirectory().getFullPathName() + "/"
+                + file.getFileNameWithoutExtension() + ".mdlx";
+            File mdlxFile(mdlxPath);
+            if(mdlxFile.existsAsFile())
+            {
+                pa.parseMDLX(mdlxFile, false);
+            }
+
+            return Result::ok();
+        }
+        else
+        {
+            // fail
+            String errorMsg = "ERROR: could not load mdl file.";
+            SAM_LOG(errorMsg);
+            return Result::fail(errorMsg);
+        }
+    }
+    else if(file.getFileExtension().compare(".mdlx") == 0)
+    {
+        if(pa.parseMDLX(file, true))
+        {
+
+        }
+        else
+        {
+
+        }
+    }
 }
 Result MDLFile::saveDocument (const File& file)
 {
@@ -155,6 +184,21 @@ Result MDLFile::saveDocument (const File& file)
 		SAM_LOG(errorMsg);
         saveOk = false;
 	}
+    if(StoredSettings::getInstance()->getIsUsingMDLX())
+    {
+        String savePath = file.getParentDirectory().getFullPathName() + "/"
+            + file.getFileNameWithoutExtension() + ".mdlx";
+        File f(savePath);
+        if(wr.writeMDLX(f))
+        {
+            SAM_LOG("Saved MDLX file: " + f.getFullPathName());
+        }
+        else
+        {
+            errorMsg = "ERROR: could not save mdl file.";
+            SAM_LOG(errorMsg);
+        }
+    }
     if(isUntitledFile)
     {
         loadDocument(file);
@@ -269,36 +313,6 @@ bool MDLFile::checkIfChecksumChanged()
         return true;
     else
         return false;
-}
-
-bool MDLFile::saveAsXml()
-{
-    FileChooser fc ("Select XML file to save...",
-                    File::getSpecialLocation (File::userHomeDirectory),
-                    "*.xml");
-    
-    if (fc.browseForFileToSave(true))
-    {
-        File xmlFile (fc.getResult());
-        
-        TemporaryFile temp(xmlFile);
-        
-        ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
-        
-        if (out != nullptr)
-        {
-            
-            String mdlXmlStr = toString();
-            out->write(mdlXmlStr.toUTF8(),
-                       mdlXmlStr.getNumBytesAsUTF8());
-            out = nullptr; // (deletes the stream)
-            
-            bool succeeded = temp.overwriteTargetFileWithTemporary();
-            return succeeded;
-        }
-    }
-    return false;
-
 }
 
 //==============================================================================

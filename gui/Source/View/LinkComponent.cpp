@@ -25,6 +25,8 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
+#include "BaseObjectComponent.h"
+#include "SelectableObject.h"
 #include "ObjectComponent.h"
 #include "ObjectsHolder.h"
 

@@ -43,6 +43,10 @@ public:
 	 * @return				true if writing succeeded
 	 */
 	bool writeMDL(const File& saveFile);
+    
+    bool writeMDLX(const File& saveFile);
+
+    String getMDLString();
 private:
 	MDLFile& mdlFile;
 };

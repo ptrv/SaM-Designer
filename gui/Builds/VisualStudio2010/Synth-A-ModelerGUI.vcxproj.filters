@@ -289,6 +289,9 @@
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\View\CommentComponent.cpp">
+      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\View\SnapGridPainter.cpp">
       <Filter>Synth-A-ModelerGUI\Source\View</Filter>
     </ClCompile>
@@ -1277,6 +1280,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\MDLFile.h">
       <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\View\CommentComponent.h">
+      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\SnapGridPainter.h">
       <Filter>Synth-A-ModelerGUI\Source\View</Filter>
