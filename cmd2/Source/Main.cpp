@@ -29,14 +29,16 @@ struct MassLinkRef
 {
     String massId;
     StringArray linkRefs;
+    bool isWithJunction;
 };
 
-int containsMassLinkRef(std::vector<MassLinkRef> mlf, const String& mId)
+//int containsMassLinkRef(std::vector<MassLinkRef> mlf, const String& mId)
+int containsMassLinkRef(const OwnedArray<MassLinkRef>& mlf, const String& mId)
 {
     for (int i = 0; i < mlf.size(); ++i)
     {
-        MassLinkRef m = mlf[i];
-        if(m.massId.compare(mId) == 0)
+        MassLinkRef* m = mlf[i];
+        if(m->massId.compare(mId) == 0)
             return i;
     }
     return -1;
@@ -64,11 +66,12 @@ String generateDspString(const XmlElement& xml)
     XmlElement* faustcode = xml.getChildByName("variables");
     XmlElement* masses = xml.getChildByName("masses");
     XmlElement* links = xml.getChildByName("links");
-    XmlElement* waveguides = xml.getChildByName("waveguides");
+    const XmlElement* waveguides = xml.getChildByName("waveguides");
     XmlElement* terminations = xml.getChildByName("terminations");
     XmlElement* junctions = xml.getChildByName("junctions");
     XmlElement* audioouts = xml.getChildByName("audioobjects");
 
+//    ValueTree wgTree = ValueTree::fromXml(*waveguides);
     int numMasslike = 0;
     int numPorts = 0;
     int numWaveguides = 0;
@@ -82,44 +85,51 @@ String generateDspString(const XmlElement& xml)
     }
     dspContent << "\n";
 
-//    HashMap<String, StringArray> massLinks;
-    std::vector<MassLinkRef> massLinkRefs;
+    // Get all ma
+    OwnedArray<MassLinkRef> massLinkRefs;
     forEachXmlChildElement(*masses, c)
     {
-        MassLinkRef mlf;
-        mlf.massId = c->getStringAttribute("identifier");
+        MassLinkRef* mlf = new MassLinkRef();
+        mlf->massId = c->getStringAttribute("identifier");
         StringArray mlfa;
-        mlf.linkRefs = mlfa;
-        massLinkRefs.push_back(mlf);
+        mlf->linkRefs = mlfa;
+        mlf->isWithJunction = false;
+        massLinkRefs.add(mlf);
     }
+
+
+    // Write all link-like objects
     StringArray linkobjects;
+
     forEachXmlChildElement(*links, c)
     {
-        String linkLine;
-        linkLine << "\t";
         String linkId = c->getStringAttribute("identifier");
-        linkLine << linkId;
-        linkLine << " = (";
         String startVertex = c->getStringAttribute("startVertex");
         String endVertex = c->getStringAttribute("endVertex");
-
         int sIdx = containsMassLinkRef(massLinkRefs, startVertex);
         if(sIdx >= 0)
-            massLinkRefs[sIdx].linkRefs.add("-"+linkId);
+            massLinkRefs[sIdx]->linkRefs.add("-"+linkId);
 
         int eIdx = containsMassLinkRef(massLinkRefs, endVertex);
         if(eIdx >= 0)
-            massLinkRefs[eIdx].linkRefs.add("+"+linkId);
+            massLinkRefs[eIdx]->linkRefs.add("+"+linkId);
 
-        linkLine << startVertex << "p - ";
-        linkLine << endVertex << "p) : ";
-        linkLine << c->getTagName() << "(";
+        String tagName = c->getTagName();
         XmlElement* params = c->getChildByName("parameters");
         StringArray paramsStr;
         forEachXmlChildElement(*params, c2)
         {
             paramsStr.add(c2->getStringAttribute("value"));
         }
+
+        String linkLine;
+        linkLine << "\t";
+        linkLine << linkId;
+        linkLine << " = (";
+
+        linkLine << startVertex << "p - ";
+        linkLine << endVertex << "p) : ";
+        linkLine << tagName << "(";
         linkLine << paramsStr.joinIntoString(",") << ");";
         linkobjects.add(linkLine);
     }
@@ -138,9 +148,9 @@ String generateDspString(const XmlElement& xml)
         int mIdx = containsMassLinkRef(massLinkRefs, massName);
         if(mIdx >= 0)
         {
-            if(massLinkRefs[mIdx].linkRefs.size() > 0)
+            if(massLinkRefs[mIdx]->linkRefs.size() > 0)
             {
-                massLine << massLinkRefs[mIdx].linkRefs.joinIntoString(String::empty);
+                massLine << massLinkRefs[mIdx]->linkRefs.joinIntoString(String::empty);
             }
         }
 
@@ -193,7 +203,7 @@ String generateDspString(const XmlElement& xml)
     StringArray inputs;
     for (int i = 0; i < massLinkRefs.size(); ++i)
     {
-        inputs.add(massLinkRefs[i].massId);
+        inputs.add(massLinkRefs[i]->massId);
     }
 
     StringArray outputs = inputs;
@@ -233,6 +243,7 @@ String generateDspString(const XmlElement& xml)
     dspContent << "):(";
     dspContent << outputArray.joinIntoString(",") << ");";
 
+    massLinkRefs.clear();
     DBG(dspContent);
 
     return dspContent;
