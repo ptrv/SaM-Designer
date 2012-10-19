@@ -43,6 +43,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/CommandLine_e08eafe1.o \
   $(OBJDIR)/SAMLookAndFeel_df6eec67.o \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Application_7b202ed2.o \
@@ -100,6 +101,11 @@ clean:
 strip:
 	@echo Stripping Synth-A-ModelerGUI
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
+
+$(OBJDIR)/CommandLine_e08eafe1.o: ../../Source/Application/CommandLine.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling CommandLine.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/SAMLookAndFeel_df6eec67.o: ../../Source/Application/SAMLookAndFeel.cpp
 	-@mkdir -p $(OBJDIR)

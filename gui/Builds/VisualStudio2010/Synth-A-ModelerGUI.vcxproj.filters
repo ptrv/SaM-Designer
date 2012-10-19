@@ -235,6 +235,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Application\CommandLine.cpp">
+      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Application\SAMLookAndFeel.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
     </ClCompile>
@@ -1217,6 +1220,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Testsuite\TestRunner.h">
       <Filter>Synth-A-ModelerGUI\Testsuite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Application\CommandLine.h">
+      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\SAMLookAndFeel.h">
       <Filter>Synth-A-ModelerGUI\Source\Application</Filter>

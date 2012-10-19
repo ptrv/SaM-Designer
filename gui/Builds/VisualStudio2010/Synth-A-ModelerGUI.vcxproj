@@ -132,6 +132,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Application\CommandLine.cpp"/>
     <ClCompile Include="..\..\Source\Application\SAMLookAndFeel.cpp"/>
     <ClCompile Include="..\..\Source\Application\MainWindow.cpp"/>
     <ClCompile Include="..\..\Source\Application\Application.cpp"/>
@@ -969,6 +970,7 @@
     <ClInclude Include="..\..\Testsuite\TestUtils.h"/>
     <ClInclude Include="..\..\Testsuite\SAMCmd_test.h"/>
     <ClInclude Include="..\..\Testsuite\TestRunner.h"/>
+    <ClInclude Include="..\..\Source\Application\CommandLine.h"/>
     <ClInclude Include="..\..\Source\Application\SAMLookAndFeel.h"/>
     <ClInclude Include="..\..\Source\Application\MainWindow.h"/>
     <ClInclude Include="..\..\Source\Application\Application.h"/>

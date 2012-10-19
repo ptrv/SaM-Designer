@@ -61,6 +61,8 @@
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
       <GROUP id="{902B3BB9-D93B-9CA8-A833-9D80066DDF9F}" name="Application">
+        <FILE id="fNE9nx" name="CommandLine.cpp" compile="1" resource="0" file="Source/Application/CommandLine.cpp"/>
+        <FILE id="CXYO1W" name="CommandLine.h" compile="0" resource="0" file="Source/Application/CommandLine.h"/>
         <FILE id="FRUoR4" name="SAMLookAndFeel.cpp" compile="1" resource="0"
               file="Source/Application/SAMLookAndFeel.cpp"/>
         <FILE id="jw1O2C" name="SAMLookAndFeel.h" compile="0" resource="0"

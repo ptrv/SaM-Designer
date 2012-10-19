@@ -117,6 +117,8 @@ public:
 #ifdef DEBUG
     ScopedPointer<Logger> samLogger;
 #endif
+
+    bool isRunningCommandLine;
     //==============================================================================
 
 };

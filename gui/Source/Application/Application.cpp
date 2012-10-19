@@ -30,6 +30,7 @@
 #include "../Models/MDLFile.h"
 #include "SAMLookAndFeel.h"
 #include "../View/ObjectsHolder.h"
+#include "CommandLine.h"
 
 #include "Application.h"
 
@@ -43,6 +44,7 @@ static const int snapSizes[] = { 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32 };
 //==============================================================================
 
 SynthAModelerApplication::SynthAModelerApplication()
+: isRunningCommandLine(false)
 {
 }
 
@@ -65,12 +67,33 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	// Do your application's initialisation code here
 	samLookAndFeel = new SAMLookAndFeel();
 	LookAndFeel::setDefaultLookAndFeel(samLookAndFeel);
+
+    if (commandLine.isNotEmpty())
+    {
+        const int appReturnCode = performCommandLine(commandLine);
+
+        if (appReturnCode != commandLineNotPerformed)
+        {
+            isRunningCommandLine = true;
+            setApplicationReturnValue(appReturnCode);
+            quit();
+            return;
+        }
+    }
+
     if( StoredSettings::getInstance()->getIsLoggingOn() )
     {
 #ifdef DEBUG
         samLogger = Utils::getLogger();
         Logger::setCurrentLogger(samLogger);
 #endif
+    }
+
+    if (sendCommandLineToPreexistingInstance())
+    {
+        DBG("Another instance is running - quitting...");
+        quit();
+        return;
     }
 
 	commandManager = new ApplicationCommandManager();
@@ -204,7 +227,7 @@ const String SynthAModelerApplication::getApplicationVersion()
 
 bool SynthAModelerApplication::moreThanOneInstanceAllowed()
 {
-	return false;
+	return true;
 }
 
 void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
