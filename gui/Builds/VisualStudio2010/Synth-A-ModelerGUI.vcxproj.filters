@@ -1266,6 +1266,9 @@
     <ClInclude Include="..\..\Source\Controller\ObjController.h">
       <Filter>Synth-A-ModelerGUI\Source\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\Models\SAMCompiler.h">
+      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Models\ObjectFactory.h">
       <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
     </ClInclude>
@@ -1687,6 +1690,9 @@
       <Filter>Juce Modules\juce_events\messages</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageManager.h">
+      <Filter>Juce Modules\juce_events\messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_NotificationType.h">
       <Filter>Juce Modules\juce_events\messages</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_MultiTimer.h">

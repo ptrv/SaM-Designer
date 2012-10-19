@@ -985,6 +985,7 @@
     <ClInclude Include="..\..\Source\Utilities\StoredSettings.h"/>
     <ClInclude Include="..\..\Source\Controller\MDLController.h"/>
     <ClInclude Include="..\..\Source\Controller\ObjController.h"/>
+    <ClInclude Include="..\..\Source\Models\SAMCompiler.h"/>
     <ClInclude Include="..\..\Source\Models\ObjectFactory.h"/>
     <ClInclude Include="..\..\Source\Models\ObjectActions.h"/>
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>
@@ -1126,6 +1127,7 @@
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_Message.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageListener.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageManager.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_NotificationType.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_MultiTimer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_Timer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\broadcasters\juce_ActionBroadcaster.h"/>

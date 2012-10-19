@@ -79,6 +79,8 @@ public:
 	 * 					else a string with the error message.
 	 */
 	const String generateFaustCode(const String& inPath, const String& outPath);
+
+    const String generateFaustCodeBuiltin(ValueTree mdlRoot_, const String& outPath);
 	/**
 	 * Generates external using the FAUST compiler.
 	 *

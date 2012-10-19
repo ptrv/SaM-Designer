@@ -25,6 +25,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
+#include "../Models/SAMCompiler.h"
 
 #include "SAMCmd.h"
 
@@ -146,7 +147,8 @@ static String execProcess(char* cmd) {
 #endif
     return result;
 }
-const String SAMCmd::generateFaustCode(const String& inPath, const String& outPath)
+const String SAMCmd::generateFaustCode(const String& inPath,
+                                       const String& outPath)
 {
     File fileOut(outPath);
     String dataDir = StoredSettings::getInstance()->getDataDir();
@@ -155,6 +157,18 @@ const String SAMCmd::generateFaustCode(const String& inPath, const String& outPa
 	String processoutput = runPerlScript("SAM-preprocessor", inPath, pathMDX);
     processoutput << runPerlScript("Synth-A-Modeler", pathMDX, outPath);
 	return processoutput;
+}
+
+const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
+                                              const String& outPath)
+{
+    String faustCodeString = SAMCompiler::compile(mdlRoot_);
+
+    File fileOut(outPath);
+    if(Utils::writeStringToFile(faustCodeString, fileOut))
+        return "Generating faust code finished!\n";
+    else
+        return "Generating faust code failed!\n";
 }
 
 const String SAMCmd::generateExternal(const String& mdlPath)
@@ -206,6 +220,8 @@ const String SAMCmd::runPerlScript(const String& script,
 	return execProcess(processStr.toUTF8().getAddress());
 //	return runChildProcess(processStr.toUTF8().getAddress());
 }
+
+
 
 //==============================================================================
 #if UNIT_TESTS

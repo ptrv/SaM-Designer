@@ -109,6 +109,7 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
+        <FILE id="HvT7tq" name="SAMCompiler.h" compile="0" resource="0" file="Source/Models/SAMCompiler.h"/>
         <FILE id="G9OIi7" name="ObjectFactory.cpp" compile="1" resource="0"
               file="Source/Models/ObjectFactory.cpp"/>
         <FILE id="Z559dG" name="ObjectFactory.h" compile="0" resource="0" file="Source/Models/ObjectFactory.h"/>
