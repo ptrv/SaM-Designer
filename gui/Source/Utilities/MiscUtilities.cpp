@@ -143,9 +143,46 @@ String fixParameterValueIfNeeded(const String& paramVal)
 	if( paramVal == String::empty)
 		return "0.0";
 
-	String tmpVal = paramVal;
-	if(tmpVal.indexOf(".") == -1)
-		tmpVal << ".0";
+	String tmpVal;
+    StringArray operators;
+    StringArray params;
+    if(paramVal.containsAnyOf("*+-/"))
+    {
+        String tmp = "";
+        for (int i = 0; i < paramVal.length(); ++i)
+        {
+            if(paramVal[i] == '*' || paramVal[i] == '+'
+                || paramVal[i] == '-' || paramVal[i] == '/')
+            {
+                String op = "";
+                op << paramVal[i];
+                operators.add(op);
+                params.add(tmp);
+                tmp = "";
+            }
+            else
+            {
+                tmp << paramVal[i];
+            }
+        }
+        if(tmp.compare("") != 0)
+            params.add(tmp);
+
+        for (int i = 0; i < params.size(); ++i)
+        {
+            tmpVal << params[i];
+            if(params[i].containsAnyOf("0123456789") && params[i].indexOf(".") == -1)
+                tmpVal << ".0";
+            if(i < operators.size())
+                tmpVal << operators[i];
+        }
+    }
+    else
+    {
+        tmpVal = paramVal;
+        if (tmpVal.indexOf(".") == -1)
+            tmpVal << ".0";
+    }
 
 	return tmpVal;
 }
