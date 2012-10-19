@@ -299,7 +299,7 @@ String generateDspString(const XmlElement& xml)
         junctString << junct[Ids::identifier].toString();
         junctString << " = ";
         junctString << junct[Ids::identifier].toString() << jOutputs;
-        junctString << ":(_:!);\n\n";
+        junctString << ":(_,!);\n\n";
 
     }
 
