@@ -50,6 +50,9 @@ int showHelp()
         << std::endl
         << " Synth-A-Modeler --compile /path/to/mdl_file /path/to/dsp_file" << std::endl
         << "    Compiles a mdl_file to a dsp_file." << std::endl
+        << std::endl
+        << " Synth-A-Modeler --print-xml /path/to/mdl_file" << std::endl
+        << "    Prints xml structure of mdl_file to stdout." << std::endl
         << std::endl;
 
     return 0;
@@ -58,7 +61,57 @@ int showHelp()
 //==============================================================================
 bool compileMdlToDsp (const StringArray& args)
 {
-    if(args.size() != 3)
+    if(args.size() != 2 && args.size() != 3)
+    {
+        return showHelp();
+    }
+
+    File in;
+    if(File::isAbsolutePath(args[1]))
+        in = args[1];
+    else
+        in = File::getCurrentWorkingDirectory().getChildFile(args[1]);
+
+    if(! in.existsAsFile())
+    {
+        std::cout << "Input file: " << in.getFullPathName().toUTF8().getAddress();
+        std::cout << " does not exist" << std::endl;
+        return 1;
+    }
+    File outFile;
+    if(args.size() == 2)
+    {
+        outFile = in.getParentDirectory().getFullPathName() + "/"
+            + in.getFileNameWithoutExtension() + ".dsp";
+    }
+    else
+    {
+        if(File::isAbsolutePath(args[2]))
+            outFile = args[2];
+        else
+            outFile = File::getCurrentWorkingDirectory().getChildFile(args[2]);
+    }
+
+    ScopedPointer<synthamodeler::MDLFile> mdl;
+    mdl = new MDLFile(in);
+    
+    String dsp = synthamodeler::SAMCompiler::compile(mdl->mdlRoot);
+    
+    if(synthamodeler::Utils::writeStringToFile(dsp, outFile))
+    {
+        std::cout << "\nSuccessfully created " << outFile.getFullPathName() << std::endl;
+        return 0;
+    }
+    else
+    {
+        std::cout << "\nCreating " << outFile.getFullPathName() << " failed!" << std::endl;
+        return 1;
+    }
+}
+
+int printMdlXml(const StringArray& args)
+{
+    if(args.size() != 2)
     {
         return showHelp();
     }
@@ -77,8 +130,10 @@ bool compileMdlToDsp (const StringArray& args)
     }
 
     ScopedPointer<synthamodeler::MDLFile> mdl;
-//    synthamodeler::SAMCompiler::compile()
+    mdl = new MDLFile(in);
+    std::cout << "\n" << mdl->toString() << std::endl;
 
+    return 0;
 }
 
 bool matchArgument(const String& arg, const String& possible)
@@ -96,8 +151,9 @@ int synthamodeler::performCommandLine (const String& commandLine)
     args.addTokens (commandLine, true);
     args.trim();
 
-    if (matchArgument (args[0], "help"))                return showHelp();
-    if (matchArgument (args[0], "compile"))              return compileMdlToDsp (args);
+    if (matchArgument (args[0], "help"))        return showHelp();
+    if (matchArgument (args[0], "compile"))     return compileMdlToDsp (args);
+    if (matchArgument (args[0], "print-xml"))   return printMdlXml (args);
 
     return commandLineNotPerformed;
 }

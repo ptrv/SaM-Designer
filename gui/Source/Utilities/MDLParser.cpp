@@ -357,7 +357,7 @@ bool MDLParser::parseMDLX(const File& f, bool onlyMDLX)
         ValueTree mdlxTree = ValueTree::fromXml(*xml);
         ValueTree mdlTree = mdlFile.mdlRoot;
 
-        DBG(mdlxTree.toXmlString());
+//        DBG(mdlxTree.toXmlString());
         ValueTree comments = mdlxTree.getChildWithName(Objects::comments);
         if(comments.isValid())
         {
