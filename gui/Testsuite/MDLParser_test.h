@@ -28,6 +28,8 @@
 
 #include "TestUtils.h"
 
+namespace synthamodeler
+{
 class MDLParserTest : public UnitTest
 {
 public:
@@ -174,6 +176,6 @@ public:
 };
 
 static MDLParserTest mdlParserTest;
-
+}
 
 #endif  // __MDLPARSER_TEST_H_E5DA3686__

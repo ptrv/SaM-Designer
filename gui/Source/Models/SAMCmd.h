@@ -78,21 +78,27 @@ public:
 	 * @return			an empty string if generation of faust code succeeded,
 	 * 					else a string with the error message.
 	 */
-	const String generateFaustCode(const String& inPath, const String& outPath);
+	const String generateFaustCode(const String& inPath,
+                                   const String& outPath,
+                                   bool useSamConsole = true);
 
-    const String generateFaustCodeBuiltin(ValueTree mdlRoot_, const String& outPath);
+    const String generateFaustCodeBuiltin(ValueTree mdlRoot_,
+                                          const String& outPath,
+                                          bool useSamConsole = true);
 	/**
 	 * Generates external using the FAUST compiler.
 	 *
 	 * @return			an empty string if generation succeeded, else a string
 	 * 					with error message
 	 */
-	const String generateExternal(const String& mdlPath);
+	const String generateExternal(const String& mdlPath,
+                                bool useSamConsole = true);
 
 private:
     const String runPerlScript(const String& script,
                                const String& inPath,
-                               const String& outPath);
+                               const String& outPath,
+                               bool useSamConsole);
 };
 }
 

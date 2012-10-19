@@ -27,6 +27,8 @@
 #define __TESTRUNNER_H_53168B6B__
 
 #include "../Source/Utilities/StoredSettings.h"
+namespace synthamodeler
+{
 static const char* delimLine = "-----------------------------------------------------------------";
 class TestRunner
 {
@@ -36,6 +38,10 @@ private:
 public:
     static void doTests()
     {
+#if JUCE_MAC
+        Process::setDockIconVisible(false);
+#endif
+
         UnitTestRunner runner;
         runner.setAssertOnFailure(false);
         runner.runAllTests();
@@ -84,6 +90,6 @@ public:
 
     }
 };
-
+}
 
 #endif  // __TESTRUNNER_H_53168B6B__

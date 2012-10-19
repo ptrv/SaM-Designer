@@ -148,19 +148,23 @@ static String execProcess(char* cmd) {
     return result;
 }
 const String SAMCmd::generateFaustCode(const String& inPath,
-                                       const String& outPath)
+                                       const String& outPath,
+                                       bool useSamConsole)
 {
     File fileOut(outPath);
     String dataDir = StoredSettings::getInstance()->getDataDir();
     String pathMDX = dataDir;
     pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
-	String processoutput = runPerlScript("SAM-preprocessor", inPath, pathMDX);
-    processoutput << runPerlScript("Synth-A-Modeler", pathMDX, outPath);
+	String processoutput = runPerlScript("SAM-preprocessor",
+                                         inPath, pathMDX, useSamConsole);
+    processoutput << runPerlScript("Synth-A-Modeler",
+                                   pathMDX, outPath, useSamConsole);
 	return processoutput;
 }
 
 const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
-                                              const String& outPath)
+                                              const String& outPath,
+                                              bool useSamConsole)
 {
     String faustCodeString = SAMCompiler::compile(mdlRoot_);
 
@@ -171,7 +175,8 @@ const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
         return "Generating faust code failed!\n";
 }
 
-const String SAMCmd::generateExternal(const String& mdlPath)
+const String SAMCmd::generateExternal(const String& mdlPath,
+                                      bool useSamConsole)
 {
     String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
     String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
@@ -193,14 +198,16 @@ const String SAMCmd::generateExternal(const String& mdlPath)
 	processStr << " 2>&1\" 2>&1";
 #endif
 	SAM_LOG("Export command: " + processStr);
-    SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
+    if(useSamConsole)
+        SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
 	return processoutput;
 }
 
 const String SAMCmd::runPerlScript(const String& script,
-                                      const String& inPath,
-                                      const String& outPath)
+                                   const String& inPath,
+                                   const String& outPath,
+                                   bool useSamConsole)
 {
     String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
 	String processStr;
@@ -216,7 +223,8 @@ const String SAMCmd::runPerlScript(const String& script,
 
 #endif
 	SAM_LOG(script + " command: " + processStr);
-    SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
+    if(useSamConsole)
+        SAM_CONSOLE_ADD_LINE(processStr + "\n", true);
 	return execProcess(processStr.toUTF8().getAddress());
 //	return runChildProcess(processStr.toUTF8().getAddress());
 }

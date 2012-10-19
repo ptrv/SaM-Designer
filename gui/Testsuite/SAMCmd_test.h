@@ -27,6 +27,8 @@
 #define __SAMCMD_TEST_H_E0BDB8A1__
 
 #include "TestUtils.h"
+namespace synthamodeler
+{
 class SAMCmdTest : public UnitTest {
 public:
 	SAMCmdTest() : UnitTest("OutputCmdTest") {}
@@ -47,7 +49,7 @@ public:
 		beginTest("generateFaustCode");
 		String inPathFull = File::getCurrentWorkingDirectory().getChildFile(inPath).getFullPathName();
 		String outPathFull = File::getCurrentWorkingDirectory().getChildFile(outPath).getFullPathName();
-		String result = cmd.generateFaustCode(inPathFull, outPathFull);
+		String result = cmd.generateFaustCode(inPathFull, outPathFull, false);
 		bool resultOk = false;
 		if(result.compare("failed to start process") != 0)
 			resultOk = true;
@@ -62,5 +64,6 @@ public:
 };
 
 static SAMCmdTest samCmdTest;
+}
 
 #endif  // __SAMCMD_TEST_H_E0BDB8A1__
