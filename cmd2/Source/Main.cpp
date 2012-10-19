@@ -30,7 +30,7 @@ struct MassLinkRef
 {
     String massId;
     StringArray linkRefs;
-    bool isWithJunction;
+    bool isPort;
 };
 
 namespace Ids
@@ -42,6 +42,10 @@ const Identifier termination("termination");
 const Identifier junction("junction");
 const Identifier parameters("parameters");
 const Identifier value("value");
+const Identifier faustCode("faustCode");
+const Identifier sources("sources");
+const Identifier optional("optional");
+const Identifier port("port");
 };
 //int containsMassLinkRef(std::vector<MassLinkRef> mlf, const String& mId)
 int containsMassLinkRef(const OwnedArray<MassLinkRef>& mlf, const String& mId)
@@ -53,6 +57,19 @@ int containsMassLinkRef(const OwnedArray<MassLinkRef>& mlf, const String& mId)
             return i;
     }
     return -1;
+}
+
+ValueTree getJunctionLink(ValueTree linksTree, ValueTree jnctTree)
+{
+    for (int i = 0; i < linksTree.getNumChildren(); ++i)
+    {
+        ValueTree link = linksTree.getChild(i);
+        if(link[Ids::startVertex] == jnctTree[Ids::identifier]
+            || link[Ids::endVertex] == jnctTree[Ids::identifier])
+            return link;
+    }
+
+    return ValueTree::invalid;
 }
 int showHelp()
 {
@@ -89,11 +106,19 @@ String generateDspString(const XmlElement& xml)
     const XmlElement* junctions = xml.getChildByName("junctions");
     const XmlElement* audioouts = xml.getChildByName("audioobjects");
 
+
+    ValueTree faustTree;
+    ValueTree massTree;
     ValueTree linkTree;
     ValueTree wgTree;
     ValueTree jTree;
     ValueTree tTree;
+    ValueTree aoTree;
 
+    if(faustcode != nullptr)
+        faustTree = ValueTree::fromXml(*faustcode);
+    if(masses != nullptr)
+        massTree = ValueTree::fromXml(*masses);
     if(links != nullptr)
         linkTree = ValueTree::fromXml(*links);
     if(waveguides != nullptr)
@@ -102,6 +127,8 @@ String generateDspString(const XmlElement& xml)
         tTree = ValueTree::fromXml(*terminations);
     if(junctions != nullptr)
         jTree = ValueTree::fromXml(*junctions);
+    if(audioouts != nullptr)
+        aoTree = ValueTree::fromXml(*audioouts);
 
 //    DBG(wgTree.toXmlString());
 //    DBG(jTree.toXmlString());
@@ -113,6 +140,11 @@ String generateDspString(const XmlElement& xml)
     String wgTermString;
     String junctString;
     StringArray wgOutputs;
+    StringArray wgInputs;
+    StringArray massWithJunct;
+    StringArray linkWithJunct;
+    StringArray massWithJunctLine;
+    StringArray massWithJunctOutputs;
     for (int i = 0; i < wgTree.getNumChildren(); ++i)
     {
         ++numWaveguides;
@@ -135,21 +167,15 @@ String generateDspString(const XmlElement& xml)
         StringArray wgSuffixes;
         if(left.getType() == Ids::termination)
         {
-            DBG(left.toXmlString());
-            DBG(right.toXmlString());
             wgSuffixes.add(wgR);
             wgSuffixes.add(wgL);
             wgSuffixes.add(wgRp);
             wgSuffixes.add(wgLp);
-
             term = left;
             junct = right;
         }
         else if(left.getType() == Ids::junction)
         {
-            DBG(left.toXmlString());
-            DBG(right.toXmlString());
-
             wgSuffixes.add(wgL);
             wgSuffixes.add(wgR);
             wgSuffixes.add(wgLp);
@@ -158,9 +184,12 @@ String generateDspString(const XmlElement& xml)
             junct = left;
         }
 
-        wgOutputs.add(wg[Ids::identifier].toString() + wgLp);
-        wgOutputs.add(wg[Ids::identifier].toString() + wgRp);
+        wgInputs.add(wg[Ids::identifier].toString() + wgLp);
+        wgInputs.add(wg[Ids::identifier].toString() + wgRp);
+        wgOutputs.add(wg[Ids::identifier].toString() + wgL);
+        wgOutputs.add(wg[Ids::identifier].toString() + wgR);
 
+        wgTermString << "\t";
         wgTermString << wg[Ids::identifier].toString();
         wgTermString << wgSuffixes[0] << " = " << term[Ids::identifier].toString();
 
@@ -187,8 +216,9 @@ String generateDspString(const XmlElement& xml)
             paTermStrings.add(paTerm.getChild(j)[Ids::value].toString());
         }
 
-        wgTermString << paTermStrings[0];
+        wgTermString << paTermStrings[0] << ";\n\n";
 
+        junctString << "\t";
         junctString << wg[Ids::identifier].toString() << wgSuffixes[1];
         junctString << " = ";
         junctString << junct[Ids::identifier].toString() << jTO;
@@ -200,64 +230,119 @@ String generateDspString(const XmlElement& xml)
         junctString << junct[Ids::identifier].toString() << jTO;
         junctString << wg[Ids::identifier].toString() << " = ";
         junctString << junct[Ids::identifier].toString() << jOutputs;
-        junctString << ":(_:!)-";
+        junctString << ":(_,!)-";
         junctString << wg[Ids::identifier].toString() << wgSuffixes[2];
         junctString << ";\n\t";
 
-        junctString << junct[Ids::identifier].toString() << jOutputs;
-        junctString << " = (0.0, 0.0+";
-        junctString << wg[Ids::identifier].toString() << wgSuffixes[2];
-        junctString << "*" << paWgStrings[0];
-        junctString << ", 0.0+" << paWgStrings[0];
-        junctString << " : ";
-        // TODO has links?
-        if (false)
+        String junctLinkString;
+        String junctMassString;
+        // Check if junction has one link connected
+        ValueTree junctLink = getJunctionLink(linkTree, junct);
+        if (junctLink.isValid())
         {
+            String jm;
+            if(junctLink[Ids::startVertex] == junct[Ids::identifier])
+                jm << junctLink[Ids::endVertex].toString();
+            else
+                jm << junctLink[Ids::startVertex].toString();
+            junctMassString << jm << "p";
+
+            massWithJunct.add(jm);
+            massWithJunctOutputs.add(jm + "p");
+            linkWithJunct.add(junctLink[Ids::identifier].toString());
+
+            ValueTree junctLinkParams = junctLink.getChildWithName(Ids::parameters);
+            StringArray junctLinkParamsStrings;
+            for (int k = 0; k < junctLinkParams.getNumChildren(); ++k)
+            {
+                ValueTree param = junctLinkParams.getChild(k);
+                junctLinkParamsStrings.add(param[Ids::value].toString());
+            }
+            junctLinkString << "junction" << junctLink.getType().toString();
+            junctLinkString << "Underneath(0.0,";
+            junctLinkString << junctLinkParamsStrings.joinIntoString(",");
+            junctLinkString << ")";
+
+            // Get mass-like object connected with junction > link
+            ValueTree mwj = massTree.getChildWithProperty(Ids::identifier, jm);
+            String mwjl = "\t";
+            mwjl << jm;
+            mwjl << " = (0.0+(";
+            mwjl << junct[Ids::identifier].toString() << jOutputs << ":(!,_)))";
+            mwjl << " : ";
+            ValueTree mwjp = mwj.getChildWithName(Ids::parameters);
+            StringArray mwjpStrings;
+            for (int p = 0; p < mwjp.getNumChildren(); ++p)
+            {
+                ValueTree param = mwjp.getChild(p);
+                mwjpStrings.add(param[Ids::value].toString());
+            }
+            mwjl << mwj.getType().toString();
+            mwjl << "(" << mwjpStrings.joinIntoString(",") << ");";
+            massWithJunctLine.add(mwjl);
 
         }
         else
         {
-            junctString << "junctionlink(0.0, 0.0, 0.0, 0.0);\n\t";
+            junctMassString << "0.0";
+            junctLinkString << "junctionlink(0.0, 0.0, 0.0, 0.0)";
         }
+        junctString << junct[Ids::identifier].toString() << jOutputs;
+        junctString << " = (";
+        junctString << junctMassString << ", 0.0+";
+        junctString << wg[Ids::identifier].toString() << wgSuffixes[2];
+        junctString << "*" << paWgStrings[0];
+        junctString << ", 0.0+" << paWgStrings[0];
+        junctString << ") : ";
+        junctString << junctLinkString << ";\n\t";
 
         junctString << junct[Ids::identifier].toString();
         junctString << " = ";
         junctString << junct[Ids::identifier].toString() << jOutputs;
-        junctString << ":(_:!);\n";
+        junctString << ":(_:!);\n\n";
 
     }
 
     // Write all faustcode
-    forEachXmlChildElementWithTagName(*faustcode, c, "variable")
+    for (int i = 0; i < faustTree.getNumChildren(); ++i)
     {
-        dspContent << c->getStringAttribute("identifier");
+        ValueTree fa = faustTree.getChild(i);
+        dspContent << fa[Ids::identifier].toString();
         dspContent << "=";
-        dspContent << c->getStringAttribute("faustCode");
+        dspContent << fa[Ids::faustCode].toString();
         dspContent << ";\n";
     }
+
     dspContent << "\n";
 
-    // Get all ma
+    // Get all mass names
     OwnedArray<MassLinkRef> massLinkRefs;
-    forEachXmlChildElement(*masses, c)
+    for (int i = 0; i < massTree.getNumChildren(); ++i)
     {
+        ValueTree ma = massTree.getChild(i);
+        if(massWithJunct.contains(ma[Ids::identifier].toString()))
+            continue;
         MassLinkRef* mlf = new MassLinkRef();
-        mlf->massId = c->getStringAttribute("identifier");
+        mlf->massId = ma[Ids::identifier].toString();
         StringArray mlfa;
         mlf->linkRefs = mlfa;
-        mlf->isWithJunction = false;
+        if(ma.getType() == Ids::port)
+            mlf->isPort = true;
+        else
+            mlf->isPort = false;
         massLinkRefs.add(mlf);
     }
 
-
     // Write all link-like objects
     StringArray linkobjects;
-
-    forEachXmlChildElement(*links, c)
+    for (int i = 0; i < linkTree.getNumChildren(); ++i)
     {
-        String linkId = c->getStringAttribute("identifier");
-        String startVertex = c->getStringAttribute("startVertex");
-        String endVertex = c->getStringAttribute("endVertex");
+        ValueTree li = linkTree.getChild(i);
+        String linkId = li[Ids::identifier].toString();
+        if(linkWithJunct.contains(linkId))
+            continue;
+        String startVertex = li[Ids::startVertex].toString();
+        String endVertex = li[Ids::endVertex].toString();
         int sIdx = containsMassLinkRef(massLinkRefs, startVertex);
         if(sIdx >= 0)
             massLinkRefs[sIdx]->linkRefs.add("-"+linkId);
@@ -266,12 +351,13 @@ String generateDspString(const XmlElement& xml)
         if(eIdx >= 0)
             massLinkRefs[eIdx]->linkRefs.add("+"+linkId);
 
-        String tagName = c->getTagName();
-        XmlElement* params = c->getChildByName("parameters");
+        String tagName = li.getType().toString();
+        ValueTree params = li.getChildWithName(Ids::parameters);
         StringArray paramsStr;
-        forEachXmlChildElement(*params, c2)
+        for (int k = 0; k < params.getNumChildren(); ++k)
         {
-            paramsStr.add(c2->getStringAttribute("value"));
+            ValueTree param = params.getChild(k);
+            paramsStr.add(param[Ids::value].toString());
         }
 
         String linkLine;
@@ -285,14 +371,21 @@ String generateDspString(const XmlElement& xml)
         linkLine << paramsStr.joinIntoString(",") << ");";
         linkobjects.add(linkLine);
     }
+
     StringArray massobjects;
-    forEachXmlChildElement(*masses, c)
+
+    // write all mass-like object except those connected to junctions
+    for (int i = 0; i < massTree.getNumChildren(); ++i)
     {
+        ValueTree ma = massTree.getChild(i);
+        if(massWithJunct.contains(ma[Ids::identifier].toString()))
+            continue;
+        
         ++numMasslike;
+        String tagName = ma.getType().toString();
+        String massName = ma[Ids::identifier].toString();
         String massLine;
-        String tagName = c->getTagName();
         massLine << "\t";
-        String massName = c->getStringAttribute("identifier");
         massLine << massName << " = (0.0";
         if(tagName.compare("port") == 0)
             ++numPorts;
@@ -309,43 +402,48 @@ String generateDspString(const XmlElement& xml)
         massLine << ")";
         if(tagName.compare("port") != 0)
         {
-            massLine << " :";
+            massLine << " : ";
             massLine << tagName << "(";
-            XmlElement* params = c->getChildByName("parameters");
+            ValueTree params = ma.getChildWithName(Ids::parameters);
             StringArray paramsStr;
-            if (params != nullptr)
+            for (int k = 0; k < params.getNumChildren(); ++k)
             {
-                forEachXmlChildElement(*params, c2)
-                {
-                    paramsStr.add(c2->getStringAttribute("value"));
-                }
+                ValueTree param = params.getChild(k);
+                paramsStr.add(param[Ids::value].toString());
             }
             massLine << paramsStr.joinIntoString(",") << ")";
         }
         massLine << ";";
         massobjects.add(massLine);
-    }
 
+    }
+    // add remaining mass-like object which are connected to junctions
+    massobjects.addArray(massWithJunctLine);
+    
     StringArray audioobjects;
     StringArray audioNames;
-    forEachXmlChildElement(*audioouts, c)
+    for (int i = 0; i < aoTree.getNumChildren(); ++i)
     {
+        ValueTree ao = aoTree.getChild(i);
+
         String audioLine;
-        String audioName = c->getStringAttribute("identifier");
+        String audioName = ao[Ids::identifier].toString();
         audioNames.add(audioName);
         audioLine << "\t";
         audioLine << audioName << " = ";
-        XmlElement* params = c->getChildByName("sources");
+        ValueTree sources = ao.getChildWithName(Ids::sources);
         StringArray paramsStr;
-        if(params->getNumChildElements() > 0)
+        if(sources.getNumChildren() > 0)
         {
-            forEachXmlChildElement(*params, c2)
+            for (int k = 0; k < sources.getNumChildren(); ++k)
             {
-                paramsStr.add(c2->getStringAttribute("value"));
+                ValueTree src = sources.getChild(k);
+                paramsStr.add(src[Ids::value].toString());
             }
             audioLine << paramsStr.joinIntoString("+");
         }
-        String optional = c->getStringAttribute("optional");
+
+        String optional = ao[Ids::optional].toString();
         if(optional != String::empty)
             audioLine << " : " << optional;
         audioLine << ";";
@@ -353,29 +451,59 @@ String generateDspString(const XmlElement& xml)
     }
 
     StringArray inputs;
+    StringArray inputsPorts;
     for (int i = 0; i < massLinkRefs.size(); ++i)
     {
-        inputs.add(massLinkRefs[i]->massId);
+        if(massLinkRefs[i]->isPort)
+            inputsPorts.add(massLinkRefs[i]->massId);
+        else
+            inputs.add(massLinkRefs[i]->massId);
     }
 
     StringArray outputs = inputs;
-    outputs.addArray(audioNames);
+    outputs.addArray(massWithJunct);
+    StringArray outputsPorts = inputsPorts;
 
     StringArray inputsP;
+    StringArray inputsPPorts;
     for (int i = 0; i < inputs.size(); ++i)
     {
         String inputP = inputs[i];
         inputP << "p";
         inputsP.add(inputP);
     }
+    for (int i = 0; i < massWithJunctOutputs.size(); ++i)
+    {
+        ++numMasslike;
+        String inputP = massWithJunctOutputs[i];
+        inputsP.add(inputP);
+    }
+    for (int i = 0; i < inputsPorts.size(); ++i)
+    {
+        String inputPPort = inputsPorts[i];
+        inputPPort << "p";
+        inputsPPorts.add(inputPPort);
+    }
 
-    dspContent << "bigBlock(" << inputsP.joinIntoString(",") << ") = (";
-    dspContent << outputs.joinIntoString(",") << ") with {\n";
+    dspContent << "bigBlock(" << inputsP.joinIntoString(",");
+    if(wgInputs.size() > 0)
+        dspContent << "," << wgInputs.joinIntoString(",");
+    if(inputsPPorts.size() > 0)
+        dspContent << "," << inputsPPorts.joinIntoString(",");
+    dspContent << ") = (";
+    dspContent << outputs.joinIntoString(",");
+    if(wgOutputs.size() > 0)
+        dspContent << "," << wgOutputs.joinIntoString(",");
+    if(outputsPorts.size() > 0)
+        dspContent << "," << outputsPorts.joinIntoString(",");
+    if(audioNames.size() > 0)
+        dspContent << "," << audioNames.joinIntoString(",");
+    dspContent << ") with {\n";
     dspContent << "\n\t//waveguide termination objects\n";
-    dspContent << "\t" << wgTermString << "\n";
-    dspContent << "\n\t//junctions\n";
-    dspContent << "\t" << junctString << "\n";
-    dspContent << "\n\t//mass-like objects\n";
+    dspContent << wgTermString;
+    dspContent << "\t//junctions\n";
+    dspContent << junctString;
+    dspContent << "\t//mass-like objects\n";
     dspContent << massobjects.joinIntoString("\n") << "\n";
     dspContent << "\n\t//link-like objects\n";
     dspContent << linkobjects.joinIntoString("\n") << "\n";
@@ -464,8 +592,8 @@ int main (int argc, char* argv[])
 
     delete mdl;
 
-//    if(writeStringToFile(dspString, args[1]))
-    if(true)
+    if(writeStringToFile(dspString, args[1]))
+//    if(true)
         return 0;
     else
         return 1;
