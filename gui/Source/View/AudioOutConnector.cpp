@@ -33,6 +33,8 @@
 
 #include "AudioOutConnector.h"
 
+using namespace synthamodeler;
+
 class GainPanel  : public DialogWindow
 {
 public:

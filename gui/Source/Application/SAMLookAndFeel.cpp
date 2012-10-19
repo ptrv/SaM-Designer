@@ -12,6 +12,8 @@
 
 #include "SAMLookAndFeel.h"
 
+using namespace synthamodeler;
+
 static const Colour menuColourInsertMass(0xffff0000);
 //static const Colour menuColourInsertGround(0xff800000);
 static const Colour menuColourInsertGround(0xff935632);

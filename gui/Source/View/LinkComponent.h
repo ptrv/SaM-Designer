@@ -27,6 +27,8 @@
 #define __LINKCOMPONENT_H_4CCE4B86__
 
 
+namespace synthamodeler
+{
 class SelectableObject;
 class BaseObjectComponent;
 class ObjController;
@@ -98,6 +100,7 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LinkComponent);
 };
+}
 
 
 #endif  // __LINKCOMPONENT_H_4CCE4B86__

@@ -26,6 +26,8 @@
 #ifndef __SELECTABLEOBJECT_H_D4CBD94B__
 #define __SELECTABLEOBJECT_H_D4CBD94B__
 
+namespace synthamodeler
+{
 class SelectableObject
 {
 public:
@@ -36,7 +38,7 @@ public:
 protected:
     bool selected;
 };
-
+}
 
 
 #endif  // __SELECTABLEOBJECT_H_D4CBD94B__

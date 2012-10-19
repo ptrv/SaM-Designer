@@ -28,6 +28,8 @@
 
 #include "MDLWriter.h"
 
+using namespace synthamodeler;
+
 MDLWriter::MDLWriter(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {

@@ -37,6 +37,8 @@
 #include "AudioOutConnector.h"
 #include "ObjectsHolder.h"
 
+using namespace synthamodeler;
+
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
   dragging(false), isDrawingObjectNames(false), showObjectNames(false),

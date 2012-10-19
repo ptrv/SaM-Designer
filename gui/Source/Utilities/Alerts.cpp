@@ -27,6 +27,8 @@
 
 #include "Alerts.h"
 
+using namespace synthamodeler;
+
 void Alerts::missingPerl()
 {
 	String title = "Missing perl executable";

@@ -38,7 +38,9 @@
 
 #include "MainWindow.h"
 
-ScopedPointer<ApplicationCommandManager> commandManager;
+using namespace synthamodeler;
+
+ScopedPointer<ApplicationCommandManager> synthamodeler::commandManager;
 
 //==============================================================================
 MainAppWindow::MainAppWindow()

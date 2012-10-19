@@ -26,7 +26,8 @@
 #ifndef __OBJECTIDS_H_C7C4C1BC__
 #define __OBJECTIDS_H_C7C4C1BC__
 
-
+namespace synthamodeler
+{
 /**
  * Namespace for Ids used for the ValueTrees.
  */
@@ -100,7 +101,7 @@ namespace Objects
 
 	#undef DECLARE_ID
 };
-
+}
 
 
 #endif  // __OBJECTIDS_H_C7C4C1BC__

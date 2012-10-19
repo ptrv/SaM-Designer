@@ -26,6 +26,8 @@
 #ifndef __DEBUGWINDOW_H_3A3F156F__
 #define __DEBUGWINDOW_H_3A3F156F__
 
+namespace synthamodeler
+{
 class TextConsole;
 
 /**
@@ -95,6 +97,6 @@ public:
 private:
 	TextConsole* console;
 };
-
+}
 
 #endif  // __DEBUGWINDOW_H_3A3F156F__

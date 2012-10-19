@@ -27,6 +27,7 @@
 
 #include "SAMRegex.h"
 
+using namespace synthamodeler;
 
 const char* SAMRegex::pos = "(\\s*#\\s*pos\\s*\\d+,\\s*\\d+\\s*)?";
 const char* SAMRegex::label = "([a-zA-Z\\d]*)";

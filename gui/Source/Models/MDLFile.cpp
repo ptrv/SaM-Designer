@@ -29,6 +29,8 @@
 
 #include "MDLFile.h"
 
+using namespace synthamodeler;
+
 const char* MDLFile::mdlFileExtension = ".mdl";
 
 MDLFile::MDLFile()

@@ -28,6 +28,7 @@
 #include "../Utilities/StoredSettings.h"
 
 
+using namespace synthamodeler;
 //==============================================================================
 class MiscPage  : public Component
 {

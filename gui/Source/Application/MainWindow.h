@@ -29,6 +29,8 @@
 #define __MAINWINDOW_H_3C77CBD5__
 
 
+namespace synthamodeler
+{
 class ContentComp;
 class ObjController;
 class MDLFile;
@@ -95,6 +97,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 
 };
-
+}
 
 #endif  // __MAINWINDOW_H_3C77CBD5__

@@ -33,6 +33,8 @@
 
 #include "Application.h"
 
+using namespace synthamodeler;
+
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"
 #endif

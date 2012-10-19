@@ -26,6 +26,8 @@
 #ifndef __OBJECTCOMPONENT_H_4AC10D4B__
 #define __OBJECTCOMPONENT_H_4AC10D4B__
 
+namespace synthamodeler
+{
 class ObjectsHolder;
 class ObjController;
 class LinkComponent;
@@ -92,6 +94,7 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };
+}
 
 
 #endif  // __OBJECTCOMPONENT_H_4AC10D4B__

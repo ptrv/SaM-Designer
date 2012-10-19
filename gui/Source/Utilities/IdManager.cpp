@@ -27,6 +27,8 @@
 
 #include "IdManager.h"
 
+using namespace synthamodeler;
+
 IdManager::IdManager()
 {
     

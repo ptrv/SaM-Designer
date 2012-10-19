@@ -26,6 +26,8 @@
 #ifndef __COMMENTCOMPONENT_H_FE5F7A49__
 #define __COMMENTCOMPONENT_H_FE5F7A49__
 
+namespace synthamodeler
+{
 class BaseObjectComponent;
 class ObjController;
 
@@ -40,7 +42,7 @@ public:
 private:
 
 };
-
+}
 
 
 #endif  // __COMMENTCOMPONENT_H_FE5F7A49__

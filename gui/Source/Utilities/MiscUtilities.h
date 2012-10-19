@@ -26,6 +26,8 @@
 #ifndef __MISCUTILITIES_H_64FF5DE5__
 #define __MISCUTILITIES_H_64FF5DE5__
 
+namespace synthamodeler
+{
 class BaseObjectComponent;
 class ObjController;
 /**
@@ -98,6 +100,7 @@ String fixPath(const String& path);
 bool writeStringToFile(const String& s, const File& f);
 
 };
+}
 
 
 #endif  // __MISCUTILITIES_H_64FF5DE5__

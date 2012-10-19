@@ -27,6 +27,8 @@
 #define __OBJECTPROPERTIESPANEL_H_460EACF0__
 
 
+namespace synthamodeler
+{
 class ObjectComponent;
 class BaseObjectComponent;
 
@@ -58,5 +60,7 @@ public:
 
     int returnVal;
 };
+}
+
 
 #endif  // __OBJECTPROPERTIESPANEL_H_460EACF0__

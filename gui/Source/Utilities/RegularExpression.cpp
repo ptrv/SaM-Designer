@@ -28,6 +28,7 @@
 
 #include "re2/re2.h"
 
+using namespace synthamodeler;
 //==============================================================================
 RegularExpression::RegularExpression() :
 	pattern (String::empty),

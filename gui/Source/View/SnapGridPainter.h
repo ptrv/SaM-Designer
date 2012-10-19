@@ -27,6 +27,8 @@
 #define __SNAPGRIDPAINTER_H_EFB1F3E4__
 
 
+namespace synthamodeler
+{
 class ObjectsHolder;
 class SnapGridPainter
 {
@@ -46,6 +48,7 @@ private:
     bool snapShown;
     Image backgroundFill;
 };
+}
 
 
 #endif  // __SNAPGRIDPAINTER_H_EFB1F3E4__

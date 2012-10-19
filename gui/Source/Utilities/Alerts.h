@@ -26,6 +26,8 @@
 #ifndef __ALERTS_H_2AC9A37F__
 #define __ALERTS_H_2AC9A37F__
 
+namespace synthamodeler
+{
 /**
  * Static helper class for various alerts.
  */
@@ -46,6 +48,6 @@ private:
 	static void missingAlert(const String& title, const String& msg);
 
 };
-
+}
 
 #endif  // __ALERTS_H_2AC9A37F__

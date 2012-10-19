@@ -32,6 +32,8 @@
 /**
     A namespace to hold all the possible command IDs.
 */
+namespace synthamodeler
+{
 namespace CommandIDs
 {
     static const int newFile                = 0x200010;
@@ -114,6 +116,8 @@ namespace CommandCategories
     static const char* const view          = "View";
     static const char* const windows       = "Windows";
     static const char* const help          = "help";
+}
+
 }
 
 #endif  // __COMMANDIDS_H_5D051BD1__

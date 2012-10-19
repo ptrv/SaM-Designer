@@ -26,6 +26,8 @@
 #ifndef __STOREDSETTINGS_H_7CF20172__
 #define __STOREDSETTINGS_H_7CF20172__
 
+namespace synthamodeler
+{
 /**
  * Singleton class which handles a property file for persistent user settings.
  */
@@ -113,7 +115,7 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StoredSettings);
 };
-
+}
 
 
 

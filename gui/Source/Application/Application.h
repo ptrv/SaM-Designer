@@ -27,6 +27,8 @@
 #define __APPLICATION_H_BBAD6F5C__
 
 
+namespace synthamodeler
+{
 class MainAppWindow;
 class OutputWindow;
 class SAMLookAndFeel;
@@ -118,7 +120,7 @@ public:
     //==============================================================================
 
 };
-
+}
 
 
 #endif  // __APPLICATION_H_BBAD6F5C__

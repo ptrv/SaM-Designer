@@ -37,6 +37,8 @@
 
 #include "ObjController.h"
 
+using namespace synthamodeler;
+
 ObjController::ObjController(MDLController& owner_)
 : owner(owner_),
   timesPasted(0)

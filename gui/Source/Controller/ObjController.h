@@ -26,7 +26,8 @@
 #ifndef __OBJCONTROLLER_H_A98EC6A3__
 #define __OBJCONTROLLER_H_A98EC6A3__
 
-
+namespace synthamodeler
+{
 class MDLController;
 class BaseObjectComponent;
 class ObjectComponent;
@@ -201,6 +202,6 @@ private:
     ScopedPointer<IdManager> idMgr;
     int timesPasted;
 };
-
+}
 
 #endif  // __OBJCONTROLLER_H_A98EC6A3__

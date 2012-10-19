@@ -26,6 +26,8 @@
 #ifndef __IDMANAGER_H_C25241F9__
 #define __IDMANAGER_H_C25241F9__
 
+namespace synthamodeler
+{
 class IdManager
 {
 public:
@@ -61,7 +63,7 @@ private:
     SortedSet<String> terminationIds;
     SortedSet<String> junctionIds;
 };
-
+}
 
 
 #endif  // __IDMANAGER_H_C25241F9__

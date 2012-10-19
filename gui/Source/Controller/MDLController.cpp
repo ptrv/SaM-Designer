@@ -30,6 +30,7 @@
 
 #include "MDLController.h"
 
+using namespace synthamodeler;
 
 MDLController::MDLController(MainAppWindow& mainAppWindow_)
 : mainAppWindow(mainAppWindow_),

@@ -26,7 +26,8 @@
 #ifndef __SAMREGEX_H_36A909E0__
 #define __SAMREGEX_H_36A909E0__
 
-
+namespace synthamodeler
+{
 class SAMRegex
 {
 private:
@@ -55,6 +56,7 @@ public:
     static String getWaveguideLine();
     static String getParamsLine(int numParams);
 };
+}
 
 
 #endif  // __SAMREGEX_H_36A909E0__

@@ -32,6 +32,7 @@
 
 #include "ObjectPropertiesPanel.h"
 
+using namespace synthamodeler;
 //==============================================================================
 
 class ObjectPropertiesComponent : public Component,

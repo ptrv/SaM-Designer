@@ -26,6 +26,8 @@
 #ifndef __REGULAREXPRESSION_H_197041BB__
 #define __REGULAREXPRESSION_H_197041BB__
 
+namespace synthamodeler
+{
 //==============================================================================
 class RegularExpression
 {
@@ -51,5 +53,6 @@ private:
 	String subject;
 
 };
+}
 
 #endif  // __REGULAREXPRESSION_H_197041BB__

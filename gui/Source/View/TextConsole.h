@@ -26,6 +26,8 @@
 #ifndef __TEXTCONSOLE_H_16CA25D5__
 #define __TEXTCONSOLE_H_16CA25D5__
 
+namespace synthamodeler
+{
 /**
  * A JUCE TextEditor subclass which acts as a console windwow.
  */
@@ -63,6 +65,6 @@ public:
 private:
     Font fBold, fRegular;
 };
-
+}
 
 #endif  // __TEXTCONSOLE_H_16CA25D5__

@@ -34,6 +34,8 @@
 #include "RegularExpression.h"
 #include "../Utilities/SAMRegex.h"
 
+using namespace synthamodeler;
+
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {

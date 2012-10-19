@@ -26,6 +26,8 @@
 #ifndef __OBJECTFACTORY_H_2132166E__
 #define __OBJECTFACTORY_H_2132166E__
 
+namespace synthamodeler
+{
 /**
  * Namespace for object creation functions.
  */
@@ -50,6 +52,6 @@ namespace ObjectFactory
     ValueTree createParamsTree(StringArray p);
     ValueTree createLabelsTree(StringArray p);
 }
-
+}
 
 #endif  // __OBJECTFACTORY_H_2132166E__

@@ -31,6 +31,8 @@
 
 #include "CommentComponent.h"
 
+using namespace synthamodeler;
+
 CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_)
 {

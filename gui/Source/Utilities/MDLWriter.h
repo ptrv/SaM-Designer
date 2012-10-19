@@ -26,7 +26,8 @@
 #ifndef __MDLWRITER_H_CB9D9CEF__
 #define __MDLWRITER_H_CB9D9CEF__
 
-
+namespace synthamodeler
+{
 class MDLFile;
 /**
  * MDL writer class. Writes current oatch to a file.
@@ -50,7 +51,7 @@ public:
 private:
 	MDLFile& mdlFile;
 };
-
+}
 
 
 #endif  // __MDLWRITER_H_CB9D9CEF__

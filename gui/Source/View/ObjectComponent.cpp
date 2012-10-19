@@ -33,6 +33,8 @@
 
 #include "ObjectComponent.h"
 
+using namespace synthamodeler;
+
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_)
 {

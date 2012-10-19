@@ -26,6 +26,8 @@
 #ifndef __MDLCONTROLLER_H_8A72BC7D__
 #define __MDLCONTROLLER_H_8A72BC7D__
 
+namespace synthamodeler
+{
 class MDLFile;
 class SAMCmd;
 class AppController;
@@ -73,6 +75,6 @@ private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<SAMCmd> samCmd;
 };
-
+}
 
 #endif  // __MDLCONTROLLER_H_8A72BC7D__

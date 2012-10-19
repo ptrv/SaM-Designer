@@ -32,6 +32,8 @@
 
 #include "LinkComponent.h"
 
+using namespace synthamodeler;
+
 LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 : BaseObjectComponent(owner_, linkTree),
     lastInputX (0),

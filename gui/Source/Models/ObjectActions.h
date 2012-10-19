@@ -37,6 +37,8 @@
 #include "../View/SelectableObject.h"
 #include "ObjectIDs.h"
 
+namespace synthamodeler
+{
 class AddObjectAction : public UndoableAction
 {
 public:
@@ -482,5 +484,6 @@ private:
     int oldIndexAudioOut;
     bool sourceIsLink;
 };
+}
 
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

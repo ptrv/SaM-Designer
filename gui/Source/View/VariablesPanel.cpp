@@ -29,6 +29,7 @@
 
 #include "VariablesPanel.h"
 
+using namespace synthamodeler;
 //class VariableInputPanel;
 class VariableInputPanel : public DialogWindow
 {

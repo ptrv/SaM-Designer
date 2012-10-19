@@ -28,6 +28,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "Application.h"
 
+using namespace synthamodeler;
 //==============================================================================
 // This macro generates the main() routine that starts the app.
 START_JUCE_APPLICATION(SynthAModelerApplication)

@@ -26,6 +26,8 @@
 #ifndef __RESOURCELOADER_H_E0EF3E32__
 #define __RESOURCELOADER_H_E0EF3E32__
 
+namespace synthamodeler
+{
 /**
  * Class for loading resources like icons.
  */
@@ -64,6 +66,7 @@ private:
 	OwnedArray<Drawable> iconsFromZipFile;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResourceLoader);
 };
+}
 
 
 #endif  // __RESOURCELOADER_H_E0EF3E32__

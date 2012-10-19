@@ -26,6 +26,8 @@
 #ifndef __MDLPARSER_H_DC928BC0__
 #define __MDLPARSER_H_DC928BC0__
 
+namespace synthamodeler
+{
 class MDLFile;
 /**
  * MDL parser class.
@@ -45,7 +47,7 @@ public:
 private:
 	MDLFile& mdlFile;
 };
-
+}
 
 
 #endif  // __MDLPARSER_H_DC928BC0__

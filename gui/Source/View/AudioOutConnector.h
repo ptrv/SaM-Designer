@@ -27,6 +27,8 @@
 #define __AUDIOOUTCONNECTOR_H_D0DAD273__
 
 
+namespace synthamodeler
+{
 class ObjController;
 class ObjectComponent;
 class SelectableObject;
@@ -87,6 +89,7 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioOutConnector);
 };
+}
 
 
 #endif  // __AUDIOOUTCONNECTOR_H_D0DAD273__

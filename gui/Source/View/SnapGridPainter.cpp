@@ -29,6 +29,7 @@
 
 #include "SnapGridPainter.h"
 
+using namespace synthamodeler;
 //==============================================================================
 SnapGridPainter::SnapGridPainter()
     : snapGridSize (-1),

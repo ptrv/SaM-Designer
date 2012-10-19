@@ -31,6 +31,7 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using namespace synthamodeler;
 
 class ContentComp::MagnifierComponent : public Component
 {

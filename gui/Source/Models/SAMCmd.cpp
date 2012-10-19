@@ -28,6 +28,8 @@
 
 #include "SAMCmd.h"
 
+using namespace synthamodeler;
+
 SAMCmd::SAMCmd()
 {
 

@@ -27,6 +27,8 @@
 
 #include "StoredSettings.h"
 
+using namespace synthamodeler;
+
 static const String getDefaultPathFaustDir()
 {
 #ifdef JUCE_WINDOWS

@@ -26,6 +26,8 @@
 #ifndef __PREFSPANEL_H_87C5CC8A__
 #define __PREFSPANEL_H_87C5CC8A__
 
+namespace synthamodeler
+{
 /**
  * A preferences window.
  */
@@ -42,7 +44,7 @@ public:
      */
     static void show();
 };
-
+}
 
 
 #endif  // __PREFSPANEL_H_87C5CC8A__

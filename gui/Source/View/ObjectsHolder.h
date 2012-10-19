@@ -26,6 +26,8 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
+namespace synthamodeler
+{
 class BaseObjectComponent;
 class ObjectComponent;
 class MDLFile;
@@ -118,6 +120,6 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };
-
+}
 
 #endif  // __OBJCOMP_H_F3604232__

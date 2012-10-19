@@ -26,7 +26,8 @@
 #ifndef __MDLFILE_H_70428F9D__
 #define __MDLFILE_H_70428F9D__
 
-
+namespace synthamodeler
+{
 /**
  * The MDLFile class is the document which conatins an the contents of an mdl
  * file. It mangaes also the handling of the file like open, close, save, saveAs
@@ -98,6 +99,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLFile);
 
 };
-
+}
 
 #endif  // __MDLFILE_H_70428F9D__

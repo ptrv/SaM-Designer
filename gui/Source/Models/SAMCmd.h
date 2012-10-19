@@ -26,6 +26,8 @@
 #ifndef __SAMCMD_H_1206E4C5__
 #define __SAMCMD_H_1206E4C5__
 
+namespace synthamodeler
+{
 class MDLFile;
 /**
  * This class encapsulates the external commands for generating FAUST code
@@ -90,6 +92,7 @@ private:
                                const String& inPath,
                                const String& outPath);
 };
+}
 
 
 #endif  // __SAMCMD_H_1206E4C5__
