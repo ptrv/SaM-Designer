@@ -30,6 +30,13 @@
 namespace synthamodeler
 {
 
+static const char* wgL = "L";
+static const char* wgR = "R";
+static const char* wgLp = "Lp";
+static const char* wgRp = "Rp";
+static const char* jTO = "TO";
+static const char* jOutputs = "Outputs";
+
 class SAMCompiler
 {
 private:
@@ -43,13 +50,6 @@ private:
         bool isPort;
     };
     
-    static const char* wgL;
-    static const char* wgR;
-    static const char* wgLp;
-    static const char* wgRp;
-    static const char* jTO;
-    static const char* jOutputs;
-
     static int containsMassLinkRef(const OwnedArray<MassLinkRef>& mlf, const String& mId)
     {
         for (int i = 0; i < mlf.size(); ++i)
@@ -488,12 +488,6 @@ public:
     }
 };
 
-const char* SAMCompiler::wgL = "L";
-const char* SAMCompiler::wgR = "R";
-const char* SAMCompiler::wgLp = "Lp";
-const char* SAMCompiler::wgRp = "Rp";
-const char* SAMCompiler::jTO = "TO";
-const char* SAMCompiler::jOutputs = "Outputs";
 
 }
 
