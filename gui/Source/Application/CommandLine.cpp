@@ -44,7 +44,7 @@ int showHelp()
 {
     hideDockIcon();
 
-    std::cout << "The Introjucer!" << std::endl
+    std::cout << "Synth-A-Modeler!" << std::endl
         << std::endl
         << "Usage: " << std::endl
         << std::endl
@@ -53,43 +53,77 @@ int showHelp()
         << std::endl
         << " Synth-A-Modeler --print-xml /path/to/mdl_file" << std::endl
         << "    Prints xml structure of mdl_file to stdout." << std::endl
+        << std::endl
+        << " Synth-A-Modeler --list-exporters" << std::endl
+        << "    Lists all available exporter commands." << std::endl
+        << std::endl
+        << " Synth-A-Modeler --list-exportersd" << std::endl
+        << "    Lists all available exporter commands with detail." << std::endl
+        << std::endl
+        << " Synth-A-Modeler --binary exporter_name mdl_file" << std::endl
+        << "    Generates a binary." << std::endl
         << std::endl;
 
     return 0;
 }
 
 //==============================================================================
-bool compileMdlToDsp (const StringArray& args)
+bool checkFilesForIO(const String& path1, const String& path2, File& f1, File& f2,
+                     const String& outExt, bool sameDir)
 {
+    if(File::isAbsolutePath(path1))
+        f1 = path1;
+    else
+        f1 = File::getCurrentWorkingDirectory().getChildFile(path1);
+
+    if(! f1.existsAsFile())
+    {
+        std::cout << "Input file: " << f1.getFullPathName().toUTF8().getAddress();
+        std::cout << " does not exist" << std::endl;
+        return false;
+    }
+    if(sameDir)
+    {
+        f2 = f1.getParentDirectory().getFullPathName() + "/"
+            + f1.getFileNameWithoutExtension() + outExt;
+    }
+    else
+    {
+        if(File::isAbsolutePath(path2))
+            f2 = path2;
+        else
+            f2 = File::getCurrentWorkingDirectory().getChildFile(path2);
+    }
+
+    return true;
+}
+
+
+int compileMdlToDsp (const StringArray& args)
+{
+    hideDockIcon();
+    
     if(args.size() != 2 && args.size() != 3)
     {
         return showHelp();
     }
 
     File in;
-    if(File::isAbsolutePath(args[1]))
-        in = args[1];
-    else
-        in = File::getCurrentWorkingDirectory().getChildFile(args[1]);
-
-    if(! in.existsAsFile())
-    {
-        std::cout << "Input file: " << in.getFullPathName().toUTF8().getAddress();
-        std::cout << " does not exist" << std::endl;
-        return 1;
-    }
     File outFile;
+    bool createOutputInSameDir = false;
+    String outPath;
     if(args.size() == 2)
     {
-        outFile = in.getParentDirectory().getFullPathName() + "/"
-            + in.getFileNameWithoutExtension() + ".dsp";
+        createOutputInSameDir = true;
+        outPath = String::empty;
     }
     else
     {
-        if(File::isAbsolutePath(args[2]))
-            outFile = args[2];
-        else
-            outFile = File::getCurrentWorkingDirectory().getChildFile(args[2]);
+        outPath = args[2];
+    }
+    if(! checkFilesForIO(args[1], outPath, in, outFile, "*.dsp", createOutputInSameDir))
+    {
+        return 1;
     }
 
     ScopedPointer<synthamodeler::MDLFile> mdl;
@@ -111,6 +145,8 @@ bool compileMdlToDsp (const StringArray& args)
 
 int printMdlXml(const StringArray& args)
 {
+    hideDockIcon();
+    
     if(args.size() != 2)
     {
         return showHelp();
@@ -136,6 +172,39 @@ int printMdlXml(const StringArray& args)
     return 0;
 }
 
+int generateBinary(const StringArray& args)
+{
+    hideDockIcon();
+
+    std::cout << "Not implemented yet!" << std::endl;
+    return 0;
+}
+
+int listExporters(bool showDetails)
+{
+    hideDockIcon();
+    
+    StringPairArray pf = StoredSettings::getInstance()->getExporters().getAllProperties();
+
+    std::cout << "Synth-A-Modeler!" << std::endl << std::endl;
+    std::cout << " Available exporters:" << std::endl << std::endl;
+    for (int i = 0; i < pf.size(); ++i)
+    {
+        std::cout << "    " << pf.getAllKeys()[i];;
+        if(showDetails)
+        {
+            std::cout << ": " << std::endl;
+            std::cout << pf.getAllValues()[i] << std::endl << std::endl;
+        }
+        else
+        {
+            std::cout << std::endl;
+        }
+    }
+
+    return 0;
+}
+
 bool matchArgument(const String& arg, const String& possible)
 {
     return arg == possible
@@ -151,9 +220,12 @@ int synthamodeler::performCommandLine (const String& commandLine)
     args.addTokens (commandLine, true);
     args.trim();
 
-    if (matchArgument (args[0], "help"))        return showHelp();
-    if (matchArgument (args[0], "compile"))     return compileMdlToDsp (args);
-    if (matchArgument (args[0], "print-xml"))   return printMdlXml (args);
+    if (matchArgument (args[0], "help"))              return showHelp();
+    if (matchArgument (args[0], "compile"))           return compileMdlToDsp (args);
+    if (matchArgument (args[0], "print-xml"))         return printMdlXml (args);
+    if (matchArgument (args[0], "list-exporters"))    return listExporters(false);
+    if (matchArgument (args[0], "list-exportersd"))   return listExporters(true);
+    if (matchArgument (args[0], "binary"))            return generateBinary(args);
 
     return commandLineNotPerformed;
 }
