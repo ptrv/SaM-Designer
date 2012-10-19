@@ -105,6 +105,9 @@ public:
     const bool getIsUsingMDLX() const;
     void setIsUsingMDLX (bool isUsingMDLX);
 
+    const bool getIsUsingBuiltinSAMCompiler() const;
+    void setIsUsingBuiltinSAMCompiler (bool isUsingBuiltinSAMCompiler);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

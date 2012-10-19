@@ -134,64 +134,80 @@ bool MDLController::saveAsXml()
 
 const String MDLController::generateFaust()
 {
-	if(! samCmd->isPerlAvailable())
-	{
-		Alerts::missingPerl();
-		return "Missing Perl";
-	}
-	if(! samCmd->isSAMpreprocessorCmdAvailable())
-	{
-		Alerts::missingSAMpreprocessor();
-		return "Missing SAM-preprocessor";
-	}
-	if(! samCmd->isSynthAModelerCmdAvailable())
-	{
-		Alerts::missingSAM();
-		return "Missing Synth-A-Modeler";
-	}
+    bool r = true;
+    if (StoredSettings::getInstance()->getIsExportConfirm())
+        r = Alerts::confirmExport("Really export faust");
 
-	bool r = true;
-	if(StoredSettings::getInstance()->getIsExportConfirm())
-		r = Alerts::confirmExport("Really export faust");
-
-	if (r)
-	{
-        if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
-            return "Canceled";
-
-        String inPath = currentMdl->getFilePath();
-		File in(inPath);
-		String outFileName= in.getFileNameWithoutExtension();
-		outFileName << ".dsp";
-
-        String dataDir = StoredSettings::getInstance()->getDataDir();
-		String outPath = dataDir;
-		outPath << "/" << outFileName;
-
-        // if current MDL file is not in data dir make a temp copy in data dir
-        File inDataDir(dataDir + "/" + in.getFileName());
-        bool saveInDataDir = false;
-        if (in != inDataDir)
+    if (StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler())
+    {
+        if(r)
         {
-            saveInDataDir = true;
-            currentMdl->getFile().copyFileTo(inDataDir);
-            inPath = inDataDir.getFullPathName();
+            String outPath;
+            outPath << StoredSettings::getInstance()->getDataDir();
+            outPath << "/";
+            outPath << currentMdl->getFile().getFileNameWithoutExtension();
+            outPath << ".dsp";
+
+            return samCmd->generateFaustCodeBuiltin(currentMdl->mdlRoot, outPath);
         }
-		String processText = samCmd->generateFaustCode(inPath, outPath);
-        if(StoredSettings::getInstance()->getOpenFaustExport())
-            Utils::openFileNative(outPath);
-
-        // delete temp MDL file
-        if(saveInDataDir)
+    }
+    else
+    {
+        if (!samCmd->isPerlAvailable())
         {
-            if(! inDataDir.deleteFile())
+            Alerts::missingPerl();
+            return "Missing Perl";
+        }
+        if (!samCmd->isSAMpreprocessorCmdAvailable())
+        {
+            Alerts::missingSAMpreprocessor();
+            return "Missing SAM-preprocessor";
+        }
+        if (!samCmd->isSynthAModelerCmdAvailable())
+        {
+            Alerts::missingSAM();
+            return "Missing Synth-A-Modeler";
+        }
+
+        if (r)
+        {
+            if (currentMdl->save(true, true) != FileBasedDocument::savedOk)
+                return "Canceled";
+
+            String inPath = currentMdl->getFilePath();
+            File in(inPath);
+            String outFileName = in.getFileNameWithoutExtension();
+            outFileName << ".dsp";
+
+            String dataDir = StoredSettings::getInstance()->getDataDir();
+            String outPath = dataDir;
+            outPath << "/" << outFileName;
+
+            // if current MDL file is not in data dir make a temp copy in data dir
+            File inDataDir(dataDir + "/" + in.getFileName());
+            bool saveInDataDir = false;
+            if (in != inDataDir)
             {
-                DBG("Deleting temp file failed!");
+                saveInDataDir = true;
+                currentMdl->getFile().copyFileTo(inDataDir);
+                inPath = inDataDir.getFullPathName();
             }
+            String processText = samCmd->generateFaustCode(inPath, outPath);
+            if (StoredSettings::getInstance()->getOpenFaustExport())
+                Utils::openFileNative(outPath);
+
+            // delete temp MDL file
+            if (saveInDataDir)
+            {
+                if (!inDataDir.deleteFile())
+                {
+                    DBG("Deleting temp file failed!");
+                }
+            }
+            return processText;
         }
-        return processText;
-	}
-	return String::empty;
+    }
+    return String::empty;
 }
 
 const String MDLController::generateExternal()

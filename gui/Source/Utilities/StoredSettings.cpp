@@ -329,9 +329,17 @@ void StoredSettings::setRunSAMBeforeExternal (bool runSAMBeforeExternal)
 
 const bool StoredSettings::getIsUsingMDLX() const
 {
-    return props->getBoolValue("usemdlx", true);
+    return props->getBoolValue("usemdlx", false);
 }
 void StoredSettings::setIsUsingMDLX(bool isUsingMDLX)
 {
     props->setValue("usemdlx", isUsingMDLX);
+}
+const bool StoredSettings::getIsUsingBuiltinSAMCompiler() const
+{
+    return props->getBoolValue("usebuiltincompiler", false);
+}
+void StoredSettings::setIsUsingBuiltinSAMCompiler(bool isUsingBuiltinSAMCompiler)
+{
+    props->setValue("usebuiltincompiler", isUsingBuiltinSAMCompiler);
 }
