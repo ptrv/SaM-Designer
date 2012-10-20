@@ -52,8 +52,8 @@ int showHelp()
         << " Synth-A-Modeler --compile /path/to/mdl_file /path/to/dsp_file" << std::endl
         << "    Compiles a mdl_file to a dsp_file." << std::endl
         << std::endl
-        << " Synth-A-Modeler --print-xml /path/to/mdl_file" << std::endl
-        << "    Prints xml structure of mdl_file to stdout." << std::endl
+        << " Synth-A-Modeler --binary exporter_name mdl_file" << std::endl
+        << "    Generates a binary." << std::endl
         << std::endl
         << " Synth-A-Modeler --list-exporters" << std::endl
         << "    Lists all available exporter commands." << std::endl
@@ -61,8 +61,8 @@ int showHelp()
         << " Synth-A-Modeler --list-exportersd" << std::endl
         << "    Lists all available exporter commands with detail." << std::endl
         << std::endl
-        << " Synth-A-Modeler --binary exporter_name mdl_file" << std::endl
-        << "    Generates a binary." << std::endl
+        << " Synth-A-Modeler --print-xml /path/to/mdl_file" << std::endl
+        << "    Prints xml structure of mdl_file to stdout." << std::endl
         << std::endl;
 
     return 0;
