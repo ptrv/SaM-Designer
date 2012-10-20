@@ -232,8 +232,13 @@ bool SynthAModelerApplication::moreThanOneInstanceAllowed()
 
 void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
 {
-    File f(commandLine);
-    if(f.getFileExtension().compare(".mdl") == 0)
+    File f;
+    if(File::isAbsolutePath(commandLine))
+        f = commandLine;
+    else
+        f = File::getCurrentWorkingDirectory().getChildFile(commandLine);
+
+    if(f.existsAsFile() && f.getFileExtension().compare(".mdl") == 0)
         openFile(f);
 }
 
