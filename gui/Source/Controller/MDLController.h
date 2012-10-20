@@ -42,6 +42,8 @@ public:
 	MDLController(MainAppWindow& mainAppWindow_);
 	~MDLController();
 
+    static const char* fileTypesToDelete[];
+
 	void newFile();
 	void open();
 	void openFromFile(const File& mdlFile);

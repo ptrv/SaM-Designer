@@ -32,6 +32,8 @@
 
 using namespace synthamodeler;
 
+const char* MDLController::fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
+
 MDLController::MDLController(MainAppWindow& mainAppWindow_)
 : mainAppWindow(mainAppWindow_),
   currentMdl(nullptr)
@@ -333,8 +335,6 @@ ObjectsHolder* MDLController::getHolderComponent()
 {
     return mainAppWindow.getHolderComponent();
 }
-
-static const char* fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
 
 void MDLController::cleanDataDir()
 {

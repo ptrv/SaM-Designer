@@ -27,6 +27,7 @@
 #include "../Models/SAMCompiler.h"
 #include "../Models/MDLFile.h"
 #include "../Models/SAMCmd.h"
+#include "../Controller/MDLController.h"
 
 #include "CommandLine.h"
 
@@ -63,6 +64,12 @@ int showHelp()
         << std::endl
         << " Synth-A-Modeler --print-xml /path/to/mdl_file" << std::endl
         << "    Prints xml structure of mdl_file to stdout." << std::endl
+        << std::endl
+        << " Synth-A-Modeler --clean" << std::endl
+        << "    Cleans DATA_DIR." << std::endl
+        << std::endl
+        << " Synth-A-Modeler --version" << std::endl
+        << "    Prints version information." << std::endl
         << std::endl;
 
     return 0;
@@ -193,11 +200,11 @@ int listExporters(bool showDetails)
     std::cout << " Available exporters:" << std::endl << std::endl;
     for (int i = 0; i < pf.size(); ++i)
     {
-        std::cout << "    " << pf.getAllKeys()[i];;
+        std::cout << "    " << pf.getAllKeys()[i];
         if(showDetails)
         {
             std::cout << ": " << std::endl;
-            std::cout << pf.getAllValues()[i] << std::endl << std::endl;
+            std::cout << "    " << pf.getAllValues()[i] << std::endl << std::endl;
         }
         else
         {
@@ -205,6 +212,94 @@ int listExporters(bool showDetails)
         }
     }
 
+    return 0;
+}
+
+int cleanDataDir()
+{
+    StringArray filePathsToDelete;
+    for (int i = 0; i < 4; ++i)
+    {
+        DirectoryIterator iter(StoredSettings::getInstance()->getDataDir(),
+                               false, "*"+String(MDLController::fileTypesToDelete[i]));
+        while (iter.next())
+        {
+            filePathsToDelete.add(iter.getFile().getFullPathName());
+        }
+    }
+    String outStrOk;
+    String outStrError;
+    for (int j = 0; j < filePathsToDelete.size(); ++j)
+    {
+        File f(filePathsToDelete[j]);
+        if(! f.existsAsFile())
+            continue;
+        if (f.moveToTrash())
+            outStrOk << filePathsToDelete[j] << "\n";
+        else
+            outStrError << filePathsToDelete[j] << "\n";
+    }
+    if(outStrOk.isEmpty() && outStrError.isEmpty())
+    {
+        std::cout << "\nNo files were deleted." << std::endl;
+        return 0;
+    }
+    if(outStrOk.isNotEmpty())
+        std::cout << "\nDelete OK:\n" << outStrOk << std::endl;
+    if(outStrError.isNotEmpty())
+        std::cout << "\nError: Could not delete\n" << outStrError << std::endl;
+    return 0;
+}
+
+int printDataDir()
+{
+    std::cout << "\nDATA_DIR: " << StoredSettings::getInstance()->getDataDir();
+    std::cout << std::endl << std::endl;
+    return 0;
+}
+
+String columnizeText(const String& text, const String& prependText, int textLength)
+{
+    String resText;
+    StringArray textLines;
+    StringArray textWords;
+    textWords.addTokens(text, true);
+    textWords.trim();
+    String tmp = "";
+    for (int i = 0; i < textWords.size(); ++i)
+    {
+        if(tmp.length()+textWords[i].length() > textLength)
+        {
+            textLines.add(tmp);
+            tmp = "";
+            tmp << textWords[i];
+        }
+        else
+        {
+            if(i != 0)
+                tmp << " ";
+            tmp << textWords[i];
+        }
+    }
+    if(tmp.isNotEmpty())
+        textLines.add(tmp);
+
+    for (int i = 0; i < textLines.size(); ++i)
+    {
+        resText << prependText << textLines[i] << "\n";
+    }
+    return resText;
+}
+int printVersion()
+{
+    std::cout << "Synth-A-Modeler!" << std::endl
+        << std::endl
+        << "   Version: " << JUCEApplication::getInstance()->getApplicationVersion()
+        << " (Build: " + String(__DATE__) << " " << String(__TIME__) + ")"
+        << ", " + SystemStats::getJUCEVersion() << std::endl
+        << std::endl
+        << columnizeText(BinaryData::about_txt, "   ", 72)
+        << std::endl;
     return 0;
 }
 
@@ -223,12 +318,15 @@ int synthamodeler::performCommandLine (const String& commandLine)
     args.addTokens (commandLine, true);
     args.trim();
 
-    if (matchArgument (args[0], "help"))              return showHelp();
-    if (matchArgument (args[0], "compile"))           return compileMdlToDsp (args);
-    if (matchArgument (args[0], "binary"))            return generateBinary(args);
-    if (matchArgument (args[0], "list-exporters"))    return listExporters(false);
-    if (matchArgument (args[0], "list-exportersd"))   return listExporters(true);
-    if (matchArgument (args[0], "print-xml"))         return printMdlXml (args);
+    if (matchArgument(args[0], "help"))              return showHelp();
+    if (matchArgument(args[0], "compile"))           return compileMdlToDsp(args);
+    if (matchArgument(args[0], "binary"))            return generateBinary(args);
+    if (matchArgument(args[0], "list-exporters"))    return listExporters(false);
+    if (matchArgument(args[0], "list-exportersd"))   return listExporters(true);
+    if (matchArgument(args[0], "print-xml"))         return printMdlXml(args);
+    if (matchArgument(args[0], "clean"))             return cleanDataDir();
+    if (matchArgument(args[0], "data-dir"))          return printDataDir();
+    if (matchArgument(args[0], "version"))           return printVersion();
 
     return commandLineNotPerformed;
 }
