@@ -244,7 +244,10 @@ const String MDLController::generateExternal()
             currentMdl->getFile().copyFileTo(inDataDir);
         }
 
-        outStr << samCmd->generateExternal(inDataDir.getFullPathName());
+        String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
+        String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
+
+        outStr << samCmd->generateExternal(inDataDir.getFullPathName(), exporterValue);
 
         // delete temp MDL file
         if(saveInDataDir)

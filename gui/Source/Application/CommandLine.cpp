@@ -26,6 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/SAMCompiler.h"
 #include "../Models/MDLFile.h"
+#include "../Models/SAMCmd.h"
 
 #include "CommandLine.h"
 
@@ -68,36 +69,24 @@ int showHelp()
 }
 
 //==============================================================================
-bool checkFilesForIO(const String& path1, const String& path2, File& f1, File& f2,
-                     const String& outExt, bool sameDir)
+bool checkFile(const String& path, File& f, bool checkExistance)
 {
-    if(File::isAbsolutePath(path1))
-        f1 = path1;
+    if(File::isAbsolutePath(path))
+        f = path;
     else
-        f1 = File::getCurrentWorkingDirectory().getChildFile(path1);
+        f = File::getCurrentWorkingDirectory().getChildFile(path);
 
-    if(! f1.existsAsFile())
+    if(checkExistance)
     {
-        std::cout << "Input file: " << f1.getFullPathName().toUTF8().getAddress();
-        std::cout << " does not exist" << std::endl;
-        return false;
+        if(! f.existsAsFile())
+        {
+            std::cout << "File: " << f.getFullPathName().toUTF8().getAddress();
+            std::cout << " does not exist" << std::endl;
+            return false;
+        }
     }
-    if(sameDir)
-    {
-        f2 = f1.getParentDirectory().getFullPathName() + "/"
-            + f1.getFileNameWithoutExtension() + outExt;
-    }
-    else
-    {
-        if(File::isAbsolutePath(path2))
-            f2 = path2;
-        else
-            f2 = File::getCurrentWorkingDirectory().getChildFile(path2);
-    }
-
     return true;
 }
-
 
 int compileMdlToDsp (const StringArray& args)
 {
@@ -109,21 +98,19 @@ int compileMdlToDsp (const StringArray& args)
     }
 
     File in;
+    if(! checkFile(args[1], in, true))
+        return 1;
+
     File outFile;
-    bool createOutputInSameDir = false;
-    String outPath;
     if(args.size() == 2)
     {
-        createOutputInSameDir = true;
-        outPath = String::empty;
+        outFile = in.getParentDirectory().getFullPathName() + "/"
+            + in.getFileNameWithoutExtension() + ".dsp";
     }
     else
     {
-        outPath = args[2];
-    }
-    if(! checkFilesForIO(args[1], outPath, in, outFile, "*.dsp", createOutputInSameDir))
-    {
-        return 1;
+        if(! checkFile(args[2], outFile, false))
+            return 1;
     }
 
     ScopedPointer<synthamodeler::MDLFile> mdl;
@@ -153,15 +140,8 @@ int printMdlXml(const StringArray& args)
     }
 
     File in;
-    if(File::isAbsolutePath(args[1]))
-        in = args[1];
-    else
-        in = File::getCurrentWorkingDirectory().getChildFile(args[1]);
-
-    if(! in.existsAsFile())
+    if(! checkFile(args[1], in, true))
     {
-        std::cout << "Input file: " << in.getFullPathName().toUTF8().getAddress();
-        std::cout << " does not exist" << std::endl;
         return 1;
     }
 
@@ -176,7 +156,30 @@ int generateBinary(const StringArray& args)
 {
     hideDockIcon();
 
-    std::cout << "Not implemented yet!" << std::endl;
+    if(args.size() != 3)
+    {
+        showHelp();
+    }
+
+    String exporter = args[1];
+    String mdlPath = args[2];
+    File mdlFile;
+    if(! checkFile(mdlPath, mdlFile, true))
+        return 1;
+
+    ScopedPointer<synthamodeler::MDLFile> mdl;
+    mdl = new MDLFile(mdlFile);
+
+    StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
+    String exporterCmd = spa.getValue(exporter, String::empty);
+    if(exporterCmd == String::empty)
+    {
+        std::cout << "There is no such exporter: " << exporter << std::endl;
+        return 1;
+    }
+    SAMCmd cmd;
+
+    std::cout << cmd.generateExternal(mdl->getFilePath(), exporterCmd, false) << std::endl;
     return 0;
 }
 
@@ -222,10 +225,10 @@ int synthamodeler::performCommandLine (const String& commandLine)
 
     if (matchArgument (args[0], "help"))              return showHelp();
     if (matchArgument (args[0], "compile"))           return compileMdlToDsp (args);
-    if (matchArgument (args[0], "print-xml"))         return printMdlXml (args);
+    if (matchArgument (args[0], "binary"))            return generateBinary(args);
     if (matchArgument (args[0], "list-exporters"))    return listExporters(false);
     if (matchArgument (args[0], "list-exportersd"))   return listExporters(true);
-    if (matchArgument (args[0], "binary"))            return generateBinary(args);
+    if (matchArgument (args[0], "print-xml"))         return printMdlXml (args);
 
     return commandLineNotPerformed;
 }

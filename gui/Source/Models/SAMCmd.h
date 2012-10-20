@@ -92,6 +92,7 @@ public:
 	 * 					with error message
 	 */
 	const String generateExternal(const String& mdlPath,
+                                const String& exporter,
                                 bool useSamConsole = true);
 
 private:

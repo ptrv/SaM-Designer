@@ -176,10 +176,9 @@ const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
 }
 
 const String SAMCmd::generateExternal(const String& mdlPath,
+                                      const String& exporter,
                                       bool useSamConsole)
 {
-    String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
-    String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
 	String processStr;
 #ifdef JUCE_WINDOWS
 	String msg = "Genarating external code is not implemented yet!";
@@ -190,7 +189,7 @@ const String SAMCmd::generateExternal(const String& mdlPath,
 	processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
 	processStr << " ; cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
     processStr << " ; ";
-    processStr << exporterValue;
+    processStr << exporter;
 	processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
     File mdlFile(mdlPath);
     processStr = processStr.replace("$(MDL_NAME)", mdlFile.getFileNameWithoutExtension(), true);
