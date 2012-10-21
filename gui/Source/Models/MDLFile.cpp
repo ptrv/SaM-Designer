@@ -31,10 +31,10 @@
 
 using namespace synthamodeler;
 
-const char* MDLFile::mdlFileExtension = ".mdl";
+const char* MDLFile::mdlFileExtension = ".mdl;.mdlx";
 
 MDLFile::MDLFile()
-: FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
+: FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
   mdlRoot(Objects::MDLROOT), isUntitledFile(true)
 {
 	initMDL();
@@ -42,7 +42,7 @@ MDLFile::MDLFile()
 
 }
 MDLFile::MDLFile(const File& file)
-: FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
+: FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
   mdlRoot(Objects::MDLROOT), isUntitledFile(false)
 {
 	initMDL();
@@ -124,46 +124,33 @@ Result MDLFile::loadDocument (const File& file)
 	destroyMDL();
 	initMDL();
 	MDLParser pa(*this);
-    if(file.getFileExtension().compare(".mdl") == 0)
+    bool parseOk;
+    String ext = file.getFileExtension().trimCharactersAtStart(".");
+    if(file.hasFileExtension(".mdlx"))
     {
-        if (pa.parseMDL(file))
-        {
-            // success
-            SAM_LOG("Opened MDL file: " + getFilePath());
-            setFile(file);
-            setChangedFlag(false);
-            isUntitledFile = false;
-            md5 = MD5(file);
-
-            // Load MDLX file if present
-            String mdlxPath = file.getParentDirectory().getFullPathName() + "/"
-                + file.getFileNameWithoutExtension() + ".mdlx";
-            File mdlxFile(mdlxPath);
-            if(mdlxFile.existsAsFile())
-            {
-                pa.parseMDLX(mdlxFile, false);
-            }
-
-            return Result::ok();
-        }
-        else
-        {
-            // fail
-            String errorMsg = "ERROR: could not load mdl file.";
-            SAM_LOG(errorMsg);
-            return Result::fail(errorMsg);
-        }
+        parseOk = pa.parseMDLX(file);
     }
-    else if(file.getFileExtension().compare(".mdlx") == 0)
+    else
     {
-        if(pa.parseMDLX(file, true))
-        {
+        parseOk = pa.parseMDL(file);
+    }
+    if (parseOk)
+    {
+        // success
+        SAM_LOG("Opened " + ext.toUpperCase() + " file: " + getFilePath());
+        setFile(file);
+        setChangedFlag(false);
+        isUntitledFile = false;
+        md5 = MD5(file);
 
-        }
-        else
-        {
-
-        }
+        return Result::ok();
+    }
+    else
+    {
+        // fail
+        String errorMsg = "ERROR: could not load " + ext + " file.";
+        SAM_LOG(errorMsg);
+        return Result::fail(errorMsg);
     }
 }
 Result MDLFile::saveDocument (const File& file)
@@ -172,21 +159,30 @@ Result MDLFile::saveDocument (const File& file)
     String errorMsg;
 	this->setChangedFlag(false);
 	MDLWriter wr(*this);
-	if(wr.writeMDL(file))
+    String ext;
+    if(file.hasFileExtension(".mdlx"))
+    {
+        saveOk = wr.writeMDLX(file);
+    }
+    else
+    {
+        saveOk = wr.writeMDL(file);
+    }
+    ext = file.getFileExtension().trimCharactersAtStart(".");
+	if(saveOk)
 	{
-		SAM_LOG("Saved MDL file: "+file.getFullPathName());
+		SAM_LOG("Saved "+ ext.toUpperCase() + " file: "+file.getFullPathName());
         setFile(file);
         setChangedFlag(false);
-        saveOk = true;
         md5 = MD5(file);
 	}
 	else
 	{
-		errorMsg = "ERROR: could not save mdl file.";
+		errorMsg = "ERROR: could not save "+ ext + " file.";
 		SAM_LOG(errorMsg);
-        saveOk = false;
 	}
-    if(StoredSettings::getInstance()->getIsUsingMDLX())
+    if(StoredSettings::getInstance()->getIsUsingMDLX()
+        && ! file.hasFileExtension(".mdlx"))
     {
         String savePath = file.getParentDirectory().getFullPathName() + "/"
             + file.getFileNameWithoutExtension() + ".mdlx";
@@ -233,27 +229,27 @@ void MDLFile::mdlChanged()
 //    DBG(mdlRoot.toXmlString());
 }
 //==============================================================================
-void MDLFile::valueTreePropertyChanged (ValueTree& tree, const Identifier& property)
+void MDLFile::valueTreePropertyChanged (ValueTree& /*tree*/, const Identifier& /*property*/)
 {
     mdlChanged();
 }
 
-void MDLFile::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
+void MDLFile::valueTreeChildAdded (ValueTree& /*parentTree*/, ValueTree& /*childWhichHasBeenAdded*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved)
+void MDLFile::valueTreeChildRemoved (ValueTree& /*parentTree*/, ValueTree& /*childWhichHasBeenRemoved*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeChildOrderChanged (ValueTree& parentTree)
+void MDLFile::valueTreeChildOrderChanged (ValueTree& /*parentTree*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeParentChanged (ValueTree& tree)
+void MDLFile::valueTreeParentChanged (ValueTree& /*tree*/)
 {
 }
 

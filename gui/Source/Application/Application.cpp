@@ -238,7 +238,7 @@ void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine
     else
         f = File::getCurrentWorkingDirectory().getChildFile(commandLine);
 
-    if(f.existsAsFile() && f.getFileExtension().compare(".mdl") == 0)
+    if(f.existsAsFile() && f.hasFileExtension(MDLFile::mdlFileExtension))
         openFile(f);
 }
 
@@ -347,7 +347,7 @@ void SynthAModelerApplication::creatNewMDLDocument()
 
 void SynthAModelerApplication::askUserToOpenFile()
 {
-    FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl");
+    FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl;*.mdlx");
 
     if (fc.browseForFileToOpen())
         openFile (fc.getResult());

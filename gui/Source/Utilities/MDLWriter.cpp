@@ -270,7 +270,11 @@ bool MDLWriter::writeMDLX(const File& saveFile)
 {
 	const File& outFile = saveFile;//(savePath);
 
-    String mdlContent = mdlFile.toString();
+    ValueTree mdlxTree = mdlFile.mdlRoot;//.createCopy();
+    mdlxTree.setProperty(Ids::mdlName, outFile.getFileName(), nullptr);
+	mdlxTree.setProperty(Ids::mdlPath, outFile.getFullPathName(), nullptr);
+
+    String mdlContent = mdlxTree.toXmlString();
     // ------------------------------------------------------------------------
     return Utils::writeStringToFile(mdlContent, outFile);
 }
