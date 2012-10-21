@@ -140,7 +140,8 @@ const String MDLController::generateFaust()
     if (StoredSettings::getInstance()->getIsExportConfirm())
         r = Alerts::confirmExport("Really export faust");
 
-    if (StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler())
+    if (StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler()
+        || currentMdl->getFile().hasFileExtension(".mdlx"))
     {
         if(r)
         {
