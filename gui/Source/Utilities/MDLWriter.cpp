@@ -270,7 +270,7 @@ bool MDLWriter::writeMDLX(const File& saveFile)
 {
 	const File& outFile = saveFile;//(savePath);
 
-    ValueTree mdlxTree = mdlFile.mdlRoot;//.createCopy();
+    ValueTree mdlxTree = mdlFile.mdlRoot.createCopy();
     mdlxTree.setProperty(Ids::mdlName, outFile.getFileName(), nullptr);
 	mdlxTree.setProperty(Ids::mdlPath, outFile.getFullPathName(), nullptr);
 
