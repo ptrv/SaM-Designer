@@ -134,6 +134,8 @@ String Utils::getObjectTypeAsString(const Identifier& objType)
 		return "Termination";
 	else if(objType == Ids::junction)
 		return "Junction";
+    else if(objType == Ids::variable)
+        return "Variable";
 	else
 		return String::empty;
 }
@@ -288,6 +290,8 @@ const Identifier& Utils::getObjectGroup(const Identifier& ident)
         return Objects::junctions;
     else if(ident == Ids::variable)
         return Objects::variables;
+    else if(ident == Ids::comment)
+        return Objects::comments;
 
     else
         return Objects::invalid;

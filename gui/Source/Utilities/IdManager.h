@@ -62,6 +62,7 @@ private:
     SortedSet<String> waveguideIds;
     SortedSet<String> terminationIds;
     SortedSet<String> junctionIds;
+    SortedSet<String> commentIds;
 };
 }
 

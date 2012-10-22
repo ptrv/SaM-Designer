@@ -36,6 +36,7 @@
 #include "SnapGridPainter.h"
 #include "AudioOutConnector.h"
 #include "ObjectsHolder.h"
+#include "CommentComponent.h"
 
 using namespace synthamodeler;
 
@@ -125,6 +126,11 @@ void ObjectsHolder::updateComponents()
         else if (AudioOutConnector * const aobj = dynamic_cast<AudioOutConnector*> (getChildComponent(i)))
         {
             aocs.add(aobj);
+        }
+        else if (CommentComponent* const cobj = dynamic_cast<CommentComponent*> (getChildComponent(i)))
+        {
+            checkExtent(cobj->getBounds());
+            cobj->update();
         }
     }
     for (i = 0; i < links.size(); ++i)
@@ -432,6 +438,8 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     m.addSeparator();
     m.addItem(6, "Junction");
     m.addItem(7, "Termination");
+    m.addSeparator();
+    m.addItem(8, "Comment");
 
     const int r = m.show();
 
@@ -485,6 +493,13 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
                                    ObjectFactory::createNewObjectTree(Ids::termination,
                                                                       objController.getNewNameForObject(Ids::termination),
                                                                       mPos.x, mPos.y));
+    }
+    else if (r == 8)
+    {
+        objController.addNewComment(this,
+                                    ObjectFactory::createNewObjectTree(Ids::comment,
+                                                                       objController.getNewNameForObject(Ids::comment),
+                                                                       mPos.x, mPos.y));
     }
 }
 

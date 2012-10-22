@@ -994,6 +994,7 @@
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>
     <ClInclude Include="..\..\Source\Models\SAMCmd.h"/>
     <ClInclude Include="..\..\Source\Models\MDLFile.h"/>
+    <ClInclude Include="..\..\Source\View\CommentEditor.h"/>
     <ClInclude Include="..\..\Source\View\CommentComponent.h"/>
     <ClInclude Include="..\..\Source\View\SnapGridPainter.h"/>
     <ClInclude Include="..\..\Source\View\SelectableObject.h"/>

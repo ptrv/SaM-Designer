@@ -124,6 +124,7 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="Dd613g" name="CommentEditor.h" compile="0" resource="0" file="Source/View/CommentEditor.h"/>
         <FILE id="d64dNC" name="CommentComponent.cpp" compile="1" resource="0"
               file="Source/View/CommentComponent.cpp"/>
         <FILE id="pUpBNd" name="CommentComponent.h" compile="0" resource="0"

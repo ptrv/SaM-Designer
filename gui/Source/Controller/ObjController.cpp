@@ -34,6 +34,7 @@
 #include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
 #include "../Utilities/IdManager.h"
+#include "../View/CommentComponent.h"
 
 #include "ObjController.h"
 
@@ -51,6 +52,7 @@ ObjController::~ObjController()
     audioConnections.clear(true);
     links.clear(true);
     objects.clear(true);
+    comments.clear(true);
     idMgr = nullptr;
 }
 
@@ -294,6 +296,45 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
     }
 }
 
+CommentComponent* ObjController::addComment(ObjectsHolder* holder,
+                                            ValueTree commentValues,
+                                            int index, bool undoable)
+{
+    if(undoable)
+    {
+        AddCommentAction* action = new AddCommentAction(this, commentValues, holder);
+        owner.getUndoManager()->perform(action, "Add new Comment");
+
+        return comments[action->indexAdded];
+    }
+    else
+    {
+        const Identifier& groupName = Utils::getObjectGroup(commentValues.getType().toString());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+
+        subTree.addChild(commentValues,-1, nullptr);
+        idMgr->addId(commentValues.getType(),
+                     commentValues[Ids::identifier].toString(),
+                     nullptr);
+
+        CommentComponent* commentComp = new CommentComponent(*this, commentValues);
+        comments.insert(index, commentComp);
+
+        holder->addAndMakeVisible(commentComp);
+        holder->updateComponents();
+        changed();
+        return commentComp;
+    }
+}
+
+void ObjController::addNewComment(ObjectsHolder* holder, ValueTree commentValues)
+{
+    CommentComponent* cc = addComment(holder, commentValues, -1, true);
+    sObjects.selectOnly(cc);
+}
+
+
 void ObjController::removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder)
 {
     if (undoable)
@@ -365,7 +406,10 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
             if(ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i)))
             {
                 removeObject(oc, true, holder);
-                continue;
+            }
+            else if(CommentComponent* cc = dynamic_cast<CommentComponent*>(temp.getSelectedItem(i)))
+            {
+                removeComment(cc, true, holder);
             }
 //            LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i));
 //            if(lc != nullptr)
@@ -431,6 +475,28 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
                         linkComp->getData()[Ids::identifier].toString(), nullptr);
         subTree.removeChild(linkComp->getData(), nullptr);
         links.removeObject(linkComp);
+    }
+}
+
+void ObjController::removeComment(CommentComponent* commentComp,
+                                  bool undoable, ObjectsHolder* holder)
+{
+    if(undoable)
+    {
+        owner.getUndoManager()->perform(new RemoveCommentAction(holder, commentComp, this));
+    }
+    else
+    {
+        sObjects.deselect(commentComp);
+        sObjects.changed(true);
+
+        const Identifier& groupName = Utils::getObjectGroup(commentComp->getData().getType());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+        idMgr->removeId(commentComp->getData().getType(),
+                        commentComp->getData()[Ids::identifier].toString(), nullptr);
+        subTree.removeChild(commentComp->getData(), nullptr);
+        comments.removeObject(commentComp);
     }
 }
 
@@ -571,6 +637,21 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             variables.removeChild(obj, nullptr);
         }
     }
+
+    ValueTree commentsTree = mdl.getChildWithName(Objects::comments);
+    for (int i = 0; i < commentsTree.getNumChildren(); ++i)
+    {
+        ValueTree comment = commentsTree.getChild(i);
+        if(idMgr->addId(comment.getType(), comment[Ids::identifier].toString(), nullptr))
+        {
+            CommentComponent* cComp = new CommentComponent(*this, comment);
+            comments.add(cComp);
+            holder->addAndMakeVisible(cComp);
+            cComp->update();
+            SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
+        }
+    }
+
     holder->updateComponents();
 }
 
@@ -591,6 +672,10 @@ void ObjController::selectAll(bool shouldBeSelected)
         {
             sObjects.addToSelection(audioConnections.getUnchecked(k));
         }
+        for (int l = 0; l < comments.size(); ++l)
+        {
+            sObjects.addToSelection(comments.getUnchecked(l));
+        }
     }
     else
     {
@@ -608,6 +693,15 @@ void ObjController::startDragging()
     for (int i = 0; i < objects.size(); ++i)
     {
         ObjectComponent * const c = objects.getUnchecked(i);
+
+        Point<int> r(c->getPosition());
+
+        c->getProperties().set("xDragStart", r.getX());
+        c->getProperties().set("yDragStart", r.getY());
+    }
+    for (int i = 0; i < comments.size(); ++i)
+    {
+        CommentComponent * const c = comments.getUnchecked(i);
 
         Point<int> r(c->getPosition());
 
@@ -639,6 +733,22 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
             //c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
             c->setPosition(Point<int>(r.x, r.y)-c->getPinOffset(), true);
+        }
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
+        {
+            const int startX = cc->getProperties() ["xDragStart"];
+            const int startY = cc->getProperties() ["yDragStart"];
+//            const int startX = cc->getPosition().x;
+//            const int startY = cc->getPosition().y;
+
+            Point<int> r(cc->getPosition());
+
+            r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
+                    owner.getHolderComponent()->snapPosition(startY + dy));
+
+            cc->setPosition(Point<int>(r.x + cc->getWidth() / 2, r.y + cc->getHeight() / 2), true);
+//            c->setPosition(Point<int>(r.x, r.y)-cc->getPinOffset(), true);
+
         }
     }
 

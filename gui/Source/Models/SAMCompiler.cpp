@@ -225,7 +225,7 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
             if (wgSuffixesIdx == -1)
                 continue;
 
-            StringArray& wgSuffixes = wgWithSuffixes[wgSuffixesIdx]->wgSuffixes;
+            const StringArray& wgSuffixes = wgWithSuffixes[wgSuffixesIdx]->wgSuffixes;
             junctString << wg[Ids::identifier].toString() << wgSuffixes[1];
             junctString << " = ";
             junctString << junct[Ids::identifier].toString() << jTO;

@@ -257,10 +257,21 @@ static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
 	return newTree;
 }
 
+static ValueTree createNewCommentTree(const String& newName, int x, int y)
+{
+    ValueTree newTree(Ids::comment);
+
+	newTree.setProperty(Ids::posX, x, nullptr);
+	newTree.setProperty(Ids::posY, y, nullptr);
+	newTree.setProperty(Ids::identifier,newName, nullptr);
+    newTree.setProperty(Ids::value, "", nullptr);
+    newTree.setProperty(Ids::fontSize, 16.0f, nullptr);
+    return newTree;
+}
 
 ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
-                              const String& newName,
-                              int x, int y)
+                                             const String& newName,
+                                             int x, int y)
 {
 	if(objType == Ids::mass)
 		return createNewMassTree(newName, x, y);
@@ -276,6 +287,8 @@ ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
         return createNewJunctionTree(newName, x, y);
     else if(objType == Ids::termination)
         return createNewTerminationTree(newName, x, y);
+    else if(objType == Ids::comment)
+        return createNewCommentTree(newName, x, y);
 	else
 		return ValueTree::invalid;
 }

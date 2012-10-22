@@ -50,6 +50,7 @@ IdManager::~IdManager()
     waveguideIds.clear();
     terminationIds.clear();
     junctionIds.clear();
+    commentIds.clear();
 
 }
 
@@ -79,6 +80,8 @@ SortedSet<String>* IdManager::getSet(const Identifier& objId)
         return &terminationIds;
     else if(objId == Ids::junction)
         return &junctionIds;
+    else if(objId == Ids::comment)
+        return &commentIds;
     else
         return nullptr;
 }
@@ -276,6 +279,8 @@ String IdManager::getObjNamePrefix(const Identifier& objId)
         return "term";
     else if(objId == Ids::junction)
         return "junct";
+    else if(objId == Ids::comment)
+        return "comment";
 
     else
         return String::empty;

@@ -78,6 +78,7 @@ namespace Ids
     DECLARE_ID (value);
     DECLARE_ID (variable);
     DECLARE_ID (comment);
+    DECLARE_ID (fontSize);
 
     const Identifier class_ ("class");
 

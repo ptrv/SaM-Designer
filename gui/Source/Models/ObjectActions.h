@@ -35,6 +35,7 @@
 #include "../View/ObjectsHolder.h"
 #include "../Controller/ObjController.h"
 #include "../View/SelectableObject.h"
+#include "../View/CommentComponent.h"
 #include "ObjectIDs.h"
 
 namespace synthamodeler
@@ -484,6 +485,141 @@ private:
     int oldIndexAudioOut;
     bool sourceIsLink;
 };
+
+class AddCommentAction : public UndoableAction
+{
+public:
+	AddCommentAction(ObjController* objController_,
+                 ValueTree objTree_, ObjectsHolder* holder_)
+	: objTree(objTree_.createCopy()),
+        holderComp(holder_),
+        objController(objController_)
+	{
+	}
+	~AddCommentAction()
+	{
+	}
+
+	bool perform()
+	{
+        CommentComponent* commentComp = objController->addComment(holderComp, objTree, -1,false);
+        indexAdded = objController->indexOfComment(commentComp);
+        String logText = "Add ";
+        logText << objTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
+		SAM_LOG(logText);
+		return true;
+	}
+
+	bool undo()
+	{
+        objController->removeComment(objController->getComment(indexAdded), false, holderComp);
+
+        String logText = "Undo add ";
+        logText <<  objTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
+		SAM_LOG(logText);
+		return true;
+	}
+    int indexAdded;
+private:
+    ValueTree objTree;
+	ObjectsHolder* holderComp;
+    ObjController* objController;
+
+
+};
+
+class RemoveCommentAction : public UndoableAction
+{
+public:
+    RemoveCommentAction(ObjectsHolder* objHolderComp_,
+                       CommentComponent* componentToRemove,
+                       ObjController* objController_)
+    :
+    holderComp(objHolderComp_),
+    objController(objController_),
+    oldIndex(-1)
+	{
+        oldValue = componentToRemove->getData().createCopy();
+        oldIndex = objController->indexOfComment(componentToRemove);
+	}
+	~RemoveCommentAction()
+	{
+	}
+
+	bool perform()
+	{
+        SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
+        CommentComponent* cc = objController->getComment(oldIndex);
+        if(objController->getSelectedObjects().getNumSelected() == 0)
+        {
+            objController->getSelectedObjects().selectOnly(cc);
+        }
+        objController->removeComment(cc, false, holderComp);
+		return true;
+	}
+
+	bool undo()
+	{
+        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
+
+        CommentComponent* oc = objController->addComment(holderComp, oldValue, oldIndex, false);
+        if(objController->getSelectedObjects().getNumSelected() == 0)
+        {
+            objController->getSelectedObjects().selectOnly(oc);
+        }
+
+		return true;
+	}
+private:
+	ObjectsHolder* holderComp;
+	ValueTree oldValue;
+    ObjController* objController;
+    int oldIndex;
+
+
+};
+class MoveCommentAction : public UndoableAction {
+public:
+	MoveCommentAction(ObjectsHolder* objHolderComp_,
+			CommentComponent* componentToMove,
+			Point<int> newPos_,
+            ObjController* objController_)
+	: holderComp(objHolderComp_),
+//	  objComp(componentToMove),
+      objController(objController_),
+	  newPos(newPos_),
+      oldPos(componentToMove->getActualPos())
+	{
+        indexOfCommentToMove = objController->indexOfComment(componentToMove);
+	}
+
+	~MoveCommentAction()
+	{
+
+	}
+
+	bool perform()
+	{
+        CommentComponent* cc = objController->getComment(indexOfCommentToMove);
+        cc->setPosition(newPos, false);
+		return true;
+	}
+
+	bool undo()
+	{
+        CommentComponent* cc = objController->getComment(indexOfCommentToMove);
+        cc->setPosition(oldPos, false);
+		return true;
+	}
+private:
+	ObjectsHolder* holderComp;
+//	ObjectComponent* objComp;
+    ObjController* objController;
+	Point<int> newPos;
+    Point<int> oldPos;
+    int indexOfCommentToMove;
+};
+
 }
 
 #endif  // __OBJECTACTIONS_H_7C20FDA1__

@@ -1293,6 +1293,9 @@
     <ClInclude Include="..\..\Source\Models\MDLFile.h">
       <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\View\CommentEditor.h">
+      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\View\CommentComponent.h">
       <Filter>Synth-A-ModelerGUI\Source\View</Filter>
     </ClInclude>
