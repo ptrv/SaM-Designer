@@ -33,7 +33,7 @@ class CommentComponent;
 class CommentEditor : public TextEditor
 {
 public:
-    CommentEditor(CommentComponent& p, float fontHeight) : TextEditor("CommentEditor"), parent(p), fHeight(fontHeight)
+    CommentEditor(CommentComponent& p, float fontHeight, Colour textColour_) : TextEditor("CommentEditor"), parent(p), fHeight(fontHeight)
     {
 //        MemoryInputStream mis(BinaryData::UbuntuR_ttf, BinaryData::UbuntuR_ttfSize, false);
 //        CustomTypeface* ctf = new CustomTypeface(mis);
@@ -46,6 +46,8 @@ public:
         setColour(TextEditor::backgroundColourId, Colour(0x00000000));
         setColour(TextEditor::shadowColourId, Colour(0x00000000));
 
+        setColour(TextEditor::textColourId, textColour_);
+        
         BorderSize<int> b(0, 0, 0, 0);
         setBorder(b);
 
@@ -104,6 +106,40 @@ public:
     {
         applyFontToAllText(font);
     }
+
+    void addPopupMenuItems (PopupMenu& m, const MouseEvent* mouseClickEvent)
+    {
+        TextEditor::addPopupMenuItems(m, mouseClickEvent);
+
+        m.addSeparator();
+        m.addItem(CommandIDs::selectTextColour, "Text color");
+    }
+
+    void performPopupMenuAction (int menuItemID)
+    {
+        switch (menuItemID)
+        {
+        case CommandIDs::selectTextColour:
+            selectTextColour();
+            break;
+        default:
+            TextEditor::performPopupMenuAction(menuItemID);
+            break;
+        }
+    }
+
+    void selectTextColour()
+    {
+        ColourSelector* colourSelector = new ColourSelector();
+        colourSelector->setName ("comment colour");
+        colourSelector->setCurrentColour (findColour (TextEditor::textColourId));
+        colourSelector->addChangeListener (&parent);
+        colourSelector->setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
+        colourSelector->setSize (300, 400);
+
+        CallOutBox::launchAsynchronously (colourSelector, getScreenBounds(), nullptr);
+    }
+
 private:
     CommentComponent& parent;
     Font font;

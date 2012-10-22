@@ -43,7 +43,8 @@ CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
 			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
 	setComponentEffect (&shadow);
 
-    textField = new CommentEditor(*this, data.getProperty(Ids::fontSize, 16.0f));
+    commentColour = Colour::fromString(data.getProperty(Ids::commentColour, Colours::black.toString()));
+    textField = new CommentEditor(*this, data.getProperty(Ids::fontSize, 16.0f), commentColour);
     textField->setText(data[Ids::value].toString(), false);
     textField->addListener(this);
     addAndMakeVisible(textField);
@@ -229,14 +230,23 @@ void CommentComponent::toggleSelected()
 	repaint();
 }
 
-void CommentComponent::changeListenerCallback (ChangeBroadcaster*)
+void CommentComponent::changeListenerCallback (ChangeBroadcaster* source)
 {
-    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
-
-    if (selected != nowSelected)
+    if (ColourSelector* cs = dynamic_cast <ColourSelector*> (source))
     {
-        selected = nowSelected;
-        repaint();
+        commentColour = cs->getCurrentColour();
+        textField->setColour (TextEditor::textColourId, commentColour);
+        textField->applyFont();
+    }
+    else
+    {
+        const bool nowSelected = owner.getSelectedObjects().isSelected (this);
+
+        if (selected != nowSelected)
+        {
+            selected = nowSelected;
+            repaint();
+        }
     }
 }
 
@@ -268,6 +278,12 @@ void CommentComponent::textEditorFocusLost(TextEditor&)
         owner.getUndoManager()->beginNewTransaction("Set comment font height");
         data.setProperty(Ids::fontSize, textField->getFont().getHeight(), owner.getUndoManager());
     }
+    if(data[Ids::commentColour].toString().compare(commentColour.toString()) != 0)
+    {
+        owner.getUndoManager()->beginNewTransaction("Set comment text colour");
+        data.setProperty(Ids::commentColour, commentColour.toString(), owner.getUndoManager());
+    }
+
 }
 
 void CommentComponent::valueTreePropertyChanged(ValueTree& treeWhosePropertyHasChanged,

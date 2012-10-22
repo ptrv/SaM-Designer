@@ -104,6 +104,8 @@ namespace CommandIDs
     static const int moveDownFine           = 0x202410;
     static const int moveLeftFine           = 0x202420;
     static const int moveRightFine          = 0x202430;
+
+    static const int selectTextColour       = 0x202710;
 }
 
 namespace CommandCategories

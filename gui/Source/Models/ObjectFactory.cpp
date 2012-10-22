@@ -266,6 +266,7 @@ static ValueTree createNewCommentTree(const String& newName, int x, int y)
 	newTree.setProperty(Ids::identifier,newName, nullptr);
     newTree.setProperty(Ids::value, "", nullptr);
     newTree.setProperty(Ids::fontSize, 16.0f, nullptr);
+    newTree.setProperty(Ids::commentColour, Colours::black.toString(), nullptr);
     return newTree;
 }
 
