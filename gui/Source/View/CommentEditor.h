@@ -33,13 +33,13 @@ class CommentComponent;
 class CommentEditor : public TextEditor
 {
 public:
-    CommentEditor(CommentComponent& p, float fontHeight, Colour textColour_) : TextEditor("CommentEditor"), parent(p), fHeight(fontHeight)
+    CommentEditor(CommentComponent& p, float fontHeight, Colour textColour_) : TextEditor("CommentEditor"), parent(p)
     {
 //        MemoryInputStream mis(BinaryData::UbuntuR_ttf, BinaryData::UbuntuR_ttfSize, false);
 //        CustomTypeface* ctf = new CustomTypeface(mis);
 //        ctf->setCharacteristics("Ubuntu", 0.7f, false, false, 'a');
 //        font = Font(ctf);
-        font.setHeight(fHeight);
+        font.setHeight(fontHeight);
         applyFontToAllText(font);
 //        setFont(font);
         setTextToShowWhenEmpty("(comment)", Colours::grey);
@@ -81,13 +81,13 @@ public:
             float fontH = font.getHeight();
             if(wheel.deltaY < 0.0f)
             {
-                fHeight = fontH - 0.5f;
+                fontH -= 0.5f;
             }
             else if(wheel.deltaY > 0.0f)
             {
-                fHeight = fontH + 0.5f;
+                fontH += 0.5f;
             }
-            font.setHeight(fHeight);
+            font.setHeight(fontH);
             applyFontToAllText(font);
             parent.resized();
         }
@@ -99,8 +99,7 @@ public:
 
     void setFontHeight(float newHeight)
     {
-        fHeight = newHeight;
-        font.setHeight(fHeight);
+        font.setHeight(newHeight);
     }
     void applyFont()
     {
@@ -143,7 +142,6 @@ public:
 private:
     CommentComponent& parent;
     Font font;
-    float fHeight;
 };
 }
 
