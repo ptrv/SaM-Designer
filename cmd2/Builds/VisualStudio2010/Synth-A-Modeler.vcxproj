@@ -126,6 +126,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\gui\Source\Models\SAMCompiler.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\..\juce\modules\juce_core\text\juce_CharacterFunctions.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
@@ -396,6 +397,7 @@
     <ClCompile Include="..\..\..\juce\modules\juce_events\juce_events.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\gui\Source\Models\SAMCompiler.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_CharacterFunctions.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_CharPointer_ASCII.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_CharPointer_UTF16.h"/>
@@ -512,6 +514,7 @@
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_Message.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageListener.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageManager.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_NotificationType.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_MultiTimer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_Timer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\broadcasters\juce_ActionBroadcaster.h"/>

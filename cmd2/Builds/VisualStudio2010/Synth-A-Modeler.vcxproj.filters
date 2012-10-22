@@ -100,6 +100,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\gui\Source\Models\SAMCompiler.cpp">
+      <Filter>Synth-A-Modeler\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Main.cpp">
       <Filter>Synth-A-Modeler\Source</Filter>
     </ClCompile>
@@ -399,6 +402,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\gui\Source\Models\SAMCompiler.h">
+      <Filter>Synth-A-Modeler\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_CharacterFunctions.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
@@ -745,6 +751,9 @@
       <Filter>Juce Modules\juce_events\messages</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageManager.h">
+      <Filter>Juce Modules\juce_events\messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_NotificationType.h">
       <Filter>Juce Modules\juce_events\messages</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_MultiTimer.h">

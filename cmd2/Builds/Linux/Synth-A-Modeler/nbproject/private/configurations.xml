@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="85">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="Models"
+                   displayName="Models"
+                   projectFiles="true"
+                   root="../../../../gui/Source/Models">
+      <itemPath>../../../../gui/Source/Models/ObjectIDs.h</itemPath>
+      <itemPath>../../../../gui/Source/Models/SAMCompiler.cpp</itemPath>
+      <itemPath>../../../../gui/Source/Models/SAMCompiler.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="modules"
                    displayName="modules"
                    projectFiles="true"
@@ -280,6 +288,7 @@
           <itemPath>../../../../juce/modules/juce_events/messages/juce_MessageListener.h</itemPath>
           <itemPath>../../../../juce/modules/juce_events/messages/juce_MessageManager.cpp</itemPath>
           <itemPath>../../../../juce/modules/juce_events/messages/juce_MessageManager.h</itemPath>
+          <itemPath>../../../../juce/modules/juce_events/messages/juce_NotificationType.h</itemPath>
         </logicalFolder>
         <logicalFolder name="native" displayName="native" projectFiles="true">
           <itemPath>../../../../juce/modules/juce_events/native/juce_ScopedXLock.h</itemPath>
@@ -326,367 +335,436 @@
         </makeTool>
       </makefileType>
       <item path="../../../../juce/modules/juce_core/containers/juce_AbstractFifo.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/containers/juce_DynamicObject.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/containers/juce_NamedValueSet.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/containers/juce_PropertySet.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/containers/juce_Variant.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/files/juce_DirectoryIterator.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/files/juce_File.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/files/juce_FileInputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/files/juce_FileOutputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/files/juce_FileSearchPath.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/files/juce_TemporaryFile.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/json/juce_JSON.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../../../juce/modules/juce_core/logging/juce_FileLogger.cpp"
+      <item path="../../../../juce/modules/juce_core/juce_core.cpp"
             ex="false"
+            tool="1"
+            flavor2="4">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="../../../../juce/modules/juce_core/logging/juce_FileLogger.cpp"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/logging/juce_Logger.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/maths/juce_BigInteger.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/maths/juce_Expression.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/maths/juce_Random.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/memory/juce_MemoryBlock.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/misc/juce_Result.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/misc/juce_Uuid.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/native/juce_linux_Files.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/native/juce_linux_Network.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/native/juce_linux_SystemStats.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/native/juce_linux_Threads.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/native/juce_posix_NamedPipe.cpp"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/native/juce_posix_SharedCode.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/network/juce_MACAddress.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/network/juce_NamedPipe.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/network/juce_Socket.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/network/juce_URL.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_BufferedInputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_FileInputSource.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_InputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_MemoryInputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_MemoryOutputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_OutputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/streams/juce_SubregionStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/system/juce_SystemStats.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_CharacterFunctions.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_Identifier.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_LocalisedStrings.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_String.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_StringArray.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_StringPairArray.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_StringPool.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/text/juce_TextDiff.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/threads/juce_ChildProcess.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/threads/juce_ReadWriteLock.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/threads/juce_Thread.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/threads/juce_ThreadPool.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/threads/juce_TimeSliceThread.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/time/juce_PerformanceCounter.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/time/juce_RelativeTime.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/time/juce_Time.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/unit_tests/juce_UnitTest.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/xml/juce_XmlDocument.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/xml/juce_XmlElement.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/juce_GZIPCompressorOutputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/juce_GZIPDecompressorInputStream.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/juce_ZipFile.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/adler32.c"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/compress.c"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/crc32.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/crc32.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/deflate.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/deflate.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/inffast.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/inffast.h"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/inffixed.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/inflate.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/inflate.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/inftrees.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/inftrees.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/trees.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/trees.h"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/zconf.h"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/zlib.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_core/zip/zlib/zutil.c"
-            ex="false"
+            ex="true"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_core/zip/zlib/zutil.h"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_data_structures/app_properties/juce_ApplicationProperties.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_data_structures/app_properties/juce_PropertiesFile.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../../../juce/modules/juce_data_structures/undomanager/juce_UndoManager.cpp"
+      <item path="../../../../juce/modules/juce_data_structures/juce_data_structures.cpp"
             ex="false"
+            tool="1"
+            flavor2="4">
+        <ccTool>
+        </ccTool>
+      </item>
+      <item path="../../../../juce/modules/juce_data_structures/undomanager/juce_UndoManager.cpp"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_data_structures/values/juce_Value.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
       <item path="../../../../juce/modules/juce_data_structures/values/juce_ValueTree.cpp"
-            ex="false"
+            ex="true"
             tool="3"
             flavor2="0">
       </item>
@@ -714,6 +792,13 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../../../juce/modules/juce_events/juce_events.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+        <ccTool>
+        </ccTool>
       </item>
       <item path="../../../../juce/modules/juce_events/messages/juce_ApplicationBase.cpp"
             ex="false"
@@ -749,6 +834,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../../Source/Main.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool>
+        </ccTool>
       </item>
       <dbx_gdbdebugger version="1">
         <gdb_pathmaps>

@@ -43,6 +43,7 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/SAMCompiler_62c3cf3f.o \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/juce_core_5f5a3bad.o \
   $(OBJDIR)/juce_data_structures_7e517fa9.o \
@@ -66,6 +67,11 @@ clean:
 strip:
 	@echo Stripping Synth-A-Modeler
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
+
+$(OBJDIR)/SAMCompiler_62c3cf3f.o: ../../../gui/Source/Models/SAMCompiler.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SAMCompiler.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 	-@mkdir -p $(OBJDIR)

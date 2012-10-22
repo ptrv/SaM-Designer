@@ -4,6 +4,8 @@
               bundleIdentifier="com.yourcompany.SynthAModeler" jucerVersion="3.0.0">
   <MAINGROUP id="f7GfJp" name="Synth-A-Modeler">
     <GROUP id="{8DDBB5DD-5098-4B65-2138-49AE72BE4E73}" name="Source">
+      <FILE id="ob3xKP" name="SAMCompiler.h" compile="0" resource="0" file="../gui/Source/Models/SAMCompiler.h"/>
+      <FILE id="F0QcWG" name="SAMCompiler.cpp" compile="1" resource="0" file="../gui/Source/Models/SAMCompiler.cpp"/>
       <FILE id="dwjatb" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
