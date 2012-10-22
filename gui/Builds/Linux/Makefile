@@ -59,6 +59,7 @@ OBJECTS := \
   $(OBJDIR)/StoredSettings_125117b4.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
+  $(OBJDIR)/SAMCompiler_55c40662.o \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
@@ -180,6 +181,11 @@ $(OBJDIR)/MDLController_4aad0d67.o: ../../Source/Controller/MDLController.cpp
 $(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ObjController.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/SAMCompiler_55c40662.o: ../../Source/Models/SAMCompiler.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SAMCompiler.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ObjectFactory_a170b74f.o: ../../Source/Models/ObjectFactory.cpp

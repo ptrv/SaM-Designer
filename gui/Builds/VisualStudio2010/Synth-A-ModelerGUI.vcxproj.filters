@@ -283,6 +283,9 @@
     <ClCompile Include="..\..\Source\Controller\ObjController.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Controller</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Models\SAMCompiler.cpp">
+      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
     </ClCompile>

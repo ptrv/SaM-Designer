@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\Source\Utilities\StoredSettings.cpp"/>
     <ClCompile Include="..\..\Source\Controller\MDLController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\ObjController.cpp"/>
+    <ClCompile Include="..\..\Source\Models\SAMCompiler.cpp"/>
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp"/>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp"/>
