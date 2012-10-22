@@ -164,7 +164,7 @@ const String SAMCmd::generateFaustCode(const String& inPath,
 
 const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
                                               const String& outPath,
-                                              bool useSamConsole)
+                                              bool /*useSamConsole*/)
 {
     String faustCodeString = SAMCompiler::compile(mdlRoot_);
 
