@@ -23,6 +23,7 @@
 
 */
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Application/Application.h"
 #include "StoredSettings.h"
 #include "../Models/ObjectIDs.h"
 #include "../View/BaseObjectComponent.h"
@@ -83,6 +84,16 @@ void Utils::openHelpUrl(const String& helpId)
 	helpUrl.launchInDefaultBrowser();
 }
 
+void Utils::openHelpPatch(const String& helpId)
+{
+    String helpPatch = helpId + "-help.mdlx";
+    File f = StoredSettings::getInstance()->getDataDir() + "/help-patches/" + helpPatch;
+
+    if(f.existsAsFile())
+        SynthAModelerApplication::getApp()->openFile(f);
+    else
+        openHelpUrl(helpId);
+}
 void Utils::openDataDir()
 {
 #if JUCE_MAC

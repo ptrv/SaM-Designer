@@ -71,6 +71,6 @@ void BaseObjectComponent::showContextMenu()
 	}
 	else if (r == 3)
 	{
-        Utils::openHelpUrl(data.getType().toString());
+        Utils::openHelpPatch(data.getType().toString());
 	}
 }

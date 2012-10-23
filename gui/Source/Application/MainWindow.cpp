@@ -177,7 +177,10 @@ void MainAppWindow::restoreWindowPosition()
 
     if (mdlController->getMDLFile() != nullptr)
     {
-        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName());
+        String defaultVal = String::empty;
+        if(mdlController->getMDLFile()->getFile().getFileNameWithoutExtension().endsWith("-help"))
+            defaultVal = "100 100 450 400";
+        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName(), defaultVal);
         double newZoomFactor = StoredSettings::getInstance()->getProps().getDoubleValue (getProjectWindowZoomName(), 1.0);
         getMDLFileContentComponent()->setZoom(newZoomFactor);
     }

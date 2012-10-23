@@ -64,6 +64,7 @@ FileLogger* getLogger();
 void openHelpUrl();
 
 void openHelpUrl(const String& helpId);
+void openHelpPatch(const String& helpId);
 /**
  * Opens data directory in file explorer.
  */
