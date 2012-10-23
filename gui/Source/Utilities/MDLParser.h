@@ -43,7 +43,7 @@ public:
 	 * @return		true if parsing succeeded
 	 */
 	bool parseMDL(const File& f);
-    bool parseMDLX(const File& f);
+    bool parseMDLX(const File& f, bool onlyExtras=false);
 private:
 	MDLFile& mdlFile;
 };

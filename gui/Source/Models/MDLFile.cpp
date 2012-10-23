@@ -133,6 +133,17 @@ Result MDLFile::loadDocument (const File& file)
     else
     {
         parseOk = pa.parseMDL(file);
+        if(StoredSettings::getInstance()->getIsUsingMDLX())
+        {
+            String mdlxPath = file.getParentDirectory().getFullPathName() + "/"
+                + file.getFileNameWithoutExtension() + ".mdlx";
+
+            File mdlxF(mdlxPath);
+            if(mdlxF.existsAsFile())
+            {
+                pa.parseMDLX(mdlxF, true);
+            }
+        }
     }
     if (parseOk)
     {

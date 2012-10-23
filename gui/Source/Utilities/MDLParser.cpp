@@ -345,14 +345,32 @@ bool MDLParser::parseMDL(const File& f)
 	return true;
 }
 
-bool MDLParser::parseMDLX(const File& f)
+bool MDLParser::parseMDLX(const File& f, bool onlyExtras)
 {
     XmlElement* xml = XmlDocument::parse(f);
     if (xml != nullptr)
     {
         ValueTree mdlxTree = ValueTree::fromXml(*xml);
-        mdlFile.mdlRoot = mdlxTree.createCopy();
-
+        if (onlyExtras)
+        {
+            ValueTree comments = mdlxTree.getChildWithName(Objects::comments);
+            if(comments.isValid())
+            {
+                mdlxTree.removeChild(comments, nullptr);
+                ValueTree tmp1 = mdlxTree.createCopy();
+                ValueTree tmp2 = mdlFile.mdlRoot.createCopy();
+                tmp1.setProperty(Ids::mdlName, "", nullptr);
+                tmp1.setProperty(Ids::mdlPath, "", nullptr);
+                tmp2.setProperty(Ids::mdlName, "", nullptr);
+                tmp2.setProperty(Ids::mdlPath, "", nullptr);
+                if(tmp1.isEquivalentTo(tmp2))
+                    mdlFile.mdlRoot.addChild(comments, -1, nullptr);
+            }
+        }
+        else
+        {
+            mdlFile.mdlRoot = mdlxTree.createCopy();
+        }
         delete xml;
         return true;
     }
