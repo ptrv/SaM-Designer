@@ -81,7 +81,7 @@ void CommentEditor::mouseUp(const MouseEvent& e)
 
 void CommentEditor::mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel)
 {
-    if (e.mods.isAltDown() && hasKeyboardFocus(true))
+    if (e.mods.isCommandDown() && hasKeyboardFocus(true))
     {
         float fontH = font.getHeight();
         if (wheel.deltaY < 0.0f)

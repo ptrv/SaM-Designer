@@ -79,7 +79,6 @@ public:
     void valueTreeChildOrderChanged(ValueTree& parentTreeWhoseChildrenHaveMoved);
     void valueTreeParentChanged(ValueTree& treeWhoseParentHasChanged);
 
-    void showContextMenu();
 private:
     void changeListenerCallback (ChangeBroadcaster*);
 

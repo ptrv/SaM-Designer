@@ -113,7 +113,6 @@ void CommentComponent::paint(Graphics& g)
 void CommentComponent::setOriginalPosition()
 {
 	originalPos = localPointToGlobal (Point<int>());
-
 }
 
 void CommentComponent::mouseDown (const MouseEvent& e)
@@ -123,12 +122,6 @@ void CommentComponent::mouseDown (const MouseEvent& e)
 	toFront (true);
 
     dragging = false;
-
-    if (e.mods.isPopupMenu())
-    {
-        showContextMenu();
-        return; // this may be deleted now..
-    }
 
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 
@@ -166,14 +159,8 @@ void CommentComponent::mouseUp (const MouseEvent& e)
     if (dragging)
         owner.endDragging();
 
-//	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
-//	{
-//		getObjectsHolder()->editObjectProperties(this);
-//	}
-
     owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging,
                                                         mouseDownSelectStatus);
-
     update();
 }
 
@@ -301,7 +288,16 @@ void CommentComponent::valueTreePropertyChanged(ValueTree& treeWhosePropertyHasC
             textField->setFontHeight(data[Ids::fontSize]);
             textField->applyFont();
         }
-
+    }
+    if(treeWhosePropertyHasChanged == data && property == Ids::commentColour)
+    {
+        Colour textColour = Colour::fromString(data[Ids::commentColour].toString());
+        if(textColour != commentColour)
+        {
+            commentColour = textColour;
+            textField->setColour(TextEditor::textColourId, commentColour);
+            textField->applyFont();
+        }
     }
 }
 void CommentComponent::valueTreeChildAdded(ValueTree& /*parentTree*/,
@@ -321,8 +317,4 @@ void CommentComponent::valueTreeChildOrderChanged(ValueTree& /*parentTreeWhoseCh
 void CommentComponent::valueTreeParentChanged(ValueTree& /*treeWhoseParentHasChanged*/)
 {
     
-}
-
-void CommentComponent::showContextMenu()
-{
 }
