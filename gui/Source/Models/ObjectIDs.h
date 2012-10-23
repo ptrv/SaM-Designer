@@ -90,7 +90,7 @@ namespace Objects
 {
 	#define DECLARE_ID(name)      const Identifier name (#name)
 
-	DECLARE_ID(MDLROOT);
+	DECLARE_ID(synthamodeler);
 	DECLARE_ID(masses);
 	DECLARE_ID(links);
     DECLARE_ID(variables);

@@ -35,7 +35,7 @@ const char* MDLFile::mdlFileExtension = ".mdl;.mdlx";
 
 MDLFile::MDLFile()
 : FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
-  mdlRoot(Objects::MDLROOT), isUntitledFile(true)
+  mdlRoot(Objects::synthamodeler), isUntitledFile(true)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -43,7 +43,7 @@ MDLFile::MDLFile()
 }
 MDLFile::MDLFile(const File& file)
 : FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
-  mdlRoot(Objects::MDLROOT), isUntitledFile(false)
+  mdlRoot(Objects::synthamodeler), isUntitledFile(false)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -79,7 +79,7 @@ bool MDLFile::perform (UndoableAction* const action, const String& actionName)
 
 void MDLFile::initMDL()
 {
-	mdlRoot = ValueTree(Objects::MDLROOT);
+	mdlRoot = ValueTree(Objects::synthamodeler);
 	mdlRoot.setProperty(Ids::mdlName, "Untitled", nullptr);
 	mdlRoot.setProperty(Ids::mdlPath, String::empty, nullptr);
 	setChangedFlag(false);

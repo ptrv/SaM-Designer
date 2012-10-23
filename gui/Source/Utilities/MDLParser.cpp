@@ -62,7 +62,7 @@ bool MDLParser::parseMDL(const File& f)
     const File& in = f;//mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
 
-	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
+	ValueTree mdlTree(Objects::synthamodeler);// = mdlFile.mdlRoot;
 
 	mdlTree.setProperty(Ids::mdlName, in.getFileName(), nullptr);
 	mdlTree.setProperty(Ids::mdlPath, in.getFullPathName(), nullptr);
