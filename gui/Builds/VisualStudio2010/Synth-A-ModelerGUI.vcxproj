@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp"/>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp"/>
+    <ClCompile Include="..\..\Source\View\CommentEditor.cpp"/>
     <ClCompile Include="..\..\Source\View\CommentComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\SnapGridPainter.cpp"/>
     <ClCompile Include="..\..\Source\View\AudioOutConnector.cpp"/>

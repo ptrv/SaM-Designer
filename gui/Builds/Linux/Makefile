@@ -63,6 +63,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/CommentEditor_abeb432b.o \
   $(OBJDIR)/CommentComponent_3199b309.o \
   $(OBJDIR)/SnapGridPainter_bcfdcdba.o \
   $(OBJDIR)/AudioOutConnector_995cd494.o \
@@ -201,6 +202,11 @@ $(OBJDIR)/SAMCmd_cf7547a1.o: ../../Source/Models/SAMCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/CommentEditor_abeb432b.o: ../../Source/View/CommentEditor.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling CommentEditor.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/CommentComponent_3199b309.o: ../../Source/View/CommentComponent.cpp

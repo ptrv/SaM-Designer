@@ -295,6 +295,9 @@
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\View\CommentEditor.cpp">
+      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\View\CommentComponent.cpp">
       <Filter>Synth-A-ModelerGUI\Source\View</Filter>
     </ClCompile>

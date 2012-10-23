@@ -33,112 +33,19 @@ class CommentComponent;
 class CommentEditor : public TextEditor
 {
 public:
-    CommentEditor(CommentComponent& p, float fontHeight, Colour textColour_) : TextEditor("CommentEditor"), parent(p)
-    {
-//        MemoryInputStream mis(BinaryData::UbuntuR_ttf, BinaryData::UbuntuR_ttfSize, false);
-//        CustomTypeface* ctf = new CustomTypeface(mis);
-//        ctf->setCharacteristics("Ubuntu", 0.7f, false, false, 'a');
-//        font = Font(ctf);
-        font.setHeight(fontHeight);
-        applyFontToAllText(font);
-//        setFont(font);
-        setTextToShowWhenEmpty("(comment)", Colours::grey);
-        setColour(TextEditor::backgroundColourId, Colour(0x00000000));
-        setColour(TextEditor::shadowColourId, Colour(0x00000000));
+    CommentEditor(CommentComponent& p, float fontHeight, Colour textColour_);
+    virtual ~CommentEditor();
 
-        setColour(TextEditor::textColourId, textColour_);
-        
-        BorderSize<int> b(0, 0, 0, 0);
-        setBorder(b);
-
-        setScrollToShowCursor(false);
-        
-        setMultiLine(true, false);
-        setReturnKeyStartsNewLine(true);
-    }
-    virtual ~CommentEditor(){}
-
-    void mouseDown(const MouseEvent& e)
-    {
-        parent.mouseDown(e);
-        TextEditor::mouseDown(e);
-    }
-    void mouseDrag(const MouseEvent& e)
-    {
-        parent.mouseDrag(e);
-        TextEditor::mouseDrag(e);
-    }
-    void mouseUp(const MouseEvent& e)
-    {
-        parent.mouseUp(e);
-        TextEditor::mouseUp(e);
-    }
-
-    void mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel)
-    {
-        if(e.mods.isAltDown() && hasKeyboardFocus(true))
-        {
-            float fontH = font.getHeight();
-            if(wheel.deltaY < 0.0f)
-            {
-                fontH -= 0.5f;
-            }
-            else if(wheel.deltaY > 0.0f)
-            {
-                fontH += 0.5f;
-            }
-            font.setHeight(fontH);
-            applyFontToAllText(font);
-            parent.resized();
-        }
-        else
-        {
-            TextEditor::mouseWheelMove(e, wheel);
-        }
-    }
-
-    void setFontHeight(float newHeight)
-    {
-        font.setHeight(newHeight);
-    }
-    void applyFont()
-    {
-        applyFontToAllText(font);
-    }
-
-    void addPopupMenuItems (PopupMenu& m, const MouseEvent* mouseClickEvent)
-    {
-        TextEditor::addPopupMenuItems(m, mouseClickEvent);
-
-        m.addSeparator();
-        m.addItem(CommandIDs::selectTextColour, "Text color");
-    }
-
-    void performPopupMenuAction (int menuItemID)
-    {
-        switch (menuItemID)
-        {
-        case CommandIDs::selectTextColour:
-            selectTextColour();
-            break;
-        default:
-            TextEditor::performPopupMenuAction(menuItemID);
-            break;
-        }
-    }
-
-    void selectTextColour()
-    {
-        ColourSelector* colourSelector = new ColourSelector();
-        colourSelector->setName ("comment colour");
-        colourSelector->setCurrentColour (findColour (TextEditor::textColourId));
-        colourSelector->addChangeListener (&parent);
-        colourSelector->setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
-        colourSelector->setSize (300, 400);
-
-        CallOutBox::launchAsynchronously (colourSelector, getScreenBounds(), nullptr);
-    }
-
+    void mouseDown(const MouseEvent& e);
+    void mouseDrag(const MouseEvent& e);
+    void mouseUp(const MouseEvent& e);
+    void mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel);
+    void setFontHeight(float newHeight);
+    void applyFont();
+    void addPopupMenuItems (PopupMenu& m, const MouseEvent* mouseClickEvent);
+    void performPopupMenuAction (int menuItemID);
+    void selectTextColour();
+    bool keyPressed(const KeyPress& key);
 private:
     CommentComponent& parent;
     Font font;
