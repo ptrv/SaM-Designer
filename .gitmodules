@@ -1,4 +1,4 @@
 [submodule "juce"]
-	path = juce
-	url = git://juce.git.sourceforge.net/gitroot/juce/juce
+    path = juce
+    url = https://github.com/julianstorer/JUCE.git
     ignore = dirty
