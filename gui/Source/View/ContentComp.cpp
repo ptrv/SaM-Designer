@@ -314,6 +314,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::insertWaveguide,
         CommandIDs::insertTermination,
         CommandIDs::insertJunction,
+        CommandIDs::insertComment,
         CommandIDs::spaceBarDrag,
         CommandIDs::moveUp,
         CommandIDs::moveDown,
@@ -451,6 +452,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::insertJunction:
         result.setInfo("Junction", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
+        break;
+    case CommandIDs::insertComment:
+        result.setInfo("Comment", "", CommandCategories::inserting, 0);
+//        result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::spaceBarDrag:
         result.setInfo("Scroll while dragging mouse",

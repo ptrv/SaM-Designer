@@ -378,6 +378,12 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                                                                       objController.getNewNameForObject(Ids::termination),
                                                                       mp.x, mp.y));
         break;
+    case CommandIDs::insertComment:
+        objController.addNewComment(this,
+                                    ObjectFactory::createNewObjectTree(Ids::comment,
+                                                                       objController.getNewNameForObject(Ids::comment),
+                                                                       mp.x, mp.y));
+        break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -dy);
         break;
