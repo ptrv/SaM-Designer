@@ -879,6 +879,11 @@ void ObjController::copySelectedToClipboard()
             XmlElement* const e = lc->getData().createXml();
             clip.addChildElement (e);
         }
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
+        {
+            XmlElement* const e = cc->getData().createXml();
+            clip.addChildElement (e);
+        }
     }
 
     SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
@@ -941,6 +946,22 @@ void ObjController::paste(ObjectsHolder* holder)
 
                 if (newObjectComp != 0)
                     sObjects.addToSelection(newObjectComp);
+            }
+            else if(valTree.getType() == Ids::comment)
+            {
+                String objName = valTree.getProperty(Ids::identifier).toString();
+                if(idMgr->contains(valTree.getType(), objName))
+                {
+                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
+                                                               objName,
+                                                               timesPasted,
+                                                               groupPaste);
+                    valTree.setProperty(Ids::identifier, newName, nullptr);
+                }
+                CommentComponent* newCommentComp = addComment(holder, valTree, -1, true);
+
+                if (newCommentComp != 0)
+                    sObjects.addToSelection(newCommentComp);
             }
         }
         forEachXmlChildElement(*doc, e)
