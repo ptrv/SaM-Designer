@@ -445,7 +445,9 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     m.addItem(6, "Junction");
     m.addItem(7, "Termination");
     m.addSeparator();
-    m.addItem(8, "Comment");
+    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
+    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
+    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
 
     const int r = m.show();
 

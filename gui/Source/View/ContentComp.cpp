@@ -454,8 +454,12 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::insertComment:
+    {
         result.setInfo("Comment", "", CommandCategories::inserting, 0);
-//        result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
+        MDLFile * mdlF = mainWindow.getMDLFile();
+        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
+                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
+    }
         break;
     case CommandIDs::spaceBarDrag:
         result.setInfo("Scroll while dragging mouse",
