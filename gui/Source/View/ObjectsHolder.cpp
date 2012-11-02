@@ -678,21 +678,26 @@ const Rectangle<int> ObjectsHolder::getObjectsBounds() const
     for (int i = 0; i < getNumChildComponents(); ++i)
     {
         Component* const comp = getChildComponent(i);
-        Rectangle<int> rect = comp->getBounds();
-        int x1 = rect.getBottomLeft().getX();
-        int y1 = rect.getTopLeft().getY();
-        int x2 = rect.getRight();
-        int y2 = rect.getBottom();
-        if(x1 < leftX)
-            leftX = x1;
-        if(y1 < upY)
-            upY = y1;
-        if(x2 > rightX)
-            rightX = x2;
-        if(y2 > downY)
-            downY= y2;
+        ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(comp);
+        CommentComponent* const cc = dynamic_cast<CommentComponent*>(comp);
+        if(oc != nullptr || cc != nullptr)
+        {
+            Rectangle<int> rect = comp->getBounds();
+            int x1 = rect.getX();
+            int y1 = rect.getY();
+            int x2 = rect.getRight();
+            int y2 = rect.getBottom();
+            if (x1 < leftX)
+                leftX = x1;
+            if (y1 < upY)
+                upY = y1;
+            if (x2 > rightX)
+                rightX = x2;
+            if (y2 > downY)
+                downY = y2;
+        }
     }
-    return Rectangle<int>(leftX, upY, rightX, downY);
+    return Rectangle<int>(leftX, upY, rightX - leftX, downY - upY);
 }
 
 void ObjectsHolder::checkExtent(const Rectangle<int>& r)
