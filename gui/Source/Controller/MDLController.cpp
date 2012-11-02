@@ -114,7 +114,7 @@ void MDLController::saveAsImage()
     if(ContentComp* const c = mainAppWindow.getMDLFileContentComponent())
     {
         ObjectsHolder* const oh = getHolderComponent();
-        Image img = oh->createComponentSnapshot(oh->getObjectsBounds(), true);
+        Image img = oh->createComponentSnapshot(oh->getObjectsBounds());
 
         String initFilePath;
         initFilePath << currentMdl->getFile().getParentDirectory().getFullPathName()
@@ -139,14 +139,12 @@ void MDLController::saveAsImage()
                 if(f.hasFileExtension(".png"))
                 {
                     PNGImageFormat png;
-                    png.writeImageToStream(img, *out.get());
-                    imgToStreamOk = true;
+                    imgToStreamOk = png.writeImageToStream(img, *out.get());
                 }
                 else if(f.hasFileExtension(".jpg;.jpeg"))
                 {
                     JPEGImageFormat jpeg;
-                    jpeg.writeImageToStream(img, *out.get());
-                    imgToStreamOk = true;
+                    imgToStreamOk = jpeg.writeImageToStream(img, *out.get());
                 }
                 out = nullptr;
 
