@@ -82,6 +82,7 @@ public:
     void deleteSelectedObjects();
 
     const Rectangle<int> getObjectsExtent() const;
+    const Rectangle<int> getObjectsBounds() const;
     const bool getShowObjectNames() const { return showObjectNames; }
     //==========================================================================
     void setSnappingGrid (const int numPixels, const bool active, const bool shown);

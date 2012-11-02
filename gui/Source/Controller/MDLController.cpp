@@ -27,6 +27,7 @@
 #include "../Application/MainWindow.h"
 #include "../Models/MDLFile.h"
 #include "../Models/SAMCmd.h"
+#include "../View/ObjectsHolder.h"
 
 #include "MDLController.h"
 
@@ -108,6 +109,63 @@ void MDLController::saveAs()
 //    }
 }
 
+void MDLController::saveAsImage()
+{
+    if(ContentComp* const c = mainAppWindow.getMDLFileContentComponent())
+    {
+        ObjectsHolder* const oh = getHolderComponent();
+        Image img = oh->createComponentSnapshot(oh->getObjectsBounds(), true);
+
+        String initFilePath;
+        initFilePath << currentMdl->getFile().getParentDirectory().getFullPathName()
+                     << "/" << currentMdl->getFile().getFileNameWithoutExtension()
+                     << "_" << Time::getCurrentTime().formatted("%Y%m%d%H%M%S")
+                     << ".png";
+                
+        FileChooser fc("Please select the filename for the image...",
+                       File::createFileWithoutCheckingPath(initFilePath),
+                       "*.png;*.jpg;*.jpeg", true);
+
+        if(fc.browseForFileToSave(true))
+        {
+            File f(fc.getResult());
+            TemporaryFile temp(f);
+
+            ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
+
+            if (out != nullptr)
+            {
+                bool imgToStreamOk = false;
+                if(f.hasFileExtension(".png"))
+                {
+                    PNGImageFormat png;
+                    png.writeImageToStream(img, *out.get());
+                    imgToStreamOk = true;
+                }
+                else if(f.hasFileExtension(".jpg;.jpeg"))
+                {
+                    JPEGImageFormat jpeg;
+                    jpeg.writeImageToStream(img, *out.get());
+                    imgToStreamOk = true;
+                }
+                out = nullptr;
+
+                bool succeeded = false;
+                if(imgToStreamOk)
+                    succeeded = temp.overwriteTargetFileWithTemporary();
+                    
+                if(succeeded)
+                {
+                    SAM_CONSOLE("MSG: ", "Wrote file " + f.getFullPathName(), false);
+                }
+                else
+                {
+                    SAM_CONSOLE("ERROR: ", "Could not write file " + f.getFullPathName(), false);
+                }
+            }
+        }
+    }
+}
 void MDLController::close()
 {
 	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();

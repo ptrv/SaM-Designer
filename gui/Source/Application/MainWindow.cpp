@@ -213,6 +213,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
     const CommandID ids[] = { 	CommandIDs::closeDocument,
             					CommandIDs::saveDocument,
             					CommandIDs::saveDocumentAs,
+                                CommandIDs::saveDocumentAsImage,
                                 CommandIDs::generateFaust,
                                 CommandIDs::generateExternal,
                                 CommandIDs::cleanDataDir,
@@ -242,6 +243,10 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     case CommandIDs::saveDocumentAs:
         result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::saveDocumentAsImage:
+        result.setInfo ("Save as image", "Save patch as image.", CommandCategories::general, 0);
+//        result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::generateFaust:
     	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
@@ -303,6 +308,9 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         updateTitle();
     }
     	break;
+    case CommandIDs::saveDocumentAsImage:
+        mdlController->saveAsImage();
+        break;
     case CommandIDs::generateFaust:
     {
     	String consoleText = "Start Synth-A-Modeler...";

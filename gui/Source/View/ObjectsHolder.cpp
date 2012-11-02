@@ -669,6 +669,32 @@ const Rectangle<int> ObjectsHolder::getObjectsExtent() const
     return Rectangle<int>(0,0, maxX, maxY);
 }
 
+const Rectangle<int> ObjectsHolder::getObjectsBounds() const
+{
+    int rightX = 0;
+    int downY = 0;
+    int leftX = getWidth();
+    int upY = getHeight();
+    for (int i = 0; i < getNumChildComponents(); ++i)
+    {
+        Component* const comp = getChildComponent(i);
+        Rectangle<int> rect = comp->getBounds();
+        int x1 = rect.getBottomLeft().getX();
+        int y1 = rect.getTopLeft().getY();
+        int x2 = rect.getRight();
+        int y2 = rect.getBottom();
+        if(x1 < leftX)
+            leftX = x1;
+        if(y1 < upY)
+            upY = y1;
+        if(x2 > rightX)
+            rightX = x2;
+        if(y2 > downY)
+            downY= y2;
+    }
+    return Rectangle<int>(leftX, upY, rightX, downY);
+}
+
 void ObjectsHolder::checkExtent(const Rectangle<int>& r)
 {
     if(r.getRight() > maxX)

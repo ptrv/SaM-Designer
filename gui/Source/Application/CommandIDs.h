@@ -40,7 +40,8 @@ namespace CommandIDs
     static const int open                   = 0x200020;
     static const int closeDocument          = 0x200030;
     static const int saveDocument           = 0x200040;
-    static const int saveDocumentAs         = 0x200050;
+    static const int saveDocumentAs         = 0x200045;
+    static const int saveDocumentAsImage    = 0x200046;
 
     static const int segmentedConnectors    = 0x200051;
     static const int reverseDirection       = 0x200052;

@@ -515,6 +515,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem (commandManager, CommandIDs::saveDocument);
         menu.addCommandItem (commandManager, CommandIDs::saveDocumentAs);
         menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::saveDocumentAsImage);
+        menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::showPrefs);
 
 #if ! JUCE_MAC
