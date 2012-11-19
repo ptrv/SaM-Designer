@@ -1383,6 +1383,7 @@ void ObjController::makeGraph(DirectedGraph* g)
         g->linkNodes(ac->getSourceObject(), ac->getAudioObject());
     }
 
+    g->shuffleNodes();
 }
 
 void ObjController::makeTree(DirectedGraph* g)

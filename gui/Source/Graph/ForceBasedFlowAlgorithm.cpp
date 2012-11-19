@@ -44,7 +44,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, Ob
     float alpha = 1.0f;
     float beta = 0.001f;
     float kk = 1.0f;
-    float eta = 0.89f;
+    float eta = 0.75f;
 //    float deltaT = 0.1f;
 
     for (int i = 0; i < nodes.size(); ++i)
@@ -113,7 +113,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, Ob
 
 //    if(totalEnergy.x < 15.0f && totalEnergy.y < 15.0f)
 //        return true;
-    if(dis < 10.0f)
+    if(dis < 5.0f*nodes.size())
         return true;
 
     return false;

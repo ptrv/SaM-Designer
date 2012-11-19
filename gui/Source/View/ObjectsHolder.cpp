@@ -322,7 +322,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
 //        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
         graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
         graph->randomizeNodes(getWidth(), getHeight());
-
+        
         lastTime = Time::getCurrentTime().currentTimeMillis();
         startTimer(10);
     }
@@ -793,7 +793,7 @@ void ObjectsHolder::timerCallback()
         float dT = (currentTime-lastTime)/1000.0f;
 
 
-        bool done = graph->reflow(getWidth()/2, getHeight()/2, objController, 0.6f);
+        bool done = graph->reflow(getWidth()/2, getHeight()/2, objController, 0.2f);
         updateComponents();
         repaint();
         if(done)

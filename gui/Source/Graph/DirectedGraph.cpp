@@ -150,3 +150,20 @@ String DirectedGraph::toString()
     }
     return s;
 }
+
+// http://stackoverflow.com/questions/922256/c-array-shuffle
+void DirectedGraph::shuffleNodes()
+{
+    const int numNodes = nodes.size();
+    int numNodes2 = numNodes;
+    while(numNodes2 > 1)
+    {
+        long int k = lrand48();
+        k = k % numNodes;
+        numNodes2--;
+        nodes.swap(numNodes2, k);
+//        Node* temp = nodes[numNodes2];
+//        nodes[numNodes2] = nodes[k];
+//        nodes[k] = temp;
+    }
+}

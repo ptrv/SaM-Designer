@@ -56,6 +56,8 @@ public:
     void randomizeNodes(int width, int height);
 
     String toString();
+
+    void shuffleNodes();
     
     Array<Node*> nodes;
     ScopedPointer<FlowAlgorithm> flower;
