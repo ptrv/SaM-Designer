@@ -37,7 +37,7 @@ class AudioOutConnector;
 class SelectableObject;
 class IdManager;
 class CommentComponent;
-
+class DirectedGraph;
 /**
  * The ObjController controlls all ObjectComponents.
  */
@@ -173,8 +173,9 @@ public:
     
     void changed();
     
-    ObjectComponent* getObjectForId(String idString) const throw();
-    LinkComponent* getLinkForId(String idString) const throw();
+    ObjectComponent* getObjectForId(const String& idString) const throw();
+    LinkComponent* getLinkForId(const String& idString) const throw();
+    CommentComponent* getCommentForId(const String& idString) const throw();
     
     void reverseLinkDirection();
     
@@ -202,6 +203,9 @@ public:
     void setLinksSegmented(bool isSegmented);
 
     void destroy();
+
+    void makeGraph(DirectedGraph* g);
+    void makeTree(DirectedGraph* g);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

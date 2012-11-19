@@ -542,6 +542,12 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::tidyObjects);
+        menu.addSeparator();
+
+        PopupMenu redrawModelMenu;
+        redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawCircle);
+        redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawForceDirected);
+        menu.addSubMenu("Redraw Model", redrawModelMenu);
     }
     else if (topLevelMenuIndex == 2)
     {

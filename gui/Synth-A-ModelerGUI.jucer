@@ -60,6 +60,34 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <GROUP id="{81A0519B-F5F2-0347-8598-81A621EDD216}" name="Graph">
+        <FILE id="kiqjgA" name="ForceBasedFlowAlgorithm.cpp" compile="1" resource="0"
+              file="Source/Graph/ForceBasedFlowAlgorithm.cpp"/>
+        <FILE id="iqOXYR" name="ForceBasedFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/ForceBasedFlowAlgorithm.h"/>
+        <FILE id="ENHr9x" name="CircleFlowAlgorithm.cpp" compile="1" resource="0"
+              file="Source/Graph/CircleFlowAlgorithm.cpp"/>
+        <FILE id="miSf4b" name="CircleFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/CircleFlowAlgorithm.h"/>
+        <FILE id="JdpEm6" name="TreeFlowAlgorithm.cpp" compile="1" resource="0"
+              file="Source/Graph/TreeFlowAlgorithm.cpp"/>
+        <FILE id="soH7dX" name="TreeFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/TreeFlowAlgorithm.h"/>
+        <FILE id="QkTRy3" name="GraphUtils.cpp" compile="1" resource="0" file="Source/Graph/GraphUtils.cpp"/>
+        <FILE id="eHWLKs" name="GraphUtils.h" compile="0" resource="0" file="Source/Graph/GraphUtils.h"/>
+        <FILE id="jsAjk3" name="ForceDirectedFlowAlgorithm.cpp" compile="1"
+              resource="0" file="Source/Graph/ForceDirectedFlowAlgorithm.cpp"/>
+        <FILE id="wUWPoK" name="ForceDirectedFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/ForceDirectedFlowAlgorithm.h"/>
+        <FILE id="XyvHha" name="FlowAlgorithm.h" compile="0" resource="0" file="Source/Graph/FlowAlgorithm.h"/>
+        <FILE id="YKNoNG" name="Tree.cpp" compile="1" resource="0" file="Source/Graph/Tree.cpp"/>
+        <FILE id="OvhCDV" name="Tree.h" compile="0" resource="0" file="Source/Graph/Tree.h"/>
+        <FILE id="Rbryxx" name="DirectedGraph.cpp" compile="1" resource="0"
+              file="Source/Graph/DirectedGraph.cpp"/>
+        <FILE id="sckUTM" name="DirectedGraph.h" compile="0" resource="0" file="Source/Graph/DirectedGraph.h"/>
+        <FILE id="W41Hs4" name="Node.cpp" compile="1" resource="0" file="Source/Graph/Node.cpp"/>
+        <FILE id="SqsOHa" name="Node.h" compile="0" resource="0" file="Source/Graph/Node.h"/>
+      </GROUP>
       <GROUP id="{902B3BB9-D93B-9CA8-A833-9D80066DDF9F}" name="Application">
         <FILE id="fNE9nx" name="CommandLine.cpp" compile="1" resource="0" file="Source/Application/CommandLine.cpp"/>
         <FILE id="CXYO1W" name="CommandLine.h" compile="0" resource="0" file="Source/Application/CommandLine.h"/>

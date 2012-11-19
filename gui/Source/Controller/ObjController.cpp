@@ -35,6 +35,9 @@
 #include "MDLController.h"
 #include "../Utilities/IdManager.h"
 #include "../View/CommentComponent.h"
+//#include "../Graph/FlowAlgorithm.h"
+//#include "../Graph/ForceDirectedFlowAlgorithm.h"
+#include "../Graph/DirectedGraph.h"
 
 #include "ObjController.h"
 
@@ -778,7 +781,7 @@ void ObjController::changed()
     owner.changed();
 }
 
-ObjectComponent* ObjController::getObjectForId(String idString) const throw()
+ObjectComponent* ObjController::getObjectForId(const String& idString) const throw()
 {
     for (int i = 0; i < objects.size(); i++)
     {
@@ -792,11 +795,25 @@ ObjectComponent* ObjController::getObjectForId(String idString) const throw()
 
 }
 
-LinkComponent* ObjController::getLinkForId(String idString) const throw()
+LinkComponent* ObjController::getLinkForId(const String& idString) const throw()
 {
     for (int i = 0; i < links.size(); i++)
     {
         LinkComponent* elem = links.getUnchecked(i);
+        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
+        {
+            return elem;
+        }
+    }
+    return nullptr;
+
+}
+
+CommentComponent* ObjController::getCommentForId(const String& idString) const throw()
+{
+    for (int i = 0; i < comments.size(); i++)
+    {
+        CommentComponent* elem = comments.getUnchecked(i);
         if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
         {
             return elem;
@@ -1340,4 +1357,35 @@ void ObjController::destroy()
     idMgr = nullptr;
     idMgr = new IdManager();
 
+}
+
+void ObjController::makeGraph(DirectedGraph* g)
+{
+//    ScopedPointer<DirectedGraph> g;
+
+    for (int i = 0; i < links.size(); ++i)
+    {
+        LinkComponent* l = links.getUnchecked(i);
+
+        g->addNode(getObjectForId(l->getData()[Ids::startVertex].toString()));
+        g->addNode(getObjectForId(l->getData()[Ids::endVertex].toString()));
+
+        g->linkNodes(getObjectForId(l->getData()[Ids::startVertex].toString()),
+                     getObjectForId(l->getData()[Ids::endVertex].toString()));
+
+    }
+    for (int k = 0; k < audioConnections.size(); ++k)
+    {
+        AudioOutConnector* ac = audioConnections.getUnchecked(k);
+        g->addNode(ac->getSourceObject());
+        g->addNode(ac->getAudioObject());
+
+        g->linkNodes(ac->getSourceObject(), ac->getAudioObject());
+    }
+
+}
+
+void ObjController::makeTree(DirectedGraph* g)
+{
+    
 }

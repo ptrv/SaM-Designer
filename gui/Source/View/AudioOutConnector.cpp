@@ -25,6 +25,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../View/SelectableObject.h"
+#include "../Graph/Node.h"
 #include "BaseObjectComponent.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"

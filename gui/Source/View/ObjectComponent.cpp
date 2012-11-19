@@ -26,6 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
 #include "SelectableObject.h"
+#include "../Graph/Node.h"
 #include "BaseObjectComponent.h"
 #include "ObjectsHolder.h"
 #include "ObjectPropertiesPanel.h"

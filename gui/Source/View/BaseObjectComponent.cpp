@@ -24,6 +24,7 @@
  */
 
 #include "../Application/CommonHeaders.h"
+#include "../Graph/Node.h"
 #include "ObjectsHolder.h"
 
 #include "BaseObjectComponent.h"
@@ -31,7 +32,7 @@
 using namespace synthamodeler;
 
 BaseObjectComponent::BaseObjectComponent(ObjController& owner_, ValueTree data_)
-: owner(owner_), data(data_)
+: Node(data_), owner(owner_), data(data_)
 {
     
 }

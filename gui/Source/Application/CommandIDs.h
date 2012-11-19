@@ -83,8 +83,8 @@ namespace CommandIDs
     static const int cleanDataDir           = 0x2030c7;
     static const int cleanDataDirAll        = 0x2030c8;
 
-    static const int group                  = 0x202170;
-    static const int ungroup                = 0x202180;
+//    static const int group                  = 0x202170;
+//    static const int ungroup                = 0x202180;
 
     static const int showPrefs              = 0x2020c0;
     static const int showHelp				= 0x2020d0;
@@ -97,6 +97,8 @@ namespace CommandIDs
     static const int zoomNormal             = 0x202150;
     static const int spaceBarDrag           = 0x202160;
     static const int tidyObjects            = 0x202170;
+    static const int redrawCircle           = 0x202171;
+    static const int redrawForceDirected    = 0x202172;
 
     static const int moveUp                 = 0x202200;
     static const int moveDown               = 0x202210;

@@ -35,12 +35,14 @@ class ObjController;
 class SelectableObject;
 class SnapGridPainter;
 class VariablesPanel;
+class DirectedGraph;
 /**
  * Component which contains all objects.
  */
 class ObjectsHolder : public Component,
-                        public LassoSource <SelectableObject*>,
-                       public ChangeListener
+                      public LassoSource <SelectableObject*>,
+                      public ChangeListener,
+                      public Timer
 {
 public:
     ObjectsHolder(ObjController& objController_);
@@ -93,6 +95,9 @@ public:
 
     int snapPosition (int pos) const throw();
 
+
+    void timerCallback();
+
     //==========================================================================
 private:
 
@@ -118,6 +123,7 @@ private:
     bool snapActive, snapShown;
 
     ScopedPointer<VariablesPanel> vpanel;
+    ScopedPointer<DirectedGraph> graph;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };

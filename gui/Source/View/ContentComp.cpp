@@ -302,6 +302,8 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::reverseDirection,
         CommandIDs::defineVariables,
         CommandIDs::tidyObjects,
+        CommandIDs::redrawCircle,
+        CommandIDs::redrawForceDirected,
         CommandIDs::insertMass,
         CommandIDs::insertGround,
         CommandIDs::insertResonator,
@@ -401,6 +403,12 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::tidyObjects:
         result.setInfo("Tidy up", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::redrawCircle:
+        result.setInfo("Circle", "", CommandCategories::editing, 0);
+        break;
+    case CommandIDs::redrawForceDirected:
+        result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
         break;
 
     case CommandIDs::insertMass:

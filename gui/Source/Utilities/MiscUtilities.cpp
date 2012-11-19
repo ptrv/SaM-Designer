@@ -26,6 +26,7 @@
 #include "../Application/Application.h"
 #include "StoredSettings.h"
 #include "../Models/ObjectIDs.h"
+#include "../Graph/Node.h"
 #include "../View/BaseObjectComponent.h"
 #include "../View/SelectableObject.h"
 #include "../View/ObjectComponent.h"

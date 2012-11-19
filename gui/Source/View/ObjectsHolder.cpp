@@ -27,6 +27,11 @@
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"
 #include "SelectableObject.h"
+#include "../Graph/FlowAlgorithm.h"
+#include "../Graph/ForceDirectedFlowAlgorithm.h"
+#include "../Graph/ForceBasedFlowAlgorithm.h"
+#include "../Graph/DirectedGraph.h"
+#include "../Graph/Node.h"
 #include "BaseObjectComponent.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
@@ -35,8 +40,9 @@
 #include "VariablesPanel.h"
 #include "SnapGridPainter.h"
 #include "AudioOutConnector.h"
-#include "ObjectsHolder.h"
 #include "CommentComponent.h"
+
+#include "ObjectsHolder.h"
 
 using namespace synthamodeler;
 
@@ -220,6 +226,8 @@ static const int dx = 20;
 static const int dy = 20;
 static const int dxfine = 5;
 static const int dyfine = 5;
+
+int64 lastTime = 0.0f;
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
     Point<int> mp = getMouseXYRelative();
@@ -286,6 +294,38 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case CommandIDs::tidyObjects:
         objController.tidyUp();
+        break;
+    case CommandIDs::redrawCircle:
+    {
+        DBG("redraw objects");
+        if(isTimerRunning())
+        {
+            stopTimer();
+            graph = nullptr;
+        }
+        graph = new DirectedGraph();
+        objController.makeGraph(graph.get());
+        startTimer(10);
+    }
+        break;
+    case CommandIDs::redrawForceDirected:
+    {
+        DBG("redraw objects");
+        if(isTimerRunning())
+        {
+            stopTimer();
+            graph = nullptr;
+        }
+        graph = new DirectedGraph();
+        objController.makeGraph(graph.get());
+        DBG(graph->toString());
+//        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
+        graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
+        graph->randomizeNodes(getWidth(), getHeight());
+
+        lastTime = Time::getCurrentTime().currentTimeMillis();
+        startTimer(10);
+    }
         break;
     case CommandIDs::insertMass:
         objController.addNewObject(this,
@@ -744,5 +784,25 @@ void ObjectsHolder::setSnappingGrid (const int numPixels, const bool active, con
     }
 }
 
+void ObjectsHolder::timerCallback()
+{
+//    DBG("tick");
+    if (graph != nullptr)
+    {
+        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
+        float dT = (currentTime-lastTime)/1000.0f;
+
+
+        bool done = graph->reflow(getWidth()/2, getHeight()/2, objController, 0.6f);
+        updateComponents();
+        repaint();
+        if(done)
+        {
+            graph = nullptr;
+            stopTimer();
+            DBG("stop timer");
+        }
+    }
+}
 
 //==============================================================================

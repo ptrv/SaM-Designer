@@ -30,8 +30,10 @@ namespace synthamodeler
 {
 class ObjController;
 class ObjectsHolder;
+class Node;
 
-class BaseObjectComponent : public Component
+class BaseObjectComponent : public Component,
+                            public Node
 {
 public:
     BaseObjectComponent(ObjController& _owner, ValueTree data_);

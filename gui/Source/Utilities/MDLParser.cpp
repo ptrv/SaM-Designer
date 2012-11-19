@@ -341,6 +341,7 @@ bool MDLParser::parseMDL(const File& f)
             junctsTree.addChild(junctTree, -1, nullptr);
         }
     }
+    DBG(mdlTree.toXmlString());
     mdlFile.mdlRoot = mdlTree;
 	return true;
 }

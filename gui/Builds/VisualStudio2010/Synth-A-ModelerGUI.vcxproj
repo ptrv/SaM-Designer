@@ -132,6 +132,14 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\CircleFlowAlgorithm.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\TreeFlowAlgorithm.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\GraphUtils.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\Tree.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\DirectedGraph.cpp"/>
+    <ClCompile Include="..\..\Source\Graph\Node.cpp"/>
     <ClCompile Include="..\..\Source\Application\CommandLine.cpp"/>
     <ClCompile Include="..\..\Source\Application\SAMLookAndFeel.cpp"/>
     <ClCompile Include="..\..\Source\Application\MainWindow.cpp"/>
@@ -972,6 +980,15 @@
     <ClInclude Include="..\..\Testsuite\TestUtils.h"/>
     <ClInclude Include="..\..\Testsuite\SAMCmd_test.h"/>
     <ClInclude Include="..\..\Testsuite\TestRunner.h"/>
+    <ClInclude Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.h"/>
+    <ClInclude Include="..\..\Source\Graph\CircleFlowAlgorithm.h"/>
+    <ClInclude Include="..\..\Source\Graph\TreeFlowAlgorithm.h"/>
+    <ClInclude Include="..\..\Source\Graph\GraphUtils.h"/>
+    <ClInclude Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.h"/>
+    <ClInclude Include="..\..\Source\Graph\FlowAlgorithm.h"/>
+    <ClInclude Include="..\..\Source\Graph\Tree.h"/>
+    <ClInclude Include="..\..\Source\Graph\DirectedGraph.h"/>
+    <ClInclude Include="..\..\Source\Graph\Node.h"/>
     <ClInclude Include="..\..\Source\Application\CommandLine.h"/>
     <ClInclude Include="..\..\Source\Application\SAMLookAndFeel.h"/>
     <ClInclude Include="..\..\Source\Application\MainWindow.h"/>
