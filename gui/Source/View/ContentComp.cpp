@@ -406,9 +406,12 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::redrawCircle:
         result.setInfo("Circle", "", CommandCategories::editing, 0);
+        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
         break;
     case CommandIDs::redrawForceDirected:
         result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
+        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+
         break;
 
     case CommandIDs::insertMass:
