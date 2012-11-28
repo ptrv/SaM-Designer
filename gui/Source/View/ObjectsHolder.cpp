@@ -793,7 +793,7 @@ void ObjectsHolder::timerCallback()
         float dT = (currentTime-lastTime)/1000.0f;
 
 
-        bool done = graph->reflow(getWidth()/2, getHeight()/2, objController, 0.2f);
+        bool done = graph->reflow(getWidth(), getHeight(), objController, 0.6f);
         updateComponents();
         repaint();
         if(done)

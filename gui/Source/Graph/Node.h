@@ -32,7 +32,7 @@ namespace synthamodeler
 class Node
 {
 public:
-    Node(ValueTree data_);
+    Node(ValueTree data);
     virtual ~Node();
 
     void addIncomingLink(Node* n);
@@ -50,19 +50,23 @@ public:
     void setLabel(const String& s) { label = s; }
     const String& getLabel() { return label; }
 
-    void setNX(int x);
-    void setNY(int y);
-    int getNX();
-    int getNY();
+    void setNX(float x_);
+    void setNY(float y_);
+    float getNX();
+    float getNY();
 
+    float getMass();
     Point<float> force;
     Point<float> velocity;
 private:
 
-    ValueTree data;
+    float x, y;
+//    ValueTree data;
     String label;
     Array<Node*> inLinks;
     Array<Node*> outLinks;
+
+    float mass;
 };
 
 }

@@ -31,10 +31,36 @@
 
 using namespace synthamodeler;
 
-Node::Node(ValueTree data_)
-: force(0,0), velocity(0, 0), data(data_)
+Node::Node(ValueTree data)
+: force(0,0), velocity(0, 0)
 {
+    x = float(data[Ids::posX]);
+    y = float(data[Ids::posY]);
+    
     label = data[Ids::identifier].toString();
+    mass = 1.0f;
+    if(data.getType() == Ids::mass)
+    {
+        mass = float(data.getChildWithName(Ids::parameters).getChild(0).getProperty(Ids::value));
+        DBG(mass);
+    }
+    else if(data.getType() == Ids::ground)
+    {
+
+    }
+    else if(data.getType() == Ids::resonator)
+    {
+
+    }
+    else if(data.getType() == Ids::port)
+    {
+
+    }
+    else if(data.getType() == Ids::link)
+    {
+
+    }
+
 }
 
 Node::~Node()
@@ -89,19 +115,24 @@ bool Node::equals(const Node* other)
     return label.equalsIgnoreCase(other->label);
 }
 
-void Node::setNX(int x)
+void Node::setNX(float x_)
 {
-    data.setProperty(Ids::posX, x, nullptr);
+    x = x_;
 }
-void Node::setNY(int y)
+void Node::setNY(float y_)
 {
-    data.setProperty(Ids::posY, y, nullptr);
+    y = y_;
 }
-int Node::getNX()
+float Node::getNX()
 {
-    return int(data[Ids::posX]);
+    return x;
 }
-int Node::getNY()
+float Node::getNY()
 {
-    return int(data[Ids::posY]);
+    return y;
+}
+
+float Node::getMass()
+{
+    return mass;
 }
