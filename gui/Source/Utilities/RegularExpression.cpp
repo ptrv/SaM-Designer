@@ -55,10 +55,11 @@ bool RegularExpression::fullMatch( const String& pattern_, const String& subject
 bool RegularExpression::fullMatch( const String& subject_ )
 {
 	subject = subject_;
-    RE2 regexPattern(pattern.toUTF8().getAddress());
+    std::string pttr(pattern.getCharPointer().getAddress());
+//    RE2 regexPattern(pttr);
 
-    return RE2::FullMatch(subject.toUTF8().getAddress(),
-                          regexPattern);
+    std::string subj(subject.getCharPointer().getAddress());
+    return RE2::FullMatch(subj, pttr);
 }
 
 bool RegularExpression::fullMatchValues(const String& pattern_, const String& subject_,
@@ -74,8 +75,9 @@ bool RegularExpression::fullMatchValues(const String& subject_, StringArray& res
 	subject = subject_;
 
     result.clear();
-    
-    RE2 regexPattern(pattern.toUTF8().getAddress());
+
+    std::string pttr = pattern.getCharPointer().getAddress();
+//    RE2 regexPattern(pttr);
 
     std::vector<std::string> vals(numResults, "");
 	std::vector<RE2::Arg const*> args;
@@ -85,8 +87,10 @@ bool RegularExpression::fullMatchValues(const String& subject_, StringArray& res
         args.push_back(newArg);
     }
 
-	bool isMatch = RE2::FullMatchN(subject.toUTF8().getAddress(),
-                                   regexPattern, &args[0], numResults);
+    std::string subj = subject.getCharPointer().getAddress();
+//    DBG(pattern.toUTF8().getAddress());
+//    DBG(subj.c_str());
+	bool isMatch = RE2::FullMatchN(subj, pttr, &args[0], numResults);
 
     for (int i = 0; i < numResults; ++i)
     {

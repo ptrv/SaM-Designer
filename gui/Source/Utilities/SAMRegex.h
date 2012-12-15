@@ -46,6 +46,7 @@ public:
     static const char* faustCode;
     static const char* paramsDetail;
     static const char* word;
+    static const char* commentObject;
     
     static String getVertexLine();
     static String getLinkLine();
@@ -55,6 +56,7 @@ public:
     static String getJunctionLine();
     static String getWaveguideLine();
     static String getParamsLine(int numParams);
+    static String getCommentObjectLine();
 };
 }
 

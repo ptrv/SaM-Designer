@@ -172,6 +172,34 @@ public:
         expect(vals4[0].compare("massMembrane*(1.0 + randomTweak*(-0.799939))") == 0 &&
                vals4[1].compare("0.0") == 0 &&
                vals4[2].compare("0.0") == 0);
+
+        // test 37
+        expect(re.fullMatch(SAMRegex::getCommentObjectLine(),
+                            "## comment(\"Test\", 16, ff000000),c1; # pos 200, 100"));
+
+        // test 38
+        StringArray commentVals;
+        expect(re.fullMatchValues(SAMRegex::getCommentObjectLine(),
+                                  "## comment(\"Test\", 16, ff000000),comment1; # pos 200, 100",
+                                  commentVals, 4));
+
+        // test 39
+        DBG(commentVals.joinIntoString(" "));
+        expect(commentVals[0].compare("comment") == 0 &&
+               commentVals[1].compare("\"Test\", 16, ff000000") == 0 &&
+               commentVals[2].compare("comment1") == 0 &&
+               commentVals[3].compare("# pos 200, 100") == 0);
+
+        // test 40
+        StringArray commentParams;
+        expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
+                                  "\"Test\", 16, ff000000",
+                                  commentParams, 3));
+
+        // test 41
+        expect(commentParams[0].removeCharacters("\\\"").compare("Test") == 0 &&
+               commentParams[1].compare("16") == 0 &&
+               commentParams[2].compare("ff000000") == 0);
     }
 };
 

@@ -36,6 +36,7 @@ class SelectableObject;
 class SnapGridPainter;
 class VariablesPanel;
 class DirectedGraph;
+class ContentComp;
 /**
  * Component which contains all objects.
  */
@@ -98,8 +99,12 @@ public:
 
     void timerCallback();
 
+    void redrawObjects(const int cmdId);
+
     //==========================================================================
 private:
+
+    ContentComp* getContentComp();
 
     void showContextMenu(const Point<int> mPos);
 

@@ -68,17 +68,20 @@ bool MDLParser::parseMDL(const File& f)
 	mdlTree.setProperty(Ids::mdlPath, in.getFullPathName(), nullptr);
 
 	StringArray lines;
+    DBG(lines.joinIntoString(""));
 	lines.addTokens(mdlContent, "\n", "\"");
 	for (int i = 0; i < lines.size(); ++i) {
 		String line = lines[i];
 
         RegularExpression re;
-        RegularExpression reComment("\\A\\s*#");
+        RegularExpression reComment("\\A\\s*#[^#].*$");
         RegularExpression reParams(SAMRegex::paramsDetail);
         RegularExpression reLabel(SAMRegex::word);
 
-        if(reComment.partialMatch(line) || line.isEmpty())
+        if(reComment.fullMatch(line) || line.isEmpty())
+        {
             continue;
+        }
 
         if(re.fullMatch(SAMRegex::getVertexLine(), line))
         {
@@ -142,8 +145,6 @@ bool MDLParser::parseMDL(const File& f)
 
             ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::masses, nullptr);
             masses.addChild(newTree, -1, nullptr);
-
-
         }
         else if(re.fullMatch(SAMRegex::getLinkLine(), line))
         {
@@ -340,8 +341,37 @@ bool MDLParser::parseMDL(const File& f)
             ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
             junctsTree.addChild(junctTree, -1, nullptr);
         }
+        else if(re.fullMatch(SAMRegex::getCommentObjectLine(), line))
+        {
+            StringArray values;
+            DBG(SAMRegex::getCommentObjectLine());
+            if(! re.fullMatchValues(line, values, 3))
+            {
+                DBG("Error reading comment object!");
+            }
+            ValueTree newTree(Ids::comment);
+            Point<int> pos = getPos(line);
+            newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+            newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+
+            newTree.setProperty(Ids::identifier, values[2], nullptr);
+
+            String params = values[1];
+            StringArray paramsArray;
+
+            reParams.fullMatchValues(SAMRegex::getParamsLine(3),
+                                     params, paramsArray, 3);
+
+            newTree.setProperty(Ids::value, paramsArray[0].unquoted(), nullptr);
+            newTree.setProperty(Ids::fontSize, paramsArray[1], nullptr);
+            newTree.setProperty(Ids::commentColour, paramsArray[2], nullptr);
+
+            ValueTree comments = mdlTree.getOrCreateChildWithName(Objects::comments, nullptr);
+            comments.addChild(newTree, -1, nullptr);
+        }
+
     }
-    DBG(mdlTree.toXmlString());
+//    DBG(mdlTree.toXmlString());
     mdlFile.mdlRoot = mdlTree;
 	return true;
 }

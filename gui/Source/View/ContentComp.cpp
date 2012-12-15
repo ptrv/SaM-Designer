@@ -406,11 +406,11 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::redrawCircle:
         result.setInfo("Circle", "", CommandCategories::editing, 0);
-        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+//        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
         break;
     case CommandIDs::redrawForceDirected:
         result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
-        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+//        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
 
         break;
 
@@ -642,6 +642,16 @@ void ContentComp::xyToTargetXY(int& x, int& y) const
 void ContentComp::dragKeyHeldDown(bool isKeyDown)
 {
     ((ZoomingViewport*) viewport)->dragKeyHeldDown(isKeyDown);
+}
+
+int ContentComp::getViewWidth() const
+{
+    return viewport->getViewHeight();
+}
+
+int ContentComp::getViewHeight() const
+{
+    return viewport->getViewWidth();
 }
 
 //[/MiscUserCode]

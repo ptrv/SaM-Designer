@@ -80,6 +80,10 @@ public:
 
     ObjectsHolder* getHolderComponent() { return objectsHolder; }
 
+    const MainAppWindow* getMainAppWindow() const { return &mainWindow; }
+
+    int getViewWidth() const;
+    int getViewHeight() const;
     //==============================================================================
 //    juce_UseDebuggingNewOperator
 

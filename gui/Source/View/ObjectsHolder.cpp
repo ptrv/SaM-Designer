@@ -296,36 +296,10 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         objController.tidyUp();
         break;
     case CommandIDs::redrawCircle:
-    {
-        DBG("redraw objects");
-        if(isTimerRunning())
-        {
-            stopTimer();
-            graph = nullptr;
-        }
-        graph = new DirectedGraph();
-        objController.makeGraph(graph.get());
-        startTimer(10);
-    }
+        redrawObjects(CommandIDs::redrawCircle);
         break;
     case CommandIDs::redrawForceDirected:
-    {
-        DBG("redraw objects");
-        if(isTimerRunning())
-        {
-            stopTimer();
-            graph = nullptr;
-        }
-        graph = new DirectedGraph();
-        objController.makeGraph(graph.get());
-        DBG(graph->toString());
-//        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
-        graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
-        graph->randomizeNodes(getWidth(), getHeight());
-        
-        lastTime = Time::getCurrentTime().currentTimeMillis();
-        startTimer(10);
-    }
+        redrawObjects(CommandIDs::redrawForceDirected);
         break;
     case CommandIDs::insertMass:
         objController.addNewObject(this,
@@ -485,9 +459,10 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     m.addItem(6, "Junction");
     m.addItem(7, "Termination");
     m.addSeparator();
-    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
-    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
-    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
+//    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
+//    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
+//    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
+    m.addItem(8, "Comment");
 
     const int r = m.show();
 
@@ -793,7 +768,9 @@ void ObjectsHolder::timerCallback()
         float dT = (currentTime-lastTime)/1000.0f;
 
 
-        bool done = graph->reflow(getWidth(), getHeight(), objController, 0.6f);
+        bool done = graph->reflow(getContentComp()->getViewWidth(), 
+                                  getContentComp()->getViewHeight(),
+                                  objController, 0.6f);
         updateComponents();
         repaint();
         if(done)
@@ -805,4 +782,40 @@ void ObjectsHolder::timerCallback()
     }
 }
 
+ContentComp* ObjectsHolder::getContentComp()
+{
+    return findParentComponentOfClass<ContentComp>();
+}
+
+void ObjectsHolder::redrawObjects(const int cmdId)
+{
+    DBG("redraw objects");
+    if (isTimerRunning())
+    {
+        stopTimer();
+        graph = nullptr;
+    }
+
+
+    if(cmdId == CommandIDs::redrawCircle)
+    {
+        graph = new DirectedGraph();
+        objController.makeGraph(graph.get());
+    }
+    else if(cmdId == CommandIDs::redrawForceDirected)
+    {
+        graph = new DirectedGraph();
+        objController.makeGraph(graph.get());
+//        DBG(graph->toString());
+//        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
+        graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
+        graph->randomizeNodes(getContentComp()->getViewWidth(),
+                              getContentComp()->getViewHeight());
+
+    }
+
+    lastTime = Time::getCurrentTime().currentTimeMillis();
+    startTimer(10);
+
+}
 //==============================================================================

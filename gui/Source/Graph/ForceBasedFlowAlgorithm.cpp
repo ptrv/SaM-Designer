@@ -101,10 +101,11 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, Ob
 //            }
 //            else
 //            {
+            beta = v->getMass() * u->getMass();
             res = GraphUtils::coulombForce(vp, up, beta);
 //            }
-            fx += res.getX();
-            fy += res.getY();
+            fx += res.getX()/v->getMass();
+            fy += res.getY()/v->getMass();
         }
         for (int j = 0; j < nodes.size(); ++j)
         {
