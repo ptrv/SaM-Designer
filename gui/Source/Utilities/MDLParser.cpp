@@ -150,6 +150,8 @@ bool MDLParser::parseMDL(const File& f)
 
             ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::masses, nullptr);
             masses.addChild(newTree, -1, nullptr);
+
+
         }
         else if(re.fullMatch(SAMRegex::getLinkLine(), line))
         {
@@ -352,7 +354,7 @@ bool MDLParser::parseMDL(const File& f)
             if(! re.fullMatchValues(line, values, 3))
             {
                 DBG("Error reading comment object!");
-            }
+    }
             ValueTree newTree(Ids::comment);
             Point<int> pos = getPos(line);
             newTree.setProperty(Ids::posX, pos.getX(), nullptr);
