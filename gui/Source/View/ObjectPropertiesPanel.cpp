@@ -590,7 +590,7 @@ public:
         teStiff("teStiff"),
         laDamp("laDamp", "Damping (N/(m/s))"),
         teDamp("teDamp"),
-        laPos("laPos", "Position (m)"),
+        laPos("laPos", "Position offset (m)"),
         tePos("tePos"),
         laLabels("laLabels", "Labels"),
         teLabels("teLabels"),
