@@ -89,8 +89,10 @@ Point<float> GraphUtils::coulombForce(Point<float> p1, Point<float> p2, float be
     float ds = sqrt(ds2);
     float dsTmp = ds2 * ds;
     float c = 0.0f;
-    if(dsTmp != 0.0f)
-        c = beta / (dsTmp);
+//    if(dsTmp != 0.0f)
+//        c = beta / dsTmp;
+//        c = beta / ds2;
+        c = beta / ds;
 
     return Point<float>(-c * dx, -c * dy);
 }

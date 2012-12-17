@@ -255,6 +255,30 @@ String MDLWriter::getMDLString()
 		mdlContent << "\n";
 
 	}
+    // write comments
+    ValueTree commentTree = mdlFile.mdlRoot.getChildWithName(Objects::comments);
+    for (int commIdx = 0; commIdx < commentTree.getNumChildren(); ++commIdx)
+    {
+        ValueTree comm = commentTree.getChild(commIdx);
+        mdlContent << "## ";
+        mdlContent << comm.getType().toString();
+        mdlContent << "(";
+        mdlContent << comm[Ids::value].toString().quoted();
+        mdlContent << ",";
+        mdlContent << comm[Ids::fontSize].toString();
+        mdlContent << ",";
+        mdlContent << comm[Ids::commentColour].toString();
+        mdlContent << "),";
+        mdlContent << comm[Ids::identifier].toString();
+		mdlContent << ";";
+		mdlContent << " # pos " << comm.getProperty(Ids::posX, "0").toString();
+        mdlContent << ",";
+        mdlContent << comm.getProperty(Ids::posY, "0").toString();
+		mdlContent << "\n";
+
+    }
+
+
     return mdlContent;
 }
 bool MDLWriter::writeMDL(const File& saveFile)

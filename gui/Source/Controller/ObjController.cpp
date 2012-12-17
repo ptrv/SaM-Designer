@@ -507,6 +507,8 @@ void ObjController::loadComponents(ObjectsHolder* holder)
 {
     MDLFile* mf = owner.getMDLFile();
     ValueTree mdl = mf->mdlRoot;
+    int numObjects = 0;
+    int numNodesZeroPos = 0;
 
     ValueTree massObjects = mdl.getChildWithName(Objects::masses);
     for (int i = 0; i < massObjects.getNumChildren(); i++)
@@ -519,6 +521,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
         else
         {
@@ -536,6 +542,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
         else
         {
@@ -553,6 +563,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
         else
         {
@@ -597,6 +611,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(audioOutComp);
             audioOutComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
 
             ValueTree aoSources = obj.getChildWithName(Ids::sources);
             for (int j = 0; j < aoSources.getNumChildren(); ++j)
@@ -652,10 +670,17 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(cComp);
             cComp->update();
             SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
+            ++numObjects;
+            if(float(comment[Ids::posX]) < 0.00001f
+                && float(comment[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
     }
 
     holder->updateComponents();
+
+    if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
+        holder->redrawObjects(CommandIDs::redrawForceDirected);
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
