@@ -42,7 +42,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, Ob
 //    float dis = 0.0f;
     
     float alpha = 2.0f;
-    float beta = 0.01f;
+    float beta = 1.01f;
     float kk = 0.10f;
     float eta = 0.75f;
 //    float deltaT = 0.1f;
@@ -101,11 +101,11 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, Ob
 //            }
 //            else
 //            {
-            beta = v->getMass() * u->getMass();
+//            beta = v->getMass() * u->getMass();
             res = GraphUtils::coulombForce(vp, up, beta);
 //            }
-            fx += res.getX()/v->getMass();
-            fy += res.getY()/v->getMass();
+            fx += res.getX();// /v->getMass();
+            fy += res.getY();// /v->getMass();
         }
         for (int j = 0; j < nodes.size(); ++j)
         {

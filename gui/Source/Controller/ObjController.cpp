@@ -1399,14 +1399,14 @@ void ObjController::makeGraph(DirectedGraph* g)
                      getObjectForId(l->getData()[Ids::endVertex].toString()));
 
     }
-    for (int k = 0; k < audioConnections.size(); ++k)
-    {
-        AudioOutConnector* ac = audioConnections.getUnchecked(k);
-        g->addNode(ac->getSourceObject());
-        g->addNode(ac->getAudioObject());
-
-        g->linkNodes(ac->getSourceObject(), ac->getAudioObject());
-    }
+//    for (int k = 0; k < audioConnections.size(); ++k)
+//    {
+//        AudioOutConnector* ac = audioConnections.getUnchecked(k);
+//        g->addNode(ac->getSourceObject());
+//        g->addNode(ac->getAudioObject());
+//
+//        g->linkNodes(ac->getSourceObject(), ac->getAudioObject());
+//    }
 
     g->shuffleNodes();
 }
