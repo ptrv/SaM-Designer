@@ -82,6 +82,7 @@ void MDLFile::initMDL()
 	mdlRoot = ValueTree(Objects::synthamodeler);
 	mdlRoot.setProperty(Ids::mdlName, "Untitled", nullptr);
 	mdlRoot.setProperty(Ids::mdlPath, String::empty, nullptr);
+
 	setChangedFlag(false);
 }
 
@@ -154,6 +155,8 @@ Result MDLFile::loadDocument (const File& file)
         isUntitledFile = false;
         md5 = MD5(file);
 
+        checkForOutputDSPVar();
+
         return Result::ok();
     }
     else
@@ -166,6 +169,8 @@ Result MDLFile::loadDocument (const File& file)
 }
 Result MDLFile::saveDocument (const File& file)
 {
+    checkForOutputDSPVar();
+
     bool saveOk;
     String errorMsg;
 	this->setChangedFlag(false);
@@ -324,6 +329,18 @@ bool MDLFile::checkIfChecksumChanged()
         return false;
 }
 
+void MDLFile::checkForOutputDSPVar()
+{
+    ValueTree vars = mdlRoot.getOrCreateChildWithName(Objects::variables, nullptr);
+    ValueTree var = vars.getChildWithProperty(Ids::identifier, "outputDSP");
+    if(! var.isValid())
+    {
+        var = ValueTree(Ids::variable);
+        var.setProperty(Ids::identifier, "outputDSP", nullptr);
+        var.setProperty(Ids::faustCode, "highpass(4,20.0)", nullptr);
+        vars.addChild(var, -1, nullptr);
+    }
+}
 //==============================================================================
 #if UNIT_TESTS
 
