@@ -225,6 +225,10 @@ void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
         }
         else
         {
+            if(newPos.getX() < 0)
+                newPos.x = 0;
+            if(newPos.getY() < 0)
+                newPos.y = 0;
             data.setProperty(Ids::posX, newPos.getX(), nullptr);
             data.setProperty(Ids::posY, newPos.getY(), nullptr);
             setActualPosition(newPos);

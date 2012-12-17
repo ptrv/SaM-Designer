@@ -52,7 +52,13 @@ static Point<int> getPos(const String& posStr)
 		StringArray posArray;
 		posArray.addTokens(tmp, ",", "\"");
 		if(posArray.size() == 2)
+        {
 			p.setXY(posArray[0].getIntValue(), posArray[1].getIntValue());
+            if(p.getX() < 0)
+                p.setX(0);
+            if(p.getY() < 0)
+                p.setY(0);
+        }
 	}
 	return p;
 }

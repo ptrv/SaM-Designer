@@ -100,6 +100,17 @@ String fixPath(const String& path);
 
 bool writeStringToFile(const String& s, const File& f);
 
+template<class T>
+T constrain(T actual, T min, T max)
+{
+    if(actual < min)
+        return min;
+    else if(actual > max)
+        return max;
+    else
+        return actual;
+}
+
 };
 }
 
