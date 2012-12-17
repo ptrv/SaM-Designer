@@ -438,6 +438,15 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                         isSnapActive(false),
                         !isSnapShown());
         break;
+    case CommandIDs::showAudioConnections:
+    {
+        bool sac = StoredSettings::getInstance()->getShowAudioConnections();
+        sac = !sac;
+        StoredSettings::getInstance()->setShowAudioConnections(sac);
+        objController.setAudioConnectionVisibility(sac);
+    }
+        break;
+
     default:
         return false;
     }

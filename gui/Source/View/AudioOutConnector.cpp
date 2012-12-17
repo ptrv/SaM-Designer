@@ -267,6 +267,9 @@ void AudioOutConnector::resized()
 
 void AudioOutConnector::paint(Graphics& g)
 {
+    if(! isVisible())
+        return;
+
     if(selected)
     {
         g.setColour(Colours::red);

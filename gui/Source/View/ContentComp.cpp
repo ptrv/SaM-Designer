@@ -329,6 +329,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::showObjectNames,
         CommandIDs::enableSnapToGrid,
         CommandIDs::showGrid,
+        CommandIDs::showAudioConnections,
     };
 
     commands.addArray(ids, numElementsInArray(ids));
@@ -533,6 +534,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
 //        result.defaultKeypresses.add(KeyPress('g', cmd | shift, 0));
         break;
 
+    case CommandIDs::showAudioConnections:
+        result.setInfo("Show audio connections", "", CommandCategories::view, 0);
+        result.setTicked(StoredSettings::getInstance()->getShowAudioConnections());
+        break;
     default:
         break;
     };

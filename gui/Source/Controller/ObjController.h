@@ -206,6 +206,8 @@ public:
 
     void makeGraph(DirectedGraph* g);
     void makeTree(DirectedGraph* g);
+
+    void setAudioConnectionVisibility(bool shouldBeVisible);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

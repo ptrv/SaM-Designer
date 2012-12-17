@@ -343,3 +343,11 @@ void StoredSettings::setIsUsingBuiltinSAMCompiler(bool isUsingBuiltinSAMCompiler
 {
     props->setValue("usebuiltincompiler", isUsingBuiltinSAMCompiler);
 }
+const bool StoredSettings::getShowAudioConnections() const
+{
+    return props->getBoolValue("showaudioconnections", true);
+}
+void StoredSettings::setShowAudioConnections(bool showAudioConnections)
+{
+    props->setValue("showaudioconnections", showAudioConnections);
+}

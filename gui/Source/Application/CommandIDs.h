@@ -110,6 +110,8 @@ namespace CommandIDs
     static const int moveRightFine          = 0x202430;
 
     static const int selectTextColour       = 0x202710;
+
+    static const int showAudioConnections   = 0x202720;
 }
 
 namespace CommandCategories

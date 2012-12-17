@@ -239,6 +239,12 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
 {
     if(sObjects.getNumSelected() == 2)
     {
+        if(! StoredSettings::getInstance()->getShowAudioConnections())
+        {
+            StoredSettings::getInstance()->setShowAudioConnections(true);
+            setAudioConnectionVisibility(true);
+        }
+
         ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
         LinkComponent* lc1 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
@@ -677,6 +683,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
         }
     }
 
+    setAudioConnectionVisibility(StoredSettings::getInstance()->getShowAudioConnections());
     holder->updateComponents();
 
     if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
@@ -1414,4 +1421,14 @@ void ObjController::makeGraph(DirectedGraph* g)
 void ObjController::makeTree(DirectedGraph* g)
 {
     
+}
+
+void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
+{
+    for (int i = 0; i < audioConnections.size(); ++i)
+    {
+        audioConnections[i]->setVisible(shouldBeVisible);
+        audioConnections[i]->repaint();
+    }
+
 }

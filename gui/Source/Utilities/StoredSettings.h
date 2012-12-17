@@ -108,6 +108,9 @@ public:
     const bool getIsUsingBuiltinSAMCompiler() const;
     void setIsUsingBuiltinSAMCompiler (bool isUsingBuiltinSAMCompiler);
 
+    const bool getShowAudioConnections() const;
+    void setShowAudioConnections (bool showAudioConnections);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

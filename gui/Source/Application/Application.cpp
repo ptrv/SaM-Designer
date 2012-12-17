@@ -623,6 +623,9 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
             m.addItem (300 + i, String (snapSizes[i]) + " pixels", true, snapSizes[i] == currentSnapSize);
 
         menu.addSubMenu ("Grid size", m, getApp()->getActiveHolderComponent() != 0);
+
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showAudioConnections);
     }
     else if (topLevelMenuIndex == 6)
     {
