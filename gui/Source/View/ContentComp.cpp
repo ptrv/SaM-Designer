@@ -407,11 +407,11 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::redrawCircle:
         result.setInfo("Circle", "", CommandCategories::editing, 0);
-//        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
         break;
     case CommandIDs::redrawForceDirected:
         result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
-//        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
 
         break;
 
@@ -469,8 +469,8 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     {
         result.setInfo("Comment", "", CommandCategories::inserting, 0);
         MDLFile * mdlF = mainWindow.getMDLFile();
-        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
-                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
+//        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
+//                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
     }
         break;
     case CommandIDs::spaceBarDrag:
