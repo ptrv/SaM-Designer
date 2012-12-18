@@ -304,6 +304,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::tidyObjects,
         CommandIDs::redrawCircle,
         CommandIDs::redrawForceDirected,
+        CommandIDs::showRedrawOptions,
         CommandIDs::insertMass,
         CommandIDs::insertGround,
         CommandIDs::insertResonator,
@@ -412,9 +413,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::redrawForceDirected:
         result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
         result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
-
         break;
-
+    case CommandIDs::showRedrawOptions:
+        result.setInfo("Force-Directed options...", "Open redraw options", CommandCategories::editing, 0);
+        break;
     case CommandIDs::insertMass:
         result.setInfo("Mass", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('1', ModifierKeys::commandModifier);

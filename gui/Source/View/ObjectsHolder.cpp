@@ -38,6 +38,7 @@
 #include "LinkComponent.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
+#include "RedrawOptionsPanel.h"
 #include "SnapGridPainter.h"
 #include "AudioOutConnector.h"
 #include "CommentComponent.h"
@@ -300,6 +301,9 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case CommandIDs::redrawForceDirected:
         redrawObjects(CommandIDs::redrawForceDirected);
+        break;
+    case CommandIDs::showRedrawOptions:
+        RedrawOptionsPanel::show();
         break;
     case CommandIDs::insertMass:
         objController.addNewObject(this,
@@ -768,6 +772,7 @@ void ObjectsHolder::setSnappingGrid (const int numPixels, const bool active, con
     }
 }
 
+double timeStep = 0.6;
 void ObjectsHolder::timerCallback()
 {
 //    DBG("tick");
@@ -779,7 +784,7 @@ void ObjectsHolder::timerCallback()
 
         bool done = graph->reflow(getContentComp()->getViewWidth(), 
                                   getContentComp()->getViewHeight(),
-                                  objController, 0.6f);
+                                  objController, timeStep);
         updateComponents();
         repaint();
         if(done)
@@ -805,7 +810,7 @@ void ObjectsHolder::redrawObjects(const int cmdId)
         graph = nullptr;
     }
 
-
+    timeStep = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.6);
     if(cmdId == CommandIDs::redrawCircle)
     {
         graph = new DirectedGraph();

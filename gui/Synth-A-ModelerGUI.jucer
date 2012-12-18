@@ -152,6 +152,10 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="kIUIkp" name="RedrawOptionsPanel.cpp" compile="1" resource="0"
+              file="Source/View/RedrawOptionsPanel.cpp"/>
+        <FILE id="Ejkwfk" name="RedrawOptionsPanel.h" compile="0" resource="0"
+              file="Source/View/RedrawOptionsPanel.h"/>
         <FILE id="V7zrp4" name="CommentEditor.cpp" compile="1" resource="0"
               file="Source/View/CommentEditor.cpp"/>
         <FILE id="Dd613g" name="CommentEditor.h" compile="0" resource="0" file="Source/View/CommentEditor.h"/>

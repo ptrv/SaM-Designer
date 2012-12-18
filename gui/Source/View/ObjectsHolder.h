@@ -35,6 +35,7 @@ class ObjController;
 class SelectableObject;
 class SnapGridPainter;
 class VariablesPanel;
+class RedrawOptionsPanel;
 class DirectedGraph;
 class ContentComp;
 /**
@@ -107,6 +108,8 @@ private:
     ContentComp* getContentComp();
 
     void showContextMenu(const Point<int> mPos);
+
+    void showRedrawOptions();
 
     void checkExtent(const Rectangle<int>& r);
     ObjController& objController;
