@@ -36,7 +36,9 @@ class ObjController;
 class TreeFlowAlgorithm : public FlowAlgorithm
 {
 public:
-    bool reflow(DirectedGraph* g, int width, int height, ObjController& objController, float deltaTime);
+    bool reflow(DirectedGraph* g, int offsetX, int offsetY, 
+                int width, int height, ObjController& objController,
+                float deltaTime);
 };
 
 }

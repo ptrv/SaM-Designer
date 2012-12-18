@@ -34,7 +34,9 @@
 
 using namespace synthamodeler;
 
-bool TreeFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, ObjController& objController, float deltaTime)
+bool TreeFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
+                               int width, int height, ObjController& objController,
+                               float deltaTime)
 {
     if (Tree * t = dynamic_cast<Tree*> (g))
     {

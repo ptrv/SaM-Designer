@@ -782,7 +782,9 @@ void ObjectsHolder::timerCallback()
         float dT = (currentTime-lastTime)/1000.0f;
 
 
-        bool done = graph->reflow(getContentComp()->getViewWidth(), 
+        bool done = graph->reflow(getContentComp()->getViewPosition().x,
+                                  getContentComp()->getViewPosition().y,
+                                  getContentComp()->getViewWidth(),
                                   getContentComp()->getViewHeight(),
                                   objController, timeStep);
         updateComponents();
@@ -823,7 +825,9 @@ void ObjectsHolder::redrawObjects(const int cmdId)
 //        DBG(graph->toString());
 //        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
         graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
-        graph->randomizeNodes(getContentComp()->getViewWidth(),
+        graph->randomizeNodes(getContentComp()->getViewPosition().x,
+                              getContentComp()->getViewPosition().y,
+                              getContentComp()->getViewWidth(),
                               getContentComp()->getViewHeight());
 
     }

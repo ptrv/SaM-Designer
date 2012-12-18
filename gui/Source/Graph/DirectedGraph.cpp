@@ -95,12 +95,12 @@ Array<Node*> DirectedGraph::getLeaves()
     return leaves;
 }
 
-bool DirectedGraph::reflow(int width, int height, ObjController& objController, float deltaTime)
+bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height, ObjController& objController, float deltaTime)
 {
-    return flower->reflow(this, width, height, objController, deltaTime);
+    return flower->reflow(this, offsetX, offsetY, width, height, objController, deltaTime);
 }
 
-void DirectedGraph::randomizeNodes(int width, int height)
+void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int height)
 {
     Random rnd(Time::currentTimeMillis());
     for (int i = 0; i < nodes.size(); ++i)
@@ -111,21 +111,32 @@ void DirectedGraph::randomizeNodes(int width, int height)
         int y = n->getNY();
         float f1 = 1.0f;
         float f2 = f1/2.0f;
-        int rx = x + rnd.nextInt(width*f1) - width*f2;
-        int ry = y + rnd.nextInt(height*f1) - height*f2;
+//        int rx = x + rnd.nextInt(width*f1) - width*f2;
+//        int ry = y + rnd.nextInt(height*f1) - height*f2;
+        int rx = rnd.nextInt(width) + offsetX;
+        int ry = rnd.nextInt(height) + offsetY;
+
 //        while(rx < 0 || ry > width)
 //            rx = x + rnd.nextInt(width*f1) - width*f2;
 //        while(ry < 0 || ry > height)
 //            ry = y + rnd.nextInt(height*f1) - height*f2;
 
-        if(rx < 0)
-            rx = abs(rx);
-        else if(rx > width)
-            rx = width - (rx - width);
-        if(ry < 0)
-            ry = abs(ry);
-        else if(ry > height)
-            ry = height - (ry - height);
+//        if(rx < 0)
+//            rx = abs(rx);
+//        else if(rx > width)
+//            rx = width - (rx - width);
+//        if(ry < 0)
+//            ry = abs(ry);
+//        else if(ry > height)
+//            ry = height - (ry - height);
+        if(rx < offsetX)
+            rx = offsetX;
+        else if(rx > width + offsetX)
+            rx = width + offsetX;
+        if(ry < offsetY)
+            ry = offsetY;
+        else if(ry > height + offsetY)
+            ry = height + offsetY;
 
         n->setNX(rx);
         n->setNY(ry);

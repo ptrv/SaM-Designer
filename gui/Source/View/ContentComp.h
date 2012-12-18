@@ -84,6 +84,7 @@ public:
 
     int getViewWidth() const;
     int getViewHeight() const;
+    Point<int> getViewPosition() const;
     //==============================================================================
 //    juce_UseDebuggingNewOperator
 

@@ -18,6 +18,7 @@
 #include "../View/ObjectComponent.h"
 #include "GraphUtils.h"
 #include "../Models/ObjectIDs.h"
+#include "../Utilities/StoredSettings.h"
 
 #include "ForceBasedFlowAlgorithm.h"
 
@@ -34,17 +35,19 @@ ForceBasedFlowAlgorithm::~ForceBasedFlowAlgorithm()
 }
 
 //bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g, int /*width*/, int /*height*/, ObjController& objController)
-bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, ObjController& objController, float deltaT)
+bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY, 
+                                     int width, int height, ObjController& objController,
+                                     float deltaT)
 {
     Array<Node*>& nodes = g->getNodes();
 
     Point<float> totalEnergy(0, 0);
 //    float dis = 0.0f;
     
-    float alpha = 2.0f;
-    float beta = 1.01f;
-    float kk = 0.10f;
-    float eta = 0.75f;
+    float alpha = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 1.0);
+    float beta = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 1.01);
+    float kk = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.10);
+    float eta = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.75);
 //    float deltaT = 0.1f;
 
     for (int i = 0; i < nodes.size(); ++i)

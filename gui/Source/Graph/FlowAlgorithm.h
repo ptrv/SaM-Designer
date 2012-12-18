@@ -34,7 +34,9 @@ class DirectedGraph;
 class ObjController;
 class FlowAlgorithm{
 public:
-    virtual bool reflow(DirectedGraph* g, int width, int height, ObjController& objController, float deltaTime) = 0;
+    virtual bool reflow(DirectedGraph* g, int offsetX, int offsetY,
+                        int width, int height, ObjController& objController,
+                        float deltaTime) = 0;
 };
 
 }

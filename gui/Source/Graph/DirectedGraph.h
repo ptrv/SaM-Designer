@@ -51,9 +51,10 @@ public:
     Array<Node*> getRoots();
     Array<Node*> getLeaves();
 
-    bool reflow(int width, int height, ObjController& objControler, float deltaTime);
+    bool reflow(int offsetX, int offsetY, int width, int height,
+                ObjController& objControler, float deltaTime);
 
-    void randomizeNodes(int width, int height);
+    void randomizeNodes(int offsetX, int offsetY, int width, int height);
 
     String toString();
 

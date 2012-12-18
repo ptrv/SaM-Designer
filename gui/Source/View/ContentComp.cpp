@@ -653,13 +653,21 @@ void ContentComp::dragKeyHeldDown(bool isKeyDown)
 
 int ContentComp::getViewWidth() const
 {
-    return viewport->getViewHeight();
+//    return viewport->getViewWidth();
+    return viewport->getMaximumVisibleWidth();
 }
 
 int ContentComp::getViewHeight() const
 {
-    return viewport->getViewWidth();
+//    return viewport->getViewHeight();
+    return viewport->getMaximumVisibleHeight();
 }
+Point<int> ContentComp::getViewPosition() const
+{
+//    return viewport->getViewHeight();
+    return viewport->getViewPosition();
+}
+
 
 //[/MiscUserCode]
 
