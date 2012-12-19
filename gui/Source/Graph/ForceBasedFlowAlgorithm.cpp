@@ -138,7 +138,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
 //        dis += abs(fx) + abs(fy);
     }
 
-    objController.getSelectedObjects().deselectAll();
+//    objController.getSelectedObjects().deselectAll();
     for (int i = 0; i < nodes.size(); ++i)
     {
         Node* v = nodes.getUnchecked(i);
@@ -150,18 +150,22 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
 
         if(ObjectComponent* oc = objController.getObjectForId(v->getLabel()))
         {
+            if(oc->isMouseButtonDown())
+            {
+                vx = oc->getActualPos().x;
+                vy = oc->getActualPos().y;
+            }
             oc->setPosition(Point<int>(vx, vy), false);
             v->setNX(vx);
             v->setNY(vy);
         }
-        else if(LinkComponent* lc = objController.getLinkForId(v->getLabel()))
-        {
-            DBG("link");
-//            ObjectComponent* oc1 = objController.getObject(lc->getData()[Ids::startVertex].toString());
-//            ObjectComponent* oc2 = objController.getObject(lc->getData()[Ids::endVertex].toString());
-//            oc->setPosition(Point<int>(vx, vy), false);
-//            oc->setPosition(Point<int>(vx, vy), false);
-        }
+//        else if(LinkComponent* lc = objController.getLinkForId(v->getLabel()))
+//        {
+////            ObjectComponent* oc1 = objController.getObject(lc->getData()[Ids::startVertex].toString());
+////            ObjectComponent* oc2 = objController.getObject(lc->getData()[Ids::endVertex].toString());
+////            oc->setPosition(Point<int>(vx, vy), false);
+////            oc->setPosition(Point<int>(vx, vy), false);
+//        }
     }
 
     float lengthTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x
