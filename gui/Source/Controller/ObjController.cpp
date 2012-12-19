@@ -1418,11 +1418,6 @@ void ObjController::makeGraph(DirectedGraph* g)
     g->shuffleNodes();
 }
 
-void ObjController::makeTree(DirectedGraph* g)
-{
-    
-}
-
 void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
 {
     for (int i = 0; i < audioConnections.size(); ++i)

@@ -244,16 +244,10 @@
     <ClCompile Include="..\..\Source\Graph\CircleFlowAlgorithm.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Graph\TreeFlowAlgorithm.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Graph\GraphUtils.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Graph\Tree.cpp">
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\DirectedGraph.cpp">
@@ -1263,9 +1257,6 @@
     <ClInclude Include="..\..\Source\Graph\CircleFlowAlgorithm.h">
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Graph\TreeFlowAlgorithm.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Graph\GraphUtils.h">
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClInclude>
@@ -1273,9 +1264,6 @@
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\FlowAlgorithm.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Graph\Tree.h">
       <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\DirectedGraph.h">

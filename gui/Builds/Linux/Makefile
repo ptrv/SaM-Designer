@@ -45,10 +45,8 @@ endif
 OBJECTS := \
   $(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o \
   $(OBJDIR)/CircleFlowAlgorithm_8478b2f1.o \
-  $(OBJDIR)/TreeFlowAlgorithm_a63c68a3.o \
   $(OBJDIR)/GraphUtils_6816740d.o \
   $(OBJDIR)/ForceDirectedFlowAlgorithm_3998fbd8.o \
-  $(OBJDIR)/Tree_a861a5e8.o \
   $(OBJDIR)/DirectedGraph_c0af84a6.o \
   $(OBJDIR)/Node_98b30e4c.o \
   $(OBJDIR)/CommandLine_e08eafe1.o \
@@ -123,11 +121,6 @@ $(OBJDIR)/CircleFlowAlgorithm_8478b2f1.o: ../../Source/Graph/CircleFlowAlgorithm
 	@echo "Compiling CircleFlowAlgorithm.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/TreeFlowAlgorithm_a63c68a3.o: ../../Source/Graph/TreeFlowAlgorithm.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling TreeFlowAlgorithm.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
 $(OBJDIR)/GraphUtils_6816740d.o: ../../Source/Graph/GraphUtils.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling GraphUtils.cpp"
@@ -136,11 +129,6 @@ $(OBJDIR)/GraphUtils_6816740d.o: ../../Source/Graph/GraphUtils.cpp
 $(OBJDIR)/ForceDirectedFlowAlgorithm_3998fbd8.o: ../../Source/Graph/ForceDirectedFlowAlgorithm.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ForceDirectedFlowAlgorithm.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/Tree_a861a5e8.o: ../../Source/Graph/Tree.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling Tree.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/DirectedGraph_c0af84a6.o: ../../Source/Graph/DirectedGraph.cpp
