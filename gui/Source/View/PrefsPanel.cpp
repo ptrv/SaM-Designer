@@ -48,7 +48,9 @@ public:
 		tbExportConfirm("Confirm before generating code"),
         tbOpenFaustExport("Open Faust file after export"),
         tbUseMDLX("Use MDLX file"),
+#ifdef BUILTIN_SAM_COMPILER
         tbUseBuiltinCompiler("Use builtin Synth-A-Modeler compiler"),
+#endif
 #ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
 #endif
@@ -67,8 +69,10 @@ public:
         tbOpenFaustExport.setToggleState(StoredSettings::getInstance()->getOpenFaustExport(), false);
         addAndMakeVisible(&tbUseMDLX);
         tbUseMDLX.setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(), false);
+#ifdef BUILTIN_SAM_COMPILER
         addAndMakeVisible(&tbUseBuiltinCompiler);
         tbUseBuiltinCompiler.setToggleState(StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler(), false);
+#endif
 #ifdef DEBUG
         addAndMakeVisible(&tbLoggingOn);
         tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(), false);
@@ -83,7 +87,9 @@ public:
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
         StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
         StoredSettings::getInstance()->setIsUsingMDLX(tbUseMDLX.getToggleState());
+#ifdef BUILTIN_SAM_COMPILER
         StoredSettings::getInstance()->setIsUsingBuiltinSAMCompiler(tbUseBuiltinCompiler.getToggleState());
+#endif
 #ifdef DEBUG
         StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
 #endif
@@ -97,7 +103,9 @@ public:
         tbExportConfirm.setBounds(10, 200, getWidth() - 20, 22);
         tbOpenFaustExport.setBounds(10, 230, getWidth() - 20, 22);
         tbUseMDLX.setBounds(10, 260, getWidth() - 20, 22);
+#ifdef BUILTIN_SAM_COMPILER
         tbUseBuiltinCompiler.setBounds(10, 290, getWidth() - 20, 22);
+#endif
 #ifdef DEBUG
         tbLoggingOn.setBounds(10, 320, getWidth() - 20, 22);
 #endif
@@ -110,7 +118,9 @@ private:
     ToggleButton tbExportConfirm;
     ToggleButton tbOpenFaustExport;
     ToggleButton tbUseMDLX;
+#ifdef BUILTIN_SAM_COMPILER
     ToggleButton tbUseBuiltinCompiler;
+#endif
 #ifdef DEBUG
     ToggleButton tbLoggingOn;
 #endif

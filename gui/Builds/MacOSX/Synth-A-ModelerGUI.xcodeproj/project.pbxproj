@@ -513,7 +513,6 @@
 		A0A079956E6032AA486D56DD = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = "SOURCE_ROOT"; };
 		A0AA6F5E3CCD5D11F428FB8F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_LookAndFeel.cpp"; path = "../../../juce/modules/juce_gui_basics/lookandfeel/juce_LookAndFeel.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A0B0CA6F73170A0E1396555B = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_StretchableLayoutResizerBar.cpp"; path = "../../../juce/modules/juce_gui_basics/layout/juce_StretchableLayoutResizerBar.cpp"; sourceTree = "SOURCE_ROOT"; };
-		A0CCE7A8FBF092534641788F = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_NotificationType.h"; path = "../../../juce/modules/juce_events/messages/juce_NotificationType.h"; sourceTree = "SOURCE_ROOT"; };
 		A13E95B09B5A9D24C6E0195B = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "juce_CriticalSection.h"; path = "../../../juce/modules/juce_core/threads/juce_CriticalSection.h"; sourceTree = "SOURCE_ROOT"; };
 		A2A095C1D6DF45F1F6F851A7 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_MemoryBlock.cpp"; path = "../../../juce/modules/juce_core/memory/juce_MemoryBlock.cpp"; sourceTree = "SOURCE_ROOT"; };
 		A2D86059C3B12BFBDB622E22 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_win32_SystemTrayIcon.cpp"; path = "../../../juce/modules/juce_gui_extra/native/juce_win32_SystemTrayIcon.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -1170,8 +1169,7 @@
 				DB5186F4DABA766DF95BA6AA,
 				905E8C24A4132F8EBF5F4881,
 				EDB54EDC16532B5498F30A5F,
-				7FEC52BAFFAE196B13EBACD0,
-				A0CCE7A8FBF092534641788F ); name = messages; sourceTree = "<group>"; };
+				7FEC52BAFFAE196B13EBACD0 ); name = messages; sourceTree = "<group>"; };
 		476C63A25A2A94B9996F7CF4 = { isa = PBXGroup; children = (
 				2ABCD53E3659F75804ACA09F,
 				70EB45F30B21871B4EB0CB9C,
@@ -1704,6 +1702,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 				"_DEBUG=1",
 				"DEBUG=1",
+				"BUILTIN_SAM_COMPILER=0",
 				"UNIT_TESTS=1",
 				"JUCER_XCODE_MAC_F6D2F4CF=1"); }; name = Debug; };
 		04205668AD9AC3C13C4B3679 = { isa = XCBuildConfiguration; buildSettings = {
@@ -1724,6 +1723,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 				"_NDEBUG=1",
 				"NDEBUG=1",
+				"BUILTIN_SAM_COMPILER=0",
 				"JUCER_XCODE_MAC_F6D2F4CF=1"); }; name = Release; };
 		CB7D49DC606871A43686D7A5 = { isa = XCBuildConfiguration; buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;

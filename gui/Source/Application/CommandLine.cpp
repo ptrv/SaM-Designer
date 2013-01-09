@@ -53,6 +53,11 @@ int showHelp()
         << " Synth-A-Modeler --compile /path/to/mdl_file /path/to/dsp_file" << std::endl
         << "    Compiles a mdl_file to a dsp_file." << std::endl
         << std::endl
+#if BUILTIN_SAM_COMPILER
+        << " Synth-A-Modeler --compile-builtin /path/to/mdl_file /path/to/dsp_file" << std::endl
+        << "    Compiles a mdl_file to a dsp_file." << std::endl
+        << std::endl
+#endif
         << " Synth-A-Modeler --binary exporter_name mdl_file" << std::endl
         << "    Generates a binary." << std::endl
         << std::endl
@@ -95,7 +100,11 @@ bool checkFile(const String& path, File& f, bool checkExistance)
     return true;
 }
 
+#if BUILTIN_SAM_COMPILER
+int compileMdlToDsp (const StringArray& args, bool useBuiltinCompiler)
+#else
 int compileMdlToDsp (const StringArray& args)
+#endif
 {
     hideDockIcon();
     
@@ -120,20 +129,35 @@ int compileMdlToDsp (const StringArray& args)
             return 1;
     }
 
-    ScopedPointer<synthamodeler::MDLFile> mdl;
-    mdl = new MDLFile(in);
-    
-    String dsp = synthamodeler::SAMCompiler::compile(mdl->mdlRoot);
-    
-    if(synthamodeler::Utils::writeStringToFile(dsp, outFile))
+#if BUILTIN_SAM_COMPILER
+    if(useBuiltinCompiler)
     {
-        std::cout << "\nSuccessfully created " << outFile.getFullPathName() << std::endl;
-        return 0;
+        ScopedPointer<synthamodeler::MDLFile> mdl;
+        mdl = new MDLFile(in);
+
+        String dsp = synthamodeler::SAMCompiler::compile(mdl->mdlRoot);
+
+        if (synthamodeler::Utils::writeStringToFile(dsp, outFile))
+        {
+            std::cout << "\nSuccessfully created " << outFile.getFullPathName() << std::endl;
+            return 0;
+        }
+        else
+        {
+            std::cout << "\nCreating " << outFile.getFullPathName() << " failed!" << std::endl;
+            return 1;
+        }
     }
     else
+#endif
     {
-        std::cout << "\nCreating " << outFile.getFullPathName() << " failed!" << std::endl;
-        return 1;
+        SAMCmd cmd;
+        String result = cmd.generateFaustCode(in.getFullPathName(),
+                                              outFile.getFullPathName(),
+                                              false);
+
+        std::cout << "\n" << result << std::endl;
+        return 0;
     }
 }
 
@@ -319,7 +343,12 @@ int synthamodeler::performCommandLine (const String& commandLine)
     args.trim();
 
     if (matchArgument(args[0], "help"))              return showHelp();
+#if BUILTIN_SAM_COMPILER
+    if (matchArgument(args[0], "compile"))           return compileMdlToDsp(args, false);
+    if (matchArgument(args[0], "compile-builtin"))   return compileMdlToDsp(args, true);
+#else
     if (matchArgument(args[0], "compile"))           return compileMdlToDsp(args);
+#endif
     if (matchArgument(args[0], "binary"))            return generateBinary(args);
     if (matchArgument(args[0], "list-exporters"))    return listExporters(false);
     if (matchArgument(args[0], "list-exportersd"))   return listExporters(true);

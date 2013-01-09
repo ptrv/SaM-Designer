@@ -25,7 +25,9 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
+#if BUILTIN_SAM_COMPILER
 #include "../Models/SAMCompiler.h"
+#endif
 
 #include "SAMCmd.h"
 
@@ -162,6 +164,7 @@ const String SAMCmd::generateFaustCode(const String& inPath,
 	return processoutput;
 }
 
+#if BUILTIN_SAM_COMPILER
 const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
                                               const String& outPath,
                                               bool /*useSamConsole*/)
@@ -174,7 +177,7 @@ const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
     else
         return "Generating faust code failed!\n";
 }
-
+#endif
 const String SAMCmd::generateExternal(const String& mdlPath,
                                       const String& exporter,
                                       bool useSamConsole)

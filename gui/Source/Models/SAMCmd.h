@@ -82,9 +82,11 @@ public:
                                    const String& outPath,
                                    bool useSamConsole = true);
 
+#if BUILTIN_SAM_COMPILER
     const String generateFaustCodeBuiltin(ValueTree mdlRoot_,
                                           const String& outPath,
                                           bool useSamConsole = true);
+#endif
 	/**
 	 * Generates external using the FAUST compiler.
 	 *

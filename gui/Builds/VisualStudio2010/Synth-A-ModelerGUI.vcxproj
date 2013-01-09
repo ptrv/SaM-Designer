@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;BUILTIN_SAM_COMPILER=0;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -100,7 +100,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;BUILTIN_SAM_COMPILER=0;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -1149,7 +1149,6 @@
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_Message.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageListener.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageManager.h"/>
-    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_NotificationType.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_MultiTimer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_Timer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\broadcasters\juce_ActionBroadcaster.h"/>

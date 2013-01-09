@@ -196,6 +196,7 @@ const String MDLController::generateFaust()
     if (StoredSettings::getInstance()->getIsExportConfirm())
         r = Alerts::confirmExport("Really export faust");
 
+#if BUILTIN_SAM_COMPILER
     if (StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler()
         || currentMdl->getFile().hasFileExtension(".mdlx"))
     {
@@ -211,6 +212,7 @@ const String MDLController::generateFaust()
         }
     }
     else
+#endif
     {
         if (!samCmd->isPerlAvailable())
         {
