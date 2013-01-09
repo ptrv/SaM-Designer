@@ -26,6 +26,8 @@
 #ifndef __MISCUTILITIES_H_64FF5DE5__
 #define __MISCUTILITIES_H_64FF5DE5__
 
+namespace synthamodeler
+{
 class BaseObjectComponent;
 class ObjController;
 /**
@@ -62,6 +64,7 @@ FileLogger* getLogger();
 void openHelpUrl();
 
 void openHelpUrl(const String& helpId);
+void openHelpPatch(const String& helpId);
 /**
  * Opens data directory in file explorer.
  */
@@ -95,7 +98,21 @@ const Identifier& getObjectGroup(const Identifier& ident);
 
 String fixPath(const String& path);
 
+bool writeStringToFile(const String& s, const File& f);
+
+template<class T>
+T constrain(T actual, T min, T max)
+{
+    if(actual < min)
+        return min;
+    else if(actual > max)
+        return max;
+    else
+        return actual;
+}
+
 };
+}
 
 
 #endif  // __MISCUTILITIES_H_64FF5DE5__

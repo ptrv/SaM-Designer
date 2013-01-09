@@ -27,9 +27,13 @@
 #include "../Application/MainWindow.h"
 #include "../Models/MDLFile.h"
 #include "../Models/SAMCmd.h"
+#include "../View/ObjectsHolder.h"
 
 #include "MDLController.h"
 
+using namespace synthamodeler;
+
+const char* MDLController::fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
 
 MDLController::MDLController(MainAppWindow& mainAppWindow_)
 : mainAppWindow(mainAppWindow_),
@@ -105,6 +109,61 @@ void MDLController::saveAs()
 //    }
 }
 
+void MDLController::saveAsImage()
+{
+    if(ContentComp* const c = mainAppWindow.getMDLFileContentComponent())
+    {
+        ObjectsHolder* const oh = getHolderComponent();
+        Image img = oh->createComponentSnapshot(oh->getObjectsBounds());
+
+        String initFilePath;
+        initFilePath << currentMdl->getFile().getParentDirectory().getFullPathName()
+                     << "/" << currentMdl->getFile().getFileNameWithoutExtension()
+                     << "_" << Time::getCurrentTime().formatted("%Y%m%d%H%M%S")
+                     << ".png";
+                
+        FileChooser fc("Please select the filename for the image...",
+                       File::createFileWithoutCheckingPath(initFilePath),
+                       "*.png;*.jpg;*.jpeg", true);
+
+        if(fc.browseForFileToSave(true))
+        {
+            File f(fc.getResult());
+            TemporaryFile temp(f);
+
+            ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
+
+            if (out != nullptr)
+            {
+                bool imgToStreamOk = false;
+                if(f.hasFileExtension(".png"))
+                {
+                    PNGImageFormat png;
+                    imgToStreamOk = png.writeImageToStream(img, *out.get());
+                }
+                else if(f.hasFileExtension(".jpg;.jpeg"))
+                {
+                    JPEGImageFormat jpeg;
+                    imgToStreamOk = jpeg.writeImageToStream(img, *out.get());
+                }
+                out = nullptr;
+
+                bool succeeded = false;
+                if(imgToStreamOk)
+                    succeeded = temp.overwriteTargetFileWithTemporary();
+                    
+                if(succeeded)
+                {
+                    SAM_CONSOLE("MSG: ", "Wrote file " + f.getFullPathName(), false);
+                }
+                else
+                {
+                    SAM_CONSOLE("ERROR: ", "Could not write file " + f.getFullPathName(), false);
+                }
+            }
+        }
+    }
+}
 void MDLController::close()
 {
 	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
@@ -116,69 +175,98 @@ void MDLController::close()
 
 bool MDLController::saveAsXml()
 {
-    return currentMdl->saveAsXml();
+    bool saveOk = false;
+    FileChooser fc("Select XML file to save...",
+                   File::getSpecialLocation(File::userHomeDirectory),
+                   "*.xml");
+
+    if (fc.browseForFileToSave(true))
+    {
+        File xmlFile (fc.getResult());
+        String mdlXmlStr = currentMdl->toString();
+
+        saveOk = Utils::writeStringToFile(mdlXmlStr, xmlFile);
+    }
+    return saveOk;
 }
 
 const String MDLController::generateFaust()
 {
-	if(! samCmd->isPerlAvailable())
-	{
-		Alerts::missingPerl();
-		return "Missing Perl";
-	}
-	if(! samCmd->isSAMpreprocessorCmdAvailable())
-	{
-		Alerts::missingSAMpreprocessor();
-		return "Missing SAM-preprocessor";
-	}
-	if(! samCmd->isSynthAModelerCmdAvailable())
-	{
-		Alerts::missingSAM();
-		return "Missing Synth-A-Modeler";
-	}
+    bool r = true;
+    if (StoredSettings::getInstance()->getIsExportConfirm())
+        r = Alerts::confirmExport("Really export faust");
 
-	bool r = true;
-	if(StoredSettings::getInstance()->getIsExportConfirm())
-		r = Alerts::confirmExport("Really export faust");
-
-	if (r)
-	{
-        if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
-            return "Canceled";
-
-        String inPath = currentMdl->getFilePath();
-		File in(inPath);
-		String outFileName= in.getFileNameWithoutExtension();
-		outFileName << ".dsp";
-
-        String dataDir = StoredSettings::getInstance()->getDataDir();
-		String outPath = dataDir;
-		outPath << "/" << outFileName;
-
-        // if current MDL file is not in data dir make a temp copy in data dir
-        File inDataDir(dataDir + "/" + in.getFileName());
-        bool saveInDataDir = false;
-        if (in != inDataDir)
+    if (StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler()
+        || currentMdl->getFile().hasFileExtension(".mdlx"))
+    {
+        if(r)
         {
-            saveInDataDir = true;
-            currentMdl->getFile().copyFileTo(inDataDir);
-            inPath = inDataDir.getFullPathName();
+            String outPath;
+            outPath << StoredSettings::getInstance()->getDataDir();
+            outPath << "/";
+            outPath << currentMdl->getFile().getFileNameWithoutExtension();
+            outPath << ".dsp";
+
+            return samCmd->generateFaustCodeBuiltin(currentMdl->mdlRoot, outPath);
         }
-		String processText = samCmd->generateFaustCode(inPath, outPath);
-        if(StoredSettings::getInstance()->getOpenFaustExport())
-            Utils::openFileNative(outPath);
-
-        // delete temp MDL file
-        if(saveInDataDir)
+    }
+    else
+    {
+        if (!samCmd->isPerlAvailable())
         {
-            if(! inDataDir.deleteFile())
+            Alerts::missingPerl();
+            return "Missing Perl";
+        }
+        if (!samCmd->isSAMpreprocessorCmdAvailable())
+        {
+            Alerts::missingSAMpreprocessor();
+            return "Missing SAM-preprocessor";
+        }
+        if (!samCmd->isSynthAModelerCmdAvailable())
+        {
+            Alerts::missingSAM();
+            return "Missing Synth-A-Modeler";
+        }
+
+        if (r)
+        {
+            if (currentMdl->save(true, true) != FileBasedDocument::savedOk)
+                return "Canceled";
+
+            String inPath = currentMdl->getFilePath();
+            File in(inPath);
+            String outFileName = in.getFileNameWithoutExtension();
+            outFileName << ".dsp";
+
+            String dataDir = StoredSettings::getInstance()->getDataDir();
+            String outPath = dataDir;
+            outPath << "/" << outFileName;
+
+            // if current MDL file is not in data dir make a temp copy in data dir
+            File inDataDir(dataDir + "/" + in.getFileName());
+            bool saveInDataDir = false;
+            if (in != inDataDir)
             {
-                DBG("Deleting temp file failed!");
+                saveInDataDir = true;
+                currentMdl->getFile().copyFileTo(inDataDir);
+                inPath = inDataDir.getFullPathName();
             }
+            String processText = samCmd->generateFaustCode(inPath, outPath);
+            if (StoredSettings::getInstance()->getOpenFaustExport())
+                Utils::openFileNative(outPath);
+
+            // delete temp MDL file
+            if (saveInDataDir)
+            {
+                if (!inDataDir.deleteFile())
+                {
+                    DBG("Deleting temp file failed!");
+                }
+            }
+            return processText;
         }
-        return processText;
-	}
-	return String::empty;
+    }
+    return String::empty;
 }
 
 const String MDLController::generateExternal()
@@ -215,7 +303,10 @@ const String MDLController::generateExternal()
             currentMdl->getFile().copyFileTo(inDataDir);
         }
 
-        outStr << samCmd->generateExternal(inDataDir.getFullPathName());
+        String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
+        String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
+
+        outStr << samCmd->generateExternal(inDataDir.getFullPathName(), exporterValue);
 
         // delete temp MDL file
         if(saveInDataDir)
@@ -301,8 +392,6 @@ ObjectsHolder* MDLController::getHolderComponent()
 {
     return mainAppWindow.getHolderComponent();
 }
-
-static const char* fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
 
 void MDLController::cleanDataDir()
 {

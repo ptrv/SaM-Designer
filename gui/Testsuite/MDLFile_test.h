@@ -28,6 +28,8 @@
 
 #include "TestUtils.h"
 
+namespace synthamodeler
+{
 class MDLFileTest : public UnitTest
 {
 public:
@@ -304,5 +306,6 @@ public:
 };
 
 static MDLFileTest mdlFileTest;
+}
 
 #endif  // __MDLFILE_TEST_H_234EF909__

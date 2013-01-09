@@ -26,6 +26,8 @@
 #ifndef __STOREDSETTINGS_H_7CF20172__
 #define __STOREDSETTINGS_H_7CF20172__
 
+namespace synthamodeler
+{
 /**
  * Singleton class which handles a property file for persistent user settings.
  */
@@ -100,6 +102,15 @@ public:
     const bool getRunSAMBeforeExternal() const;
     void setRunSAMBeforeExternal (bool runSAMBeforeExternal);
 
+    const bool getIsUsingMDLX() const;
+    void setIsUsingMDLX (bool isUsingMDLX);
+
+    const bool getIsUsingBuiltinSAMCompiler() const;
+    void setIsUsingBuiltinSAMCompiler (bool isUsingBuiltinSAMCompiler);
+
+    const bool getShowAudioConnections() const;
+    void setShowAudioConnections (bool showAudioConnections);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;
@@ -110,7 +121,7 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StoredSettings);
 };
-
+}
 
 
 

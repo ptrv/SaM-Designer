@@ -23,9 +23,12 @@
 
 */
 #include "../../JuceLibraryCode/JuceHeader.h"
+#include "../Application/Application.h"
 #include "StoredSettings.h"
 #include "../Models/ObjectIDs.h"
+#include "../Graph/Node.h"
 #include "../View/BaseObjectComponent.h"
+#include "../View/SelectableObject.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../Controller/ObjController.h"
@@ -33,10 +36,9 @@
 #include "MiscUtilities.h"
 #include "RegularExpression.h"
 
-namespace Utils
-{
+using namespace synthamodeler;
 
-bool cancelAnyModalComponents()
+bool Utils::cancelAnyModalComponents()
 {
     const int numModal = ModalComponentManager::getInstance()->getNumModalComponents();
 
@@ -47,7 +49,7 @@ bool cancelAnyModalComponents()
     return numModal > 0;
 }
 
-void SAMLogger(const String& message)
+void Utils::SAMLogger(const String& message)
 {
 String timeString;
 //	timeString << "[" << Time::getCurrentTime().formatted("%H:%M:%S")
@@ -57,7 +59,7 @@ String timeString;
 	Logger::writeToLog(tmp);
 }
 
-FileLogger* getLogger()
+FileLogger* Utils::getLogger()
 {
 #if JUCE_LINUX
 	String subDir = ".Synth-A-Modeler";
@@ -69,21 +71,31 @@ FileLogger* getLogger()
 			"Synth-A-Modeler.log", "Synth-A-Modeler logfile");
 }
 
-void openHelpUrl()
+void Utils::openHelpUrl()
 {
-//	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
-	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/");
+	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+//	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/");
 	helpUrl.launchInDefaultBrowser();
 }
 
-void openHelpUrl(const String& helpId)
+void Utils::openHelpUrl(const String& helpId)
 {
-//	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
-	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/" + helpId + ".html");
+	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
+//	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/" + helpId + ".html");
 	helpUrl.launchInDefaultBrowser();
 }
 
-void openDataDir()
+void Utils::openHelpPatch(const String& helpId)
+{
+    String helpPatch = helpId + "-help.mdlx";
+    File f = StoredSettings::getInstance()->getDataDir() + "/help-patches/" + helpPatch;
+
+    if(f.existsAsFile())
+        SynthAModelerApplication::getApp()->openFile(f);
+    else
+        openHelpUrl(helpId);
+}
+void Utils::openDataDir()
 {
 #if JUCE_MAC
 	Process::openDocument("/usr/bin/open", StoredSettings::getInstance()->getDataDir());
@@ -93,7 +105,7 @@ void openDataDir()
 
 }
 
-void openFileNative(const String& path)
+void Utils::openFileNative(const String& path)
 {
     File f(path);
     if(f.existsAsFile())
@@ -110,7 +122,7 @@ void openFileNative(const String& path)
     }
 }
 
-String getObjectTypeAsString(const Identifier& objType)
+String Utils::getObjectTypeAsString(const Identifier& objType)
 {
 	if(objType == Ids::mass)
 		return "Mass";
@@ -134,11 +146,13 @@ String getObjectTypeAsString(const Identifier& objType)
 		return "Termination";
 	else if(objType == Ids::junction)
 		return "Junction";
+    else if(objType == Ids::variable)
+        return "Variable";
 	else
 		return String::empty;
 }
 
-String fixParameterValueIfNeeded(const String& paramVal)
+String Utils::fixParameterValueIfNeeded(const String& paramVal)
 {
 	if( paramVal == String::empty)
 		return "0.0";
@@ -187,7 +201,7 @@ String fixParameterValueIfNeeded(const String& paramVal)
 	return tmpVal;
 }
 
-String getGainForSourceId(ValueTree& sources, const String& sourceId)
+String Utils::getGainForSourceId(ValueTree& sources, const String& sourceId)
 {
     String gainStr;
     for (int i = 0; i < sources.getNumChildren(); ++i)
@@ -223,7 +237,7 @@ String getGainForSourceId(ValueTree& sources, const String& sourceId)
     return gainStr;
 }
 
-void setGainForSourceId(ValueTree& sources, const String& sourceId,
+void Utils::setGainForSourceId(ValueTree& sources, const String& sourceId,
                         const String& gainVal, UndoManager* undoManager)
 {
     String gainStr;
@@ -251,7 +265,7 @@ void setGainForSourceId(ValueTree& sources, const String& sourceId,
     }
 }
 
-BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, ValueTree& source)
+BaseObjectComponent* Utils::getBaseObjectFromSource(ObjController* objController, ValueTree& source)
 {
     String srcVal = source[Ids::value].toString();
     StringArray srcArray;
@@ -270,7 +284,7 @@ BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, Value
     return nullptr;
 }
 
-const Identifier& getObjectGroup(const Identifier& ident)
+const Identifier& Utils::getObjectGroup(const Identifier& ident)
 {
     if(ident == Ids::mass || ident == Ids::port
             || ident == Ids::ground	|| ident == Ids::resonator)
@@ -288,13 +302,15 @@ const Identifier& getObjectGroup(const Identifier& ident)
         return Objects::junctions;
     else if(ident == Ids::variable)
         return Objects::variables;
+    else if(ident == Ids::comment)
+        return Objects::comments;
 
     else
         return Objects::invalid;
 }
 
 // escapes particular characters
-String fixPath(const String& path)
+String Utils::fixPath(const String& path)
 {
     if(path.containsAnyOf(" ()*?!"))
     {
@@ -310,4 +326,22 @@ String fixPath(const String& path)
     return path;
 }
 
+bool Utils::writeStringToFile(const String& s, const File& f)
+{
+	TemporaryFile temp (f);
+
+	ScopedPointer <FileOutputStream> out (temp.getFile().createOutputStream());
+
+	if (out != nullptr)
+	{
+		out->write(s.toUTF8(), s.getNumBytesAsUTF8());
+		out = nullptr; // (deletes the stream)
+
+		bool succeeded = temp.overwriteTargetFileWithTemporary();
+		return succeeded;
+	}
+	else
+	{
+		return false;
+	}
 }

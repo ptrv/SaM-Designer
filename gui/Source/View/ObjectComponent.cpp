@@ -25,12 +25,16 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
+#include "SelectableObject.h"
+#include "../Graph/Node.h"
+#include "BaseObjectComponent.h"
 #include "ObjectsHolder.h"
 #include "ObjectPropertiesPanel.h"
 #include "../Models/ObjectActions.h"
 
-#include "BaseObjectComponent.h"
 #include "ObjectComponent.h"
+
+using namespace synthamodeler;
 
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_)
@@ -221,6 +225,10 @@ void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
         }
         else
         {
+            if(newPos.getX() < 0)
+                newPos.x = 0;
+            if(newPos.getY() < 0)
+                newPos.y = 0;
             data.setProperty(Ids::posX, newPos.getX(), nullptr);
             data.setProperty(Ids::posY, newPos.getY(), nullptr);
             setActualPosition(newPos);

@@ -30,8 +30,11 @@
 #include "../Models/MDLFile.h"
 #include "SAMLookAndFeel.h"
 #include "../View/ObjectsHolder.h"
+#include "CommandLine.h"
 
 #include "Application.h"
+
+using namespace synthamodeler;
 
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"
@@ -41,6 +44,7 @@ static const int snapSizes[] = { 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32 };
 //==============================================================================
 
 SynthAModelerApplication::SynthAModelerApplication()
+: isRunningCommandLine(false)
 {
 }
 
@@ -63,12 +67,33 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	// Do your application's initialisation code here
 	samLookAndFeel = new SAMLookAndFeel();
 	LookAndFeel::setDefaultLookAndFeel(samLookAndFeel);
+
+    if (commandLine.isNotEmpty())
+    {
+        const int appReturnCode = performCommandLine(commandLine);
+
+        if (appReturnCode != commandLineNotPerformed)
+        {
+            isRunningCommandLine = true;
+            setApplicationReturnValue(appReturnCode);
+            quit();
+            return;
+        }
+    }
+
     if( StoredSettings::getInstance()->getIsLoggingOn() )
     {
 #ifdef DEBUG
         samLogger = Utils::getLogger();
         Logger::setCurrentLogger(samLogger);
 #endif
+    }
+
+    if (sendCommandLineToPreexistingInstance())
+    {
+        DBG("Another instance is running - quitting...");
+        quit();
+        return;
     }
 
 	commandManager = new ApplicationCommandManager();
@@ -202,13 +227,18 @@ const String SynthAModelerApplication::getApplicationVersion()
 
 bool SynthAModelerApplication::moreThanOneInstanceAllowed()
 {
-	return false;
+	return true;
 }
 
 void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
 {
-    File f(commandLine);
-    if(f.getFileExtension().compare(".mdl") == 0)
+    File f;
+    if(File::isAbsolutePath(commandLine))
+        f = commandLine;
+    else
+        f = File::getCurrentWorkingDirectory().getChildFile(commandLine);
+
+    if(f.existsAsFile() && f.hasFileExtension(MDLFile::mdlFileExtension))
         openFile(f);
 }
 
@@ -317,7 +347,7 @@ void SynthAModelerApplication::creatNewMDLDocument()
 
 void SynthAModelerApplication::askUserToOpenFile()
 {
-    FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl");
+    FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl;*.mdlx");
 
     if (fc.browseForFileToOpen())
         openFile (fc.getResult());
@@ -485,6 +515,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem (commandManager, CommandIDs::saveDocument);
         menu.addCommandItem (commandManager, CommandIDs::saveDocumentAs);
         menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::saveDocumentAsImage);
+        menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::showPrefs);
 
 #if ! JUCE_MAC
@@ -510,6 +542,14 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::tidyObjects);
+        menu.addSeparator();
+
+        PopupMenu redrawModelMenu;
+        redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawCircle);
+        redrawModelMenu.addSeparator();
+        redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawForceDirected);
+        redrawModelMenu.addCommandItem(commandManager, CommandIDs::showRedrawOptions);
+        menu.addSubMenu("Redraw Model", redrawModelMenu);
     }
     else if (topLevelMenuIndex == 2)
     {
@@ -528,6 +568,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     	menu.addCommandItem(commandManager, CommandIDs::insertWaveguide);
     	menu.addCommandItem(commandManager, CommandIDs::insertTermination);
         menu.addCommandItem(commandManager, CommandIDs::insertJunction);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::insertComment);
     }
     else if (topLevelMenuIndex == 3)
     {
@@ -583,6 +625,9 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
             m.addItem (300 + i, String (snapSizes[i]) + " pixels", true, snapSizes[i] == currentSnapSize);
 
         menu.addSubMenu ("Grid size", m, getApp()->getActiveHolderComponent() != 0);
+
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showAudioConnections);
     }
     else if (topLevelMenuIndex == 6)
     {

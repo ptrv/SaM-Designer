@@ -26,6 +26,8 @@
 #ifndef __SAMCMD_H_1206E4C5__
 #define __SAMCMD_H_1206E4C5__
 
+namespace synthamodeler
+{
 class MDLFile;
 /**
  * This class encapsulates the external commands for generating FAUST code
@@ -76,20 +78,30 @@ public:
 	 * @return			an empty string if generation of faust code succeeded,
 	 * 					else a string with the error message.
 	 */
-	const String generateFaustCode(const String& inPath, const String& outPath);
+	const String generateFaustCode(const String& inPath,
+                                   const String& outPath,
+                                   bool useSamConsole = true);
+
+    const String generateFaustCodeBuiltin(ValueTree mdlRoot_,
+                                          const String& outPath,
+                                          bool useSamConsole = true);
 	/**
 	 * Generates external using the FAUST compiler.
 	 *
 	 * @return			an empty string if generation succeeded, else a string
 	 * 					with error message
 	 */
-	const String generateExternal(const String& mdlPath);
+	const String generateExternal(const String& mdlPath,
+                                const String& exporter,
+                                bool useSamConsole = true);
 
 private:
     const String runPerlScript(const String& script,
                                const String& inPath,
-                               const String& outPath);
+                               const String& outPath,
+                               bool useSamConsole);
 };
+}
 
 
 #endif  // __SAMCMD_H_1206E4C5__

@@ -29,19 +29,21 @@
 
 #include "MDLFile.h"
 
-const char* MDLFile::mdlFileExtension = ".mdl";
+using namespace synthamodeler;
+
+const char* MDLFile::mdlFileExtension = ".mdl;.mdlx";
 
 MDLFile::MDLFile()
-: FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
-  mdlRoot(Objects::MDLROOT), isUntitledFile(true)
+: FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
+  mdlRoot(Objects::synthamodeler), isUntitledFile(true)
 {
 	initMDL();
 	mdlRoot.addListener(this);
 
 }
 MDLFile::MDLFile(const File& file)
-: FileBasedDocument(".mdl", "*.mdl", "Open mdl file", "Save mdl file"),
-  mdlRoot(Objects::MDLROOT), isUntitledFile(false)
+: FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
+  mdlRoot(Objects::synthamodeler), isUntitledFile(false)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -54,6 +56,11 @@ MDLFile::~MDLFile()
 	mdlRoot.removeListener(this);
 	removeAllChangeListeners();
 	destroyMDL();
+}
+
+const String MDLFile::getFilePath() const
+{
+    return mdlRoot.getProperty(Ids::mdlPath).toString();
 }
 
 const String MDLFile::getNameWithStatus()
@@ -72,9 +79,10 @@ bool MDLFile::perform (UndoableAction* const action, const String& actionName)
 
 void MDLFile::initMDL()
 {
-	mdlRoot = ValueTree(Objects::MDLROOT);
+	mdlRoot = ValueTree(Objects::synthamodeler);
 	mdlRoot.setProperty(Ids::mdlName, "Untitled", nullptr);
 	mdlRoot.setProperty(Ids::mdlPath, String::empty, nullptr);
+
 	setChangedFlag(false);
 }
 
@@ -117,44 +125,94 @@ Result MDLFile::loadDocument (const File& file)
 	destroyMDL();
 	initMDL();
 	MDLParser pa(*this);
-	if(pa.parseMDL())
-	{
-		// success
-		SAM_LOG("Opened MDL file: "+getFilePath());
-		setFile(file);
-		setChangedFlag(false);
+    bool parseOk;
+    String ext = file.getFileExtension().trimCharactersAtStart(".");
+    if(file.hasFileExtension(".mdlx"))
+    {
+        parseOk = pa.parseMDLX(file);
+    }
+    else
+    {
+        parseOk = pa.parseMDL(file);
+        if(StoredSettings::getInstance()->getIsUsingMDLX())
+        {
+            String mdlxPath = file.getParentDirectory().getFullPathName() + "/"
+                + file.getFileNameWithoutExtension() + ".mdlx";
+
+            File mdlxF(mdlxPath);
+            if(mdlxF.existsAsFile())
+            {
+                pa.parseMDLX(mdlxF, true);
+            }
+        }
+    }
+    if (parseOk)
+    {
+        // success
+        SAM_LOG("Opened " + ext.toUpperCase() + " file: " + getFilePath());
+        setFile(file);
+        setChangedFlag(false);
         isUntitledFile = false;
         md5 = MD5(file);
-		return Result::ok();
-	}
-	else
-	{
-		// fail
-		String errorMsg = "ERROR: could not load mdl file.";
-		SAM_LOG(errorMsg);
-		return Result::fail(errorMsg);
-	}
+
+        checkForOutputDSPVar();
+
+        return Result::ok();
+    }
+    else
+    {
+        // fail
+        String errorMsg = "ERROR: could not load " + ext + " file.";
+        SAM_LOG(errorMsg);
+        return Result::fail(errorMsg);
+    }
 }
 Result MDLFile::saveDocument (const File& file)
 {
+    checkForOutputDSPVar();
+
     bool saveOk;
     String errorMsg;
 	this->setChangedFlag(false);
 	MDLWriter wr(*this);
-	if(wr.writeMDL(file))
+    String ext;
+    if(file.hasFileExtension(".mdlx"))
+    {
+        saveOk = wr.writeMDLX(file);
+    }
+    else
+    {
+        saveOk = wr.writeMDL(file);
+    }
+    ext = file.getFileExtension().trimCharactersAtStart(".");
+	if(saveOk)
 	{
-		SAM_LOG("Saved MDL file: "+file.getFullPathName());
+		SAM_LOG("Saved "+ ext.toUpperCase() + " file: "+file.getFullPathName());
         setFile(file);
         setChangedFlag(false);
-        saveOk = true;
         md5 = MD5(file);
 	}
 	else
 	{
-		errorMsg = "ERROR: could not save mdl file.";
+		errorMsg = "ERROR: could not save "+ ext + " file.";
 		SAM_LOG(errorMsg);
-        saveOk = false;
 	}
+    if(StoredSettings::getInstance()->getIsUsingMDLX()
+        && ! file.hasFileExtension(".mdlx"))
+    {
+        String savePath = file.getParentDirectory().getFullPathName() + "/"
+            + file.getFileNameWithoutExtension() + ".mdlx";
+        File f(savePath);
+        if(wr.writeMDLX(f))
+        {
+            SAM_LOG("Saved MDLX file: " + f.getFullPathName());
+        }
+        else
+        {
+            errorMsg = "ERROR: could not save mdl file.";
+            SAM_LOG(errorMsg);
+        }
+    }
     if(isUntitledFile)
     {
         loadDocument(file);
@@ -187,27 +245,27 @@ void MDLFile::mdlChanged()
 //    DBG(mdlRoot.toXmlString());
 }
 //==============================================================================
-void MDLFile::valueTreePropertyChanged (ValueTree& tree, const Identifier& property)
+void MDLFile::valueTreePropertyChanged (ValueTree& /*tree*/, const Identifier& /*property*/)
 {
     mdlChanged();
 }
 
-void MDLFile::valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded)
+void MDLFile::valueTreeChildAdded (ValueTree& /*parentTree*/, ValueTree& /*childWhichHasBeenAdded*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved)
+void MDLFile::valueTreeChildRemoved (ValueTree& /*parentTree*/, ValueTree& /*childWhichHasBeenRemoved*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeChildOrderChanged (ValueTree& parentTree)
+void MDLFile::valueTreeChildOrderChanged (ValueTree& /*parentTree*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeParentChanged (ValueTree& tree)
+void MDLFile::valueTreeParentChanged (ValueTree& /*tree*/)
 {
 }
 
@@ -271,36 +329,18 @@ bool MDLFile::checkIfChecksumChanged()
         return false;
 }
 
-bool MDLFile::saveAsXml()
+void MDLFile::checkForOutputDSPVar()
 {
-    FileChooser fc ("Select XML file to save...",
-                    File::getSpecialLocation (File::userHomeDirectory),
-                    "*.xml");
-    
-    if (fc.browseForFileToSave(true))
+    ValueTree vars = mdlRoot.getOrCreateChildWithName(Objects::variables, nullptr);
+    ValueTree var = vars.getChildWithProperty(Ids::identifier, "outputDSP");
+    if(! var.isValid())
     {
-        File xmlFile (fc.getResult());
-        
-        TemporaryFile temp(xmlFile);
-        
-        ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
-        
-        if (out != nullptr)
-        {
-            
-            String mdlXmlStr = toString();
-            out->write(mdlXmlStr.toUTF8(),
-                       mdlXmlStr.getNumBytesAsUTF8());
-            out = nullptr; // (deletes the stream)
-            
-            bool succeeded = temp.overwriteTargetFileWithTemporary();
-            return succeeded;
-        }
+        var = ValueTree(Ids::variable);
+        var.setProperty(Ids::identifier, "outputDSP", nullptr);
+        var.setProperty(Ids::faustCode, "highpass(4,20.0)", nullptr);
+        vars.addChild(var, -1, nullptr);
     }
-    return false;
-
 }
-
 //==============================================================================
 #if UNIT_TESTS
 

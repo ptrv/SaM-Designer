@@ -26,6 +26,8 @@
 #ifndef __MDLPARSER_H_DC928BC0__
 #define __MDLPARSER_H_DC928BC0__
 
+namespace synthamodeler
+{
 class MDLFile;
 /**
  * MDL parser class.
@@ -40,11 +42,12 @@ public:
 	 *
 	 * @return		true if parsing succeeded
 	 */
-	bool parseMDL();
+	bool parseMDL(const File& f);
+    bool parseMDLX(const File& f, bool onlyExtras=false);
 private:
 	MDLFile& mdlFile;
 };
-
+}
 
 
 #endif  // __MDLPARSER_H_DC928BC0__

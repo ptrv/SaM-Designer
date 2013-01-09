@@ -24,12 +24,14 @@
 */
 
 #include "../Application/CommonHeaders.h"
+#include "../View/SelectableObject.h"
+#include "../Graph/Node.h"
+#include "../View/BaseObjectComponent.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "ObjectFactory.h"
 
-namespace ObjectFactory
-{
+using namespace synthamodeler;
 
 static ValueTree createNewMassTree(const String& newName, int x, int y)
 {
@@ -42,7 +44,7 @@ static ValueTree createNewMassTree(const String& newName, int x, int y)
     p.add("0.001");
     p.add("0.0");
     p.add("0.0");
-	ValueTree paramsTree = createParamsTree(p);
+	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
@@ -102,7 +104,7 @@ static ValueTree createNewResonatorTree(const String& newName, int x, int y)
     p.add("200.0");
     p.add("1.5");
     p.add("0.01");
-	ValueTree paramsTree = createParamsTree(p);
+	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
 	ValueTree labelsTree(Ids::labels);
@@ -123,7 +125,7 @@ static ValueTree createNewLinkTree(const String& newName,
     p.add("100.0");
     p.add("0.1");
     p.add("0.0");
-	ValueTree paramsTree = createParamsTree(p);
+	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -146,7 +148,7 @@ static ValueTree createNewTouchTree(const String& newName,
     p.add("100.0");
     p.add("0.1");
     p.add("0.0");
-    ValueTree paramsTree = createParamsTree(p);
+    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -170,7 +172,7 @@ static ValueTree createNewPluckTree(const String& newName,
     p.add("0.1");
     p.add("0.003");
     p.add("0.0");
-    ValueTree paramsTree = createParamsTree(p);
+    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -193,7 +195,7 @@ static ValueTree createNewWaveguideTree(const String& newName,
     StringArray p;
     p.add("1.0");
     p.add("simpleString(0.033,0.017)");
-    ValueTree paramsTree = createParamsTree(p);
+    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 
     newTree.setProperty(Ids::identifier, newName, nullptr);
@@ -256,10 +258,22 @@ static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
 	return newTree;
 }
 
+static ValueTree createNewCommentTree(const String& newName, int x, int y)
+{
+    ValueTree newTree(Ids::comment);
 
-ValueTree createNewObjectTree(const Identifier& objType,
-                              const String& newName,
-                              int x, int y)
+	newTree.setProperty(Ids::posX, x, nullptr);
+	newTree.setProperty(Ids::posY, y, nullptr);
+	newTree.setProperty(Ids::identifier,newName, nullptr);
+    newTree.setProperty(Ids::value, "", nullptr);
+    newTree.setProperty(Ids::fontSize, 16.0f, nullptr);
+    newTree.setProperty(Ids::commentColour, Colours::black.toString(), nullptr);
+    return newTree;
+}
+
+ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
+                                             const String& newName,
+                                             int x, int y)
 {
 	if(objType == Ids::mass)
 		return createNewMassTree(newName, x, y);
@@ -275,11 +289,13 @@ ValueTree createNewObjectTree(const Identifier& objType,
         return createNewJunctionTree(newName, x, y);
     else if(objType == Ids::termination)
         return createNewTerminationTree(newName, x, y);
+    else if(objType == Ids::comment)
+        return createNewCommentTree(newName, x, y);
 	else
 		return ValueTree::invalid;
 }
 
-ValueTree createNewLinkObjectTree(const Identifier& linkType,
+ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
                                   const String& newName,
                                   const String& startObject, 
                                   const String& endObject)
@@ -295,7 +311,7 @@ ValueTree createNewLinkObjectTree(const Identifier& linkType,
     else
 		return ValueTree::invalid;
 }
-ValueTree createParamsTree(StringArray p)
+ValueTree ObjectFactory::createParamsTree(StringArray p)
 {
     ValueTree paramsTree(Ids::parameters);
     for (int i = 0; i < p.size(); ++i)
@@ -307,7 +323,7 @@ ValueTree createParamsTree(StringArray p)
     return paramsTree;
 }
 
-ValueTree createLabelsTree(StringArray p)
+ValueTree ObjectFactory::createLabelsTree(StringArray p)
 {
     ValueTree labelsTree(Ids::labels);
     for (int i = 0; i < p.size(); ++i)
@@ -318,6 +334,3 @@ ValueTree createLabelsTree(StringArray p)
     }
     return labelsTree;
 }
-
-}
-

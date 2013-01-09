@@ -29,6 +29,8 @@
 
 #include "OutputWindow.h"
 
+using namespace synthamodeler;
+
 OutputWindow::OutputWindow()
 :
 DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Output",

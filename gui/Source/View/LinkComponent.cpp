@@ -25,10 +25,15 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
+#include "../Graph/Node.h"
+#include "BaseObjectComponent.h"
+#include "SelectableObject.h"
 #include "ObjectComponent.h"
 #include "ObjectsHolder.h"
 
 #include "LinkComponent.h"
+
+using namespace synthamodeler;
 
 LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 : BaseObjectComponent(owner_, linkTree),

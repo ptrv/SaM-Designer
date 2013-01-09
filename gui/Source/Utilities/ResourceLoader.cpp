@@ -28,6 +28,8 @@
 
 #include "ResourceLoader.h"
 
+using namespace synthamodeler;
+
 ResourceLoader::ResourceLoader()
 {
 	initObjectIconMap();

@@ -34,6 +34,8 @@
 #include "RegularExpression.h"
 #include "../Utilities/SAMRegex.h"
 
+using namespace synthamodeler;
+
 MDLParser::MDLParser(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {
@@ -50,17 +52,23 @@ static Point<int> getPos(const String& posStr)
 		StringArray posArray;
 		posArray.addTokens(tmp, ",", "\"");
 		if(posArray.size() == 2)
+        {
 			p.setXY(posArray[0].getIntValue(), posArray[1].getIntValue());
+            if(p.getX() < 0)
+                p.setX(0);
+            if(p.getY() < 0)
+                p.setY(0);
+        }
 	}
 	return p;
 }
 
-bool MDLParser::parseMDL()
+bool MDLParser::parseMDL(const File& f)
 {
-    const File& in = mdlFile.getFile();
+    const File& in = f;//mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
 
-	ValueTree mdlTree(Objects::MDLROOT);// = mdlFile.mdlRoot;
+	ValueTree mdlTree(Objects::synthamodeler);// = mdlFile.mdlRoot;
 
 	mdlTree.setProperty(Ids::mdlName, in.getFileName(), nullptr);
 	mdlTree.setProperty(Ids::mdlPath, in.getFullPathName(), nullptr);
@@ -71,12 +79,14 @@ bool MDLParser::parseMDL()
 		String line = lines[i];
 
         RegularExpression re;
-        RegularExpression reComment("\\A\\s*#");
+        RegularExpression reComment("\\A\\s*#[^#].*$");
         RegularExpression reParams(SAMRegex::paramsDetail);
         RegularExpression reLabel(SAMRegex::word);
 
-        if(reComment.partialMatch(line) || line.isEmpty())
+        if(reComment.fullMatch(line) || line.isEmpty())
+        {
             continue;
+        }
 
         if(re.fullMatch(SAMRegex::getVertexLine(), line))
         {
@@ -338,9 +348,70 @@ bool MDLParser::parseMDL()
             ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
             junctsTree.addChild(junctTree, -1, nullptr);
         }
+        else if(re.fullMatch(SAMRegex::getCommentObjectLine(), line))
+        {
+            StringArray values;
+            if(! re.fullMatchValues(line, values, 3))
+            {
+                DBG("Error reading comment object!");
     }
+            ValueTree newTree(Ids::comment);
+            Point<int> pos = getPos(line);
+            newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+            newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+
+            newTree.setProperty(Ids::identifier, values[2], nullptr);
+
+            String params = values[1];
+            StringArray paramsArray;
+
+            reParams.fullMatchValues(SAMRegex::getParamsLine(3),
+                                     params, paramsArray, 3);
+
+            newTree.setProperty(Ids::value, paramsArray[0].unquoted(), nullptr);
+            newTree.setProperty(Ids::fontSize, paramsArray[1], nullptr);
+            newTree.setProperty(Ids::commentColour, paramsArray[2], nullptr);
+
+            ValueTree comments = mdlTree.getOrCreateChildWithName(Objects::comments, nullptr);
+            comments.addChild(newTree, -1, nullptr);
+        }
+
+    }
+//    DBG(mdlTree.toXmlString());
     mdlFile.mdlRoot = mdlTree;
 	return true;
+}
+
+bool MDLParser::parseMDLX(const File& f, bool onlyExtras)
+{
+    XmlElement* xml = XmlDocument::parse(f);
+    if (xml != nullptr)
+    {
+        ValueTree mdlxTree = ValueTree::fromXml(*xml);
+        if (onlyExtras)
+        {
+            ValueTree comments = mdlxTree.getChildWithName(Objects::comments);
+            if(comments.isValid())
+            {
+                mdlxTree.removeChild(comments, nullptr);
+                ValueTree tmp1 = mdlxTree.createCopy();
+                ValueTree tmp2 = mdlFile.mdlRoot.createCopy();
+                tmp1.setProperty(Ids::mdlName, "", nullptr);
+                tmp1.setProperty(Ids::mdlPath, "", nullptr);
+                tmp2.setProperty(Ids::mdlName, "", nullptr);
+                tmp2.setProperty(Ids::mdlPath, "", nullptr);
+                if(tmp1.isEquivalentTo(tmp2))
+                    mdlFile.mdlRoot.addChild(comments, -1, nullptr);
+            }
+        }
+        else
+        {
+            mdlFile.mdlRoot = mdlxTree.createCopy();
+        }
+        delete xml;
+        return true;
+    }
+    return false;
 }
 
 //==============================================================================

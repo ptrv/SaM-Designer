@@ -26,6 +26,8 @@
 #ifndef __IDMANAGER_H_C25241F9__
 #define __IDMANAGER_H_C25241F9__
 
+namespace synthamodeler
+{
 class IdManager
 {
 public:
@@ -60,8 +62,9 @@ private:
     SortedSet<String> waveguideIds;
     SortedSet<String> terminationIds;
     SortedSet<String> junctionIds;
+    SortedSet<String> commentIds;
 };
-
+}
 
 
 #endif  // __IDMANAGER_H_C25241F9__

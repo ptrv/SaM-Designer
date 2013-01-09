@@ -11,6 +11,8 @@
 #ifndef __SAMLOOKANDFEEL_H_F27BC606__
 #define __SAMLOOKANDFEEL_H_F27BC606__
 
+namespace synthamodeler
+{
 /**
  * This class is the theme for the application's widgets (buttons, text, etc...)
  */
@@ -34,6 +36,6 @@ public:
                             const Colour * const textColour);
 private:
 };
-
+}
 
 #endif  // __SAMLOOKANDFEEL_H_F27BC606__

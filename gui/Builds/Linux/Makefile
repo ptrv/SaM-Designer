@@ -43,6 +43,13 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
+  $(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o \
+  $(OBJDIR)/CircleFlowAlgorithm_8478b2f1.o \
+  $(OBJDIR)/GraphUtils_6816740d.o \
+  $(OBJDIR)/ForceDirectedFlowAlgorithm_3998fbd8.o \
+  $(OBJDIR)/DirectedGraph_c0af84a6.o \
+  $(OBJDIR)/Node_98b30e4c.o \
+  $(OBJDIR)/CommandLine_e08eafe1.o \
   $(OBJDIR)/SAMLookAndFeel_df6eec67.o \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Application_7b202ed2.o \
@@ -58,9 +65,13 @@ OBJECTS := \
   $(OBJDIR)/StoredSettings_125117b4.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
+  $(OBJDIR)/SAMCompiler_55c40662.o \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/RedrawOptionsPanel_f391d648.o \
+  $(OBJDIR)/CommentEditor_abeb432b.o \
+  $(OBJDIR)/CommentComponent_3199b309.o \
   $(OBJDIR)/SnapGridPainter_bcfdcdba.o \
   $(OBJDIR)/AudioOutConnector_995cd494.o \
   $(OBJDIR)/BaseObjectComponent_eac867ec.o \
@@ -99,6 +110,41 @@ clean:
 strip:
 	@echo Stripping Synth-A-ModelerGUI
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
+
+$(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o: ../../Source/Graph/ForceBasedFlowAlgorithm.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ForceBasedFlowAlgorithm.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/CircleFlowAlgorithm_8478b2f1.o: ../../Source/Graph/CircleFlowAlgorithm.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling CircleFlowAlgorithm.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/GraphUtils_6816740d.o: ../../Source/Graph/GraphUtils.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling GraphUtils.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ForceDirectedFlowAlgorithm_3998fbd8.o: ../../Source/Graph/ForceDirectedFlowAlgorithm.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ForceDirectedFlowAlgorithm.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/DirectedGraph_c0af84a6.o: ../../Source/Graph/DirectedGraph.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling DirectedGraph.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/Node_98b30e4c.o: ../../Source/Graph/Node.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling Node.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/CommandLine_e08eafe1.o: ../../Source/Application/CommandLine.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling CommandLine.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/SAMLookAndFeel_df6eec67.o: ../../Source/Application/SAMLookAndFeel.cpp
 	-@mkdir -p $(OBJDIR)
@@ -175,6 +221,11 @@ $(OBJDIR)/ObjController_e2cf3d29.o: ../../Source/Controller/ObjController.cpp
 	@echo "Compiling ObjController.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
+$(OBJDIR)/SAMCompiler_55c40662.o: ../../Source/Models/SAMCompiler.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SAMCompiler.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 $(OBJDIR)/ObjectFactory_a170b74f.o: ../../Source/Models/ObjectFactory.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling ObjectFactory.cpp"
@@ -188,6 +239,21 @@ $(OBJDIR)/SAMCmd_cf7547a1.o: ../../Source/Models/SAMCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/RedrawOptionsPanel_f391d648.o: ../../Source/View/RedrawOptionsPanel.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling RedrawOptionsPanel.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/CommentEditor_abeb432b.o: ../../Source/View/CommentEditor.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling CommentEditor.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/CommentComponent_3199b309.o: ../../Source/View/CommentComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling CommentComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/SnapGridPainter_bcfdcdba.o: ../../Source/View/SnapGridPainter.cpp

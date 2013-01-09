@@ -31,6 +31,7 @@
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+using namespace synthamodeler;
 
 class ContentComp::MagnifierComponent : public Component
 {
@@ -301,6 +302,9 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::reverseDirection,
         CommandIDs::defineVariables,
         CommandIDs::tidyObjects,
+        CommandIDs::redrawCircle,
+        CommandIDs::redrawForceDirected,
+        CommandIDs::showRedrawOptions,
         CommandIDs::insertMass,
         CommandIDs::insertGround,
         CommandIDs::insertResonator,
@@ -313,6 +317,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::insertWaveguide,
         CommandIDs::insertTermination,
         CommandIDs::insertJunction,
+        CommandIDs::insertComment,
         CommandIDs::spaceBarDrag,
         CommandIDs::moveUp,
         CommandIDs::moveDown,
@@ -325,6 +330,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::showObjectNames,
         CommandIDs::enableSnapToGrid,
         CommandIDs::showGrid,
+        CommandIDs::showAudioConnections,
     };
 
     commands.addArray(ids, numElementsInArray(ids));
@@ -400,7 +406,17 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.setInfo("Tidy up", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
-
+    case CommandIDs::redrawCircle:
+        result.setInfo("Circle", "", CommandCategories::editing, 0);
+        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+        break;
+    case CommandIDs::redrawForceDirected:
+        result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
+        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+        break;
+    case CommandIDs::showRedrawOptions:
+        result.setInfo("Force-Directed options...", "Open redraw options", CommandCategories::editing, 0);
+        break;
     case CommandIDs::insertMass:
         result.setInfo("Mass", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('1', ModifierKeys::commandModifier);
@@ -450,6 +466,14 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::insertJunction:
         result.setInfo("Junction", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
+        break;
+    case CommandIDs::insertComment:
+    {
+        result.setInfo("Comment", "", CommandCategories::inserting, 0);
+        MDLFile * mdlF = mainWindow.getMDLFile();
+//        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
+//                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
+    }
         break;
     case CommandIDs::spaceBarDrag:
         result.setInfo("Scroll while dragging mouse",
@@ -512,6 +536,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
 //        result.defaultKeypresses.add(KeyPress('g', cmd | shift, 0));
         break;
 
+    case CommandIDs::showAudioConnections:
+        result.setInfo("Show audio connections", "", CommandCategories::view, 0);
+        result.setTicked(StoredSettings::getInstance()->getShowAudioConnections());
+        break;
     default:
         break;
     };
@@ -622,6 +650,24 @@ void ContentComp::dragKeyHeldDown(bool isKeyDown)
 {
     ((ZoomingViewport*) viewport)->dragKeyHeldDown(isKeyDown);
 }
+
+int ContentComp::getViewWidth() const
+{
+//    return viewport->getViewWidth();
+    return viewport->getMaximumVisibleWidth();
+}
+
+int ContentComp::getViewHeight() const
+{
+//    return viewport->getViewHeight();
+    return viewport->getMaximumVisibleHeight();
+}
+Point<int> ContentComp::getViewPosition() const
+{
+//    return viewport->getViewHeight();
+    return viewport->getViewPosition();
+}
+
 
 //[/MiscUserCode]
 

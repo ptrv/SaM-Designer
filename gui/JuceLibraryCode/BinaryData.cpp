@@ -108,9 +108,8 @@ const char* mdl_file_header_txt = (const char*) temp_80b36b9f;
 
 //================== about.txt ==================
 static const unsigned char temp_fcfb1946[] =
-"The Synth-A-Model project was carried out at the TU Berlin's Audio Communication Group.  The Synth-A-Model compiler was written by Edgar Berdahl, and the graphical user interface was created by Peter Vasil.  We would like to graciously thank Prof. Ju"
-"lius O. Smith III, Alexandros Kontogeorgakopoulos, Prof. Stefan Weinzierl, Prof. Yann Orlarey, and the Alexander von Humboldt foundation for their support.\n"
-"\n";
+"The Synth-A-Modeler project was carried out at the TU Berlin's Audio Communication Group. The Synth-A-Modeler compiler was written by Edgar Berdahl, and the graphical user interface was created by Peter Vasil. We would like to graciously thank Prof. "
+"Julius O. Smith III, Alexandros Kontogeorgakopoulos, Prof. Stefan Weinzierl, Prof. Yann Orlarey, and the Alexander von Humboldt foundation for their support.";
 
 const char* about_txt = (const char*) temp_fcfb1946;
 

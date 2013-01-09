@@ -26,10 +26,14 @@
 #ifndef __BASEOBJECTCOMPONENT_H_ADAD1FA0__
 #define __BASEOBJECTCOMPONENT_H_ADAD1FA0__
 
+namespace synthamodeler
+{
 class ObjController;
 class ObjectsHolder;
+class Node;
 
-class BaseObjectComponent : public Component
+class BaseObjectComponent : public Component,
+                            public Node
 {
 public:
     BaseObjectComponent(ObjController& _owner, ValueTree data_);
@@ -45,7 +49,7 @@ protected:
     ObjController& owner;
     ValueTree data;
 };
-
+};
 
 
 #endif  // __BASEOBJECTCOMPONENT_H_ADAD1FA0__

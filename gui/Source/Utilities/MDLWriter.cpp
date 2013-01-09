@@ -28,16 +28,16 @@
 
 #include "MDLWriter.h"
 
+using namespace synthamodeler;
+
 MDLWriter::MDLWriter(MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {
 }
 
-bool MDLWriter::writeMDL(const File& saveFile)
+String MDLWriter::getMDLString()
 {
-	const File& outFile = saveFile;//(savePath);
-
-	String mdlHeader(BinaryData::mdl_file_header_txt);
+    String mdlHeader(BinaryData::mdl_file_header_txt);
 
 	String mdlContent;
 	mdlContent << mdlHeader;
@@ -56,7 +56,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		{
             ValueTree massParam = massParams.getChild(i);
             mdlContent << massParam.getProperty(Ids::value).toString();
-            
+
 			if(i != massParams.getNumChildren()-1)
 				mdlContent << ",";
 		}
@@ -105,7 +105,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 
             ValueTree label = labelTree.getChild(j);
             mdlContent << label.getProperty(Ids::value).toString();
-            
+
 			if(j != labelTree.getNumChildren()-1)
 				mdlContent << ",";
 		}
@@ -140,7 +140,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		for (int n = 0; n < labelTree.getNumChildren(); ++n) {
             ValueTree label = labelTree.getChild(n);
             mdlContent << label.getProperty(Ids::value).toString();
-            
+
 			if(n != labelTree.getNumChildren()-1)
 				mdlContent << ",";
 		}
@@ -168,7 +168,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		for (int p = 0; p < labelTree.getNumChildren(); ++p) {
             ValueTree label = labelTree.getChild(p);
             mdlContent << label.getProperty(Ids::value).toString();
-            
+
 			if(p != labelTree.getNumChildren()-1)
 				mdlContent << ",";
 		}
@@ -194,7 +194,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		for (int q = 0; q < labelTree.getNumChildren(); ++q) {
             ValueTree label = labelTree.getChild(q);
             mdlContent << label.getProperty(Ids::value).toString();
-            
+
 			if(q != labelTree.getNumChildren()-1)
 				mdlContent << ",";
 		}
@@ -241,7 +241,7 @@ bool MDLWriter::writeMDL(const File& saveFile)
                 mdlContent << "0.0";
             else
                 mdlContent << source.getProperty(Ids::value).toString();
-            
+
             if(q != sources.getNumChildren()-1)
 				mdlContent << "+";
         }
@@ -255,24 +255,50 @@ bool MDLWriter::writeMDL(const File& saveFile)
 		mdlContent << "\n";
 
 	}
+    // write comments
+    ValueTree commentTree = mdlFile.mdlRoot.getChildWithName(Objects::comments);
+    for (int commIdx = 0; commIdx < commentTree.getNumChildren(); ++commIdx)
+    {
+        ValueTree comm = commentTree.getChild(commIdx);
+        mdlContent << "## ";
+        mdlContent << comm.getType().toString();
+        mdlContent << "(";
+        mdlContent << comm[Ids::value].toString().quoted();
+        mdlContent << ",";
+        mdlContent << comm[Ids::fontSize].toString();
+        mdlContent << ",";
+        mdlContent << comm[Ids::commentColour].toString();
+        mdlContent << "),";
+        mdlContent << comm[Ids::identifier].toString();
+		mdlContent << ";";
+		mdlContent << " # pos " << comm.getProperty(Ids::posX, "0").toString();
+        mdlContent << ",";
+        mdlContent << comm.getProperty(Ids::posY, "0").toString();
+		mdlContent << "\n";
 
+    }
+
+
+    return mdlContent;
+}
+bool MDLWriter::writeMDL(const File& saveFile)
+{
+	const File& outFile = saveFile;//(savePath);
+
+    String mdlContent = getMDLString();
     // ------------------------------------------------------------------------
+    return Utils::writeStringToFile(mdlContent, outFile);
+}
 
-	TemporaryFile temp (outFile);
+bool MDLWriter::writeMDLX(const File& saveFile)
+{
+	const File& outFile = saveFile;//(savePath);
 
-	ScopedPointer <FileOutputStream> out (temp.getFile().createOutputStream());
+    ValueTree mdlxTree = mdlFile.mdlRoot.createCopy();
+    mdlxTree.setProperty(Ids::mdlName, outFile.getFileName(), nullptr);
+	mdlxTree.setProperty(Ids::mdlPath, outFile.getFullPathName(), nullptr);
 
-	if (out != nullptr)
-	{
-
-		out->write(mdlContent.toUTF8(), mdlContent.getNumBytesAsUTF8());
-		out = nullptr; // (deletes the stream)
-
-		bool succeeded = temp.overwriteTargetFileWithTemporary();
-		return succeeded;
-	}
-	else
-	{
-		return false;
-	}
+    String mdlContent = mdlxTree.toXmlString();
+    // ------------------------------------------------------------------------
+    return Utils::writeStringToFile(mdlContent, outFile);
 }

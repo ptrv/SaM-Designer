@@ -42,6 +42,8 @@
 #include "../Utilities/ResourceLoader.h"
 #include "Application.h"
 
+namespace synthamodeler
+{
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 
 #ifdef DEBUG
@@ -52,5 +54,6 @@ extern ScopedPointer<ApplicationCommandManager> commandManager;
 
 #define SAM_CONSOLE(title, message, bold) SynthAModelerApplication::getApp()->writeToDebugConsole(title, message, bold)
 #define SAM_CONSOLE_ADD_LINE(message, bold) SynthAModelerApplication::getApp()->writeToDebugConsole(message, bold)
+}
 
 #endif  // __COMMONHEADERS_H_CA475C67__

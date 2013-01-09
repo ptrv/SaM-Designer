@@ -26,6 +26,8 @@
 #ifndef __MDLCONTROLLER_H_8A72BC7D__
 #define __MDLCONTROLLER_H_8A72BC7D__
 
+namespace synthamodeler
+{
 class MDLFile;
 class SAMCmd;
 class AppController;
@@ -40,11 +42,14 @@ public:
 	MDLController(MainAppWindow& mainAppWindow_);
 	~MDLController();
 
+    static const char* fileTypesToDelete[];
+
 	void newFile();
 	void open();
 	void openFromFile(const File& mdlFile);
 	void save();
 	void saveAs();
+	void saveAsImage();
 	void close();
 
     bool saveAsXml();
@@ -73,6 +78,6 @@ private:
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<SAMCmd> samCmd;
 };
-
+}
 
 #endif  // __MDLCONTROLLER_H_8A72BC7D__

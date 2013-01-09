@@ -26,10 +26,14 @@
 #include "../Application/CommonHeaders.h"
 #include "../Controller/MDLController.h"
 #include "../Controller/ObjController.h"
+#include "../Graph/Node.h"
+#include "../View/BaseObjectComponent.h"
+#include "../View/SelectableObject.h"
 #include "ObjectComponent.h"
 
 #include "ObjectPropertiesPanel.h"
 
+using namespace synthamodeler;
 //==============================================================================
 
 class ObjectPropertiesComponent : public Component,
@@ -586,7 +590,7 @@ public:
         teStiff("teStiff"),
         laDamp("laDamp", "Damping (N/(m/s))"),
         teDamp("teDamp"),
-        laPos("laPos", "Position (m)"),
+        laPos("laPos", "Position offset (m)"),
         tePos("tePos"),
         laLabels("laLabels", "Labels"),
         teLabels("teLabels"),

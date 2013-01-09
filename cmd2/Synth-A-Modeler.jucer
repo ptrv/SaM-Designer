@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="KDNWMK" name="Synth-A-Modeler" projectType="consoleapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.SynthAModeler" jucerVersion="3.0.0">
+  <MAINGROUP id="f7GfJp" name="Synth-A-Modeler">
+    <GROUP id="{8DDBB5DD-5098-4B65-2138-49AE72BE4E73}" name="Source">
+      <FILE id="ob3xKP" name="SAMCompiler.h" compile="0" resource="0" file="../gui/Source/Models/SAMCompiler.h"/>
+      <FILE id="F0QcWG" name="SAMCompiler.cpp" compile="1" resource="0" file="../gui/Source/Models/SAMCompiler.cpp"/>
+      <FILE id="dwjatb" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <EXPORTFORMATS>
+    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="../juce/modules">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="Synth-A-Modeler" defines="UNIT_TESTS=1"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="Synth-A-Modeler"/>
+      </CONFIGURATIONS>
+    </LINUX_MAKE>
+    <XCODE_MAC targetFolder="Builds/MacOSX" juceFolder="../juce/modules">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       isDebug="1" optimisation="1" targetName="Synth-A-Modeler" defines="UNIT_TESTS=1"/>
+        <CONFIGURATION name="Release" osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="default"
+                       isDebug="0" optimisation="2" targetName="Synth-A-Modeler"/>
+      </CONFIGURATIONS>
+    </XCODE_MAC>
+    <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder="../juce/modules">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="Synth-A-Modeler" defines="UNIT_TESTS=1"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="Synth-A-Modeler"/>
+      </CONFIGURATIONS>
+    </VS2010>
+  </EXPORTFORMATS>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>

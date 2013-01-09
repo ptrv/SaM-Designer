@@ -24,6 +24,7 @@
  */
 
 #include "../Application/CommonHeaders.h"
+#include "../View/SelectableObject.h"
 #include "../Models/ObjectActions.h"
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"
@@ -33,8 +34,14 @@
 #include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
 #include "../Utilities/IdManager.h"
+#include "../View/CommentComponent.h"
+//#include "../Graph/FlowAlgorithm.h"
+//#include "../Graph/ForceDirectedFlowAlgorithm.h"
+#include "../Graph/DirectedGraph.h"
 
 #include "ObjController.h"
+
+using namespace synthamodeler;
 
 ObjController::ObjController(MDLController& owner_)
 : owner(owner_),
@@ -48,6 +55,7 @@ ObjController::~ObjController()
     audioConnections.clear(true);
     links.clear(true);
     objects.clear(true);
+    comments.clear(true);
     idMgr = nullptr;
 }
 
@@ -231,6 +239,12 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
 {
     if(sObjects.getNumSelected() == 2)
     {
+        if(! StoredSettings::getInstance()->getShowAudioConnections())
+        {
+            StoredSettings::getInstance()->setShowAudioConnections(true);
+            setAudioConnectionVisibility(true);
+        }
+
         ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
         LinkComponent* lc1 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
@@ -290,6 +304,45 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
         }
     }
 }
+
+CommentComponent* ObjController::addComment(ObjectsHolder* holder,
+                                            ValueTree commentValues,
+                                            int index, bool undoable)
+{
+    if(undoable)
+    {
+        AddCommentAction* action = new AddCommentAction(this, commentValues, holder);
+        owner.getUndoManager()->perform(action, "Add new Comment");
+
+        return comments[action->indexAdded];
+    }
+    else
+    {
+        const Identifier& groupName = Utils::getObjectGroup(commentValues.getType().toString());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+
+        subTree.addChild(commentValues,-1, nullptr);
+        idMgr->addId(commentValues.getType(),
+                     commentValues[Ids::identifier].toString(),
+                     nullptr);
+
+        CommentComponent* commentComp = new CommentComponent(*this, commentValues);
+        comments.insert(index, commentComp);
+
+        holder->addAndMakeVisible(commentComp);
+        holder->updateComponents();
+        changed();
+        return commentComp;
+    }
+}
+
+void ObjController::addNewComment(ObjectsHolder* holder, ValueTree commentValues)
+{
+    CommentComponent* cc = addComment(holder, commentValues, -1, true);
+    sObjects.selectOnly(cc);
+}
+
 
 void ObjController::removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder)
 {
@@ -362,7 +415,10 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
             if(ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i)))
             {
                 removeObject(oc, true, holder);
-                continue;
+            }
+            else if(CommentComponent* cc = dynamic_cast<CommentComponent*>(temp.getSelectedItem(i)))
+            {
+                removeComment(cc, true, holder);
             }
 //            LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i));
 //            if(lc != nullptr)
@@ -431,10 +487,34 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
     }
 }
 
+void ObjController::removeComment(CommentComponent* commentComp,
+                                  bool undoable, ObjectsHolder* holder)
+{
+    if(undoable)
+    {
+        owner.getUndoManager()->perform(new RemoveCommentAction(holder, commentComp, this));
+    }
+    else
+    {
+        sObjects.deselect(commentComp);
+        sObjects.changed(true);
+
+        const Identifier& groupName = Utils::getObjectGroup(commentComp->getData().getType());
+        ValueTree mdl = owner.getMDLTree();
+        ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
+        idMgr->removeId(commentComp->getData().getType(),
+                        commentComp->getData()[Ids::identifier].toString(), nullptr);
+        subTree.removeChild(commentComp->getData(), nullptr);
+        comments.removeObject(commentComp);
+    }
+}
+
 void ObjController::loadComponents(ObjectsHolder* holder)
 {
     MDLFile* mf = owner.getMDLFile();
     ValueTree mdl = mf->mdlRoot;
+    int numObjects = 0;
+    int numNodesZeroPos = 0;
 
     ValueTree massObjects = mdl.getChildWithName(Objects::masses);
     for (int i = 0; i < massObjects.getNumChildren(); i++)
@@ -447,6 +527,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
         else
         {
@@ -464,6 +548,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
         else
         {
@@ -481,6 +569,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
         }
         else
         {
@@ -525,6 +617,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(audioOutComp);
             audioOutComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f
+                && float(obj[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
 
             ValueTree aoSources = obj.getChildWithName(Ids::sources);
             for (int j = 0; j < aoSources.getNumChildren(); ++j)
@@ -568,7 +664,30 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             variables.removeChild(obj, nullptr);
         }
     }
+
+    ValueTree commentsTree = mdl.getChildWithName(Objects::comments);
+    for (int i = 0; i < commentsTree.getNumChildren(); ++i)
+    {
+        ValueTree comment = commentsTree.getChild(i);
+        if(idMgr->addId(comment.getType(), comment[Ids::identifier].toString(), nullptr))
+        {
+            CommentComponent* cComp = new CommentComponent(*this, comment);
+            comments.add(cComp);
+            holder->addAndMakeVisible(cComp);
+            cComp->update();
+            SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
+            ++numObjects;
+            if(float(comment[Ids::posX]) < 0.00001f
+                && float(comment[Ids::posY]) < 0.00001f)
+                ++numNodesZeroPos;
+        }
+    }
+
+    setAudioConnectionVisibility(StoredSettings::getInstance()->getShowAudioConnections());
     holder->updateComponents();
+
+    if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
+        holder->redrawObjects(CommandIDs::redrawForceDirected);
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
@@ -588,6 +707,10 @@ void ObjController::selectAll(bool shouldBeSelected)
         {
             sObjects.addToSelection(audioConnections.getUnchecked(k));
         }
+        for (int l = 0; l < comments.size(); ++l)
+        {
+            sObjects.addToSelection(comments.getUnchecked(l));
+        }
     }
     else
     {
@@ -605,6 +728,15 @@ void ObjController::startDragging()
     for (int i = 0; i < objects.size(); ++i)
     {
         ObjectComponent * const c = objects.getUnchecked(i);
+
+        Point<int> r(c->getPosition());
+
+        c->getProperties().set("xDragStart", r.getX());
+        c->getProperties().set("yDragStart", r.getY());
+    }
+    for (int i = 0; i < comments.size(); ++i)
+    {
+        CommentComponent * const c = comments.getUnchecked(i);
 
         Point<int> r(c->getPosition());
 
@@ -637,6 +769,22 @@ void ObjController::dragSelectedComps(int dx, int dy)
             //c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
             c->setPosition(Point<int>(r.x, r.y)-c->getPinOffset(), true);
         }
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
+        {
+            const int startX = cc->getProperties() ["xDragStart"];
+            const int startY = cc->getProperties() ["yDragStart"];
+//            const int startX = cc->getPosition().x;
+//            const int startY = cc->getPosition().y;
+
+            Point<int> r(cc->getPosition());
+
+            r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
+                    owner.getHolderComponent()->snapPosition(startY + dy));
+
+            cc->setPosition(Point<int>(r.x + cc->getWidth() / 2, r.y + cc->getHeight() / 2), true);
+//            c->setPosition(Point<int>(r.x, r.y)-cc->getPinOffset(), true);
+
+        }
     }
 
     changed();
@@ -665,7 +813,7 @@ void ObjController::changed()
     owner.changed();
 }
 
-ObjectComponent* ObjController::getObjectForId(String idString) const throw()
+ObjectComponent* ObjController::getObjectForId(const String& idString) const throw()
 {
     for (int i = 0; i < objects.size(); i++)
     {
@@ -679,11 +827,25 @@ ObjectComponent* ObjController::getObjectForId(String idString) const throw()
 
 }
 
-LinkComponent* ObjController::getLinkForId(String idString) const throw()
+LinkComponent* ObjController::getLinkForId(const String& idString) const throw()
 {
     for (int i = 0; i < links.size(); i++)
     {
         LinkComponent* elem = links.getUnchecked(i);
+        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
+        {
+            return elem;
+        }
+    }
+    return nullptr;
+
+}
+
+CommentComponent* ObjController::getCommentForId(const String& idString) const throw()
+{
+    for (int i = 0; i < comments.size(); i++)
+    {
+        CommentComponent* elem = comments.getUnchecked(i);
         if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
         {
             return elem;
@@ -766,6 +928,11 @@ void ObjController::copySelectedToClipboard()
             XmlElement* const e = lc->getData().createXml();
             clip.addChildElement (e);
         }
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
+        {
+            XmlElement* const e = cc->getData().createXml();
+            clip.addChildElement (e);
+        }
     }
 
     SystemClipboard::copyTextToClipboard (clip.createDocument (String::empty, false, false));
@@ -828,6 +995,22 @@ void ObjController::paste(ObjectsHolder* holder)
 
                 if (newObjectComp != 0)
                     sObjects.addToSelection(newObjectComp);
+            }
+            else if(valTree.getType() == Ids::comment)
+            {
+                String objName = valTree.getProperty(Ids::identifier).toString();
+                if(idMgr->contains(valTree.getType(), objName))
+                {
+                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
+                                                               objName,
+                                                               timesPasted,
+                                                               groupPaste);
+                    valTree.setProperty(Ids::identifier, newName, nullptr);
+                }
+                CommentComponent* newCommentComp = addComment(holder, valTree, -1, true);
+
+                if (newCommentComp != 0)
+                    sObjects.addToSelection(newCommentComp);
             }
         }
         forEachXmlChildElement(*doc, e)
@@ -1205,5 +1388,42 @@ void ObjController::destroy()
     sObjects.deselectAll();
     idMgr = nullptr;
     idMgr = new IdManager();
+
+}
+
+void ObjController::makeGraph(DirectedGraph* g)
+{
+//    ScopedPointer<DirectedGraph> g;
+
+    for (int i = 0; i < links.size(); ++i)
+    {
+        LinkComponent* l = links.getUnchecked(i);
+
+        g->addNode(getObjectForId(l->getData()[Ids::startVertex].toString()));
+        g->addNode(getObjectForId(l->getData()[Ids::endVertex].toString()));
+
+        g->linkNodes(getObjectForId(l->getData()[Ids::startVertex].toString()),
+                     getObjectForId(l->getData()[Ids::endVertex].toString()));
+
+    }
+//    for (int k = 0; k < audioConnections.size(); ++k)
+//    {
+//        AudioOutConnector* ac = audioConnections.getUnchecked(k);
+//        g->addNode(ac->getSourceObject());
+//        g->addNode(ac->getAudioObject());
+//
+//        g->linkNodes(ac->getSourceObject(), ac->getAudioObject());
+//    }
+
+    g->shuffleNodes();
+}
+
+void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
+{
+    for (int i = 0; i < audioConnections.size(); ++i)
+    {
+        audioConnections[i]->setVisible(shouldBeVisible);
+        audioConnections[i]->repaint();
+    }
 
 }

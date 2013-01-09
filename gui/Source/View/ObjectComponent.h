@@ -26,12 +26,12 @@
 #ifndef __OBJECTCOMPONENT_H_4AC10D4B__
 #define __OBJECTCOMPONENT_H_4AC10D4B__
 
+namespace synthamodeler
+{
 class ObjectsHolder;
 class ObjController;
-
-#include "BaseObjectComponent.h"
-#include "LinkComponent.h"
-#include "SelectableObject.h"
+class LinkComponent;
+class SelectableObject;
 
 /**
  * The object component.
@@ -94,6 +94,7 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };
+}
 
 
 #endif  // __OBJECTCOMPONENT_H_4AC10D4B__

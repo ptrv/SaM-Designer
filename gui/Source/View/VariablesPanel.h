@@ -26,6 +26,8 @@
 #ifndef __VARIABLESPANEL_H_684205E3__
 #define __VARIABLESPANEL_H_684205E3__
 
+namespace synthamodeler
+{
 /**
  * Dialog window for editing defined variables.
  *
@@ -52,6 +54,7 @@ public:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VariablesPanel)
 };
+}
 
 
 #endif  // __VARIABLESPANEL_H_684205E3__

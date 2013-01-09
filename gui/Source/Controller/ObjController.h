@@ -26,7 +26,8 @@
 #ifndef __OBJCONTROLLER_H_A98EC6A3__
 #define __OBJCONTROLLER_H_A98EC6A3__
 
-
+namespace synthamodeler
+{
 class MDLController;
 class BaseObjectComponent;
 class ObjectComponent;
@@ -35,7 +36,8 @@ class LinkComponent;
 class AudioOutConnector;
 class SelectableObject;
 class IdManager;
-
+class CommentComponent;
+class DirectedGraph;
 /**
  * The ObjController controlls all ObjectComponents.
  */
@@ -96,6 +98,14 @@ public:
                                bool undoable,
                                ObjectsHolder* holder);
 
+
+    CommentComponent* addComment(ObjectsHolder* holder, ValueTree commentValues,
+                                 int index, bool undoable);
+    void addNewComment(ObjectsHolder* holder, ValueTree commentValues);
+
+    void removeComment(CommentComponent* commentComp, bool undoable,
+                       ObjectsHolder* holder);
+
 	/**
 	 * Loads the object components of a patch when a mdl file is opened.
 	 * @param holder
@@ -155,11 +165,17 @@ public:
     { return audioConnections[index]; }
     int indexOfAudioConnector (AudioOutConnector* e) const throw() 
     { return audioConnections.indexOf (e); }
+
+    CommentComponent* getComment(int index) const throw() { return comments[index]; }
+    CommentComponent* getCommentUnchecked(int index) const throw() { return comments.getUnchecked(index); }
+    int indexOfComment (CommentComponent* e) const throw() { return comments.indexOf (e); }
+    int getNumComment() const { return comments.size(); }
     
     void changed();
     
-    ObjectComponent* getObjectForId(String idString) const throw();
-    LinkComponent* getLinkForId(String idString) const throw();
+    ObjectComponent* getObjectForId(const String& idString) const throw();
+    LinkComponent* getLinkForId(const String& idString) const throw();
+    CommentComponent* getCommentForId(const String& idString) const throw();
     
     void reverseLinkDirection();
     
@@ -187,6 +203,10 @@ public:
     void setLinksSegmented(bool isSegmented);
 
     void destroy();
+
+    void makeGraph(DirectedGraph* g);
+
+    void setAudioConnectionVisibility(bool shouldBeVisible);
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
@@ -197,10 +217,11 @@ private:
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
     OwnedArray<AudioOutConnector> audioConnections;
+    OwnedArray<CommentComponent> comments;
     SelectedItemSet<SelectableObject*> sObjects;
     ScopedPointer<IdManager> idMgr;
     int timesPasted;
 };
-
+}
 
 #endif  // __OBJCONTROLLER_H_A98EC6A3__

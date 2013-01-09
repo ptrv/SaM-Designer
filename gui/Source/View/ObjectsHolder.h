@@ -26,22 +26,25 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
-#include "ObjectComponent.h"
-#include "VariablesPanel.h"
-
-
+namespace synthamodeler
+{
+class BaseObjectComponent;
 class ObjectComponent;
 class MDLFile;
 class ObjController;
 class SelectableObject;
 class SnapGridPainter;
-
+class VariablesPanel;
+class RedrawOptionsPanel;
+class DirectedGraph;
+class ContentComp;
 /**
  * Component which contains all objects.
  */
 class ObjectsHolder : public Component,
-                        public LassoSource <SelectableObject*>,
-                       public ChangeListener
+                      public LassoSource <SelectableObject*>,
+                      public ChangeListener,
+                      public Timer
 {
 public:
     ObjectsHolder(ObjController& objController_);
@@ -83,6 +86,7 @@ public:
     void deleteSelectedObjects();
 
     const Rectangle<int> getObjectsExtent() const;
+    const Rectangle<int> getObjectsBounds() const;
     const bool getShowObjectNames() const { return showObjectNames; }
     //==========================================================================
     void setSnappingGrid (const int numPixels, const bool active, const bool shown);
@@ -93,10 +97,19 @@ public:
 
     int snapPosition (int pos) const throw();
 
+
+    void timerCallback();
+
+    void redrawObjects(const int cmdId);
+
     //==========================================================================
 private:
 
+    ContentComp* getContentComp();
+
     void showContextMenu(const Point<int> mPos);
+
+    void showRedrawOptions();
 
     void checkExtent(const Rectangle<int>& r);
     ObjController& objController;
@@ -118,9 +131,10 @@ private:
     bool snapActive, snapShown;
 
     ScopedPointer<VariablesPanel> vpanel;
+    ScopedPointer<DirectedGraph> graph;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };
-
+}
 
 #endif  // __OBJCOMP_H_F3604232__

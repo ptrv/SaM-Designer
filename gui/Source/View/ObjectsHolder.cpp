@@ -26,16 +26,26 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"
+#include "SelectableObject.h"
+#include "../Graph/FlowAlgorithm.h"
+#include "../Graph/ForceDirectedFlowAlgorithm.h"
+#include "../Graph/ForceBasedFlowAlgorithm.h"
+#include "../Graph/DirectedGraph.h"
+#include "../Graph/Node.h"
+#include "BaseObjectComponent.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
-#include "SelectableObject.h"
 #include "../Controller/ObjController.h"
 #include "VariablesPanel.h"
+#include "RedrawOptionsPanel.h"
 #include "SnapGridPainter.h"
+#include "AudioOutConnector.h"
+#include "CommentComponent.h"
 
 #include "ObjectsHolder.h"
-#include "AudioOutConnector.h"
+
+using namespace synthamodeler;
 
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
@@ -123,6 +133,11 @@ void ObjectsHolder::updateComponents()
         else if (AudioOutConnector * const aobj = dynamic_cast<AudioOutConnector*> (getChildComponent(i)))
         {
             aocs.add(aobj);
+        }
+        else if (CommentComponent* const cobj = dynamic_cast<CommentComponent*> (getChildComponent(i)))
+        {
+            checkExtent(cobj->getBounds());
+            cobj->update();
         }
     }
     for (i = 0; i < links.size(); ++i)
@@ -212,6 +227,8 @@ static const int dx = 20;
 static const int dy = 20;
 static const int dxfine = 5;
 static const int dyfine = 5;
+
+int64 lastTime = 0.0f;
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
 {
     Point<int> mp = getMouseXYRelative();
@@ -278,6 +295,15 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case CommandIDs::tidyObjects:
         objController.tidyUp();
+        break;
+    case CommandIDs::redrawCircle:
+        redrawObjects(CommandIDs::redrawCircle);
+        break;
+    case CommandIDs::redrawForceDirected:
+        redrawObjects(CommandIDs::redrawForceDirected);
+        break;
+    case CommandIDs::showRedrawOptions:
+        RedrawOptionsPanel::show();
         break;
     case CommandIDs::insertMass:
         objController.addNewObject(this,
@@ -370,6 +396,12 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                                                                       objController.getNewNameForObject(Ids::termination),
                                                                       mp.x, mp.y));
         break;
+    case CommandIDs::insertComment:
+        objController.addNewComment(this,
+                                    ObjectFactory::createNewObjectTree(Ids::comment,
+                                                                       objController.getNewNameForObject(Ids::comment),
+                                                                       mp.x, mp.y));
+        break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -dy);
         break;
@@ -410,6 +442,15 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                         isSnapActive(false),
                         !isSnapShown());
         break;
+    case CommandIDs::showAudioConnections:
+    {
+        bool sac = StoredSettings::getInstance()->getShowAudioConnections();
+        sac = !sac;
+        StoredSettings::getInstance()->setShowAudioConnections(sac);
+        objController.setAudioConnectionVisibility(sac);
+    }
+        break;
+
     default:
         return false;
     }
@@ -430,6 +471,11 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     m.addSeparator();
     m.addItem(6, "Junction");
     m.addItem(7, "Termination");
+    m.addSeparator();
+//    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
+//    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
+//    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
+    m.addItem(8, "Comment");
 
     const int r = m.show();
 
@@ -483,6 +529,13 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
                                    ObjectFactory::createNewObjectTree(Ids::termination,
                                                                       objController.getNewNameForObject(Ids::termination),
                                                                       mPos.x, mPos.y));
+    }
+    else if (r == 8)
+    {
+        objController.addNewComment(this,
+                                    ObjectFactory::createNewObjectTree(Ids::comment,
+                                                                       objController.getNewNameForObject(Ids::comment),
+                                                                       mPos.x, mPos.y));
     }
 }
 
@@ -644,6 +697,37 @@ const Rectangle<int> ObjectsHolder::getObjectsExtent() const
     return Rectangle<int>(0,0, maxX, maxY);
 }
 
+const Rectangle<int> ObjectsHolder::getObjectsBounds() const
+{
+    int rightX = 0;
+    int downY = 0;
+    int leftX = getWidth();
+    int upY = getHeight();
+    for (int i = 0; i < getNumChildComponents(); ++i)
+    {
+        Component* const comp = getChildComponent(i);
+        ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(comp);
+        CommentComponent* const cc = dynamic_cast<CommentComponent*>(comp);
+        if(oc != nullptr || cc != nullptr)
+        {
+            Rectangle<int> rect = comp->getBounds();
+            int x1 = rect.getX();
+            int y1 = rect.getY();
+            int x2 = rect.getRight();
+            int y2 = rect.getBottom();
+            if (x1 < leftX)
+                leftX = x1;
+            if (y1 < upY)
+                upY = y1;
+            if (x2 > rightX)
+                rightX = x2;
+            if (y2 > downY)
+                downY = y2;
+        }
+    }
+    return Rectangle<int>(leftX, upY, rightX - leftX, downY - upY);
+}
+
 void ObjectsHolder::checkExtent(const Rectangle<int>& r)
 {
     if(r.getRight() > maxX)
@@ -688,5 +772,68 @@ void ObjectsHolder::setSnappingGrid (const int numPixels, const bool active, con
     }
 }
 
+double timeStep = 0.6;
+void ObjectsHolder::timerCallback()
+{
+//    DBG("tick");
+    if (graph != nullptr)
+    {
+        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
+        float dT = (currentTime-lastTime)/1000.0f;
 
+
+        bool done = graph->reflow(getContentComp()->getViewPosition().x,
+                                  getContentComp()->getViewPosition().y,
+                                  getContentComp()->getViewWidth(),
+                                  getContentComp()->getViewHeight(),
+                                  objController, timeStep);
+        updateComponents();
+        repaint();
+        if(done)
+        {
+            graph = nullptr;
+            stopTimer();
+            DBG("stop timer");
+        }
+    }
+}
+
+ContentComp* ObjectsHolder::getContentComp()
+{
+    return findParentComponentOfClass<ContentComp>();
+}
+
+void ObjectsHolder::redrawObjects(const int cmdId)
+{
+    DBG("redraw objects");
+    if (isTimerRunning())
+    {
+        stopTimer();
+        graph = nullptr;
+    }
+
+    timeStep = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.6);
+    if(cmdId == CommandIDs::redrawCircle)
+    {
+        graph = new DirectedGraph();
+        objController.makeGraph(graph.get());
+    }
+    else if(cmdId == CommandIDs::redrawForceDirected)
+    {
+        graph = new DirectedGraph();
+        objController.makeGraph(graph.get());
+//        DBG(graph->toString());
+//        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
+        graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
+        graph->randomizeNodes(getContentComp()->getViewPosition().x,
+                              getContentComp()->getViewPosition().y,
+                              getContentComp()->getViewWidth(),
+                              getContentComp()->getViewHeight());
+
+    }
+
+    lastTime = Time::getCurrentTime().currentTimeMillis();
+    startTimer(10);
+
+}
 //==============================================================================

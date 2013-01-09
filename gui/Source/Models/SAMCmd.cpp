@@ -25,8 +25,11 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
+#include "../Models/SAMCompiler.h"
 
 #include "SAMCmd.h"
+
+using namespace synthamodeler;
 
 SAMCmd::SAMCmd()
 {
@@ -144,21 +147,38 @@ static String execProcess(char* cmd) {
 #endif
     return result;
 }
-const String SAMCmd::generateFaustCode(const String& inPath, const String& outPath)
+const String SAMCmd::generateFaustCode(const String& inPath,
+                                       const String& outPath,
+                                       bool useSamConsole)
 {
     File fileOut(outPath);
     String dataDir = StoredSettings::getInstance()->getDataDir();
     String pathMDX = dataDir;
     pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
-	String processoutput = runPerlScript("SAM-preprocessor", inPath, pathMDX);
-    processoutput << runPerlScript("Synth-A-Modeler", pathMDX, outPath);
+	String processoutput = runPerlScript("SAM-preprocessor",
+                                         inPath, pathMDX, useSamConsole);
+    processoutput << runPerlScript("Synth-A-Modeler",
+                                   pathMDX, outPath, useSamConsole);
 	return processoutput;
 }
 
-const String SAMCmd::generateExternal(const String& mdlPath)
+const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
+                                              const String& outPath,
+                                              bool /*useSamConsole*/)
 {
-    String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
-    String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
+    String faustCodeString = SAMCompiler::compile(mdlRoot_);
+
+    File fileOut(outPath);
+    if(Utils::writeStringToFile(faustCodeString, fileOut))
+        return "Generating faust code finished!\n";
+    else
+        return "Generating faust code failed!\n";
+}
+
+const String SAMCmd::generateExternal(const String& mdlPath,
+                                      const String& exporter,
+                                      bool useSamConsole)
+{
 	String processStr;
 #ifdef JUCE_WINDOWS
 	String msg = "Genarating external code is not implemented yet!";
@@ -169,7 +189,7 @@ const String SAMCmd::generateExternal(const String& mdlPath)
 	processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
 	processStr << " ; cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
     processStr << " ; ";
-    processStr << exporterValue;
+    processStr << exporter;
 	processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
     File mdlFile(mdlPath);
     processStr = processStr.replace("$(MDL_NAME)", mdlFile.getFileNameWithoutExtension(), true);
@@ -177,14 +197,16 @@ const String SAMCmd::generateExternal(const String& mdlPath)
 	processStr << " 2>&1\" 2>&1";
 #endif
 	SAM_LOG("Export command: " + processStr);
-    SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
+    if(useSamConsole)
+        SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
 	String processoutput = execProcess(processStr.toUTF8().getAddress());
 	return processoutput;
 }
 
 const String SAMCmd::runPerlScript(const String& script,
-                                      const String& inPath,
-                                      const String& outPath)
+                                   const String& inPath,
+                                   const String& outPath,
+                                   bool useSamConsole)
 {
     String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
 	String processStr;
@@ -200,10 +222,13 @@ const String SAMCmd::runPerlScript(const String& script,
 
 #endif
 	SAM_LOG(script + " command: " + processStr);
-    SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
+    if(useSamConsole)
+        SAM_CONSOLE_ADD_LINE(processStr + "\n", true);
 	return execProcess(processStr.toUTF8().getAddress());
 //	return runChildProcess(processStr.toUTF8().getAddress());
 }
+
+
 
 //==============================================================================
 #if UNIT_TESTS

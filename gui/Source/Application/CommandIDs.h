@@ -32,13 +32,16 @@
 /**
     A namespace to hold all the possible command IDs.
 */
+namespace synthamodeler
+{
 namespace CommandIDs
 {
     static const int newFile                = 0x200010;
     static const int open                   = 0x200020;
     static const int closeDocument          = 0x200030;
     static const int saveDocument           = 0x200040;
-    static const int saveDocumentAs         = 0x200050;
+    static const int saveDocumentAs         = 0x200045;
+    static const int saveDocumentAsImage    = 0x200046;
 
     static const int segmentedConnectors    = 0x200051;
     static const int reverseDirection       = 0x200052;
@@ -73,14 +76,12 @@ namespace CommandIDs
     static const int insertWaveguide		= 0x2030c1;
     static const int insertTermination		= 0x2030c2;
     static const int insertJunction 		= 0x2030c3;
+    static const int insertComment          = 0x2030c4;
 
     static const int generateFaust			= 0x2030c5;
     static const int generateExternal		= 0x2030c6;
     static const int cleanDataDir           = 0x2030c7;
     static const int cleanDataDirAll        = 0x2030c8;
-
-    static const int group                  = 0x202170;
-    static const int ungroup                = 0x202180;
 
     static const int showPrefs              = 0x2020c0;
     static const int showHelp				= 0x2020d0;
@@ -93,6 +94,9 @@ namespace CommandIDs
     static const int zoomNormal             = 0x202150;
     static const int spaceBarDrag           = 0x202160;
     static const int tidyObjects            = 0x202170;
+    static const int redrawCircle           = 0x202171;
+    static const int redrawForceDirected    = 0x202172;
+    static const int showRedrawOptions      = 0x202173;
 
     static const int moveUp                 = 0x202200;
     static const int moveDown               = 0x202210;
@@ -102,6 +106,9 @@ namespace CommandIDs
     static const int moveDownFine           = 0x202410;
     static const int moveLeftFine           = 0x202420;
     static const int moveRightFine          = 0x202430;
+
+    static const int selectTextColour       = 0x202710;
+    static const int showAudioConnections   = 0x202720;
 }
 
 namespace CommandCategories
@@ -114,6 +121,8 @@ namespace CommandCategories
     static const char* const view          = "View";
     static const char* const windows       = "Windows";
     static const char* const help          = "help";
+}
+
 }
 
 #endif  // __COMMANDIDS_H_5D051BD1__

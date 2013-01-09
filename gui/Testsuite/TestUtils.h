@@ -28,11 +28,13 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+namespace synthamodeler
+{
 #if JUCE_MAC
 static const char* TESTSUITE_DATA_PATH = "../../../../Testsuite/data/";
 #else
 static const char* TESTSUITE_DATA_PATH = "../../../Testsuite/data/";
 #endif
-
+}
 
 #endif  // __TESTUTILS_H_D0F1300A__

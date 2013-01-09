@@ -28,6 +28,7 @@
 #include "../Utilities/StoredSettings.h"
 
 
+using namespace synthamodeler;
 //==============================================================================
 class MiscPage  : public Component
 {
@@ -46,6 +47,8 @@ public:
 		tbRunSAMBeforeExport("Run Synth-A-Modeler before generating code"),
 		tbExportConfirm("Confirm before generating code"),
         tbOpenFaustExport("Open Faust file after export"),
+        tbUseMDLX("Use MDLX file"),
+        tbUseBuiltinCompiler("Use builtin Synth-A-Modeler compiler"),
 #ifdef DEBUG
         tbLoggingOn("Logging (After change, restart required)"),
 #endif
@@ -62,6 +65,10 @@ public:
         tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
         addAndMakeVisible(&tbOpenFaustExport);
         tbOpenFaustExport.setToggleState(StoredSettings::getInstance()->getOpenFaustExport(), false);
+        addAndMakeVisible(&tbUseMDLX);
+        tbUseMDLX.setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(), false);
+        addAndMakeVisible(&tbUseBuiltinCompiler);
+        tbUseBuiltinCompiler.setToggleState(StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler(), false);
 #ifdef DEBUG
         addAndMakeVisible(&tbLoggingOn);
         tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(), false);
@@ -75,6 +82,8 @@ public:
         StoredSettings::getInstance()->setRunSAMBeforeExternal(tbRunSAMBeforeExport.getToggleState());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
         StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
+        StoredSettings::getInstance()->setIsUsingMDLX(tbUseMDLX.getToggleState());
+        StoredSettings::getInstance()->setIsUsingBuiltinSAMCompiler(tbUseBuiltinCompiler.getToggleState());
 #ifdef DEBUG
         StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
 #endif
@@ -85,8 +94,10 @@ public:
         fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
         fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
         tbRunSAMBeforeExport.setBounds(10, 170, getWidth() - 20, 22);
-        tbExportConfirm.setBounds(10, 220, getWidth() - 20, 22);
-        tbOpenFaustExport.setBounds(10, 270, getWidth() - 20, 22);
+        tbExportConfirm.setBounds(10, 200, getWidth() - 20, 22);
+        tbOpenFaustExport.setBounds(10, 230, getWidth() - 20, 22);
+        tbUseMDLX.setBounds(10, 260, getWidth() - 20, 22);
+        tbUseBuiltinCompiler.setBounds(10, 290, getWidth() - 20, 22);
 #ifdef DEBUG
         tbLoggingOn.setBounds(10, 320, getWidth() - 20, 22);
 #endif
@@ -98,6 +109,8 @@ private:
     ToggleButton tbRunSAMBeforeExport;
     ToggleButton tbExportConfirm;
     ToggleButton tbOpenFaustExport;
+    ToggleButton tbUseMDLX;
+    ToggleButton tbUseBuiltinCompiler;
 #ifdef DEBUG
     ToggleButton tbLoggingOn;
 #endif

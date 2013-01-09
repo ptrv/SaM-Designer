@@ -60,7 +60,31 @@
       <FILE id="KPXlQy" name="TestRunner.h" compile="0" resource="0" file="Testsuite/TestRunner.h"/>
     </GROUP>
     <GROUP id="{EE6AE3CA-D446-1077-CCAC-814FE8EEDBB8}" name="Source">
+      <GROUP id="{81A0519B-F5F2-0347-8598-81A621EDD216}" name="Graph">
+        <FILE id="kiqjgA" name="ForceBasedFlowAlgorithm.cpp" compile="1" resource="0"
+              file="Source/Graph/ForceBasedFlowAlgorithm.cpp"/>
+        <FILE id="iqOXYR" name="ForceBasedFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/ForceBasedFlowAlgorithm.h"/>
+        <FILE id="ENHr9x" name="CircleFlowAlgorithm.cpp" compile="1" resource="0"
+              file="Source/Graph/CircleFlowAlgorithm.cpp"/>
+        <FILE id="miSf4b" name="CircleFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/CircleFlowAlgorithm.h"/>
+        <FILE id="QkTRy3" name="GraphUtils.cpp" compile="1" resource="0" file="Source/Graph/GraphUtils.cpp"/>
+        <FILE id="eHWLKs" name="GraphUtils.h" compile="0" resource="0" file="Source/Graph/GraphUtils.h"/>
+        <FILE id="jsAjk3" name="ForceDirectedFlowAlgorithm.cpp" compile="1"
+              resource="0" file="Source/Graph/ForceDirectedFlowAlgorithm.cpp"/>
+        <FILE id="wUWPoK" name="ForceDirectedFlowAlgorithm.h" compile="0" resource="0"
+              file="Source/Graph/ForceDirectedFlowAlgorithm.h"/>
+        <FILE id="XyvHha" name="FlowAlgorithm.h" compile="0" resource="0" file="Source/Graph/FlowAlgorithm.h"/>
+        <FILE id="Rbryxx" name="DirectedGraph.cpp" compile="1" resource="0"
+              file="Source/Graph/DirectedGraph.cpp"/>
+        <FILE id="sckUTM" name="DirectedGraph.h" compile="0" resource="0" file="Source/Graph/DirectedGraph.h"/>
+        <FILE id="W41Hs4" name="Node.cpp" compile="1" resource="0" file="Source/Graph/Node.cpp"/>
+        <FILE id="SqsOHa" name="Node.h" compile="0" resource="0" file="Source/Graph/Node.h"/>
+      </GROUP>
       <GROUP id="{902B3BB9-D93B-9CA8-A833-9D80066DDF9F}" name="Application">
+        <FILE id="fNE9nx" name="CommandLine.cpp" compile="1" resource="0" file="Source/Application/CommandLine.cpp"/>
+        <FILE id="CXYO1W" name="CommandLine.h" compile="0" resource="0" file="Source/Application/CommandLine.h"/>
         <FILE id="FRUoR4" name="SAMLookAndFeel.cpp" compile="1" resource="0"
               file="Source/Application/SAMLookAndFeel.cpp"/>
         <FILE id="jw1O2C" name="SAMLookAndFeel.h" compile="0" resource="0"
@@ -109,6 +133,8 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
+        <FILE id="p3f3Ep" name="SAMCompiler.cpp" compile="1" resource="0" file="Source/Models/SAMCompiler.cpp"/>
+        <FILE id="HvT7tq" name="SAMCompiler.h" compile="0" resource="0" file="Source/Models/SAMCompiler.h"/>
         <FILE id="G9OIi7" name="ObjectFactory.cpp" compile="1" resource="0"
               file="Source/Models/ObjectFactory.cpp"/>
         <FILE id="Z559dG" name="ObjectFactory.h" compile="0" resource="0" file="Source/Models/ObjectFactory.h"/>
@@ -120,6 +146,17 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="kIUIkp" name="RedrawOptionsPanel.cpp" compile="1" resource="0"
+              file="Source/View/RedrawOptionsPanel.cpp"/>
+        <FILE id="Ejkwfk" name="RedrawOptionsPanel.h" compile="0" resource="0"
+              file="Source/View/RedrawOptionsPanel.h"/>
+        <FILE id="V7zrp4" name="CommentEditor.cpp" compile="1" resource="0"
+              file="Source/View/CommentEditor.cpp"/>
+        <FILE id="Dd613g" name="CommentEditor.h" compile="0" resource="0" file="Source/View/CommentEditor.h"/>
+        <FILE id="d64dNC" name="CommentComponent.cpp" compile="1" resource="0"
+              file="Source/View/CommentComponent.cpp"/>
+        <FILE id="pUpBNd" name="CommentComponent.h" compile="0" resource="0"
+              file="Source/View/CommentComponent.h"/>
         <FILE id="oFDA5A" name="SnapGridPainter.cpp" compile="1" resource="0"
               file="Source/View/SnapGridPainter.cpp"/>
         <FILE id="dQ29ls" name="SnapGridPainter.h" compile="0" resource="0"

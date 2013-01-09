@@ -25,17 +25,22 @@
 
 */
 
-#include "../Application/Application.h"
+#include "CommonHeaders.h"
+#include "Application.h"
+#include "CommandIDs.h"
 #include "../View/OutputWindow.h"
 #include "../View/ContentComp.h"
 #include "../Controller/ObjController.h"
 #include "../Controller/MDLController.h"
 #include "../Models/MDLFile.h"
+#include "../View/SelectableObject.h"
 #include "../View/ObjectsHolder.h"
 
 #include "MainWindow.h"
 
-ScopedPointer<ApplicationCommandManager> commandManager;
+using namespace synthamodeler;
+
+ScopedPointer<ApplicationCommandManager> synthamodeler::commandManager;
 
 //==============================================================================
 MainAppWindow::MainAppWindow()
@@ -172,7 +177,10 @@ void MainAppWindow::restoreWindowPosition()
 
     if (mdlController->getMDLFile() != nullptr)
     {
-        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName());
+        String defaultVal = String::empty;
+        if(mdlController->getMDLFile()->getFile().getFileNameWithoutExtension().endsWith("-help"))
+            defaultVal = "100 100 450 400";
+        windowState = StoredSettings::getInstance()->getProps().getValue (getProjectWindowPosName(), defaultVal);
         double newZoomFactor = StoredSettings::getInstance()->getProps().getDoubleValue (getProjectWindowZoomName(), 1.0);
         getMDLFileContentComponent()->setZoom(newZoomFactor);
     }
@@ -205,6 +213,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
     const CommandID ids[] = { 	CommandIDs::closeDocument,
             					CommandIDs::saveDocument,
             					CommandIDs::saveDocumentAs,
+                                CommandIDs::saveDocumentAsImage,
                                 CommandIDs::generateFaust,
                                 CommandIDs::generateExternal,
                                 CommandIDs::cleanDataDir,
@@ -234,6 +243,10 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     case CommandIDs::saveDocumentAs:
         result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::saveDocumentAsImage:
+        result.setInfo ("Save as image", "Save patch as image.", CommandCategories::general, 0);
+//        result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::generateFaust:
     	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
@@ -295,6 +308,9 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         updateTitle();
     }
     	break;
+    case CommandIDs::saveDocumentAsImage:
+        mdlController->saveAsImage();
+        break;
     case CommandIDs::generateFaust:
     {
     	String consoleText = "Start Synth-A-Modeler...";

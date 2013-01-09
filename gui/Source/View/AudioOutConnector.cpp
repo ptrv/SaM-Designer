@@ -24,12 +24,17 @@
  */
 
 #include "../Application/CommonHeaders.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
+#include "../View/SelectableObject.h"
+#include "../Graph/Node.h"
+#include "BaseObjectComponent.h"
+#include "ObjectComponent.h"
+#include "LinkComponent.h"
 #include "../Controller/ObjController.h"
+#include "ObjectsHolder.h"
 
 #include "AudioOutConnector.h"
-#include "ObjectsHolder.h"
+
+using namespace synthamodeler;
 
 class GainPanel  : public DialogWindow
 {
@@ -262,6 +267,9 @@ void AudioOutConnector::resized()
 
 void AudioOutConnector::paint(Graphics& g)
 {
+    if(! isVisible())
+        return;
+
     if(selected)
     {
         g.setColour(Colours::red);

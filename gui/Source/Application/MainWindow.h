@@ -29,12 +29,12 @@
 #define __MAINWINDOW_H_3C77CBD5__
 
 
-#include "../Application/CommonHeaders.h"
-#include "../Controller/MDLController.h"
-
+namespace synthamodeler
+{
 class ContentComp;
 class ObjController;
 class MDLFile;
+class MDLController;
 //==============================================================================
 /**
  * The application's main window, which contains the main component with the
@@ -97,6 +97,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 
 };
-
+}
 
 #endif  // __MAINWINDOW_H_3C77CBD5__

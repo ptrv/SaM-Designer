@@ -27,8 +27,8 @@
 #define __APPLICATION_H_BBAD6F5C__
 
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
+namespace synthamodeler
+{
 class MainAppWindow;
 class OutputWindow;
 class SAMLookAndFeel;
@@ -117,10 +117,12 @@ public:
 #ifdef DEBUG
     ScopedPointer<Logger> samLogger;
 #endif
+
+    bool isRunningCommandLine;
     //==============================================================================
 
 };
-
+}
 
 
 #endif  // __APPLICATION_H_BBAD6F5C__

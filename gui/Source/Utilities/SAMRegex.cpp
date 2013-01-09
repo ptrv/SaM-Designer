@@ -27,6 +27,7 @@
 
 #include "SAMRegex.h"
 
+using namespace synthamodeler;
 
 const char* SAMRegex::pos = "(\\s*#\\s*pos\\s*\\d+,\\s*\\d+\\s*)?";
 const char* SAMRegex::label = "([a-zA-Z\\d]*)";
@@ -39,8 +40,9 @@ const char* SAMRegex::audioOutDetails = "(.+)";
 const char* SAMRegex::faustName = "\\A\\s*(faustcode):.*";
 const char* SAMRegex::faustCode = "(.+)\\s*=\\s*(.+)";
 //const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*]+|[a-zA-Z]*\\([a-zA-Z\\.\\d,\\s*]*\\))"";
-const char* SAMRegex::paramsDetail = "([\\d\\.]*|[\\d\\.\\*a-zA-Z]*|[\\(\\)\\*\\+\\-a-zA-Z\\.\\d,\\s*]*)";
+const char* SAMRegex::paramsDetail = "([\\d\\.]*|[\\d\\.\\*a-zA-Z]*|[\\(\\)\\*\\+\\-a-zA-Z\\.\\d,\\s*]*|[\\w\\\\\"]*)";
 const char* SAMRegex::word = "(\\w+)";
+const char* SAMRegex::commentObject = "\\A\\s*#\\s*(comment)";
 
 String SAMRegex::getVertexLine()
 {
@@ -113,4 +115,14 @@ String SAMRegex::getParamsLine(int numParams)
             paramsLine << ",";
     }
     return paramsLine;
+}
+
+String SAMRegex::getCommentObjectLine()
+{
+    String commentObjectLine;
+    commentObjectLine << "\\A\\s*##\\s*(comment)\\(\\s*([!-~\\s]*)";
+    commentObjectLine << "\\s*\\)\\s*,\\s*" << label << "\\s*;\\s*";
+    commentObjectLine << pos << "\\s*$";
+
+    return commentObjectLine;
 }
