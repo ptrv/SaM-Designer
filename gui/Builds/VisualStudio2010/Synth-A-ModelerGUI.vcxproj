@@ -81,6 +81,7 @@
       <ProgramDatabaseFile>$(IntDir)\Synth-A-ModelerGUI.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>..\..\Libs\re2win\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>re2.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
@@ -124,6 +125,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <AdditionalLibraryDirectories>..\..\Libs\re2win\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>re2.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
