@@ -42,6 +42,7 @@ public:
 
     PropertiesFile& getProps();
     PropertiesFile& getExporters();
+    PropertiesFile& getDefaultValues();
     void flush();
 
     //==============================================================================
@@ -111,9 +112,12 @@ public:
     const bool getShowAudioConnections() const;
     void setShowAudioConnections (bool showAudioConnections);
 
+    const String getDefaultValue(const String& keyName,
+                                 const String& defaultVal);
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;
+    ScopedPointer<PropertiesFile> defaultValues;
     StringArray fontNames;
 
 //    ScopedPointer<Drawable> imageFileIcon;

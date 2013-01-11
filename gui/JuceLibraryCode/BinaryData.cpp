@@ -7,6 +7,36 @@
 namespace BinaryData
 {
 
+//================== default_values.xml ==================
+static const unsigned char temp_96b5b732[] =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
+"\r\n"
+"<PROPERTIES>\r\n"
+"  <VALUE name=\"mass_kg\" val=\"0.001\"/>\r\n"
+"  <VALUE name=\"mass_init_position\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"mass_init_velocity\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"ground_init_position\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"resonator_frequency\" val=\"200.0\"/>\r\n"
+"  <VALUE name=\"resonator_decay_time\" val=\"1.5\"/>\r\n"
+"  <VALUE name=\"resonator_eq_mass\" val=\"0.01\"/>\r\n"
+"  <VALUE name=\"link_stiffness\" val=\"100.0\"/>\r\n"
+"  <VALUE name=\"link_damping\" val=\"0.1\"/>\r\n"
+"  <VALUE name=\"link_offset\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"touch_stiffness\" val=\"100.0\"/>\r\n"
+"  <VALUE name=\"touch_damping\" val=\"0.1\"/>\r\n"
+"  <VALUE name=\"touch_offset\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"pluck_stiffness\" val=\"300.0\"/>\r\n"
+"  <VALUE name=\"pluck_damping\" val=\"0.1\"/>\r\n"
+"  <VALUE name=\"pluck_displacement\" val=\"0.003\"/>\r\n"
+"  <VALUE name=\"pluck_offset\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"term_type\" val=\"simpleStringTerm(-0.996, 20)\"/>\r\n"
+"  <VALUE name=\"junct_displacement\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"waveguide_impedance\" val=\"1.0\"/>\r\n"
+"  <VALUE name=\"waveguide_string_type\" val=\"simpleString(0.033,0.017)\"/>\r\n"
+"</PROPERTIES>\r\n";
+
+const char* default_values_xml = (const char*) temp_96b5b732;
+
 //================== default_exporters.xml ==================
 static const unsigned char temp_fb5cda14[] =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n"
@@ -791,6 +821,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
 
     switch (hash)
     {
+        case 0x9a1ef838:  numBytes = 1082; return default_values_xml;
         case 0xd0e7a20c:  numBytes = 607; return default_exporters_xml;
         case 0x9a64200d:  numBytes = 3839; return prefs_export_png;
         case 0xe7d611d7:  numBytes = 875; return mdl_file_header_txt;

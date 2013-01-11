@@ -39,6 +39,8 @@
   </EXPORTFORMATS>
   <MAINGROUP id="RyljMx" name="Synth-A-ModelerGUI">
     <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">
+      <FILE id="VCcpfE" name="default_values.xml" compile="0" resource="1"
+            file="BinaryData/default_values.xml"/>
       <FILE id="XwZAHd" name="default_exporters.xml" compile="0" resource="1"
             file="BinaryData/default_exporters.xml"/>
       <FILE id="lqNc9f" name="prefs_export.png" compile="0" resource="1"

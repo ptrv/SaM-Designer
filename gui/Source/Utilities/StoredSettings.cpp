@@ -26,6 +26,7 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "StoredSettings.h"
+#include "MiscUtilities.h"
 
 using namespace synthamodeler;
 
@@ -107,6 +108,7 @@ StoredSettings::~StoredSettings()
     flush();
     props = nullptr;
     exporters = nullptr;
+    defaultValues = nullptr;
     clearSingletonInstance();
 }
 
@@ -124,6 +126,12 @@ PropertiesFile& StoredSettings::getExporters()
 {
     jassert (exporters != nullptr);
     return *exporters;
+}
+
+PropertiesFile& StoredSettings::getDefaultValues()
+{
+    jassert (defaultValues != nullptr);
+    return *defaultValues;
 }
 
 void StoredSettings::flush()
@@ -159,8 +167,22 @@ void StoredSettings::flush()
 
     exporters = new PropertiesFile(exporterOptions);
 
+    defaultValues = nullptr;
+    PropertiesFile::Options defaultValuesOptions = options;
+    defaultValuesOptions.filenameSuffix = "default_values";
+
+    defaultValues = new PropertiesFile(defaultValuesOptions);
 }
 
+const String StoredSettings::getDefaultValue(const String& keyName,
+                                             const String& defaultVal)
+{
+    if(! defaultValues->containsKey(keyName))
+    {
+        defaultValues->setValue(keyName, defaultVal);
+    }
+    return defaultValues->getValue(keyName, defaultVal);
+}
 Array<File> StoredSettings::getLastFiles() const
 {
     StringArray s;

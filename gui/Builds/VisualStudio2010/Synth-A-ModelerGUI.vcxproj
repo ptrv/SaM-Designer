@@ -1149,6 +1149,7 @@
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_Message.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageListener.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_MessageManager.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_NotificationType.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_MultiTimer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\timers\juce_Timer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_events\broadcasters\juce_ActionBroadcaster.h"/>
@@ -1352,6 +1353,7 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\BinaryData\default_values.xml"/>
     <None Include="..\..\BinaryData\default_exporters.xml"/>
     <None Include="..\..\BinaryData\prefs_export.png"/>
     <None Include="..\..\BinaryData\mdl_file_header.txt"/>

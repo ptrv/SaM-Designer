@@ -136,6 +136,23 @@ void SynthAModelerApplication::initialise (const String& commandLine)
         StoredSettings::getInstance()->setCurrentExporter(currentExporter);
     }
 
+    // create default values properties file if not present
+    XmlDocument defaultValuesXml(String::createStringFromData(BinaryData::default_values_xml,
+                                                              BinaryData::default_values_xmlSize));
+    ScopedPointer<XmlElement> elem(defaultValuesXml.getDocumentElement());
+
+    if(StoredSettings::getInstance()->getDefaultValues().getAllProperties().size()
+        != elem->getNumChildElements())
+    {
+        for (int i = 0; i < elem->getNumChildElements(); ++i)
+        {
+            XmlElement* c = elem->getChildElement(i);
+            StoredSettings::getInstance()->getDefaultValues().setValue(c->getStringAttribute("name"),
+                                                                       c->getStringAttribute("val"));
+        }
+    }
+    elem = nullptr;
+
     if (mainWindows.size() == 0)
         createNewMainWindow()->makeVisible();
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PROPERTIES>
+  <VALUE name="mass_kg" val="0.001"/>
+  <VALUE name="mass_init_position" val="0.0"/>
+  <VALUE name="mass_init_velocity" val="0.0"/>
+  <VALUE name="ground_init_position" val="0.0"/>
+  <VALUE name="resonator_frequency" val="200.0"/>
+  <VALUE name="resonator_decay_time" val="1.5"/>
+  <VALUE name="resonator_eq_mass" val="0.01"/>
+  <VALUE name="link_stiffness" val="100.0"/>
+  <VALUE name="link_damping" val="0.1"/>
+  <VALUE name="link_offset" val="0.0"/>
+  <VALUE name="touch_stiffness" val="100.0"/>
+  <VALUE name="touch_damping" val="0.1"/>
+  <VALUE name="touch_offset" val="0.0"/>
+  <VALUE name="pluck_stiffness" val="300.0"/>
+  <VALUE name="pluck_damping" val="0.1"/>
+  <VALUE name="pluck_displacement" val="0.003"/>
+  <VALUE name="pluck_offset" val="0.0"/>
+  <VALUE name="term_type" val="simpleStringTerm(-0.996, 20)"/>
+  <VALUE name="junct_displacement" val="0.0"/>
+  <VALUE name="waveguide_impedance" val="1.0"/>
+  <VALUE name="waveguide_string_type" val="simpleString(0.033,0.017)"/>
+</PROPERTIES>

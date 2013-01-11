@@ -6,6 +6,9 @@
 
 namespace BinaryData
 {
+    extern const char*   default_values_xml;
+    const int            default_values_xmlSize = 1082;
+
     extern const char*   default_exporters_xml;
     const int            default_exporters_xmlSize = 607;
 
