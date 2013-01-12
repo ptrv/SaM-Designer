@@ -7,6 +7,24 @@ would like to graciously thank Prof. Julius O. Smith III, Alexandros
 Kontogeorgakopoulos, Prof. Stefan Weinzierl, Prof. Yann Orlarey, and the
 Alexander von Humboldt foundation for their support.
 
+## Screenshot
+
+![Synth-A-ModelerGUI](https://github.com/ptrv/Synth-A-Modeler/raw/master/screenshot.png
+ "Synth-A-ModelerGUI")
+
+
+## Porject structure
+
+**cmd**: This folder consist Edgar Berdahl's *Synth-A-Modeler* compiler
+  and example model files.
+
+**cmd2**: A C++ version of the *Synth-A-Modeler* compiler.
+
+**extras**: Consists of Synth-A-Modeler file Editor support for Emacs
+  and Vim and an *Synth-A-ModelerGUI* Linux installer.
+
+**gui**: This folder consist the *Synth-A-ModelerGUI* project.
+
 ## Setup
 
 The Synth-A-ModelerGUI project is heavily using the [JUCE][1] library.
