@@ -23,6 +23,8 @@
 
  */
 
+#if BUILTIN_SAM_COMPILER
+
 #ifndef __SAMCOMPILER_H_7CDF5BCC__
 #define __SAMCOMPILER_H_7CDF5BCC__
 
@@ -69,3 +71,5 @@ public:
 }
 
 #endif  // __SAMCOMPILER_H_7CDF5BCC__
+
+#endif

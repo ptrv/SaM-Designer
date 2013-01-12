@@ -22,6 +22,9 @@
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
  */
+
+#if BUILTIN_SAM_COMPILER
+
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "ObjectIDs.h"
 
@@ -579,3 +582,5 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
 
     return dspContent;
 }
+
+#endif
