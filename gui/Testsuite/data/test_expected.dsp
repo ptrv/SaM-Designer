@@ -2,6 +2,7 @@
 import("physicalmodeling.lib");
 
 adjStiffness=hslider("stiffness", 2200.0, 500.0, 4000.0, 100.0);
+outputDSP=highpass(4,20.0);
 
 
 bigBlock(m1p,m2p,m3p,gp,dev1p) = (m1,m2,m3,g,dev1,a1,a2) with {

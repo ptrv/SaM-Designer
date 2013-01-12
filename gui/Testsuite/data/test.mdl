@@ -84,7 +84,7 @@ link(2.0*adjStiffness,0.005,0.0),l3,m2,dev1,(link3);
 # For example, we assign the value of a horizontal slider with name stiffness, initial value 2200.0,
 # minimum value 500.0, GUI adjustment step 100.0, and maximum value 4000.0 to the unique identifier adjStiffness.
 faustcode: adjStiffness=hslider("stiffness", 2200.0, 500.0, 4000.0, 100.0);
-
+faustcode: outputDSP=highpass(4,20.0);
 
 
 
