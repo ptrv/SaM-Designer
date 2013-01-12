@@ -18,10 +18,10 @@ Alexander von Humboldt foundation for their support.
 **cmd**: This folder consist Edgar Berdahl's *Synth-A-Modeler* compiler
   and example model files.
 
-**cmd2**: A C++ version of the *Synth-A-Modeler* compiler.
+**cmd2**: A C++ version of the *Synth-A-Modeler* compiler (experimental).
 
-**extras**: Consists of Synth-A-Modeler file Editor support for Emacs
-  and Vim and an *Synth-A-ModelerGUI* Linux installer.
+**extras**: Consists of Synth-A-Modeler file editor support for Emacs
+  and Vim and a *Synth-A-ModelerGUI* Linux installer.
 
 **gui**: This folder consist the *Synth-A-ModelerGUI* project.
 
@@ -71,7 +71,7 @@ platforms. For linux:
     make
     build/Introjucer
 
-With the Introjucer you can now open *.jucer files, like the one at the
+With the Introjucer you can now open `*.jucer` files, like the one at the
 `Synth-A-Modeler/gui` path.
 
 ### Compiling Synth-A-ModelerGUI
