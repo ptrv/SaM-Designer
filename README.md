@@ -93,3 +93,10 @@ Run the application:
 
 [1]: http://rawmaterialsoftware.com/juce.php
 [2]: https://code.google.com/p/re2/
+
+## Usage
+
+Please refer to the [Wiki][3] for information on the usage of
+Synth-A-ModelerGUI.
+
+[3]: https://github.com/ptrv/Synth-A-Modeler/wiki
