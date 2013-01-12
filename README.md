@@ -13,7 +13,7 @@ Alexander von Humboldt foundation for their support.
  "Synth-A-ModelerGUI")
 
 
-## Porject structure
+## Project structure
 
 **cmd**: This folder consist Edgar Berdahl's *Synth-A-Modeler* compiler
   and example model files.
