@@ -55,7 +55,13 @@ public:
         tbLoggingOn("Logging (After change, restart required)"),
 #endif
         labelDataDir (String::empty, "Data Dir"),
-		labelFaustDir (String::empty, "FAUST Dir")
+		labelFaustDir (String::empty, "FAUST Dir"),
+        fcExternalEditor ("External editor:",
+			StoredSettings::getInstance()->getExternalEditor(),
+			true, false, false,
+			String::empty, String::empty,
+			"(select external editor executable)"),
+        labelExternalEditor(String::empty, "External editor")
     {
         addAndMakeVisible (&fcDataDir);
         labelDataDir.attachToComponent (&fcDataDir, false);
@@ -77,6 +83,8 @@ public:
         addAndMakeVisible(&tbLoggingOn);
         tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(), false);
 #endif
+        addAndMakeVisible(&fcExternalEditor);
+        labelExternalEditor.attachToComponent(&fcExternalEditor, false);
     }
 
     ~MiscPage()
@@ -93,6 +101,7 @@ public:
 #ifdef DEBUG
         StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
 #endif
+        StoredSettings::getInstance()->setExternalEditor(fcExternalEditor.getCurrentFile().getFullPathName());
     }
 
     void resized()
@@ -109,6 +118,7 @@ public:
 #ifdef DEBUG
         tbLoggingOn.setBounds(10, 320, getWidth() - 20, 22);
 #endif
+        fcExternalEditor.setBounds(10, 380, getWidth() - 20, 22);
     }
 
 private:
@@ -126,6 +136,8 @@ private:
 #endif
     Label labelDataDir;
     Label labelFaustDir;
+    FilenameComponent fcExternalEditor;
+    Label labelExternalEditor;
 };
 
 //==============================================================================

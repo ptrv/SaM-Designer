@@ -105,6 +105,23 @@ void Utils::openDataDir()
 
 }
 
+void Utils::openFileExternal(const String& path)
+{
+    File f(path);
+    if(f.existsAsFile())
+    {
+        StringArray tokens;
+        tokens.addTokens(StoredSettings::getInstance()->getExternalEditor(), " ", "\"");
+        if(tokens.size() == 0)
+            return;
+        tokens.add(f.getFullPathName());
+        Process::openDocument(tokens[0], tokens.joinIntoString(" ", 1, -1));
+    }
+    else
+    {
+        DBG("The file " << f.getFullPathName() << " does not exist");
+    }
+}
 void Utils::openFileNative(const String& path)
 {
     File f(path);

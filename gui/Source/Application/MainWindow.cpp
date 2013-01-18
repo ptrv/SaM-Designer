@@ -354,7 +354,8 @@ bool MainAppWindow::perform (const InvocationInfo& info)
                     false);
         break;
     case CommandIDs::openMdlFileExtern:
-        Utils::openFileNative(mdlController->getMDLFile()->getFile().getFullPathName());
+//        Utils::openFileNative(mdlController->getMDLFile()->getFile().getFullPathName());
+        Utils::openFileExternal(mdlController->getMDLFile()->getFile().getFullPathName());
         break;
 
 	default:

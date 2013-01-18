@@ -70,6 +70,8 @@ void openHelpPatch(const String& helpId);
  */
 void openDataDir();
 
+void openFileExternal(const String& path);
+
 void openFileNative(const String& path);
 
 /**

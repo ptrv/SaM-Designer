@@ -114,6 +114,10 @@ public:
 
     const String getDefaultValue(const String& keyName,
                                  const String& defaultVal);
+
+    String getExternalEditor() const;
+    void setExternalEditor(const String& externalEditor);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

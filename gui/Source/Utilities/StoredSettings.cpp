@@ -97,6 +97,19 @@ static const String getDefaultPathDataDir()
 	return "";
 }
 
+static const String getDefaultExternalEditor()
+{
+#ifdef JUCE_WINDOWS
+    return "notepad.exe";
+#elif JUCE_MAC
+    return "/Applications/TextEdit.app";
+#elif JUCE_LINUX
+    return "/usr/bin/gedit";
+#else
+    return String::empty;
+#endif
+}
+
 //==============================================================================
 StoredSettings::StoredSettings()
 {
@@ -372,4 +385,14 @@ const bool StoredSettings::getShowAudioConnections() const
 void StoredSettings::setShowAudioConnections(bool showAudioConnections)
 {
     props->setValue("showaudioconnections", showAudioConnections);
+}
+
+String StoredSettings::getExternalEditor() const
+{
+    return props->getValue("external_editor", getDefaultExternalEditor());
+}
+
+void StoredSettings::setExternalEditor(const String& externalEditor)
+{
+    props->setValue("external_editor", externalEditor);
 }
