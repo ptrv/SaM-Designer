@@ -7,7 +7,10 @@
 ;;
 ;; Installation:
 ;;
-;; Put sam-mode.el to your load-path and add this to
+;; To find out the value of load-path in your version of emacs, just
+;; run the command in emacs:  'C-h v load-path RET'
+;;
+;; Then put sam-mode.el somewhere in your load-path and add this to
 ;; your .emacs:
 ;;
 ;; (setq auto-mode-alist (cons '("\\.mdl$" . sam-mode) auto-mode-alist))
