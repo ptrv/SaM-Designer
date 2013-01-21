@@ -1,0 +1,76 @@
+# MDL file for Synth-A-Modeler
+#
+# Edgar Berdahl, 2012
+# Audio Communication Group
+# Technical University of Berlin
+#
+# -------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+
+mass(0.001,0.0,0.0),m0,(); # pos 276,95
+mass(0.001,0.0,0.0),m1,(); # pos 382,106
+mass(0.001,0.0,0.0),m2,(); # pos 467,141
+mass(0.001,0.0,0.0),m3,(); # pos 533,198
+mass(0.001,0.0,0.0),m4,(); # pos 575,258
+mass(0.001,0.0,0.0),m5,(); # pos 605,338
+mass(0.001,0.0,0.0),m6,(); # pos 604,414
+mass(0.001,0.0,0.0),m7,(); # pos 579,481
+mass(0.001,0.0,0.0),m8,(); # pos 535,538
+mass(0.001,0.0,0.0),m9,(); # pos 471,582
+mass(0.001,0.0,0.0),m10,(); # pos 379,592
+mass(0.001,0.0,0.0),m11,(); # pos 289,570
+mass(0.001,0.0,0.0),m12,(); # pos 213,514
+mass(0.001,0.0,0.0),m13,(); # pos 147,476
+mass(0.001,0.0,0.0),m14,(); # pos 87,404
+mass(0.001,0.0,0.0),m15,(); # pos 38,335
+mass(0.001,0.0,0.0),m16,(); # pos 29,240
+mass(0.001,0.0,0.0),m17,(); # pos 57,167
+mass(0.001,0.0,0.0),m18,(); # pos 97,119
+mass(0.001,0.0,0.0),m19,(); # pos 177,105
+
+
+link(100.0,0.1,0.0),l0,m0,m19,();
+link(100.0,0.1,0.0),l1,m0,m1,();
+link(100.0,0.1,0.0),l2,m1,m2,();
+link(100.0,0.1,0.0),l3,m2,m3,();
+link(100.0,0.1,0.0),l4,m3,m4,();
+link(100.0,0.1,0.0),l5,m4,m5,();
+link(100.0,0.1,0.0),l6,m5,m6,();
+link(100.0,0.1,0.0),l7,m6,m7,();
+link(100.0,0.1,0.0),l8,m7,m8,();
+link(100.0,0.1,0.0),l9,m8,m9,();
+link(100.0,0.1,0.0),l10,m9,m10,();
+link(100.0,0.1,0.0),l11,m10,m11,();
+link(100.0,0.1,0.0),l12,m11,m12,();
+link(100.0,0.1,0.0),l13,m12,m13,();
+link(100.0,0.1,0.0),l14,m13,m14,();
+link(100.0,0.1,0.0),l15,m14,m15,();
+link(100.0,0.1,0.0),l16,m15,m16,();
+link(100.0,0.1,0.0),l17,m16,m17,();
+link(100.0,0.1,0.0),l18,m17,m18,();
+link(100.0,0.1,0.0),l19,m18,m19,();
+
+
+
+
+
+
+
+
+
+
