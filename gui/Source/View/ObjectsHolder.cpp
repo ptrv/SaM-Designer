@@ -205,6 +205,21 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
     }
 }
 
+bool ObjectsHolder::keyPressed(const KeyPress& key)
+{
+    if(key == KeyPress::escapeKey)
+    {
+        if(isTimerRunning())
+        {
+            DBG("redraw cancelled!");
+            stopTimer();
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 {
     if (newMDLFile != mdlFile && newMDLFile != nullptr)
@@ -805,6 +820,7 @@ ContentComp* ObjectsHolder::getContentComp()
 
 void ObjectsHolder::redrawObjects(const int cmdId)
 {
+    grabKeyboardFocus();
     DBG("redraw objects");
     if (isTimerRunning())
     {
