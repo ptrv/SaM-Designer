@@ -102,7 +102,7 @@ static const String getDefaultExternalEditor()
 #ifdef JUCE_WINDOWS
     return "notepad.exe";
 #elif JUCE_MAC
-    return "/Applications/TextEdit.app";
+    return "/usr/bin/open -a TextEdit";
 #elif JUCE_LINUX
     return "/usr/bin/gedit";
 #else
