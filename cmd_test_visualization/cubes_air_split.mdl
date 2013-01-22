@@ -1,0 +1,244 @@
+# MDL file for Synth-A-Modeler
+#
+# Edgar Berdahl, 2012
+# Audio Communication Group
+# Technical University of Berlin
+#
+# -------------------------------------------------------------------
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+
+mass(0.001,0.0,0.0),m0,(); # pos 488,440
+mass(0.001,0.0,0.0),m1,(); # pos 592,440
+mass(0.001,0.0,0.0),m2,(); # pos 496,528
+mass(0.001,0.0,0.0),m3,(); # pos 592,528
+mass(0.001,0.0,0.0),m1cpy,(); # pos 632,384
+mass(0.001,0.0,0.0),m3cpy,(); # pos 632,472
+mass(0.001,0.0,0.0),m0cpy,(); # pos 528,384
+mass(0.001,0.0,0.0),m2cpy,(); # pos 536,472
+mass(0.001,0.0,0.0),m3cpy1,(); # pos 800,536
+mass(0.001,0.0,0.0),m2cpy1,(); # pos 704,536
+mass(0.001,0.0,0.0),m0cpy1,(); # pos 696,448
+mass(0.001,0.0,0.0),m3cpycpy,(); # pos 840,480
+mass(0.001,0.0,0.0),m0cpycpy,(); # pos 736,392
+mass(0.001,0.0,0.0),m2cpycpy,(); # pos 744,480
+mass(0.001,0.0,0.0),m1cpy1,(); # pos 800,448
+mass(0.001,0.0,0.0),m1cpycpy,(); # pos 840,392
+mass(0.001,0.0,0.0),m2cpy12,(); # pos 408,680
+mass(0.001,0.0,0.0),m0cpy12,(); # pos 400,592
+mass(0.001,0.0,0.0),m0cpycpy1,(); # pos 440,536
+mass(0.001,0.0,0.0),m2cpycpy1,(); # pos 448,624
+mass(0.001,0.0,0.0),m1cpycpy1,(); # pos 544,536
+mass(0.001,0.0,0.0),m3cpy1cpy,(); # pos 704,688
+mass(0.001,0.0,0.0),m3cpycpycpy,(); # pos 744,632
+mass(0.001,0.0,0.0),m1cpy1cpy,(); # pos 704,600
+mass(0.001,0.0,0.0),m1cpycpycpy,(); # pos 744,544
+mass(0.001,0.0,0.0),m0cpycpycpy,(); # pos 640,544
+mass(0.001,0.0,0.0),m3cpycpy1,(); # pos 544,624
+mass(0.001,0.0,0.0),m2cpycpycpy,(); # pos 648,632
+mass(0.001,0.0,0.0),m2cpy1cpy,(); # pos 608,688
+mass(0.001,0.0,0.0),m3cpy12,(); # pos 504,680
+mass(0.001,0.0,0.0),m1cpy12,(); # pos 504,592
+mass(0.001,0.0,0.0),m0cpy1cpy,(); # pos 600,600
+mass(0.001,0.0,0.0),m0cpy11,(); # pos 176,112
+mass(0.001,0.0,0.0),m1cpy11,(); # pos 280,112
+mass(0.001,0.0,0.0),m2cpy11,(); # pos 184,200
+mass(0.001,0.0,0.0),m3cpy11,(); # pos 280,200
+mass(0.001,0.0,0.0),m1cpycpy11,(); # pos 320,56
+mass(0.001,0.0,0.0),m3cpycpy11,(); # pos 320,144
+mass(0.001,0.0,0.0),m0cpycpy11,(); # pos 216,56
+mass(0.001,0.0,0.0),m2cpycpy11,(); # pos 224,144
+mass(0.001,0.0,0.0),m3cpy1cpy1,(); # pos 488,208
+mass(0.001,0.0,0.0),m2cpy1cpy1,(); # pos 392,208
+mass(0.001,0.0,0.0),m0cpy1cpy1,(); # pos 384,120
+mass(0.001,0.0,0.0),m3cpycpycpy1,(); # pos 528,152
+mass(0.001,0.0,0.0),m0cpycpycpy1,(); # pos 424,64
+mass(0.001,0.0,0.0),m2cpycpycpy1,(); # pos 432,152
+mass(0.001,0.0,0.0),m1cpy1cpy1,(); # pos 488,120
+mass(0.001,0.0,0.0),m1cpycpycpy1,(); # pos 528,64
+mass(0.001,0.0,0.0),m2cpy12cpy1,(); # pos 96,352
+mass(0.001,0.0,0.0),m0cpy12cpy1,(); # pos 88,264
+mass(0.001,0.0,0.0),m0cpycpy1cpy1,(); # pos 128,208
+mass(0.001,0.0,0.0),m2cpycpy1cpy1,(); # pos 136,296
+mass(0.001,0.0,0.0),m1cpycpy1cpy1,(); # pos 232,208
+mass(0.001,0.0,0.0),m3cpy1cpycpy1,(); # pos 392,360
+mass(0.001,0.0,0.0),m3cpycpycpycpy1,(); # pos 432,304
+mass(0.001,0.0,0.0),m1cpy1cpycpy1,(); # pos 392,272
+mass(0.001,0.0,0.0),m1cpycpycpycpy1,(); # pos 432,216
+mass(0.001,0.0,0.0),m0cpycpycpycpy1,(); # pos 328,216
+mass(0.001,0.0,0.0),m3cpycpy1cpy1,(); # pos 232,296
+mass(0.001,0.0,0.0),m2cpycpycpycpy1,(); # pos 336,304
+mass(0.001,0.0,0.0),m2cpy1cpycpy1,(); # pos 296,360
+mass(0.001,0.0,0.0),m3cpy12cpy1,(); # pos 192,352
+mass(0.001,0.0,0.0),m1cpy12cpy1,(); # pos 192,264
+mass(0.001,0.0,0.0),m0cpy1cpycpy1,(); # pos 288,272
+
+
+link(100.0,0.1,0.0),l0,m3,m2,();
+link(100.0,0.1,0.0),l1,m2,m0,();
+link(100.0,0.1,0.0),l2,m1,m0,();
+link(100.0,0.1,0.0),l3,m1,m3,();
+link(100.0,0.1,0.0),l0cpy,m3cpy,m2cpy,();
+link(100.0,0.1,0.0),l1cpy,m2cpy,m0cpy,();
+link(100.0,0.1,0.0),l2cpy,m1cpy,m0cpy,();
+link(100.0,0.1,0.0),l3cpy,m1cpy,m3cpy,();
+link(100.0,0.1,0.0),l8,m3,m3cpy,();
+link(100.0,0.1,0.0),l9,m2,m2cpy,();
+link(100.0,0.1,0.0),l10,m0,m0cpy,();
+link(100.0,0.1,0.0),l11,m1,m1cpy,();
+link(100.0,0.1,0.0),l0cpy1,m3cpy1,m2cpy1,();
+link(100.0,0.1,0.0),l1cpy1,m2cpy1,m0cpy1,();
+link(100.0,0.1,0.0),l2cpy1,m1cpy1,m0cpy1,();
+link(100.0,0.1,0.0),l3cpy1,m1cpy1,m3cpy1,();
+link(100.0,0.1,0.0),l0cpycpy,m3cpycpy,m2cpycpy,();
+link(100.0,0.1,0.0),l1cpycpy,m2cpycpy,m0cpycpy,();
+link(100.0,0.1,0.0),l2cpycpy,m1cpycpy,m0cpycpy,();
+link(100.0,0.1,0.0),l3cpycpy,m1cpycpy,m3cpycpy,();
+link(100.0,0.1,0.0),l8cpy,m3cpy1,m3cpycpy,();
+link(100.0,0.1,0.0),l9cpy,m2cpy1,m2cpycpy,();
+link(100.0,0.1,0.0),l10cpy,m0cpy1,m0cpycpy,();
+link(100.0,0.1,0.0),l11cpy,m1cpy1,m1cpycpy,();
+link(100.0,0.1,0.0),l24,m1cpy,m0cpycpy,();
+link(100.0,0.1,0.0),l25,m3cpy,m2cpycpy,();
+link(100.0,0.1,0.0),l26,m2cpy1,m3,();
+link(100.0,0.1,0.0),l27,m1,m0cpy1,();
+link(100.0,0.1,0.0),l0cpy12,m3cpy12,m2cpy12,();
+link(100.0,0.1,0.0),l1cpy12,m2cpy12,m0cpy12,();
+link(100.0,0.1,0.0),l2cpy12,m1cpy12,m0cpy12,();
+link(100.0,0.1,0.0),l3cpy12,m1cpy12,m3cpy12,();
+link(100.0,0.1,0.0),l0cpycpy1,m3cpycpy1,m2cpycpy1,();
+link(100.0,0.1,0.0),l1cpycpy1,m2cpycpy1,m0cpycpy1,();
+link(100.0,0.1,0.0),l2cpycpy1,m1cpycpy1,m0cpycpy1,();
+link(100.0,0.1,0.0),l3cpycpy1,m1cpycpy1,m3cpycpy1,();
+link(100.0,0.1,0.0),l8cpy1,m3cpy12,m3cpycpy1,();
+link(100.0,0.1,0.0),l9cpy1,m2cpy12,m2cpycpy1,();
+link(100.0,0.1,0.0),l10cpy1,m0cpy12,m0cpycpy1,();
+link(100.0,0.1,0.0),l11cpy1,m1cpy12,m1cpycpy1,();
+link(100.0,0.1,0.0),l0cpy1cpy,m3cpy1cpy,m2cpy1cpy,();
+link(100.0,0.1,0.0),l1cpy1cpy,m2cpy1cpy,m0cpy1cpy,();
+link(100.0,0.1,0.0),l2cpy1cpy,m1cpy1cpy,m0cpy1cpy,();
+link(100.0,0.1,0.0),l3cpy1cpy,m1cpy1cpy,m3cpy1cpy,();
+link(100.0,0.1,0.0),l0cpycpycpy,m3cpycpycpy,m2cpycpycpy,();
+link(100.0,0.1,0.0),l1cpycpycpy,m2cpycpycpy,m0cpycpycpy,();
+link(100.0,0.1,0.0),l2cpycpycpy,m1cpycpycpy,m0cpycpycpy,();
+link(100.0,0.1,0.0),l3cpycpycpy,m1cpycpycpy,m3cpycpycpy,();
+link(100.0,0.1,0.0),l8cpycpy,m3cpy1cpy,m3cpycpycpy,();
+link(100.0,0.1,0.0),l9cpycpy,m2cpy1cpy,m2cpycpycpy,();
+link(100.0,0.1,0.0),l10cpycpy,m0cpy1cpy,m0cpycpycpy,();
+link(100.0,0.1,0.0),l11cpycpy,m1cpy1cpy,m1cpycpycpy,();
+link(100.0,0.1,0.0),l24cpy,m1cpycpy1,m0cpycpycpy,();
+link(100.0,0.1,0.0),l25cpy,m3cpycpy1,m2cpycpycpy,();
+link(100.0,0.1,0.0),l26cpy,m2cpy1cpy,m3cpy12,();
+link(100.0,0.1,0.0),l27cpy,m1cpy12,m0cpy1cpy,();
+link(100.0,0.1,0.0),l56,m3cpycpycpy,m3cpy1,();
+link(100.0,0.1,0.0),l57,m1cpycpycpy,m1cpy1,();
+link(100.0,0.1,0.0),l58,m2cpycpycpy,m2cpy1,();
+link(100.0,0.1,0.0),l59,m0cpycpycpy,m0cpy1,();
+link(100.0,0.1,0.0),l60,m3cpycpy1,m3,();
+link(100.0,0.1,0.0),l61,m1cpycpy1,m1,();
+link(100.0,0.1,0.0),l62,m2cpycpy1,m2,();
+link(100.0,0.1,0.0),l63,m0cpycpy1,m0,();
+link(100.0,0.1,0.0),l0cpy11,m3cpy11,m2cpy11,();
+link(100.0,0.1,0.0),l1cpy11,m2cpy11,m0cpy11,();
+link(100.0,0.1,0.0),l2cpy11,m1cpy11,m0cpy11,();
+link(100.0,0.1,0.0),l3cpy11,m1cpy11,m3cpy11,();
+link(100.0,0.1,0.0),l0cpycpy11,m3cpycpy11,m2cpycpy11,();
+link(100.0,0.1,0.0),l1cpycpy11,m2cpycpy11,m0cpycpy11,();
+link(100.0,0.1,0.0),l2cpycpy11,m1cpycpy11,m0cpycpy11,();
+link(100.0,0.1,0.0),l3cpycpy11,m1cpycpy11,m3cpycpy11,();
+link(100.0,0.1,0.0),l8cpy11,m3cpy11,m3cpycpy11,();
+link(100.0,0.1,0.0),l9cpy11,m2cpy11,m2cpycpy11,();
+link(100.0,0.1,0.0),l10cpy11,m0cpy11,m0cpycpy11,();
+link(100.0,0.1,0.0),l11cpy11,m1cpy11,m1cpycpy11,();
+link(100.0,0.1,0.0),l0cpy1cpy1,m3cpy1cpy1,m2cpy1cpy1,();
+link(100.0,0.1,0.0),l1cpy1cpy1,m2cpy1cpy1,m0cpy1cpy1,();
+link(100.0,0.1,0.0),l2cpy1cpy1,m1cpy1cpy1,m0cpy1cpy1,();
+link(100.0,0.1,0.0),l3cpy1cpy1,m1cpy1cpy1,m3cpy1cpy1,();
+link(100.0,0.1,0.0),l0cpycpycpy1,m3cpycpycpy1,m2cpycpycpy1,();
+link(100.0,0.1,0.0),l1cpycpycpy1,m2cpycpycpy1,m0cpycpycpy1,();
+link(100.0,0.1,0.0),l2cpycpycpy1,m1cpycpycpy1,m0cpycpycpy1,();
+link(100.0,0.1,0.0),l3cpycpycpy1,m1cpycpycpy1,m3cpycpycpy1,();
+link(100.0,0.1,0.0),l8cpycpy1,m3cpy1cpy1,m3cpycpycpy1,();
+link(100.0,0.1,0.0),l9cpycpy1,m2cpy1cpy1,m2cpycpycpy1,();
+link(100.0,0.1,0.0),l10cpycpy1,m0cpy1cpy1,m0cpycpycpy1,();
+link(100.0,0.1,0.0),l11cpycpy1,m1cpy1cpy1,m1cpycpycpy1,();
+link(100.0,0.1,0.0),l24cpy1,m1cpycpy11,m0cpycpycpy1,();
+link(100.0,0.1,0.0),l25cpy1,m3cpycpy11,m2cpycpycpy1,();
+link(100.0,0.1,0.0),l26cpy1,m2cpy1cpy1,m3cpy11,();
+link(100.0,0.1,0.0),l27cpy1,m1cpy11,m0cpy1cpy1,();
+link(100.0,0.1,0.0),l0cpy12cpy1,m3cpy12cpy1,m2cpy12cpy1,();
+link(100.0,0.1,0.0),l1cpy12cpy1,m2cpy12cpy1,m0cpy12cpy1,();
+link(100.0,0.1,0.0),l2cpy12cpy1,m1cpy12cpy1,m0cpy12cpy1,();
+link(100.0,0.1,0.0),l3cpy12cpy1,m1cpy12cpy1,m3cpy12cpy1,();
+link(100.0,0.1,0.0),l0cpycpy1cpy1,m3cpycpy1cpy1,m2cpycpy1cpy1,();
+link(100.0,0.1,0.0),l1cpycpy1cpy1,m2cpycpy1cpy1,m0cpycpy1cpy1,();
+link(100.0,0.1,0.0),l2cpycpy1cpy1,m1cpycpy1cpy1,m0cpycpy1cpy1,();
+link(100.0,0.1,0.0),l3cpycpy1cpy1,m1cpycpy1cpy1,m3cpycpy1cpy1,();
+link(100.0,0.1,0.0),l8cpy1cpy1,m3cpy12cpy1,m3cpycpy1cpy1,();
+link(100.0,0.1,0.0),l9cpy1cpy1,m2cpy12cpy1,m2cpycpy1cpy1,();
+link(100.0,0.1,0.0),l10cpy1cpy1,m0cpy12cpy1,m0cpycpy1cpy1,();
+link(100.0,0.1,0.0),l11cpy1cpy1,m1cpy12cpy1,m1cpycpy1cpy1,();
+link(100.0,0.1,0.0),l0cpy1cpycpy1,m3cpy1cpycpy1,m2cpy1cpycpy1,();
+link(100.0,0.1,0.0),l1cpy1cpycpy1,m2cpy1cpycpy1,m0cpy1cpycpy1,();
+link(100.0,0.1,0.0),l2cpy1cpycpy1,m1cpy1cpycpy1,m0cpy1cpycpy1,();
+link(100.0,0.1,0.0),l3cpy1cpycpy1,m1cpy1cpycpy1,m3cpy1cpycpy1,();
+link(100.0,0.1,0.0),l0cpycpycpycpy1,m3cpycpycpycpy1,m2cpycpycpycpy1,();
+link(100.0,0.1,0.0),l1cpycpycpycpy1,m2cpycpycpycpy1,m0cpycpycpycpy1,();
+link(100.0,0.1,0.0),l2cpycpycpycpy1,m1cpycpycpycpy1,m0cpycpycpycpy1,();
+link(100.0,0.1,0.0),l3cpycpycpycpy1,m1cpycpycpycpy1,m3cpycpycpycpy1,();
+link(100.0,0.1,0.0),l8cpycpycpy1,m3cpy1cpycpy1,m3cpycpycpycpy1,();
+link(100.0,0.1,0.0),l9cpycpycpy1,m2cpy1cpycpy1,m2cpycpycpycpy1,();
+link(100.0,0.1,0.0),l10cpycpycpy1,m0cpy1cpycpy1,m0cpycpycpycpy1,();
+link(100.0,0.1,0.0),l11cpycpycpy1,m1cpy1cpycpy1,m1cpycpycpycpy1,();
+link(100.0,0.1,0.0),l24cpycpy1,m1cpycpy1cpy1,m0cpycpycpycpy1,();
+link(100.0,0.1,0.0),l25cpycpy1,m3cpycpy1cpy1,m2cpycpycpycpy1,();
+link(100.0,0.1,0.0),l26cpycpy1,m2cpy1cpycpy1,m3cpy12cpy1,();
+link(100.0,0.1,0.0),l27cpycpy1,m1cpy12cpy1,m0cpy1cpycpy1,();
+link(100.0,0.1,0.0),l56cpy1,m3cpycpycpycpy1,m3cpy1cpy1,();
+link(100.0,0.1,0.0),l57cpy1,m1cpycpycpycpy1,m1cpy1cpy1,();
+link(100.0,0.1,0.0),l58cpy1,m2cpycpycpycpy1,m2cpy1cpy1,();
+link(100.0,0.1,0.0),l59cpy1,m0cpycpycpycpy1,m0cpy1cpy1,();
+link(100.0,0.1,0.0),l60cpy1,m3cpycpy1cpy1,m3cpy11,();
+link(100.0,0.1,0.0),l61cpy1,m1cpycpy1cpy1,m1cpy11,();
+link(100.0,0.1,0.0),l62cpy1,m2cpycpy1cpy1,m2cpy11,();
+link(100.0,0.1,0.0),l63cpy1,m0cpycpy1cpy1,m0cpy11,();
+link(100.0,0.1,0.0),l128,m3cpycpycpy1,m1cpycpy,();
+link(100.0,0.1,0.0),l129,m3cpy1cpy1,m1cpy1,();
+link(100.0,0.1,0.0),l130,m3cpycpycpycpy1,m1cpycpycpy,();
+link(100.0,0.1,0.0),l131,m3cpy1cpycpy1,m1cpy1cpy,();
+link(100.0,0.1,0.0),l132,m2cpycpycpy1,m0cpycpy,();
+link(100.0,0.1,0.0),l133,m2cpy1cpy1,m0cpy1,();
+link(100.0,0.1,0.0),l134,m2cpycpycpycpy1,m0cpycpycpy,();
+link(100.0,0.1,0.0),l135,m2cpy1cpycpy1,m0cpy1cpy,();
+link(100.0,0.1,0.0),l136,m3cpycpy11,m1cpy,();
+link(100.0,0.1,0.0),l137,m3cpy11,m1,();
+link(100.0,0.1,0.0),l138,m3cpycpy1cpy1,m1cpycpy1,();
+link(100.0,0.1,0.0),l139,m3cpy12cpy1,m1cpy12,();
+link(100.0,0.1,0.0),l140,m2cpy12cpy1,m0cpy12,();
+link(100.0,0.1,0.0),l141,m2cpycpy1cpy1,m0cpycpy1,();
+link(100.0,0.1,0.0),l142,m2cpy11,m0,();
+link(100.0,0.1,0.0),l143,m2cpycpy11,m0cpy,();
+
+
+
+
+
+
+
+
+
+
