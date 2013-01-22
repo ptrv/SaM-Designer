@@ -44,10 +44,12 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
     Point<float> totalEnergy(0, 0);
 //    float dis = 0.0f;
     
-    float alpha = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 1.0);
-    float beta = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 1.01);
-    float kk = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.10);
-    float eta = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.75);
+    float alpha = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_alpha", 1.0);
+    float beta = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_beta", 1.01);
+    float kk = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_k", 0.10);
+    float eta = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_damp", 0.75);
+    float stopEnergy = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_energy", 0.5);
+    float dij = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_dij", 200.0);
 //    float deltaT = 0.1f;
 
     for (int i = 0; i < nodes.size(); ++i)
@@ -122,7 +124,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
             Point<float> res(0.0f, 0.0f);
             if(outgoing.contains(u) || incoming.contains(u))
             {
-                res = GraphUtils::hookeForce(vp, up, 200.0f, kk);
+                res = GraphUtils::hookeForce(vp, up, dij, kk);
             }
             fx += res.getX();
             fy += res.getY();
@@ -171,7 +173,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
     float lengthTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x
                                    + totalEnergy.y * totalEnergy.y);
 //    DBG(lengthTotalEnergy);
-    if(lengthTotalEnergy < 0.5f)
+    if(lengthTotalEnergy < stopEnergy)
         return true;
 
     return false;
