@@ -291,35 +291,6 @@ String MDLFile::toString()
     return mdlStr;
 }
 
-bool MDLFile::changedOutside()
-{
-    if(checkIfChecksumChanged())
-    {
-        int res = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
-                                                  "MDL file changed outside!",
-                                                  "",
-                                                  "Load from disk",
-                                                  "Overwrite",
-                                                  "Cancel");
-        switch (res)
-        {
-        case 0:
-            return true;
-        case 1:
-            loadDocument(getFile());
-            return false;
-        case 2:
-            return false;
-        default:
-            return false;
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
-
 bool MDLFile::checkIfChecksumChanged()
 {
     MD5 tmpMD5 = MD5(getFile());

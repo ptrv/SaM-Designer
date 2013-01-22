@@ -28,6 +28,7 @@
 #include "../Models/MDLFile.h"
 #include "../Models/SAMCmd.h"
 #include "../View/ObjectsHolder.h"
+#include "../View/ContentComp.h"
 
 #include "MDLController.h"
 
@@ -84,9 +85,28 @@ void MDLController::openFromFile(const File& mdlFile)
 }
 void MDLController::save()
 {
-    if(currentMdl->changedOutside())
+    if (currentMdl->checkIfChecksumChanged())
     {
-
+        int res = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+                                                  "MDL file changed outside!",
+                                                  "",
+                                                  "Load from disk",
+                                                  "Overwrite",
+                                                  "Cancel");
+        switch (res)
+        {
+        case 0:
+            break;
+        case 1:
+            currentMdl->close();
+            openFromFile(currentMdl->getFile());
+            mainAppWindow.getMDLFileContentComponent()->reloadMDLFile(getMDLFile());
+            getUndoManager()->clearUndoHistory();
+            break;
+        case 2:
+            currentMdl->save(false, true);
+            break;
+        }
     }
     else
     {
@@ -460,4 +480,32 @@ void MDLController::cleanDataDirAll()
         SAM_CONSOLE("Delete OK:\n", outStrOk, false);
     if(outStrError.isNotEmpty())
         SAM_CONSOLE("Error: ", "Could not delete\n" + outStrError, false);
+}
+
+bool MDLController::checkIfMdlCanchedOutside()
+{
+    return false;
+//    if (currentMdl->checkIfChecksumChanged())
+//    {
+//        int res = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
+//                                                  "MDL file changed outside!",
+//                                                  "",
+//                                                  "Load from disk",
+//                                                  "Overwrite",
+//                                                  "Cancel");
+//        switch (res)
+//        {
+//        case 0:
+//            break;
+//        case 1:
+//            currentMdl->close();
+//            openFromFile(currentMdl->getFile());
+//            mainAppWindow.getMDLFileContentComponent()->reloadMDLFile(getMDLFile());
+//            getUndoManager()->clearUndoHistory();
+//            break;
+//        case 2:
+//            currentMdl->save(false, true);
+//            return
+//        }
+//    }
 }

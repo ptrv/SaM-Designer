@@ -73,7 +73,7 @@ public:
 
     String toString();
 
-    bool changedOutside();
+    bool checkIfChecksumChanged();
     
 protected:
 	String getDocumentTitle();
@@ -87,7 +87,6 @@ private:
 	void initMDL();
 	void destroyMDL();
 
-    bool checkIfChecksumChanged();
 	static File lastDocumentOpened;
     
 	UndoManager undoMgr;

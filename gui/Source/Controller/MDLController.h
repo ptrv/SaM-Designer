@@ -73,6 +73,8 @@ public:
     void changed();
 
     ObjectsHolder* getHolderComponent();
+
+    bool checkIfMdlCanchedOutside();
 private:
 	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;
