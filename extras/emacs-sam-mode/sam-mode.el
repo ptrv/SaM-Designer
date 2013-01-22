@@ -7,11 +7,16 @@
 ;;
 ;; Installation:
 ;;
+;; Put sam-mode.el somewhere in your load-path.
 ;; To find out the value of load-path in your version of emacs, just
 ;; run the command in emacs:  'C-h v load-path RET'
 ;;
-;; Then put sam-mode.el somewhere in your load-path and add this to
-;; your .emacs:
+;; Or add the path of 'sam-mode.el' to your load-path by adding the
+;; following line to your .emacs:
+;;
+;; (add-to-list 'load-path "/path/to/sam-mode.el")
+;;
+;; Add this to your .emacs:
 ;;
 ;; (setq auto-mode-alist (cons '("\\.mdl$" . sam-mode) auto-mode-alist))
 ;; (autoload 'sam-mode "sam-mode" "Synth-A-Modeler editing mode." t)
