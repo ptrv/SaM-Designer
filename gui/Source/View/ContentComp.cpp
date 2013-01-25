@@ -413,9 +413,11 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::redrawForceDirected:
         result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
         result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
+        result.addDefaultKeypress('r', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showRedrawOptions:
         result.setInfo("Force-Directed options...", "Open redraw options", CommandCategories::editing, 0);
+        result.addDefaultKeypress('d', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::insertMass:
         result.setInfo("Mass", "", CommandCategories::inserting, 0);
