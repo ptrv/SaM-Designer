@@ -44,7 +44,7 @@ static const unsigned char temp_fb5cda14[] =
 "<PROPERTIES>\r\n"
 "  <VALUE name=\"puredata\" val=\"faust -xml -a puredata.cpp -o $(DATA_DIR)/$(MDL_NAME).cpp $(DATA_DIR)/$(MDL_NAME).dsp;mkdir -p $(DATA_DIR)/puredatadir; g++ -DPD -fPIC -Wall -O3 -mfpmath=sse -msse -msse2 -msse3 -ffast-math -shared -Dmydsp=$(MDL_NAME)"
 " -I/usr/include/pdextended -o $(DATA_DIR)/puredatadir/$(MDL_NAME)~.pd_linux $(DATA_DIR)/$(MDL_NAME).cpp; faust2pd -r 10 -s $(DATA_DIR)/$(MDL_NAME).dsp.xml; mv -f $(DATA_DIR)/$(MDL_NAME).pd $(DATA_DIR)/puredatadir\"/>\r\n"
-"  <VALUE name=\"puredata makefile\" val=\"make -C $(DATA_DIR) puredata\"/>\r\n"
+"  <VALUE name=\"puredata makefile\" val=\"make -C $(DATA_DIR) puredata TARGET=$(MDL_NAME)\"/>\r\n"
 "</PROPERTIES>\r\n";
 
 const char* default_exporters_xml = (const char*) temp_fb5cda14;
@@ -822,7 +822,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x9a1ef838:  numBytes = 1082; return default_values_xml;
-        case 0xd0e7a20c:  numBytes = 607; return default_exporters_xml;
+        case 0xd0e7a20c:  numBytes = 626; return default_exporters_xml;
         case 0x9a64200d:  numBytes = 3839; return prefs_export_png;
         case 0xe7d611d7:  numBytes = 875; return mdl_file_header_txt;
         case 0xb02b86be:  numBytes = 407; return about_txt;
