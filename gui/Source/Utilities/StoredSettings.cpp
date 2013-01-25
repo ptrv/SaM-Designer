@@ -396,3 +396,12 @@ void StoredSettings::setExternalEditor(const String& externalEditor)
 {
     props->setValue("external_editor", externalEditor);
 }
+
+const bool StoredSettings::getShouldRedrawOnLoad() const
+{
+    return props->getBoolValue("shouldredrawonload", true);
+}
+void StoredSettings::setShouldRedrawOnLoad(bool shouldRedrawOnLoad)
+{
+    props->setValue("shouldredrawonload", shouldRedrawOnLoad);
+}

@@ -118,6 +118,9 @@ public:
     String getExternalEditor() const;
     void setExternalEditor(const String& externalEditor);
 
+    const bool getShouldRedrawOnLoad() const;
+    void setShouldRedrawOnLoad(bool shouldRedrawOnLoad);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

@@ -61,7 +61,8 @@ public:
 			true, false, false,
 			String::empty, String::empty,
 			"(select external editor executable)"),
-        labelExternalEditor(String::empty, "External editor")
+        labelExternalEditor(String::empty, "External editor"),
+        tbRedrawOnLoad("Redraw model when no position data")
     {
         addAndMakeVisible (&fcDataDir);
         labelDataDir.attachToComponent (&fcDataDir, false);
@@ -85,6 +86,8 @@ public:
 #endif
         addAndMakeVisible(&fcExternalEditor);
         labelExternalEditor.attachToComponent(&fcExternalEditor, false);
+        tbRedrawOnLoad.setToggleState(StoredSettings::getInstance()->getShouldRedrawOnLoad(), false);
+        addAndMakeVisible(&tbRedrawOnLoad);
     }
 
     ~MiscPage()
@@ -102,6 +105,7 @@ public:
         StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
 #endif
         StoredSettings::getInstance()->setExternalEditor(fcExternalEditor.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setShouldRedrawOnLoad(tbRedrawOnLoad.getToggleState());
     }
 
     void resized()
@@ -119,6 +123,7 @@ public:
         tbLoggingOn.setBounds(10, 320, getWidth() - 20, 22);
 #endif
         fcExternalEditor.setBounds(10, 380, getWidth() - 20, 22);
+        tbRedrawOnLoad.setBounds(10, 410, getWidth() - 20, 22);
     }
 
 private:
@@ -138,6 +143,7 @@ private:
     Label labelFaustDir;
     FilenameComponent fcExternalEditor;
     Label labelExternalEditor;
+    ToggleButton tbRedrawOnLoad;
 };
 
 //==============================================================================
@@ -535,7 +541,7 @@ PrefsPanel::PrefsPanel()
     : DialogWindow ("Synth-A-Modeler Preferences", Colour::greyLevel (0.92f), true)
 {
     PrefsTabComp* const p = new PrefsTabComp();
-    p->setSize (456, 510);
+    p->setSize (456, 520);
 
     setContentOwned (p, true);
 

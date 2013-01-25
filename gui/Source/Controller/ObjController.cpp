@@ -686,8 +686,9 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     setAudioConnectionVisibility(StoredSettings::getInstance()->getShowAudioConnections());
     holder->updateComponents();
 
-    if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
-        holder->redrawObjects(CommandIDs::redrawForceDirected);
+    if(StoredSettings::getInstance()->getShouldRedrawOnLoad())
+        if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
+            holder->redrawObjects(CommandIDs::redrawForceDirected);
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
