@@ -36,7 +36,7 @@ public:
     RedrawOptionsComponent(RedrawOptionsPanel* rop_)
     : rop(rop_), btOk("Ok"), btCancel("Cancel"),
         lAlpha("labelAlpha", "mass"), slAlpha("slAlpha"),
-        lBeta("labelBeta", "beta"), slBeta("slBeta"),
+        lBeta("labelBeta", "charge"), slBeta("slBeta"),
         lK("labelK", "spring constant k"), slK("slK"),
         lDamp("labelDamp", "damp"), slDamp("slDamp"),
         lDij("labelDij", "ideal distance"), slDij("slDij"),
