@@ -2,5 +2,5 @@
 
 <PROPERTIES>
   <VALUE name="puredata" val="faust -xml -a puredata.cpp -o $(DATA_DIR)/$(MDL_NAME).cpp $(DATA_DIR)/$(MDL_NAME).dsp;mkdir -p $(DATA_DIR)/puredatadir; g++ -DPD -fPIC -Wall -O3 -mfpmath=sse -msse -msse2 -msse3 -ffast-math -shared -Dmydsp=$(MDL_NAME) -I/usr/include/pdextended -o $(DATA_DIR)/puredatadir/$(MDL_NAME)~.pd_linux $(DATA_DIR)/$(MDL_NAME).cpp; faust2pd -r 10 -s $(DATA_DIR)/$(MDL_NAME).dsp.xml; mv -f $(DATA_DIR)/$(MDL_NAME).pd $(DATA_DIR)/puredatadir"/>
-  <VALUE name="puredata makefile" val="make -C $(DATA_DIR) puredata"/>
+  <VALUE name="puredata makefile" val="make -C $(DATA_DIR) puredata TARGET=$(MDL_NAME)"/>
 </PROPERTIES>
