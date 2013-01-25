@@ -312,7 +312,7 @@ class ExporterTable : public Component,
 {
 public:
     ExporterTable()
-    : table("Exporter table", this)
+    : table("Exporter table", this), font(14.0f)
     {
         data = &StoredSettings::getInstance()->getExporters().getAllProperties();
 
@@ -320,8 +320,9 @@ public:
 	    table.setOutlineThickness (1);
 
 	    table.getHeader().addColumn("Exporter",1,100);
-	    table.getHeader().addColumn("Command",2,300);
 
+	    table.getHeader().addColumn("Command",2, 500);
+        table.autoSizeAllColumns();
 	    table.setMultipleSelectionEnabled(false);
 		addAndMakeVisible(&table);
     }
@@ -345,6 +346,7 @@ public:
 			int height, bool rowIsSelected)
 	{
 		g.setColour(Colours::black);
+        g.setFont(font);
         StringArray keys = data->getAllKeys();
 		String varName = keys[rowNumber];
 		String varValue = data->getValue(varName, "");
@@ -395,8 +397,31 @@ public:
         table.updateContent();
         table.repaintRow(rowNumber);
     }
+
+    int getColumnAutoSizeWidth(int columnid)
+    {
+        if(columnid == 2 || columnid == 1)
+        {
+            int colWidth = 0;
+            for (int i = 0; i < data->size(); ++i)
+            {
+                int dl = 0;
+                if(columnid == 1)
+                {
+                    dl = font.getStringWidth(data->getAllKeys()[i]);
+                }
+                else if(columnid == 2)
+                    dl = font.getStringWidth(data->getAllValues()[i]);
+                if (colWidth < dl)
+                    colWidth = dl;
+            }
+            return colWidth+10;
+        }
+        return 0;
+    }
 private:
     TableListBox table;
+    Font font;
     StringPairArray* data;
 };
 class ExporterPage : public Component,
