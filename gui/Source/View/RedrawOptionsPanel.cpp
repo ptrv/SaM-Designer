@@ -71,7 +71,7 @@ public:
         slAlpha.setSliderStyle (Slider::LinearHorizontal);
         slAlpha.setTextBoxStyle(Slider::TextBoxLeft, false, 80, 20);
 
-        slBeta.setRange(0.001, 2, 0.001);
+        slBeta.setRange(0.000, 2, 0.001);
         slBeta.setPopupMenuEnabled(true);
         slBeta.setValue(pf.getDoubleValue("redrawparam_beta", 1.0));
         slBeta.setSliderStyle (Slider::LinearHorizontal);
@@ -89,13 +89,13 @@ public:
         slDamp.setSliderStyle (Slider::LinearHorizontal);
         slDamp.setTextBoxStyle(Slider::TextBoxLeft, false, 80, 20);
 
-        slDij.setRange(0.1, 500.0, 0.1);
+        slDij.setRange(0.1, 500.0, 0.01);
         slDij.setPopupMenuEnabled(true);
         slDij.setValue(pf.getDoubleValue("redrawparam_dij", 200.0));
         slDij.setSliderStyle (Slider::LinearHorizontal);
         slDij.setTextBoxStyle(Slider::TextBoxLeft, false, 80, 20);
 
-        slEnergy.setRange(0.0, 10, 0.1);
+        slEnergy.setRange(0.0, 10, 0.01);
         slEnergy.setPopupMenuEnabled(true);
         slEnergy.setValue(pf.getDoubleValue("redrawparam_energy", 0.5));
         slEnergy.setSliderStyle (Slider::LinearHorizontal);
