@@ -284,6 +284,11 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
     }
     else if(data.getType() == Ids::pluck)
     {
+        if (x1 == x2 && y1 == y2)
+        {
+            x2 = x1 + 1;
+            y2 = y2 + 1;
+        }
         Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
                                                                    0,
@@ -353,6 +358,11 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
     }
     else if(data.getType() == Ids::touch)
     {
+        if (x1 == x2 && y1 == y2)
+        {
+            x2 = x1 + 1;
+            y2 = y2 + 1;
+        }
         Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
                                                                    0,
