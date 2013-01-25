@@ -111,6 +111,7 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     int numMasslike = 0;
     int numPorts = 0;
     int numWaveguides = 0;
+    int numJunctions = 0;
     String wgTermString;
     String junctString;
     StringArray wgOutputs;
@@ -119,6 +120,8 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     StringArray linkWithJunct;
     StringArray massWithJunctLine;
     StringArray massWithJunctOutputs;
+    StringArray junctInputs;
+    StringArray junctOutputs;
 
     //==========================================================================
 
@@ -214,7 +217,11 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     //==========================================================================
     for (int i = 0; i < jTree.getNumChildren(); ++i)
     {
+        ++numJunctions;
         ValueTree junct = jTree.getChild(i);
+
+        junctOutputs.add(junct[Ids::identifier].toString());
+        junctInputs.add(junct[Ids::identifier].toString()+"p");
 
         ValueTree wgs = getWgForJunct(wgTree, junct);
         StringArray junctWgOuts;
@@ -288,16 +295,17 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
             mwjl << jm;
             mwjl << " = (0.0+(";
             mwjl << junct[Ids::identifier].toString() << jOutputs << ":(!,_)))";
-            mwjl << " : ";
-            ValueTree mwjp = mwj.getChildWithName(Ids::parameters);
-            StringArray mwjpStrings;
-            for (int p = 0; p < mwjp.getNumChildren(); ++p)
-            {
-                ValueTree param = mwjp.getChild(p);
-                mwjpStrings.add(param[Ids::value].toString());
-            }
-            mwjl << mwj.getType().toString();
-            mwjl << "(" << mwjpStrings.joinIntoString(",") << ");";
+//            mwjl << " : ";
+//            ValueTree mwjp = mwj.getChildWithName(Ids::parameters);
+//            StringArray mwjpStrings;
+//            for (int p = 0; p < mwjp.getNumChildren(); ++p)
+//            {
+//                ValueTree param = mwjp.getChild(p);
+//                mwjpStrings.add(param[Ids::value].toString());
+//            }
+//            mwjl << mwj.getType().toString();
+//            mwjl << "(" << mwjpStrings.joinIntoString(",") << ")";
+            mwjl << ";";
             massWithJunctLine.add(mwjl);
 
         }
@@ -530,12 +538,16 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     dspContent << "bigBlock(" << inputsP.joinIntoString(",");
     if (wgInputs.size() > 0)
         dspContent << "," << wgInputs.joinIntoString(",");
+    if (junctInputs.size() > 0)
+        dspContent << "," << junctInputs.joinIntoString(",");
     if (inputsPPorts.size() > 0)
         dspContent << "," << inputsPPorts.joinIntoString(",");
     dspContent << ") = (";
     dspContent << outputs.joinIntoString(",");
     if (wgOutputs.size() > 0)
         dspContent << "," << wgOutputs.joinIntoString(",");
+    if (junctOutputs.size() > 0)
+        dspContent << "," << junctOutputs.joinIntoString(",");
     if (outputsPorts.size() > 0)
         dspContent << "," << outputsPorts.joinIntoString(",");
     if (audioNames.size() > 0)
@@ -561,7 +573,9 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     //==========================================================================
     StringArray feedbackArray;
     StringArray outputArray;
-    for (int i = 0; i < numMasslike - numPorts + 2 * numWaveguides; ++i)
+    //TODO: needs to be fixed for latest Synth-A-Modeler changes/fiyes
+    int numFeedback = numMasslike - numPorts + (2 * numWaveguides);// + numJunctions;
+    for (int i = 0; i < numFeedback; ++i)
     {
         feedbackArray.add("_");
         outputArray.add("!");
