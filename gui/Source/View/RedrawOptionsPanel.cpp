@@ -35,11 +35,11 @@ class RedrawOptionsComponent : public Component,
 public:
     RedrawOptionsComponent(RedrawOptionsPanel* rop_)
     : rop(rop_), btOk("Ok"), btCancel("Cancel"),
-        lAlpha("labelAlpha", "alpha"), slAlpha("slAlpha"),
+        lAlpha("labelAlpha", "mass"), slAlpha("slAlpha"),
         lBeta("labelBeta", "beta"), slBeta("slBeta"),
-        lK("labelK", "k"), slK("slK"),
+        lK("labelK", "spring constant k"), slK("slK"),
         lDamp("labelDamp", "damp"), slDamp("slDamp"),
-        lDij("labelDij", "dij"), slDij("slDij"),
+        lDij("labelDij", "ideal distance"), slDij("slDij"),
         lEnergy("labelEnergy", "energy"), slEnergy("slEnergy"),
         lTimeStep("labelTeimStep", "timestep"), slTimeStep("slTimeStep"),
         pf(StoredSettings::getInstance()->getProps())
@@ -118,21 +118,21 @@ public:
         btOk.setBounds(getWidth() / 2 - 65, getHeight() - 30, 60, 22);
         btCancel.setBounds(getWidth() / 2 + 5, getHeight() - 30, 60, 22);
 
-        lAlpha.setBounds(10, 10, 50, 20);
-        lBeta.setBounds(10, 50, 50, 20);
-        lK.setBounds(10, 90, 50, 20);
-        lDamp.setBounds(10, 130, 50, 20);
-        lDij.setBounds(10, 180, 50, 20);
-        lEnergy.setBounds(10, 230, 50, 20);
-        lTimeStep.setBounds(10, 280, 50, 20);
+        lAlpha.setBounds(10, 10, 100, 20);
+        lBeta.setBounds(10, 50, 100, 20);
+        lK.setBounds(10, 90, 100, 20);
+        lDamp.setBounds(10, 130, 100, 20);
+        lDij.setBounds(10, 180, 100, 20);
+        lEnergy.setBounds(10, 230, 100, 20);
+        lTimeStep.setBounds(10, 280, 100, 20);
 
-        slAlpha.setBounds(70, 10, 250, 20);
-        slBeta.setBounds(70, 50, 250, 20);
-        slK.setBounds(70, 90, 250, 20);
-        slDamp.setBounds(70, 130, 250, 20);
-        slDij.setBounds(70, 180, 250, 20);
-        slEnergy.setBounds(70, 230, 250, 20);
-        slTimeStep.setBounds(70, 280, 250, 20);
+        slAlpha.setBounds(120, 10, 250, 20);
+        slBeta.setBounds(120, 50, 250, 20);
+        slK.setBounds(120, 90, 250, 20);
+        slDamp.setBounds(120, 130, 250, 20);
+        slDij.setBounds(120, 180, 250, 20);
+        slEnergy.setBounds(120, 230, 250, 20);
+        slTimeStep.setBounds(120, 280, 250, 20);
 
     }
 
@@ -186,7 +186,7 @@ RedrawOptionsPanel::RedrawOptionsPanel()
 : DialogWindow("Redraw options", Colours::grey, true)
 {
     RedrawOptionsComponent * const roc = new RedrawOptionsComponent(this);
-    roc->setSize (350, 350);
+    roc->setSize (400, 350);
 
     setContentOwned (roc, true);
 
