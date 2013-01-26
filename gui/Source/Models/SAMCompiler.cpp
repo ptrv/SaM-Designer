@@ -119,6 +119,7 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     StringArray massWithJunct;
     StringArray linkWithJunct;
     StringArray massWithJunctLine;
+    StringArray portWithJunctLine;
     StringArray massWithJunctOutputs;
     StringArray junctInputs;
     StringArray junctOutputs;
@@ -293,7 +294,27 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
             ValueTree mwj = massTree.getChildWithProperty(Ids::identifier, jm);
             String mwjl = "\t";
             mwjl << jm;
-            mwjl << " = (0.0+(";
+            mwjl << " = (0.0";
+
+            StringArray otherLinks;
+            for (int k = 0; k < linkTree.getNumChildren(); ++k)
+            {
+                ValueTree li = linkTree.getChild(k);
+                if(li[Ids::identifier].toString() == junctLink[Ids::identifier].toString())
+                    continue;
+                if(li[Ids::startVertex].toString() == jm)
+                {
+                    otherLinks.add("-"+li[Ids::identifier].toString());
+                }
+                else if (li[Ids::endVertex].toString() == jm)
+                {
+                    otherLinks.add("+"+li[Ids::identifier].toString());
+                }
+            }
+
+
+            mwjl << otherLinks.joinIntoString(String::empty);
+            mwjl << "+(";
             mwjl << junct[Ids::identifier].toString() << jOutputs << ":(!,_)))";
 //            mwjl << " : ";
 //            ValueTree mwjp = mwj.getChildWithName(Ids::parameters);
@@ -418,7 +439,11 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     {
         ValueTree ma = massTree.getChild(i);
         if (massWithJunct.contains(ma[Ids::identifier].toString()))
+        {
+            if(ma.getType().toString().compare("port") == 0)
+                ++numPorts;
             continue;
+        }
 
         ++numMasslike;
         String tagName = ma.getType().toString();
@@ -476,6 +501,7 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
         audioLine << "\t";
         audioLine << audioName << " = ";
         ValueTree sources = ao.getChildWithName(Ids::sources);
+        String paramLine;
         StringArray paramsStr;
         if (sources.getNumChildren() > 0)
         {
@@ -484,12 +510,19 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
                 ValueTree src = sources.getChild(k);
                 paramsStr.add(src[Ids::value].toString());
             }
-            audioLine << paramsStr.joinIntoString("+");
+            paramLine << paramsStr.joinIntoString("+");
         }
 
         String optional = ao[Ids::optional].toString();
         if (optional != String::empty)
-            audioLine << " : " << optional;
+        {
+            if(! paramLine.startsWith("("))
+                paramLine = "(" + paramLine;
+            if(! paramLine.endsWith(")"))
+                paramLine << ")";
+            paramLine << optional;
+        }
+        audioLine << paramLine;
         audioLine << ";";
         audioobjects.add(audioLine);
     }
@@ -574,7 +607,7 @@ const String SAMCompiler::compile(ValueTree mdlRoot_)
     StringArray feedbackArray;
     StringArray outputArray;
     //TODO: needs to be fixed for latest Synth-A-Modeler changes/fiyes
-    int numFeedback = numMasslike - numPorts + (2 * numWaveguides);// + numJunctions;
+    int numFeedback = numMasslike - numPorts + (2 * numWaveguides) + numJunctions;
     for (int i = 0; i < numFeedback; ++i)
     {
         feedbackArray.add("_");
