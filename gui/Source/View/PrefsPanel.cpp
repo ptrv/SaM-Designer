@@ -364,6 +364,7 @@ public:
 	{
         ExporterInputPanel::show(-1);
         table.updateContent();
+        table.autoSizeAllColumns();
 	}
 
 	void editRow()
@@ -374,6 +375,7 @@ public:
             ExporterInputPanel::show(rowIndex);
 			table.updateContent();
 			table.repaintRow(rowIndex);
+            table.autoSizeAllColumns();
 		}
 	}
 
@@ -389,6 +391,7 @@ public:
             StoredSettings::getInstance()->getExporters().removeValue(spa.getAllKeys()[rowIndex]);
 
 			table.updateContent();
+            table.autoSizeAllColumns();
 		}
 	}
     void cellDoubleClicked (int rowNumber, int columnId, const MouseEvent& e)
@@ -396,6 +399,7 @@ public:
         ExporterInputPanel::show(rowNumber);
         table.updateContent();
         table.repaintRow(rowNumber);
+        table.autoSizeAllColumns();
     }
 
     int getColumnAutoSizeWidth(int columnid)
@@ -411,7 +415,9 @@ public:
                     dl = font.getStringWidth(data->getAllKeys()[i]);
                 }
                 else if(columnid == 2)
+                {
                     dl = font.getStringWidth(data->getAllValues()[i]);
+                }
                 if (colWidth < dl)
                     colWidth = dl;
             }
