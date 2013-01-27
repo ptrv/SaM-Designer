@@ -73,7 +73,8 @@ String SAMRegex::getAudioOutLine()
 String SAMRegex::getFaustLine()
 {
     String faustLine;
-    faustLine << "\\A\\s*(faustcode):\\s*" << faustCode << "\\s*;\\s*$";
+    //faustLine << "\\A\\s*(faustcode):\\s*" << faustCode << "\\s*;\\s*$";
+    faustLine << "\\A\\s*(faustcode):\\s*" << faustCode << "\\s*$";
     return faustLine;
 }
 
