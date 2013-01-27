@@ -213,7 +213,7 @@ String MDLWriter::getMDLString()
 		mdlContent << la[Ids::identifier].toString();
 		mdlContent << "=";
 		mdlContent << la.getProperty(Ids::faustCode).toString();
-		mdlContent << ";";
+		// mdlContent << ";";
 		mdlContent << "\n";
 	}
 
