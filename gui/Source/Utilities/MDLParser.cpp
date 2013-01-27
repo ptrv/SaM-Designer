@@ -203,11 +203,9 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getFaustLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 3);
-            
+            re.fullMatchValues(line, values, 2);
             ValueTree variableTree(Ids::variable);
-            variableTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
-            variableTree.setProperty(Ids::faustCode, values[2].trim(), nullptr);
+            variableTree.setProperty(Ids::faustCode, values[1].trim(), nullptr);
             ValueTree variablesTree = mdlTree.getOrCreateChildWithName(Objects::variables, nullptr);
             variablesTree.addChild(variableTree, -1, nullptr);
         }

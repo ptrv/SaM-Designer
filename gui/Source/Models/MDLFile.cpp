@@ -303,12 +303,24 @@ bool MDLFile::checkIfChecksumChanged()
 void MDLFile::checkForOutputDSPVar()
 {
     ValueTree vars = mdlRoot.getOrCreateChildWithName(Objects::variables, nullptr);
-    ValueTree var = vars.getChildWithProperty(Ids::identifier, "outputDSP");
-    if(! var.isValid())
+    bool outputDSPExists = false;
+    for(int i = 0; i < vars.getNumChildren(); ++i)
     {
-        var = ValueTree(Ids::variable);
-        var.setProperty(Ids::identifier, "outputDSP", nullptr);
-        var.setProperty(Ids::faustCode, "highpass(4,20.0)", nullptr);
+        ValueTree var = vars.getChild(i);
+        if(var.hasProperty(Ids::faustCode))
+        {
+            String varStr = var[Ids::faustCode].toString();
+            if(varStr.startsWith("outputDSP"))
+            {
+                outputDSPExists = true;
+                break;
+            }
+        }
+    }
+    if(! outputDSPExists)
+    {
+        ValueTree var(Ids::variable);
+        var.setProperty(Ids::faustCode, "outputDSP=highpass(4,20.0);", nullptr);
         vars.addChild(var, -1, nullptr);
     }
 }

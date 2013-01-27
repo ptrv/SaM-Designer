@@ -41,7 +41,7 @@ public:
 	{
 		VariableInputComponent* const vic = new VariableInputComponent(*this,
 				objController_, data_, edit_, undoManager_);
-		vic->setSize(350, 100);
+		vic->setSize(500, 100);
 
 		setContentOwned (vic, true);
 
@@ -81,9 +81,7 @@ private:
                                UndoManager* undoManager_)
     	: parent(parent_),
           objController(objController_),
-    	  labelVarName("Variable"),
     	  labelVarValue("Value"),
-    	  inputVarName("Input variable"),
     	  inputVarValue("Input value"),
     	  data(data_),
     	  edit(edit_),
@@ -92,12 +90,8 @@ private:
     	  undoManager(undoManager_),
           dataChanged(false)
     	{
-    		labelVarName.setText("Variable", false);
-    		addAndMakeVisible(&labelVarName);
-    		labelVarValue.setText("Value", false);
+    		labelVarValue.setText("Faust code", false);
     		addAndMakeVisible(&labelVarValue);
-            inputVarName.addListener(this);
-    		addAndMakeVisible(&inputVarName);
             inputVarValue.addListener(this);
     		addAndMakeVisible(&inputVarValue);
     		btOk.addListener(this);
@@ -107,7 +101,6 @@ private:
 
     		if(edit)
     		{
-    			inputVarName.setText(data[Ids::identifier].toString());
     			inputVarValue.setText(data[Ids::faustCode].toString());
     		}
     	}
@@ -118,10 +111,8 @@ private:
 
     	void resized()
     	{
-    		labelVarName.setBounds(0, 5, 60, 22);
-    		inputVarName.setBounds(60, 5, getWidth() - 65, 22);
-    		labelVarValue.setBounds(0, 40, 60, 22);
-    		inputVarValue.setBounds(60, 40, getWidth() - 65, 22);
+            labelVarValue.setBounds(0, 5, 60, 22);
+            inputVarValue.setBounds(60, 5, getWidth() - 65, 22);
     		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
     		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
     	}
@@ -144,46 +135,29 @@ private:
                 return;
 
             ValueTree newData(Ids::variable);
-            newData.setProperty(Ids::identifier, inputVarName.getText(), nullptr);
             newData.setProperty(Ids::faustCode, inputVarValue.getText(), nullptr);
-            if(data[Ids::identifier] != newData[Ids::identifier])
-            {
-                if(objController->checkIfIdExists(data.getType(), inputVarName.getText()))
-                {
-                    Alerts::nameAlreadyExists();
-                    return;
-                }
-            }
+//            if(data[Ids::identifier] != newData[Ids::identifier])
+//            {
+//                if(objController->checkIfIdExists(data.getType(), inputVarName.getText()))
+//                {
+//                    Alerts::nameAlreadyExists();
+//                    return;
+//                }
+//            }
 
             if (edit)
             {
                 undoManager->beginNewTransaction("Edit variable");
-                String oldName = data[Ids::identifier].toString();
-                data.setProperty(Ids::identifier,
-                                 newData[Ids::identifier].toString(),
-                                 undoManager);
                 data.setProperty(Ids::faustCode,
                                  newData[Ids::faustCode].toString(),
                                  undoManager);
-                objController->getIdManager()->renameId(data.getType(),
-                                                        oldName,
-                                                        data[Ids::identifier].toString(),
-                                                        undoManager);
-                DBG(undoManager->getNumActionsInCurrentTransaction());
             }
             else
             {
                 undoManager->beginNewTransaction("Add variable");
-                //                    data.addChild(newData, -1, undoManager);
-                data.setProperty(Ids::identifier,
-                                 newData[Ids::identifier].toString(),
-                                 undoManager);
                 data.setProperty(Ids::faustCode,
                                  newData[Ids::faustCode].toString(),
                                  undoManager);
-                objController->getIdManager()->addId(newData.getType(),
-                                                     newData[Ids::identifier].toString(),
-                                                     undoManager);
             }
             parent.returnVal = 1;
             parent.closeButtonPressed();
@@ -211,9 +185,7 @@ private:
     private:
     	VariableInputPanel& parent;
         ObjController* objController;
-    	Label labelVarName;
     	Label labelVarValue;
-    	TextEditor inputVarName;
     	TextEditor inputVarValue;
     	ValueTree data;
     	bool edit;
@@ -232,6 +204,7 @@ class VariablesTable :public Component,
 public:
 	VariablesTable(ObjController* objController_, ValueTree data_, UndoManager* undoManager_)
 	: table("VariablesTable", this),
+        font(14.0f),
         objController(objController_),
 		data(data_),
         undoManager(undoManager_)
@@ -239,8 +212,8 @@ public:
 	    table.setColour (ListBox::outlineColourId, Colours::grey);
 	    table.setOutlineThickness (1);
 
-	    table.getHeader().addColumn("variable",1,200);
-	    table.getHeader().addColumn("value",2,380);
+	    table.getHeader().addColumn("faustcode",1,800);
+        table.autoSizeAllColumns();
 
 	    table.setMultipleSelectionEnabled(false);
 		addAndMakeVisible(&table);
@@ -271,14 +244,10 @@ public:
 			int height, bool rowIsSelected)
 	{
 		g.setColour(Colours::black);
-		String varName = data.getChildWithName(Objects::variables).getChild(rowNumber)[Ids::identifier].toString();
-		String varValue = data.getChildWithName(Objects::variables).getChild(rowNumber)[Ids::faustCode].toString();
+        g.setFont(font);
 		if(columnId == 1)
 		{
-			g.drawText(varName, 2, 0, width - 4, height, Justification::left, true);
-		}
-		else if(columnId == 2)
-		{
+            String varValue = data.getChildWithName(Objects::variables).getChild(rowNumber)[Ids::faustCode].toString();
 			g.drawText(varValue, 2, 0, width -4, height, Justification::left, true);
 		}
 	}
@@ -299,6 +268,7 @@ public:
 			SAM_LOG(data[Ids::mdlName].toString() + ": Canceled add variable");
         }
 		table.updateContent();
+        table.autoSizeAllColumns();
 	}
 
 	void removeSelectedRow()
@@ -306,14 +276,12 @@ public:
 		int rowIndex = table.getLastRowSelected();
 		if(rowIndex >= 0)
 		{
-            String varName = data.getChildWithName(Objects::variables).getChild(rowIndex)[Ids::identifier].toString();
 			undoManager->beginNewTransaction("Remove variable");
-            objController->getIdManager()->removeId(data.getChildWithName(Objects::variables).getChild(rowIndex).getType(),
-                                                    varName, undoManager);
             data.getChildWithName(Objects::variables).removeChild(rowIndex, undoManager);
 
 			table.updateContent();
-			SAM_LOG(data[Ids::mdlName].toString() + ": Remove variable " + varName);
+            table.autoSizeAllColumns();
+			SAM_LOG(data[Ids::mdlName].toString() + ": Remove variable");
 		}
 	}
     void cellDoubleClicked (int rowNumber, int columnId, const MouseEvent& e)
@@ -322,10 +290,33 @@ public:
         int r = VariableInputPanel::show(objController, editData, true, undoManager);
         table.updateContent();
         table.repaintRow(rowNumber);
+        table.autoSizeAllColumns();
         if (r == 1)
-            SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable " + editData[Ids::identifier].toString());
+            SAM_LOG(data[Ids::mdlName].toString() + ": Edit variable ");
         else if (r == 2)
             SAM_LOG(data[Ids::mdlName].toString() + ": Canceled edit variable");
+    }
+    int getColumnAutoSizeWidth(int columnid)
+    {
+        if(columnid == 1)
+        {
+            ValueTree vars = data.getChildWithName(Objects::variables);
+            if(! vars.isValid())
+                return 0;
+
+            int colWidth = 0;
+            for (int i = 0; i < vars.getNumChildren(); ++i)
+            {
+                ValueTree var = vars.getChild(i);
+                int dl = 0;
+                dl = font.getStringWidth(var[Ids::faustCode].toString());
+
+                if (colWidth < dl)
+                    colWidth = dl;
+            }
+            return colWidth+10;
+        }
+        return 0;
     }
 	ValueTree getData() { return data; }
 private:
@@ -334,6 +325,7 @@ private:
 		return true;
 	}
 	TableListBox table;
+    Font font;
     ObjController* objController;
 	ValueTree data;
     UndoManager* undoManager;
@@ -417,7 +409,7 @@ private:
 //            g.fillAll(Colours::white);
             g.setColour(Colours::white);
             g.drawText("Example:",0, 0, getWidth(), 20,Justification::left, false);
-            g.drawMultiLineText("hslider(\"DescriptiveLabelForVariable\",defaultValue,minimumValue,maximumValue,stepSize)",
+            g.drawMultiLineText("varname=hslider(\"DescriptiveLabelForVariable\",defaultValue,minimumValue,maximumValue,stepSize)",
                        0, 30, 550);
         }
     private:

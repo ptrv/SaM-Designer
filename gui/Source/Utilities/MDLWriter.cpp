@@ -204,16 +204,13 @@ String MDLWriter::getMDLString()
 
 	}
 
-	// write labels
+	// write variables
 	mdlContent << "\n\n";
 	ValueTree variablesTree = mdlFile.mdlRoot.getChildWithName(Objects::variables);
 	for (int varIdx = 0; varIdx < variablesTree.getNumChildren(); ++varIdx) {
 		ValueTree la = variablesTree.getChild(varIdx);
 		mdlContent << "faustcode: ";
-		mdlContent << la[Ids::identifier].toString();
-		mdlContent << "=";
 		mdlContent << la.getProperty(Ids::faustCode).toString();
-		// mdlContent << ";";
 		mdlContent << "\n";
 	}
 

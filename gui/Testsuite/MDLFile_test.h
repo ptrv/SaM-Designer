@@ -197,13 +197,9 @@ public:
         // test 1
 		expect(labelObjs.getNumChildren() == 2, "have "+String(labelObjs.getNumChildren())+" variables");
         // test 2
-		expectEquals(labelObjs.getChild(0)[Ids::identifier].toString(), String("adjStiffness"));
-        // test 3
-		expectEquals(labelObjs.getChild(0)[Ids::faustCode].toString(), String("hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0)"));
-        // test 4
-		expectEquals(labelObjs.getChild(1)[Ids::identifier].toString(), String("outputDSP"));
-        // test 5
-		expectEquals(labelObjs.getChild(1)[Ids::faustCode].toString(), String("highpass(4,20.0)"));
+        expectEquals(labelObjs.getChild(0)[Ids::faustCode].toString(), String("adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0);"));
+//        // test 3
+        expectEquals(labelObjs.getChild(1)[Ids::faustCode].toString(), String("outputDSP=highpass(4,20.0);"));
 
 //		beginTest("getWaveguides");
 //

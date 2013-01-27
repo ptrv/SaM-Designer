@@ -655,14 +655,14 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     for (int i = 0; i < variables.getNumChildren(); i++)
     {
         ValueTree obj = variables.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-        }
-        else
-        {
-            variables.removeChild(obj, nullptr);
-        }
+//        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+//        {
+//            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+//        }
+//        else
+//        {
+//            variables.removeChild(obj, nullptr);
+//        }
     }
 
     ValueTree commentsTree = mdl.getChildWithName(Objects::comments);
