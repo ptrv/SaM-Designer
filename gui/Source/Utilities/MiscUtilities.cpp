@@ -100,7 +100,7 @@ void Utils::openDataDir()
 #if JUCE_MAC
 	Process::openDocument("/usr/bin/open", StoredSettings::getInstance()->getDataDir());
 #else
-	Process::openDocument("file:"+StoredSettings::getInstance()->getDataDir(), "");
+	Process::openDocument(StoredSettings::getInstance()->getDataDir(), "");
 #endif
 
 }
