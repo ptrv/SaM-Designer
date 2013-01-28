@@ -87,7 +87,7 @@ void Utils::openHelpUrl(const String& helpId)
 
 void Utils::openHelpPatch(const String& helpId)
 {
-    String helpPatch = helpId + "-help.mdlx";
+    String helpPatch = helpId + "-help.mdl";
     File f = StoredSettings::getInstance()->getDataDir() + "/help-patches/" + helpPatch;
 
     if(f.existsAsFile())
