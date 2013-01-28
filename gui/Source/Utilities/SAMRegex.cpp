@@ -41,7 +41,7 @@ const char* SAMRegex::faustName = "\\A\\s*(faustcode):.*";
 //const char* SAMRegex::faustCode = "(.+)\\s*=\\s*(.+)";
 const char* SAMRegex::faustCode = "(.+)";
 //const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*]+|[a-zA-Z]*\\([a-zA-Z\\.\\d,\\s*]*\\))"";
-const char* SAMRegex::paramsDetail = "([\\d\\.]*|[\\d\\.\\*a-zA-Z]*|[\\(\\)\\*\\+\\-a-zA-Z\\.\\d,/:\\s*]*|[\\w\\\\\"]*)";
+const char* SAMRegex::paramsDetail = "([\\d\\.]*|[\\d\\.\\*a-zA-Z]*|[\\(\\)\\*\\+\\-a-zA-Z\\.\\d,/:\\s*]*|[\\w\\\\\"\\s[:graph:]]*)";
 const char* SAMRegex::word = "(\\w+)";
 const char* SAMRegex::commentObject = "\\A\\s*#\\s*(comment)";
 

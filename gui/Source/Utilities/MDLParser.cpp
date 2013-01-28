@@ -352,7 +352,7 @@ bool MDLParser::parseMDL(const File& f)
             if(! re.fullMatchValues(line, values, 3))
             {
                 DBG("Error reading comment object!");
-    }
+            }
             ValueTree newTree(Ids::comment);
             Point<int> pos = getPos(line);
             newTree.setProperty(Ids::posX, pos.getX(), nullptr);
@@ -366,7 +366,9 @@ bool MDLParser::parseMDL(const File& f)
             reParams.fullMatchValues(SAMRegex::getParamsLine(3),
                                      params, paramsArray, 3);
 
-            newTree.setProperty(Ids::value, paramsArray[0].unquoted(), nullptr);
+            StringArray commVal;
+            commVal.addTokens(paramsArray[0].unquoted(), "|" , "\"");
+            newTree.setProperty(Ids::value, commVal.joinIntoString("\n"), nullptr);
             newTree.setProperty(Ids::fontSize, paramsArray[1], nullptr);
             newTree.setProperty(Ids::commentColour, paramsArray[2], nullptr);
 

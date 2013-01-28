@@ -260,7 +260,9 @@ String MDLWriter::getMDLString()
         mdlContent << "## ";
         mdlContent << comm.getType().toString();
         mdlContent << "(";
-        mdlContent << comm[Ids::value].toString().quoted();
+        StringArray commVal;
+        commVal.addTokens(comm[Ids::value].toString(),"\n" ,"\"");
+        mdlContent << commVal.joinIntoString("|").quoted();
         mdlContent << ",";
         mdlContent << comm[Ids::fontSize].toString();
         mdlContent << ",";
