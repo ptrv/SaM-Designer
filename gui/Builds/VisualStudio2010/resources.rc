@@ -13,9 +13,9 @@ BEGIN
   BEGIN
     BLOCK "040904E4"
     BEGIN
-      VALUE "FileDescription",  "Synth-A-ModelerGUI\0"
+      VALUE "FileDescription",  "Synth-A-Modeler-Designer\0"
       VALUE "FileVersion",  "1.0.0dev\0"
-      VALUE "ProductName",  "Synth-A-ModelerGUI\0"
+      VALUE "ProductName",  "Synth-A-Modeler-Designer\0"
       VALUE "ProductVersion",  "1.0.0dev\0"
     END
   END

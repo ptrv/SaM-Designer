@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="VkFX9m" name="Synth-A-ModelerGUI" projectType="guiapp" version="1.0.0dev"
-              bundleIdentifier="de.tu-berlin.SynthAModelerGUI" jucerVersion="3.0.0"
-              defines="BUILTIN_SAM_COMPILER=0">
+<JUCERPROJECT id="VkFX9m" name="Synth-A-Modeler-Designer" projectType="guiapp"
+              version="1.0.0dev" bundleIdentifier="de.tu-berlin.SynthAModelerDesigner"
+              jucerVersion="3.0.0" defines="BUILTIN_SAM_COMPILER=0">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
                bigIcon="WodEAp" documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
                extraLinkerFlags="-L../../Libs/re2/obj -lre2">
       <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-Modeler-Designer"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        defines="UNIT_TESTS=1"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-ModelerGUI"
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-Modeler-Designer"
                        osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="default"/>
       </CONFIGURATIONS>
     </XCODE_MAC>
@@ -19,9 +19,9 @@
                 extraLinkerFlags="-L../../Libs/re2/obj -lre2" extraCompilerFlags="-I../../Libs/re2">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
-                       targetName="Synth-A-ModelerGUI" defines="UNIT_TESTS=1"/>
+                       targetName="Synth-A-Modeler-Designer" defines="UNIT_TESTS=1"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
-                       targetName="Synth-A-ModelerGUI"/>
+                       targetName="Synth-A-Modeler-Designer"/>
       </CONFIGURATIONS>
     </LINUX_MAKE>
     <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder="..\juce\modules"
@@ -29,15 +29,15 @@
             bigIcon="WodEAp" extraDefs="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="Synth-A-ModelerGUI"
+                       isDebug="1" optimisation="1" targetName="Synth-A-Modeler-Designer"
                        libraryPath="..\..\Libs\re2win\lib\debug"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="2" targetName="Synth-A-ModelerGUI"
+                       isDebug="0" optimisation="2" targetName="Synth-A-Modeler-Designer"
                        libraryPath="..\..\Libs\re2win\lib\release"/>
       </CONFIGURATIONS>
     </VS2010>
   </EXPORTFORMATS>
-  <MAINGROUP id="RyljMx" name="Synth-A-ModelerGUI">
+  <MAINGROUP id="RyljMx" name="Synth-A-Modeler-Designer">
     <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">
       <FILE id="VCcpfE" name="default_values.xml" compile="0" resource="1"
             file="BinaryData/default_values.xml"/>

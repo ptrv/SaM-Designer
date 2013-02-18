@@ -2,35 +2,35 @@
 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Synth-A-ModelerGUI">
-      <UniqueIdentifier>{09B4DC05-8895-8B93-CFDE-EF3129BD37FB}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer">
+      <UniqueIdentifier>{0C55F505-F060-289D-9D58-4C6F89C3BE74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\BinaryData">
-      <UniqueIdentifier>{20A91245-5BB7-11AB-CA1F-E321A1B67F10}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\BinaryData">
+      <UniqueIdentifier>{D3F09516-2A9D-58EC-F327-58F2975C28DB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Testsuite">
-      <UniqueIdentifier>{50F431A7-D116-5020-B4DF-9FB5DD98FDBC}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Testsuite">
+      <UniqueIdentifier>{FBF7D034-4DCE-C72A-D27E-6755CCA7469C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source">
-      <UniqueIdentifier>{ACB4FFEB-7BB2-E0B1-74FF-A155F7239298}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source">
+      <UniqueIdentifier>{F5552E89-D836-C591-8784-F777E72EC356}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source\Graph">
-      <UniqueIdentifier>{D6466A64-878E-A673-D9B2-F91839DC4265}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source\Graph">
+      <UniqueIdentifier>{9B304CCC-2736-8FA9-A831-3AC0E3E8A297}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source\Application">
-      <UniqueIdentifier>{00881802-5552-0F80-D049-3C9D4454E003}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source\Application">
+      <UniqueIdentifier>{AA9D8191-5872-A588-CBB5-33D8B1EBD8FC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source\Utilities">
-      <UniqueIdentifier>{37585411-49FB-AC10-307C-874610C6428E}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source\Utilities">
+      <UniqueIdentifier>{73D43535-265A-5818-4EA6-2A3DC62556F3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source\Controller">
-      <UniqueIdentifier>{0B1A6055-0EEA-7A6D-1E2F-B3E15DC941E9}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source\Controller">
+      <UniqueIdentifier>{5B8C032A-7C4F-94C3-0583-8AACF89FB5CD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source\Models">
-      <UniqueIdentifier>{9F804C8E-7972-8E64-6F35-D3C6E1E7959B}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source\Models">
+      <UniqueIdentifier>{72DF74CC-76D9-A2FD-2FBF-0ED920D5C25D}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Synth-A-ModelerGUI\Source\View">
-      <UniqueIdentifier>{65215BAF-5105-0564-42B2-3DAB2008F285}</UniqueIdentifier>
+    <Filter Include="Synth-A-Modeler-Designer\Source\View">
+      <UniqueIdentifier>{E6B8ABFF-BA7C-680E-5FE6-754306DC4286}</UniqueIdentifier>
     </Filter>
     <Filter Include="Juce Modules">
       <UniqueIdentifier>{422C46B7-0467-2DB0-BF3C-16DFCAFD69AC}</UniqueIdentifier>
@@ -239,124 +239,124 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\CircleFlowAlgorithm.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\GraphUtils.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\DirectedGraph.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Graph\Node.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Application\CommandLine.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Application\SAMLookAndFeel.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Application\MainWindow.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Application\Application.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Application\Main.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\SAMRegex.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\RegularExpression.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\IdManager.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\ResourceLoader.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\MiscUtilities.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\MDLWriter.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\Alerts.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\MDLParser.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Utilities\StoredSettings.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Controller\MDLController.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Controller</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Controller\ObjController.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Controller</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Models\SAMCompiler.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\RedrawOptionsPanel.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\CommentEditor.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\CommentComponent.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\SnapGridPainter.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\AudioOutConnector.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\BaseObjectComponent.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\LinkComponent.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\VariablesPanel.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\ObjectPropertiesPanel.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\ObjectComponent.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\OutputWindow.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\PrefsPanel.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\ContentComp.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\ObjectsHolder.cpp">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_core\text\juce_CharacterFunctions.cpp">
       <Filter>Juce Modules\juce_core\text</Filter>
@@ -410,6 +410,9 @@
       <Filter>Juce Modules\juce_core\containers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_core\threads\juce_ChildProcess.cpp">
+      <Filter>Juce Modules\juce_core\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_core\threads\juce_HighResolutionTimer.cpp">
       <Filter>Juce Modules\juce_core\threads</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_core\threads\juce_ReadWriteLock.cpp">
@@ -1237,157 +1240,157 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Testsuite\MDLParser_test.h">
-      <Filter>Synth-A-ModelerGUI\Testsuite</Filter>
+      <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Testsuite\MDLFile_test.h">
-      <Filter>Synth-A-ModelerGUI\Testsuite</Filter>
+      <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Testsuite\TestUtils.h">
-      <Filter>Synth-A-ModelerGUI\Testsuite</Filter>
+      <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Testsuite\SAMCmd_test.h">
-      <Filter>Synth-A-ModelerGUI\Testsuite</Filter>
+      <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Testsuite\TestRunner.h">
-      <Filter>Synth-A-ModelerGUI\Testsuite</Filter>
+      <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\CircleFlowAlgorithm.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\GraphUtils.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\FlowAlgorithm.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\DirectedGraph.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\Node.h">
-      <Filter>Synth-A-ModelerGUI\Source\Graph</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\CommandLine.h">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\SAMLookAndFeel.h">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\MainWindow.h">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\Application.h">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\CommandIDs.h">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Application\CommonHeaders.h">
-      <Filter>Synth-A-ModelerGUI\Source\Application</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\SAMRegex.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\RegularExpression.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\IdManager.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\ResourceLoader.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\MiscUtilities.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\MDLWriter.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\Alerts.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\MDLParser.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\StoredSettings.h">
-      <Filter>Synth-A-ModelerGUI\Source\Utilities</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Controller\MDLController.h">
-      <Filter>Synth-A-ModelerGUI\Source\Controller</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Controller\ObjController.h">
-      <Filter>Synth-A-ModelerGUI\Source\Controller</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\SAMCompiler.h">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\ObjectFactory.h">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\ObjectActions.h">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\SAMCmd.h">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\MDLFile.h">
-      <Filter>Synth-A-ModelerGUI\Source\Models</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\RedrawOptionsPanel.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\CommentEditor.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\CommentComponent.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\SnapGridPainter.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\SelectableObject.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\AudioOutConnector.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\BaseObjectComponent.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\LinkComponent.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\VariablesPanel.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\ObjectPropertiesPanel.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\ObjectComponent.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\OutputWindow.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\PrefsPanel.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\ContentComp.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\ObjectsHolder.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\TextConsole.h">
-      <Filter>Synth-A-ModelerGUI\Source\View</Filter>
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_CharacterFunctions.h">
       <Filter>Juce Modules\juce_core\text</Filter>
@@ -1528,6 +1531,9 @@
       <Filter>Juce Modules\juce_core\threads</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_DynamicLibrary.h">
+      <Filter>Juce Modules\juce_core\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_HighResolutionTimer.h">
       <Filter>Juce Modules\juce_core\threads</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_InterProcessLock.h">
@@ -2364,31 +2370,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\BinaryData\default_values.xml">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\default_exporters.xml">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\prefs_export.png">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\mdl_file_header.txt">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\about.txt">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\prefs_about.png">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\prefs_misc.png">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\icons.zip">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\BinaryData\synthamodeler_icon.png">
-      <Filter>Synth-A-ModelerGUI\BinaryData</Filter>
+      <Filter>Synth-A-Modeler-Designer\BinaryData</Filter>
     </None>
     <None Include="..\..\..\juce\modules\juce_core\juce_module_info">
       <Filter>Juce Modules\juce_core</Filter>

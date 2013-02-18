@@ -37,12 +37,12 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Synth-A-ModelerGUI</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Synth-A-Modeler-Designer</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(LibraryPath);..\..\Libs\re2win\lib\debug</LibraryPath>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Synth-A-ModelerGUI</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Synth-A-Modeler-Designer</TargetName>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(LibraryPath);..\..\Libs\re2win\lib\release</LibraryPath>
   </PropertyGroup>
@@ -74,19 +74,20 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)\Synth-A-ModelerGUI.exe</OutputFile>
+      <OutputFile>$(OutDir)\Synth-A-Modeler-Designer.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcmt.lib; msvcrt.lib;;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(IntDir)\Synth-A-ModelerGUI.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(IntDir)\Synth-A-Modeler-Designer.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalLibraryDirectories>..\..\Libs\re2win\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>re2.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(IntDir)\Synth-A-ModelerGUI.bsc</OutputFile>
+      <OutputFile>$(IntDir)\Synth-A-Modeler-Designer.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -116,11 +117,11 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)\Synth-A-ModelerGUI.exe</OutputFile>
+      <OutputFile>$(OutDir)\Synth-A-Modeler-Designer.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(IntDir)\Synth-A-ModelerGUI.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(IntDir)\Synth-A-Modeler-Designer.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
@@ -130,7 +131,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>$(IntDir)\Synth-A-ModelerGUI.bsc</OutputFile>
+      <OutputFile>$(IntDir)\Synth-A-Modeler-Designer.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -226,6 +227,9 @@
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_core\threads\juce_ChildProcess.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_core\threads\juce_HighResolutionTimer.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_core\threads\juce_ReadWriteLock.cpp">
@@ -1074,6 +1078,7 @@
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_ChildProcess.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_CriticalSection.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_DynamicLibrary.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_HighResolutionTimer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_InterProcessLock.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_Process.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\threads\juce_ReadWriteLock.h"/>

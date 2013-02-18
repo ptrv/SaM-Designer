@@ -23,7 +23,7 @@ ifeq ($(CONFIG),Debug)
   LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "BUILTIN_SAM_COMPILER=0" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
-  TARGET := Synth-A-ModelerGUI
+  TARGET := Synth-A-Modeler-Designer
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
 
@@ -38,7 +38,7 @@ ifeq ($(CONFIG),Release)
   LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "BUILTIN_SAM_COMPILER=0" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
-  TARGET := Synth-A-ModelerGUI
+  TARGET := Synth-A-Modeler-Designer
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
 
@@ -95,20 +95,20 @@ OBJECTS := \
 .PHONY: clean
 
 $(OUTDIR)/$(TARGET): $(OBJECTS) $(LDDEPS) $(RESOURCES)
-	@echo Linking Synth-A-ModelerGUI
+	@echo Linking Synth-A-Modeler-Designer
 	-@mkdir -p $(BINDIR)
 	-@mkdir -p $(LIBDIR)
 	-@mkdir -p $(OUTDIR)
 	@$(BLDCMD)
 
 clean:
-	@echo Cleaning Synth-A-ModelerGUI
+	@echo Cleaning Synth-A-Modeler-Designer
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
 strip:
-	@echo Stripping Synth-A-ModelerGUI
+	@echo Stripping Synth-A-Modeler-Designer
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
 
 $(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o: ../../Source/Graph/ForceBasedFlowAlgorithm.cpp

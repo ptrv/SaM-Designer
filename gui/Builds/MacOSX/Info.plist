@@ -8,9 +8,9 @@
     <key>CFBundleIconFile</key>
     <string>Icon.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>de.tu-berlin.SynthAModelerGUI</string>
+    <string>de.tu-berlin.SynthAModelerDesigner</string>
     <key>CFBundleName</key>
-    <string>Synth-A-ModelerGUI</string>
+    <string>Synth-A-Modeler-Designer</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleSignature</key>

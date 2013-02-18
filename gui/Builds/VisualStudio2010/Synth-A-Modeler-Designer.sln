@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{C832C843-8DAF-E1DF-33DC-697C950F457E}") = "Synth-A-ModelerGUI", "Synth-A-ModelerGUI.vcxproj", "{D9CA3016-E563-38BD-1869-389E254F74EA}"
+Project("{4F4FA98E-362F-8C84-6FAD-2EA31001B92B}") = "Synth-A-Modeler-Designer", "Synth-A-Modeler-Designer.vcxproj", "{D9CA3016-E563-38BD-1869-389E254F74EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
