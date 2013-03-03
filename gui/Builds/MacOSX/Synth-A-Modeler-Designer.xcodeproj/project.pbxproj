@@ -1702,6 +1702,7 @@
 				SDKROOT_ppc = macosx10.5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2";
 				ONLY_ACTIVE_ARCH = YES;
@@ -1724,6 +1725,7 @@
 				SDKROOT_ppc = macosx10.5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
