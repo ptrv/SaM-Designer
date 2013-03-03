@@ -81,7 +81,6 @@ bool MDLParser::parseMDL(const File& f)
         RegularExpression re;
         RegularExpression reComment("\\A\\s*#[^#].*$");
         RegularExpression reParams(SAMRegex::paramsDetail);
-        RegularExpression reLabel(SAMRegex::word);
 
         if(reComment.fullMatch(line) || line.isEmpty())
         {
@@ -92,7 +91,7 @@ bool MDLParser::parseMDL(const File& f)
         {
 
             StringArray values;
-            re.fullMatchValues(line, values, 5);
+            re.fullMatchValues(line, values, 4);
 
             ValueTree newTree;
             if (values[0].compare("mass") == 0)
@@ -107,9 +106,9 @@ bool MDLParser::parseMDL(const File& f)
             {
                 newTree = ValueTree(Ids::ground);
             }
-            else if (values[0].compare("resonator") == 0)
+            else if (values[0].compare("resonators") == 0)
             {
-                newTree = ValueTree(Ids::resonator);
+                newTree = ValueTree(Ids::resonators);
             }
             else
             {
@@ -127,10 +126,22 @@ bool MDLParser::parseMDL(const File& f)
                 String params = values[1];
                 StringArray paramsArray;
 
-                reParams.fullMatchValues(SAMRegex::getParamsLine(3),
-                                         params, paramsArray, 3);
-                newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
-                                 -1, nullptr);
+                if(newTree.getType() == Ids::resonators)
+                {
+                    String reResStr;
+                    reResStr << "\\s*" << SAMRegex::paramsDetailRes << "\\s*[,]*";
+                    RegularExpression reRes(reResStr);
+                    reRes.findAndConsume(params, paramsArray);
+                    newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
+                                     -1, nullptr);
+                }
+                else
+                {
+                    reParams.fullMatchValues(SAMRegex::getParamsLine(3),
+                                             params, paramsArray, 3);
+                    newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
+                                     -1, nullptr);
+                }
             }
             if(newTree.getType() == Ids::ground)
             {
@@ -143,11 +154,6 @@ bool MDLParser::parseMDL(const File& f)
 
             newTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
 
-            StringArray labelsArray;
-            reLabel.findAndConsume(values[3], labelsArray);
-            newTree.addChild(ObjectFactory::createLabelsTree(labelsArray),
-                             -1, nullptr);
-
             ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::masses, nullptr);
             masses.addChild(newTree, -1, nullptr);
 
@@ -156,7 +162,7 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getLinkLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 6);
+            re.fullMatchValues(line, values, 5);
 
             ValueTree linkTree;
             if (values[0].compare("link") == 0)
@@ -190,12 +196,6 @@ bool MDLParser::parseMDL(const File& f)
             linkTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
             linkTree.setProperty(Ids::startVertex, values[3].trim(), nullptr);
             linkTree.setProperty(Ids::endVertex, values[4].trim(), nullptr);
-
-            StringArray labelsArray;
-
-            reLabel.findAndConsume(values[5], labelsArray);
-            linkTree.addChild(ObjectFactory::createLabelsTree(labelsArray),
-                              -1, nullptr);
 
             ValueTree linksTree = mdlTree.getOrCreateChildWithName(Objects::links, nullptr);
             linksTree.addChild(linkTree, -1, nullptr);
@@ -263,7 +263,7 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getWaveguideLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 6);
+            re.fullMatchValues(line, values, 5);
 
             ValueTree waveguideTree(Ids::waveguide);
 
@@ -279,12 +279,6 @@ bool MDLParser::parseMDL(const File& f)
             waveguideTree.setProperty(Ids::startVertex, values[3].trim(), nullptr);
             waveguideTree.setProperty(Ids::endVertex, values[4].trim(), nullptr);
 
-            StringArray labelsArray;
-
-            reLabel.findAndConsume(values[5], labelsArray);
-            waveguideTree.addChild(ObjectFactory::createLabelsTree(labelsArray),
-                              -1, nullptr);
-
 			ValueTree wavesTree = mdlTree.getOrCreateChildWithName(Objects::waveguides, nullptr);
             wavesTree.addChild(waveguideTree, -1, nullptr);
 
@@ -292,7 +286,7 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getTerminationLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 5);
+            re.fullMatchValues(line, values, 4);
 
             Point<int> pos = getPos(line);
 
@@ -310,11 +304,6 @@ bool MDLParser::parseMDL(const File& f)
 
             terminationTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
 
-            StringArray labelsArray;
-            reLabel.findAndConsume(values[3], labelsArray);
-            terminationTree.addChild(ObjectFactory::createLabelsTree(labelsArray),
-                                     -1, nullptr);
-
             ValueTree terminations = mdlTree.getOrCreateChildWithName(Objects::terminations, nullptr);
             terminations.addChild(terminationTree, -1, nullptr);
 
@@ -322,7 +311,7 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getJunctionLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 5);
+            re.fullMatchValues(line, values, 4);
 
             Point<int> pos = getPos(line);
 
@@ -337,11 +326,6 @@ bool MDLParser::parseMDL(const File& f)
             junctTree.addChild(junctParams, -1, nullptr);
 
             junctTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
-
-            StringArray labelsArray;
-            reLabel.findAndConsume(values[3], labelsArray);
-            junctTree.addChild(ObjectFactory::createLabelsTree(labelsArray),
-                               -1, nullptr);
             
             ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
             junctsTree.addChild(junctTree, -1, nullptr);

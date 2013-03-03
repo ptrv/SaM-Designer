@@ -60,63 +60,46 @@ public:
 		expectEquals(params.getChild(0)[Ids::value].toString(), String("0.01"));
         // test 4
 		expectEquals(m.getChild(0)[Ids::identifier].toString(), String("m1"));
-		ValueTree labels = m.getChild(0).getChildWithName(Ids::labels);
-        // test 5
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("mass1"));
 
         //======================================================================
 		// mass 2
         //======================================================================
-        // test 6
+        // test 5
 		expectEquals(m.getChild(1).getType().toString(), Ids::mass.toString());
 		params = m.getChild(1).getChildWithName(Ids::parameters);
-        // test 7
+        // test 6
 		expectEquals(params.getChild(0)[Ids::value].toString(), String("0.01"));
-        // test 8
+        // test 7
 		expectEquals(m.getChild(1)[Ids::identifier].toString(), String("m2"));
-		labels = m.getChild(1).getChildWithName(Ids::labels);
-        // test 9
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("mass2"));
-//		expectEquals(labels[Ids::idx[1]].toString(), String("mmiddle"));
 
         //======================================================================
 		// mass 3
         //======================================================================
-        // test 10
+        // test 8
 		expectEquals(m.getChild(2).getType().toString(), Ids::mass.toString());
 		params = m.getChild(2).getChildWithName(Ids::parameters);
-        // test 11
+        // test 9
 		expectEquals(params.getChild(0)[Ids::value].toString(), String("0.03"));
-        // test 12
+        // test 10
 		expectEquals(m.getChild(2)[Ids::identifier].toString(), String("m3"));
-		labels = m.getChild(2).getChildWithName(Ids::labels);
-        // test 13
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("mass3"));
 
         //======================================================================
 		// port
         //======================================================================
-        // test 14
+        // test 11
 		expectEquals(m.getChild(3).getType().toString(), Ids::port.toString());
 //		params = m.getChild(3).getChildWithName(Ids::parameters);
-        // test 15
+        // test 12
 		expectEquals(m.getChild(3)[Ids::identifier].toString(), String("dev1"));
-		labels = m.getChild(3).getChildWithName(Ids::labels);
-        // test 16
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("port1"));
 
         //======================================================================
 		// ground
         //======================================================================
-        // test 17
+        // test 13
 		expectEquals(m.getChild(4).getType().toString(), Ids::ground.toString());
 //		params = m.getChild(4).getChildWithName(Ids::parameters);
-        // test 18
+        // test 14
 		expectEquals(m.getChild(4)[Ids::identifier].toString(), String("g"));
-		labels = m.getChild(4).getChildWithName(Ids::labels);
-        // test 19
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("ground1"));
-
 
 		beginTest("getLinks");
 
@@ -142,64 +125,54 @@ public:
 		expectEquals(ls.getChild(0)[Ids::startVertex].toString(), String("m1"));
         // test 8
 		expectEquals(ls.getChild(0)[Ids::endVertex].toString(), String("m2"));
-		labels = ls.getChild(0).getChildWithName(Ids::labels);
-        // test 9
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("link1"));
 
         //======================================================================
 		// link 2
         //======================================================================
-        // test 10
+        // test 9
 		expectEquals(ls.getChild(1).getType().toString(), Ids::link.toString(), "");
 		paramsStr = ls.getChild(1).getChildWithName(Ids::parameters);
-        // test 11
+        // test 10
 		expectEquals(paramsStr.getChild(0)[Ids::value].toString(), String("2.0*adjStiffness"));
-        // test 12
+        // test 11
 		expectEquals(paramsStr.getChild(1)[Ids::value].toString(), String("0.004"));
-        // test 13
+        // test 12
 		expectEquals(paramsStr.getChild(2)[Ids::value].toString(), String("0.0"));
-        // test 14
+        // test 13
 		expectEquals(ls.getChild(1)[Ids::identifier].toString(), String("l2"));
-        // test 15
+        // test 14
 		expectEquals(ls.getChild(1)[Ids::startVertex].toString(), String("m2"));
-        // test 16
+        // test 15
 		expectEquals(ls.getChild(1)[Ids::endVertex].toString(), String("m3"));
-		labels = ls.getChild(1).getChildWithName(Ids::labels);
-        // test 17
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("link2"));
-//		expectEquals(labels[Ids::idx[1]].toString(), String("thisl"));
 
         //======================================================================
 		// link 3
         //======================================================================
-        // test 18
+        // test 16
 		expectEquals(ls.getChild(2).getType().toString(), Ids::link.toString(), "");
 		paramsStr = ls.getChild(2).getChildWithName(Ids::parameters);
-        // test 19
+        // test 17
 		expectEquals(paramsStr.getChild(0)[Ids::value].toString(), String("2.0*adjStiffness"));
-        // test 20
+        // test 18
 		expectEquals(paramsStr.getChild(1)[Ids::value].toString(), String("0.005"));
-        // test 21
+        // test 19
 		expectEquals(paramsStr.getChild(2)[Ids::value].toString(), String("0.0"));
-        // test 22
+        // test 20
 		expectEquals(ls.getChild(2)[Ids::identifier].toString(), String("l3"));
-        // test 23
+        // test 21
 		expectEquals(ls.getChild(2)[Ids::startVertex].toString(), String("m2"));
-        // test 24
+        // test 22
 		expectEquals(ls.getChild(2)[Ids::endVertex].toString(), String("dev1"));
-		labels = ls.getChild(2).getChildWithName(Ids::labels);
-        // test 25
-		expectEquals(labels.getChild(0)[Ids::value].toString(), String("link3"));
 
-		beginTest("getLabels");
+		beginTest("getFaustcode");
 
-		ValueTree labelObjs = mdlFile->mdlRoot.getChildWithName(Objects::variables);
+		ValueTree faustcodeObjs = mdlFile->mdlRoot.getChildWithName(Objects::variables);
         // test 1
-		expect(labelObjs.getNumChildren() == 2, "have "+String(labelObjs.getNumChildren())+" variables");
+		expect(faustcodeObjs.getNumChildren() == 2, "have "+String(faustcodeObjs.getNumChildren())+" variables");
         // test 2
-        expectEquals(labelObjs.getChild(0)[Ids::faustCode].toString(), String("adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0);"));
+        expectEquals(faustcodeObjs.getChild(0)[Ids::faustCode].toString(), String("adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0);"));
 //        // test 3
-        expectEquals(labelObjs.getChild(1)[Ids::faustCode].toString(), String("outputDSP=highpass(4,20.0);"));
+        expectEquals(faustcodeObjs.getChild(1)[Ids::faustCode].toString(), String("outputDSP=highpass(4,20.0);"));
 
 //		beginTest("getWaveguides");
 //
@@ -212,8 +185,6 @@ public:
 //		params = waveObjs.getChild(0).getChildWithName(Ids::parameters);
 //		expectEquals(float(params[Ids::idx[0]]), 5.0f);
 //		expectEquals(float(params[Ids::idx[1]]), 0.01f);
-//		labels = waveObjs.getChild(0).getChildWithName(Ids::labels);
-//		expectEquals(labels[Ids::idx[0]].toString(), String("wglabel"));
 //		expectEquals(waveObjs.getChild(0)[Ids::objLeft].toString(), String("T1"));
 //		expectEquals(waveObjs.getChild(0)[Ids::objRight].toString(), String("junct1"));
 //
@@ -224,8 +195,6 @@ public:
 //		params = waveObjs.getChild(1).getChildWithName(Ids::parameters);
 //		expectEquals(float(params[Ids::idx[0]]), 5.0f);
 //		expectEquals(float(params[Ids::idx[1]]), 0.01f);
-//		labels = waveObjs.getChild(1).getChildWithName(Ids::labels);
-//		expectEquals(labels[Ids::idx[0]].toString(), String("wglabel2"));
 //		expectEquals(waveObjs.getChild(1)[Ids::objLeft].toString(), String("junct1"));
 //		expectEquals(waveObjs.getChild(1)[Ids::objRight].toString(), String("T2"));
 //
@@ -239,17 +208,12 @@ public:
 //		expectEquals(termObjs.getChild(0)[Ids::identifier].toString(), String("T1"));
 //		params = termObjs.getChild(0).getChildWithName(Ids::parameters);
 //		expectEquals(params[Ids::idx[0]].toString(), String("terminationFilter(0.1,5)"));
-//		labels = termObjs.getChild(0).getChildWithName(Ids::labels);
-//		expectEquals(labels[Ids::idx[0]].toString(), String("labelT"));
-//		expectEquals(labels[Ids::idx[1]].toString(), String("anotherTLabel"));
 //
 //		// termination 2
 //		expectEquals(termObjs.getChild(1).getType().toString(), Ids::termination.toString());
 //		expectEquals(termObjs.getChild(1)[Ids::identifier].toString(), String("T2"));
 //		params = termObjs.getChild(1).getChildWithName(Ids::parameters);
 //		expectEquals(params[Ids::idx[0]].toString(), String("terminationFilter(0.01,12)"));
-//		labels = termObjs.getChild(1).getChildWithName(Ids::labels);
-//		expectEquals(labels[Ids::idx[0]].toString(), String("labelT"));
 //
 //		beginTest("getJunctions");
 //
@@ -261,8 +225,6 @@ public:
 //		expectEquals(junctObjs.getChild(0)[Ids::identifier].toString(), String("junct1"));
 //		params = junctObjs.getChild(0).getChildWithName(Ids::parameters);
 //		expectEquals(float(params[Ids::idx[0]]), 0.01f);
-//		labels = junctObjs.getChild(0).getChildWithName(Ids::labels);
-//		expectEquals(labels[Ids::idx[0]].toString(), String("junctLabel"));
 
 		beginTest("getAudioObjects");
 

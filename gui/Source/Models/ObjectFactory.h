@@ -50,7 +50,6 @@ namespace ObjectFactory
                                       const String& startObject,
                                       const String& endObject);
     ValueTree createParamsTree(StringArray p);
-    ValueTree createLabelsTree(StringArray p);
 }
 }
 

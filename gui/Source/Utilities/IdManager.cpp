@@ -41,7 +41,7 @@ IdManager::~IdManager()
     massIds.clear();
     groundIds.clear();
     portIds.clear();
-    resonatorIds.clear();
+    resonatorsIds.clear();
     linkIds.clear();
     touchIds.clear();
     pluckIds.clear();
@@ -62,8 +62,8 @@ SortedSet<String>* IdManager::getSet(const Identifier& objId)
         return &groundIds;
     else if(objId == Ids::port)
         return &portIds;
-    else if(objId == Ids::resonator)
-        return &resonatorIds;
+    else if(objId == Ids::resonators)
+        return &resonatorsIds;
     else if(objId == Ids::link)
         return &linkIds;
     else if(objId == Ids::touch)
@@ -263,7 +263,7 @@ String IdManager::getObjNamePrefix(const Identifier& objId)
         return "g";
     else if(objId == Ids::port)
         return "dev";
-    else if(objId == Ids::resonator)
+    else if(objId == Ids::resonators)
         return "r";
     else if(objId == Ids::link)
         return "l";

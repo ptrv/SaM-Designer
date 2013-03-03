@@ -979,14 +979,6 @@ void ObjController::paste(ObjectsHolder* holder)
                     objectNamesOldNew.set(objName, newName);
                     objectNamesOldNewForAudio.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
-                    ValueTree objLabels = valTree.getChildWithName(Ids::labels);
-//                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
-//                    {
-//                        ValueTree label = objLabels.getChild(i);
-//                        String la = label.getProperty(Ids::value).toString();
-//                        la << copySuffix;
-//                        label.setProperty(Ids::value, la, nullptr);
-//                    }
                 }
                 else
                 {
@@ -1030,14 +1022,6 @@ void ObjController::paste(ObjectsHolder* holder)
                     objectNamesOldNewForAudio.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                 }
-                ValueTree objLabels = valTree.getChildWithName(Ids::labels);
-//                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
-//                    {
-//                        ValueTree label = objLabels.getChild(i);
-//                        String la = label.getProperty(Ids::value).toString();
-//                        la << copySuffix;
-//                        label.setProperty(Ids::value, la, nullptr);
-//                    }
                 String oldStartVertex = valTree[Ids::startVertex].toString();
                 String oldEndVertex = valTree[Ids::endVertex].toString();
 
@@ -1075,14 +1059,6 @@ void ObjController::paste(ObjectsHolder* holder)
                 objectNamesOldNew.set(objName, newName);
                 objectNamesOldNewForAudio.set(objName, newName);
                 valTree.setProperty(Ids::identifier, newName, nullptr);
-                ValueTree objLabels = valTree.getChildWithName(Ids::labels);
-//                    for (int i = 0; i < objLabels.getNumChildren(); ++i)
-//                    {
-//                        ValueTree label = objLabels.getChild(i);
-//                        String la = label.getProperty(Ids::value).toString();
-//                        la << copySuffix;
-//                        label.setProperty(Ids::value, la, nullptr);
-//                    }
             }
             else
             {

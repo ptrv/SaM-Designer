@@ -42,13 +42,13 @@ public:
         RegularExpression re;
         // test 1
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "mass(0.003,0.0,0.0),bounceme,(); # pos 100, 100"));
+                            "mass(0.003,0.0,0.0),bounceme; # pos 100, 100"));
         // test 2
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "mass(0.003,0.0,0.0),bounceme,();"));
+                            "mass(0.003,0.0,0.0),bounceme;"));
         // test 3
         expect(re.fullMatch(SAMRegex::getLinkLine(),
-                            "link(3200.0, 2.5, 0.00),touch2 , bounceme, dev1,();"));
+                            "link(3200.0, 2.5, 0.00),touch2 , bounceme, dev1;"));
         // test 4
         expect(re.fullMatch(SAMRegex::getAudioOutLine(),
                             "audioout,a3,bounceme*1.0; # pos 100, 100"));
@@ -63,37 +63,37 @@ public:
                             "faustcode: frequencyScaler = 0.3;"));
         // test 8
         expect(re.fullMatch(SAMRegex::getTerminationLine(),
-                            "termination(simpleStringTerm(-0.991,30) ),t1 ,(); #pos 100, 100"));
+                            "termination(simpleStringTerm(-0.991,30) ),t1; #pos 100, 100"));
         // test 9
         expect(re.fullMatch(SAMRegex::getTerminationLine(),
-                            "termination(simpleStringTerm(-0.991,30) ),t1 ,();"));
+                            "termination(simpleStringTerm(-0.991,30) ),t1;"));
         // test 10
         expect(re.fullMatch(SAMRegex::getJunctionLine(),
-                            "junction(0.0),junct1,(); # pos 100, 100"));
+                            "junction(0.0),junct1; # pos 100, 100"));
         // test 11
         expect(re.fullMatch(SAMRegex::getJunctionLine(),
-                            "junction(0.0),junct1,();"));
+                            "junction(0.0),junct1;"));
         // test 12
         expect(re.fullMatch(SAMRegex::getWaveguideLine(),
-                            "waveguide(0.5 ,simpleString(0.023, 0.023*frequencyScaler)),w4,t4, junct1,();"));
+                            "waveguide(0.5 ,simpleString(0.023, 0.023*frequencyScaler)),w4,t4, junct1;"));
         // test 13
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "port(),dev1,();"));
+                            "port(),dev1;"));
         // test 14
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "port(),dev1,(); # pos 100, 100"));
+                            "port(),dev1; # pos 100, 100"));
         // test 15
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "ground(0.0),g,(); # pos 100, 100"));
+                            "ground(0.0),g; # pos 100, 100"));
         // test 16
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "ground(0.0),g,();"));
+                            "ground(0.0),g;"));
         // test 17
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "resonator(200.0,1.5,0.01),r0,(); # pos 223,385"));
+                            "resonators(200.0,1.5,0.01),r0; # pos 223,385"));
         // test 18
         expect(re.fullMatch(SAMRegex::getVertexLine(),
-                            "resonator(200.0,1.5,0.01),r0,();"));
+                            "resonators(200.0,1.5,0.01),r0;"));
         // test 19
         expect(re.fullMatch(SAMRegex::getParamsLine(3),
                             "200.0,1.5,0.01"));
@@ -113,93 +113,96 @@ public:
         expect(re.fullMatch(SAMRegex::getParamsLine(2),
                             "simpleString(1.0, 0.001,3.0) , 8.0"));
         // test 25
-        StringArray labelArray;
-        re.findAndConsume("(\\w+)", "label_1, label2, label3", labelArray);
-        expect(labelArray[0].compare("label_1") == 0 &&
-               labelArray[1].compare("label2") == 0 &&
-               labelArray[2].compare("label3") == 0);
-        // test 26
         StringArray paramsArray;
         expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
                                   "(1.0 + randomTweak * (-0.799939)),0.0,0.0",
                                   paramsArray, 3));
-        // test 27
+        // test 26
         expect(paramsArray[0].compare("(1.0 + randomTweak * (-0.799939))") == 0 &&
                paramsArray[1].compare("0.0") == 0 &&
                paramsArray[2].compare("0.0") == 0);
 //        for (int i = 0; i < paramsArray.size(); ++i) {
 //            DBG(paramsArray[i]);
 //        }
-        // test 28
+        // test 27
         expect(re.partialMatch("\\A\\s*(faustcode):.*",
                                "faustcode: adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0);"));
-        // test29
+        // test28
         StringArray vals;
         expect(re.fullMatchValues(SAMRegex::getVertexLine(),
-                                  "mass(0.003,0.0,0.0),mass,(mass1);",
-                                  vals, 4));
-        // test 30
+                                  "mass(0.003,0.0,0.0),mass;",
+                                  vals, 3));
+        // test 29
         expect(re.fullMatch(SAMRegex::params, "0.5, simpleString(0.033, 0.033*frequencyScaler)"));
 
-        // test 31
+        // test 30
         StringArray vals2;
-        expect(re.fullMatchValues(SAMRegex::getWaveguideLine(), "waveguide(0.5, simpleString(0.033, 0.033*frequencyScaler)),w3,t3 ,junct1,();",
-                                  vals2, 6));
-        // test 32
+        expect(re.fullMatchValues(SAMRegex::getWaveguideLine(), "waveguide(0.5, simpleString(0.033, 0.033*frequencyScaler)),w3,t3 ,junct1;",
+                                  vals2, 5));
+        // test 31
         expect(vals2[0].compare("waveguide") == 0 &&
                vals2[1].compare("0.5, simpleString(0.033, 0.033*frequencyScaler)") == 0 &&
                vals2[2].compare("w3") == 0 &&
                vals2[3].compare("t3") == 0 &&
-               vals2[4].compare("junct1") == 0 &&
-               vals2[5].compare("") == 0);
-        // test 33
+               vals2[4].compare("junct1") == 0);
+        // test 32
         StringArray vals3;
         expect(re.fullMatchValues(SAMRegex::getVertexLine(),
-                                  "mass(massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0),mn0xn20y,();",
-                                  vals3, 5));
-        // test 34
+                                  "mass(massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0),mn0xn20y;",
+                                  vals3, 4));
+        // test 33
         expect(vals3[0].compare("mass") == 0 &&
                vals3[1].compare("massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0") == 0 &&
                vals3[2].compare("mn0xn20y") == 0 &&
-               vals3[3].compare("") == 0 &&
-               vals3[4].compare("") == 0);
-        // test 35
+               vals3[3].compare("") == 0);
+
+        // test 34
         StringArray vals4;
         expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
                                   "massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0",
                                   vals4, 3));
-        // test 36
+        // test 35
         expect(vals4[0].compare("massMembrane*(1.0 + randomTweak*(-0.799939))") == 0 &&
                vals4[1].compare("0.0") == 0 &&
                vals4[2].compare("0.0") == 0);
 
-        // test 37
+        // test 36
         expect(re.fullMatch(SAMRegex::getCommentObjectLine(),
                             "## comment(\"Test\", 16, ff000000),c1; # pos 200, 100"));
 
-        // test 38
+        // test 37
         StringArray commentVals;
         expect(re.fullMatchValues(SAMRegex::getCommentObjectLine(),
                                   "## comment(\"Test\", 16, ff000000),comment1; # pos 200, 100",
                                   commentVals, 4));
 
-        // test 39
-        DBG(commentVals.joinIntoString(" "));
+        // test 38
         expect(commentVals[0].compare("comment") == 0 &&
                commentVals[1].compare("\"Test\", 16, ff000000") == 0 &&
                commentVals[2].compare("comment1") == 0 &&
                commentVals[3].compare("# pos 200, 100") == 0);
 
-        // test 40
+        // test 39
         StringArray commentParams;
         expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
                                   "\"Test\", 16, ff000000",
                                   commentParams, 3));
 
-        // test 41
+        // test 40
         expect(commentParams[0].removeCharacters("\\\"").compare("Test") == 0 &&
                commentParams[1].compare("16") == 0 &&
                commentParams[2].compare("ff000000") == 0);
+
+        // test 41
+        StringArray resonatorsParams;
+        String reResStr;
+        reResStr << "\\s*" << SAMRegex::paramsDetailRes << "\\s*[,]*";
+        RegularExpression reResonators(reResStr);
+        reResonators.findAndConsume("0.001, 0.3, 0.1,0.001, 0.3, 0.1,200.0,decayTime*1.0,0.01",
+                                    resonatorsParams);
+        expect(resonatorsParams.size() == 9);
+
+
     }
 };
 

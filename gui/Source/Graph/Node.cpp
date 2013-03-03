@@ -48,7 +48,7 @@ Node::Node(ValueTree data)
     {
 
     }
-    else if(data.getType() == Ids::resonator)
+    else if(data.getType() == Ids::resonators)
     {
 
     }

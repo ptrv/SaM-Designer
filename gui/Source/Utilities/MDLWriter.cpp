@@ -62,17 +62,7 @@ String MDLWriter::getMDLString()
 		}
 		mdlContent << "),";
 		mdlContent << mo[Ids::identifier].toString();
-		mdlContent << ",(";
-		ValueTree labelTree = mo.getChildWithName(Ids::labels);
-		for (int j = 0; j < labelTree.getNumChildren(); ++j)
-        {
-            ValueTree label = labelTree.getChild(j);
-            mdlContent << label.getProperty(Ids::value).toString();
-
-			if(j != labelTree.getNumChildren()-1)
-				mdlContent << ",";
-		}
-		mdlContent << ");";
+		mdlContent << ";";
 		mdlContent << " # pos " << mo.getProperty(Ids::posX, "0").toString() << "," << mo.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 	}
@@ -99,17 +89,7 @@ String MDLWriter::getMDLString()
 		mdlContent << li[Ids::startVertex].toString();
 		mdlContent << ",";
 		mdlContent << li[Ids::endVertex].toString();
-		mdlContent << ",(";
-		ValueTree labelTree = li.getChildWithName(Ids::labels);
-		for (int j = 0; j < labelTree.getNumChildren(); ++j) {
-
-            ValueTree label = labelTree.getChild(j);
-            mdlContent << label.getProperty(Ids::value).toString();
-
-			if(j != labelTree.getNumChildren()-1)
-				mdlContent << ",";
-		}
-		mdlContent << ");";
+		mdlContent << ";";
 		mdlContent << "\n";
 	}
 
@@ -135,16 +115,7 @@ String MDLWriter::getMDLString()
 		mdlContent << wo[Ids::startVertex].toString();
 		mdlContent << ",";
 		mdlContent << wo[Ids::endVertex].toString();
-		mdlContent << ",(";
-		ValueTree labelTree = wo.getChildWithName(Ids::labels);
-		for (int n = 0; n < labelTree.getNumChildren(); ++n) {
-            ValueTree label = labelTree.getChild(n);
-            mdlContent << label.getProperty(Ids::value).toString();
-
-			if(n != labelTree.getNumChildren()-1)
-				mdlContent << ",";
-		}
-		mdlContent << ");";
+		mdlContent << ";";
 		mdlContent << "\n";
 
 	}
@@ -163,16 +134,7 @@ String MDLWriter::getMDLString()
 
 		mdlContent << "),";
 		mdlContent << to[Ids::identifier].toString();
-		mdlContent << ",(";
-		ValueTree labelTree = to.getChildWithName(Ids::labels);
-		for (int p = 0; p < labelTree.getNumChildren(); ++p) {
-            ValueTree label = labelTree.getChild(p);
-            mdlContent << label.getProperty(Ids::value).toString();
-
-			if(p != labelTree.getNumChildren()-1)
-				mdlContent << ",";
-		}
-		mdlContent << ");";
+		mdlContent << ";";
 		mdlContent << " # pos " << to.getProperty(Ids::posX, "0").toString() << "," << to.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 
@@ -189,16 +151,7 @@ String MDLWriter::getMDLString()
 		mdlContent << junctP.getProperty(Ids::value).toString();
 		mdlContent << "),";
 		mdlContent << jo[Ids::identifier].toString();
-		mdlContent << ",(";
-		ValueTree labelTree = jo.getChildWithName(Ids::labels);
-		for (int q = 0; q < labelTree.getNumChildren(); ++q) {
-            ValueTree label = labelTree.getChild(q);
-            mdlContent << label.getProperty(Ids::value).toString();
-
-			if(q != labelTree.getNumChildren()-1)
-				mdlContent << ",";
-		}
-		mdlContent << ");";
+		mdlContent << ";";
 		mdlContent << " # pos " << jo.getProperty(Ids::posX, "0").toString() << "," << jo.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
 

@@ -53,7 +53,7 @@ private:
     SortedSet<String> massIds;
     SortedSet<String> groundIds;
     SortedSet<String> portIds;
-    SortedSet<String> resonatorIds;
+    SortedSet<String> resonatorsIds;
     SortedSet<String> linkIds;
     SortedSet<String> touchIds;
     SortedSet<String> pluckIds;

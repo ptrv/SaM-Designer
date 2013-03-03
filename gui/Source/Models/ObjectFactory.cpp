@@ -49,11 +49,6 @@ static ValueTree createNewMassTree(const String& newName, int x, int y)
 	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
 	newTree.addChild(paramsTree, -1, nullptr);
 	newTree.setProperty(Ids::identifier, newName, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//    l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
@@ -65,11 +60,6 @@ static ValueTree createNewPortTree(const String& newName, int x, int y)
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//    l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
@@ -89,36 +79,26 @@ static ValueTree createNewGroundTree(const String& newName, int x, int y)
     paramsTree.addChild(pa1, -1, nullptr);
 	newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//    l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
 
-static ValueTree createNewResonatorTree(const String& newName, int x, int y)
+static ValueTree createNewResonatorsTree(const String& newName, int x, int y)
 {
     StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::resonator);
+	ValueTree newTree(Ids::resonators);
 
 	newTree.setProperty(Ids::posX, x, nullptr);
 	newTree.setProperty(Ids::posY, y, nullptr);
 
     StringArray p;
-    p.add(settings.getDefaultValue("resonator_frequency", "200.0"));
-    p.add(settings.getDefaultValue("resonator_decay_time", "1.5"));
-    p.add(settings.getDefaultValue("resonator_eq_mass", "0.01"));
+    p.add(settings.getDefaultValue("resonators_frequency", "200.0"));
+    p.add(settings.getDefaultValue("resonators_decay_time", "1.5"));
+    p.add(settings.getDefaultValue("resonators_eq_mass", "0.01"));
 
 	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//	l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
@@ -138,11 +118,6 @@ static ValueTree createNewLinkTree(const String& newName,
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//	l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
@@ -162,11 +137,6 @@ static ValueTree createNewTouchTree(const String& newName,
     newTree.setProperty(Ids::identifier, newName, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//	l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
@@ -187,11 +157,6 @@ static ValueTree createNewPluckTree(const String& newName,
 	newTree.setProperty(Ids::identifier, newName, nullptr);
 	newTree.setProperty(Ids::startVertex, startObject, nullptr);
 	newTree.setProperty(Ids::endVertex, endObject, nullptr);
-	ValueTree labelsTree(Ids::labels);
-//    ValueTree l1(Ids::label);
-//	l1.setProperty(Ids::value, "", nullptr);
-//    labelsTree.addChild(l1, -1, nullptr);
-	newTree.addChild(labelsTree, -1, nullptr);
 
 	return newTree;
 }
@@ -212,8 +177,6 @@ static ValueTree createNewWaveguideTree(const String& newName,
     newTree.setProperty(Ids::identifier, newName, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
     newTree.setProperty(Ids::endVertex, endObject, nullptr);
-    ValueTree labelsTree(Ids::labels);
-    newTree.addChild(labelsTree, -1, nullptr);
 
     return newTree;
 }
@@ -234,8 +197,6 @@ static ValueTree createNewTerminationTree(const String& newName, int x, int y)
 
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
-    ValueTree labelsTree(Ids::labels);
-    newTree.addChild(labelsTree, -1, nullptr);
 
     return newTree;
 }
@@ -256,8 +217,6 @@ static ValueTree createNewJunctionTree(const String& newName, int x, int y)
 
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
-    ValueTree labelsTree(Ids::labels);
-    newTree.addChild(labelsTree, -1, nullptr);
 
     return newTree;
 }
@@ -298,8 +257,8 @@ ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
 		return createNewPortTree(newName, x, y);
 	else if(objType == Ids::ground)
 		return createNewGroundTree(newName, x, y);
-	else if(objType == Ids::resonator)
-		return createNewResonatorTree(newName, x, y);
+	else if(objType == Ids::resonators)
+		return createNewResonatorsTree(newName, x, y);
 	else if(objType == Ids::audioout)
 		return createNewAudioOutTree(newName, x, y);
     else if(objType == Ids::junction)
@@ -338,16 +297,4 @@ ValueTree ObjectFactory::createParamsTree(StringArray p)
         paramsTree.addChild(value, -1, nullptr);
     }
     return paramsTree;
-}
-
-ValueTree ObjectFactory::createLabelsTree(StringArray p)
-{
-    ValueTree labelsTree(Ids::labels);
-    for (int i = 0; i < p.size(); ++i)
-    {
-        ValueTree label(Ids::label);
-        label.setProperty(Ids::value, p[i].trim(), nullptr);
-        labelsTree.addChild(label, -1, nullptr);
-    }
-    return labelsTree;
 }

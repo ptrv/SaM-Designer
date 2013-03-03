@@ -45,6 +45,7 @@ public:
     static const char* faustName;
     static const char* faustCode;
     static const char* paramsDetail;
+    static const char* paramsDetailRes;
     static const char* word;
     static const char* commentObject;
     

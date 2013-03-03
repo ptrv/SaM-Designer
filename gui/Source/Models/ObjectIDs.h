@@ -40,11 +40,10 @@ namespace Ids
 	DECLARE_ID (mass);
 	DECLARE_ID (port);
 	DECLARE_ID (ground);
-	DECLARE_ID (resonator);
+	DECLARE_ID (resonators);
 	DECLARE_ID (link);
 	DECLARE_ID (pluck);
 	DECLARE_ID (touch);
-	DECLARE_ID (label);
 	DECLARE_ID (audioout);
 	DECLARE_ID (waveguide);
 	DECLARE_ID (termination);
@@ -56,7 +55,6 @@ namespace Ids
     DECLARE_ID (kg);
     DECLARE_ID (initPos);
     DECLARE_ID (initVel);
-    DECLARE_ID (labels);
     DECLARE_ID (posX);
     DECLARE_ID (posY);
     DECLARE_ID (stiffness);

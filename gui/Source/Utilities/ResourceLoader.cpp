@@ -46,7 +46,7 @@ void ResourceLoader::initObjectIconMap()
 {
 	objectIcons.set(Ids::mass.toString(),"mass.svg");
 	objectIcons.set(Ids::port.toString(), "port.svg");
-	objectIcons.set(Ids::resonator.toString(), "resonator.svg");
+	objectIcons.set(Ids::resonators.toString(), "resonator.svg");
 	objectIcons.set(Ids::ground.toString(), "ground.svg");
 	objectIcons.set(Ids::link.toString(), "link.svg");
 	objectIcons.set(Ids::touch.toString(), "touch.svg");

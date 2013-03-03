@@ -177,9 +177,7 @@ public:
 	  laPos("laPos", "Position (m)"),
 	  tePos("tePos"),
 	  laVel("laVel", "Velocity (m/s)"),
-	  teVel("teVel"),
-	  laLabels("laLabels", "Labels"),
-	  teLabels("teLabels")
+	  teVel("teVel")
 	{
         teMass.addListener(this);
 		addAndMakeVisible(&teMass);
@@ -190,9 +188,6 @@ public:
         teVel.addListener(this);
 		addAndMakeVisible(&teVel);
 		laVel.attachToComponent(&teVel, true);
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
 
 		readValues();
 	}
@@ -209,21 +204,15 @@ public:
 		teMass.setBounds(100 , 40, getWidth() - 110, 22);
 		tePos.setBounds(100 , 70, getWidth() - 110, 22);
 		teVel.setBounds(100 , 100, getWidth() - 110, 22);
-		teLabels.setBounds(100, 130, getWidth() - 110, 22);
 	}
 
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		teMass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		tePos.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-		teVel.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
-		String labelText;
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
+        teMass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        tePos.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+        teVel.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+
 	}
 	bool writeValues()
 	{
@@ -250,26 +239,15 @@ public:
         ValueTree pa1 = paramsTree.getChild(0);
         ValueTree pa2 = paramsTree.getChild(1);
         ValueTree pa3 = paramsTree.getChild(2);
-        pa1.setProperty(Ids::value, 
+        pa1.setProperty(Ids::value,
                         Utils::fixParameterValueIfNeeded(teMass.getText()),
                         undoManager);
         pa2.setProperty(Ids::value,
                         Utils::fixParameterValueIfNeeded(tePos.getText()),
                         undoManager);
         pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(teVel.getText()), 
+                        Utils::fixParameterValueIfNeeded(teVel.getText()),
                         undoManager);
-        ValueTree labelsTree = data.getChildWithName(Ids::labels);
-        labelsTree.removeAllChildren(undoManager);
-        String labelsString = teLabels.getText();
-        StringArray labelsArray;
-        labelsArray.addTokens(labelsString, ",", "\"");
-        for (int i = 0; i < labelsArray.size(); ++i)
-        {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-        }
         
         // Change object reference in attached links
 //        objController->changeObjectNameInLink(oldName, newName, undoManager);
@@ -282,8 +260,6 @@ private:
 	TextEditor tePos;
 	Label laVel;
 	TextEditor teVel;
-	Label laLabels;
-	TextEditor teLabels;
 
 };
 
@@ -294,14 +270,8 @@ public:
                          ObjController* objController_,
                          ValueTree data_,
                          UndoManager* undoManager_)
-	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
-	  laLabels("laLabels", "Labels"),
-	  teLabels("teLabels")
+	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_)
 	{
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
-
 		readValues();
 	}
 
@@ -313,19 +283,11 @@ public:
 	void resized()
 	{
 		ObjectPropertiesComponent::resized();
-
-		teLabels.setBounds(100, 40, getWidth() - 110, 22);
 	}
 
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
-
 	}
 
 	bool writeValues()
@@ -349,21 +311,8 @@ public:
             data.setProperty(Ids::identifier, newName, undoManager);
         }
 
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
-        labelsTree.removeAllChildren(undoManager);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-        }
         return true;
 	}
-	Label laLabels;
-	TextEditor teLabels;
-
 private:
 };
 
@@ -379,10 +328,7 @@ public:
 	  laDecay("laDecay", "Decay (sec)"),
 	  teDecay("teDecay"),
 	  laEqMass("laEqMass", "Mass (kg)"),
-	  teEqMass("teEqMass"),
-	  laLabels("laLabels", "Labels"),
-	  teLabels("teLabels")
-
+	  teEqMass("teEqMass")
 	{
         teFreq.addListener(this);
 		addAndMakeVisible(&teFreq);
@@ -393,9 +339,6 @@ public:
         teEqMass.addListener(this);
 		addAndMakeVisible(&teEqMass);
 		laEqMass.attachToComponent(&teEqMass, true);
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
 
 		readValues();
 	}
@@ -411,21 +354,28 @@ public:
 		teFreq.setBounds(100 , 40, getWidth() - 110, 22);
 		teDecay.setBounds(100 , 70, getWidth() - 110, 22);
 		teEqMass.setBounds(100 , 100, getWidth() - 110, 22);
-		teLabels.setBounds(100, 130, getWidth() - 110, 22);
-
 	}
 
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
-		teFreq.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		teDecay.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-		teEqMass.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
+
+        String valFreq, valDecay, valEqMass;
+
+        int numRes = data.getChildWithName(Ids::parameters).getNumChildren() / 3;
+        jassert(numRes != 0);
+        for (int i = 0; i < numRes; ++i)
+        {
+            String delim = ",";
+            if (i == 0)
+                delim = "";
+            valFreq << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 0)[Ids::value].toString();
+            valDecay << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 1)[Ids::value].toString();
+            valEqMass << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 2)[Ids::value].toString();
+        }
+		teFreq.setText(valFreq);
+		teDecay.setText(valDecay);
+		teEqMass.setText(valEqMass);
 
 	}
 
@@ -451,30 +401,38 @@ public:
         }
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-        ValueTree pa1 = paramsTree.getChild(0);
-        ValueTree pa2 = paramsTree.getChild(1);
-        ValueTree pa3 = paramsTree.getChild(2);
-        pa1.setProperty(Ids::value, 
-                        Utils::fixParameterValueIfNeeded(teFreq.getText()),
-                        undoManager);
-        pa2.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(teDecay.getText()),
-                        undoManager);
-        pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(teEqMass.getText()), 
-                        undoManager);
-        ValueTree labelsTree = data.getChildWithName(Ids::labels);
-        labelsTree.removeAllChildren(undoManager);
-        String labelsString = teLabels.getText();
-        StringArray labelsArray;
-        labelsArray.addTokens(labelsString, ",", "\"");
-        for (int i = 0; i < labelsArray.size(); ++i)
+
+        String valFreq = teFreq.getText();
+        String valDecay = teDecay.getText();
+        String valEqMass = teEqMass.getText();
+
+        StringArray freqArr;
+        freqArr.addTokens(valFreq, ",", "\"");
+        StringArray decayArr;
+        decayArr.addTokens(valDecay, ",", "\"");
+        StringArray eqMassArr;
+        eqMassArr.addTokens(valEqMass, ",", "\"");
+        paramsTree.removeAllChildren(undoManager);
+
+        int numRes = jmin<int>(freqArr.size(), decayArr.size(), eqMassArr.size());
+        for (int k = 0; k < numRes; ++k)
         {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
+            ValueTree pa1(Ids::parameter);
+            ValueTree pa2(Ids::parameter);
+            ValueTree pa3(Ids::parameter);
+            pa1.setProperty(Ids::value, 
+                            Utils::fixParameterValueIfNeeded(freqArr[k]),
+                            undoManager);
+            pa2.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(decayArr[k]),
+                            undoManager);
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(eqMassArr[k]),
+                            undoManager);
+            paramsTree.addChild(pa1, -1, undoManager);
+            paramsTree.addChild(pa2, -1, undoManager);
+            paramsTree.addChild(pa3, -1, undoManager);
         }
-        
         return true;
 	}
 
@@ -485,8 +443,6 @@ private:
 	TextEditor teDecay;
 	Label laEqMass;
 	TextEditor teEqMass;
-	Label laLabels;
-	TextEditor teLabels;
 };
 
 class GroundPropertiesComponent : public ObjectPropertiesComponent {
@@ -496,14 +452,9 @@ public:
                          ValueTree data_,
                          UndoManager* undoManager_)
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
-	  laLabels("laLabels", "Labels"),
-	  teLabels("teLabels"),
 	  laPos("laPos", "Position (m)"),
 	  tePos("tePos")
 	{
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
         tePos.addListener(this);
 		addAndMakeVisible(&tePos);
 		laPos.attachToComponent(&tePos, true);
@@ -520,19 +471,12 @@ public:
 		ObjectPropertiesComponent::resized();
 
 		tePos.setBounds(100 , 40, getWidth() - 110, 22);
-		teLabels.setBounds(100, 70, getWidth() - 110, 22);
 	}
 
 	void readValues()
 	{
 		teName.setText(data[Ids::identifier].toString());
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
-
 	}
 
 	bool writeValues()
@@ -559,21 +503,10 @@ public:
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, tePos.getText(), undoManager);
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-		}
         return true;
 	}
 
 private:
-	Label laLabels;
-	TextEditor teLabels;
 	Label laPos;
 	TextEditor tePos;
 
@@ -592,8 +525,6 @@ public:
         teDamp("teDamp"),
         laPos("laPos", "Position offset (m)"),
         tePos("tePos"),
-        laLabels("laLabels", "Labels"),
-        teLabels("teLabels"),
         laStartVertex("laStartVertex", "Start Vertex"),
         teStartVertex("teStartVertex"),
         laEndVertex("laEndVertex", "End Vertex"),
@@ -614,9 +545,6 @@ public:
         tePos.addListener(this);
 		addAndMakeVisible(&tePos);
 		laPos.attachToComponent(&tePos, true);
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
         teStartVertex.setReadOnly(true);
         teStartVertex.addListener(this);
         teStartVertex.setColour(TextEditor::textColourId, Colours::darkgrey);
@@ -652,9 +580,8 @@ public:
             offset = 30;
         }
 		tePos.setBounds(100 , 100+offset, getWidth() - 110, 22);
-		teLabels.setBounds(100, 130+offset, getWidth() - 110, 22);
-        teStartVertex.setBounds(100, 160+offset, getWidth() - 110, 22);
-        teEndVertex.setBounds(100, 190+offset, getWidth() - 110, 22);
+        teStartVertex.setBounds(100, 130+offset, getWidth() - 110, 22);
+        teEndVertex.setBounds(100, 160+offset, getWidth() - 110, 22);
 	}
 
 	void readValues()
@@ -669,11 +596,6 @@ public:
             ++offset;
         }
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2+offset)[Ids::value].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
         teStartVertex.setText(data[Ids::startVertex].toString());
         teEndVertex.setText(data[Ids::endVertex].toString());
 	}
@@ -727,16 +649,6 @@ public:
                             Utils::fixParameterValueIfNeeded(tePos.getText()),
                             undoManager);
         }
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
-        labelsTree.removeAllChildren(undoManager);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-		}
         return true;
 	}
 
@@ -747,8 +659,6 @@ private:
 	TextEditor teDamp;
 	Label laPos;
 	TextEditor tePos;
-	Label laLabels;
-	TextEditor teLabels;
     Label laStartVertex;
     TextEditor teStartVertex;
     Label laEndVertex;
@@ -864,8 +774,6 @@ public:
       teWaveImp("teWaveImp"),
       laStringType("laStringType", "String type"),
       teStringType("teStringType"),
-      laLabels("laLabels", "Labels"),
-      teLabels("teLabels"),
       laLeftObj("laLeftObj", "Left object"),
       teLeftObj("teLeftObj"),
       laRightObj("laRightObj", "Right object"),
@@ -877,9 +785,6 @@ public:
         teStringType.addListener(this);
 		addAndMakeVisible(&teStringType);
 		laStringType.attachToComponent(&teStringType, true);
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
         teLeftObj.setReadOnly(true);
         teLeftObj.addListener(this);
         teLeftObj.setColour(TextEditor::textColourId, Colours::darkgrey);
@@ -902,7 +807,6 @@ public:
 
         teWaveImp.setBounds(100, 40, getWidth() - 110, 22);
 		teStringType.setBounds(100 , 70, getWidth() - 110, 22);
-        teLabels.setBounds(100, 100, getWidth() - 110, 22);
         teLeftObj.setBounds(100, 130, getWidth() - 110, 22);
         teRightObj.setBounds(100, 160, getWidth() - 110, 22);
 	}
@@ -912,11 +816,6 @@ public:
         teName.setText(data[Ids::identifier].toString());
 		teWaveImp.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		teStringType.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
         teLeftObj.setText(data[Ids::startVertex].toString());
         teRightObj.setText(data[Ids::endVertex].toString());
 	}
@@ -952,16 +851,6 @@ public:
                         undoManager);
         pa2.setProperty(Ids::value, teStringType.getText(), undoManager);
 
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
-        labelsTree.removeAllChildren(undoManager);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-		}
         return true;
 	}
 
@@ -970,8 +859,6 @@ private:
 	TextEditor teWaveImp;
     Label laStringType;
 	TextEditor teStringType;
-	Label laLabels;
-	TextEditor teLabels;
     Label laLeftObj;
     TextEditor teLeftObj;
     Label laRightObj;
@@ -986,13 +873,8 @@ public:
                          UndoManager* undoManager_)
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
       laTermType("laTermType", "Type"),
-	  teTermType("teTermType"),
-      laLabels("laLabels", "Labels"),
-	  teLabels("teLabels")
+	  teTermType("teTermType")
 	{
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
         teTermType.addListener(this);
 		addAndMakeVisible(&teTermType);
 		laTermType.attachToComponent(&teTermType, true);
@@ -1009,19 +891,12 @@ public:
 		ObjectPropertiesComponent::resized();
 
         teTermType.setBounds(100, 40, getWidth() - 110, 22);
-		teLabels.setBounds(100, 70, getWidth() - 110, 22);
 	}
 
 	void readValues()
     {
         teName.setText(data[Ids::identifier].toString());
 		teTermType.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
-
 	}
 
 	bool writeValues()
@@ -1048,23 +923,12 @@ public:
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, teTermType.getText(), undoManager);
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-		}
         return true;
 	}
 
 private:
 	Label laTermType;
 	TextEditor teTermType;
-    Label laLabels;
-	TextEditor teLabels;
 };
 
 class JunctionPropertiesComponent : public ObjectPropertiesComponent {
@@ -1074,14 +938,9 @@ public:
                          ValueTree data_,
                          UndoManager* undoManager_)
 	: ObjectPropertiesComponent(op_, objController_, data_, undoManager_),
-      laLabels("laLabels", "Labels"),
-	  teLabels("teLabels"),
 	  laPos("laPos", "Displacement (m)"),
 	  tePos("tePos")
 	{
-        teLabels.addListener(this);
-		addAndMakeVisible(&teLabels);
-		laLabels.attachToComponent(&teLabels, true);
         tePos.addListener(this);
 		addAndMakeVisible(&tePos);
 		laPos.attachToComponent(&tePos, true);
@@ -1098,18 +957,12 @@ public:
 		ObjectPropertiesComponent::resized();
 
         tePos.setBounds(100, 40, getWidth() - 110, 22);
-		teLabels.setBounds(100, 70, getWidth() - 110, 22);
 	}
 
 	void readValues()
     {
         teName.setText(data[Ids::identifier].toString());
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-		StringArray labelsArray;
-		for (int i = 0; i < data.getChildWithName(Ids::labels).getNumChildren(); ++i) {
-			labelsArray.add(data.getChildWithName(Ids::labels).getChild(i)[Ids::value].toString());
-		}
-		teLabels.setText(labelsArray.joinIntoString(","));
 	}
 
 	bool writeValues()
@@ -1136,21 +989,10 @@ public:
 		ValueTree paramsTree = data.getChildWithName(Ids::parameters);
         ValueTree param = paramsTree.getChild(0);
         param.setProperty(Ids::value, tePos.getText(), undoManager);
-		ValueTree labelsTree = data.getChildWithName(Ids::labels);
-		String labelsString = teLabels.getText();
-		StringArray labelsArray;
-		labelsArray.addTokens(labelsString, ",", "\"");
-		for (int i = 0; i < labelsArray.size(); ++i) {
-            ValueTree label(Ids::label);
-            label.setProperty(Ids::value, labelsArray[i].trim(), undoManager);
-            labelsTree.addChild(label, -1, undoManager);
-		}
         return true;
 	}
 
 private:
-    Label laLabels;
-	TextEditor teLabels;
 	Label laPos;
 	TextEditor tePos;
 };
@@ -1178,7 +1020,7 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
         comp = new PortPropertiesComponent(this, objController,
                                            caller->getData(), undoManager_);
 	}
-	else if(caller->getData().getType() == Ids::resonator)
+	else if(caller->getData().getType() == Ids::resonators)
     {
         comp = new ResonatorPropertiesComponent(this, objController,
                                                 caller->getData(), undoManager_);

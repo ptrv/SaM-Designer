@@ -331,7 +331,7 @@ bool ObjectComponent::canBeConnected(const Identifier& objId)
 bool ObjectComponent::canBeConnectedToLinks()
 {
     if(data.getType() == Ids::mass || data.getType() == Ids::ground ||
-        data.getType() == Ids::port || data.getType() == Ids::resonator)
+        data.getType() == Ids::port || data.getType() == Ids::resonators)
         return true;
     else if(data.getType() == Ids::junction)
     {

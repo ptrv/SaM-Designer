@@ -130,13 +130,12 @@ void RegularExpression::findAndConsume(const String& subject_, StringArray& resu
     
     re2::StringPiece input(subject.toUTF8().getAddress());
 
-    bool match = true;
-    
-    while (match)
+    std::string word;
+
+    while (RE2::Consume(&input, regex, &word))
     {
-        std::string word;
-        match = RE2::FindAndConsume(&input, regex, &word);
-        if(match)
-            result.add(word.c_str());
+        if(word.empty())
+            break;
+        result.add(word.c_str());
     }
 }

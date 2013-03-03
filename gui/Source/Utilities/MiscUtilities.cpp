@@ -147,8 +147,8 @@ String Utils::getObjectTypeAsString(const Identifier& objType)
 		return "Port";
 	else if(objType == Ids::ground)
 		return "Ground";
-	else if(objType == Ids::resonator)
-		return "Resonator";
+	else if(objType == Ids::resonators)
+		return "Resonators";
 	else if(objType == Ids::link)
 		return "Link";
 	else if(objType == Ids::touch)
@@ -304,7 +304,7 @@ BaseObjectComponent* Utils::getBaseObjectFromSource(ObjController* objController
 const Identifier& Utils::getObjectGroup(const Identifier& ident)
 {
     if(ident == Ids::mass || ident == Ids::port
-            || ident == Ids::ground	|| ident == Ids::resonator)
+            || ident == Ids::ground	|| ident == Ids::resonators)
         return Objects::masses;
     else if(ident == Ids::link || ident == Ids::touch
             || ident == Ids::pluck)

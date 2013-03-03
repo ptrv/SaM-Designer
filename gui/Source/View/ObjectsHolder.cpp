@@ -334,8 +334,8 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         break;
     case CommandIDs::insertResonator:
         objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::resonator,
-                                                                      objController.getNewNameForObject(Ids::resonator),
+                                   ObjectFactory::createNewObjectTree(Ids::resonators,
+                                                                      objController.getNewNameForObject(Ids::resonators),
                                                                       mp.x, mp.y));
         break;
     case CommandIDs::insertPort:
@@ -511,8 +511,8 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
     else if (r == 3)
     {
         objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::resonator,
-                                                                      objController.getNewNameForObject(Ids::resonator),
+                                   ObjectFactory::createNewObjectTree(Ids::resonators,
+                                                                      objController.getNewNameForObject(Ids::resonators),
                                                                       mPos.x, mPos.y));
     }
     else if (r == 4)

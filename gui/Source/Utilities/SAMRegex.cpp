@@ -34,7 +34,7 @@ const char* SAMRegex::label = "([a-zA-Z\\d]*)";
 const char* SAMRegex::labels = "([a-zA-Z,\\d\\s]*)";
 const char* SAMRegex::param = "(\\s*[^\\n\\r\\a\\033\\f,]*\\s*)";
 const char* SAMRegex::params = "(\\s*[^\\n\\r\\a\\033\\f]*\\s*)";
-const char* SAMRegex::vertex = "(mass|port|ground|resonator)";
+const char* SAMRegex::vertex = "(mass|port|ground|resonators)";
 const char* SAMRegex::link = "(link|pluck|touch)";
 const char* SAMRegex::audioOutDetails = "(.+)";
 const char* SAMRegex::faustName = "\\A\\s*(faustcode):.*";
@@ -42,6 +42,8 @@ const char* SAMRegex::faustName = "\\A\\s*(faustcode):.*";
 const char* SAMRegex::faustCode = "(.+)";
 //const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*]+|[a-zA-Z]*\\([a-zA-Z\\.\\d,\\s*]*\\))"";
 const char* SAMRegex::paramsDetail = "([\\d\\.]*|[\\d\\.\\*a-zA-Z]*|[\\(\\)\\*\\+\\-a-zA-Z\\.\\d,/:\\s*]*|[\\w\\\\\"\\s[:graph:]]*)";
+// resonators paramsDetail
+const char* SAMRegex::paramsDetailRes = "([\\d\\.\\*a-zA-Z]*)";
 const char* SAMRegex::word = "(\\w+)";
 const char* SAMRegex::commentObject = "\\A\\s*#\\s*(comment)";
 
@@ -49,7 +51,7 @@ String SAMRegex::getVertexLine()
 {
     String vertexLine;
     vertexLine << "\\A\\s*" << vertex << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    vertexLine << label << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;";
+    vertexLine << label << "\\s*;";
     vertexLine << pos << "\\s*$";
     return vertexLine;
 }
@@ -59,7 +61,7 @@ String SAMRegex::getLinkLine()
     String linkLine;
     linkLine << "\\A\\s*" << link << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     linkLine << label << "\\s*,\\s*" << label << "\\s*,\\s*" << label;
-    linkLine << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;\\s*$";
+    linkLine << "\\s*;\\s*$";
     return linkLine;
 }
 
@@ -83,7 +85,7 @@ String SAMRegex::getTerminationLine()
 {
     String termLine;
     termLine << "\\A\\s*(termination)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    termLine << label << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;";
+    termLine << label << "\\s*;";
     termLine << pos << "\\s*$";
     return termLine;
 }
@@ -92,7 +94,7 @@ String SAMRegex::getJunctionLine()
 {
     String junctLine;
     junctLine << "\\A\\s*(junction)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    junctLine << label << "\\s*,\\s*\\(\\s*" << labels << "\\s*\\)\\s*;";
+    junctLine << label << "\\s*;";
     junctLine << pos << "\\s*$";
     return junctLine;
 }
@@ -102,8 +104,7 @@ String SAMRegex::getWaveguideLine()
     String waveguideLine;
     waveguideLine << "\\A\\s*(waveguide)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     waveguideLine << label << "\\s*,\\s*";
-    waveguideLine << label << "\\s*,\\s*" << label << "\\s*,\\s*\\(\\s*";
-    waveguideLine << labels << "\\s*\\)\\s*;\\s*$";
+    waveguideLine << label << "\\s*,\\s*" << label << "\\s*;\\s*$";
     return waveguideLine;
 }
 
