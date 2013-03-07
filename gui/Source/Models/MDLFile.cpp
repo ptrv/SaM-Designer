@@ -320,7 +320,7 @@ void MDLFile::checkForOutputDSPVar()
     if(! outputDSPExists)
     {
         ValueTree var(Ids::variable);
-        var.setProperty(Ids::faustCode, "outputDSP=highpass(4,20.0);", nullptr);
+        var.setProperty(Ids::faustCode, "outputDSP=SAMlimiter:highpass(4,20.0);", nullptr);
         vars.addChild(var, -1, nullptr);
     }
 }
