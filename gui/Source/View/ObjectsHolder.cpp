@@ -37,7 +37,7 @@
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
 #include "../Controller/ObjController.h"
-#include "VariablesPanel.h"
+#include "FaustcodePanel.h"
 #include "RedrawOptionsPanel.h"
 #include "SnapGridPainter.h"
 #include "AudioOutConnector.h"
@@ -50,7 +50,7 @@ using namespace synthamodeler;
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
   dragging(false), isDrawingObjectNames(false), showObjectNames(false),
-  maxX(0), maxY(0), vpanel(nullptr)
+  maxX(0), maxY(0), fcPanel(nullptr)
 {
     snapGridPixels = StoredSettings::getInstance()->getSnapGridPixels();
     snapActive = StoredSettings::getInstance()->getIsSnapGridEnabled();
@@ -71,7 +71,7 @@ ObjectsHolder::~ObjectsHolder()
     }
 
     grid = nullptr;
-    vpanel = nullptr;
+    fcPanel = nullptr;
 }
 
 void ObjectsHolder::paint(Graphics& g)
@@ -224,7 +224,7 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 {
     if (newMDLFile != mdlFile && newMDLFile != nullptr)
     {
-        vpanel = nullptr;
+        fcPanel = nullptr;
         mdlFile = newMDLFile;
         mdlFile->addChangeListener(this);
         objController.loadComponents(this);
@@ -233,7 +233,7 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
 
 void ObjectsHolder::reloadMDLFile()
 {
-    vpanel = nullptr;
+    fcPanel = nullptr;
     objController.destroy();
     objController.loadComponents(this);
 }
@@ -289,14 +289,13 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     case StandardApplicationCommandIDs::del:
         deleteSelectedObjects();
         break;
-    case CommandIDs::defineVariables:
+    case CommandIDs::defineFaustcode:
     {
-        if(vpanel == nullptr)
+        if(fcPanel == nullptr)
         {
-            vpanel = new VariablesPanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
+            fcPanel = new FaustcodePanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
         }
-        vpanel->setVisible(true);
-        vpanel->toFront(true);
+        fcPanel->show();
     }
         break;
     case CommandIDs::segmentedConnectors:

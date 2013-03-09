@@ -45,7 +45,7 @@ namespace CommandIDs
 
     static const int segmentedConnectors    = 0x200051;
     static const int reverseDirection       = 0x200052;
-    static const int defineVariables        = 0x200053;
+    static const int defineFaustcode        = 0x200053;
     static const int showObjectNames        = 0x200054;
 
     static const int saveProjectAs          = 0x200070;

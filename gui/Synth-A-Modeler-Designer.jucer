@@ -177,10 +177,10 @@
         <FILE id="MSuPlG" name="LinkComponent.cpp" compile="1" resource="0"
               file="Source/View/LinkComponent.cpp"/>
         <FILE id="w7V0Xu" name="LinkComponent.h" compile="0" resource="0" file="Source/View/LinkComponent.h"/>
-        <FILE id="qzm70P" name="VariablesPanel.cpp" compile="1" resource="0"
-              file="Source/View/VariablesPanel.cpp"/>
-        <FILE id="ZgiRJ5" name="VariablesPanel.h" compile="0" resource="0"
-              file="Source/View/VariablesPanel.h"/>
+        <FILE id="qzm70P" name="FaustcodePanel.cpp" compile="1" resource="0"
+              file="Source/View/FaustcodePanel.cpp"/>
+        <FILE id="ZgiRJ5" name="FaustcodePanel.h" compile="0" resource="0"
+              file="Source/View/FaustcodePanel.h"/>
         <FILE id="IPEDKA" name="ObjectPropertiesPanel.cpp" compile="1" resource="0"
               file="Source/View/ObjectPropertiesPanel.cpp"/>
         <FILE id="zbvgtU" name="ObjectPropertiesPanel.h" compile="0" resource="0"

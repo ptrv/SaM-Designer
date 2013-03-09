@@ -34,7 +34,7 @@ class MDLFile;
 class ObjController;
 class SelectableObject;
 class SnapGridPainter;
-class VariablesPanel;
+class FaustcodePanel;
 class RedrawOptionsPanel;
 class DirectedGraph;
 class ContentComp;
@@ -132,7 +132,7 @@ private:
     int snapGridPixels;
     bool snapActive, snapShown;
 
-    ScopedPointer<VariablesPanel> vpanel;
+    ScopedPointer<FaustcodePanel> fcPanel;
     ScopedPointer<DirectedGraph> graph;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);

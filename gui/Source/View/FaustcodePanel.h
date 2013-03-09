@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    VariablesPanel.h
+    FaustcodePanel.h
     Created: 15 May 2012 7:50:53pm
     Author:  Peter Vasil
 
@@ -23,8 +23,8 @@
 
 */
 
-#ifndef __VARIABLESPANEL_H_684205E3__
-#define __VARIABLESPANEL_H_684205E3__
+#ifndef __FAUSTCODEPANEL_H_684205E3__
+#define __FAUSTCODEPANEL_H_684205E3__
 
 namespace synthamodeler
 {
@@ -32,13 +32,13 @@ namespace synthamodeler
  * Dialog window for editing defined variables.
  *
  */
-class VariablesPanel  : public DialogWindow
+class FaustcodePanel  : public DialogWindow
 {
 public:
-    VariablesPanel(ObjController* objController,
+    FaustcodePanel(ObjController* objController,
                    ValueTree data,
                    UndoManager* undoManager);
-    ~VariablesPanel();
+    ~FaustcodePanel();
 
     void closeButtonPressed();
 
@@ -48,13 +48,11 @@ public:
      * @param data 			the data of the editing object
      * @param undoManager   the UndoManager of the MDLFile consisting this object.
      */
-    static void show(ObjController* objController,
-                     ValueTree data,
-                     UndoManager* undoManager);
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VariablesPanel)
+    void show();
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FaustcodePanel)
 };
 }
 
 
-#endif  // __VARIABLESPANEL_H_684205E3__
+#endif  // __FAUSTCODEPANEL_H_684205E3__

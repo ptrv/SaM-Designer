@@ -168,7 +168,7 @@
     <ClCompile Include="..\..\Source\View\AudioOutConnector.cpp"/>
     <ClCompile Include="..\..\Source\View\BaseObjectComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\LinkComponent.cpp"/>
-    <ClCompile Include="..\..\Source\View\VariablesPanel.cpp"/>
+    <ClCompile Include="..\..\Source\View\FaustcodePanel.cpp"/>
     <ClCompile Include="..\..\Source\View\ObjectPropertiesPanel.cpp"/>
     <ClCompile Include="..\..\Source\View\ObjectComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\OutputWindow.cpp"/>
@@ -1023,7 +1023,7 @@
     <ClInclude Include="..\..\Source\View\AudioOutConnector.h"/>
     <ClInclude Include="..\..\Source\View\BaseObjectComponent.h"/>
     <ClInclude Include="..\..\Source\View\LinkComponent.h"/>
-    <ClInclude Include="..\..\Source\View\VariablesPanel.h"/>
+    <ClInclude Include="..\..\Source\View\FaustcodePanel.h"/>
     <ClInclude Include="..\..\Source\View\ObjectPropertiesPanel.h"/>
     <ClInclude Include="..\..\Source\View\ObjectComponent.h"/>
     <ClInclude Include="..\..\Source\View\OutputWindow.h"/>

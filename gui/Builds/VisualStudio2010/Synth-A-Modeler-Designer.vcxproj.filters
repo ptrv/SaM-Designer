@@ -337,7 +337,7 @@
     <ClCompile Include="..\..\Source\View\LinkComponent.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\View\VariablesPanel.cpp">
+    <ClCompile Include="..\..\Source\View\FaustcodePanel.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\ObjectPropertiesPanel.cpp">
@@ -1368,7 +1368,7 @@
     <ClInclude Include="..\..\Source\View\LinkComponent.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\View\VariablesPanel.h">
+    <ClInclude Include="..\..\Source\View\FaustcodePanel.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\ObjectPropertiesPanel.h">

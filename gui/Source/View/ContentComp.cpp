@@ -300,7 +300,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::zoomOut,
         CommandIDs::zoomNormal,
         CommandIDs::reverseDirection,
-        CommandIDs::defineVariables,
+        CommandIDs::defineFaustcode,
         CommandIDs::tidyObjects,
         CommandIDs::redrawCircle,
         CommandIDs::redrawForceDirected,
@@ -398,8 +398,8 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.setInfo("Reverse direction", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier);
         break;
-    case CommandIDs::defineVariables:
-        result.setInfo("Define variable", "", CommandCategories::editing, 0);
+    case CommandIDs::defineFaustcode:
+        result.setInfo("Define FAUST code", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('d', ModifierKeys::commandModifier);
         break;
     case CommandIDs::tidyObjects:

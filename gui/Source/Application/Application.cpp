@@ -554,7 +554,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::selectAll);
         menu.addCommandItem (commandManager, StandardApplicationCommandIDs::deselectAll);
         menu.addSeparator();
-        menu.addCommandItem (commandManager, CommandIDs::defineVariables);
+        menu.addCommandItem (commandManager, CommandIDs::defineFaustcode);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::reverseDirection);
         menu.addSeparator();

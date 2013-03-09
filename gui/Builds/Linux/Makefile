@@ -76,7 +76,7 @@ OBJECTS := \
   $(OBJDIR)/AudioOutConnector_995cd494.o \
   $(OBJDIR)/BaseObjectComponent_eac867ec.o \
   $(OBJDIR)/LinkComponent_6a391d22.o \
-  $(OBJDIR)/VariablesPanel_8104ce78.o \
+  $(OBJDIR)/FaustcodePanel_375377a7.o \
   $(OBJDIR)/ObjectPropertiesPanel_99e3c0d1.o \
   $(OBJDIR)/ObjectComponent_96e7177d.o \
   $(OBJDIR)/OutputWindow_f103bf7c.o \
@@ -276,9 +276,9 @@ $(OBJDIR)/LinkComponent_6a391d22.o: ../../Source/View/LinkComponent.cpp
 	@echo "Compiling LinkComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/VariablesPanel_8104ce78.o: ../../Source/View/VariablesPanel.cpp
+$(OBJDIR)/FaustcodePanel_375377a7.o: ../../Source/View/FaustcodePanel.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling VariablesPanel.cpp"
+	@echo "Compiling FaustcodePanel.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ObjectPropertiesPanel_99e3c0d1.o: ../../Source/View/ObjectPropertiesPanel.cpp
