@@ -59,6 +59,7 @@ public:
         teFaustCode.setMultiLine(true, false);
         teFaustCode.setReadOnly(false);
         teFaustCode.addListener(this);
+        teFaustCode.setReturnKeyStartsNewLine(true);
         addAndMakeVisible(&teFaustCode);
 
         readFaustcodeValues();
@@ -90,9 +91,9 @@ public:
         else if (button == &btHelp)
         {
             HintComponent* content = new HintComponent();
-            content->setSize(550, 50);
-
-            CallOutBox& callout = CallOutBox::launchAsynchronously(content, button->getScreenBounds(), nullptr);
+            CallOutBox::launchAsynchronously(content,
+                                             button->getScreenBounds(),
+                                             nullptr);
         }
     }
 
@@ -134,13 +135,22 @@ public:
         }
     }
 
+    bool keyPressed(const KeyPress& key)
+    {
+        if(key == KeyPress('s', ModifierKeys::commandModifier, nullptr))
+        {
+            writeFaustcodeValues();
+            return true;
+        }
+        return false;
+    }
+
     void textEditorTextChanged(TextEditor&)
     {
     }
 
     void textEditorReturnKeyPressed(TextEditor&)
     {
-        teFaustCode.insertTextAtCaret(newLine);
     }
 
     void textEditorEscapeKeyPressed(TextEditor&)
@@ -170,7 +180,12 @@ private:
     public:
 
         HintComponent()
+        : exampleText("varname=hslider(\"DescriptiveLabelForVariable\","\
+                      "defaultValue,minimumValue,maximumValue,stepSize);"),
+            font(14.0f)
         {
+            textW = font.getStringWidth(exampleText);
+            setSize(textW,font.getHeight()*3);
         }
 
         ~HintComponent()
@@ -181,11 +196,16 @@ private:
         {
 //            g.fillAll(Colours::white);
             g.setColour(Colours::white);
-            g.drawText("Example:", 0, 0, getWidth(), 20, Justification::left, false);
-            g.drawMultiLineText("varname=hslider(\"DescriptiveLabelForVariable\",defaultValue,minimumValue,maximumValue,stepSize);",
-                                0, 30, 550);
+            g.setFont(font);
+            g.drawText("Example:", 0, 0, 
+                       getWidth(), font.getHeight(),
+                       Justification::left, false);
+            g.drawMultiLineText(exampleText, 0, font.getHeight()*2, textW);
         }
     private:
+        String exampleText;
+        Font font;
+        int textW;
     };
 };
 

@@ -43,13 +43,11 @@ public:
     void closeButtonPressed();
 
     /**
-     * Opens the DialogWindow for editing defined variables.
+     * Set FaustcodePanel visibele and read values from MDL file.
      *
-     * @param data 			the data of the editing object
-     * @param undoManager   the UndoManager of the MDLFile consisting this object.
      */
-
     void show();
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FaustcodePanel)
 };
 }
