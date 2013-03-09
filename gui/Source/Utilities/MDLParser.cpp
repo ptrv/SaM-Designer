@@ -204,10 +204,10 @@ bool MDLParser::parseMDL(const File& f)
         {
             StringArray values;
             re.fullMatchValues(line, values, 2);
-            ValueTree variableTree(Ids::variable);
-            variableTree.setProperty(Ids::faustCode, values[1].trim(), nullptr);
-            ValueTree variablesTree = mdlTree.getOrCreateChildWithName(Objects::variables, nullptr);
-            variablesTree.addChild(variableTree, -1, nullptr);
+            ValueTree faustcodeTree(Ids::faustcode);
+            faustcodeTree.setProperty(Ids::value, values[1].trim(), nullptr);
+            ValueTree fcbTree = mdlTree.getOrCreateChildWithName(Objects::faustcodeblock, nullptr);
+            fcbTree.addChild(faustcodeTree, -1, nullptr);
         }
         else if(re.fullMatch(SAMRegex::getAudioOutLine(), line))
         {

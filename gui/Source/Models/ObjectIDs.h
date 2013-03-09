@@ -69,12 +69,11 @@ namespace Ids
     DECLARE_ID (objRight);
     DECLARE_ID (termFilter);
     DECLARE_ID (initDisplace);
-    DECLARE_ID (faustCode);
     DECLARE_ID (audiosource);
     DECLARE_ID (sources);
     DECLARE_ID (optional);
     DECLARE_ID (value);
-    DECLARE_ID (variable);
+    DECLARE_ID (faustcode);
     DECLARE_ID (comment);
     DECLARE_ID (fontSize);
     DECLARE_ID (commentColour);
@@ -86,20 +85,20 @@ namespace Ids
 
 namespace Objects
 {
-	#define DECLARE_ID(name)      const Identifier name (#name)
+    #define DECLARE_ID(name)      const Identifier name (#name)
 
-	DECLARE_ID(synthamodeler);
-	DECLARE_ID(masses);
-	DECLARE_ID(links);
-    DECLARE_ID(variables);
-	DECLARE_ID(audioobjects);
-	DECLARE_ID(waveguides);
-	DECLARE_ID(terminations);
-	DECLARE_ID(junctions);
-	DECLARE_ID(invalid);
+    DECLARE_ID(synthamodeler);
+    DECLARE_ID(masses);
+    DECLARE_ID(links);
+    DECLARE_ID(faustcodeblock);
+    DECLARE_ID(audioobjects);
+    DECLARE_ID(waveguides);
+    DECLARE_ID(terminations);
+    DECLARE_ID(junctions);
+    DECLARE_ID(invalid);
     DECLARE_ID(comments);
 
-	#undef DECLARE_ID
+    #undef DECLARE_ID
 };
 }
 

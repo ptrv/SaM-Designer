@@ -302,15 +302,15 @@ bool MDLFile::checkIfChecksumChanged()
 
 void MDLFile::checkForOutputDSPVar()
 {
-    ValueTree vars = mdlRoot.getOrCreateChildWithName(Objects::variables, nullptr);
+    ValueTree fcb = mdlRoot.getOrCreateChildWithName(Objects::faustcodeblock, nullptr);
     bool outputDSPExists = false;
-    for(int i = 0; i < vars.getNumChildren(); ++i)
+    for(int i = 0; i < fcb.getNumChildren(); ++i)
     {
-        ValueTree var = vars.getChild(i);
-        if(var.hasProperty(Ids::faustCode))
+        ValueTree fc = fcb.getChild(i);
+        if(fc.hasProperty(Ids::value))
         {
-            String varStr = var[Ids::faustCode].toString();
-            if(varStr.startsWith("outputDSP"))
+            String fcStr = fc[Ids::value].toString();
+            if(fcStr.startsWith("outputDSP"))
             {
                 outputDSPExists = true;
                 break;
@@ -319,9 +319,9 @@ void MDLFile::checkForOutputDSPVar()
     }
     if(! outputDSPExists)
     {
-        ValueTree var(Ids::variable);
-        var.setProperty(Ids::faustCode, "outputDSP=SAMlimiter:highpass(4,20.0);", nullptr);
-        vars.addChild(var, -1, nullptr);
+        ValueTree fc(Ids::faustcode);
+        fc.setProperty(Ids::value, "outputDSP=SAMlimiter:highpass(4,20.0);", nullptr);
+        fcb.addChild(fc, -1, nullptr);
     }
 }
 //==============================================================================

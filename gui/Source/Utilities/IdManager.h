@@ -58,7 +58,7 @@ private:
     SortedSet<String> touchIds;
     SortedSet<String> pluckIds;
     SortedSet<String> audioOutIds;
-    SortedSet<String> variableIds;
+    SortedSet<String> faustcodeIds;
     SortedSet<String> waveguideIds;
     SortedSet<String> terminationIds;
     SortedSet<String> junctionIds;

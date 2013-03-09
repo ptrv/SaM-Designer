@@ -651,17 +651,17 @@ void ObjController::loadComponents(ObjectsHolder* holder)
         }
     }
 
-    ValueTree variables = mdl.getChildWithName(Objects::variables);
-    for (int i = 0; i < variables.getNumChildren(); i++)
+    ValueTree faustcodeblock = mdl.getChildWithName(Objects::faustcodeblock);
+    for (int i = 0; i < faustcodeblock.getNumChildren(); i++)
     {
-        ValueTree obj = variables.getChild(i);
+        ValueTree obj = faustcodeblock.getChild(i);
 //        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
 //        {
 //            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
 //        }
 //        else
 //        {
-//            variables.removeChild(obj, nullptr);
+//            faustcodeblock.removeChild(obj, nullptr);
 //        }
     }
 

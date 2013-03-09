@@ -75,14 +75,6 @@ void openFileExternal(const String& path);
 void openFileNative(const String& path);
 
 /**
- * Gets object type as String for using in property window title.
- *
- * @param objType 		An object id (i.e. Ids::mass)
- * @return				Object Id string
- */
-String getObjectTypeAsString(const Identifier& objType);
-
-/**
  * Formats parameter value to have decmal point and zero.
  *
  * @param paramVal		the parameter value to format

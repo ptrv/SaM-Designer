@@ -159,11 +159,11 @@ String MDLWriter::getMDLString()
 
 	// write variables
 	mdlContent << "\n\n";
-	ValueTree variablesTree = mdlFile.mdlRoot.getChildWithName(Objects::variables);
-	for (int varIdx = 0; varIdx < variablesTree.getNumChildren(); ++varIdx) {
-		ValueTree la = variablesTree.getChild(varIdx);
+	ValueTree faustcodeblockTree = mdlFile.mdlRoot.getChildWithName(Objects::faustcodeblock);
+	for (int varIdx = 0; varIdx < faustcodeblockTree.getNumChildren(); ++varIdx) {
+		ValueTree la = faustcodeblockTree.getChild(varIdx);
 		mdlContent << "faustcode: ";
-		mdlContent << la.getProperty(Ids::faustCode).toString();
+		mdlContent << la.getProperty(Ids::value).toString();
 		mdlContent << "\n";
 	}
 

@@ -46,7 +46,7 @@ IdManager::~IdManager()
     touchIds.clear();
     pluckIds.clear();
     audioOutIds.clear();
-    variableIds.clear();
+    faustcodeIds.clear();
     waveguideIds.clear();
     terminationIds.clear();
     junctionIds.clear();
@@ -72,8 +72,8 @@ SortedSet<String>* IdManager::getSet(const Identifier& objId)
         return &pluckIds;
     else if(objId == Ids::audioout)
         return &audioOutIds;
-    else if(objId == Ids::variable)
-        return &variableIds;
+    else if(objId == Ids::faustcode)
+        return &faustcodeIds;
     else if(objId == Ids::waveguide)
         return &waveguideIds;
     else if(objId == Ids::termination)

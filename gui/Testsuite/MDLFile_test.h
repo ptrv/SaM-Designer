@@ -166,13 +166,13 @@ public:
 
 		beginTest("getFaustcode");
 
-		ValueTree faustcodeObjs = mdlFile->mdlRoot.getChildWithName(Objects::variables);
+		ValueTree faustcodeObjs = mdlFile->mdlRoot.getChildWithName(Objects::faustcodeblock);
         // test 1
 		expect(faustcodeObjs.getNumChildren() == 2, "have "+String(faustcodeObjs.getNumChildren())+" variables");
         // test 2
-        expectEquals(faustcodeObjs.getChild(0)[Ids::faustCode].toString(), String("adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0);"));
+        expectEquals(faustcodeObjs.getChild(0)[Ids::value].toString(), String("adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 4000.0, 100.0);"));
 //        // test 3
-        expectEquals(faustcodeObjs.getChild(1)[Ids::faustCode].toString(), String("outputDSP=highpass(4,20.0);"));
+        expectEquals(faustcodeObjs.getChild(1)[Ids::value].toString(), String("outputDSP=highpass(4,20.0);"));
 
 //		beginTest("getWaveguides");
 //

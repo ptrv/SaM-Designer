@@ -99,10 +99,10 @@ public:
     void readFaustcodeValues()
     {
         StringArray faustCodeLines;
-        ValueTree fcTree = data.getChildWithName(Objects::variables);
+        ValueTree fcTree = data.getChildWithName(Objects::faustcodeblock);
         for (int i = 0; i < fcTree.getNumChildren(); ++i)
         {
-            String text = fcTree.getChild(i)[Ids::faustCode].toString();
+            String text = fcTree.getChild(i)[Ids::value].toString();
             faustCodeLines.add(text);
         }
         faustCodeText = faustCodeLines.joinIntoString(newLine);
@@ -118,7 +118,7 @@ public:
             faustCodeLines.addTokens(teFaustCode.getText(), "\n\r", "\"");
 
             undoManager->beginNewTransaction("Modify faustcode");
-            ValueTree fcTree = data.getOrCreateChildWithName(Objects::variables,
+            ValueTree fcTree = data.getOrCreateChildWithName(Objects::faustcodeblock,
                                                              undoManager);
 
             fcTree.removeAllChildren(undoManager);
@@ -126,8 +126,8 @@ public:
             {
                 if(faustCodeLines[i].isEmpty())
                     continue;
-                ValueTree newData(Ids::variable);
-                newData.setProperty(Ids::faustCode, faustCodeLines[i], nullptr);
+                ValueTree newData(Ids::faustcode);
+                newData.setProperty(Ids::value, faustCodeLines[i], nullptr);
 
                 fcTree.addChild(newData, -1, undoManager);
             }

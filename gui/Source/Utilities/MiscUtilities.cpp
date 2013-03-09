@@ -139,36 +139,6 @@ void Utils::openFileNative(const String& path)
     }
 }
 
-String Utils::getObjectTypeAsString(const Identifier& objType)
-{
-	if(objType == Ids::mass)
-		return "Mass";
-	else if(objType == Ids::port)
-		return "Port";
-	else if(objType == Ids::ground)
-		return "Ground";
-	else if(objType == Ids::resonators)
-		return "Resonators";
-	else if(objType == Ids::link)
-		return "Link";
-	else if(objType == Ids::touch)
-		return "Touch";
-	else if(objType == Ids::pluck)
-		return "Pluck";
-	else if(objType == Ids::audioout)
-		return "AudioOut";
-	else if(objType == Ids::waveguide)
-		return "Waveguide";
-	else if(objType == Ids::termination)
-		return "Termination";
-	else if(objType == Ids::junction)
-		return "Junction";
-    else if(objType == Ids::variable)
-        return "Variable";
-	else
-		return String::empty;
-}
-
 String Utils::fixParameterValueIfNeeded(const String& paramVal)
 {
 	if( paramVal == String::empty)
@@ -317,8 +287,8 @@ const Identifier& Utils::getObjectGroup(const Identifier& ident)
         return Objects::terminations;
     else if(ident == Ids::junction)
         return Objects::junctions;
-    else if(ident == Ids::variable)
-        return Objects::variables;
+    else if(ident == Ids::faustcode)
+        return Objects::faustcodeblock;
     else if(ident == Ids::comment)
         return Objects::comments;
 
