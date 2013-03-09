@@ -226,7 +226,7 @@ bool MDLParser::parseMDL(const File& f)
             if(posColon > 0)
             {
                 audioLine = values[2].substring(0, posColon);
-                audioTree.setProperty(Ids::optional,values[2].substring(posColon), nullptr);
+                audioTree.setProperty(Ids::optional,values[2].substring(posColon+1), nullptr);
             }
             else
             {
@@ -234,6 +234,17 @@ bool MDLParser::parseMDL(const File& f)
                 audioLine = values[2];
             }
 
+            // add outputDSP to optional values if not present
+            if(! audioTree[Ids::optional].toString().contains("outputDSP"))
+            {
+                String aoOpt = audioTree[Ids::optional].toString();
+                if(aoOpt.isNotEmpty())
+                {
+                    aoOpt = ":" + aoOpt;
+                }
+                String aoOpt2 = "outputDSP" + aoOpt;
+                audioTree.setProperty(Ids::optional, aoOpt2, nullptr);
+            }
             // remove surrounding paranthese if there are some.
             String audioLineClean = audioLine.trim();
             if(audioLineClean.startsWithChar('(') &&

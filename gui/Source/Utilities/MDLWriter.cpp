@@ -196,9 +196,14 @@ String MDLWriter::getMDLString()
 				mdlContent << "+";
         }
         if(isOpt)
+        {
             mdlContent << ")";
-
-        mdlContent << ao[Ids::optional].toString();
+            if(! ao[Ids::optional].toString().contains("outputDSP"))
+            {
+                mdlContent << ":outputDSP";
+            }
+            mdlContent << ":" << ao[Ids::optional].toString();
+        }
 
 		mdlContent << ";";
 		mdlContent << " # pos " << ao.getProperty(Ids::posX, "0").toString() << "," << ao.getProperty(Ids::posY, "0").toString();
