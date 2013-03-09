@@ -81,6 +81,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalLibraryDirectories>..\..\Libs\re2win\lib\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
       <AdditionalOptions>re2.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
@@ -125,6 +126,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <AdditionalLibraryDirectories>..\..\Libs\re2win\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
       <AdditionalOptions>re2.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
