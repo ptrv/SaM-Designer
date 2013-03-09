@@ -998,8 +998,8 @@ private:
 };
 
 //==============================================================================
-static String exportWindowPos;
-
+static HashMap<String, String> perpertiesWindowPos;
+static String currentObjectId;
 
 ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
                                              BaseObjectComponent* caller, 
@@ -1010,6 +1010,8 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 {
 
 	Component* comp;
+    currentObjectId = caller->getData()[Ids::identifier].toString();
+
 	if(caller->getData().getType() == Ids::mass)
     {
         comp = new MassPropertiesComponent(this, objController,
@@ -1060,19 +1062,22 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 	else
 	{
 		comp = new Component();
+        currentObjectId = "";
 	}
 
 	comp->setSize (280, 300);
 	setContentOwned (comp, true);
 
-	centreAroundComponent (caller, getWidth(), getHeight());
+    if (! restoreWindowStateFromString (perpertiesWindowPos[currentObjectId]))
+        centreAroundComponent(caller, getWidth(), getHeight());
 
-    setResizable (false, false);
+    setResizable (true, true);
     setVisible(true);
 }
 
 ObjectPropertiesPanel::~ObjectPropertiesPanel()
 {
+    perpertiesWindowPos.set(currentObjectId, getWindowStateAsString());
 }
 
 void ObjectPropertiesPanel::closeButtonPressed()
