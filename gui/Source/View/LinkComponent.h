@@ -72,9 +72,10 @@ public:
 
     void setSegmented(bool isSegmented) { segmented = isSegmented; resized(); }
 private:
-    void drawPath(float x1, float y1, float x2, float y2);
+    void drawPath(Graphics& g);
 
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
+    float curInputX, curInputY, curOutputX, curOutputY;
     Path linePath, hitPath;
     
     bool segmented;
@@ -89,6 +90,7 @@ private:
 
     Colour color;
     Colour colorSelected;
+    Colour currentColor;
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
     {
         float x1, y1, x2, y2;

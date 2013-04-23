@@ -119,7 +119,10 @@ void LinkComponent::resizeToFit()
 }
 void LinkComponent::resized()
 {
-    float x1, y1, x2, y2;
+    float x1 = curInputX;
+    float y1 = curInputY;
+    float x2 = curOutputX;
+    float y2 = curOutputY;
     getPoints(x1, y1, x2, y2);
 
     lastInputX = x1;
@@ -132,17 +135,19 @@ void LinkComponent::resized()
     x2 -= getX();
     y2 -= getY();
 
-    drawPath(x1, y1, x2, y2);
-    
+    curInputX = x1;
+    curInputY = y1;
+    curOutputX = x2;
+    curOutputY = y2;
 }
 
 void LinkComponent::paint(Graphics& g)
 {
     if(selected)
-        g.setColour(colorSelected);
+        currentColor = colorSelected;
     else
-        g.setColour(color);
-    g.fillPath (linePath);
+        currentColor = color;
+    drawPath(g);
 }
 
 void LinkComponent::mouseDown(const MouseEvent& e)
@@ -238,8 +243,13 @@ bool LinkComponent::sameStartEnd(ValueTree linkTree)
         && linkTree.getProperty(Ids::endVertex) == data.getProperty(Ids::endVertex);
 }
 
-void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
+void LinkComponent::drawPath(Graphics& g)
 {
+    float x1 = curInputX;
+    float y1 = curInputY;
+    float x2 = curOutputX;
+    float y2 = curOutputY;
+    g.setColour(currentColor);
     if(data.getType() == Ids::link)
     {
         Path iconPath;
@@ -443,6 +453,7 @@ void LinkComponent::drawPath(float x1, float y1, float x2, float y2)
     }
     linePath.setUsingNonZeroWinding(true);
 
+    g.fillPath(linePath);
 }
 
 void LinkComponent::reverseDirection()
