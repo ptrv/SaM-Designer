@@ -160,7 +160,7 @@ public:
 
 		centreAroundComponent (0, getWidth(), getHeight());
 
-		setResizable (false, false);
+		setResizable (true, false);
 	}
 
 	~ExporterInputPanel()
