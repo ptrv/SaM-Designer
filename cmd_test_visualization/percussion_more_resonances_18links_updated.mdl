@@ -1,28 +1,28 @@
-ground(0.0),mn40xn40y,();
-ground(0.0),mn40xn20y,();
-ground(0.0),mn40xn0y,();
-ground(0.0),mn40x20y,();
-ground(0.0),mn40x40y,();
-ground(0.0),mn20xn40y,();
-ground(0.0),mn20xn20y,();
-mass(massMembrane,0.0,0.0),mn20xn0y,();
-ground(0.0),mn20x20y,();
-ground(0.0),mn20x40y,();
-ground(0.0),mn0xn40y,();
-mass(massMembrane,0.0,0.0),mn0xn20y,();
-mass(massMembrane,0.0,0.0),mn0xn0y,();
-mass(massMembrane,0.0,0.0),mn0x20y,();
-ground(0.0),mn0x40y,();
-ground(0.0),m20xn40y,();
-ground(0.0),m20xn20y,();
-mass(massMembrane,0.0,0.0),m20xn0y,();
-ground(0.0),m20x20y,();
-ground(0.0),m20x40y,();
-ground(0.0),m40xn40y,();
-ground(0.0),m40xn20y,();
-ground(0.0),m40xn0y,();
-ground(0.0),m40x20y,();
-ground(0.0),m40x40y,();
+ground(0.0),mn40xn40y;
+ground(0.0),mn40xn20y;
+ground(0.0),mn40xn0y;
+ground(0.0),mn40x20y;
+ground(0.0),mn40x40y;
+ground(0.0),mn20xn40y;
+ground(0.0),mn20xn20y;
+mass(massMembrane,0.0,0.0),mn20xn0y;
+ground(0.0),mn20x20y;
+ground(0.0),mn20x40y;
+ground(0.0),mn0xn40y;
+mass(massMembrane,0.0,0.0),mn0xn20y;
+mass(massMembrane,0.0,0.0),mn0xn0y;
+mass(massMembrane,0.0,0.0),mn0x20y;
+ground(0.0),mn0x40y;
+ground(0.0),m20xn40y;
+ground(0.0),m20xn20y;
+mass(massMembrane,0.0,0.0),m20xn0y;
+ground(0.0),m20x20y;
+ground(0.0),m20x40y;
+ground(0.0),m40xn40y;
+ground(0.0),m40xn20y;
+ground(0.0),m40xn0y;
+ground(0.0),m40x20y;
+ground(0.0),m40x40y;
 # This is a more elaborate drum model.
 
 # Example MDL file for Synth-A-Modeler
@@ -67,34 +67,34 @@ faustcode:edgeDamping=hslider("Edge link damping", 0.001,0.0001,0.1,0.0001);
 faustcode:interactionStiffness=hslider("Interaction stiffness", 100.0, 10.0, 400.0, 5.0);
 faustcode:interactionDamping=hslider("Interaction damping", 0.01, 0.00, 0.3, 0.001);
 
-ground(0.0),g,();
-port( ),dev1,(devlabel);
-port( ),dev2,(devlabel);
+ground(0.0),g;
+port( ),dev1;
+port( ),dev2;
 
 
 
 
-link(50.0,0.001,0.0),ldev2,dev2,g,(llabel);
-touch(interactionStiffness,interactionDamping,0.0),tt,dev1,mn0xn0y,(label);
+link(50.0,0.001,0.0),ldev2,dev2,g;
+touch(interactionStiffness,interactionDamping,0.0),tt,dev1,mn0xn0y;
 
 # Actually for this particular model, the highpass filter isn't necessary ...
 #audioout,a1,(r1*(0.0)+msnr1*(1000.0)):highpass(6,50);
 #audioout,a2,(r1*(0.0)+msnr2*(1000.0)):highpass(6,50);
 audioout,aL,mn20xn0y*(2400000.0):highpass(1,2000.0):highpass(1,1000.0);
 audioout,aR,mn0xn0y*(600000.0):highpass(1,2000.0):highpass(1,1000.0);
-link(edgeStiffness,edgeDamping,0.0),l1,mn40xn0y,mn20xn0y,();
-link(edgeStiffness,edgeDamping,0.0),l2,mn20xn20y,mn20xn0y,();
-link(edgeStiffness,edgeDamping,0.0),l3,mn20xn20y,mn0xn20y,();
-link(edgeStiffness,edgeDamping,0.0),l4,mn20xn0y,mn20x20y,();
-link(membraneStiffness,membraneDamping,0.0),l5,mn20xn0y,mn0xn0y,();
-link(edgeStiffness,edgeDamping,0.0),l6,mn20x20y,mn0x20y,();
-link(edgeStiffness,edgeDamping,0.0),l7,mn0xn40y,mn0xn20y,();
-link(membraneStiffness,membraneDamping,0.0),l8,mn0xn20y,mn0xn0y,();
-link(edgeStiffness,edgeDamping,0.0),l9,mn0xn20y,m20xn20y,();
-link(membraneStiffness,membraneDamping,0.0),l10,mn0xn0y,mn0x20y,();
-link(membraneStiffness,membraneDamping,0.0),l11,mn0xn0y,m20xn0y,();
-link(edgeStiffness,edgeDamping,0.0),l12,mn0x20y,mn0x40y,();
-link(edgeStiffness,edgeDamping,0.0),l13,mn0x20y,m20x20y,();
-link(edgeStiffness,edgeDamping,0.0),l14,m20xn20y,m20xn0y,();
-link(edgeStiffness,edgeDamping,0.0),l15,m20xn0y,m20x20y,();
-link(edgeStiffness,edgeDamping,0.0),l16,m20xn0y,m40xn0y,();
+link(edgeStiffness,edgeDamping,0.0),l1,mn40xn0y,mn20xn0y;
+link(edgeStiffness,edgeDamping,0.0),l2,mn20xn20y,mn20xn0y;
+link(edgeStiffness,edgeDamping,0.0),l3,mn20xn20y,mn0xn20y;
+link(edgeStiffness,edgeDamping,0.0),l4,mn20xn0y,mn20x20y;
+link(membraneStiffness,membraneDamping,0.0),l5,mn20xn0y,mn0xn0y;
+link(edgeStiffness,edgeDamping,0.0),l6,mn20x20y,mn0x20y;
+link(edgeStiffness,edgeDamping,0.0),l7,mn0xn40y,mn0xn20y;
+link(membraneStiffness,membraneDamping,0.0),l8,mn0xn20y,mn0xn0y;
+link(edgeStiffness,edgeDamping,0.0),l9,mn0xn20y,m20xn20y;
+link(membraneStiffness,membraneDamping,0.0),l10,mn0xn0y,mn0x20y;
+link(membraneStiffness,membraneDamping,0.0),l11,mn0xn0y,m20xn0y;
+link(edgeStiffness,edgeDamping,0.0),l12,mn0x20y,mn0x40y;
+link(edgeStiffness,edgeDamping,0.0),l13,mn0x20y,m20x20y;
+link(edgeStiffness,edgeDamping,0.0),l14,m20xn20y,m20xn0y;
+link(edgeStiffness,edgeDamping,0.0),l15,m20xn0y,m20x20y;
+link(edgeStiffness,edgeDamping,0.0),l16,m20xn0y,m40xn0y;
