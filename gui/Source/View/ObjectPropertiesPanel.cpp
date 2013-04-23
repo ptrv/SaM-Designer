@@ -66,7 +66,7 @@ public:
 #ifdef _DEBUG
         addAndMakeVisible(&laDebug);
         laDebug.setText("Pos: " + data[Ids::posX].toString() + String(" ") + 
-                        data[Ids::posY].toString(),false);
+                        data[Ids::posY].toString(), dontSendNotification);
 #endif
         op->returnVal = 0;
 	}
@@ -531,11 +531,9 @@ public:
         teEndVertex("teEndVertex"),
         laMinDisplace("laMinDisplace", "Minimum displce diff"),
         teMinDisplace("teMinDisplace"),
-        isPluck(false)
+        laPulseFreq("laPulseFreq", "Pulse frequency"),
+        tePulseFreq("tePulseFreq")
     {
-        if(data.getType() == Ids::pluck)
-            isPluck = true;
-
         teStiff.addListener(this);
         addAndMakeVisible(&teStiff);
 		laStiff.attachToComponent(&teStiff, true);
@@ -555,11 +553,17 @@ public:
         teEndVertex.setColour(TextEditor::textColourId, Colours::darkgrey);
 		addAndMakeVisible(&teEndVertex);
 		laEndVertex.attachToComponent(&teEndVertex, true);
-        if(isPluck)
+        if(data.getType() == Ids::pluck)
         {
             teMinDisplace.addListener(this);
             addAndMakeVisible(&teMinDisplace);
             laMinDisplace.attachToComponent(&teMinDisplace, true);
+        }
+        else if (data.getType() == Ids::pulsetouch)
+        {
+            tePulseFreq.addListener(this);
+            addAndMakeVisible(&tePulseFreq);
+            laPulseFreq.attachToComponent(&tePulseFreq, true);
         }
 		readValues();
 	}
@@ -574,9 +578,14 @@ public:
         int offset = 0;
         teStiff.setBounds(100 , 40, getWidth() - 110, 22);
 		teDamp.setBounds(100 , 70, getWidth() - 110, 22);
-        if(isPluck)
+        if(data.getType() == Ids::pluck)
         {
             teMinDisplace.setBounds(100 , 100, getWidth() - 110, 22);
+            offset = 30;
+        }
+        else if (data.getType() == Ids::pulsetouch)
+        {
+            tePulseFreq.setBounds(100, 100, getWidth() - 110, 22);
             offset = 30;
         }
 		tePos.setBounds(100 , 100+offset, getWidth() - 110, 22);
@@ -590,10 +599,14 @@ public:
 		teStiff.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
 		teDamp.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
         int offset = 0;
-        if(isPluck)
+        if(data.getType() == Ids::pluck)
         {
             teMinDisplace.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
             ++offset;
+        }
+        else if(data.getType() == Ids::pulsetouch)
+        {
+            tePulseFreq.setText(data.getChildWithName(Ids::parameters).getChild(3)[Ids::value].toString());
         }
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2+offset)[Ids::value].toString());
         teStartVertex.setText(data[Ids::startVertex].toString());
@@ -634,13 +647,22 @@ public:
         pa2.setProperty(Ids::value,
                         Utils::fixParameterValueIfNeeded(teDamp.getText()),
                         undoManager);
-        if(isPluck)
+        if(data.getType() == Ids::pluck)
         {
             pa3.setProperty(Ids::value,
                             Utils::fixParameterValueIfNeeded(teMinDisplace.getText()),
                             undoManager);
             pa4.setProperty(Ids::value,
                             Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+        }
+        else if(data.getType() == Ids::pulsetouch)
+        {
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+            pa4.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePulseFreq.getText()),
                             undoManager);
         }
         else
@@ -665,7 +687,8 @@ private:
     TextEditor teEndVertex;
     Label laMinDisplace;
     TextEditor teMinDisplace;
-    bool isPluck;
+    Label laPulseFreq;
+    TextEditor tePulseFreq;
 };
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
@@ -1034,7 +1057,8 @@ ObjectPropertiesPanel::ObjectPropertiesPanel(ObjController* objController,
 	}
 	else if(caller->getData().getType() == Ids::link
         || caller->getData().getType() == Ids::touch
-        || caller->getData().getType() == Ids::pluck)
+        || caller->getData().getType() == Ids::pluck
+        || caller->getData().getType() == Ids::pulsetouch)
     {
         comp = new LinkPropertiesComponent(this, objController,
                                            caller->getData(), undoManager_);

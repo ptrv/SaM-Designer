@@ -140,6 +140,26 @@ static ValueTree createNewTouchTree(const String& newName,
 
 	return newTree;
 }
+static ValueTree createNewPulsetouchTree(const String& newName,
+                                         const String& startObject,
+                                         const String& endObject)
+{
+    StoredSettings& settings = *StoredSettings::getInstance();
+	ValueTree newTree(Ids::pulsetouch);
+    StringArray p;
+    p.add(settings.getDefaultValue("pulsetouch_stiffness", "100.0"));
+    p.add(settings.getDefaultValue("pulsetouch_damping", "0.1"));
+    p.add(settings.getDefaultValue("pulsetouch_offset", "0.0"));
+    p.add(settings.getDefaultValue("pulsetouch_pulsefreq", "0.0"));
+    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
+    newTree.addChild(paramsTree, -1, nullptr);
+    newTree.setProperty(Ids::identifier, newName, nullptr);
+    newTree.setProperty(Ids::startVertex, startObject, nullptr);
+	newTree.setProperty(Ids::endVertex, endObject, nullptr);
+
+	return newTree;
+}
+
 static ValueTree createNewPluckTree(const String& newName,
                                     const String& startObject, 
                                     const String& endObject)
@@ -280,6 +300,8 @@ ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
         return createNewLinkTree(newName, startObject, endObject);
 	else if(linkType == Ids::touch)
 		return createNewTouchTree(newName, startObject, endObject);
+	else if(linkType == Ids::pulsetouch)
+		return createNewPulsetouchTree(newName, startObject, endObject);
 	else if(linkType == Ids::pluck)
 		return createNewPluckTree(newName, startObject, endObject);
 	else if(linkType == Ids::waveguide)

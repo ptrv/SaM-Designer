@@ -71,7 +71,8 @@ namespace CommandIDs
     static const int insertPort				= 0x2030b0;
     static const int insertLink				= 0x2030b1;
     static const int insertTouch			= 0x2030b2;
-    static const int insertPluck			= 0x2030b3;
+    static const int insertPulsetouch       = 0x2030b3;
+    static const int insertPluck			= 0x2030b4;
     static const int insertAudioOutput		= 0x2030c0;
     static const int insertWaveguide		= 0x2030c1;
     static const int insertTermination		= 0x2030c2;

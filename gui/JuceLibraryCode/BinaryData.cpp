@@ -33,6 +33,10 @@ static const unsigned char temp_96b5b732[] =
 "  <VALUE name=\"junct_displacement\" val=\"0.0\"/>\r\n"
 "  <VALUE name=\"waveguide_impedance\" val=\"1.0\"/>\r\n"
 "  <VALUE name=\"waveguide_string_type\" val=\"simpleString(0.033,0.017)\"/>\r\n"
+"  <VALUE name=\"pulsetouch_stiffness\" val=\"100.0\"/>\r\n"
+"  <VALUE name=\"pulsetouch_damping\" val=\"0.1\"/>\r\n"
+"  <VALUE name=\"pulsetouch_offset\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"pulsetouch_pulsefreq\" val=\"0.0\"/>\r\n"
 "</PROPERTIES>\r\n";
 
 const char* default_values_xml = (const char*) temp_96b5b732;
@@ -821,7 +825,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
 
     switch (hash)
     {
-        case 0x9a1ef838:  numBytes = 1082; return default_values_xml;
+        case 0x9a1ef838:  numBytes = 1279; return default_values_xml;
         case 0xd0e7a20c:  numBytes = 629; return default_exporters_xml;
         case 0x9a64200d:  numBytes = 3839; return prefs_export_png;
         case 0xe7d611d7:  numBytes = 875; return mdl_file_header_txt;

@@ -142,7 +142,7 @@ Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y
     {
         return getPathForLink(x, y, w, h);
     }
-    else if(linkId == Ids::touch)
+    else if(linkId == Ids::touch || linkId == Ids::pulsetouch)
     {
         return getPathForTouch(x, y, w, h);
     }

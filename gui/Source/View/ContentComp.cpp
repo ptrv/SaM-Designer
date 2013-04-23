@@ -311,6 +311,7 @@ void ContentComp::getAllCommands(Array <CommandID>& commands)
         CommandIDs::insertPort,
         CommandIDs::insertLink,
         CommandIDs::insertTouch,
+        CommandIDs::insertPulsetouch,
         CommandIDs::insertPluck,
         CommandIDs::insertAudioOutput,
         CommandIDs::insertAudioConnection,
@@ -443,6 +444,10 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::insertTouch:
         result.setInfo("Touch Link", "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('6', ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::insertPulsetouch:
+        result.setInfo("Pulsetouch Link", "", CommandCategories::inserting, 0);
+//        result.addDefaultKeypress('6', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertPluck:
         result.setInfo("Pluck Link", "", CommandCategories::inserting, 0);

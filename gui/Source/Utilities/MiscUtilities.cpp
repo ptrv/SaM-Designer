@@ -277,7 +277,7 @@ const Identifier& Utils::getObjectGroup(const Identifier& ident)
             || ident == Ids::ground	|| ident == Ids::resonators)
         return Objects::masses;
     else if(ident == Ids::link || ident == Ids::touch
-            || ident == Ids::pluck)
+            || ident == Ids::pluck || ident == Ids::pulsetouch)
         return Objects::links;
     else if(ident == Ids::audioout)
         return Objects::audioobjects;

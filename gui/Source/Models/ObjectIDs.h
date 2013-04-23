@@ -77,6 +77,7 @@ namespace Ids
     DECLARE_ID (comment);
     DECLARE_ID (fontSize);
     DECLARE_ID (commentColour);
+    DECLARE_ID (pulsetouch);
 
     const Identifier class_ ("class");
 

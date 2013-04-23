@@ -67,6 +67,10 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     {
         color = Colour(0xff006f00);
     }
+    else if(data.getType() == Ids::pulsetouch)
+    {
+        color = Colour(0xff006f00);
+    }
     else if(data.getType() == Ids::pluck)
     {
         color = Colour(0xff006f00);
@@ -366,7 +370,8 @@ void LinkComponent::drawPath(Graphics& g)
         stroke2.createStrokedPath(iconPath, iconPath);
         linePath.addPath(iconPath);
     }
-    else if(data.getType() == Ids::touch)
+    else if(data.getType() == Ids::touch ||
+            data.getType() == Ids::pulsetouch)
     {
         if (x1 == x2 && y1 == y2)
         {
@@ -374,11 +379,12 @@ void LinkComponent::drawPath(Graphics& g)
             y2 = y2 + 1;
         }
         Path iconPath;
-        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::touch,
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(data.getType(),
                                                                    0,
                                                                    0,
                                                                    iconWidth,
                                                                    iconHeight);
+       
         float rotateVal;
         if (segmented)
         {
@@ -438,7 +444,32 @@ void LinkComponent::drawPath(Graphics& g)
                                 .translated((x1 + x2) * 0.5f,
                                             (y1 + y2) * 0.5f));
         linePath.addPath(iconPath);
-    }
+
+        if(data.getType() == Ids::pulsetouch)
+        {
+            Colour c = currentColor;
+            g.setColour(Colours::indigo);
+            
+            Path outlineRect;
+
+            outlineRect.addRectangle(0 - (iconWidth * 0.15),
+                                     0 - (iconHeight * 0.15),
+                                     iconWidth + (iconWidth * 0.3),
+                                     iconHeight + (iconHeight * 0.3));
+
+            outlineRect.applyTransform(AffineTransform::translation((-iconWidth/2),
+                                                                    -iconHeight/2));
+            outlineRect.applyTransform(AffineTransform::identity
+                                    .rotated(rotateVal)
+                                    .translated((x1 + x2) * 0.5f,
+                                                (y1 + y2) * 0.5f));
+            PathStrokeType stroke(6.0f);
+            stroke.createStrokedPath(outlineRect, outlineRect);
+            g.fillPath(outlineRect);
+
+            g.setColour(c);
+        }
+   }
     else if(data.getType() == Ids::waveguide)
     {
         linePath.clear();

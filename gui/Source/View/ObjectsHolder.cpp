@@ -356,12 +356,18 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                                            ObjectFactory::createNewLinkObjectTree(Ids::touch,
                                                                                   objController.getNewNameForObject(Ids::touch),
                                                                                   startObj, endObj));
+    case CommandIDs::insertPulsetouch:
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::pulsetouch,
+                                                                                  objController.getNewNameForObject(Ids::pulsetouch),
+                                                                                  startObj, endObj));
         break;
     case CommandIDs::insertPluck:
         objController.addNewLinkIfPossible(this,
                                            ObjectFactory::createNewLinkObjectTree(Ids::pluck,
                                                                                   objController.getNewNameForObject(Ids::pluck),
                                                                                   startObj, endObj));
+       
         break;
     case CommandIDs::insertWaveguide:
     {
@@ -559,11 +565,12 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
     m.addSectionHeader("Add...");
 	m.addItem (1, "Linear Link");
 	m.addItem (2, "Touch Link");
-	m.addItem (3, "Pluck Link");
+	m.addItem (3, "Pulsetouch Link");
+	m.addItem (4, "Pluck Link");
     m.addSeparator();
-    m.addItem (4, "Waveguide");
+    m.addItem (5, "Waveguide");
     m.addSeparator();
-    m.addItem (5, "Audio Connection");
+    m.addItem (6, "Audio Connection");
 	const int r = m.show();
 
 	if (r == 1)
@@ -585,13 +592,21 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	}
 	else if (r == 3)
 	{
+		DBG("Add pulsetouch");
+        objController.addNewLinkIfPossible(this,
+                                           ObjectFactory::createNewLinkObjectTree(Ids::pulsetouch,
+                                                                                  objController.getNewNameForObject(Ids::pulsetouch),
+                                                                                  so, eo));
+	}
+	else if (r == 4)
+	{
 		DBG("Add pluck");
         objController.addNewLinkIfPossible(this,
                                            ObjectFactory::createNewLinkObjectTree(Ids::pluck,
                                                                                   objController.getNewNameForObject(Ids::pluck),
                                                                                   so, eo));
 	}
-	else if (r == 4)
+	else if (r == 5)
 	{
 //        DBG("Waveguide not implemented!")
 		DBG("Add waveguide");
@@ -616,7 +631,7 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
                                                                                   objController.getNewNameForObject(Ids::waveguide),
                                                                                   tmpSo, tmpEo));
 	}
-    else if (r == 5)
+    else if (r == 6)
     {
         DBG("Add audio connection");
         objController.addNewAudioConnection(this);

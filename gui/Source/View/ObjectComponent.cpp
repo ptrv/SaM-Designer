@@ -321,7 +321,8 @@ Point<int> ObjectComponent::getPinOffset()
 
 bool ObjectComponent::canBeConnected(const Identifier& objId)
 {
-    if(objId == Ids::link || objId == Ids::touch || objId == Ids::pluck)
+    if(objId == Ids::link || objId == Ids::touch || 
+        objId == Ids::pluck || objId == Ids::pulsetouch)
         return canBeConnectedToLinks();
     else if(objId == Ids::waveguide)
         return canBeConnectedToWaveguides();

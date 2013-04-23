@@ -56,6 +56,7 @@ private:
     SortedSet<String> resonatorsIds;
     SortedSet<String> linkIds;
     SortedSet<String> touchIds;
+    SortedSet<String> pulsetouchIds;
     SortedSet<String> pluckIds;
     SortedSet<String> audioOutIds;
     SortedSet<String> faustcodeIds;

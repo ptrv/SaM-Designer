@@ -44,6 +44,7 @@ IdManager::~IdManager()
     resonatorsIds.clear();
     linkIds.clear();
     touchIds.clear();
+    pulsetouchIds.clear();
     pluckIds.clear();
     audioOutIds.clear();
     faustcodeIds.clear();
@@ -68,6 +69,8 @@ SortedSet<String>* IdManager::getSet(const Identifier& objId)
         return &linkIds;
     else if(objId == Ids::touch)
         return &touchIds;
+    else if(objId == Ids::pulsetouch)
+        return &pulsetouchIds;
     else if(objId == Ids::pluck)
         return &pluckIds;
     else if(objId == Ids::audioout)
@@ -269,6 +272,8 @@ String IdManager::getObjNamePrefix(const Identifier& objId)
         return "l";
     else if(objId == Ids::touch)
         return "t";
+    else if(objId == Ids::pulsetouch)
+        return "pt";
     else if(objId == Ids::pluck)
         return "p";
     else if(objId == Ids::audioout)

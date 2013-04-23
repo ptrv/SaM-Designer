@@ -23,6 +23,7 @@ static const Colour menuColourInsertPort(0xffc67b2d);
 static const Colour menuColourInsertLink(0xff00b700);
 static const Colour menuColourInsertTouch(0xff006f00);
 static const Colour menuColourInsertPluck(0xff006f00);
+static const Colour menuColourInsertPulsetouch(0xff006f00);
 static const Colour menuColourInsertAudioOut(0xff000000);
 static const Colour menuColourInsertAudioConnection(0xff333333);
 static const Colour menuColourInsertWaveguide(0xff000090);
@@ -136,6 +137,8 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
                 textColour = menuColourInsertLink;
             else if(text.compare("Touch Link") == 0)
                 textColour = menuColourInsertTouch;
+            else if(text.compare("Pulsetouch Link") == 0)
+                textColour = menuColourInsertPulsetouch;
             else if(text.compare("Pluck Link") == 0)
                 textColour = menuColourInsertPluck;
             else if(text.compare("Audio Out") == 0)

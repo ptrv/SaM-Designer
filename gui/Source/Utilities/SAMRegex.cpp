@@ -35,7 +35,7 @@ const char* SAMRegex::labels = "([a-zA-Z,\\d\\s]*)";
 const char* SAMRegex::param = "(\\s*[^\\n\\r\\a\\033\\f,]*\\s*)";
 const char* SAMRegex::params = "(\\s*[^\\n\\r\\a\\033\\f]*\\s*)";
 const char* SAMRegex::vertex = "(mass|port|ground|resonators)";
-const char* SAMRegex::link = "(link|pluck|touch)";
+const char* SAMRegex::link = "(link|pluck|touch|pulsetouch)";
 const char* SAMRegex::audioOutDetails = "(.+)";
 const char* SAMRegex::faustName = "\\A\\s*(faustcode):.*";
 //const char* SAMRegex::faustCode = "(.+)\\s*=\\s*(.+)";

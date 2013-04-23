@@ -173,6 +173,10 @@ bool MDLParser::parseMDL(const File& f)
             {
                 linkTree = ValueTree(Ids::touch);
             }
+            else if (values[0].compare("pulsetouch") == 0)
+            {
+                linkTree = ValueTree(Ids::pulsetouch);
+            }
             else if (values[0].compare("pluck") == 0)
             {
                 linkTree = ValueTree(Ids::pluck);
@@ -186,7 +190,8 @@ bool MDLParser::parseMDL(const File& f)
             StringArray paramsArray;
 
             int numParams = 3;
-            if(linkTree.getType() == Ids::pluck)
+            if(linkTree.getType() == Ids::pluck ||
+                linkTree.getType() == Ids::pulsetouch)
                 numParams = 4;
             reParams.fullMatchValues(SAMRegex::getParamsLine(numParams),
                                      params, paramsArray, numParams);
