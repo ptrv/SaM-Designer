@@ -194,11 +194,11 @@ private:
     	  btOk("Ok"),
     	  btCancel("Cancel"),
           exporterIndex(exporterIndex_)
-    	{
-    		labelVarName.setText("Exporter", false);
-    		addAndMakeVisible(&labelVarName);
-    		labelVarValue.setText("Command", false);
-    		addAndMakeVisible(&labelVarValue);
+        {
+            labelVarName.setText("Exporter", dontSendNotification);
+            addAndMakeVisible(&labelVarName);
+            labelVarValue.setText("Command", dontSendNotification);
+            addAndMakeVisible(&labelVarValue);
             inputVarName.addListener(this);
     		addAndMakeVisible(&inputVarName);
             inputVarValue.addListener(this);
