@@ -5,22 +5,20 @@ ifndef CONFIG
   CONFIG=Debug
 endif
 
-ifeq ($(TARGET_ARCH),)
-  TARGET_ARCH := -march=native
-endif
-
-# (this disables dependency generation if multiple architectures are set)
-DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
-
 ifeq ($(CONFIG),Debug)
   BINDIR := build
   LIBDIR := build
   OBJDIR := build/intermediate/Debug
   OUTDIR := build
+
+  ifeq ($(TARGET_ARCH),)
+    TARGET_ARCH := -march=native
+  endif
+
   CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "BUILTIN_SAM_COMPILER=0" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS) -I../../Libs/re2
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "BUILTIN_SAM_COMPILER=0" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   TARGET := Synth-A-Modeler-Designer
@@ -32,15 +30,23 @@ ifeq ($(CONFIG),Release)
   LIBDIR := build
   OBJDIR := build/intermediate/Release
   OUTDIR := build
+
+  ifeq ($(TARGET_ARCH),)
+    TARGET_ARCH := -march=native
+  endif
+
   CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "BUILTIN_SAM_COMPILER=0" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS) -I../../Libs/re2
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
+  LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "BUILTIN_SAM_COMPILER=0" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode
   TARGET := Synth-A-Modeler-Designer
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
+
+# (this disables dependency generation if multiple architectures are set)
+DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
 
 OBJECTS := \
   $(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o \
