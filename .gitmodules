@@ -2,3 +2,6 @@
     path = juce
     url = https://github.com/julianstorer/JUCE.git
     ignore = dirty
+[submodule "SaM"]
+	path = SaM
+	url = git://github.com/eberdahl/SaM.git
