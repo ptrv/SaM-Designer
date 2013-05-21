@@ -531,8 +531,12 @@ public:
         teEndVertex("teEndVertex"),
         laMinDisplace("laMinDisplace", "Minimum displce diff"),
         teMinDisplace("teMinDisplace"),
-        laPulseFreq("laPulseFreq", "Pulse frequency"),
-        tePulseFreq("tePulseFreq")
+        laPulseMult("laPulseMult", "Pulse multiplier"),
+        tePulseMult("tePulseMult"),
+        laPulseTan("laPulseTan", "Pulse tan"),
+        tePulseTan("tePulseTan"),
+        laPulseLen("laPulseLen", "Pulse length"),
+        tePulseLen("tePulseLen")
     {
         teStiff.addListener(this);
         addAndMakeVisible(&teStiff);
@@ -561,9 +565,15 @@ public:
         }
         else if (data.getType() == Ids::pulsetouch)
         {
-            tePulseFreq.addListener(this);
-            addAndMakeVisible(&tePulseFreq);
-            laPulseFreq.attachToComponent(&tePulseFreq, true);
+            tePulseMult.addListener(this);
+            addAndMakeVisible(&tePulseMult);
+            laPulseMult.attachToComponent(&tePulseMult, true);
+            tePulseTan.addListener(this);
+            addAndMakeVisible(&tePulseTan);
+            laPulseTan.attachToComponent(&tePulseTan, true);
+            tePulseLen.addListener(this);
+            addAndMakeVisible(&tePulseLen);
+            laPulseLen.attachToComponent(&tePulseLen, true);
         }
 		readValues();
 	}
@@ -585,8 +595,10 @@ public:
         }
         else if (data.getType() == Ids::pulsetouch)
         {
-            tePulseFreq.setBounds(100, 100, getWidth() - 110, 22);
-            offset = 30;
+            tePulseMult.setBounds(100, 100, getWidth() - 110, 22);
+            tePulseTan.setBounds(100, 130, getWidth() - 110, 22);
+            tePulseLen.setBounds(100, 190, getWidth() - 110, 22);
+            offset = 90;
         }
 		tePos.setBounds(100 , 100+offset, getWidth() - 110, 22);
         teStartVertex.setBounds(100, 130+offset, getWidth() - 110, 22);
@@ -606,7 +618,9 @@ public:
         }
         else if(data.getType() == Ids::pulsetouch)
         {
-            tePulseFreq.setText(data.getChildWithName(Ids::parameters).getChild(3)[Ids::value].toString());
+            tePulseMult.setText(data.getChildWithName(Ids::parameters).getChild(3)[Ids::value].toString());
+            tePulseTan.setText(data.getChildWithName(Ids::parameters).getChild(4)[Ids::value].toString());
+            tePulseLen.setText(data.getChildWithName(Ids::parameters).getChild(5)[Ids::value].toString());
         }
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2+offset)[Ids::value].toString());
         teStartVertex.setText(data[Ids::startVertex].toString());
@@ -640,6 +654,8 @@ public:
         ValueTree pa2 = paramsTree.getChild(1);
         ValueTree pa3 = paramsTree.getChild(2);
         ValueTree pa4 = paramsTree.getChild(3);
+
+        ValueTree pa5, pa6;
         
         pa1.setProperty(Ids::value,
                         Utils::fixParameterValueIfNeeded(teStiff.getText()),
@@ -662,7 +678,15 @@ public:
                             Utils::fixParameterValueIfNeeded(tePos.getText()),
                             undoManager);
             pa4.setProperty(Ids::value,
-                            Utils::fixParameterValueIfNeeded(tePulseFreq.getText()),
+                            Utils::fixParameterValueIfNeeded(tePulseMult.getText()),
+                            undoManager);
+            pa5 = paramsTree.getChild(4);
+            pa5.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePulseTan.getText()),
+                            undoManager);
+            pa6 = paramsTree.getChild(5);
+            pa6.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePulseLen.getText()),
                             undoManager);
         }
         else
@@ -687,8 +711,12 @@ private:
     TextEditor teEndVertex;
     Label laMinDisplace;
     TextEditor teMinDisplace;
-    Label laPulseFreq;
-    TextEditor tePulseFreq;
+    Label laPulseMult;
+    TextEditor tePulseMult;
+    Label laPulseTan;
+    TextEditor tePulseTan;
+    Label laPulseLen;
+    TextEditor tePulseLen;
 };
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
