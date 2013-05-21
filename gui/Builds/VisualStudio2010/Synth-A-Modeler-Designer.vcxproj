@@ -271,6 +271,9 @@
     <ClCompile Include="..\..\..\juce\modules\juce_core\files\juce_TemporaryFile.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_core\network\juce_IPAddress.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_core\network\juce_MACAddress.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -1104,6 +1107,7 @@
     <ClInclude Include="..\..\..\juce\modules\juce_core\files\juce_FileSearchPath.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\files\juce_MemoryMappedFile.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\files\juce_TemporaryFile.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_core\network\juce_IPAddress.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\network\juce_MACAddress.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\network\juce_NamedPipe.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_core\network\juce_Socket.h"/>
