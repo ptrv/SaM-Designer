@@ -85,9 +85,9 @@ static const String getDefaultPathDataDir()
 		return infile.getFullPathName();
 	}
 #if JUCE_MAC
-	String relDataDir = "../../../../../cmd";
+	String relDataDir = "../../../../../SaM";
 #else
-	String relDataDir = "../../../../cmd";
+	String relDataDir = "../../../../SaM";
 #endif
 	infile = File::getCurrentWorkingDirectory().getChildFile(relDataDir);
 	if(infile.isDirectory())
