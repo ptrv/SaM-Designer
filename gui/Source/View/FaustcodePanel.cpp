@@ -137,7 +137,7 @@ public:
 
     bool keyPressed(const KeyPress& key)
     {
-        if(key == KeyPress('s', ModifierKeys::commandModifier, nullptr))
+        if(key == KeyPress('s', ModifierKeys::commandModifier, 0))
         {
             writeFaustcodeValues();
             return true;
