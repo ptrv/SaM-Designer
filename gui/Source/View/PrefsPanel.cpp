@@ -69,24 +69,30 @@ public:
         addAndMakeVisible (&fcFaustDir);
         labelFaustDir.attachToComponent (&fcFaustDir, false);
         addAndMakeVisible(&tbRunSAMBeforeExport);
-        tbRunSAMBeforeExport.setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(), false);
+        tbRunSAMBeforeExport.setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(),
+                                            dontSendNotification);
         addAndMakeVisible(&tbExportConfirm);
-        tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(), false);
+        tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(),
+                                       dontSendNotification);
         addAndMakeVisible(&tbOpenFaustExport);
-        tbOpenFaustExport.setToggleState(StoredSettings::getInstance()->getOpenFaustExport(), false);
+        tbOpenFaustExport.setToggleState(StoredSettings::getInstance()->getOpenFaustExport(),
+                                         dontSendNotification);
         addAndMakeVisible(&tbUseMDLX);
-        tbUseMDLX.setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(), false);
+        tbUseMDLX.setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(),
+                                 dontSendNotification);
 #if BUILTIN_SAM_COMPILER
         addAndMakeVisible(&tbUseBuiltinCompiler);
         tbUseBuiltinCompiler.setToggleState(StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler(), false);
 #endif
 #ifdef DEBUG
         addAndMakeVisible(&tbLoggingOn);
-        tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(), false);
+        tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(),
+                                   dontSendNotification);
 #endif
         addAndMakeVisible(&fcExternalEditor);
         labelExternalEditor.attachToComponent(&fcExternalEditor, false);
-        tbRedrawOnLoad.setToggleState(StoredSettings::getInstance()->getShouldRedrawOnLoad(), false);
+        tbRedrawOnLoad.setToggleState(StoredSettings::getInstance()->getShouldRedrawOnLoad(),
+                                      dontSendNotification);
         addAndMakeVisible(&tbRedrawOnLoad);
     }
 
