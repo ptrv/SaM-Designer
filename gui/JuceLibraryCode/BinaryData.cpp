@@ -37,7 +37,7 @@ static const unsigned char temp_96b5b732[] =
 "  <VALUE name=\"pulsetouch_damping\" val=\"0.1\"/>\r\n"
 "  <VALUE name=\"pulsetouch_offset\" val=\"0.0\"/>\r\n"
 "  <VALUE name=\"pulsetouch_pulsemult\" val=\"0.0\"/>\r\n"
-"  <VALUE name=\"pulsetouch_pulsetan\" val=\"0.0\"/>\r\n"
+"  <VALUE name=\"pulsetouch_pulsetau\" val=\"0.0\"/>\r\n"
 "  <VALUE name=\"pulsetouch_pulselen\" val=\"0.0\"/>\r\n"
 "</PROPERTIES>\r\n";
 

@@ -533,8 +533,8 @@ public:
         teMinDisplace("teMinDisplace"),
         laPulseMult("laPulseMult", "Pulse multiplier"),
         tePulseMult("tePulseMult"),
-        laPulseTan("laPulseTan", "Pulse tan"),
-        tePulseTan("tePulseTan"),
+        laPulseTau("laPulseTau", "Pulse tau"),
+        tePulseTau("tePulseTau"),
         laPulseLen("laPulseLen", "Pulse length"),
         tePulseLen("tePulseLen")
     {
@@ -568,9 +568,9 @@ public:
             tePulseMult.addListener(this);
             addAndMakeVisible(&tePulseMult);
             laPulseMult.attachToComponent(&tePulseMult, true);
-            tePulseTan.addListener(this);
-            addAndMakeVisible(&tePulseTan);
-            laPulseTan.attachToComponent(&tePulseTan, true);
+            tePulseTau.addListener(this);
+            addAndMakeVisible(&tePulseTau);
+            laPulseTau.attachToComponent(&tePulseTau, true);
             tePulseLen.addListener(this);
             addAndMakeVisible(&tePulseLen);
             laPulseLen.attachToComponent(&tePulseLen, true);
@@ -596,7 +596,7 @@ public:
         else if (data.getType() == Ids::pulsetouch)
         {
             tePulseMult.setBounds(100, 100, getWidth() - 110, 22);
-            tePulseTan.setBounds(100, 130, getWidth() - 110, 22);
+            tePulseTau.setBounds(100, 130, getWidth() - 110, 22);
             tePulseLen.setBounds(100, 190, getWidth() - 110, 22);
             offset = 90;
         }
@@ -619,7 +619,7 @@ public:
         else if(data.getType() == Ids::pulsetouch)
         {
             tePulseMult.setText(data.getChildWithName(Ids::parameters).getChild(3)[Ids::value].toString());
-            tePulseTan.setText(data.getChildWithName(Ids::parameters).getChild(4)[Ids::value].toString());
+            tePulseTau.setText(data.getChildWithName(Ids::parameters).getChild(4)[Ids::value].toString());
             tePulseLen.setText(data.getChildWithName(Ids::parameters).getChild(5)[Ids::value].toString());
         }
 		tePos.setText(data.getChildWithName(Ids::parameters).getChild(2+offset)[Ids::value].toString());
@@ -682,7 +682,7 @@ public:
                             undoManager);
             pa5 = paramsTree.getChild(4);
             pa5.setProperty(Ids::value,
-                            Utils::fixParameterValueIfNeeded(tePulseTan.getText()),
+                            Utils::fixParameterValueIfNeeded(tePulseTau.getText()),
                             undoManager);
             pa6 = paramsTree.getChild(5);
             pa6.setProperty(Ids::value,
@@ -713,8 +713,8 @@ private:
     TextEditor teMinDisplace;
     Label laPulseMult;
     TextEditor tePulseMult;
-    Label laPulseTan;
-    TextEditor tePulseTan;
+    Label laPulseTau;
+    TextEditor tePulseTau;
     Label laPulseLen;
     TextEditor tePulseLen;
 };

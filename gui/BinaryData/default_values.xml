@@ -26,6 +26,6 @@
   <VALUE name="pulsetouch_damping" val="0.1"/>
   <VALUE name="pulsetouch_offset" val="0.0"/>
   <VALUE name="pulsetouch_pulsemult" val="0.0"/>
-  <VALUE name="pulsetouch_pulsetan" val="0.0"/>
+  <VALUE name="pulsetouch_pulsetau" val="0.0"/>
   <VALUE name="pulsetouch_pulselen" val="0.0"/>
 </PROPERTIES>

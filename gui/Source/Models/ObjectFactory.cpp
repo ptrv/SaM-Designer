@@ -151,7 +151,7 @@ static ValueTree createNewPulsetouchTree(const String& newName,
     p.add(settings.getDefaultValue("pulsetouch_damping", "0.1"));
     p.add(settings.getDefaultValue("pulsetouch_offset", "0.0"));
     p.add(settings.getDefaultValue("pulsetouch_pulsemult", "0.0"));
-    p.add(settings.getDefaultValue("pulsetouch_pulsetan", "0.0"));
+    p.add(settings.getDefaultValue("pulsetouch_pulsetau", "0.0"));
     p.add(settings.getDefaultValue("pulsetouch_pulselen", "0.0"));
     ValueTree paramsTree = ObjectFactory::createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
