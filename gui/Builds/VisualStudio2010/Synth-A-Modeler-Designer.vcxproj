@@ -598,6 +598,9 @@
     <ClCompile Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseEvent.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInactivityDetector.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInputSource.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -967,6 +970,9 @@
     <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\native\juce_linux_WebBrowserComponent.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\native\juce_mac_SystemTrayIcon.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\native\juce_win32_ActiveXComponent.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -1226,6 +1232,7 @@
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_LassoComponent.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseCursor.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseEvent.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInactivityDetector.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInputSource.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseListener.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_SelectedItemSet.h"/>
@@ -1266,6 +1273,8 @@
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\menus\juce_MenuBarComponent.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\menus\juce_MenuBarModel.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\menus\juce_PopupMenu.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_AnimatedPosition.h"/>
+    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_AnimatedPositionBehaviours.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_ComponentAnimator.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_ComponentBoundsConstrainer.h"/>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_ComponentBuilder.h"/>

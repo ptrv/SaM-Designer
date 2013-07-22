@@ -808,6 +808,9 @@
     <ClCompile Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseEvent.cpp">
       <Filter>Juce Modules\juce_gui_basics\mouse</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInactivityDetector.cpp">
+      <Filter>Juce Modules\juce_gui_basics\mouse</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInputSource.cpp">
       <Filter>Juce Modules\juce_gui_basics\mouse</Filter>
     </ClCompile>
@@ -1205,6 +1208,9 @@
       <Filter>Juce Modules\juce_gui_extra\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\native\juce_mac_NSViewComponent.mm">
+      <Filter>Juce Modules\juce_gui_extra\native</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\native\juce_mac_SystemTrayIcon.cpp">
       <Filter>Juce Modules\juce_gui_extra\native</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\native\juce_mac_WebBrowserComponent.mm">
@@ -1965,6 +1971,9 @@
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseEvent.h">
       <Filter>Juce Modules\juce_gui_basics\mouse</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInactivityDetector.h">
+      <Filter>Juce Modules\juce_gui_basics\mouse</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\mouse\juce_MouseInputSource.h">
       <Filter>Juce Modules\juce_gui_basics\mouse</Filter>
     </ClInclude>
@@ -2084,6 +2093,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\menus\juce_PopupMenu.h">
       <Filter>Juce Modules\juce_gui_basics\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_AnimatedPosition.h">
+      <Filter>Juce Modules\juce_gui_basics\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_AnimatedPositionBehaviours.h">
+      <Filter>Juce Modules\juce_gui_basics\layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\layout\juce_ComponentAnimator.h">
       <Filter>Juce Modules\juce_gui_basics\layout</Filter>
