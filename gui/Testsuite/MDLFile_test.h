@@ -236,6 +236,7 @@ public:
 		expectEquals(aus.getChild(0).getType().toString(), Ids::audioout.toString());
         // test 3
 		expectEquals(aus.getChild(0)[Ids::identifier].toString(), String("a1"));
+        // test 4
         String actualSources1;
         ValueTree sources1 = aus.getChild(0).getChildWithName(Ids::sources);
         for (int i = 0; i < sources1.getNumChildren(); i++)
@@ -245,9 +246,8 @@ public:
             if(i != sources1.getNumChildren()-1)
                 actualSources1 << "+";
         }
-        actualSources1 << aus.getChild(0).getProperty(Ids::optional, "").toString();
-        // test 4
-		expectEquals(actualSources1, String("m1*(1000.0)+l1*(100.0)"));
+        //actualSources1 << aus.getChild(0).getProperty(Ids::optional, "").toString();
+        expectEquals(actualSources1, String("m1*(1000.0)+l1*(100.0)"));
 
         // test 5
 		expectEquals(aus.getChild(1).getType().toString(), Ids::audioout.toString());
@@ -264,6 +264,10 @@ public:
         }
         // test 7
 		expectEquals(actualSources2, String("l2*(1000.0)+l3*(-50.0)+l1*(0.01)"));
+
+        // test 8
+        String aso1 = aus.getChild(0).getProperty(Ids::optional).toString();
+        expectEquals(aso1, String("outputDSP"));
 	}
 };
 

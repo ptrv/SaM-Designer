@@ -21,8 +21,8 @@ bigBlock(m1p,m2p,m3p,gp,dev1p) = (m1,m2,m3,g,dev1,a1,a2) with {
 	l3 = (m2p - dev1p) : link(2.0*adjStiffness,0.005,0.0);
 
 	// For audio outputs:
-	a1 = m1*(1000.0)+l1*(100.0);
-	a2 = l2*(1000.0)+l3*(-50.0)+l1*(0.01);
+	a1 = m1*(1000.0)+l1*(100.0):outputDSP;
+	a2 = l2*(1000.0)+l3*(-50.0)+l1*(0.01):outputDSP;
 };
 
 process = (bigBlock)~(_,_,_,_,!,!,!):(!,!,!,!,_,_,_);
