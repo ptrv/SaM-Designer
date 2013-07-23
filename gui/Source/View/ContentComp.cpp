@@ -523,7 +523,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
     case CommandIDs::showObjectNames:
         result.setInfo("Show identifiers", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('i', ModifierKeys::commandModifier);
+        result.addDefaultKeypress('i', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         result.setTicked(objectsHolder->getShowObjectNames());
         break;
 

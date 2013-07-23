@@ -316,6 +316,9 @@
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\View\PropertiesWindow.cpp">
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\View\RedrawOptionsPanel.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
@@ -1355,6 +1358,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\MDLFile.h">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\View\PropertiesWindow.h">
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\RedrawOptionsPanel.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>

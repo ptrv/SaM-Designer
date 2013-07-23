@@ -26,6 +26,7 @@
 #include "CommonHeaders.h"
 #include "../View/PrefsPanel.h"
 #include "../View/OutputWindow.h"
+#include "../View/PropertiesWindow.h"
 #include "MainWindow.h"
 #include "../Models/MDLFile.h"
 #include "SAMLookAndFeel.h"
@@ -35,6 +36,8 @@
 #include "Application.h"
 
 using namespace synthamodeler;
+
+ScopedPointer<PropertiesWindow> synthamodeler::propertiesWindow;
 
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"
@@ -102,6 +105,9 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	menuModel = new MainMenuModel();
 
 	outputWindow = new OutputWindow();
+
+    propertiesWindow = new PropertiesWindow();
+
     Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
 
     for (int i = 0; i < mdls.size(); ++ i)
@@ -163,6 +169,8 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	outputWindow->printWelcomeMessage();
 	outputWindow->makeVisible ();
 	getOrCreateFrontmostWindow()->toFront(true);
+
+//    propertiesWindow->makeVisible();
 }
 
 void SynthAModelerApplication::shutdown()
@@ -180,6 +188,7 @@ void SynthAModelerApplication::shutdown()
 	mainWindows.clear();
 
 	commandManager = nullptr;
+    propertiesWindow = nullptr;
 
     Logger::setCurrentLogger(nullptr);
 #ifdef DEBUG
@@ -276,6 +285,7 @@ void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::clearOutputConsole,
                               CommandIDs::openDataDir,
                               CommandIDs::showHelp,
+                              CommandIDs::showPropertiesWindow
 
     };
 
@@ -314,6 +324,10 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	result.setInfo("Show output window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
+    case CommandIDs::showPropertiesWindow:
+    	result.setInfo("Show properties window", "", CommandCategories::windows,0);
+    	result.addDefaultKeypress('i', ModifierKeys::commandModifier);
+    	break;
     default:
         JUCEApplication::getCommandInfo (commandID, result);
         break;
@@ -345,6 +359,10 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
     case CommandIDs::showHelp:
     	Utils::openHelpUrl();
+    	break;
+    case CommandIDs::showPropertiesWindow:
+//    	propertiesWindow->makeVisible(!propertiesWindow->isVisible());
+    	propertiesWindow->makeVisible();
     	break;
     default:
     	return JUCEApplication::perform (info);
@@ -624,6 +642,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     {
         menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
         menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showPropertiesWindow);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
         menu.addSeparator();

@@ -48,6 +48,7 @@ ObjController::ObjController(MDLController& owner_)
   timesPasted(0)
 {
     idMgr = new IdManager();
+    sObjects.addChangeListener(propertiesWindow);
 }
 
 ObjController::~ObjController()
@@ -57,6 +58,7 @@ ObjController::~ObjController()
     objects.clear(true);
     comments.clear(true);
     idMgr = nullptr;
+    sObjects.removeChangeListener(propertiesWindow);
 }
 
 bool ObjController::perform(UndoableAction * const action, const String& actionName)

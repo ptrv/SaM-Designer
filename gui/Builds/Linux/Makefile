@@ -75,6 +75,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/PropertiesWindow_5070b22e.o \
   $(OBJDIR)/RedrawOptionsPanel_f391d648.o \
   $(OBJDIR)/CommentEditor_abeb432b.o \
   $(OBJDIR)/CommentComponent_3199b309.o \
@@ -245,6 +246,11 @@ $(OBJDIR)/SAMCmd_cf7547a1.o: ../../Source/Models/SAMCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/PropertiesWindow_5070b22e.o: ../../Source/View/PropertiesWindow.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling PropertiesWindow.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/RedrawOptionsPanel_f391d648.o: ../../Source/View/RedrawOptionsPanel.cpp

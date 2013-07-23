@@ -149,6 +149,10 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="xH2yUj" name="PropertiesWindow.cpp" compile="1" resource="0"
+              file="Source/View/PropertiesWindow.cpp"/>
+        <FILE id="JD0QlQ" name="PropertiesWindow.h" compile="0" resource="0"
+              file="Source/View/PropertiesWindow.h"/>
         <FILE id="kIUIkp" name="RedrawOptionsPanel.cpp" compile="1" resource="0"
               file="Source/View/RedrawOptionsPanel.cpp"/>
         <FILE id="Ejkwfk" name="RedrawOptionsPanel.h" compile="0" resource="0"

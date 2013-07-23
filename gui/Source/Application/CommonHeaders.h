@@ -40,11 +40,13 @@
 #include "../Utilities/MiscUtilities.h"
 //#include "../Utilities/SAMRegex.h"
 #include "../Utilities/ResourceLoader.h"
+#include "../View/PropertiesWindow.h"
 #include "Application.h"
 
 namespace synthamodeler
 {
 extern ScopedPointer<ApplicationCommandManager> commandManager;
+extern ScopedPointer<PropertiesWindow> propertiesWindow;
 
 #ifdef DEBUG
 #define SAM_LOG(message) Utils::SAMLogger(message)
