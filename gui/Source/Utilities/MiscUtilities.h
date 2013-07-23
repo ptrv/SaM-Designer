@@ -105,6 +105,9 @@ T constrain(T actual, T min, T max)
         return actual;
 }
 
+bool containsStringInValueTree(ValueTree valTree,
+                               const String& searchStr,
+                               bool isRoot);
 };
 }
 

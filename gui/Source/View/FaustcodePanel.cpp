@@ -31,6 +31,66 @@
 
 using namespace synthamodeler;
 
+class FaustCodeEditor : public TextEditor
+{
+public:
+    FaustCodeEditor(const String& componentName,
+                    ObjController* objController_)
+        : TextEditor(componentName), objController(objController_)
+    {
+    }
+
+    void mouseDoubleClick(const MouseEvent& e)
+    {
+        TextEditor::mouseDoubleClick(e);
+        if(! getHighlightedRegionIfVar().isEmpty())
+            objController->selectObjectsIfContainText(getHighlightedText());
+        else
+            objController->selectAll(false);
+    }
+    bool keyPressed(const KeyPress& kp)
+    {
+        TextEditor::keyPressed(kp);
+        if(! getHighlightedRegionIfVar().isEmpty())
+        {
+            objController->selectObjectsIfContainText(getHighlightedText());
+        }
+        else
+        {
+            objController->selectAll(false);
+        }
+    }
+    void mouseUp (const MouseEvent & md)
+    {
+        TextEditor::mouseUp(md);
+        if(! getHighlightedRegionIfVar().isEmpty())
+        {
+            objController->selectObjectsIfContainText(getHighlightedText());
+        }
+        else
+        {
+            objController->selectAll(false);
+        }
+    }
+    Range<int>getHighlightedRegionIfVar()
+    {
+        Range<int> range = TextEditor::getHighlightedRegion();
+
+        // Return only a range if selection has an equal sign on the right
+        // It make only sense to return range if it is a variable name and not
+        // the variable definition
+        if(! range.isEmpty())
+        {
+            String lineTxt = getText().substring(range.getEnd())
+                .upToFirstOccurrenceOf("\n", false, true);
+            if(! lineTxt.contains("="))
+                return Range<int>();
+        }
+        return range;
+    }
+private:
+    ObjController* objController;
+};
 class FaustcodeComponent : public Component,
                            public Button::Listener,
                            public TextEditor::Listener
@@ -45,7 +105,7 @@ public:
     btOk("Ok"),
     btCancel("Cancel"),
     btHelp("?"),
-    teFaustCode("faustcode texteditor"),
+    teFaustCode("faustcode texteditor", objController),
     objController(objController),
     data(data_),
     undoManager(undoManager_)
@@ -168,13 +228,13 @@ private:
     TextButton btOk;
     TextButton btCancel;
     TextButton btHelp;
-    TextEditor teFaustCode;
+    FaustCodeEditor teFaustCode;
     ObjController* objController;
 	ValueTree data;
     UndoManager* undoManager;
     String faustCodeText;
 
-    
+
     class HintComponent : public Component
     {
     public:

@@ -332,3 +332,39 @@ bool Utils::writeStringToFile(const String& s, const File& f)
 		return false;
 	}
 }
+
+bool Utils::containsStringInValueTree(ValueTree valTree,
+                                      const String& searchStr,
+                                      bool isRoot)
+{
+    if (isRoot)
+    {
+        for (int k = 0; k < valTree.getNumProperties(); ++k)
+        {
+            if (valTree.getProperty(valTree.getPropertyName(k)).toString().containsWholeWord(searchStr))
+            {
+                return true;
+            }
+        }
+    }
+    else
+    {
+        for (int k = 0; k < valTree.getParent().getNumChildren(); ++k)
+        {
+            ValueTree c = valTree.getParent().getChild(k);
+            for (int k = 0; k < c.getNumProperties(); ++k)
+            {
+                if (c.getProperty(c.getPropertyName(k)).toString().containsWholeWord(searchStr))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < valTree.getNumChildren(); ++i)
+    {
+        ValueTree c = valTree.getChild(i);
+        return containsStringInValueTree(c, searchStr, false);
+    }
+    return false;
+}

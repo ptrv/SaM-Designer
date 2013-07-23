@@ -119,6 +119,8 @@ public:
 	 */
 	void selectAll(bool shouldBeSelected);
 
+    void selectObjectsIfContainText(const String& selectionText);
+
 	/**
 	 * Edits the properties of an object.
 	 *

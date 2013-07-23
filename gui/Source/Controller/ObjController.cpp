@@ -719,6 +719,25 @@ void ObjController::selectAll(bool shouldBeSelected)
     }
 }
 
+void ObjController::selectObjectsIfContainText(const String& selectionText)
+{
+    sObjects.deselectAll();
+    if(selectionText.isEmpty())
+        return;
+
+    for (int i = 0; i < objects.size(); ++i)
+    {
+        ObjectComponent* oc = objects.getUnchecked(i);
+        if(Utils::containsStringInValueTree(oc->getData(), selectionText, true))
+            sObjects.addToSelection(oc);
+    }
+    for (int j = 0; j < links.size(); ++j)
+    {
+        LinkComponent* lc = links.getUnchecked(j);
+        if(Utils::containsStringInValueTree(lc->getData(), selectionText, true))
+            sObjects.addToSelection(lc);
+    }
+}
 void ObjController::editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager)
 {
     ObjectPropertiesPanel::show(this, oc, undoManager);
