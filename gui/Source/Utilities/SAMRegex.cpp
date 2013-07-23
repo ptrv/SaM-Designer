@@ -52,7 +52,8 @@ String SAMRegex::getVertexLine()
     String vertexLine;
     vertexLine << "\\A\\s*" << vertex << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     vertexLine << label << "\\s*;";
-    vertexLine << pos << "\\s*$";
+//    vertexLine << pos << "\\s*$";
+    vertexLine << "(.*)$";
     return vertexLine;
 }
 
@@ -61,7 +62,7 @@ String SAMRegex::getLinkLine()
     String linkLine;
     linkLine << "\\A\\s*" << link << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     linkLine << label << "\\s*,\\s*" << label << "\\s*,\\s*" << label;
-    linkLine << "\\s*;\\s*$";
+    linkLine << "\\s*;.*$";
     return linkLine;
 }
 
@@ -69,7 +70,9 @@ String SAMRegex::getAudioOutLine()
 {
     String aoLine;
     aoLine << "\\A\\s*(audioout)\\s*,\\s*" << label << "\\s*,";
-    aoLine << audioOutDetails << ";" << pos << "\\s*$";
+    aoLine << audioOutDetails << ";";
+//    aoLine << pos << "\\s*$";
+    aoLine << "(.*)$";
     return aoLine;
 }
 
@@ -86,7 +89,8 @@ String SAMRegex::getTerminationLine()
     String termLine;
     termLine << "\\A\\s*(termination)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     termLine << label << "\\s*;";
-    termLine << pos << "\\s*$";
+//    termLine << pos << "\\s*$";
+    termLine << "(.*)$";
     return termLine;
 }
 
@@ -95,7 +99,8 @@ String SAMRegex::getJunctionLine()
     String junctLine;
     junctLine << "\\A\\s*(junction)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     junctLine << label << "\\s*;";
-    junctLine << pos << "\\s*$";
+//    junctLine << pos << "\\s*$";
+    junctLine << "(.*)$";
     return junctLine;
 }
 
@@ -104,7 +109,7 @@ String SAMRegex::getWaveguideLine()
     String waveguideLine;
     waveguideLine << "\\A\\s*(waveguide)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
     waveguideLine << label << "\\s*,\\s*";
-    waveguideLine << label << "\\s*,\\s*" << label << "\\s*;\\s*$";
+    waveguideLine << label << "\\s*,\\s*" << label << "\\s*;.*$";
     return waveguideLine;
 }
 
@@ -125,7 +130,8 @@ String SAMRegex::getCommentObjectLine()
     String commentObjectLine;
     commentObjectLine << "\\A\\s*##\\s*(comment)\\(\\s*([!-~\\s]*)";
     commentObjectLine << "\\s*\\)\\s*,\\s*" << label << "\\s*;\\s*";
-    commentObjectLine << pos << "\\s*$";
+//    commentObjectLine << pos << "\\s*$";
+    commentObjectLine << "(.*)$";
 
     return commentObjectLine;
 }
