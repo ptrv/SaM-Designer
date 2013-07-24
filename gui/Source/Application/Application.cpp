@@ -183,12 +183,12 @@ void SynthAModelerApplication::shutdown()
 	menuModel = nullptr;
 
 	outputWindow = nullptr;
+    propertiesWindow = nullptr;
 
 	StoredSettings::deleteInstance();
 	mainWindows.clear();
 
 	commandManager = nullptr;
-    propertiesWindow = nullptr;
 
     Logger::setCurrentLogger(nullptr);
 #ifdef DEBUG

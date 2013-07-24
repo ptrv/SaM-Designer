@@ -42,6 +42,7 @@
 #include "SnapGridPainter.h"
 #include "AudioOutConnector.h"
 #include "CommentComponent.h"
+#include "PropertiesWindow.h"
 
 #include "ObjectsHolder.h"
 
@@ -648,17 +649,6 @@ void ObjectsHolder::showAudioConnectionPopupMenu()
     {
         objController.addNewAudioConnection(this);
     }
-}
-
-void ObjectsHolder::editObjectProperties(BaseObjectComponent* oc)
-{
-    isDrawingObjectNames = true;
-    toFront(false);
-    repaint();
-    objController.editObjectProperties(oc, &mdlFile->getUndoMgr());
-    isDrawingObjectNames = false;
-    toBack();
-    repaint();
 }
 
 void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results, const Rectangle<int>& lasso)

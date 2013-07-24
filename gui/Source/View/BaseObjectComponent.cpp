@@ -64,7 +64,7 @@ void BaseObjectComponent::showContextMenu()
 
 	if (r == 1)
 	{
-		getObjectsHolder()->editObjectProperties(this);
+        propertiesWindow->makeVisible(true);
 	}
 	else if (r == 2)
 	{

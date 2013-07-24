@@ -120,15 +120,7 @@ public:
 	void selectAll(bool shouldBeSelected);
 
     void selectObjectsIfContainText(const String& selectionText);
-
-	/**
-	 * Edits the properties of an object.
-	 *
-	 * @param oc			the object component to edit
-	 * @param undoManager	the MDLFile's UndoManager
-	 */
-	void editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager);
-    
+  
 //    SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
 //    { 
 //        return selectedObjects; 

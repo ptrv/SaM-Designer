@@ -149,6 +149,10 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="cskaxn" name="ObjectPropertiesComponent.cpp" compile="1"
+              resource="0" file="Source/View/ObjectPropertiesComponent.cpp"/>
+        <FILE id="w18xeI" name="ObjectPropertiesComponent.h" compile="0" resource="0"
+              file="Source/View/ObjectPropertiesComponent.h"/>
         <FILE id="xH2yUj" name="PropertiesWindow.cpp" compile="1" resource="0"
               file="Source/View/PropertiesWindow.cpp"/>
         <FILE id="JD0QlQ" name="PropertiesWindow.h" compile="0" resource="0"
@@ -185,10 +189,6 @@
               file="Source/View/FaustcodePanel.cpp"/>
         <FILE id="ZgiRJ5" name="FaustcodePanel.h" compile="0" resource="0"
               file="Source/View/FaustcodePanel.h"/>
-        <FILE id="IPEDKA" name="ObjectPropertiesPanel.cpp" compile="1" resource="0"
-              file="Source/View/ObjectPropertiesPanel.cpp"/>
-        <FILE id="zbvgtU" name="ObjectPropertiesPanel.h" compile="0" resource="0"
-              file="Source/View/ObjectPropertiesPanel.h"/>
         <FILE id="W2WCvr" name="ObjectComponent.cpp" compile="1" resource="0"
               file="Source/View/ObjectComponent.cpp"/>
         <FILE id="kbQNVc" name="ObjectComponent.h" compile="0" resource="0"

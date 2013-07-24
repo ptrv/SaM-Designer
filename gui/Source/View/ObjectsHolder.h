@@ -68,8 +68,6 @@ public:
     void setMDLFile(MDLFile* newMDLFile);
     void reloadMDLFile();
 
-    void editObjectProperties(BaseObjectComponent* oc);
-
     void findLassoItemsInArea(Array <SelectableObject*>& results,
                               const Rectangle<int>& area);
 

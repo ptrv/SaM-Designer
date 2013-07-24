@@ -31,7 +31,6 @@
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../View/AudioOutConnector.h"
-#include "../View/ObjectPropertiesPanel.h"
 #include "MDLController.h"
 #include "../Utilities/IdManager.h"
 #include "../View/CommentComponent.h"
@@ -739,10 +738,6 @@ void ObjController::selectObjectsIfContainText(const String& selectionText)
         if(Utils::containsStringInValueTree(lc->getData(), selectionText, true))
             sObjects.addToSelection(lc);
     }
-}
-void ObjController::editObjectProperties(BaseObjectComponent* oc, UndoManager* undoManager)
-{
-    ObjectPropertiesPanel::show(this, oc, undoManager);
 }
 
 void ObjController::startDragging()

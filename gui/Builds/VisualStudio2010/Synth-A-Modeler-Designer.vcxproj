@@ -161,6 +161,7 @@
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp"/>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp"/>
+    <ClCompile Include="..\..\Source\View\ObjectPropertiesComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\PropertiesWindow.cpp"/>
     <ClCompile Include="..\..\Source\View\RedrawOptionsPanel.cpp"/>
     <ClCompile Include="..\..\Source\View\CommentEditor.cpp"/>
@@ -170,7 +171,6 @@
     <ClCompile Include="..\..\Source\View\BaseObjectComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\LinkComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\FaustcodePanel.cpp"/>
-    <ClCompile Include="..\..\Source\View\ObjectPropertiesPanel.cpp"/>
     <ClCompile Include="..\..\Source\View\ObjectComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\OutputWindow.cpp"/>
     <ClCompile Include="..\..\Source\View\PrefsPanel.cpp"/>
@@ -1028,6 +1028,7 @@
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>
     <ClInclude Include="..\..\Source\Models\SAMCmd.h"/>
     <ClInclude Include="..\..\Source\Models\MDLFile.h"/>
+    <ClInclude Include="..\..\Source\View\ObjectPropertiesComponent.h"/>
     <ClInclude Include="..\..\Source\View\PropertiesWindow.h"/>
     <ClInclude Include="..\..\Source\View\RedrawOptionsPanel.h"/>
     <ClInclude Include="..\..\Source\View\CommentEditor.h"/>
@@ -1038,7 +1039,6 @@
     <ClInclude Include="..\..\Source\View\BaseObjectComponent.h"/>
     <ClInclude Include="..\..\Source\View\LinkComponent.h"/>
     <ClInclude Include="..\..\Source\View\FaustcodePanel.h"/>
-    <ClInclude Include="..\..\Source\View\ObjectPropertiesPanel.h"/>
     <ClInclude Include="..\..\Source\View\ObjectComponent.h"/>
     <ClInclude Include="..\..\Source\View\OutputWindow.h"/>
     <ClInclude Include="..\..\Source\View\PrefsPanel.h"/>

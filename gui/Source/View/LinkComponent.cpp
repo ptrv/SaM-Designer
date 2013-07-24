@@ -168,7 +168,7 @@ void LinkComponent::mouseUp(const MouseEvent& e)
 {
     if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
-		getObjectsHolder()->editObjectProperties(this);
+        propertiesWindow->makeVisible(true);
 	}
     else if (e.mods.isPopupMenu())
     {

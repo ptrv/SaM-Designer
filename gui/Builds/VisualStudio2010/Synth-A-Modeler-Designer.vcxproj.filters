@@ -316,6 +316,9 @@
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\View\ObjectPropertiesComponent.cpp">
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\View\PropertiesWindow.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
@@ -341,9 +344,6 @@
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\FaustcodePanel.cpp">
-      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\View\ObjectPropertiesPanel.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\ObjectComponent.cpp">
@@ -1359,6 +1359,9 @@
     <ClInclude Include="..\..\Source\Models\MDLFile.h">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\View\ObjectPropertiesComponent.h">
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\View\PropertiesWindow.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
@@ -1387,9 +1390,6 @@
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\FaustcodePanel.h">
-      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\View\ObjectPropertiesPanel.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\ObjectComponent.h">

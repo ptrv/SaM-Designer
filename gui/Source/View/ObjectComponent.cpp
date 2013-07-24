@@ -29,7 +29,6 @@
 #include "../Graph/Node.h"
 #include "BaseObjectComponent.h"
 #include "ObjectsHolder.h"
-#include "ObjectPropertiesPanel.h"
 #include "../Models/ObjectActions.h"
 
 #include "ObjectComponent.h"
@@ -199,7 +198,7 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 
 	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
-		getObjectsHolder()->editObjectProperties(this);
+        propertiesWindow->makeVisible(true);
 	}
 
     owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging, 

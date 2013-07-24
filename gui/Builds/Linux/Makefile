@@ -75,6 +75,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/ObjectPropertiesComponent_e2a1e34a.o \
   $(OBJDIR)/PropertiesWindow_5070b22e.o \
   $(OBJDIR)/RedrawOptionsPanel_f391d648.o \
   $(OBJDIR)/CommentEditor_abeb432b.o \
@@ -84,7 +85,6 @@ OBJECTS := \
   $(OBJDIR)/BaseObjectComponent_eac867ec.o \
   $(OBJDIR)/LinkComponent_6a391d22.o \
   $(OBJDIR)/FaustcodePanel_375377a7.o \
-  $(OBJDIR)/ObjectPropertiesPanel_99e3c0d1.o \
   $(OBJDIR)/ObjectComponent_96e7177d.o \
   $(OBJDIR)/OutputWindow_f103bf7c.o \
   $(OBJDIR)/PrefsPanel_2006a45f.o \
@@ -248,6 +248,11 @@ $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	@echo "Compiling MDLFile.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
+$(OBJDIR)/ObjectPropertiesComponent_e2a1e34a.o: ../../Source/View/ObjectPropertiesComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjectPropertiesComponent.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 $(OBJDIR)/PropertiesWindow_5070b22e.o: ../../Source/View/PropertiesWindow.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling PropertiesWindow.cpp"
@@ -291,11 +296,6 @@ $(OBJDIR)/LinkComponent_6a391d22.o: ../../Source/View/LinkComponent.cpp
 $(OBJDIR)/FaustcodePanel_375377a7.o: ../../Source/View/FaustcodePanel.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling FaustcodePanel.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/ObjectPropertiesPanel_99e3c0d1.o: ../../Source/View/ObjectPropertiesPanel.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ObjectPropertiesPanel.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ObjectComponent_96e7177d.o: ../../Source/View/ObjectComponent.cpp
