@@ -61,11 +61,6 @@ void ObjectPropertiesComponent::resized()
     laDebug.setBounds(65, getHeight() - 60, 100, 22);
 }
 
-bool ObjectPropertiesComponent::checkIfIdExists(const String& idStr)
-{
-    return objController->checkIfIdExists(data.getType(), idStr);
-}
-
 void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& editor)
 {
     dataChanged = true;
@@ -115,9 +110,52 @@ void ObjectPropertiesComponent::cancelEditing()
             data[Ids::identifier].toString());
 }
 
+bool ObjectPropertiesComponent::writeIdentifier()
+{
+    String newName = teName.getText();
+    String oldName = data[Ids::identifier];
+    if (newName != oldName)
+    {
+        if (objController->checkIfIdExists(data.getType(), newName))
+        {
+            return false;
+        }
+        else
+        {
+            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
+                return false;
+        }
+
+        // Change names in connected objects
+        if(data.getType() == Ids::mass || data.getType() == Ids::port
+            || data.getType() == Ids::ground || data.getType() == Ids::resonators)
+        {
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+        }
+        else if(data.getType() == Ids::link || data.getType() == Ids::touch
+            || data.getType() == Ids::pluck || data.getType() == Ids::pulsetouch)
+        {
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+        }
+        else if(data.getType() == Ids::junction)
+        {
+            objController->changeObjectNameInLink(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+        }
+        else if(data.getType() == Ids::termination)
+        {
+            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+        }
+
+        data.setProperty(Ids::identifier, newName, undoManager);
+    }
+    return true;
+}
+
 MassPropertiesComponent::MassPropertiesComponent(ObjController* objController_,
-                        ValueTree data_,
-                        UndoManager* undoManager_)
+                                                 ValueTree data_,
+                                                 UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, data_, undoManager_),
 laMass("laMass", "Mass (kg)"),
 teMass("teMass"),
@@ -164,24 +202,8 @@ void MassPropertiesComponent::readValues()
 
 bool MassPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier];
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
+    if(! writeIdentifier())
+        return false;
 
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
     ValueTree pa1 = paramsTree.getChild(0);
@@ -203,8 +225,8 @@ bool MassPropertiesComponent::writeValues()
 }
 
 PortPropertiesComponent::PortPropertiesComponent(ObjController* objController_,
-                        ValueTree data_,
-                        UndoManager* undoManager_)
+                                                 ValueTree data_,
+                                                 UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, data_, undoManager_)
 {
     readValues();
@@ -227,26 +249,10 @@ void PortPropertiesComponent::readValues()
 
 bool PortPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier];
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
-
-    return true;
+    if(writeIdentifier())
+        return true;
+    else
+        return false;
 }
 
 ResonatorPropertiesComponent::ResonatorPropertiesComponent(ObjController* objController_,
@@ -312,25 +318,9 @@ void ResonatorPropertiesComponent::readValues()
 
 bool ResonatorPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier];
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
-
+    if(! writeIdentifier())
+        return false;
+    
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
     String valFreq = teFreq.getText();
@@ -401,24 +391,8 @@ void GroundPropertiesComponent::readValues()
 
 bool GroundPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier];
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
+    if(! writeIdentifier())
+        return false;
 
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
     ValueTree param = paramsTree.getChild(0);
@@ -541,25 +515,8 @@ void LinkPropertiesComponent::readValues()
 
 bool LinkPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier].toString();
-
-    if (oldName != newName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-
-        objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
+    if(! writeIdentifier())
+        return false;
 
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
     ValueTree pa1 = paramsTree.getChild(0);
@@ -663,23 +620,9 @@ void AudiooutPropertiesComponent::readValues()
 
 bool AudiooutPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier].toString();
-
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
+    if(! writeIdentifier())
+        return false;
+    
     String sourceText = teSource.getText();
     StringArray sourcesList;
     sourcesList.addTokens(sourceText, "+", "\"");
@@ -753,25 +696,8 @@ void WaveguidePropertiesComponent::readValues()
 
 bool WaveguidePropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier].toString();
-
-    if (oldName != newName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-
-        //            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
+    if(! writeIdentifier())
+        return false;
 
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
     ValueTree pa1 = paramsTree.getChild(0);
@@ -819,24 +745,8 @@ void TerminationPropertiesComponent::readValues()
 
 bool TerminationPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier];
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        //            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
+    if(! writeIdentifier())
+        return false;
 
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
     ValueTree param = paramsTree.getChild(0);
@@ -878,25 +788,9 @@ void JunctionPropertiesComponent::readValues()
 
 bool JunctionPropertiesComponent::writeValues()
 {
-    String newName = teName.getText();
-    String oldName = data[Ids::identifier];
-    if (newName != oldName)
-    {
-        if (objController->checkIfIdExists(data.getType(), newName))
-        {
-            return false;
-        }
-        else
-        {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
-                return false;
-        }
-        objController->changeObjectNameInLink(oldName, newName, undoManager);
-        //            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
-
-        data.setProperty(Ids::identifier, newName, undoManager);
-    }
-
+    if(! writeIdentifier())
+        return true;
+    
     ValueTree paramsTree = data.getChildWithName(Ids::parameters);
     ValueTree param = paramsTree.getChild(0);
     param.setProperty(Ids::value, tePos.getText(), undoManager);

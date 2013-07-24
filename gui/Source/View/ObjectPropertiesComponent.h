@@ -41,7 +41,6 @@ public:
 
 	void resized();
 
-    bool checkIfIdExists(const String& idStr);
 	virtual void readValues() = 0;
 	virtual bool writeValues() = 0;
 
@@ -51,7 +50,10 @@ public:
     void textEditorFocusLost(TextEditor& editor);
     void applyEditing();
     void cancelEditing();
+
 protected:
+    bool writeIdentifier();
+
     ObjController* objController;
 	ValueTree data;
 	UndoManager* undoManager;
