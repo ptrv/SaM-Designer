@@ -26,15 +26,15 @@
 #ifndef __PROPERTIESWINDOW_H_FBFE568F__
 #define __PROPERTIESWINDOW_H_FBFE568F__
 
-#include "SelectableObject.h"
-
-
 namespace synthamodeler
 {
 class ContentComp;
+class SelectableObject;
+
 class PropertiesWindow : public DocumentWindow,
                          public FocusChangeListener,
-                         public ChangeListener
+                         public ChangeListener,
+                         public ValueTree::Listener
 {
 public:
     PropertiesWindow();
@@ -49,12 +49,20 @@ public:
     void closeButtonPressed();
 
     bool keyPressed(const KeyPress& kp);
-    
+
+    void valueTreePropertyChanged (ValueTree& tree, const Identifier& property);
+    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
+    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved);
+    void valueTreeChildOrderChanged (ValueTree& parentTree);
+    void valueTreeParentChanged (ValueTree& tree);
+
 private:
     ContentComp* currentContentComp;
     SelectedItemSet<SelectableObject*>* currentSelection;
 
     void updateProperties();
+
+    void mdlChanged();
 };
 
 }

@@ -33,6 +33,7 @@
 #include "../Graph/Node.h"
 #include "BaseObjectComponent.h"
 #include "ObjectPropertiesComponent.h"
+#include "SelectableObject.h"
 
 #include "PropertiesWindow.h"
 
@@ -77,7 +78,14 @@ PropertiesWindow::~PropertiesWindow()
 void PropertiesWindow::makeVisible(bool shouldBeVisible)
 {
 	setVisible(shouldBeVisible);
-//	StoredSettings::getInstance()->setShowCompilerWindow(true);
+    if (shouldBeVisible)
+    {
+        toFront(true);
+        if (currentSelection)
+        {
+            updateProperties();
+        }
+    }
 }
 
 void PropertiesWindow::globalFocusChanged (Component* focusedComponent)
@@ -93,14 +101,13 @@ void PropertiesWindow::globalFocusChanged (Component* focusedComponent)
 
 void PropertiesWindow::changeListenerCallback(ChangeBroadcaster* /*source*/)
 {
+    if(! isVisible())
+        return;
+
     if(currentSelection)
     {
         DBG("Selection changed");
         updateProperties();
-    }
-    else
-    {
-        setContentOwned(new EmptyComponent("no selection"), true);
     }
 }
 void PropertiesWindow::closeButtonPressed()
@@ -121,71 +128,128 @@ bool PropertiesWindow::keyPressed(const KeyPress& kp)
 static String currentObjectId;
 void PropertiesWindow::updateProperties()
 {
-    if (BaseObjectComponent * caller = dynamic_cast<BaseObjectComponent*> (currentSelection->getSelectedItem(0)))
+    if(currentSelection->getNumSelected() > 0)
     {
-        Component* comp;
-        ObjController* objCtrl = &currentContentComp->getHolderComponent()->getObjController();
-        UndoManager* undoManager_ = objCtrl->getUndoManager();
+//        Array<ValueTree> datas;
+//        const Array<SelectableObject*>& selectedItems = currentSelection->getItemArray();
+//        Identifier selectedId;
+//        for (int i = 0; i < selectedItems.size(); ++i)
+//        {
+//            if(BaseObjectComponent* boc = dynamic_cast<BaseObjectComponent*>(selectedItems[i]))
+//            {
+//                // get first id type. This is the type for a multiple selection
+//                if(datas.size() == 0)
+//                    selectedId = boc->getData().getType();
+//
+//                if(selectedId == boc->getData().getType())
+//                    datas.add(boc->getData());
+//            }
+//        }
 
-        currentObjectId = caller->getData()[Ids::identifier].toString();
 
-        if (caller->getData().getType() == Ids::mass)
+        if (BaseObjectComponent * caller = dynamic_cast<BaseObjectComponent*> (currentSelection->getSelectedItem(0)))
         {
-            comp = new MassPropertiesComponent(objCtrl,
-                                               caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::port)
-        {
-            comp = new PortPropertiesComponent(objCtrl,
-                                               caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::resonators)
-        {
-            comp = new ResonatorPropertiesComponent(objCtrl,
-                                                    caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::ground)
-        {
-            comp = new GroundPropertiesComponent(objCtrl,
-                                                 caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::link
-            || caller->getData().getType() == Ids::touch
-            || caller->getData().getType() == Ids::pluck
-            || caller->getData().getType() == Ids::pulsetouch)
-        {
-            comp = new LinkPropertiesComponent(objCtrl,
-                                               caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::waveguide)
-        {
-            comp = new WaveguidePropertiesComponent(objCtrl,
-                                                    caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::junction)
-        {
-            comp = new JunctionPropertiesComponent(objCtrl,
+            Component* comp;
+            ObjController* objCtrl = &currentContentComp->getHolderComponent()->getObjController();
+            UndoManager* undoManager_ = objCtrl->getUndoManager();
+
+            currentObjectId = caller->getData()[Ids::identifier].toString();
+
+            if (caller->getData().getType() == Ids::mass)
+            {
+                comp = new MassPropertiesComponent(objCtrl,
                                                    caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::termination)
-        {
-            comp = new TerminationPropertiesComponent(objCtrl,
-                                                      caller->getData(), undoManager_);
-        }
-        else if (caller->getData().getType() == Ids::audioout)
-        {
-            comp = new AudiooutPropertiesComponent(objCtrl,
+            }
+            else if (caller->getData().getType() == Ids::port)
+            {
+                comp = new PortPropertiesComponent(objCtrl,
                                                    caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::resonators)
+            {
+                comp = new ResonatorPropertiesComponent(objCtrl,
+                                                        caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::ground)
+            {
+                comp = new GroundPropertiesComponent(objCtrl,
+                                                     caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::link
+                || caller->getData().getType() == Ids::touch
+                || caller->getData().getType() == Ids::pluck
+                || caller->getData().getType() == Ids::pulsetouch)
+            {
+                comp = new LinkPropertiesComponent(objCtrl,
+                                                   caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::waveguide)
+            {
+                comp = new WaveguidePropertiesComponent(objCtrl,
+                                                        caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::junction)
+            {
+                comp = new JunctionPropertiesComponent(objCtrl,
+                                                       caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::termination)
+            {
+                comp = new TerminationPropertiesComponent(objCtrl,
+                                                          caller->getData(), undoManager_);
+            }
+            else if (caller->getData().getType() == Ids::audioout)
+            {
+                comp = new AudiooutPropertiesComponent(objCtrl,
+                                                       caller->getData(), undoManager_);
+            }
+            else
+            {
+                comp = new EmptyComponent();
+                currentObjectId = "";
+            }
+            setContentOwned(comp, false);
         }
-        else
-        {
-            comp = new Component();
-            currentObjectId = "";
-        }
-        setContentOwned (comp, false);
     }
     else
     {
         setContentOwned(new EmptyComponent(), false);
     }
 }
+
+void PropertiesWindow::mdlChanged()
+{
+    if(isVisible())
+        if (ObjectPropertiesComponent * opc = dynamic_cast<ObjectPropertiesComponent*> (getContentComponent()))
+            opc->readValues();
+}
+//==============================================================================
+void PropertiesWindow::valueTreePropertyChanged (ValueTree& /*tree*/,
+                                                 const Identifier& /*property*/)
+{
+    mdlChanged();
+}
+
+void PropertiesWindow::valueTreeChildAdded (ValueTree& /*parentTree*/,
+                                            ValueTree& /*childWhichHasBeenAdded*/)
+{
+	mdlChanged();
+}
+
+void PropertiesWindow::valueTreeChildRemoved (ValueTree& /*parentTree*/,
+                                              ValueTree& /*childWhichHasBeenRemoved*/)
+{
+	mdlChanged();
+}
+
+void PropertiesWindow::valueTreeChildOrderChanged (ValueTree& /*parentTree*/)
+{
+	mdlChanged();
+}
+
+void PropertiesWindow::valueTreeParentChanged (ValueTree& /*tree*/)
+{
+    mdlChanged();
+}
+
+//==============================================================================
