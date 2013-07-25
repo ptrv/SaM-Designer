@@ -15,10 +15,10 @@ Alexander von Humboldt foundation for their support.
 
 ## Project structure
 
-**cmd**: This folder consist Edgar Berdahl's *Synth-A-Modeler* compiler
+**SaM**: This folder consist Edgar Berdahl's *Synth-A-Modeler* compiler
   and example model files.
 
-**cmd2**: A C++ version of the *Synth-A-Modeler* compiler (experimental).
+<!-- **cmd2**: A C++ version of the *Synth-A-Modeler* compiler (experimental). -->
 
 **extras**: Consists of Synth-A-Modeler file editor support for Emacs
   and Vim and a *Synth-A-ModelerGUI* Linux installer.
@@ -74,7 +74,7 @@ platforms. For linux:
 With the Introjucer you can now open `*.jucer` files, like the one at the
 `Synth-A-Modeler/gui` path.
 
-### Compiling Synth-A-ModelerGUI
+### Compiling Synth-A-Modeler Designer
 
 There are project files for different operating systems provided. For
 Mac OS X a Xcode project, for Windows Visual Studio 2010 project and a
