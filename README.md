@@ -88,7 +88,7 @@ To compile on Linux:
 
 Run the application:
 
-    build/Synth-A-ModelerGUI
+    build/Synth-A-Modeler-Designer
 
 
 [1]: http://rawmaterialsoftware.com/juce.php
