@@ -66,11 +66,6 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
 
 ObjectsHolder::~ObjectsHolder()
 {
-    if (mdlFile != nullptr)
-    {
-        mdlFile->removeChangeListener(this);
-    }
-
     grid = nullptr;
     fcPanel = nullptr;
 }
