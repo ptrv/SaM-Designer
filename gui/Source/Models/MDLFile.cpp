@@ -39,7 +39,7 @@ MDLFile::MDLFile()
 {
 	initMDL();
 	mdlRoot.addListener(this);
-
+    mdlRoot.addListener(propertiesWindow);
 }
 MDLFile::MDLFile(const File& file)
 : FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
@@ -47,6 +47,7 @@ MDLFile::MDLFile(const File& file)
 {
 	initMDL();
 	mdlRoot.addListener(this);
+    mdlRoot.addListener(propertiesWindow);
 
 	loadDocument(file);
 }
@@ -54,6 +55,7 @@ MDLFile::MDLFile(const File& file)
 MDLFile::~MDLFile()
 {
 	mdlRoot.removeListener(this);
+	mdlRoot.removeListener(propertiesWindow);
 	removeAllChangeListeners();
 	destroyMDL();
 }
