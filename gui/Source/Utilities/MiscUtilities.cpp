@@ -199,7 +199,7 @@ String Utils::getGainForSourceId(ValueTree& sources, const String& sourceId)
         int srcIdx = -1;
         for (int j = 0; j < vals.size(); ++j)
         {
-            if(vals[j].compare(sourceId) == 0)
+            if(vals[j].contains(sourceId))
             {
                 srcIdx = j;
                 break;
@@ -236,7 +236,7 @@ void Utils::setGainForSourceId(ValueTree& sources, const String& sourceId,
         int srcIdx = -1;
         for (int j = 0; j < vals.size(); ++j)
         {
-            if(vals[j].compare(sourceId) == 0)
+            if(vals[j].contains(sourceId))
             {
                 srcIdx = j;
                 break;
