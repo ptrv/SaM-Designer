@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="VkFX9m" name="Synth-A-Modeler-Designer" projectType="guiapp"
-              version="0.2.0" bundleIdentifier="de.tu-berlin.SynthAModelerDesigner"
+              version="0.2.1" bundleIdentifier="de.tu-berlin.SynthAModelerDesigner"
               jucerVersion="3.1.0" defines="BUILTIN_SAM_COMPILER=0">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
