@@ -29,7 +29,7 @@
 
 using namespace synthamodeler;
 
-const char* multipleSelectionText = "(multiple selection)";
+const char* multipleSelectionText = "(multiple selected)";
 
 ObjectPropertiesComponent::ObjectPropertiesComponent(ObjController* objController_,
                                                      Array<ValueTree> datas_,
