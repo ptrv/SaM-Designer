@@ -189,9 +189,23 @@ void ObjectPropertiesComponent::readValues()
         teName.setTextToShowWhenEmpty(String::empty, Colours::black);
         teName.setText(datas[0][Ids::identifier].toString());
 
-        propertiesWindow->setName("Properties: " + teName.getText() + " ("
-                                  + datas[0][Ids::posX].toString() + String(", ")
-                                  + datas[0][Ids::posY].toString() + ")");
+        if(datas[0].getType() == Ids::mass
+            || datas[0].getType() == Ids::port
+            || datas[0].getType() == Ids::resonators
+            || datas[0].getType() == Ids::ground
+            || datas[0].getType() == Ids::termination
+            || datas[0].getType() == Ids::junction
+            || datas[0].getType() == Ids::audioout
+            || datas[0].getType() == Ids::comment)
+        {
+            propertiesWindow->setName("Properties: " + teName.getText() + " ("
+                                      + datas[0][Ids::posX].toString() + String(", ")
+                                      + datas[0][Ids::posY].toString() + ")");
+        }
+        else
+        {
+            propertiesWindow->setName("Properties: " + teName.getText());
+        }
     }
 }
 
