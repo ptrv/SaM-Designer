@@ -82,6 +82,7 @@ void ObjectPropertiesComponent::textEditorEscapeKeyPressed(TextEditor& /*editor*
 
 void ObjectPropertiesComponent::textEditorFocusLost(TextEditor& /*editor*/)
 {
+    applyEditing();
 }
 
 void ObjectPropertiesComponent::applyEditing()
