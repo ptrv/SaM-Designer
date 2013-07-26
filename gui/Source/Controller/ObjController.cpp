@@ -1213,9 +1213,26 @@ void ObjController::changeObjectNameInAudioSources(const String& oldName,
         ValueTree aoData = aoc->getAudioObject()->getData();
         ValueTree sources = aoData.getChildWithName(Ids::sources);
 
-        ValueTree source = sources.getChildWithProperty(Ids::value, oldName);
-        if(source.isValid())
-            source.setProperty(Ids::value, newName, undoManager);
+        for (int i = 0; i < sources.getNumChildren(); ++i)
+        {
+            ValueTree source = sources.getChild(i);
+
+            String srcStr = source.getProperty(Ids::value);
+            if(srcStr.contains(oldName))
+            {
+                StringArray srcParts;
+                srcParts.addTokens(srcStr, "*", "\"");
+                int oldNameIdx = srcParts.indexOf(oldName);
+                if(oldNameIdx == 0)
+                {
+                    srcParts.set(oldNameIdx, newName);
+                    srcStr = srcParts.joinIntoString("*");
+                    source.setProperty(Ids::value, srcStr, undoManager);
+                }
+                break;
+            }
+        }
+
     }
 }
 
