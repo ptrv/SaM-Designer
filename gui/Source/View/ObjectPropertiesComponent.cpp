@@ -232,12 +232,15 @@ laVel("laVel", "Velocity (m/s)"),
 teVel("teVel")
 {
     teMass.addListener(this);
+    teMass.setMultiLine(true,true);
     addAndMakeVisible(&teMass);
     laMass.attachToComponent(&teMass, true);
     tePos.addListener(this);
+    tePos.setMultiLine(true,true);
     addAndMakeVisible(&tePos);
     laPos.attachToComponent(&tePos, true);
     teVel.addListener(this);
+    teVel.setMultiLine(true,true);
     addAndMakeVisible(&teVel);
     laVel.attachToComponent(&teVel, true);
 
@@ -253,9 +256,9 @@ void MassPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    teMass.setBounds(100, 40, getWidth() - 110, 22);
-    tePos.setBounds(100, 70, getWidth() - 110, 22);
-    teVel.setBounds(100, 100, getWidth() - 110, 22);
+    teMass.setBounds(100, 40, getWidth() - 110, 50);
+    tePos.setBounds(100, 100, getWidth() - 110, 50);
+    teVel.setBounds(100, 160, getWidth() - 110, 50);
 }
 
 void MassPropertiesComponent::readValues()
@@ -362,12 +365,15 @@ laEqMass("laEqMass", "Mass (kg)"),
 teEqMass("teEqMass")
 {
     teFreq.addListener(this);
+    teFreq.setMultiLine(true, true);
     addAndMakeVisible(&teFreq);
     laFreq.attachToComponent(&teFreq, true);
     teDecay.addListener(this);
+    teDecay.setMultiLine(true, true);
     addAndMakeVisible(&teDecay);
     laDecay.attachToComponent(&teDecay, true);
     teEqMass.addListener(this);
+    teEqMass.setMultiLine(true, true);
     addAndMakeVisible(&teEqMass);
     laEqMass.attachToComponent(&teEqMass, true);
 
@@ -383,9 +389,9 @@ void ResonatorPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    teFreq.setBounds(100, 40, getWidth() - 110, 22);
-    teDecay.setBounds(100, 70, getWidth() - 110, 22);
-    teEqMass.setBounds(100, 100, getWidth() - 110, 22);
+    teFreq.setBounds(100, 40, getWidth() - 110, 50);
+    teDecay.setBounds(100, 100, getWidth() - 110, 50);
+    teEqMass.setBounds(100, 160, getWidth() - 110, 50);
 }
 
 void ResonatorPropertiesComponent::readValues()
@@ -485,6 +491,7 @@ laPos("laPos", "Position (m)"),
 tePos("tePos")
 {
     tePos.addListener(this);
+    tePos.setMultiLine(true, true);
     addAndMakeVisible(&tePos);
     laPos.attachToComponent(&tePos, true);
 
@@ -500,7 +507,7 @@ void GroundPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    tePos.setBounds(100, 40, getWidth() - 110, 22);
+    tePos.setBounds(100, 40, getWidth() - 110, 50);
 }
 
 void GroundPropertiesComponent::readValues()
@@ -564,12 +571,15 @@ laPulseLen("laPulseLen", "Pulse length"),
 tePulseLen("tePulseLen")
 {
     teStiff.addListener(this);
+    teStiff.setMultiLine(true, true);
     addAndMakeVisible(&teStiff);
     laStiff.attachToComponent(&teStiff, true);
     teDamp.addListener(this);
+    teDamp.setMultiLine(true, true);
     addAndMakeVisible(&teDamp);
     laDamp.attachToComponent(&teDamp, true);
     tePos.addListener(this);
+    tePos.setMultiLine(true, true);
     addAndMakeVisible(&tePos);
     laPos.attachToComponent(&tePos, true);
     teStartVertex.setReadOnly(true);
@@ -585,18 +595,22 @@ tePulseLen("tePulseLen")
     if (datas[0].getType() == Ids::pluck)
     {
         teMinDisplace.addListener(this);
+        teMinDisplace.setMultiLine(true, true);
         addAndMakeVisible(&teMinDisplace);
         laMinDisplace.attachToComponent(&teMinDisplace, true);
     }
     else if (datas[0].getType() == Ids::pulsetouch)
     {
         tePulseMult.addListener(this);
+        tePulseMult.setMultiLine(true,true);
         addAndMakeVisible(&tePulseMult);
         laPulseMult.attachToComponent(&tePulseMult, true);
         tePulseTau.addListener(this);
+        tePulseTau.setMultiLine(true, true);
         addAndMakeVisible(&tePulseTau);
         laPulseTau.attachToComponent(&tePulseTau, true);
         tePulseLen.addListener(this);
+        tePulseLen.setMultiLine(true, true);
         addAndMakeVisible(&tePulseLen);
         laPulseLen.attachToComponent(&tePulseLen, true);
     }
@@ -612,23 +626,23 @@ void LinkPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
     int offset = 0;
-    teStiff.setBounds(100, 40, getWidth() - 110, 22);
-    teDamp.setBounds(100, 70, getWidth() - 110, 22);
+    teStiff.setBounds(100, 40, getWidth() - 110, 50);
+    teDamp.setBounds(100, 100, getWidth() - 110, 50);
     if (datas[0].getType() == Ids::pluck)
     {
-        teMinDisplace.setBounds(100, 100, getWidth() - 110, 22);
-        offset = 30;
+        teMinDisplace.setBounds(100, 160, getWidth() - 110, 50);
+        offset = 60;
     }
     else if (datas[0].getType() == Ids::pulsetouch)
     {
-        tePulseMult.setBounds(100, 100, getWidth() - 110, 22);
-        tePulseTau.setBounds(100, 130, getWidth() - 110, 22);
-        tePulseLen.setBounds(100, 190, getWidth() - 110, 22);
-        offset = 90;
+        tePulseMult.setBounds(100, 160, getWidth() - 110, 50);
+        tePulseTau.setBounds(100, 220, getWidth() - 110, 50);
+        tePulseLen.setBounds(100, 280, getWidth() - 110, 50);
+        offset = 180;
     }
-    tePos.setBounds(100, 100 + offset, getWidth() - 110, 22);
-    teStartVertex.setBounds(100, 130 + offset, getWidth() - 110, 22);
-    teEndVertex.setBounds(100, 160 + offset, getWidth() - 110, 22);
+    tePos.setBounds(100, 160 + offset, getWidth() - 110, 50);
+    teStartVertex.setBounds(100, 220 + offset, getWidth() - 110, 22);
+    teEndVertex.setBounds(100, 250 + offset, getWidth() - 110, 22);
 }
 
 void LinkPropertiesComponent::readValues()
@@ -773,9 +787,11 @@ teOpt("teopt")
     teSource.addListener(this);
     teSource.setTextToShowWhenEmpty("0.0", Colours::darkgrey);
     teSource.setColour(TextEditor::textColourId, Colours::darkgrey);
+    teSource.setMultiLine(true,true);
     addAndMakeVisible(&teSource);
     laSource.attachToComponent(&teSource, true);
     teOpt.addListener(this);
+    teOpt.setMultiLine(true,true);
     addAndMakeVisible(&teOpt);
     laOpt.attachToComponent(&teOpt, true);
 
@@ -791,8 +807,8 @@ void AudiooutPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    teSource.setBounds(100, 40, getWidth() - 110, 22);
-    teOpt.setBounds(100, 70, getWidth() - 110, 22);
+    teSource.setBounds(100, 40, getWidth() - 110, 50);
+    teOpt.setBounds(100, 100, getWidth() - 110, 50);
 }
 
 void AudiooutPropertiesComponent::readValues()
@@ -868,9 +884,11 @@ laRightObj("laRightObj", "Right object"),
 teRightObj("teRightObj")
 {
     teWaveImp.addListener(this);
+    teWaveImp.setMultiLine(true, true);
     addAndMakeVisible(&teWaveImp);
     laWaveImp.attachToComponent(&teWaveImp, true);
     teStringType.addListener(this);
+    teStringType.setMultiLine(true, true);
     addAndMakeVisible(&teStringType);
     laStringType.attachToComponent(&teStringType, true);
     teLeftObj.setReadOnly(true);
@@ -894,10 +912,10 @@ void WaveguidePropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    teWaveImp.setBounds(100, 40, getWidth() - 110, 22);
-    teStringType.setBounds(100, 70, getWidth() - 110, 22);
-    teLeftObj.setBounds(100, 130, getWidth() - 110, 22);
-    teRightObj.setBounds(100, 160, getWidth() - 110, 22);
+    teWaveImp.setBounds(100, 40, getWidth() - 110, 50);
+    teStringType.setBounds(100, 100, getWidth() - 110, 50);
+    teLeftObj.setBounds(100, 160, getWidth() - 110, 22);
+    teRightObj.setBounds(100, 190, getWidth() - 110, 22);
 }
 
 void WaveguidePropertiesComponent::readValues()
@@ -963,6 +981,7 @@ laTermType("laTermType", "Type"),
 teTermType("teTermType")
 {
     teTermType.addListener(this);
+    teTermType.setMultiLine(true, true);
     addAndMakeVisible(&teTermType);
     laTermType.attachToComponent(&teTermType, true);
 
@@ -978,7 +997,7 @@ void TerminationPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    teTermType.setBounds(100, 40, getWidth() - 110, 22);
+    teTermType.setBounds(100, 40, getWidth() - 110, 50);
 }
 
 void TerminationPropertiesComponent::readValues()
@@ -1026,6 +1045,7 @@ laPos("laPos", "Displacement (m)"),
 tePos("tePos")
 {
     tePos.addListener(this);
+    tePos.setMultiLine(true, true);
     addAndMakeVisible(&tePos);
     laPos.attachToComponent(&tePos, true);
 
@@ -1041,7 +1061,7 @@ void JunctionPropertiesComponent::resized()
 {
     ObjectPropertiesComponent::resized();
 
-    tePos.setBounds(100, 40, getWidth() - 110, 22);
+    tePos.setBounds(100, 40, getWidth() - 110, 50);
 }
 
 void JunctionPropertiesComponent::readValues()
