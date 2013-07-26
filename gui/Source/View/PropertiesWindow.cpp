@@ -125,95 +125,83 @@ bool PropertiesWindow::keyPressed(const KeyPress& kp)
     return false;
 }
 
-static String currentObjectId;
 void PropertiesWindow::updateProperties()
 {
     if(currentSelection->getNumSelected() > 0)
     {
-//        Array<ValueTree> datas;
-//        const Array<SelectableObject*>& selectedItems = currentSelection->getItemArray();
-//        Identifier selectedId;
-//        for (int i = 0; i < selectedItems.size(); ++i)
-//        {
-//            if(BaseObjectComponent* boc = dynamic_cast<BaseObjectComponent*>(selectedItems[i]))
-//            {
-//                // get first id type. This is the type for a multiple selection
-//                if(datas.size() == 0)
-//                    selectedId = boc->getData().getType();
-//
-//                if(selectedId == boc->getData().getType())
-//                    datas.add(boc->getData());
-//            }
-//        }
-
-
-        if (BaseObjectComponent * caller = dynamic_cast<BaseObjectComponent*> (currentSelection->getSelectedItem(0)))
+        Array<ValueTree> datas;
+        const Array<SelectableObject*>& selectedItems = currentSelection->getItemArray();
+        Identifier selectedId;
+        for (int i = 0; i < selectedItems.size(); ++i)
         {
-            Component* comp;
-            ObjController* objCtrl = &currentContentComp->getHolderComponent()->getObjController();
-            UndoManager* undoManager_ = objCtrl->getUndoManager();
+            if(BaseObjectComponent* boc = dynamic_cast<BaseObjectComponent*>(selectedItems[i]))
+            {
+                // get first id type. This is the type for a multiple selection
+                if(datas.size() == 0)
+                    selectedId = boc->getData().getType();
 
-            currentObjectId = caller->getData()[Ids::identifier].toString();
-
-            if (caller->getData().getType() == Ids::mass)
-            {
-                comp = new MassPropertiesComponent(objCtrl,
-                                                   caller->getData(), undoManager_);
+                if(selectedId == boc->getData().getType())
+                    datas.add(boc->getData());
             }
-            else if (caller->getData().getType() == Ids::port)
-            {
-                comp = new PortPropertiesComponent(objCtrl,
-                                                   caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::resonators)
-            {
-                comp = new ResonatorPropertiesComponent(objCtrl,
-                                                        caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::ground)
-            {
-                comp = new GroundPropertiesComponent(objCtrl,
-                                                     caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::link
-                || caller->getData().getType() == Ids::touch
-                || caller->getData().getType() == Ids::pluck
-                || caller->getData().getType() == Ids::pulsetouch)
-            {
-                comp = new LinkPropertiesComponent(objCtrl,
-                                                   caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::waveguide)
-            {
-                comp = new WaveguidePropertiesComponent(objCtrl,
-                                                        caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::junction)
-            {
-                comp = new JunctionPropertiesComponent(objCtrl,
-                                                       caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::termination)
-            {
-                comp = new TerminationPropertiesComponent(objCtrl,
-                                                          caller->getData(), undoManager_);
-            }
-            else if (caller->getData().getType() == Ids::audioout)
-            {
-                comp = new AudiooutPropertiesComponent(objCtrl,
-                                                       caller->getData(), undoManager_);
-            }
-            else
-            {
-                comp = new EmptyComponent();
-                currentObjectId = "";
-            }
-            setContentOwned(comp, false);
         }
+
+        if(datas.size() == 0)
+            return;
+        
+        Component* comp;
+        ObjController* objCtrl = &currentContentComp->getHolderComponent()->getObjController();
+        UndoManager* undoManager_ = objCtrl->getUndoManager();
+
+        if (selectedId == Ids::mass)
+        {
+            comp = new MassPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::port)
+        {
+            comp = new PortPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::resonators)
+        {
+            comp = new ResonatorPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::ground)
+        {
+            comp = new GroundPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::link
+            || selectedId == Ids::touch
+            || selectedId == Ids::pluck
+            || selectedId == Ids::pulsetouch)
+        {
+            comp = new LinkPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::waveguide)
+        {
+            comp = new WaveguidePropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::junction)
+        {
+            comp = new JunctionPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::termination)
+        {
+            comp = new TerminationPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::audioout)
+        {
+            comp = new AudiooutPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else
+        {
+            comp = new EmptyComponent();
+            setName("Properties");
+        }
+        setContentOwned(comp, false);
     }
     else
     {
         setContentOwned(new EmptyComponent(), false);
+        setName("Properties");
     }
 }
 

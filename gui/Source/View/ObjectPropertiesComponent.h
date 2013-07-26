@@ -34,7 +34,7 @@ class ObjectPropertiesComponent : public Component,
 {
 public:
 	ObjectPropertiesComponent(ObjController* objController_,
-                             ValueTree data_,
+                             Array<ValueTree> datas_,
                              UndoManager* undoManager_);
 
 	virtual ~ObjectPropertiesComponent();
@@ -55,19 +55,21 @@ protected:
     bool writeIdentifier();
 
     ObjController* objController;
-	ValueTree data;
+	Array<ValueTree> datas;
 	UndoManager* undoManager;
 	Label laName;
 	TextEditor teName;
-    Label laDebug;
+//    Label laDebug;
     bool dataChanged;
+    bool multipleEdit;
+    bool isEditing;
 };
 
 class MassPropertiesComponent : public ObjectPropertiesComponent
 {
 public:
 	MassPropertiesComponent(ObjController* objController_,
-                         ValueTree data_,
+                         Array<ValueTree> datas_,
                          UndoManager* undoManager_);
 	~MassPropertiesComponent();
 	void resized();
@@ -87,7 +89,7 @@ class PortPropertiesComponent : public ObjectPropertiesComponent
 {
 public:
 	PortPropertiesComponent(ObjController* objController_,
-                         ValueTree data_,
+                         Array<ValueTree> datas_,
                          UndoManager* undoManager_);
     virtual ~PortPropertiesComponent();
 	void resized();
@@ -99,7 +101,7 @@ private:
 class ResonatorPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	ResonatorPropertiesComponent(ObjController* objController_,
-                                 ValueTree data_,
+                                 Array<ValueTree> datas_,
                                  UndoManager* undoManager_);
 	virtual ~ResonatorPropertiesComponent();
 	void resized();
@@ -117,8 +119,8 @@ private:
 class GroundPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	GroundPropertiesComponent(ObjController* objController_,
-                         ValueTree data_,
-                         UndoManager* undoManager_);
+                             Array<ValueTree> datas_,
+                             UndoManager* undoManager_);
 	virtual ~GroundPropertiesComponent();
 
 	void resized();
@@ -134,7 +136,7 @@ private:
 class LinkPropertiesComponent : public ObjectPropertiesComponent {
 public:
     LinkPropertiesComponent(ObjController* objController_,
-                            ValueTree data_,
+                            Array<ValueTree> datas_,
                             UndoManager* undoManager_);
 	virtual ~LinkPropertiesComponent();
 
@@ -166,7 +168,7 @@ private:
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
 public:
     AudiooutPropertiesComponent(ObjController* objController_,
-                                ValueTree data_,
+                                Array<ValueTree> datas_,
                                 UndoManager* undoManager_);
 	virtual ~AudiooutPropertiesComponent();
     void resized();
@@ -182,8 +184,8 @@ private:
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
 public:
 	WaveguidePropertiesComponent(ObjController* objController_,
-                         ValueTree data_,
-                         UndoManager* undoManager_);
+                                 Array<ValueTree> datas_,
+                                 UndoManager* undoManager_);
 	virtual ~WaveguidePropertiesComponent();
 	void resized();
 	void readValues();
@@ -202,8 +204,8 @@ private:
 class TerminationPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	TerminationPropertiesComponent(ObjController* objController_,
-                         ValueTree data_,
-                         UndoManager* undoManager_);
+                                 Array<ValueTree> datas_,
+                                 UndoManager* undoManager_);
 	virtual ~TerminationPropertiesComponent();
 	void resized();
 	void readValues();
@@ -217,8 +219,8 @@ private:
 class JunctionPropertiesComponent : public ObjectPropertiesComponent {
 public:
 	JunctionPropertiesComponent(ObjController* objController_,
-                         ValueTree data_,
-                         UndoManager* undoManager_);
+                             Array<ValueTree> datas_,
+                             UndoManager* undoManager_);
 	virtual ~JunctionPropertiesComponent();
 	void resized();
 	void readValues();

@@ -29,26 +29,26 @@
 
 using namespace synthamodeler;
 
+const char* multipleSelectionText = "(multiple selection)";
+
 ObjectPropertiesComponent::ObjectPropertiesComponent(ObjController* objController_,
-                                                     ValueTree data_,
+                                                     Array<ValueTree> datas_,
                                                      UndoManager* undoManager_)
 :
 objController(objController_),
-data(data_),
+datas(datas_),
 undoManager(undoManager_),
 laName("laName", "Identifier"),
 teName("teName"),
-laDebug(""),
-dataChanged(false)
+//laDebug(""),
+dataChanged(false),
+isEditing(false)
 {
     addAndMakeVisible(&teName);
     teName.addListener(this);
     laName.attachToComponent(&teName, true);
-#ifdef _DEBUG
-    addAndMakeVisible(&laDebug);
-    laDebug.setText("Pos: " + data[Ids::posX].toString() + String(" ") +
-                    data[Ids::posY].toString(), dontSendNotification);
-#endif
+    multipleEdit = datas.size() > 1;
+//    addAndMakeVisible(&laDebug);
 }
 
 ObjectPropertiesComponent::~ObjectPropertiesComponent()
@@ -58,10 +58,10 @@ ObjectPropertiesComponent::~ObjectPropertiesComponent()
 void ObjectPropertiesComponent::resized()
 {
     teName.setBounds(100, 10, getWidth() - 110, 22);
-    laDebug.setBounds(65, getHeight() - 60, 100, 22);
+//    laDebug.setBounds(65, getHeight() - 60, 200, 22);
 }
 
-void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& editor)
+void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& /*editor*/)
 {
     dataChanged = true;
 }
@@ -89,12 +89,19 @@ void ObjectPropertiesComponent::applyEditing()
     undoManager->beginNewTransaction("Change object properties");
     if (dataChanged)
     {
+        isEditing = true;
         bool writeOk = writeValues();
+        isEditing = false;
         undoManager->beginNewTransaction();
         if (writeOk)
         {
-            SAM_LOG("Change " + data.getType().toString() + " " +
-                    data[Ids::identifier].toString());
+            for (int i = 0; i < datas.size(); ++i)
+            {
+                ValueTree data = datas[i];
+
+                SAM_LOG("Change " + data.getType().toString() + " " +
+                        data[Ids::identifier].toString());
+            }
         }
         else
         {
@@ -106,12 +113,18 @@ void ObjectPropertiesComponent::applyEditing()
 
 void ObjectPropertiesComponent::cancelEditing()
 {
-    SAM_LOG("Cancel change " + data.getType().toString() + " " +
-            data[Ids::identifier].toString());
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
+
+        SAM_LOG("Cancel change " + data.getType().toString() + " " +
+                data[Ids::identifier].toString());
+    }
 }
 
 bool ObjectPropertiesComponent::writeIdentifier()
 {
+    ValueTree data = datas[0];
     String newName = teName.getText();
     String oldName = data[Ids::identifier];
     if (newName != oldName)
@@ -150,13 +163,53 @@ bool ObjectPropertiesComponent::writeIdentifier()
 
         data.setProperty(Ids::identifier, newName, undoManager);
     }
+
+    return true;
+}
+
+void ObjectPropertiesComponent::readValues()
+{
+    if(multipleEdit)
+    {
+//        laDebug.setText("Pos: " + String(multipleSelectionText),
+//                        dontSendNotification);
+
+        teName.setReadOnly(true);
+        teName.setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
+        teName.setText(String::empty);
+
+        propertiesWindow->setName("Properties: " + String(multipleSelectionText));
+    }
+    else
+    {
+//        laDebug.setText("Pos: " + datas[0][Ids::posX].toString() + String(" ") +
+//                        datas[0][Ids::posY].toString(), dontSendNotification);
+
+        teName.setReadOnly(false);
+        teName.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teName.setText(datas[0][Ids::identifier].toString());
+
+        propertiesWindow->setName("Properties: " + teName.getText() + " ("
+                                  + datas[0][Ids::posX].toString() + String(", ")
+                                  + datas[0][Ids::posY].toString() + ")");
+    }
+}
+
+bool ObjectPropertiesComponent::writeValues()
+{
+    DBG("write in base");
+
+    if(! multipleEdit)
+        if(! writeIdentifier())
+            return false;
+
     return true;
 }
 
 MassPropertiesComponent::MassPropertiesComponent(ObjController* objController_,
-                                                 ValueTree data_,
+                                                 Array<ValueTree> datas_,
                                                  UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laMass("laMass", "Mass (kg)"),
 teMass("teMass"),
 laPos("laPos", "Position (m)"),
@@ -193,41 +246,66 @@ void MassPropertiesComponent::resized()
 
 void MassPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    teMass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-    tePos.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-    teVel.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+    if (isEditing)
+        return;
 
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
+    {
+        teMass.setText(String::empty);
+        tePos.setText(String::empty);
+        teVel.setText(String::empty);
+        teMass.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        tePos.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teVel.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+    }
+    else
+    {
+        ValueTree data = datas[0];
+        teMass.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        tePos.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+        teVel.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+        teMass.setTextToShowWhenEmpty(String::empty, Colours::black);
+        tePos.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teVel.setTextToShowWhenEmpty(String::empty, Colours::black);
+    }
 }
 
 bool MassPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
 
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-    ValueTree pa1 = paramsTree.getChild(0);
-    ValueTree pa2 = paramsTree.getChild(1);
-    ValueTree pa3 = paramsTree.getChild(2);
-    pa1.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(teMass.getText()),
-                    undoManager);
-    pa2.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(tePos.getText()),
-                    undoManager);
-    pa3.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(teVel.getText()),
-                    undoManager);
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
 
-    // Change object reference in attached links
-    //        objController->changeObjectNameInLink(oldName, newName, undoManager);
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+        ValueTree pa3 = paramsTree.getChild(2);
+        pa1.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teMass.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(tePos.getText()),
+                        undoManager);
+        pa3.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teVel.getText()),
+                        undoManager);
+
+        // Change object reference in attached links
+        //        objController->changeObjectNameInLink(oldName, newName, undoManager);
+    }
+
     return true;
 }
 
 PortPropertiesComponent::PortPropertiesComponent(ObjController* objController_,
-                                                 ValueTree data_,
+                                                 Array<ValueTree> datas_,
                                                  UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     readValues();
 }
@@ -244,21 +322,24 @@ void PortPropertiesComponent::resized()
 
 void PortPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
 }
 
 bool PortPropertiesComponent::writeValues()
 {
-    if(writeIdentifier())
-        return true;
-    else
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
+    
+    return true;
 }
 
 ResonatorPropertiesComponent::ResonatorPropertiesComponent(ObjController* objController_,
-                             ValueTree data_,
-                             UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                           Array<ValueTree> datas_,
+                                                           UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laFreq("laFreq", "Frequency (Hz)"),
 teFreq("teFreq"),
 laDecay("laDecay", "Decay (sec)"),
@@ -295,72 +376,97 @@ void ResonatorPropertiesComponent::resized()
 
 void ResonatorPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
+    if (isEditing)
+        return;
 
-    String valFreq, valDecay, valEqMass;
+    ObjectPropertiesComponent::readValues();
 
-    int numRes = data.getChildWithName(Ids::parameters).getNumChildren() / 3;
-    jassert(numRes != 0);
-    for (int i = 0; i < numRes; ++i)
+   if(multipleEdit)
     {
-        String delim = ",";
-        if (i == 0)
-            delim = "";
-        valFreq << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 0)[Ids::value].toString();
-        valDecay << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 1)[Ids::value].toString();
-        valEqMass << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 2)[Ids::value].toString();
+        teFreq.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teDecay.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teEqMass.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teFreq.setText(String::empty);
+        teDecay.setText(String::empty);
+        teEqMass.setText(String::empty);
     }
-    teFreq.setText(valFreq);
-    teDecay.setText(valDecay);
-    teEqMass.setText(valEqMass);
+    else
+    {
+        ValueTree data = datas[0];
 
+        String valFreq, valDecay, valEqMass;
+
+        int numRes = data.getChildWithName(Ids::parameters).getNumChildren() / 3;
+        jassert(numRes != 0);
+        for (int i = 0; i < numRes; ++i)
+        {
+            String delim = ",";
+            if (i == 0)
+                delim = "";
+            valFreq << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 0)[Ids::value].toString();
+            valDecay << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 1)[Ids::value].toString();
+            valEqMass << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 2)[Ids::value].toString();
+        }
+        teFreq.setText(valFreq);
+        teDecay.setText(valDecay);
+        teEqMass.setText(valEqMass);
+        teFreq.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teDecay.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teEqMass.setTextToShowWhenEmpty(String::empty, Colours::black);
+    }
 }
 
 bool ResonatorPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
-    
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-    String valFreq = teFreq.getText();
-    String valDecay = teDecay.getText();
-    String valEqMass = teEqMass.getText();
-
-    StringArray freqArr;
-    freqArr.addTokens(valFreq, ",", "\"");
-    StringArray decayArr;
-    decayArr.addTokens(valDecay, ",", "\"");
-    StringArray eqMassArr;
-    eqMassArr.addTokens(valEqMass, ",", "\"");
-    paramsTree.removeAllChildren(undoManager);
-
-    int numRes = jmin<int>(freqArr.size(), decayArr.size(), eqMassArr.size());
-    for (int k = 0; k < numRes; ++k)
+    for (int i = 0; i < datas.size(); ++i)
     {
-        ValueTree pa1(Ids::parameter);
-        ValueTree pa2(Ids::parameter);
-        ValueTree pa3(Ids::parameter);
-        pa1.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(freqArr[k]),
-                        undoManager);
-        pa2.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(decayArr[k]),
-                        undoManager);
-        pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(eqMassArr[k]),
-                        undoManager);
-        paramsTree.addChild(pa1, -1, undoManager);
-        paramsTree.addChild(pa2, -1, undoManager);
-        paramsTree.addChild(pa3, -1, undoManager);
+        ValueTree data = datas[i];
+
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+
+        String valFreq = teFreq.getText();
+        String valDecay = teDecay.getText();
+        String valEqMass = teEqMass.getText();
+
+        StringArray freqArr;
+        freqArr.addTokens(valFreq, ",", "\"");
+        StringArray decayArr;
+        decayArr.addTokens(valDecay, ",", "\"");
+        StringArray eqMassArr;
+        eqMassArr.addTokens(valEqMass, ",", "\"");
+        paramsTree.removeAllChildren(undoManager);
+
+        int numRes = jmin<int>(freqArr.size(), decayArr.size(), eqMassArr.size());
+        for (int k = 0; k < numRes; ++k)
+        {
+            ValueTree pa1(Ids::parameter);
+            ValueTree pa2(Ids::parameter);
+            ValueTree pa3(Ids::parameter);
+            pa1.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(freqArr[k]),
+                            undoManager);
+            pa2.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(decayArr[k]),
+                            undoManager);
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(eqMassArr[k]),
+                            undoManager);
+            paramsTree.addChild(pa1, -1, undoManager);
+            paramsTree.addChild(pa2, -1, undoManager);
+            paramsTree.addChild(pa3, -1, undoManager);
+        }
     }
+
     return true;
 }
 
 GroundPropertiesComponent::GroundPropertiesComponent(ObjController* objController_,
-                          ValueTree data_,
-                          UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                     Array<ValueTree> datas_,
+                                                     UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laPos("laPos", "Position (m)"),
 tePos("tePos")
 {
@@ -385,25 +491,45 @@ void GroundPropertiesComponent::resized()
 
 void GroundPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
+    {
+        tePos.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        tePos.setText(String::empty);
+    }
+    else
+    {
+        ValueTree data = datas[0];
+        tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        tePos.setTextToShowWhenEmpty(String::empty, Colours::black);
+    }
 }
 
 bool GroundPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
 
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-    ValueTree param = paramsTree.getChild(0);
-    param.setProperty(Ids::value, tePos.getText(), undoManager);
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
+
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree param = paramsTree.getChild(0);
+        param.setProperty(Ids::value, tePos.getText(), undoManager);
+    }
+
     return true;
 }
 
 LinkPropertiesComponent::LinkPropertiesComponent(ObjController* objController_,
-                        ValueTree data_,
-                        UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                 Array<ValueTree> datas_,
+                                                 UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laStiff("laStiff", "Stiffness (N/m)"),
 teStiff("teStiff"),
 laDamp("laDamp", "Damping (N/(m/s))"),
@@ -442,13 +568,13 @@ tePulseLen("tePulseLen")
     teEndVertex.setColour(TextEditor::textColourId, Colours::darkgrey);
     addAndMakeVisible(&teEndVertex);
     laEndVertex.attachToComponent(&teEndVertex, true);
-    if (data.getType() == Ids::pluck)
+    if (datas[0].getType() == Ids::pluck)
     {
         teMinDisplace.addListener(this);
         addAndMakeVisible(&teMinDisplace);
         laMinDisplace.attachToComponent(&teMinDisplace, true);
     }
-    else if (data.getType() == Ids::pulsetouch)
+    else if (datas[0].getType() == Ids::pulsetouch)
     {
         tePulseMult.addListener(this);
         addAndMakeVisible(&tePulseMult);
@@ -474,12 +600,12 @@ void LinkPropertiesComponent::resized()
     int offset = 0;
     teStiff.setBounds(100, 40, getWidth() - 110, 22);
     teDamp.setBounds(100, 70, getWidth() - 110, 22);
-    if (data.getType() == Ids::pluck)
+    if (datas[0].getType() == Ids::pluck)
     {
         teMinDisplace.setBounds(100, 100, getWidth() - 110, 22);
         offset = 30;
     }
-    else if (data.getType() == Ids::pulsetouch)
+    else if (datas[0].getType() == Ids::pulsetouch)
     {
         tePulseMult.setBounds(100, 100, getWidth() - 110, 22);
         tePulseTau.setBounds(100, 130, getWidth() - 110, 22);
@@ -493,84 +619,137 @@ void LinkPropertiesComponent::resized()
 
 void LinkPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    teStiff.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-    teDamp.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-    int offset = 0;
-    if (data.getType() == Ids::pluck)
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
     {
-        teMinDisplace.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
-        ++offset;
+        teStiff.setText(String::empty);
+        teStiff.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teDamp.setText(String::empty);
+        teDamp.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        int offset = 0;
+        if (datas[0].getType() == Ids::pluck)
+        {
+            teMinDisplace.setText(String::empty);
+            teMinDisplace.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+            ++offset;
+        }
+        else if (datas[0].getType() == Ids::pulsetouch)
+        {
+            tePulseMult.setText(String::empty);
+            tePulseMult.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+            tePulseTau.setText(String::empty);
+            tePulseTau.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+            tePulseLen.setText(String::empty);
+            tePulseLen.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        }
+        tePos.setText(String::empty);
+        tePos.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teStartVertex.setText(String::empty);
+        teStartVertex.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teEndVertex.setText(String::empty);
+        teEndVertex.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+
     }
-    else if (data.getType() == Ids::pulsetouch)
+    else
     {
-        tePulseMult.setText(data.getChildWithName(Ids::parameters).getChild(3)[Ids::value].toString());
-        tePulseTau.setText(data.getChildWithName(Ids::parameters).getChild(4)[Ids::value].toString());
-        tePulseLen.setText(data.getChildWithName(Ids::parameters).getChild(5)[Ids::value].toString());
+        ValueTree data = datas[0];
+        teStiff.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        teStiff.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teDamp.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+        teDamp.setTextToShowWhenEmpty(String::empty, Colours::black);
+        int offset = 0;
+        if (data.getType() == Ids::pluck)
+        {
+            teMinDisplace.setText(data.getChildWithName(Ids::parameters).getChild(2)[Ids::value].toString());
+            teMinDisplace.setTextToShowWhenEmpty(String::empty, Colours::black);
+            ++offset;
+        }
+        else if (data.getType() == Ids::pulsetouch)
+        {
+            tePulseMult.setText(data.getChildWithName(Ids::parameters).getChild(3)[Ids::value].toString());
+            tePulseTau.setText(data.getChildWithName(Ids::parameters).getChild(4)[Ids::value].toString());
+            tePulseLen.setText(data.getChildWithName(Ids::parameters).getChild(5)[Ids::value].toString());
+            tePulseMult.setTextToShowWhenEmpty(String::empty, Colours::black);
+            tePulseTau.setTextToShowWhenEmpty(String::empty, Colours::black);
+            tePulseLen.setTextToShowWhenEmpty(String::empty, Colours::black);
+        }
+        tePos.setText(data.getChildWithName(Ids::parameters).getChild(2 + offset)[Ids::value].toString());
+        teStartVertex.setText(data[Ids::startVertex].toString());
+        teEndVertex.setText(data[Ids::endVertex].toString());
+        tePos.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teStartVertex.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teEndVertex.setTextToShowWhenEmpty(String::empty, Colours::black);
     }
-    tePos.setText(data.getChildWithName(Ids::parameters).getChild(2 + offset)[Ids::value].toString());
-    teStartVertex.setText(data[Ids::startVertex].toString());
-    teEndVertex.setText(data[Ids::endVertex].toString());
 }
 
 bool LinkPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
 
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-    ValueTree pa1 = paramsTree.getChild(0);
-    ValueTree pa2 = paramsTree.getChild(1);
-    ValueTree pa3 = paramsTree.getChild(2);
-    ValueTree pa4 = paramsTree.getChild(3);
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
 
-    ValueTree pa5, pa6;
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+        ValueTree pa3 = paramsTree.getChild(2);
+        ValueTree pa4 = paramsTree.getChild(3);
 
-    pa1.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(teStiff.getText()),
-                    undoManager);
-    pa2.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(teDamp.getText()),
-                    undoManager);
-    if (data.getType() == Ids::pluck)
-    {
-        pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(teMinDisplace.getText()),
+        ValueTree pa5, pa6;
+
+        pa1.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teStiff.getText()),
                         undoManager);
-        pa4.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePos.getText()),
+        pa2.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teDamp.getText()),
                         undoManager);
+        if (data.getType() == Ids::pluck)
+        {
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(teMinDisplace.getText()),
+                            undoManager);
+            pa4.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+        }
+        else if (data.getType() == Ids::pulsetouch)
+        {
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+            pa4.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePulseMult.getText()),
+                            undoManager);
+            pa5 = paramsTree.getChild(4);
+            pa5.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePulseTau.getText()),
+                            undoManager);
+            pa6 = paramsTree.getChild(5);
+            pa6.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePulseLen.getText()),
+                            undoManager);
+        }
+        else
+        {
+            pa3.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(tePos.getText()),
+                            undoManager);
+        }
     }
-    else if (data.getType() == Ids::pulsetouch)
-    {
-        pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePos.getText()),
-                        undoManager);
-        pa4.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePulseMult.getText()),
-                        undoManager);
-        pa5 = paramsTree.getChild(4);
-        pa5.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePulseTau.getText()),
-                        undoManager);
-        pa6 = paramsTree.getChild(5);
-        pa6.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePulseLen.getText()),
-                        undoManager);
-    }
-    else
-    {
-        pa3.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(tePos.getText()),
-                        undoManager);
-    }
+
     return true;
 }
 
 AudiooutPropertiesComponent::AudiooutPropertiesComponent(ObjController* objController_,
-                            ValueTree data_,
-                            UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                         Array<ValueTree> datas_,
+                                                         UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laSource("laSource", "Source"),
 teSource("teSource"),
 laOpt("laOpt", "Optional"),
@@ -604,45 +783,67 @@ void AudiooutPropertiesComponent::resized()
 
 void AudiooutPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    String sourceText;
-    ValueTree sourcesTree = data.getChildWithName(Ids::sources);
-    for (int i = 0; i < sourcesTree.getNumChildren(); ++i)
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
     {
-        ValueTree source = sourcesTree.getChild(i);
-        sourceText << source[Ids::value].toString();
-        if (i != sourcesTree.getNumChildren() - 1)
-            sourceText << "+";
+        teSource.setText(String::empty);
+        teOpt.setText(String::empty);
+        teSource.setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
+        teOpt.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
     }
-    teSource.setText(sourceText);
-    teOpt.setText(data.getProperty(Ids::optional).toString());
+    else
+    {
+        ValueTree data = datas[0];
+        String sourceText;
+        ValueTree sourcesTree = data.getChildWithName(Ids::sources);
+        for (int i = 0; i < sourcesTree.getNumChildren(); ++i)
+        {
+            ValueTree source = sourcesTree.getChild(i);
+            sourceText << source[Ids::value].toString();
+            if (i != sourcesTree.getNumChildren() - 1)
+                sourceText << "+";
+        }
+        teSource.setText(sourceText);
+        teSource.setTextToShowWhenEmpty("0.0", Colours::darkgrey);
+        teOpt.setText(data.getProperty(Ids::optional).toString());
+        teOpt.setTextToShowWhenEmpty(String::empty, Colours::black);
+    }
 }
 
 bool AudiooutPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
-    
-    String sourceText = teSource.getText();
-    StringArray sourcesList;
-    sourcesList.addTokens(sourceText, "+", "\"");
-    ValueTree sourcesTree = data.getChildWithName(Ids::sources);
-    sourcesTree.removeAllChildren(undoManager);
-    for (int i = 0; i < sourcesList.size(); ++i)
+
+    for (int i = 0; i < datas.size(); ++i)
     {
-        ValueTree source(Ids::audiosource);
-        source.setProperty(Ids::value, sourcesList[i], undoManager);
-        sourcesTree.addChild(source, -1, undoManager);
+        ValueTree data = datas[i];
+
+        String sourceText = teSource.getText();
+        StringArray sourcesList;
+        sourcesList.addTokens(sourceText, "+", "\"");
+        ValueTree sourcesTree = data.getChildWithName(Ids::sources);
+        sourcesTree.removeAllChildren(undoManager);
+        for (int i = 0; i < sourcesList.size(); ++i)
+        {
+            ValueTree source(Ids::audiosource);
+            source.setProperty(Ids::value, sourcesList[i], undoManager);
+            sourcesTree.addChild(source, -1, undoManager);
+        }
+        data.setProperty(Ids::optional, teOpt.getText(), undoManager);
     }
-    data.setProperty(Ids::optional, teOpt.getText(), undoManager);
 
     return true;
 }
 
 WaveguidePropertiesComponent::WaveguidePropertiesComponent(ObjController* objController_,
-                             ValueTree data_,
-                             UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                           Array<ValueTree> datas_,
+                                                           UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laWaveImp("laWaveImp", "Wave impedance (N/(m/s))"),
 teWaveImp("teWaveImp"),
 laStringType("laStringType", "String type"),
@@ -687,34 +888,63 @@ void WaveguidePropertiesComponent::resized()
 
 void WaveguidePropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    teWaveImp.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
-    teStringType.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
-    teLeftObj.setText(data[Ids::startVertex].toString());
-    teRightObj.setText(data[Ids::endVertex].toString());
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
+    {
+        teWaveImp.setText(String::empty);
+        teStringType.setText(String::empty);
+        teLeftObj.setText(String::empty);
+        teRightObj.setText(String::empty);
+        teName.setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
+        teWaveImp.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teStringType.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teLeftObj.setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
+        teRightObj.setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
+    }
+    else
+    {
+        ValueTree data = datas[0];
+        teWaveImp.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        teStringType.setText(data.getChildWithName(Ids::parameters).getChild(1)[Ids::value].toString());
+        teLeftObj.setText(data[Ids::startVertex].toString());
+        teRightObj.setText(data[Ids::endVertex].toString());
+        teWaveImp.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teStringType.setTextToShowWhenEmpty(String::empty, Colours::black);
+        teLeftObj.setTextToShowWhenEmpty(String::empty, Colours::darkgrey);
+        teRightObj.setTextToShowWhenEmpty(String::empty, Colours::darkgrey);
+    }
 }
 
 bool WaveguidePropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
 
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-    ValueTree pa1 = paramsTree.getChild(0);
-    ValueTree pa2 = paramsTree.getChild(1);
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
 
-    pa1.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(teWaveImp.getText()),
-                    undoManager);
-    pa2.setProperty(Ids::value, teStringType.getText(), undoManager);
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree pa1 = paramsTree.getChild(0);
+        ValueTree pa2 = paramsTree.getChild(1);
+
+        pa1.setProperty(Ids::value,
+                        Utils::fixParameterValueIfNeeded(teWaveImp.getText()),
+                        undoManager);
+        pa2.setProperty(Ids::value, teStringType.getText(), undoManager);
+    }
 
     return true;
 }
 
 TerminationPropertiesComponent::TerminationPropertiesComponent(ObjController* objController_,
-                               ValueTree data_,
-                               UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                               Array<ValueTree> datas_,
+                                                               UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laTermType("laTermType", "Type"),
 teTermType("teTermType")
 {
@@ -739,25 +969,45 @@ void TerminationPropertiesComponent::resized()
 
 void TerminationPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    teTermType.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
+    {
+        teTermType.setText(String::empty);
+        teTermType.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+    }
+    else
+    {
+        ValueTree data = datas[0];
+        teTermType.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        teTermType.setTextToShowWhenEmpty(String::empty, Colours::black);
+    }
 }
 
 bool TerminationPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
+    if(! ObjectPropertiesComponent::writeValues())
         return false;
 
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-    ValueTree param = paramsTree.getChild(0);
-    param.setProperty(Ids::value, teTermType.getText(), undoManager);
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
+
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree param = paramsTree.getChild(0);
+        param.setProperty(Ids::value, teTermType.getText(), undoManager);
+    }
+
     return true;
 }
 
 JunctionPropertiesComponent::JunctionPropertiesComponent(ObjController* objController_,
-                            ValueTree data_,
-                            UndoManager* undoManager_)
-: ObjectPropertiesComponent(objController_, data_, undoManager_),
+                                                         Array<ValueTree> datas_,
+                                                         UndoManager* undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_),
 laPos("laPos", "Displacement (m)"),
 tePos("tePos")
 {
@@ -782,17 +1032,37 @@ void JunctionPropertiesComponent::resized()
 
 void JunctionPropertiesComponent::readValues()
 {
-    teName.setText(data[Ids::identifier].toString());
-    tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+    if (isEditing)
+        return;
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
+    {
+        tePos.setText(String::empty);
+        tePos.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+    }
+    else
+    {
+        ValueTree data = datas[0];
+        tePos.setText(data.getChildWithName(Ids::parameters).getChild(0)[Ids::value].toString());
+        tePos.setTextToShowWhenEmpty(String::empty, Colours::black);
+    }
 }
 
 bool JunctionPropertiesComponent::writeValues()
 {
-    if(! writeIdentifier())
-        return true;
-    
-    ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-    ValueTree param = paramsTree.getChild(0);
-    param.setProperty(Ids::value, tePos.getText(), undoManager);
+    if(! ObjectPropertiesComponent::writeValues())
+        return false;
+
+    for (int i = 0; i < datas.size(); ++i)
+    {
+        ValueTree data = datas[i];
+
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        ValueTree param = paramsTree.getChild(0);
+        param.setProperty(Ids::value, tePos.getText(), undoManager);
+    }
+
     return true;
 }
