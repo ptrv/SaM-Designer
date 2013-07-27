@@ -186,6 +186,37 @@ public:
 	bool writeValues();
 };
 
+class GainComponent : public Component,
+                      public TextEditor::Listener
+{
+public:
+
+    GainComponent(StringArray sourceIds_,
+                  Array<ValueTree> datas_,
+                  UndoManager* undoManager_);
+    ~GainComponent();
+
+    void resized();
+
+    void textEditorTextChanged(TextEditor& editor);
+
+    void textEditorReturnKeyPressed(TextEditor& editor);
+    void textEditorEscapeKeyPressed(TextEditor& editor);
+
+    void textEditorFocusLost(TextEditor& editor);
+
+    void readValues();
+
+    void applyEditing();
+private:
+    Label labelGain;
+    TextEditor teGain;
+    StringArray sourceIds;
+    Array<ValueTree> datas;
+    UndoManager* undoManager;
+    bool multipleEdit;
+    bool dataChanged;
+};
 }
 
 #endif  // __OBJECTPROPERTIESCOMPONENT_H_C1992334__

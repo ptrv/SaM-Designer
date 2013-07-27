@@ -85,8 +85,6 @@ private:
         distanceFromEnd = juce_hypot (x - (x2 - getX()), y - (y2 - getY()));
     }
     
-    void showGainPanel();
-
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioOutConnector);
 };
 }

@@ -36,149 +36,6 @@
 
 using namespace synthamodeler;
 
-class GainPanel  : public DialogWindow
-{
-public:
-	GainPanel(AudioOutConnector* aoc, const String& sourceId, 
-             ValueTree data, UndoManager* undoManager)
-    : DialogWindow ("Gain", Colour::fromRGBA((uint8)200, (uint8)200, (uint8)200, (uint8)150), true)
-    {
-        GainComponent * const gc = new GainComponent(*this, sourceId, 
-                                                     data, undoManager);
-        gc->setSize(200, 100);
-
-        setContentOwned(gc, true);
-
-//        if (!restoreWindowStateFromString(variablesWindowPos))
-//            centreWithSize(getWidth(), getHeight());
-        centreAroundComponent(aoc, getWidth(), getHeight());
-        setResizable(false, false);
-        setVisible(true);
-    }
-    ~GainPanel()
-    {
-        
-    }
-
-    void closeButtonPressed()
-    {
-        setVisible (false);
-    }
-
-    static int show(AudioOutConnector* aoc, const String& sourceId, 
-                    ValueTree data, UndoManager* undoManager)
-    {
-        GainPanel gp(aoc, sourceId, data, undoManager);
-        gp.runModalLoop();
-        return gp.returnVal;
-    }
-
-    int returnVal;
-private:
-    class GainComponent : public Component,
-    					  public Button::Listener,
-                          public TextEditor::Listener
-    {
-    public:
-        GainComponent(GainPanel& parent_,
-                      const String& sourceId_,
-                      ValueTree data_,
-                      UndoManager* undoManager_)
-    	: parent(parent_),
-    	  labelGain("Gain", "Gain"),
-    	  teGain("Gain value"),
-          sourceId(sourceId_),
-    	  data(data_),
-    	  btOk("Ok"),
-    	  btCancel("Cancel"),
-    	  undoManager(undoManager_)
-        {
-            ValueTree sources = data.getChildWithName(Ids::sources);
-//            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
-//            oldGain = source[Ids::gain].toString();
-            oldGain = Utils::getGainForSourceId(sources, sourceId);
-            teGain.setText(oldGain);
-            teGain.addListener(this);
-    		addAndMakeVisible(&teGain);
-            labelGain.attachToComponent(&teGain, true);
-    		btOk.addListener(this);
-    		addAndMakeVisible(&btOk);
-    		btCancel.addListener(this);
-    		addAndMakeVisible(&btCancel);
-    	}
-
-    	~GainComponent()
-    	{
-    	}
-
-    	void resized()
-    	{
-    		labelGain.setBounds(0, 5, 60, 22);
-    		teGain.setBounds(60, 5, getWidth() - 65, 22);
-    		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
-    		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
-    	}
-
-    	void buttonClicked(Button* button)
-    	{
-            parent.returnVal = 0;
-    		if(button == &btOk)
-    		{
-                applyEditing();
-    		}
-    		else if(button == &btCancel)
-    		{
-                cancelEditing();
-    		}
-        }
-        void textEditorTextChanged(TextEditor& editor)
-        {
-        }
-        void textEditorReturnKeyPressed(TextEditor& editor)
-        {
-            applyEditing();
-        }
-        void textEditorEscapeKeyPressed(TextEditor& editor)
-        {
-            cancelEditing();
-        }
-        void textEditorFocusLost(TextEditor& editor)
-        {
-        }
-        void cancelEditing()
-        {
-            parent.returnVal = 2;
-            parent.closeButtonPressed();
-        }
-        void applyEditing()
-        {
-//            ValueTree sources = data.getChildWithName(Ids::sources);
-//            ValueTree source = sources.getChildWithProperty(Ids::value, sourceId);
-            String newGain = teGain.getText();
-            if (oldGain.compare(newGain) != 0)
-            {
-                undoManager->beginNewTransaction("Edit gain");
-                ValueTree sources = data.getChildWithName(Ids::sources);
-                Utils::setGainForSourceId(sources, sourceId, newGain, undoManager);
-//                source.setProperty(Ids::gain, newGain, undoManager);
-                undoManager->beginNewTransaction();
-            }
-            parent.returnVal = 1;
-            parent.closeButtonPressed();
-        }
-    private:
-    	GainPanel& parent;
-    	Label labelGain;
-    	TextEditor teGain;
-        String sourceId;
-    	ValueTree data;
-    	TextButton btOk;
-    	TextButton btCancel;
-    	UndoManager* undoManager;
-        String oldGain;
-    };
-};
-
 AudioOutConnector::AudioOutConnector(ObjController& owner_, 
                                      BaseObjectComponent* objComp_,
                                      ObjectComponent* audioOutComp_)
@@ -381,7 +238,7 @@ void AudioOutConnector::mouseUp(const MouseEvent& e)
 {
    	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
-        showGainPanel();
+        propertiesWindow->makeVisible(true);
 	}
 
     owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, false,
@@ -396,15 +253,4 @@ Rectangle<int> AudioOutConnector::getIntersectioBounds()
                                             (int) fabsf(lastInputX - lastOutputX),
                                             (int) fabsf(lastInputY - lastOutputY));
     return intersectionBounds;
-}
-
-void AudioOutConnector::showGainPanel()
-{
-    String sourceId;
-    if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(sourceComp))
-        sourceId = oc->getData()[Ids::identifier].toString();
-    else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(sourceComp))
-        sourceId = lc->getData()[Ids::identifier].toString();
-    
-    GainPanel::show(this, sourceId, audioOutComp->getData(), owner.getUndoManager());
 }

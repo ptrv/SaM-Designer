@@ -78,6 +78,7 @@ namespace Ids
     DECLARE_ID (fontSize);
     DECLARE_ID (commentColour);
     DECLARE_ID (pulsetouch);
+    DECLARE_ID (audioconnector);
 
     const Identifier class_ ("class");
 

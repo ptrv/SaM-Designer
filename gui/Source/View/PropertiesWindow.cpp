@@ -29,13 +29,15 @@
 #include "ContentComp.h"
 #include "ObjectsHolder.h"
 #include "../Controller/ObjController.h"
-#include "../Controller/ObjController.h"
 #include "../Graph/Node.h"
 #include "BaseObjectComponent.h"
 #include "ObjectPropertiesComponent.h"
 #include "SelectableObject.h"
+#include "ObjectComponent.h"
+#include "LinkComponent.h"
 
 #include "PropertiesWindow.h"
+#include "AudioOutConnector.h"
 
 using namespace synthamodeler;
 
@@ -130,6 +132,7 @@ void PropertiesWindow::updateProperties()
     if(currentSelection->getNumSelected() > 0)
     {
         Array<ValueTree> datas;
+        StringArray audioSourceIds;
         const Array<SelectableObject*>& selectedItems = currentSelection->getItemArray();
         Identifier selectedId;
         for (int i = 0; i < selectedItems.size(); ++i)
@@ -142,6 +145,20 @@ void PropertiesWindow::updateProperties()
 
                 if(selectedId == boc->getData().getType())
                     datas.add(boc->getData());
+            }
+            else if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(selectedItems[i]))
+            {
+                if (datas.size() == 0)
+                    selectedId = Ids::audioconnector;
+
+                String sourceId;
+                if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (aoc->getSourceObject()))
+                    sourceId = oc->getData()[Ids::identifier].toString();
+                else if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (aoc->getSourceObject()))
+                    sourceId = lc->getData()[Ids::identifier].toString();
+
+                audioSourceIds.add(sourceId);
+                datas.add(aoc->getAudioObject()->getData());
             }
         }
 
@@ -190,6 +207,10 @@ void PropertiesWindow::updateProperties()
         else if (selectedId == Ids::audioout)
         {
             comp = new AudiooutPropertiesComponent(objCtrl, datas, undoManager_);
+        }
+        else if (selectedId == Ids::audioconnector)
+        {
+            comp = new GainComponent(audioSourceIds, datas, undoManager_);
         }
         else
         {

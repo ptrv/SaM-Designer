@@ -944,3 +944,93 @@ bool JunctionPropertiesComponent::writeValues()
 
     return true;
 }
+
+GainComponent::GainComponent(StringArray sourceIds_,
+                             Array<ValueTree> datas_,
+                             UndoManager* undoManager_)
+: labelGain("Gain", "Gain"),
+teGain("Gain value"),
+sourceIds(sourceIds_),
+datas(datas_),
+undoManager(undoManager_),
+dataChanged(false)
+{
+    teGain.setText("");
+    teGain.addListener(this);
+    addAndMakeVisible(&teGain);
+    labelGain.attachToComponent(&teGain, true);
+
+    multipleEdit = datas.size() > 1;
+
+    readValues();
+}
+
+GainComponent::~GainComponent()
+{
+}
+
+void GainComponent::resized()
+{
+    labelGain.setBounds(0, 5, 60, 22);
+    teGain.setBounds(60, 5, getWidth() - 65, 22);
+}
+
+void GainComponent::textEditorTextChanged(TextEditor& /*editor*/)
+{
+    dataChanged = true;
+}
+
+void GainComponent::textEditorReturnKeyPressed(TextEditor& /*editor*/)
+{
+    applyEditing();
+}
+
+void GainComponent::textEditorEscapeKeyPressed(TextEditor& /*editor*/)
+{
+    if(PropertiesWindow* pw = dynamic_cast <PropertiesWindow*> (getParentComponent()))
+    {
+        pw->closeButtonPressed();
+    }
+}
+
+void GainComponent::textEditorFocusLost(TextEditor& /*editor*/)
+{
+    applyEditing();
+}
+
+void GainComponent::readValues()
+{
+    if(multipleEdit)
+    {
+        teGain.setText(String::empty);
+        teGain.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+
+        propertiesWindow->setName("Properties: " + String(multipleSelectionText));
+    }
+    else
+    {
+        ValueTree sources = datas[0].getChildWithName(Ids::sources);
+
+        String oldGain = Utils::getGainForSourceId(sources, sourceIds[0]);
+
+        teGain.setText(oldGain);
+
+        propertiesWindow->setName("Properties: " + sourceIds[0]);
+    }
+
+}
+void GainComponent::applyEditing()
+{
+    if(dataChanged)
+    {
+        String newGain = teGain.getText();
+        undoManager->beginNewTransaction("Edit gain");
+        for (int i = 0; i < datas.size(); ++i)
+        {
+            ValueTree sources = datas[i].getChildWithName(Ids::sources);
+            Utils::setGainForSourceId(sources, sourceIds[i], newGain, undoManager);
+        }
+        undoManager->beginNewTransaction();
+        dataChanged = false;
+    }
+}
