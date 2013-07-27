@@ -224,12 +224,17 @@ bool ObjectPropertiesComponent::writeValues()
     return true;
 }
 
-TextEditor* ObjectPropertiesComponent::createRow(const String& name,
-                                                 const String& text,
-                                                 bool isMultiline)
+TextEditor* ObjectPropertiesComponent::createEditor(const String& name,
+                                                    const String& text,
+                                                    bool isMultiline,
+                                                    bool isReadOnly)
 {
     TextEditor* te = new TextEditor("te" + name);
     Label* la = new Label("la" + name, text);
+
+    te->setReadOnly(isReadOnly);
+    if(isReadOnly)
+        te->setColour(TextEditor::textColourId, Colours::darkgrey);
 
     te->addListener(this);
     if(isMultiline)
@@ -240,36 +245,40 @@ TextEditor* ObjectPropertiesComponent::createRow(const String& name,
     return te;
 }
 
-void ObjectPropertiesComponent::setRowMultipleSelection()
+void ObjectPropertiesComponent::readEditorsMultipleSelection(Array<TextEditor*>& editors_,
+                                                             Colour c)
 {
-    for (int i = 0; i < editors.size(); ++i)
+    for (int i = 0; i < editors_.size(); ++i)
     {
-        TextEditor* editor = editors[i];
+        TextEditor* editor = editors_[i];
         editor->setText(String::empty);
-        editor->setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        editor->setTextToShowWhenEmpty(multipleSelectionText, c);
     }
 
 }
 
-void ObjectPropertiesComponent::readRowsSingleSelection(ValueTree data)
+void ObjectPropertiesComponent::readEditorsSingleSelection(Array<TextEditor*>& editors_,
+                                                           StringArray params,
+                                                           Colour c)
 {
-    for (int i = 0; i < editors.size(); ++i)
+    for (int i = 0; i < editors_.size(); ++i)
     {
-        TextEditor* editor = editors[i];
+        TextEditor* editor = editors_[i];
 
-        editor->setText(data.getChild(i)[Ids::value].toString());
-        editor->setTextToShowWhenEmpty(String::empty, Colours::black);
+        editor->setText(params[i]);
+        editor->setTextToShowWhenEmpty(String::empty, c);
     }
 }
 
-void ObjectPropertiesComponent::writeRowsSingleSelection(ValueTree data_,
-                                                         bool fixValues)
+void ObjectPropertiesComponent::writeEditors(Array<TextEditor*> editors_,
+                                             ValueTree params_,
+                                             bool fixValues)
 {
-    for (int i = 0; i < editors.size(); ++i)
+    for (int i = 0; i < editors_.size(); ++i)
     {
-        TextEditor* editor = editors[i];
+        TextEditor* editor = editors_[i];
 
-        ValueTree pa = data_.getChild(i);
+        ValueTree pa = params_.getChild(i);
 
         String val = editor->getText();
         if(fixValues)
@@ -279,14 +288,25 @@ void ObjectPropertiesComponent::writeRowsSingleSelection(ValueTree data_,
     }
 }
 
+StringArray ObjectPropertiesComponent::getParamsStrings(int numParams,
+                                                        ValueTree params)
+{
+    StringArray res;
+    for (int i = 0; i < numParams; ++i)
+    {
+        res.add(params.getChild(i)[Ids::value].toString());
+    }
+    return res;
+}
+
 MassPropertiesComponent::MassPropertiesComponent(ObjController* objController_,
                                                  Array<ValueTree> datas_,
                                                  UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("Mass", "Mass (kg)", true));
-    editors.add(createRow("Pos", "Position (m)", true));
-    editors.add(createRow("Vel", "Valocity (m/s)", true));
+    editors.add(createEditor("Mass", "Mass (kg)", true));
+    editors.add(createEditor("Pos", "Position (m)", true));
+    editors.add(createEditor("Vel", "Valocity (m/s)", true));
 
     readValues();
 }
@@ -314,13 +334,15 @@ void MassPropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
+        readEditorsMultipleSelection(editors);
     }
     else
     {
         ValueTree data = datas[0];
 
-        readRowsSingleSelection(data.getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(editors.size(),
+                                              data.getChildWithName(Ids::parameters));
+        readEditorsSingleSelection(editors, params);
     }
 }
 
@@ -334,7 +356,8 @@ bool MassPropertiesComponent::writeValues()
         ValueTree data = datas[i];
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-        writeRowsSingleSelection(paramsTree, true);
+        
+        writeEditors(editors, paramsTree, true);
     }
 
     return true;
@@ -379,9 +402,9 @@ ResonatorPropertiesComponent::ResonatorPropertiesComponent(ObjController* objCon
                                                            UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("Freq", "Frequency (Hz)", true));
-    editors.add(createRow("Decay", "Decay (sec)", true));
-    editors.add(createRow("EqMass", "Mass (kg)", true));
+    editors.add(createEditor("Freq", "Frequency (Hz)", true));
+    editors.add(createEditor("Decay", "Decay (sec)", true));
+    editors.add(createEditor("EqMass", "Mass (kg)", true));
 
     readValues();
 }
@@ -409,31 +432,31 @@ void ResonatorPropertiesComponent::readValues()
 
    if(multipleEdit)
     {
-        setRowMultipleSelection();
+        readEditorsMultipleSelection(editors);
     }
     else
     {
-        ValueTree data = datas[0];
+        ValueTree paramsTree = datas[0].getChildWithName(Ids::parameters);
 
         String valFreq, valDecay, valEqMass;
 
-        int numRes = data.getChildWithName(Ids::parameters).getNumChildren() / 3;
+        int numRes = paramsTree.getNumChildren() / 3;
         jassert(numRes != 0);
         for (int i = 0; i < numRes; ++i)
         {
             String delim = ",";
             if (i == 0)
                 delim = "";
-            valFreq << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 0)[Ids::value].toString();
-            valDecay << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 1)[Ids::value].toString();
-            valEqMass << delim << data.getChildWithName(Ids::parameters).getChild(i * 3 + 2)[Ids::value].toString();
+            valFreq << delim << paramsTree.getChild(i * 3 + 0)[Ids::value].toString();
+            valDecay << delim << paramsTree.getChild(i * 3 + 1)[Ids::value].toString();
+            valEqMass << delim << paramsTree.getChild(i * 3 + 2)[Ids::value].toString();
         }
-        editors[0]->setText(valFreq);
-        editors[1]->setText(valDecay);
-        editors[2]->setText(valEqMass);
-        editors[0]->setTextToShowWhenEmpty(String::empty, Colours::black);
-        editors[1]->setTextToShowWhenEmpty(String::empty, Colours::black);
-        editors[2]->setTextToShowWhenEmpty(String::empty, Colours::black);
+
+        StringArray params;
+        params.add(valFreq);
+        params.add(valDecay);
+        params.add(valEqMass);
+        readEditorsSingleSelection(editors, params);
     }
 }
 
@@ -489,7 +512,7 @@ GroundPropertiesComponent::GroundPropertiesComponent(ObjController* objControlle
                                                      UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("Pos", "Position (m)", true));
+    editors.add(createEditor("Pos", "Position (m)", true));
 
     readValues();
 }
@@ -515,11 +538,13 @@ void GroundPropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
+        readEditorsMultipleSelection(editors);
     }
     else
     {
-        readRowsSingleSelection(datas[0].getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(editors.size(),
+                                              datas[0].getChildWithName(Ids::parameters));
+        readEditorsSingleSelection(editors,params);
     }
 }
 
@@ -545,40 +570,24 @@ LinkPropertiesComponent::LinkPropertiesComponent(ObjController* objController_,
                                                  UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("Stiff", "Stiffness (N/m)", true));
-    editors.add(createRow("Damp", "Damping (N/(m/s))", true));
+    editors.add(createEditor("Stiff", "Stiffness (N/m)", true));
+    editors.add(createEditor("Damp", "Damping (N/(m/s))", true));
     if(datas[0].getType() == Ids::pluck)
     {
-        editors.add(createRow("MinDisplace", "Minimum displace diff", true));
+        editors.add(createEditor("MinDisplace", "Minimum displace diff", true));
 //        editors.add(createRow("Pos", "Position offste (m)", true));
     }
-    editors.add(createRow("Pos", "Position offste (m)", true));
+    editors.add(createEditor("Pos", "Position offste (m)", true));
     if(datas[0].getType() == Ids::pulsetouch)
     {
 //        editors.add(createRow("Pos", "Position offste (m)", true));
-        editors.add(createRow("PulseMult", "Pulse multiplier", true));
-        editors.add(createRow("PulseTau", "Pulse tau", true));
-        editors.add(createRow("PulseLen", "Pulse length", true));
+        editors.add(createEditor("PulseMult", "Pulse multiplier", true));
+        editors.add(createEditor("PulseTau", "Pulse tau", true));
+        editors.add(createEditor("PulseLen", "Pulse length", true));
     }
 
-    TextEditor* teStartVertex = new TextEditor("teStartVertex");
-    Label* laStartVertex = new Label("laStartVertex", "Start vertex");
-    teStartVertex->setReadOnly(true);
-    teStartVertex->addListener(this);
-    teStartVertex->setColour(TextEditor::textColourId, Colours::darkgrey);
-    addAndMakeVisible(teStartVertex);
-    laStartVertex->attachToComponent(teStartVertex, true);
-
-    TextEditor* teEndVertex = new TextEditor("teEndVertex");
-    Label* laEndVertex = new Label("laEndVertex", "End vertex");
-    teEndVertex->setReadOnly(true);
-    teEndVertex->addListener(this);
-    teEndVertex->setColour(TextEditor::textColourId, Colours::darkgrey);
-    addAndMakeVisible(teEndVertex);
-    laEndVertex->attachToComponent(teEndVertex, true);
-
-    vertices.add(teStartVertex);
-    vertices.add(teEndVertex);
+    vertices.add(createEditor("StartVertex", "Start vertex", false, true));
+    vertices.add(createEditor("EndVertex", "End vertex", false, true));
     
     readValues();
 }
@@ -622,24 +631,21 @@ void LinkPropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
-        
-        vertices[0]->setText(String::empty);
-        vertices[0]->setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
-        vertices[1]->setText(String::empty);
-        vertices[1]->setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
-
+        readEditorsMultipleSelection(editors);
+        readEditorsMultipleSelection(vertices, Colours::darkgrey);
     }
     else
     {
         ValueTree data = datas[0];
 
-        readRowsSingleSelection(data.getChildWithName(Ids::parameters));
-        
-        vertices[0]->setText(data[Ids::startVertex].toString());
-        vertices[0]->setTextToShowWhenEmpty(String::empty, Colours::black);
-        vertices[1]->setText(data[Ids::endVertex].toString());
-        vertices[1]->setTextToShowWhenEmpty(String::empty, Colours::black);
+        StringArray params = getParamsStrings(editors.size(),
+                                              data.getChildWithName(Ids::parameters));
+        readEditorsSingleSelection(editors, params);
+
+        StringArray vertexVals;
+        vertexVals.add(data[Ids::startVertex].toString());
+        vertexVals.add(data[Ids::endVertex].toString());
+        readEditorsSingleSelection(vertices, vertexVals, Colours::darkgrey);
     }
 }
 
@@ -654,7 +660,7 @@ bool LinkPropertiesComponent::writeValues()
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        writeRowsSingleSelection(paramsTree, true);
+        writeEditors(editors, paramsTree, true);
     }
 
     return true;
@@ -665,12 +671,10 @@ AudiooutPropertiesComponent::AudiooutPropertiesComponent(ObjController* objContr
                                                          UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("Source", "Source", true));
-    editors[0]->addListener(this);
+    editors.add(createEditor("Source", "Source", true, true));
     editors[0]->setTextToShowWhenEmpty("0.0", Colours::darkgrey);
-    editors[0]->setColour(TextEditor::textColourId, Colours::darkgrey);
 
-    editors.add(createRow("Opt", "Optional", true));
+    editors.add(createEditor("Opt", "Optional", true));
 
     readValues();
 }
@@ -697,7 +701,7 @@ void AudiooutPropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
+        readEditorsMultipleSelection(editors);
         editors[0]->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
     }
     else
@@ -712,10 +716,12 @@ void AudiooutPropertiesComponent::readValues()
             if (i != sourcesTree.getNumChildren() - 1)
                 sourceText << "+";
         }
-        editors[0]->setText(sourceText);
+
+        StringArray vals;
+        vals.add(sourceText);
+        vals.add(data.getProperty(Ids::optional).toString());
+        readEditorsSingleSelection(editors, vals);
         editors[0]->setTextToShowWhenEmpty("0.0", Colours::darkgrey);
-        editors[1]->setText(data.getProperty(Ids::optional).toString());
-        editors[1]->setTextToShowWhenEmpty(String::empty, Colours::black);
     }
 }
 
@@ -750,24 +756,11 @@ WaveguidePropertiesComponent::WaveguidePropertiesComponent(ObjController* objCon
                                                            UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("WaveImp", "Wave impedance (N/(m/s))", true));
-    editors.add(createRow("StringType", "String Type", true));
+    editors.add(createEditor("WaveImp", "Wave impedance (N/(m/s))", true));
+    editors.add(createEditor("StringType", "String Type", true));
 
-    TextEditor* teLeftObj = new TextEditor("teLeftObj");
-    Label* laLeftObj = new Label("laLeftObj", "Left object");
-    teLeftObj->setReadOnly(true);
-    teLeftObj->addListener(this);
-    teLeftObj->setColour(TextEditor::textColourId, Colours::darkgrey);
-    addAndMakeVisible(teLeftObj);
-    laLeftObj->attachToComponent(teLeftObj, true);
-
-    TextEditor* teRightObj = new TextEditor("teRightObj");
-    Label* laRightObj = new Label("laRightObj", "Right object");
-    teRightObj->setReadOnly(true);
-    teRightObj->addListener(this);
-    teRightObj->setColour(TextEditor::textColourId, Colours::darkgrey);
-    addAndMakeVisible(teRightObj);
-    laRightObj->attachToComponent(teRightObj, true);
+    vertices.add(createEditor("LeftObj", "Left object", false, true));
+    vertices.add(createEditor("RightObj", "Right object", false, true));
 
     readValues();
 }
@@ -796,20 +789,21 @@ void WaveguidePropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
-        vertices[0]->setText(String::empty);
-        vertices[0]->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
-        vertices[1]->setText(String::empty);
-        vertices[1]->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
+        readEditorsMultipleSelection(editors);
+        readEditorsMultipleSelection(vertices, Colours::darkgrey);
     }
     else
     {
         ValueTree data = datas[0];
-        readRowsSingleSelection(data.getChildWithName(Ids::parameters));
-        vertices[0]->setText(data[Ids::startVertex].toString());
-        vertices[0]->setTextToShowWhenEmpty(String::empty, Colours::darkgrey);
-        vertices[1]->setText(data[Ids::endVertex].toString());
-        vertices[1]->setTextToShowWhenEmpty(String::empty, Colours::darkgrey);
+
+        StringArray params = getParamsStrings(editors.size(),
+                                              data.getChildWithName(Ids::parameters));
+        readEditorsSingleSelection(editors, params);
+
+        StringArray vertexVals;
+        vertexVals.add(data[Ids::startVertex].toString());
+        vertexVals.add(data[Ids::endVertex].toString());
+        readEditorsSingleSelection(vertices, vertexVals, Colours::darkgrey);
     }
 }
 
@@ -840,7 +834,7 @@ TerminationPropertiesComponent::TerminationPropertiesComponent(ObjController* ob
                                                                UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("TermType", "Type", true));
+    editors.add(createEditor("TermType", "Type", true));
 
     readValues();
 }
@@ -866,11 +860,13 @@ void TerminationPropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
+        readEditorsMultipleSelection(editors);
     }
     else
     {
-        readRowsSingleSelection(datas[0].getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(editors.size(),
+                                              datas[0].getChildWithName(Ids::parameters));
+        readEditorsSingleSelection(editors, params);
     }
 }
 
@@ -885,7 +881,7 @@ bool TerminationPropertiesComponent::writeValues()
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        writeRowsSingleSelection(paramsTree, false);
+        writeEditors(editors, paramsTree, false);
     }
 
     return true;
@@ -896,7 +892,7 @@ JunctionPropertiesComponent::JunctionPropertiesComponent(ObjController* objContr
                                                          UndoManager* undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createRow("Pos", "Displacement (m)", true));
+    editors.add(createEditor("Pos", "Displacement (m)", true));
 
     readValues();
 }
@@ -922,11 +918,13 @@ void JunctionPropertiesComponent::readValues()
 
     if(multipleEdit)
     {
-        setRowMultipleSelection();
+        readEditorsMultipleSelection(editors);
     }
     else
     {
-        readRowsSingleSelection(datas[0].getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(editors.size(),
+                                              datas[0].getChildWithName(Ids::parameters));
+        readEditorsSingleSelection(editors, params);
     }
 }
 
@@ -941,7 +939,7 @@ bool JunctionPropertiesComponent::writeValues()
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        writeRowsSingleSelection(paramsTree, false);
+        writeEditors(editors, paramsTree, false);
     }
 
     return true;

@@ -53,10 +53,17 @@ public:
 
 protected:
     bool writeIdentifier();
-    TextEditor* createRow(const String& name, const String& text, bool isMultiline);
-    void setRowMultipleSelection();
-    void readRowsSingleSelection(ValueTree data);
-    void writeRowsSingleSelection(ValueTree data, bool fixValues);
+    TextEditor* createEditor(const String& name, const String& text,
+                             bool isMultiline, bool isReadOnly = false);
+
+    void readEditorsMultipleSelection(Array<TextEditor*>& editors_,
+                                      Colour c = Colours::black);
+    void readEditorsSingleSelection(Array<TextEditor*>& editors_,
+                                    StringArray params,
+                                    Colour c = Colours::black);
+    void writeEditors(Array<TextEditor*> editors_,
+                      ValueTree params, bool fixValues);
+    StringArray getParamsStrings(int numParams, ValueTree params);
 
     ObjController* objController;
 	Array<ValueTree> datas;
