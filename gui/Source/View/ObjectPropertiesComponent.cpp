@@ -106,6 +106,7 @@ void ObjectPropertiesComponent::applyEditing()
                 SAM_LOG("Change " + data.getType().toString() + " " +
                         data[Ids::identifier].toString());
             }
+            dataChanged = false;
         }
         else
         {
