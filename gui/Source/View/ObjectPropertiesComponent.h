@@ -61,7 +61,7 @@ protected:
     void readEditorsSingleSelection(Array<TextEditor*>& editors_,
                                     StringArray params,
                                     Colour c = Colours::black);
-    void writeEditors(Array<TextEditor*> editors_,
+    void writeEditors(Array<TextEditor*>& editors_,
                       ValueTree params, bool fixValues);
     StringArray getParamsStrings(int numParams, ValueTree params);
 

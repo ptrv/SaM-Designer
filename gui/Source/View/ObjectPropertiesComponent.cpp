@@ -271,7 +271,7 @@ void ObjectPropertiesComponent::readEditorsSingleSelection(Array<TextEditor*>& e
     }
 }
 
-void ObjectPropertiesComponent::writeEditors(Array<TextEditor*> editors_,
+void ObjectPropertiesComponent::writeEditors(Array<TextEditor*>& editors_,
                                              ValueTree params_,
                                              bool fixValues)
 {
