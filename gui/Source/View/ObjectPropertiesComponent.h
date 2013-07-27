@@ -53,16 +53,22 @@ public:
 
 protected:
     bool writeIdentifier();
+    TextEditor* createRow(const String& name, const String& text, bool isMultiline);
+    void setRowMultipleSelection();
+    void readRowsSingleSelection(ValueTree data);
+    void writeRowsSingleSelection(ValueTree data, bool fixValues);
 
     ObjController* objController;
 	Array<ValueTree> datas;
 	UndoManager* undoManager;
-	Label laName;
-	TextEditor teName;
+	Label* laName;
+	TextEditor* teName;
 //    Label laDebug;
     bool dataChanged;
     bool multipleEdit;
     bool isEditing;
+
+    Array<TextEditor*> editors;
 };
 
 class MassPropertiesComponent : public ObjectPropertiesComponent
@@ -75,14 +81,6 @@ public:
 	void resized();
 	void readValues();
 	bool writeValues();
-private:
-	Label laMass;
-	TextEditor teMass;
-	Label laPos;
-	TextEditor tePos;
-	Label laVel;
-	TextEditor teVel;
-
 };
 
 class PortPropertiesComponent : public ObjectPropertiesComponent
@@ -95,7 +93,6 @@ public:
 	void resized();
 	void readValues();
 	bool writeValues();
-private:
 };
 
 class ResonatorPropertiesComponent : public ObjectPropertiesComponent {
@@ -107,13 +104,6 @@ public:
 	void resized();
 	void readValues();
 	bool writeValues();
-private:
-    Label laFreq;
-	TextEditor teFreq;
-	Label laDecay;
-	TextEditor teDecay;
-	Label laEqMass;
-	TextEditor teEqMass;
 };
 
 class GroundPropertiesComponent : public ObjectPropertiesComponent {
@@ -126,11 +116,6 @@ public:
 	void resized();
 	void readValues();
 	bool writeValues();
-
-private:
-	Label laPos;
-	TextEditor tePos;
-
 };
 
 class LinkPropertiesComponent : public ObjectPropertiesComponent {
@@ -145,24 +130,7 @@ public:
 	bool writeValues();
 
 private:
-    Label laStiff;
-	TextEditor teStiff;
-	Label laDamp;
-	TextEditor teDamp;
-	Label laPos;
-	TextEditor tePos;
-    Label laStartVertex;
-    TextEditor teStartVertex;
-    Label laEndVertex;
-    TextEditor teEndVertex;
-    Label laMinDisplace;
-    TextEditor teMinDisplace;
-    Label laPulseMult;
-    TextEditor tePulseMult;
-    Label laPulseTau;
-    TextEditor tePulseTau;
-    Label laPulseLen;
-    TextEditor tePulseLen;
+    Array<TextEditor*> vertices;
 };
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
@@ -174,11 +142,6 @@ public:
     void resized();
 	void readValues();
 	bool writeValues();
-private:
-    Label laSource;
-    TextEditor teSource;
-    Label laOpt;
-    TextEditor teOpt;
 };
 
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
@@ -191,14 +154,7 @@ public:
 	void readValues();
 	bool writeValues();
 private:
-    Label laWaveImp;
-	TextEditor teWaveImp;
-    Label laStringType;
-	TextEditor teStringType;
-    Label laLeftObj;
-    TextEditor teLeftObj;
-    Label laRightObj;
-    TextEditor teRightObj;
+    Array<TextEditor*> vertices;
 };
 
 class TerminationPropertiesComponent : public ObjectPropertiesComponent {
@@ -210,10 +166,6 @@ public:
 	void resized();
 	void readValues();
 	bool writeValues();
-
-private:
-	Label laTermType;
-	TextEditor teTermType;
 };
 
 class JunctionPropertiesComponent : public ObjectPropertiesComponent {
@@ -225,10 +177,6 @@ public:
 	void resized();
 	void readValues();
 	bool writeValues();
-
-private:
-	Label laPos;
-	TextEditor tePos;
 };
 
 }
