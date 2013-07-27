@@ -25,7 +25,7 @@
 
 
 (defvar sam-keywords
-  '("mass" "ground" "port" "resonator" "link" "touch" "pluck"
+  '("mass" "ground" "port" "resonators" "link" "touch" "pluck"
     "waveguide" "termination" "junction" "audioout"))
 
 (defvar sam-functions
