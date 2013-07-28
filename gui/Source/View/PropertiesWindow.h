@@ -30,9 +30,9 @@ namespace synthamodeler
 {
 class ContentComp;
 class SelectableObject;
+class MainAppWindow;
 
 class PropertiesWindow : public DocumentWindow,
-                         public FocusChangeListener,
                          public ChangeListener,
                          public ValueTree::Listener
 {
@@ -41,8 +41,6 @@ public:
     ~PropertiesWindow();
 
     void makeVisible(bool shouldBeVisible=true);
-
-    void globalFocusChanged (Component* focusedComponent);
 
     void changeListenerCallback(ChangeBroadcaster* source);
     
@@ -56,6 +54,7 @@ public:
     void valueTreeChildOrderChanged (ValueTree& parentTree);
     void valueTreeParentChanged (ValueTree& tree);
 
+    void setCurrentActiveWindow(MainAppWindow& maw);
 private:
     ContentComp* currentContentComp;
     SelectedItemSet<SelectableObject*>* currentSelection;

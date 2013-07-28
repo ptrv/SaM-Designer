@@ -55,10 +55,10 @@ public:
 
 PropertiesWindow::PropertiesWindow()
 :
-DocumentWindow("Properties", Colour::greyLevel (0.92f), DocumentWindow::closeButton, true)
+DocumentWindow("Properties", Colour::greyLevel (0.92f), DocumentWindow::closeButton, true),
+    currentContentComp(nullptr),
+    currentSelection(nullptr)
 {
-    Desktop::getInstance().addFocusChangeListener(this);
-
     setSize(400, 300);
 
     // restore the last size and position from our settings file..
@@ -83,19 +83,27 @@ void PropertiesWindow::makeVisible(bool shouldBeVisible)
     if (shouldBeVisible)
     {
         toFront(true);
-        if (currentSelection)
+        if (currentSelection != nullptr)
         {
             updateProperties();
         }
     }
 }
 
-void PropertiesWindow::globalFocusChanged (Component* focusedComponent)
+void PropertiesWindow::setCurrentActiveWindow(MainAppWindow& maw)
 {
-    if(ContentComp* cc = dynamic_cast<ContentComp*>(focusedComponent))
+    if(maw.isActiveWindow())
     {
-        currentContentComp = cc;
-        currentSelection = &cc->getHolderComponent()->getObjController().getSelectedObjects();
+        if (ContentComp * cc = static_cast<ContentComp*> (maw.getContentComponent()))
+        {
+            if (currentContentComp != cc)
+            {
+                DBG("current active window changed");
+                currentContentComp = cc;
+                currentSelection = &cc->getHolderComponent()->getObjController().getSelectedObjects();
+                currentSelection->sendChangeMessage();
+            }
+        }
     }
 }
 
@@ -104,7 +112,7 @@ void PropertiesWindow::changeListenerCallback(ChangeBroadcaster* /*source*/)
     if(! isVisible())
         return;
 
-    if(currentSelection)
+    if(currentSelection != nullptr)
     {
         updateProperties();
     }

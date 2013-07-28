@@ -59,7 +59,8 @@ public:
     bool closeMDLFile(MDLFile* mdlFile);
     bool closeCurrentMDLFile();
 
-    //==============================================================================
+    void activeWindowStatusChanged();
+//==============================================================================
 //    const StringArray getMenuBarNames ();
 //    const PopupMenu getMenuForIndex (int topLevelMenuIndex, const String& menuName);
 //    void menuItemSelected (int menuItemID, int topLevelMenuIndex);
@@ -82,8 +83,8 @@ public:
     ContentComp* getMDLFileContentComponent() const;
     ObjectsHolder* getHolderComponent();
     UndoManager* getUndoManager();
-private:
 
+private:
     String getProjectWindowPosName() const;
     String getProjectWindowZoomName() const;
 

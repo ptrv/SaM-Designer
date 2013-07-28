@@ -170,6 +170,15 @@ bool MainAppWindow::closeCurrentMDLFile()
     return mdlController->getMDLFile() == nullptr || closeMDLFile(mdlController->getMDLFile());
 }
 
+void MainAppWindow::activeWindowStatusChanged()
+{
+    DocumentWindow::activeWindowStatusChanged();
+
+    if(propertiesWindow != nullptr)
+    {
+        propertiesWindow->setCurrentActiveWindow(*this);
+    }
+}
 
 void MainAppWindow::restoreWindowPosition()
 {
