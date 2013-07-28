@@ -243,7 +243,7 @@ bool SynthAModelerApplication::isCommandActive (const CommandID commandID)
 //==============================================================================
 const String SynthAModelerApplication::getApplicationName()
 {
-	return "Synth-A-Modeler";
+	return "Synth-A-Modeler Designer";
 }
 
 const String SynthAModelerApplication::getApplicationVersion()
