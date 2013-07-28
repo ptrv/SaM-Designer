@@ -76,6 +76,8 @@ protected:
     bool isEditing;
 
     Array<TextEditor*> editors;
+    HashMap<TextEditor*,bool> editorsModified;
+    void resetEditorsModifiedState();
 };
 
 class MassPropertiesComponent : public ObjectPropertiesComponent
@@ -209,8 +211,8 @@ public:
 
     void applyEditing();
 private:
-    Label labelGain;
-    TextEditor teGain;
+    Label* laGain;
+    TextEditor* teGain;
     StringArray sourceIds;
     Array<ValueTree> datas;
     UndoManager* undoManager;

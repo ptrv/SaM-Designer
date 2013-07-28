@@ -64,9 +64,14 @@ void ObjectPropertiesComponent::resized()
 //    laDebug.setBounds(65, getHeight() - 60, 200, 22);
 }
 
-void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& /*editor*/)
+void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& editor)
 {
     dataChanged = true;
+    for (int i = 0; i < editors.size(); ++i)
+    {
+        if(&editor == editors[i])
+            editorsModified.set(&editor, true);
+    }
 }
 
 void ObjectPropertiesComponent::textEditorReturnKeyPressed(TextEditor& /*editor*/)
@@ -181,7 +186,7 @@ void ObjectPropertiesComponent::readValues()
 
         teName->setReadOnly(true);
         teName->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
-        teName->setText(String::empty);
+        teName->setText(String::empty, false);
 
         propertiesWindow->setName("Properties: " + String(multipleSelectionText));
     }
@@ -192,7 +197,7 @@ void ObjectPropertiesComponent::readValues()
 
         teName->setReadOnly(false);
         teName->setTextToShowWhenEmpty(String::empty, Colours::black);
-        teName->setText(datas[0][Ids::identifier].toString());
+        teName->setText(datas[0][Ids::identifier].toString(), false);
 
         if(datas[0].getType() == Ids::mass
             || datas[0].getType() == Ids::port
@@ -237,9 +242,11 @@ TextEditor* ObjectPropertiesComponent::createEditor(const String& name,
 
     te->addListener(this);
     if(isMultiline)
-        te->setMultiLine(true,true);
+        te->setMultiLine(true, true);
     addAndMakeVisible(te);
     la->attachToComponent(te, true);
+
+    editorsModified.set(te, false);
 
     return te;
 }
@@ -250,7 +257,7 @@ void ObjectPropertiesComponent::readEditorsMultipleSelection(Array<TextEditor*>&
     for (int i = 0; i < editors_.size(); ++i)
     {
         TextEditor* editor = editors_[i];
-        editor->setText(String::empty);
+        editor->setText(String::empty, false);
         editor->setTextToShowWhenEmpty(multipleSelectionText, c);
     }
 
@@ -264,7 +271,7 @@ void ObjectPropertiesComponent::readEditorsSingleSelection(Array<TextEditor*>& e
     {
         TextEditor* editor = editors_[i];
 
-        editor->setText(params[i]);
+        editor->setText(params[i], false);
         editor->setTextToShowWhenEmpty(String::empty, c);
     }
 }
@@ -277,6 +284,9 @@ void ObjectPropertiesComponent::writeEditors(Array<TextEditor*>& editors_,
     {
         TextEditor* editor = editors_[i];
 
+        if(! editorsModified[editor])
+            continue;
+
         ValueTree pa = params_.getChild(i);
 
         String val = editor->getText();
@@ -284,6 +294,14 @@ void ObjectPropertiesComponent::writeEditors(Array<TextEditor*>& editors_,
             val = Utils::fixParameterValueIfNeeded(val);
 
         pa.setProperty(Ids::value, val, undoManager);
+    }
+}
+
+void ObjectPropertiesComponent::resetEditorsModifiedState()
+{
+    for (int i = 0; i < editors.size(); ++i)
+    {
+        editorsModified.set(editors[i], false);
     }
 }
 
@@ -312,7 +330,6 @@ MassPropertiesComponent::MassPropertiesComponent(ObjController* objController_,
 
 MassPropertiesComponent::~MassPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void MassPropertiesComponent::resized()
@@ -358,6 +375,7 @@ bool MassPropertiesComponent::writeValues()
         
         writeEditors(editors, paramsTree, true);
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -372,7 +390,6 @@ PortPropertiesComponent::PortPropertiesComponent(ObjController* objController_,
 
 PortPropertiesComponent::~PortPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void PortPropertiesComponent::resized()
@@ -410,7 +427,6 @@ ResonatorPropertiesComponent::ResonatorPropertiesComponent(ObjController* objCon
 
 ResonatorPropertiesComponent::~ResonatorPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void ResonatorPropertiesComponent::resized()
@@ -429,7 +445,7 @@ void ResonatorPropertiesComponent::readValues()
 
     ObjectPropertiesComponent::readValues();
 
-   if(multipleEdit)
+    if (multipleEdit)
     {
         readEditorsMultipleSelection(editors);
     }
@@ -470,38 +486,27 @@ bool ResonatorPropertiesComponent::writeValues()
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        String valFreq = editors[0]->getText();
-        String valDecay = editors[1]->getText();
-        String valEqMass = editors[2]->getText();
-
-        StringArray freqArr;
-        freqArr.addTokens(valFreq, ",", "\"");
-        StringArray decayArr;
-        decayArr.addTokens(valDecay, ",", "\"");
-        StringArray eqMassArr;
-        eqMassArr.addTokens(valEqMass, ",", "\"");
-        paramsTree.removeAllChildren(undoManager);
-
-        int numRes = jmin<int>(freqArr.size(), decayArr.size(), eqMassArr.size());
-        for (int k = 0; k < numRes; ++k)
+        // TODO Make sure all editors have the same number of parameters
+        for (int j = 0; j < 3; ++j)
         {
-            ValueTree pa1(Ids::parameter);
-            ValueTree pa2(Ids::parameter);
-            ValueTree pa3(Ids::parameter);
-            pa1.setProperty(Ids::value,
-                            Utils::fixParameterValueIfNeeded(freqArr[k]),
+            if (editorsModified[editors[j]])
+            {
+                String val = editors[j]->getText();
+                StringArray valArr;
+                valArr.addTokens(val, ",", "\"");
+                for (int k = 0; k < valArr.size(); ++k)
+                {
+                    ValueTree pa(Ids::parameter);
+                    pa.setProperty(Ids::value,
+                            Utils::fixParameterValueIfNeeded(valArr[k]),
                             undoManager);
-            pa2.setProperty(Ids::value,
-                            Utils::fixParameterValueIfNeeded(decayArr[k]),
-                            undoManager);
-            pa3.setProperty(Ids::value,
-                            Utils::fixParameterValueIfNeeded(eqMassArr[k]),
-                            undoManager);
-            paramsTree.addChild(pa1, -1, undoManager);
-            paramsTree.addChild(pa2, -1, undoManager);
-            paramsTree.addChild(pa3, -1, undoManager);
+                    paramsTree.removeChild(j * k + 0, undoManager);
+                    paramsTree.addChild(pa, j * k + 0, undoManager);
+                }
+            }
         }
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -518,7 +523,6 @@ GroundPropertiesComponent::GroundPropertiesComponent(ObjController* objControlle
 
 GroundPropertiesComponent::~GroundPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void GroundPropertiesComponent::resized()
@@ -554,12 +558,15 @@ bool GroundPropertiesComponent::writeValues()
 
     for (int i = 0; i < datas.size(); ++i)
     {
-        ValueTree data = datas[i];
-
-        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-        ValueTree param = paramsTree.getChild(0);
-        param.setProperty(Ids::value, editors[0]->getText(), undoManager);
+        if(editorsModified[editors[0]])
+        {
+            ValueTree data = datas[i];
+            ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+            ValueTree param = paramsTree.getChild(0);
+            param.setProperty(Ids::value, editors[0]->getText(), undoManager);
+        }
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -593,7 +600,6 @@ LinkPropertiesComponent::LinkPropertiesComponent(ObjController* objController_,
 
 LinkPropertiesComponent::~LinkPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void LinkPropertiesComponent::resized()
@@ -661,6 +667,7 @@ bool LinkPropertiesComponent::writeValues()
 
         writeEditors(editors, paramsTree, true);
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -680,7 +687,6 @@ AudiooutPropertiesComponent::AudiooutPropertiesComponent(ObjController* objContr
 
 AudiooutPropertiesComponent::~AudiooutPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void AudiooutPropertiesComponent::resized()
@@ -733,20 +739,27 @@ bool AudiooutPropertiesComponent::writeValues()
     {
         ValueTree data = datas[i];
 
-        String sourceText = editors[0]->getText();
-        StringArray sourcesList;
-        sourcesList.addTokens(sourceText, "+", "\"");
-        ValueTree sourcesTree = data.getChildWithName(Ids::sources);
-        sourcesTree.removeAllChildren(undoManager);
-        for (int i = 0; i < sourcesList.size(); ++i)
+        if(editorsModified[editors[0]])
         {
-            ValueTree source(Ids::audiosource);
-            source.setProperty(Ids::value, sourcesList[i], undoManager);
-            sourcesTree.addChild(source, -1, undoManager);
+            String sourceText = editors[0]->getText();
+            StringArray sourcesList;
+            sourcesList.addTokens(sourceText, "+", "\"");
+            ValueTree sourcesTree = data.getChildWithName(Ids::sources);
+            sourcesTree.removeAllChildren(undoManager);
+            for (int i = 0; i < sourcesList.size(); ++i)
+            {
+                ValueTree source(Ids::audiosource);
+                source.setProperty(Ids::value, sourcesList[i], undoManager);
+                sourcesTree.addChild(source, -1, undoManager);
+            }
         }
-        data.setProperty(Ids::optional, editors[1]->getText(), undoManager);
+        if(editorsModified[editors[1]])
+        {
+            data.setProperty(Ids::optional, editors[1]->getText(), undoManager);
+        }
     }
-
+    resetEditorsModifiedState();
+    
     return true;
 }
 
@@ -766,7 +779,6 @@ WaveguidePropertiesComponent::WaveguidePropertiesComponent(ObjController* objCon
 
 WaveguidePropertiesComponent::~WaveguidePropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void WaveguidePropertiesComponent::resized()
@@ -814,16 +826,23 @@ bool WaveguidePropertiesComponent::writeValues()
     for (int i = 0; i < datas.size(); ++i)
     {
         ValueTree data = datas[i];
-
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-        ValueTree pa1 = paramsTree.getChild(0);
-        ValueTree pa2 = paramsTree.getChild(1);
 
-        pa1.setProperty(Ids::value,
-                        Utils::fixParameterValueIfNeeded(editors[0]->getText()),
-                        undoManager);
-        pa2.setProperty(Ids::value, editors[1]->getText(), undoManager);
+        if(editorsModified[editors[0]])
+        {
+            ValueTree pa1 = paramsTree.getChild(0);
+            pa1.setProperty(Ids::value,
+                    Utils::fixParameterValueIfNeeded(editors[0]->getText()),
+                    undoManager);
+        }
+
+        if(editorsModified[editors[1]])
+        {
+            ValueTree pa2 = paramsTree.getChild(1);
+            pa2.setProperty(Ids::value, editors[1]->getText(), undoManager);
+        }
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -840,7 +859,6 @@ TerminationPropertiesComponent::TerminationPropertiesComponent(ObjController* ob
 
 TerminationPropertiesComponent::~TerminationPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void TerminationPropertiesComponent::resized()
@@ -882,6 +900,7 @@ bool TerminationPropertiesComponent::writeValues()
 
         writeEditors(editors, paramsTree, false);
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -898,7 +917,6 @@ JunctionPropertiesComponent::JunctionPropertiesComponent(ObjController* objContr
 
 JunctionPropertiesComponent::~JunctionPropertiesComponent()
 {
-//    deleteAllChildren();
 }
 
 void JunctionPropertiesComponent::resized()
@@ -922,7 +940,7 @@ void JunctionPropertiesComponent::readValues()
     else
     {
         StringArray params = getParamsStrings(editors.size(),
-                                              datas[0].getChildWithName(Ids::parameters));
+                datas[0].getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors, params);
     }
 }
@@ -940,6 +958,7 @@ bool JunctionPropertiesComponent::writeValues()
 
         writeEditors(editors, paramsTree, false);
     }
+    resetEditorsModifiedState();
 
     return true;
 }
@@ -947,17 +966,21 @@ bool JunctionPropertiesComponent::writeValues()
 GainComponent::GainComponent(StringArray sourceIds_,
                              Array<ValueTree> datas_,
                              UndoManager* undoManager_)
-: labelGain("Gain", "Gain"),
-teGain("Gain value"),
+:
+laGain(nullptr),
+teGain(nullptr),
 sourceIds(sourceIds_),
 datas(datas_),
 undoManager(undoManager_),
 dataChanged(false)
 {
-    teGain.setText("");
-    teGain.addListener(this);
-    addAndMakeVisible(&teGain);
-    labelGain.attachToComponent(&teGain, true);
+    teGain = new TextEditor("teGain");
+    laGain = new Label("laGain", "Gain");
+    
+    teGain->setText("", false);
+    teGain->addListener(this);
+    addAndMakeVisible(teGain);
+    laGain->attachToComponent(teGain, true);
 
     multipleEdit = datas.size() > 1;
 
@@ -966,12 +989,13 @@ dataChanged(false)
 
 GainComponent::~GainComponent()
 {
+    deleteAllChildren();
 }
 
 void GainComponent::resized()
 {
-    labelGain.setBounds(0, 5, 60, 22);
-    teGain.setBounds(60, 5, getWidth() - 65, 22);
+    laGain->setBounds(0, 5, 60, 22);
+    teGain->setBounds(60, 5, getWidth() - 65, 22);
 }
 
 void GainComponent::textEditorTextChanged(TextEditor& /*editor*/)
@@ -1001,8 +1025,8 @@ void GainComponent::readValues()
 {
     if(multipleEdit)
     {
-        teGain.setText(String::empty);
-        teGain.setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
+        teGain->setText(String::empty, false);
+        teGain->setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
 
         propertiesWindow->setName("Properties: " + String(multipleSelectionText));
     }
@@ -1012,7 +1036,8 @@ void GainComponent::readValues()
 
         String oldGain = Utils::getGainForSourceId(sources, sourceIds[0]);
 
-        teGain.setText(oldGain);
+        teGain->setText(oldGain, false);
+        teGain->setTextToShowWhenEmpty(String::empty, Colours::black);
 
         propertiesWindow->setName("Properties: " + sourceIds[0]);
     }
@@ -1022,7 +1047,7 @@ void GainComponent::applyEditing()
 {
     if(dataChanged)
     {
-        String newGain = teGain.getText();
+        String newGain = teGain->getText();
         undoManager->beginNewTransaction("Edit gain");
         for (int i = 0; i < datas.size(); ++i)
         {
