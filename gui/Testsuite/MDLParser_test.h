@@ -202,6 +202,10 @@ public:
                                     resonatorsParams);
         expect(resonatorsParams.size() == 9);
 
+        // test 41
+        expect(re.fullMatch(SAMRegex::getVertexLine(),
+                            "resonators(200.0,1.5,0.01,220.0,2.0,0.02),r0; # pos 223,385"));
+
 
     }
 };

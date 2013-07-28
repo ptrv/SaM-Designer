@@ -108,7 +108,11 @@ T constrain(T actual, T min, T max)
 bool containsStringInValueTree(ValueTree valTree,
                                const String& searchStr,
                                bool isRoot);
+
+extern Identifier resonatorParamIds[3];
+
 };
+
 }
 
 

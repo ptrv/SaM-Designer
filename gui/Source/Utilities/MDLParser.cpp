@@ -132,8 +132,26 @@ bool MDLParser::parseMDL(const File& f)
                     reResStr << "\\s*" << SAMRegex::paramsDetailRes << "\\s*[,]*";
                     RegularExpression reRes(reResStr);
                     reRes.findAndConsume(params, paramsArray);
-                    newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
-                                     -1, nullptr);
+                    if(paramsArray.size() % 3 == 0)
+                    {
+                        ValueTree paramsTree(Ids::parameters);
+                        Array<ValueTree> values;
+                        values.add(ValueTree(Ids::parameter));
+                        values.add(ValueTree(Ids::parameter));
+                        values.add(ValueTree(Ids::parameter));
+
+                        for (int n = 0; n < paramsArray.size(); ++n)
+                        {
+                            ValueTree subVal(Utils::resonatorParamIds[n % 3]);
+                            subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
+
+                            values[n % 3].addChild(subVal, -1, nullptr);
+                        }
+                        paramsTree.addChild(values[0], -1, nullptr);
+                        paramsTree.addChild(values[1], -1, nullptr);
+                        paramsTree.addChild(values[2], -1, nullptr);
+                        newTree.addChild(paramsTree, -1, nullptr);
+                    }
                 }
                 else
                 {

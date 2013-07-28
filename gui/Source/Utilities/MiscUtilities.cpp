@@ -368,3 +368,9 @@ bool Utils::containsStringInValueTree(ValueTree valTree,
     }
     return false;
 }
+
+Identifier Utils::resonatorParamIds[3] = {
+    Ids::resonatorsFreq,
+    Ids::resonatorsDecay,
+    Ids::resonatorsEqMass
+};

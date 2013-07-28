@@ -41,6 +41,9 @@ namespace Ids
 	DECLARE_ID (port);
 	DECLARE_ID (ground);
 	DECLARE_ID (resonators);
+	DECLARE_ID (resonatorsFreq);
+	DECLARE_ID (resonatorsDecay);
+	DECLARE_ID (resonatorsEqMass);
 	DECLARE_ID (link);
 	DECLARE_ID (pluck);
 	DECLARE_ID (touch);

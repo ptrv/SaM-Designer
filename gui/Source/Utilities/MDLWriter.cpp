@@ -52,14 +52,47 @@ String MDLWriter::getMDLString()
 		mdlContent << mo.getType().toString();
 		mdlContent << "(";
 		ValueTree massParams = mo.getChildWithName(Ids::parameters);
-		for (int i = 0; i < massParams.getNumChildren(); ++i)
-		{
-            ValueTree massParam = massParams.getChild(i);
-            mdlContent << massParam.getProperty(Ids::value).toString();
+        if (mo.getType() == Ids::resonators)
+        {
+            if(massParams.getNumChildren() == 3)
+            {
+                Array<ValueTree> resParams;
+                for (int n = 0; n < 3; ++n)
+                    resParams.add(massParams.getChild(n));
 
-			if(i != massParams.getNumChildren()-1)
-				mdlContent << ",";
-		}
+                int numRes = jmin<int>(
+                    resParams[0].getNumChildren(),
+                    resParams[1].getNumChildren(),
+                    resParams[2].getNumChildren());
+                StringArray vals;
+
+                for (int n = 0; n < numRes; ++n)
+                {
+                    for (int m = 0; m < 3; ++m)
+                        vals.add(resParams[m].getChild(n)[Ids::value].toString());
+                }
+
+                mdlContent << vals.joinIntoString(",");
+
+                for (int n = 0; n < 3; ++n)
+                {
+                    for (int m = resParams[n].getNumChildren(); --m >= numRes;)
+                        massParams.getChild(n).removeChild(m, nullptr);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < massParams.getNumChildren(); ++i)
+            {
+                ValueTree massParam = massParams.getChild(i);
+                mdlContent << massParam.getProperty(Ids::value).toString();
+
+                if (i != massParams.getNumChildren() - 1)
+                    mdlContent << ",";
+            }
+        }
+
 		mdlContent << "),";
 		mdlContent << mo[Ids::identifier].toString();
 		mdlContent << ";";

@@ -96,7 +96,18 @@ static ValueTree createNewResonatorsTree(const String& newName, int x, int y)
     p.add(settings.getDefaultValue("resonators_decay_time", "1.5"));
     p.add(settings.getDefaultValue("resonators_eq_mass", "0.01"));
 
-	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
+    ValueTree paramsTree(Ids::parameters);
+
+    for (int i = 0; i < 3; ++i)
+    {
+        ValueTree value(Ids::parameter);
+        ValueTree subval(Utils::resonatorParamIds[i]);
+        subval.setProperty(Ids::value, p[i].trim(), nullptr);
+        value.addChild(subval, -1, nullptr);
+        paramsTree.addChild(value, -1, nullptr);
+
+    }
+
     newTree.addChild(paramsTree, -1, nullptr);
     newTree.setProperty(Ids::identifier, newName, nullptr);
 

@@ -453,24 +453,18 @@ void ResonatorPropertiesComponent::readValues()
     {
         ValueTree paramsTree = datas[0].getChildWithName(Ids::parameters);
 
-        String valFreq, valDecay, valEqMass;
-
-        int numRes = paramsTree.getNumChildren() / 3;
-        jassert(numRes != 0);
-        for (int i = 0; i < numRes; ++i)
-        {
-            String delim = ",";
-            if (i == 0)
-                delim = "";
-            valFreq << delim << paramsTree.getChild(i * 3 + 0)[Ids::value].toString();
-            valDecay << delim << paramsTree.getChild(i * 3 + 1)[Ids::value].toString();
-            valEqMass << delim << paramsTree.getChild(i * 3 + 2)[Ids::value].toString();
-        }
-
         StringArray params;
-        params.add(valFreq);
-        params.add(valDecay);
-        params.add(valEqMass);
+        for (int i = 0; i < paramsTree.getNumChildren(); ++i)
+        {
+            StringArray valsArray;
+            ValueTree param = paramsTree.getChild(i);
+            for (int j = 0; j < param.getNumChildren(); ++j)
+            {
+                ValueTree subVal = param.getChild(j);
+                valsArray.add(subVal[Ids::value].toString());
+            }
+            params.add(valsArray.joinIntoString(","));
+        }
         readEditorsSingleSelection(editors, params);
     }
 }
@@ -486,22 +480,21 @@ bool ResonatorPropertiesComponent::writeValues()
 
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        // TODO Make sure all editors have the same number of parameters
-        for (int j = 0; j < 3; ++j)
+        for (int k = 0; k < editors.size(); ++k)
         {
-            if (editorsModified[editors[j]])
+            if (editorsModified[editors[k]])
             {
-                String val = editors[j]->getText();
-                StringArray valArr;
-                valArr.addTokens(val, ",", "\"");
-                for (int k = 0; k < valArr.size(); ++k)
+                String val = editors[k]->getText();
+                StringArray vals;
+                vals.addTokens(val, ",", "\"");
+
+                ValueTree param = paramsTree.getChild(k);
+                param.removeAllChildren(undoManager);
+                for (int j = 0; j < vals.size(); ++j)
                 {
-                    ValueTree pa(Ids::parameter);
-                    pa.setProperty(Ids::value,
-                            Utils::fixParameterValueIfNeeded(valArr[k]),
-                            undoManager);
-                    paramsTree.removeChild(j * k + 0, undoManager);
-                    paramsTree.addChild(pa, j * k + 0, undoManager);
+                    ValueTree pa(Utils::resonatorParamIds[k]);
+                    pa.setProperty(Ids::value, vals[j], undoManager);
+                    param.addChild(pa, -1, undoManager);
                 }
             }
         }
