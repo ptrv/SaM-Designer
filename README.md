@@ -1,16 +1,17 @@
-# Synth-A-Modeler
+# Synth-A-Modeler Designer
 
 The Synth-A-Modeler project was carried out at the TU Berlin's Audio
-Communication Group. The Synth-A-Modeler compiler was written by Edgar
-Berdahl, and the graphical user interface was created by Peter Vasil. We
-would like to graciously thank Prof. Julius O. Smith III, Alexandros
-Kontogeorgakopoulos, Prof. Stefan Weinzierl, Prof. Yann Orlarey, and the
-Alexander von Humboldt foundation for their support.
+Communication Group. The **Synth-A-Modeler compiler** was written by
+Edgar Berdahl, and the graphical user interface, the **Synth-A-Modeler
+Designer** was created by Peter Vasil. We would like to graciously thank
+Prof. Julius O. Smith III, Alexandros Kontogeorgakopoulos, Prof. Stefan
+Weinzierl, Prof. Yann Orlarey, and the Alexander von Humboldt foundation
+for their support.
 
 ## Screenshot
 
-![Synth-A-ModelerGUI](https://github.com/ptrv/Synth-A-Modeler/raw/master/screenshot.png
- "Synth-A-ModelerGUI")
+![Synth-A-Modeler Designer](https://github.com/ptrv/Synth-A-Modeler/raw/master/screenshot.png
+ "Synth-A-Modeler Designer")
 
 
 ## Project structure
