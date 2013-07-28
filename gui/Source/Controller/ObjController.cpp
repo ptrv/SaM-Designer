@@ -449,7 +449,7 @@ void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
         for (int i = 0; i < sources.getNumChildren(); ++i)
         {
             String val = sources.getChild(i)[Ids::value];
-            DBG(aocComp->getSourceObject()->getData()[Ids::identifier].toString());
+//            DBG(aocComp->getSourceObject()->getData()[Ids::identifier].toString());
             if(val.contains(aocComp->getSourceObject()->getData()[Ids::identifier].toString()))
             {
                 source = sources.getChild(i);
@@ -1125,7 +1125,7 @@ void ObjController::paste(ObjectsHolder* holder)
                 }
             }
 
-            DBG(valTree.toXmlString());
+//            DBG(valTree.toXmlString());
             ObjectComponent* newObjectComp = addObject(holder, valTree, -1, true);
 
             if (newObjectComp != 0)

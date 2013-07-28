@@ -216,8 +216,6 @@ void ObjectPropertiesComponent::readValues()
 
 bool ObjectPropertiesComponent::writeValues()
 {
-    DBG("write in base");
-
     if(! multipleEdit)
         if(! writeIdentifier())
             return false;

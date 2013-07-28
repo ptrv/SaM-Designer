@@ -42,7 +42,6 @@ Node::Node(ValueTree data)
     if(data.getType() == Ids::mass)
     {
         mass = float(data.getChildWithName(Ids::parameters).getChild(0).getProperty(Ids::value));
-        DBG(mass);
     }
     else if(data.getType() == Ids::ground)
     {

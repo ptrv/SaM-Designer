@@ -96,9 +96,7 @@ void PropertiesWindow::globalFocusChanged (Component* focusedComponent)
     {
         currentContentComp = cc;
         currentSelection = &cc->getHolderComponent()->getObjController().getSelectedObjects();
-        DBG("focus changed");
     }
-
 }
 
 void PropertiesWindow::changeListenerCallback(ChangeBroadcaster* /*source*/)
@@ -108,7 +106,6 @@ void PropertiesWindow::changeListenerCallback(ChangeBroadcaster* /*source*/)
 
     if(currentSelection)
     {
-        DBG("Selection changed");
         updateProperties();
     }
 }
