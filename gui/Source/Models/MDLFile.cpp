@@ -67,11 +67,13 @@ const String MDLFile::getFilePath() const
 
 const String MDLFile::getNameWithStatus()
 {
-    if(getDocumentTitle().compare("Untitled") == 0 ||
-       getDocumentTitle().compare("Untitled*") == 0)
-        return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle();
-    else
-        return hasChangedSinceSaved() ? getFilePath()+"*" : getFilePath();
+//    if(getDocumentTitle().compare("Untitled") == 0 ||
+//       getDocumentTitle().compare("Untitled*") == 0)
+//        return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle();
+//    else
+//        return hasChangedSinceSaved() ? getFilePath()+"*" : getFilePath();
+
+    return hasChangedSinceSaved() ? getDocumentTitle()+"*" : getDocumentTitle();
 }
 
 bool MDLFile::perform (UndoableAction* const action, const String& actionName)
