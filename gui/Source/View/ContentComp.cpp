@@ -142,7 +142,7 @@ private:
         {
         }
 
-        void mouseDown(const MouseEvent& e)
+        void mouseDown(const MouseEvent& /*e*/)
         {
             Viewport* viewport = findParentComponentOfClass<Viewport > ();
 
@@ -263,12 +263,12 @@ void ContentComp::setMDLFile(MDLFile* newMDLFile)
 {
     objectsHolder->setMDLFile(newMDLFile);
 }
-void ContentComp::reloadMDLFile(MDLFile* newMDLFile)
+void ContentComp::reloadMDLFile(MDLFile* /*newMDLFile*/)
 {
     objectsHolder->reloadMDLFile();
 }
 
-void ContentComp::updateMainAppWindowTitle(const String& newTitle)
+void ContentComp::updateMainAppWindowTitle(const String& /*newTitle*/)
 {
     MainAppWindow* mw = findParentComponentOfClass<MainAppWindow > ();
 
@@ -477,7 +477,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::insertComment:
     {
         result.setInfo("Comment", "", CommandCategories::inserting, 0);
-        MDLFile * mdlF = mainWindow.getMDLFile();
+//        MDLFile * mdlF = mainWindow.getMDLFile();
 //        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
 //                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
     }

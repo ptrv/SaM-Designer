@@ -34,7 +34,7 @@ class RegularExpression
 public:
 
 	RegularExpression();
-	RegularExpression( const String& pattern );
+	RegularExpression( const String& pattern_);
 	~RegularExpression();
 
     bool fullMatch(const String& subject);

@@ -739,10 +739,10 @@ bool AudiooutPropertiesComponent::writeValues()
             sourcesList.addTokens(sourceText, "+", "\"");
             ValueTree sourcesTree = data.getChildWithName(Ids::sources);
             sourcesTree.removeAllChildren(undoManager);
-            for (int i = 0; i < sourcesList.size(); ++i)
+            for (int j = 0; j < sourcesList.size(); ++j)
             {
                 ValueTree source(Ids::audiosource);
-                source.setProperty(Ids::value, sourcesList[i], undoManager);
+                source.setProperty(Ids::value, sourcesList[j], undoManager);
                 sourcesTree.addChild(source, -1, undoManager);
             }
         }

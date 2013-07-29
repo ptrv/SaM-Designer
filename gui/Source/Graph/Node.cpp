@@ -34,8 +34,8 @@ using namespace synthamodeler;
 Node::Node(ValueTree data)
 : force(0,0), velocity(0, 0)
 {
-    x = float(data[Ids::posX]);
-    y = float(data[Ids::posY]);
+    nx = float(data[Ids::posX]);
+    ny = float(data[Ids::posY]);
     
     label = data[Ids::identifier].toString();
     mass = 1.0f;
@@ -116,19 +116,19 @@ bool Node::equals(const Node* other)
 
 void Node::setNX(float x_)
 {
-    x = x_;
+    nx = x_;
 }
 void Node::setNY(float y_)
 {
-    y = y_;
+    ny = y_;
 }
 float Node::getNX()
 {
-    return x;
+    return nx;
 }
 float Node::getNY()
 {
-    return y;
+    return ny;
 }
 
 float Node::getMass()

@@ -287,14 +287,14 @@ private:
             parent.closeButtonPressed();
         }
 
-        void textEditorTextChanged(TextEditor& editor)
+        void textEditorTextChanged(TextEditor& /*editor*/)
         {
         }
-        void textEditorReturnKeyPressed(TextEditor& editor)
+        void textEditorReturnKeyPressed(TextEditor& /*editor*/)
         {
             applyEdits();
         }
-        void textEditorEscapeKeyPressed(TextEditor& editor)
+        void textEditorEscapeKeyPressed(TextEditor& /*editor*/)
         {
             cancelEdits();
         }
@@ -341,7 +341,7 @@ public:
 	{
 		return data->size();
 	}
-    void paintRowBackground(Graphics& g, int rowNumber, int width, int height,
+    void paintRowBackground(Graphics& g, int /*rowNumber*/, int /*width*/, int /*height*/,
 			bool rowIsSelected)
 	{
 		if(rowIsSelected)
@@ -349,7 +349,7 @@ public:
 	}
 
 	void paintCell(Graphics& g, int rowNumber, int columnId, int width,
-			int height, bool rowIsSelected)
+			int height, bool /*rowIsSelected*/)
 	{
 		g.setColour(Colours::black);
         g.setFont(font);
@@ -400,7 +400,7 @@ public:
             table.autoSizeAllColumns();
 		}
 	}
-    void cellDoubleClicked (int rowNumber, int columnId, const MouseEvent& e)
+    void cellDoubleClicked (int rowNumber, int /*columnId*/, const MouseEvent& /*e*/)
     {
         ExporterInputPanel::show(rowNumber);
         table.updateContent();

@@ -229,7 +229,7 @@ void AudioOutConnector::mouseDown(const MouseEvent& e)
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 
-void AudioOutConnector::mouseDrag(const MouseEvent& e)
+void AudioOutConnector::mouseDrag(const MouseEvent& /*e*/)
 {
     
 }

@@ -120,9 +120,9 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	}
 	else
 	{
-		Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
-		for (int i = 0; i < mdls.size(); ++ i)
-			openFile (mdls.getReference(i));
+		Array<File> mdlsArr (StoredSettings::getInstance()->getLastFiles());
+		for (int i = 0; i < mdlsArr.size(); ++ i)
+			openFile (mdlsArr.getReference(i));
 	}
     // get all exporters
     if(StoredSettings::getInstance()->getExporters().getAllProperties().size() == 0)
@@ -234,7 +234,7 @@ void SynthAModelerApplication::closeWindow (MainAppWindow* w)
     updateRecentProjectList();
 }
 
-bool SynthAModelerApplication::isCommandActive (const CommandID commandID)
+bool SynthAModelerApplication::isCommandActive (const CommandID /*commandID*/)
 {
     return true;
 }

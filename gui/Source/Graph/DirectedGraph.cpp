@@ -107,12 +107,12 @@ void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int heig
     {
         Node* n = nodes[i];
 
-        int x = n->getNX();
-        int y = n->getNY();
-        float f1 = 1.0f;
-        float f2 = f1/2.0f;
-//        int rx = x + rnd.nextInt(width*f1) - width*f2;
-//        int ry = y + rnd.nextInt(height*f1) - height*f2;
+//        int x = n->getNX();
+//        int y = n->getNY();
+//        float f1 = 1.0f;
+//        float f2 = f1/2.0f;
+////        int rx = x + rnd.nextInt(width*f1) - width*f2;
+////        int ry = y + rnd.nextInt(height*f1) - height*f2;
         int rx = rnd.nextInt(width) + offsetX;
         int ry = rnd.nextInt(height) + offsetY;
 

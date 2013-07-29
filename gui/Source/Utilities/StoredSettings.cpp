@@ -283,7 +283,7 @@ void StoredSettings::setDataDir (const String& folder)
 	props->setValue("datadir", folder);
 }
 
-const bool StoredSettings::getIsSegmentedConnectors() const
+bool StoredSettings::getIsSegmentedConnectors() const
 {
 	return props->getBoolValue("segmentedconnectors", false);
 }
@@ -292,7 +292,7 @@ void StoredSettings::setIsSegmentedConnectors (bool isSegmentedConnectors)
 	props->setValue("segmentedconnectors", isSegmentedConnectors);
 }
 
-const bool StoredSettings::getIsExportConfirm() const
+bool StoredSettings::getIsExportConfirm() const
 {
 	return props->getBoolValue("exportconfirm", false);
 }
@@ -301,7 +301,7 @@ void StoredSettings::setIsExportConfirm (bool isExportConfirm)
 	props->setValue("exportconfirm", isExportConfirm);
 }
 
-const bool StoredSettings::getIsLoggingOn() const
+bool StoredSettings::getIsLoggingOn() const
 {
     return props->getBoolValue("loggingon", false);
 }
@@ -310,7 +310,7 @@ void StoredSettings::setIsLoggingOn (bool isLoggingOn)
     props->setValue("loggingon", isLoggingOn);
 }
 
-const bool StoredSettings::getOpenFaustExport() const
+bool StoredSettings::getOpenFaustExport() const
 {
     return props->getBoolValue("openfaustexport", false);
 }
@@ -328,7 +328,7 @@ void StoredSettings::setCurrentExporter(const String& currentExporter)
     props->setValue("currentexporter", currentExporter);
 }
 
-const bool StoredSettings::getIsSnapGridEnabled() const
+bool StoredSettings::getIsSnapGridEnabled() const
 {
     return props->getBoolValue("snapgridenabled", true);
 }
@@ -336,7 +336,7 @@ void StoredSettings::setSnapGridEnabled (bool snapGridActive)
 {
     props->setValue("snapgridenabled", snapGridActive);
 }
-const bool StoredSettings::getIsSnapGridShow() const
+bool StoredSettings::getIsSnapGridShow() const
 {
     return props->getBoolValue("snapgridshow", true);
 }
@@ -344,7 +344,7 @@ void StoredSettings::setSnapGridShow (bool snapGridShow)
 {
     props->setValue("snapgridshow", snapGridShow);
 }
-const int StoredSettings::getSnapGridPixels() const
+int StoredSettings::getSnapGridPixels() const
 {
     return props->getIntValue("snapgridpixels", 8);
 }
@@ -353,7 +353,7 @@ void StoredSettings::setSnapGridPixels (int snapGridPixels)
     props->setValue("snapgridpixels", snapGridPixels);
 }
 
-const bool StoredSettings::getRunSAMBeforeExternal() const
+bool StoredSettings::getRunSAMBeforeExternal() const
 {
     return props->getBoolValue("runsambeforeexternal", true);
 }
@@ -362,7 +362,7 @@ void StoredSettings::setRunSAMBeforeExternal (bool runSAMBeforeExternal)
     props->setValue("runsambeforeexternal", runSAMBeforeExternal);
 }
 
-const bool StoredSettings::getIsUsingMDLX() const
+bool StoredSettings::getIsUsingMDLX() const
 {
     return props->getBoolValue("usemdlx", false);
 }
@@ -370,7 +370,7 @@ void StoredSettings::setIsUsingMDLX(bool isUsingMDLX)
 {
     props->setValue("usemdlx", isUsingMDLX);
 }
-const bool StoredSettings::getIsUsingBuiltinSAMCompiler() const
+bool StoredSettings::getIsUsingBuiltinSAMCompiler() const
 {
     return props->getBoolValue("usebuiltincompiler", false);
 }
@@ -378,7 +378,7 @@ void StoredSettings::setIsUsingBuiltinSAMCompiler(bool isUsingBuiltinSAMCompiler
 {
     props->setValue("usebuiltincompiler", isUsingBuiltinSAMCompiler);
 }
-const bool StoredSettings::getShowAudioConnections() const
+bool StoredSettings::getShowAudioConnections() const
 {
     return props->getBoolValue("showaudioconnections", true);
 }
@@ -397,7 +397,7 @@ void StoredSettings::setExternalEditor(const String& externalEditor)
     props->setValue("external_editor", externalEditor);
 }
 
-const bool StoredSettings::getShouldRedrawOnLoad() const
+bool StoredSettings::getShouldRedrawOnLoad() const
 {
     return props->getBoolValue("shouldredrawonload", true);
 }

@@ -234,10 +234,13 @@ void ObjectsHolder::reloadMDLFile()
     objController.loadComponents(this);
 }
 
+namespace synthamodeler
+{
 static const int dx = 20;
 static const int dy = 20;
 static const int dxfine = 5;
 static const int dyfine = 5;
+}
 
 int64 lastTime = 0.0f;
 bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
@@ -419,28 +422,28 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                                                                        mp.x, mp.y));
         break;
     case CommandIDs::moveUp:
-        objController.moveSelectedComps(0, -dy);
+        objController.moveSelectedComps(0, -synthamodeler::dy);
         break;
     case CommandIDs::moveUpFine:
-        objController.moveSelectedComps(0, -dyfine);
+        objController.moveSelectedComps(0, -synthamodeler::dyfine);
         break;
     case CommandIDs::moveDown:
-        objController.moveSelectedComps(0, dy);
+        objController.moveSelectedComps(0, synthamodeler::dy);
         break;
     case CommandIDs::moveDownFine:
-        objController.moveSelectedComps(0, dyfine);
+        objController.moveSelectedComps(0, synthamodeler::dyfine);
         break;
     case CommandIDs::moveLeft:
-        objController.moveSelectedComps(-dx, 0);
+        objController.moveSelectedComps(-synthamodeler::dx, 0);
         break;
     case CommandIDs::moveLeftFine:
-        objController.moveSelectedComps(-dxfine, 0);
+        objController.moveSelectedComps(-synthamodeler::dxfine, 0);
         break;
     case CommandIDs::moveRight:
-        objController.moveSelectedComps(dx, 0);
+        objController.moveSelectedComps(synthamodeler::dx, 0);
         break;
     case CommandIDs::moveRightFine:
-        objController.moveSelectedComps(dxfine, 0);
+        objController.moveSelectedComps(synthamodeler::dxfine, 0);
         break;
     case CommandIDs::showObjectNames:
         if(! isDrawingObjectNames)
@@ -792,8 +795,8 @@ void ObjectsHolder::timerCallback()
 //    DBG("tick");
     if (graph != nullptr)
     {
-        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
-        float dT = (currentTime-lastTime)/1000.0f;
+//        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
+//        float dT = (currentTime-lastTime)/1000.0f;
 
 
         bool done = graph->reflow(getContentComp()->getViewPosition().x,

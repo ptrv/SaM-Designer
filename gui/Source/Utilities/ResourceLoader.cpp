@@ -84,7 +84,7 @@ Drawable* ResourceLoader::createSVGDrawable(const String& filename)
 
     return iconsFromZipFile [iconNames.indexOf (filename)];//->createCopy();
 }
-Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
+Path ResourceLoader::getPathForLink(float /*x*/, float /*y*/, float w, float h)
 {
     Path linkPath;
     float step = w / 20.0f;
@@ -97,7 +97,7 @@ Path ResourceLoader::getPathForLink(float x, float y, float w, float h)
     linkPath.applyTransform(AffineTransform::translation(-w/2, 0));
     return linkPath;
 }
-Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
+Path ResourceLoader::getPathForPluck(float /*x*/, float /*y*/, float w, float h)
 {
     Path touchPath;
     float lineDist = w * 0.7f;
@@ -110,7 +110,7 @@ Path ResourceLoader::getPathForPluck(float x, float y, float w, float h)
     touchPath.applyTransform(AffineTransform::translation(-nw, -nh));
     return touchPath;
 }
-Path ResourceLoader::getPathForTouch(float x, float y, float w, float h)
+Path ResourceLoader::getPathForTouch(float /*x*/, float /*y*/, float w, float h)
 {
     Path pluckPath;
     float step = w / 20.0f;

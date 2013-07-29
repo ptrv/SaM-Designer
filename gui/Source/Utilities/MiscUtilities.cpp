@@ -352,9 +352,9 @@ bool Utils::containsStringInValueTree(ValueTree valTree,
         for (int k = 0; k < valTree.getParent().getNumChildren(); ++k)
         {
             ValueTree c = valTree.getParent().getChild(k);
-            for (int k = 0; k < c.getNumProperties(); ++k)
+            for (int j = 0; j < c.getNumProperties(); ++j)
             {
-                if (c.getProperty(c.getPropertyName(k)).toString().containsWholeWord(searchStr))
+                if (c.getProperty(c.getPropertyName(j)).toString().containsWholeWord(searchStr))
                 {
                     return true;
                 }

@@ -34,9 +34,9 @@ using namespace synthamodeler;
 class FaustCodeEditor : public TextEditor
 {
 public:
-    FaustCodeEditor(const String& componentName,
+    FaustCodeEditor(const String& componentName_,
                     ObjController* objController_)
-        : TextEditor(componentName), objController(objController_)
+        : TextEditor(componentName_), objController(objController_)
     {
     }
 
@@ -98,15 +98,15 @@ class FaustcodeComponent : public Component,
 public:
 
     FaustcodeComponent(FaustcodePanel* fcp_,
-                       ObjController* objController,
+                       ObjController* objController_,
                        ValueTree data_,
                        UndoManager* undoManager_)
     : parent(fcp_),
     btOk("Ok"),
     btCancel("Cancel"),
     btHelp("?"),
-    teFaustCode("faustcode texteditor", objController),
-    objController(objController),
+    teFaustCode("faustcode texteditor", objController_),
+    objController(objController_),
     data(data_),
     undoManager(undoManager_)
     {

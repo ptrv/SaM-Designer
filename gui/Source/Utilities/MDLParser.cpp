@@ -135,21 +135,21 @@ bool MDLParser::parseMDL(const File& f)
                     if(paramsArray.size() % 3 == 0)
                     {
                         ValueTree paramsTree(Ids::parameters);
-                        Array<ValueTree> values;
-                        values.add(ValueTree(Ids::parameter));
-                        values.add(ValueTree(Ids::parameter));
-                        values.add(ValueTree(Ids::parameter));
+                        Array<ValueTree> valuesArr;
+                        valuesArr.add(ValueTree(Ids::parameter));
+                        valuesArr.add(ValueTree(Ids::parameter));
+                        valuesArr.add(ValueTree(Ids::parameter));
 
                         for (int n = 0; n < paramsArray.size(); ++n)
                         {
                             ValueTree subVal(Utils::resonatorParamIds[n % 3]);
                             subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
 
-                            values[n % 3].addChild(subVal, -1, nullptr);
+                            valuesArr[n % 3].addChild(subVal, -1, nullptr);
                         }
-                        paramsTree.addChild(values[0], -1, nullptr);
-                        paramsTree.addChild(values[1], -1, nullptr);
-                        paramsTree.addChild(values[2], -1, nullptr);
+                        paramsTree.addChild(valuesArr[0], -1, nullptr);
+                        paramsTree.addChild(valuesArr[1], -1, nullptr);
+                        paramsTree.addChild(valuesArr[2], -1, nullptr);
                         newTree.addChild(paramsTree, -1, nullptr);
                     }
                 }

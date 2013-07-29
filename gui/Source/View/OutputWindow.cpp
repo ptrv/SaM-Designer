@@ -137,15 +137,16 @@ ApplicationCommandTarget* OutputWindow::getNextCommandTarget()
     return findFirstTargetParentComponent();
 }
 
-void OutputWindow::getAllCommands (Array <CommandID>& commands)
+void OutputWindow::getAllCommands (Array <CommandID>& /*commands*/)
 {
 }
 
-void OutputWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
+void OutputWindow::getCommandInfo (CommandID /*commandID*/,
+                                   ApplicationCommandInfo& /*result*/)
 {
 }
 
-bool OutputWindow::perform (const InvocationInfo& info)
+bool OutputWindow::perform (const InvocationInfo& /*info*/)
 {
 	return false;
 }

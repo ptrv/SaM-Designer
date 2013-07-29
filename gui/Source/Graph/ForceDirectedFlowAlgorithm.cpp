@@ -61,7 +61,7 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height,
         DBG("width: " +String(width)+ " height: " +String(height));
         Node* n = nodes.getUnchecked(i);
         Array<Node*>& incoming = n->getIncomingLinks();
-        Array<Node*>& outcoming = n->getOutgoingLinks();
+//        Array<Node*>& outcoming = n->getOutgoingLinks();
         int nx = n->getNX();
         int ny = n->getNY();
 
@@ -76,7 +76,7 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height,
             dy += (ni->getNY() - n->getNY());
         }
 
-        float len = sqrt(dx * dx + dy * dy);
+//        float len = sqrt(dx * dx + dy * dy);
         float angle = GraphUtils::getDirection(dx, dy);
         Point<int> motion = GraphUtils::rotateCoordinate(0.9 * repulsion,
                                                          0.0, angle);

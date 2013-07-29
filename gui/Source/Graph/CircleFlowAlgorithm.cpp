@@ -40,7 +40,7 @@ using namespace synthamodeler;
 
 bool CircleFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
                                  int width, int height, ObjController& objController,
-                                 float deltaTime)
+                                 float /*deltaTime*/)
 {
     float interval = 2 * M_PI / (float) g->size();
     int cx = width/2;

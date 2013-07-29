@@ -386,7 +386,8 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
 
 void ObjController::removeSelectedObjects(ObjectsHolder* holder)
 {
-    SelectedItemSet <SelectableObject*> temp(sObjects);
+    SelectedItemSet <SelectableObject*> temp;
+    temp = sObjects;
 
     if (temp.getNumSelected() > 0)
     {
@@ -1181,10 +1182,10 @@ bool ObjController::changeObjectNameInLink(const String& oldName,
 
     if (oc != nullptr)
     {
-        Array<LinkComponent*> links = oc->getAttachedLinks();
-        for (int i = 0; i < links.size(); ++i)
+        Array<LinkComponent*> linksTmp = oc->getAttachedLinks();
+        for (int i = 0; i < linksTmp.size(); ++i)
         {
-            LinkComponent* elem = links[i];
+            LinkComponent* elem = linksTmp[i];
             if (elem->getData()[Ids::startVertex] == oldName)
             {
                 elem->getData().setProperty(Ids::startVertex, newName, undoManager);
@@ -1213,9 +1214,9 @@ void ObjController::changeObjectNameInAudioSources(const String& oldName,
         ValueTree aoData = aoc->getAudioObject()->getData();
         ValueTree sources = aoData.getChildWithName(Ids::sources);
 
-        for (int i = 0; i < sources.getNumChildren(); ++i)
+        for (int j = 0; j < sources.getNumChildren(); ++j)
         {
-            ValueTree source = sources.getChild(i);
+            ValueTree source = sources.getChild(j);
 
             String srcStr = source.getProperty(Ids::value);
             if(srcStr.contains(oldName))

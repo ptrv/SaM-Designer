@@ -298,7 +298,7 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     };
 }
 
-bool MainAppWindow::isCommandActive (const CommandID commandID)
+bool MainAppWindow::isCommandActive (const CommandID /*commandID*/)
 {
     return true;
 }

@@ -132,7 +132,8 @@ public:
                     ValueTree src = sources.getChild(i);
                     BaseObjectComponent* boc = Utils::getBaseObjectFromSource(objController, src);
 
-                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
+//                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
+                    objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
 //                    if(aoc != nullptr)
 //                        aoc->repaint();
                 }

@@ -60,7 +60,7 @@ public:
     Point<float> velocity;
 private:
 
-    float x, y;
+    float nx, ny;
 //    ValueTree data;
     String label;
     Array<Node*> inLinks;

@@ -36,8 +36,8 @@ RegularExpression::RegularExpression() :
 {
 }
 
-RegularExpression::RegularExpression( const String& pattern ) :
-	pattern(pattern),
+RegularExpression::RegularExpression( const String& pattern_) :
+	pattern(pattern_),
 	subject(String::empty)
 {
 }

@@ -71,16 +71,16 @@ public:
 
     const StringArray& getFontNames();
 
-	const bool getIsSegmentedConnectors() const;
+	bool getIsSegmentedConnectors() const;
     void setIsSegmentedConnectors (bool isSegmentedConnectors);
 
-	const bool getIsExportConfirm() const;
+	bool getIsExportConfirm() const;
     void setIsExportConfirm (bool isExportConfirm);
 
-    const bool getIsLoggingOn() const;
+    bool getIsLoggingOn() const;
     void setIsLoggingOn (bool isLoggingOn);
 
-    const bool getOpenFaustExport() const;
+    bool getOpenFaustExport() const;
     void setOpenFaustExport (bool isOpenMdlAfterExport);
 
     const String getCurrentExporter() const;
@@ -93,23 +93,23 @@ public:
 //    Image getFallbackImage();
 //    const Drawable* getImageFileIcon();
 
-    const bool getIsSnapGridEnabled() const;
+    bool getIsSnapGridEnabled() const;
     void setSnapGridEnabled (bool snapGridActive);
-    const bool getIsSnapGridShow() const;
+    bool getIsSnapGridShow() const;
     void setSnapGridShow (bool snapGridShow);
-    const int getSnapGridPixels() const;
+    int getSnapGridPixels() const;
     void setSnapGridPixels (int snapGridPixels);
 
-    const bool getRunSAMBeforeExternal() const;
+    bool getRunSAMBeforeExternal() const;
     void setRunSAMBeforeExternal (bool runSAMBeforeExternal);
 
-    const bool getIsUsingMDLX() const;
+    bool getIsUsingMDLX() const;
     void setIsUsingMDLX (bool isUsingMDLX);
 
-    const bool getIsUsingBuiltinSAMCompiler() const;
+    bool getIsUsingBuiltinSAMCompiler() const;
     void setIsUsingBuiltinSAMCompiler (bool isUsingBuiltinSAMCompiler);
 
-    const bool getShowAudioConnections() const;
+    bool getShowAudioConnections() const;
     void setShowAudioConnections (bool showAudioConnections);
 
     const String getDefaultValue(const String& keyName,
@@ -118,7 +118,7 @@ public:
     String getExternalEditor() const;
     void setExternalEditor(const String& externalEditor);
 
-    const bool getShouldRedrawOnLoad() const;
+    bool getShouldRedrawOnLoad() const;
     void setShouldRedrawOnLoad(bool shouldRedrawOnLoad);
 
 private:

@@ -159,7 +159,7 @@ void LinkComponent::mouseDown(const MouseEvent& e)
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 
-void LinkComponent::mouseDrag(const MouseEvent& e)
+void LinkComponent::mouseDrag(const MouseEvent& /*e*/)
 {
     
 }
@@ -463,8 +463,8 @@ void LinkComponent::drawPath(Graphics& g)
                                     .rotated(rotateVal)
                                     .translated((x1 + x2) * 0.5f,
                                                 (y1 + y2) * 0.5f));
-            PathStrokeType stroke(6.0f);
-            stroke.createStrokedPath(outlineRect, outlineRect);
+            PathStrokeType stroke2(6.0f);
+            stroke2.createStrokedPath(outlineRect, outlineRect);
             g.fillPath(outlineRect);
 
             g.setColour(c);
