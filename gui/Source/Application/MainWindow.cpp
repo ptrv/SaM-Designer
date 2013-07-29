@@ -35,6 +35,7 @@
 #include "../Models/MDLFile.h"
 #include "../View/SelectableObject.h"
 #include "../View/ObjectsHolder.h"
+#include "../View/MDLProperties.h"
 
 #include "MainWindow.h"
 
@@ -71,6 +72,8 @@ MainAppWindow::MainAppWindow()
     setWantsKeyboardFocus (false);
 
     getLookAndFeel().setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
+
+    mdlPropsComp = new MDLProperties();
 }
 
 MainAppWindow::~MainAppWindow()
@@ -88,6 +91,8 @@ MainAppWindow::~MainAppWindow()
 
     mdlController = nullptr;
     objController = nullptr;
+
+    mdlPropsComp = nullptr;
 
 }
 
@@ -232,6 +237,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
 #endif
                                 CommandIDs::dumpMDL,
                                 CommandIDs::openMdlFileExtern,
+                                CommandIDs::showMDLProperties,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -282,6 +288,10 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     case CommandIDs::openMdlFileExtern:
         result.setInfo("Open MDL file extern", "", CommandCategories::tools, 0);
         result.addDefaultKeypress('l', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::showMDLProperties:
+        result.setInfo("Show MDL properties", "", CommandCategories::general, 0);
+        result.addDefaultKeypress('i', ModifierKeys::altModifier);
         break;
     default:
         break;
@@ -366,6 +376,9 @@ bool MainAppWindow::perform (const InvocationInfo& info)
 //        Utils::openFileNative(mdlController->getMDLFile()->getFile().getFullPathName());
         Utils::openFileExternal(mdlController->getMDLFile()->getFile().getFullPathName());
         break;
+    case CommandIDs::showMDLProperties:
+        showMDLProperties();
+        break;
 
 	default:
         return false;
@@ -412,4 +425,12 @@ String MainAppWindow::getProjectWindowZoomName() const
 ObjectsHolder* MainAppWindow::getHolderComponent()
 {
     return getMDLFileContentComponent()->getHolderComponent();
+}
+
+void MainAppWindow::showMDLProperties()
+{
+	Colour color(0,0,0);
+    mdlPropsComp->setContent(mdlController->getProps());
+	DialogWindow::showModalDialog("MDL properties", mdlPropsComp,
+                                nullptr, color, true);
 }

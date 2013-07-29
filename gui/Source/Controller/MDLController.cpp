@@ -509,3 +509,53 @@ bool MDLController::checkIfMdlCanchedOutside()
 //        }
 //    }
 }
+
+String MDLController::getProps()
+{
+    String props;
+    ValueTree mdl = currentMdl->mdlRoot;
+    props << "MDL path: " << mdl[Ids::mdlPath].toString() << newLine;
+    props << newLine;
+
+    int numMasses, numLinks, numAudioOuts, numWaveguides, numTerms, numJuncts,
+        numFauscode;
+    numMasses = numLinks = numAudioOuts = numWaveguides = numTerms = numJuncts
+        = numFauscode = 0;
+    if(mdl.getChildWithName(Objects::masses).isValid())
+    {
+        numMasses = mdl.getChildWithName(Objects::masses).getNumChildren();
+    }
+    if(mdl.getChildWithName(Objects::links).isValid())
+    {
+        numLinks = mdl.getChildWithName(Objects::links).getNumChildren();
+    }
+    if(mdl.getChildWithName(Objects::audioobjects).isValid())
+    {
+        numAudioOuts = mdl.getChildWithName(Objects::audioobjects).getNumChildren();
+    }
+    if(mdl.getChildWithName(Objects::waveguides).isValid())
+    {
+        numWaveguides = mdl.getChildWithName(Objects::waveguides).getNumChildren();
+    }
+    if(mdl.getChildWithName(Objects::terminations).isValid())
+    {
+        numTerms = mdl.getChildWithName(Objects::terminations).getNumChildren();
+    }
+    if(mdl.getChildWithName(Objects::junctions).isValid())
+    {
+        numJuncts = mdl.getChildWithName(Objects::junctions).getNumChildren();
+    }
+    if(mdl.getChildWithName(Objects::faustcodeblock).isValid())
+    {
+        numFauscode = mdl.getChildWithName(Objects::faustcodeblock).getNumChildren();
+    }
+    props << "Masses: " << numMasses << newLine;
+    props << "Links: " << numLinks << newLine;
+    props << "AudioOuts: " << numAudioOuts << newLine;
+    props << "Waveguides: " << numWaveguides << newLine;
+    props << "Terminations: " << numTerms << newLine;
+    props << "Junctions: " << numJuncts << newLine;
+    props << "Faustcode lines: " << numFauscode << newLine;
+
+    return props;
+}

@@ -35,6 +35,7 @@ class ContentComp;
 class ObjController;
 class MDLFile;
 class MDLController;
+class MDLProperties;
 //==============================================================================
 /**
  * The application's main window, which contains the main component with the
@@ -84,6 +85,8 @@ public:
     ObjectsHolder* getHolderComponent();
     UndoManager* getUndoManager();
 
+    void showMDLProperties();
+
 private:
     String getProjectWindowPosName() const;
     String getProjectWindowZoomName() const;
@@ -94,6 +97,7 @@ private:
 
     void createMDLFileContentCompIfNeeded();
 
+    ScopedPointer<MDLProperties> mdlPropsComp;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 

@@ -75,6 +75,8 @@ public:
     ObjectsHolder* getHolderComponent();
 
     bool checkIfMdlCanchedOutside();
+
+    String getProps();
 private:
 	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;

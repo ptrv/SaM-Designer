@@ -149,6 +149,9 @@
         <FILE id="GnIMA4" name="MDLFile.h" compile="0" resource="0" file="Source/Models/MDLFile.h"/>
       </GROUP>
       <GROUP id="{5D6B729C-BF40-1A38-201A-01149CDEB495}" name="View">
+        <FILE id="g0QxTe" name="MDLProperties.cpp" compile="1" resource="0"
+              file="Source/View/MDLProperties.cpp"/>
+        <FILE id="QDLPmF" name="MDLProperties.h" compile="0" resource="0" file="Source/View/MDLProperties.h"/>
         <FILE id="cskaxn" name="ObjectPropertiesComponent.cpp" compile="1"
               resource="0" file="Source/View/ObjectPropertiesComponent.cpp"/>
         <FILE id="w18xeI" name="ObjectPropertiesComponent.h" compile="0" resource="0"
