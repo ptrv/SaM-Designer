@@ -59,7 +59,7 @@ DocumentWindow("Properties", Colour::greyLevel (0.92f), DocumentWindow::closeBut
     currentContentComp(nullptr),
     currentSelection(nullptr)
 {
-    setSize(400, 300);
+    setSize(400, 500);
 
     // restore the last size and position from our settings file..
 	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
