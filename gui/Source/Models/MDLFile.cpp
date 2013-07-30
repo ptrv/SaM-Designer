@@ -387,6 +387,18 @@ String MDLFile::getInfoString()
     props << "Junctions: " << numJuncts << newLine;
     props << "Faustcode lines: " << numFauscode << newLine;
 
+    props << newLine;
+
+    props << "---------------------" << newLine;
+
+    props << newLine;
+
+    const File& tmpFile = getFile();
+    props << "Size: " << String(tmpFile.getSize() / 1024.0, 3) << " KB" << newLine;
+    props << "Creation time: " << tmpFile.getCreationTime().formatted("%c") << newLine;
+    props << "Modification time: " << tmpFile.getLastModificationTime().formatted("%c") << newLine;
+    props << "On harddisk: " << tmpFile.isOnHardDisk() << newLine;
+
     return props;
 }
 
