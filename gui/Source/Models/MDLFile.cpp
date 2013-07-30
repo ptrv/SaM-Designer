@@ -295,6 +295,101 @@ String MDLFile::toString()
     return mdlStr;
 }
 
+String MDLFile::getInfoString()
+{
+    String props;
+    props << "MDL path: " << mdlRoot[Ids::mdlPath].toString() << newLine;
+    props << newLine;
+
+    int numMasses, numRes, numGrounds, numPorts, numLinks, numTouchs, numPlucks,
+    numPulsetouchs, numAudioOuts, numWaveguides, numTerms, numJuncts,
+    numFauscode;
+    numMasses = numRes = numGrounds = numPorts = numLinks = numTouchs = numPlucks
+    = numPulsetouchs = numAudioOuts = numWaveguides = numTerms = numJuncts
+    = numFauscode = 0;
+    if(mdlRoot.getChildWithName(Objects::masses).isValid())
+    {
+        ValueTree masses = mdlRoot.getChildWithName(Objects::masses);
+        for (int i = 0; i < masses.getNumChildren(); ++i)
+        {
+            if (masses.getChild(i).getType() == Ids::mass)
+            {
+                ++numMasses;
+            }
+            else if (masses.getChild(i).getType() == Ids::ground)
+            {
+                ++numGrounds;
+            }
+            else if (masses.getChild(i).getType() == Ids::port)
+            {
+                ++numPorts;
+            }
+            else if (masses.getChild(i).getType() == Ids::resonators)
+            {
+                ++numRes;
+            }
+        }
+    }
+    if(mdlRoot.getChildWithName(Objects::links).isValid())
+    {
+        ValueTree links = mdlRoot.getChildWithName(Objects::links);
+        for (int i = 0; i < links.getNumChildren(); ++i)
+        {
+            if (links.getChild(i).getType() == Ids::link)
+            {
+                ++numLinks;
+            }
+            else if (links.getChild(i).getType() == Ids::touch)
+            {
+                ++numTouchs;
+            }
+            else if (links.getChild(i).getType() == Ids::pluck)
+            {
+                ++numPlucks;
+            }
+            else if (links.getChild(i).getType() == Ids::pulsetouch)
+            {
+                ++numPulsetouchs;
+            }
+        }
+    }
+    if(mdlRoot.getChildWithName(Objects::audioobjects).isValid())
+    {
+        numAudioOuts = mdlRoot.getChildWithName(Objects::audioobjects).getNumChildren();
+    }
+    if(mdlRoot.getChildWithName(Objects::waveguides).isValid())
+    {
+        numWaveguides = mdlRoot.getChildWithName(Objects::waveguides).getNumChildren();
+    }
+    if(mdlRoot.getChildWithName(Objects::terminations).isValid())
+    {
+        numTerms = mdlRoot.getChildWithName(Objects::terminations).getNumChildren();
+    }
+    if(mdlRoot.getChildWithName(Objects::junctions).isValid())
+    {
+        numJuncts = mdlRoot.getChildWithName(Objects::junctions).getNumChildren();
+    }
+    if(mdlRoot.getChildWithName(Objects::faustcodeblock).isValid())
+    {
+        numFauscode = mdlRoot.getChildWithName(Objects::faustcodeblock).getNumChildren();
+    }
+    props << "Masses: " << numMasses << newLine;
+    props << "Grounds: " << numGrounds << newLine;
+    props << "Ports: " << numPorts << newLine;
+    props << "Resonators: " << numRes << newLine;
+    props << "Links: " << numLinks << newLine;
+    props << "Touchs: " << numTouchs << newLine;
+    props << "Plucks: " << numPlucks << newLine;
+    props << "Pulsetouchs: " << numPulsetouchs << newLine;
+    props << "AudioOuts: " << numAudioOuts << newLine;
+    props << "Waveguides: " << numWaveguides << newLine;
+    props << "Terminations: " << numTerms << newLine;
+    props << "Junctions: " << numJuncts << newLine;
+    props << "Faustcode lines: " << numFauscode << newLine;
+
+    return props;
+}
+
 bool MDLFile::checkIfChecksumChanged()
 {
     MD5 tmpMD5 = MD5(getFile());

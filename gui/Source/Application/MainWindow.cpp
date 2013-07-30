@@ -430,7 +430,7 @@ ObjectsHolder* MainAppWindow::getHolderComponent()
 void MainAppWindow::showMDLProperties()
 {
 	Colour color(0,0,0);
-    mdlPropsComp->setContent(mdlController->getProps());
+    mdlPropsComp->setContent(getMDLFile()->getInfoString());
 	DialogWindow::showModalDialog("MDL properties", mdlPropsComp,
                                 nullptr, color, true);
 }

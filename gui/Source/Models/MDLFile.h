@@ -72,6 +72,7 @@ public:
     bool isUntiled();
 
     String toString();
+    String getInfoString();
 
     bool checkIfChecksumChanged();
     
