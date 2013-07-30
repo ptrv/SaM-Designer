@@ -67,6 +67,8 @@ DocumentWindow("Properties", Colour::greyLevel (0.92f), DocumentWindow::closeBut
 
     setContentOwned(new EmptyComponent(), false);
     setResizable(true, true);
+
+    setAlwaysOnTop(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
 }
 
 PropertiesWindow::~PropertiesWindow()

@@ -119,6 +119,8 @@ public:
 #endif
 
     bool isRunningCommandLine;
+
+    void togglePropertiesWindowAlwaysOnTop();
     //==============================================================================
 
 };

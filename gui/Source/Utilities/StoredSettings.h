@@ -121,6 +121,9 @@ public:
     bool getShouldRedrawOnLoad() const;
     void setShouldRedrawOnLoad(bool shouldRedrawOnLoad);
 
+    bool getIsPropertiesWindowAlwaysOnTop() const;
+    void setIsPropertiesWindowAlwaysOnTop (bool alwaysOnTop);
+
 private:
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;

@@ -57,7 +57,6 @@ namespace CommandIDs
     static const int showOutputConsole      = 0x200076;
     static const int clearOutputConsole		= 0x200077;
     static const int dumpMDL                = 0x200078;
-    static const int showPropertiesWindow   = 0x200079;
 
     static const int saveAll                = 0x200080;
     static const int undo                   = 0x200090;
@@ -112,6 +111,9 @@ namespace CommandIDs
 
     static const int selectTextColour       = 0x202710;
     static const int showAudioConnections   = 0x202720;
+
+    static const int showPropertiesWindow   = 0x202810;
+    static const int propertiesWindowOnTop  = 0x202820;
 }
 
 namespace CommandCategories

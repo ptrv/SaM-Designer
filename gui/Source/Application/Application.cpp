@@ -285,8 +285,8 @@ void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::clearOutputConsole,
                               CommandIDs::openDataDir,
                               CommandIDs::showHelp,
-                              CommandIDs::showPropertiesWindow
-
+                              CommandIDs::showPropertiesWindow,
+                              CommandIDs::propertiesWindowOnTop
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -328,6 +328,10 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	result.setInfo("Show properties window", "", CommandCategories::windows,0);
     	result.addDefaultKeypress('i', ModifierKeys::commandModifier);
     	break;
+    case CommandIDs::propertiesWindowOnTop:
+        result.setInfo("properties window always on top", "", CommandCategories::windows,0);
+        result.setTicked(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
+        break;
     default:
         JUCEApplication::getCommandInfo (commandID, result);
         break;
@@ -364,6 +368,9 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
 //    	propertiesWindow->makeVisible(!propertiesWindow->isVisible());
     	propertiesWindow->makeVisible();
     	break;
+    case CommandIDs::propertiesWindowOnTop:
+        togglePropertiesWindowAlwaysOnTop();
+        break;
     default:
     	return JUCEApplication::perform (info);
     }
@@ -646,6 +653,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::showPropertiesWindow);
+        menu.addCommandItem(commandManager, CommandIDs::propertiesWindowOnTop);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
         menu.addSeparator();
@@ -756,4 +764,15 @@ ObjectsHolder* SynthAModelerApplication::getActiveHolderComponent()
     }
 
     return mainWindows.getLast()->getHolderComponent();
+}
+
+void SynthAModelerApplication::togglePropertiesWindowAlwaysOnTop()
+{
+    StoredSettings* settings = StoredSettings::getInstance();
+
+    bool shouldStayOnTop = ! settings->getIsPropertiesWindowAlwaysOnTop();
+
+    propertiesWindow->setAlwaysOnTop(shouldStayOnTop);
+
+    settings->setIsPropertiesWindowAlwaysOnTop(shouldStayOnTop);
 }

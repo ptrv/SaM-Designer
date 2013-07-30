@@ -405,3 +405,12 @@ void StoredSettings::setShouldRedrawOnLoad(bool shouldRedrawOnLoad)
 {
     props->setValue("shouldredrawonload", shouldRedrawOnLoad);
 }
+
+bool StoredSettings::getIsPropertiesWindowAlwaysOnTop() const
+{
+    return props->getBoolValue("propertiesWindowAlwaysOnTop", false);
+}
+void StoredSettings::setIsPropertiesWindowAlwaysOnTop (bool alwaysOnTop)
+{
+    props->setValue("propertiesWindowAlwaysOnTop", alwaysOnTop);
+}
