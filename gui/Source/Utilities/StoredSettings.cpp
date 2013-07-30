@@ -227,183 +227,183 @@ const StringArray& StoredSettings::getFontNames()
 
 String StoredSettings::getCmdPerl() const
 {
-	return props->getValue("cmdperl", getDefaultPathPerl());
+	return props->getValue("cmdPerl", getDefaultPathPerl());
 }
 void StoredSettings::setCmdPerl(const String& cmdPerl)
 {
-	props->setValue("cmdperl", cmdPerl);
+	props->setValue("cmdPerl", cmdPerl);
 }
 
 String StoredSettings::getFaustDir() const
 {
-	return props->getValue("faustdir", getDefaultPathFaustDir());
+	return props->getValue("faustDir", getDefaultPathFaustDir());
 }
 void StoredSettings::setFaustDir(const String& faustDir)
 {
-	props->setValue("faustdir", faustDir);
+	props->setValue("faustDir", faustDir);
 }
 
 bool StoredSettings::getShowCompilerWindow() const
 {
-	return props->getBoolValue("showcompilerwindow", false);
+	return props->getBoolValue("showPostWindow", false);
 }
 void StoredSettings::setShowCompilerWindow(bool shouldShow)
 {
-	props->setValue("showcompilerwindow", shouldShow);
+	props->setValue("showPostWindow", shouldShow);
 }
 
 const String StoredSettings::getWorkingFolder() const
 {
-	return props->getValue("workingdir",
+	return props->getValue("workingDir",
 			File::getCurrentWorkingDirectory().getFullPathName());
 }
 
 void StoredSettings::setWorkingFolder (const String& folder)
 {
-	props->setValue("workingdir", folder);
+	props->setValue("workingDir", folder);
 }
 
 const String StoredSettings::getLastDocument() const
 {
-	return props->getValue("lastmdl", String::empty);
+	return props->getValue("lastMDL", String::empty);
 }
 void StoredSettings::setLastDocument(const String& docName)
 {
-	props->setValue("lastmdl", docName);
+	props->setValue("lastMDL", docName);
 }
 
 const String StoredSettings::getDataDir() const
 {
     String p = File::getSpecialLocation(File::currentApplicationFile)
                                     .getParentDirectory().getFullPathName();
-	return props->getValue("datadir", p);
+	return props->getValue("dataDir", p);
 }
 void StoredSettings::setDataDir (const String& folder)
 {
-	props->setValue("datadir", folder);
+	props->setValue("dataDir", folder);
 }
 
 bool StoredSettings::getIsSegmentedConnectors() const
 {
-	return props->getBoolValue("segmentedconnectors", false);
+	return props->getBoolValue("segmentedConnectors", false);
 }
 void StoredSettings::setIsSegmentedConnectors (bool isSegmentedConnectors)
 {
-	props->setValue("segmentedconnectors", isSegmentedConnectors);
+	props->setValue("segmentedConnectors", isSegmentedConnectors);
 }
 
 bool StoredSettings::getIsExportConfirm() const
 {
-	return props->getBoolValue("exportconfirm", false);
+	return props->getBoolValue("exportConfirm", false);
 }
 void StoredSettings::setIsExportConfirm (bool isExportConfirm)
 {
-	props->setValue("exportconfirm", isExportConfirm);
+	props->setValue("exportConfirm", isExportConfirm);
 }
 
 bool StoredSettings::getIsLoggingOn() const
 {
-    return props->getBoolValue("loggingon", false);
+    return props->getBoolValue("loggingOn", false);
 }
 void StoredSettings::setIsLoggingOn (bool isLoggingOn)
 {
-    props->setValue("loggingon", isLoggingOn);
+    props->setValue("loggingOn", isLoggingOn);
 }
 
 bool StoredSettings::getOpenFaustExport() const
 {
-    return props->getBoolValue("openfaustexport", false);
+    return props->getBoolValue("openFaustExport", false);
 }
 void StoredSettings::setOpenFaustExport(bool isOpenMdlAfterExport)
 {
-    props->setValue("openfaustexport", isOpenMdlAfterExport);
+    props->setValue("openFaustExport", isOpenMdlAfterExport);
 }
 
 const String StoredSettings::getCurrentExporter() const
 {
-    return props->getValue("currentexporter", "");
+    return props->getValue("currentExporter", "");
 }
 void StoredSettings::setCurrentExporter(const String& currentExporter)
 {
-    props->setValue("currentexporter", currentExporter);
+    props->setValue("currentExporter", currentExporter);
 }
 
 bool StoredSettings::getIsSnapGridEnabled() const
 {
-    return props->getBoolValue("snapgridenabled", true);
+    return props->getBoolValue("snapGridEnabled", true);
 }
 void StoredSettings::setSnapGridEnabled (bool snapGridActive)
 {
-    props->setValue("snapgridenabled", snapGridActive);
+    props->setValue("snapGridEnabled", snapGridActive);
 }
 bool StoredSettings::getIsSnapGridShow() const
 {
-    return props->getBoolValue("snapgridshow", true);
+    return props->getBoolValue("snapGridShow", true);
 }
 void StoredSettings::setSnapGridShow (bool snapGridShow)
 {
-    props->setValue("snapgridshow", snapGridShow);
+    props->setValue("snapGridShow", snapGridShow);
 }
 int StoredSettings::getSnapGridPixels() const
 {
-    return props->getIntValue("snapgridpixels", 8);
+    return props->getIntValue("snapGridPixels", 8);
 }
 void StoredSettings::setSnapGridPixels (int snapGridPixels)
 {
-    props->setValue("snapgridpixels", snapGridPixels);
+    props->setValue("snapGridPixels", snapGridPixels);
 }
 
 bool StoredSettings::getRunSAMBeforeExternal() const
 {
-    return props->getBoolValue("runsambeforeexternal", true);
+    return props->getBoolValue("runSAMBeforeExternal", true);
 }
 void StoredSettings::setRunSAMBeforeExternal (bool runSAMBeforeExternal)
 {
-    props->setValue("runsambeforeexternal", runSAMBeforeExternal);
+    props->setValue("runSAMBeforeExternal", runSAMBeforeExternal);
 }
 
 bool StoredSettings::getIsUsingMDLX() const
 {
-    return props->getBoolValue("usemdlx", false);
+    return props->getBoolValue("useMDLX", false);
 }
 void StoredSettings::setIsUsingMDLX(bool isUsingMDLX)
 {
-    props->setValue("usemdlx", isUsingMDLX);
+    props->setValue("useMDLX", isUsingMDLX);
 }
 bool StoredSettings::getIsUsingBuiltinSAMCompiler() const
 {
-    return props->getBoolValue("usebuiltincompiler", false);
+    return props->getBoolValue("useBuiltinCompiler", false);
 }
 void StoredSettings::setIsUsingBuiltinSAMCompiler(bool isUsingBuiltinSAMCompiler)
 {
-    props->setValue("usebuiltincompiler", isUsingBuiltinSAMCompiler);
+    props->setValue("useBuiltinCompiler", isUsingBuiltinSAMCompiler);
 }
 bool StoredSettings::getShowAudioConnections() const
 {
-    return props->getBoolValue("showaudioconnections", true);
+    return props->getBoolValue("showAudioConnections", true);
 }
 void StoredSettings::setShowAudioConnections(bool showAudioConnections)
 {
-    props->setValue("showaudioconnections", showAudioConnections);
+    props->setValue("showAudioConnections", showAudioConnections);
 }
 
 String StoredSettings::getExternalEditor() const
 {
-    return props->getValue("external_editor", getDefaultExternalEditor());
+    return props->getValue("externalEditor", getDefaultExternalEditor());
 }
 
 void StoredSettings::setExternalEditor(const String& externalEditor)
 {
-    props->setValue("external_editor", externalEditor);
+    props->setValue("externalEditor", externalEditor);
 }
 
 bool StoredSettings::getShouldRedrawOnLoad() const
 {
-    return props->getBoolValue("shouldredrawonload", true);
+    return props->getBoolValue("shouldRedrawOnLoad", true);
 }
 void StoredSettings::setShouldRedrawOnLoad(bool shouldRedrawOnLoad)
 {
-    props->setValue("shouldredrawonload", shouldRedrawOnLoad);
+    props->setValue("shouldRedrawOnLoad", shouldRedrawOnLoad);
 }
 
 bool StoredSettings::getIsPropertiesWindowAlwaysOnTop() const

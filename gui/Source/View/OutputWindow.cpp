@@ -33,7 +33,7 @@ using namespace synthamodeler;
 
 OutputWindow::OutputWindow()
 :
-DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Output",
+DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Post window",
                Colours::darkseagreen, DocumentWindow::closeButton, false)
 {
     setUsingNativeTitleBar(true);
@@ -42,7 +42,7 @@ DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Ou
 	setSize(400,400);
 	// restore the last size and position from our settings file..
 	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
-	                                    .getValue ("lastDebugWindowPos"));
+	                                    .getValue ("lastPostWindowPos"));
 
 	console = new TextConsole();
 	console->setSize(getWidth(),getHeight());
@@ -58,7 +58,7 @@ DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Ou
 OutputWindow::~OutputWindow()
 {
     StoredSettings::getInstance()->getProps()
-        .setValue ("lastDebugWindowPos", getWindowStateAsString());
+        .setValue ("lastPostWindowPos", getWindowStateAsString());
 
     clearContentComponent();
 }
