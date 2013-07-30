@@ -40,7 +40,8 @@ public:
     ForceDirectedFlowAlgorithm();
     virtual ~ForceDirectedFlowAlgorithm();
 
-    bool reflow(DirectedGraph* g, int width, int height, ObjController& objController);
+    bool reflow(DirectedGraph* g, int offsetX, int offsetY, int width, int height,
+                ObjController& objController, float deltaTime);
 
     void setElasticity(float e) { elasticity = e; }
     void setRepulsion(float r) { repulsion = r; }

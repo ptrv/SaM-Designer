@@ -185,7 +185,6 @@ public:
     }
 
 private:
-	int returnVal;
     class ExporterInputComponent : public Component,
                                    public Button::Listener,
                                    public TextEditor::Listener

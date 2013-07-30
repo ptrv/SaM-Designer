@@ -177,8 +177,7 @@ void CommentComponent::setPosition(Point<int> newPos, bool undoable)
     {
         if (undoable)
         {
-            owner.getUndoManager()->perform(new MoveCommentAction(getObjectsHolder(),
-                                                                 this, newPos, &owner),
+            owner.getUndoManager()->perform(new MoveCommentAction(this, newPos, &owner),
                                             "Move comment");
         }
         else

@@ -76,26 +76,26 @@ static const String getDefaultPathPerl()
 	return "";
 }
 
-static const String getDefaultPathDataDir()
-{
-	File infile = File::getSpecialLocation(File::userDocumentsDirectory)
-									.getChildFile("Synth-A-Modeler-Data");
-	if(infile.isDirectory())
-	{
-		return infile.getFullPathName();
-	}
-#if JUCE_MAC
-	String relDataDir = "../../../../../SaM";
-#else
-	String relDataDir = "../../../../SaM";
-#endif
-	infile = File::getCurrentWorkingDirectory().getChildFile(relDataDir);
-	if(infile.isDirectory())
-	{
-		return infile.getFullPathName();
-	}
-	return "";
-}
+//static const String getDefaultPathDataDir()
+//{
+//	File infile = File::getSpecialLocation(File::userDocumentsDirectory)
+//									.getChildFile("Synth-A-Modeler-Data");
+//	if(infile.isDirectory())
+//	{
+//		return infile.getFullPathName();
+//	}
+//#if JUCE_MAC
+//	String relDataDir = "../../../../../SaM";
+//#else
+//	String relDataDir = "../../../../SaM";
+//#endif
+//	infile = File::getCurrentWorkingDirectory().getChildFile(relDataDir);
+//	if(infile.isDirectory())
+//	{
+//		return infile.getFullPathName();
+//	}
+//	return "";
+//}
 
 static const String getDefaultExternalEditor()
 {

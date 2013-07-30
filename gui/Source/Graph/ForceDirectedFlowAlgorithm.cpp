@@ -49,8 +49,11 @@ ForceDirectedFlowAlgorithm::~ForceDirectedFlowAlgorithm()
 
 }
 
-//bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g, int /*width*/, int /*height*/, ObjController& objController)
-bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g, int width, int height, ObjController& objController)
+bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g,
+                                        int /*offsetX*/, int /*offsetY*/,
+                                        int width, int height,
+                                        ObjController& objController,
+                                        float /*deltaTime*/)
 {
     Array<Node*>& nodes = g->getNodes();
 

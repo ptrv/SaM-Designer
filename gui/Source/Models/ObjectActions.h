@@ -44,8 +44,8 @@ namespace synthamodeler
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(ObjController* objController_, 
-                 ValueTree objTree_, ObjectsHolder* holder_)
+	AddObjectAction(ObjController* objController_,
+                    ValueTree objTree_, ObjectsHolder* holder_)
 	: objTree(objTree_.createCopy()), 
         holderComp(holder_), 
         objController(objController_)
@@ -79,8 +79,6 @@ private:
     ValueTree objTree;
 	ObjectsHolder* holderComp;
     ObjController* objController;
-    
-    
 };
 
 class RemoveObjectAction : public UndoableAction
@@ -147,19 +145,14 @@ private:
 	ValueTree oldValue;
     ObjController* objController;
     int oldIndex;
-    
-
 };
 
 class MoveObjectAction : public UndoableAction {
 public:
-	MoveObjectAction(ObjectsHolder* objHolderComp_,
-			ObjectComponent* componentToMove,
-			Point<int> newPos_,
-            ObjController* objController_)
-	: holderComp(objHolderComp_),
-//	  objComp(componentToMove),
-      objController(objController_),
+	MoveObjectAction(ObjectComponent* componentToMove,
+                    Point<int> newPos_,
+                    ObjController* objController_)
+	: objController(objController_),
 	  newPos(newPos_),
       oldPos(componentToMove->getActualPos())
 	{
@@ -185,8 +178,6 @@ public:
 		return true;
 	}
 private:
-	ObjectsHolder* holderComp;
-//	ObjectComponent* objComp;
     ObjController* objController;
 	Point<int> newPos;
     Point<int> oldPos;
@@ -196,8 +187,8 @@ private:
 class AddLinkAction : public UndoableAction
 {
 public:
-	AddLinkAction(ObjController* objController_, 
-                 ValueTree linkTree_, ObjectsHolder* holder_)
+	AddLinkAction(ObjController* objController_,
+                ValueTree linkTree_, ObjectsHolder* holder_)
 	: linkTree(linkTree_.createCopy()), 
         holderComp(holder_), 
         objController(objController_)
@@ -220,7 +211,6 @@ public:
 
 	bool undo()
 	{
-        
         objController->removeLink(objController->getLink(indexAdded), false, holderComp);
         String logText = "Undo add ";
         logText <<  linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
@@ -232,16 +222,14 @@ private:
     ValueTree linkTree;
 	ObjectsHolder* holderComp;
     ObjController* objController;
-    
-    
 };
 
 class RemoveLinkAction : public UndoableAction
 {
 public:
     RemoveLinkAction(ObjectsHolder* objHolderComp_,
-                       LinkComponent* linkToRemove,
-                       ObjController* objController_)
+                     LinkComponent* linkToRemove,
+                     ObjController* objController_)
     : 
     holderComp(objHolderComp_),
     objController(objController_),
@@ -401,8 +389,6 @@ private:
     int indexSource;
     int indexAudioOut;
     bool sourceIsLink;
-    
-    
 };
 
 class RemoveAudioConnectionAction : public UndoableAction
@@ -439,7 +425,6 @@ public:
             if(src[Ids::value].toString().contains(srcName))
                 sourceTree = src.createCopy();
         }
-
 	}
 	~RemoveAudioConnectionAction()
 	{
@@ -492,7 +477,7 @@ class AddCommentAction : public UndoableAction
 {
 public:
 	AddCommentAction(ObjController* objController_,
-                 ValueTree objTree_, ObjectsHolder* holder_)
+                    ValueTree objTree_, ObjectsHolder* holder_)
 	: objTree(objTree_.createCopy()),
         holderComp(holder_),
         objController(objController_)
@@ -577,18 +562,13 @@ private:
 	ValueTree oldValue;
     ObjController* objController;
     int oldIndex;
-
-
 };
 class MoveCommentAction : public UndoableAction {
 public:
-	MoveCommentAction(ObjectsHolder* objHolderComp_,
-			CommentComponent* componentToMove,
-			Point<int> newPos_,
-            ObjController* objController_)
-	: holderComp(objHolderComp_),
-//	  objComp(componentToMove),
-      objController(objController_),
+	MoveCommentAction(CommentComponent* componentToMove,
+                    Point<int> newPos_,
+                    ObjController* objController_)
+	: objController(objController_),
 	  newPos(newPos_),
       oldPos(componentToMove->getActualPos())
 	{
@@ -614,8 +594,6 @@ public:
 		return true;
 	}
 private:
-	ObjectsHolder* holderComp;
-//	ObjectComponent* objComp;
     ObjController* objController;
 	Point<int> newPos;
     Point<int> oldPos;

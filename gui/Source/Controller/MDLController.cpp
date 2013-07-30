@@ -133,7 +133,7 @@ void MDLController::saveAsImage()
 {
     if(ContentComp* const c = mainAppWindow.getMDLFileContentComponent())
     {
-        ObjectsHolder* const oh = getHolderComponent();
+        ObjectsHolder* const oh = c->getHolderComponent();
         Image img = oh->createComponentSnapshot(oh->getObjectsBounds());
 
         String initFilePath;

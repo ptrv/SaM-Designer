@@ -59,6 +59,7 @@ public:
         {
             objController->selectAll(false);
         }
+        return true;
     }
     void mouseUp (const MouseEvent & md)
     {
@@ -106,7 +107,6 @@ public:
     btCancel("Cancel"),
     btHelp("?"),
     teFaustCode("faustcode texteditor", objController_),
-    objController(objController_),
     data(data_),
     undoManager(undoManager_)
     {
@@ -229,7 +229,6 @@ private:
     TextButton btCancel;
     TextButton btHelp;
     FaustCodeEditor teFaustCode;
-    ObjController* objController;
 	ValueTree data;
     UndoManager* undoManager;
     String faustCodeText;
