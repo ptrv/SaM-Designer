@@ -76,7 +76,7 @@ private:
 
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     float curInputX, curInputY, curOutputX, curOutputY;
-    Path linePath, hitPath;
+    Path linePath, hitPath, iconPath;
     
     bool segmented;
     bool mouseDownSelectStatus;

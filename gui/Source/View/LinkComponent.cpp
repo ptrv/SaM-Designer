@@ -190,6 +190,10 @@ bool LinkComponent::hitTest(int x, int y)
         // avoid clicking the connector when over a pin
         return distanceFromStart > 7.0 && distanceFromEnd > 7.0;
     }
+    else if (iconPath.getBounds().contains((float) x, (float) y))
+    {
+        return true;
+    }
 
     return false;
 }
@@ -256,7 +260,6 @@ void LinkComponent::drawPath(Graphics& g)
     g.setColour(currentColor);
     if(data.getType() == Ids::link)
     {
-        Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
                                                                    0,
                                                                    0,
@@ -303,7 +306,6 @@ void LinkComponent::drawPath(Graphics& g)
             x2 = x1 + 1;
             y2 = y2 + 1;
         }
-        Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
                                                                    0,
                                                                    0,
@@ -378,7 +380,6 @@ void LinkComponent::drawPath(Graphics& g)
             x2 = x1 + 1;
             y2 = y2 + 1;
         }
-        Path iconPath;
         iconPath = ResourceLoader::getInstance()->getPathForLinkId(data.getType(),
                                                                    0,
                                                                    0,
