@@ -44,7 +44,7 @@ MDLProperties::MDLProperties ()
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (300, 250);
+    setSize (300, 300);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -77,7 +77,7 @@ void MDLProperties::paint (Graphics& g)
 
 void MDLProperties::resized()
 {
-    teMDLProps->setBounds (10, 10, 280, 230);
+    teMDLProps->setBounds (10, 10, 280, 280);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -105,10 +105,10 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="MDLProperties" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
-                 fixedSize="1" initialWidth="300" initialHeight="250">
+                 fixedSize="1" initialWidth="300" initialHeight="300">
   <BACKGROUND backgroundColour="ffffffff"/>
   <TEXTEDITOR name="teMDLProps" id="3d321bae99f7e300" memberName="teMDLProps"
-              virtualName="" explicitFocusOrder="0" pos="10 10 280 230" initialText=""
+              virtualName="" explicitFocusOrder="0" pos="10 10 280 280" initialText=""
               multiline="1" retKeyStartsLine="0" readonly="1" scrollbars="1"
               caret="0" popupmenu="1"/>
 </JUCER_COMPONENT>

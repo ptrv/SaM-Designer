@@ -517,17 +517,57 @@ String MDLController::getProps()
     props << "MDL path: " << mdl[Ids::mdlPath].toString() << newLine;
     props << newLine;
 
-    int numMasses, numLinks, numAudioOuts, numWaveguides, numTerms, numJuncts,
+    int numMasses, numRes, numGrounds, numPorts, numLinks, numTouchs, numPlucks,
+        numPulsetouchs, numAudioOuts, numWaveguides, numTerms, numJuncts,
         numFauscode;
-    numMasses = numLinks = numAudioOuts = numWaveguides = numTerms = numJuncts
+    numMasses = numRes = numGrounds = numPorts = numLinks = numTouchs = numPlucks
+        = numPulsetouchs = numAudioOuts = numWaveguides = numTerms = numJuncts
         = numFauscode = 0;
     if(mdl.getChildWithName(Objects::masses).isValid())
     {
-        numMasses = mdl.getChildWithName(Objects::masses).getNumChildren();
+        ValueTree masses = mdl.getChildWithName(Objects::masses);
+        for (int i = 0; i < masses.getNumChildren(); ++i)
+        {
+            if (masses.getChild(i).getType() == Ids::mass)
+            {
+                ++numMasses;
+            }
+            else if (masses.getChild(i).getType() == Ids::ground)
+            {
+                ++numGrounds;
+            }
+            else if (masses.getChild(i).getType() == Ids::port)
+            {
+                ++numPorts;
+            }
+            else if (masses.getChild(i).getType() == Ids::resonators)
+            {
+                ++numRes;
+            }
+        }
     }
     if(mdl.getChildWithName(Objects::links).isValid())
     {
-        numLinks = mdl.getChildWithName(Objects::links).getNumChildren();
+        ValueTree links = mdl.getChildWithName(Objects::links);
+        for (int i = 0; i < links.getNumChildren(); ++i)
+        {
+            if (links.getChild(i).getType() == Ids::link)
+            {
+                ++numLinks;
+            }
+            else if (links.getChild(i).getType() == Ids::touch)
+            {
+                ++numTouchs;
+            }
+            else if (links.getChild(i).getType() == Ids::pluck)
+            {
+                ++numPlucks;
+            }
+            else if (links.getChild(i).getType() == Ids::pulsetouch)
+            {
+                ++numPulsetouchs;
+            }
+        }
     }
     if(mdl.getChildWithName(Objects::audioobjects).isValid())
     {
@@ -550,7 +590,13 @@ String MDLController::getProps()
         numFauscode = mdl.getChildWithName(Objects::faustcodeblock).getNumChildren();
     }
     props << "Masses: " << numMasses << newLine;
+    props << "Grounds: " << numGrounds << newLine;
+    props << "Ports: " << numPorts << newLine;
+    props << "Resonators: " << numRes << newLine;
     props << "Links: " << numLinks << newLine;
+    props << "Touchs: " << numTouchs << newLine;
+    props << "Plucks: " << numPlucks << newLine;
+    props << "Pulsetouchs: " << numPulsetouchs << newLine;
     props << "AudioOuts: " << numAudioOuts << newLine;
     props << "Waveguides: " << numWaveguides << newLine;
     props << "Terminations: " << numTerms << newLine;
