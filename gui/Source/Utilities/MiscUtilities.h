@@ -43,7 +43,7 @@ namespace Utils
 bool cancelAnyModalComponents();
 
 /**
- * The Synth-A-Modeler logger function.
+ * The Synth-A-Modeler Designer logger function.
  *
  * Writes log to a file and post to stdout when CONFIG is Debug.
  *

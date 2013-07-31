@@ -34,16 +34,16 @@ class MiscPage  : public Component
 {
 public:
     MiscPage()
-    : fcDataDir ("Synth-A-Modeler location:",
+    : fcDataDir ("Synth-A-Modeler data directory:",
     		StoredSettings::getInstance()->getDataDir(),
     		true, true, false,
-    		"*.plx", String::empty,
-    		"(select the Synth-A-Modeler.plx file)"),
+            String::empty, String::empty,
+            "(select the Synth-A-Modeler data directory)"),
     	fcFaustDir ("FAUST directory:",
 			StoredSettings::getInstance()->getFaustDir(),
 			true, true, false,
-			"*.*", String::empty,
-			"(select the directory which faust is in)"),
+			String::empty, String::empty,
+			"(select the directory where the faust executable resides)"),
 		tbRunSAMBeforeExport("Run Synth-A-Modeler before generating code"),
 		tbExportConfirm("Confirm before generating code"),
         tbOpenFaustExport("Open Faust file after export"),
@@ -480,8 +480,8 @@ class AboutPage   : public Component
 {
 public:
     AboutPage()
-        : link ("https://github.com/ptrv/Synth-A-Modeler",
-                URL ("https://github.com/ptrv/Synth-A-Modeler")),
+        : link ("https://github.com/ptrv/SaM-Designer",
+                URL ("https://github.com/ptrv/SaM-Designer")),
           logo (ImageCache::getFromMemory (BinaryData::synthamodeler_icon_png,
         		  BinaryData::synthamodeler_icon_pngSize))
     {
@@ -491,7 +491,7 @@ public:
 
         text2.setJustification (Justification::centred);
         String buildDate = " (Build: " + String(__DATE__) + " " + String(__TIME__) + ")";
-        text2.append ("Synth-A-Modeler v" + JUCEApplication::getInstance()->getApplicationVersion()
+        text2.append ("Synth-A-Modeler-Designer v" + JUCEApplication::getInstance()->getApplicationVersion()
                         + buildDate + ", " + SystemStats::getJUCEVersion(), Font (12.0f, Font::bold));
 
         addAndMakeVisible (&link);
@@ -574,7 +574,8 @@ static String prefsWindowPos;
 
 
 PrefsPanel::PrefsPanel()
-    : DialogWindow ("Synth-A-Modeler Preferences", Colour::greyLevel (0.92f), true)
+    : DialogWindow ("Synth-A-Modeler-Designer Preferences",
+                    Colour::greyLevel (0.92f), true)
 {
     PrefsTabComp* const p = new PrefsTabComp();
     p->setSize (456, 520);

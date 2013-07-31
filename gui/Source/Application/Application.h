@@ -35,7 +35,7 @@ class SAMLookAndFeel;
 class ObjectsHolder;
 //==============================================================================
 /**
- * The main class of the Synth-A-ModelerBUI application.
+ * The main class of the Synth-A-Modeler Designer application.
  *
  * Here happens all initialization on startup and all cleaning up on shutdown.
  *

@@ -62,25 +62,25 @@ String timeString;
 FileLogger* Utils::getLogger()
 {
 #if JUCE_LINUX
-	String subDir = ".Synth-A-Modeler";
+	String subDir = ".Synth-A-Modeler-Designer";
 #else
 	String subDir = "";
 #endif
 
 	return FileLogger::createDefaultAppLogger(subDir,
-			"Synth-A-Modeler.log", "Synth-A-Modeler logfile");
+			"Synth-A-Modeler-Designer.log", "Synth-A-Modeler-Designer logfile");
 }
 
 void Utils::openHelpUrl()
 {
-	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki");
+	URL helpUrl("https://github.com/ptrv/SaM-Designer/wiki");
 //	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/");
 	helpUrl.launchInDefaultBrowser();
 }
 
 void Utils::openHelpUrl(const String& helpId)
 {
-	URL helpUrl("https://github.com/ptrv/Synth-A-Modeler/wiki/" + helpId);
+	URL helpUrl("https://github.com/ptrv/SaM-Designer/wiki/" + helpId);
 //	URL helpUrl("http://www.user.tu-berlin.de/peter.vasil/synthamodelergui-help/" + helpId + ".html");
 	helpUrl.launchInDefaultBrowser();
 }

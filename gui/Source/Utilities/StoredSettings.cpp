@@ -158,11 +158,11 @@ void StoredSettings::flush()
 
     // These settings are used in defining the properties file's location.
     PropertiesFile::Options options;
-    options.applicationName     = "Synth-A-Modeler";
+    options.applicationName     = "Synth-A-Modeler-Designer";
 #if JUCE_LINUX
-    options.folderName          = ".Synth-A-Modeler";
+    options.folderName          = ".Synth-A-Modeler-Designer";
 #else
-    options.folderName          = "Synth-A-Modeler";
+    options.folderName          = "Synth-A-Modeler-Designer";
 #endif
     options.filenameSuffix      = "settings";
     options.osxLibrarySubFolder = "Application Support";

@@ -50,30 +50,30 @@ int showHelp()
         << std::endl
         << "Usage: " << std::endl
         << std::endl
-        << " Synth-A-Modeler --compile /path/to/mdl_file /path/to/dsp_file" << std::endl
+        << " Synth-A-Modeler-Designer --compile /path/to/mdl_file /path/to/dsp_file" << std::endl
         << "    Compiles a mdl_file to a dsp_file." << std::endl
         << std::endl
 #if BUILTIN_SAM_COMPILER
-        << " Synth-A-Modeler --compile-builtin /path/to/mdl_file /path/to/dsp_file" << std::endl
+        << " Synth-A-Modeler-Designer --compile-builtin /path/to/mdl_file /path/to/dsp_file" << std::endl
         << "    Compiles a mdl_file to a dsp_file." << std::endl
         << std::endl
 #endif
-        << " Synth-A-Modeler --binary exporter_name mdl_file" << std::endl
+        << " Synth-A-Modeler-Designer --binary exporter_name mdl_file" << std::endl
         << "    Generates a binary." << std::endl
         << std::endl
-        << " Synth-A-Modeler --list-exporters" << std::endl
+        << " Synth-A-Modeler-Designer --list-exporters" << std::endl
         << "    Lists all available exporter commands." << std::endl
         << std::endl
-        << " Synth-A-Modeler --list-exportersd" << std::endl
+        << " Synth-A-Modeler-Designer --list-exportersd" << std::endl
         << "    Lists all available exporter commands with detail." << std::endl
         << std::endl
-        << " Synth-A-Modeler --print-xml /path/to/mdl_file" << std::endl
+        << " Synth-A-Modeler-Designer --print-xml /path/to/mdl_file" << std::endl
         << "    Prints xml structure of mdl_file to stdout." << std::endl
         << std::endl
-        << " Synth-A-Modeler --clean" << std::endl
+        << " Synth-A-Modeler-Designer --clean" << std::endl
         << "    Cleans DATA_DIR." << std::endl
         << std::endl
-        << " Synth-A-Modeler --version" << std::endl
+        << " Synth-A-Modeler-Designer --version" << std::endl
         << "    Prints version information." << std::endl
         << std::endl;
 
@@ -220,7 +220,7 @@ int listExporters(bool showDetails)
     
     StringPairArray pf = StoredSettings::getInstance()->getExporters().getAllProperties();
 
-    std::cout << "Synth-A-Modeler!" << std::endl << std::endl;
+    std::cout << "Synth-A-Modeler-Designer!" << std::endl << std::endl;
     std::cout << " Available exporters:" << std::endl << std::endl;
     for (int i = 0; i < pf.size(); ++i)
     {
@@ -316,7 +316,7 @@ String columnizeText(const String& text, const String& prependText, int textLeng
 }
 int printVersion()
 {
-    std::cout << "Synth-A-Modeler!" << std::endl
+    std::cout << "Synth-A-Modeler-Designer!" << std::endl
         << std::endl
         << "   Version: " << JUCEApplication::getInstance()->getApplicationVersion()
         << " (Build: " + String(__DATE__) << " " << String(__TIME__) + ")"
