@@ -63,7 +63,7 @@ public:
 
     bool keyPressed(const KeyPress& key);
 
-    bool dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info);
+    bool perform(const ApplicationCommandTarget::InvocationInfo& info);
 
     void setMDLFile(MDLFile* newMDLFile);
     void reloadMDLFile();
@@ -132,6 +132,21 @@ private:
 
     ScopedPointer<FaustcodePanel> fcPanel;
     ScopedPointer<DirectedGraph> graph;
+//==============================================================================
+    void openFaustcodePanel();
+    void setSegmentedLinks();
+    void insertNewObject(const Identifier& objType);
+    void insertNewObject(const Identifier& objType, const Point<int>& point);
+    void insertNewLink(const Identifier& linkType);
+    void insertNewLink(const Identifier& linkType,
+                       const String& startId,
+                       const String& endId);
+    Point<int> getMouseXYRelativeViewport();
+    bool getStartEndObjects(String& startId, String& endId);
+    bool getStartEndObjectsLeftRight(String& startId, String& endId);
+    void showObjectIds();
+    void showAudioConnections();
+//==============================================================================
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);
 };

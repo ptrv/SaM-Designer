@@ -581,7 +581,7 @@ bool ContentComp::perform(const InvocationInfo& info)
         break;
 
     default:
-        return objectsHolder->dispatchMenuItemClick(info);
+        return objectsHolder->perform(info);
     }
     mainWindow.getUndoManager()->beginNewTransaction();
     return true;

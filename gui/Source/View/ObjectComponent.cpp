@@ -115,37 +115,34 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 
     dragging = false;
 
-    if (e.mods.isPopupMenu() && owner.getSelectedObjects().getNumSelected() == 2)
+    SelectedItemSet<SelectableObject*>& sis = owner.getSelectedObjects();
+    if (e.mods.isPopupMenu() && sis.getNumSelected() == 2)
     {
         String startObj;
         String endObj;
-        if (owner.getSelectedObjects().getNumSelected() == 2)
+        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(0));
+        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(1));
+        if (oc1 != nullptr && oc2 != nullptr)
         {
-            ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(owner.getSelectedObjects().getSelectedItem(0));
-            ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(owner.getSelectedObjects().getSelectedItem(1));
-            if(oc1 != nullptr && oc2 != nullptr)
+            startObj = oc1->getData().getProperty(Ids::identifier).toString();
+            endObj = oc2->getData().getProperty(Ids::identifier).toString();
+            DBG(String("Link: ") + startObj + String(", ") + endObj);
+            getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
+        }
+        else if (oc1 == nullptr)
+        {
+            LinkComponent* lc1 = dynamic_cast<LinkComponent*> (sis.getSelectedItem(0));
+            if (lc1 != nullptr)
             {
-                startObj = oc1->getData().getProperty(Ids::identifier).toString();
-                endObj = oc2->getData().getProperty(Ids::identifier).toString();
-                DBG(String("Link: ") + startObj + String(", ") + endObj);
-                getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
+                getObjectsHolder()->showAudioConnectionPopupMenu();
             }
-            else if(oc1 == nullptr)
+        }
+        else if (oc2 == nullptr)
+        {
+            LinkComponent* lc2 = dynamic_cast<LinkComponent*> (sis.getSelectedItem(1));
+            if (lc2 != nullptr)
             {
-                LinkComponent* lc1 = dynamic_cast<LinkComponent*>(owner.getSelectedObjects().getSelectedItem(0));
-                if(lc1 != nullptr)
-                {
-                    getObjectsHolder()->showAudioConnectionPopupMenu();
-                }
-            }
-            else if(oc2 == nullptr)
-            {
-                LinkComponent* lc2 = dynamic_cast<LinkComponent*>(owner.getSelectedObjects().getSelectedItem(1));
-                if(lc2 != nullptr)
-                {
-                    getObjectsHolder()->showAudioConnectionPopupMenu();
-                }
-                
+                getObjectsHolder()->showAudioConnectionPopupMenu();
             }
         }
         return;
@@ -160,7 +157,7 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
 //    {
 //        owner.getSelectedObjects().deselectAll();
 //    }
-    mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
+    mouseDownSelectStatus = sis.addToSelectionOnMouseDown (this, e.mods);
 
 }
 

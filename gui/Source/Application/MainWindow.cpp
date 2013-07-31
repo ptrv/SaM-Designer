@@ -303,6 +303,53 @@ bool MainAppWindow::isCommandActive (const CommandID /*commandID*/)
     return true;
 }
 
+void MainAppWindow::saveDocument()
+{
+    mdlController->save();
+    updateTitle();
+}
+
+void MainAppWindow::saveDocumentAs()
+{
+    mdlController->saveAs();
+    String newFilePath = mdlController->getMDLFile()->getFile().getFullPathName();
+    File newFile(newFilePath);
+    StoredSettings::getInstance()->recentFiles.addFile(newFile);
+    mdlController->close();
+    mdlController->openFromFile(newFile);
+    getMDLFileContentComponent()->reloadMDLFile(mdlController->getMDLFile());
+    SynthAModelerApplication::getApp()->updateRecentProjectList();
+    updateTitle();
+}
+
+void MainAppWindow::generateFaust()
+{
+    String consoleText = "Start Synth-A-Modeler...";
+    String titleText = "Generate FAUST code...\n\n";
+    SAM_CONSOLE("COMMAND: ", titleText, false);
+    consoleText << mdlController->generateFaust();
+    SAM_CONSOLE("OUTPUT: \n", consoleText, false);
+    SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.\n\n\n", false);
+}
+
+void MainAppWindow::generateExternal()
+{
+    if (StoredSettings::getInstance()->getExporters().getAllProperties().size() > 0
+        || StoredSettings::getInstance()->getCurrentExporter() != String::empty)
+    {
+        String titleText = "Generating " + StoredSettings::getInstance()->getCurrentExporter() + " external...\n\n";
+        SAM_CONSOLE("COMMAND: ", titleText, false);
+        String consoleText = mdlController->generateExternal();
+        SAM_CONSOLE("OUTPUT: \n", consoleText, false);
+        SAM_CONSOLE_ADD_LINE("\nFinished!\n\n\n", false);
+    }
+    else
+    {
+        SAM_CONSOLE("Error: ", "There are no exporters defined!", false);
+    }
+}
+
+
 bool MainAppWindow::perform (const InvocationInfo& info)
 {
     switch (info.commandID)
@@ -311,51 +358,19 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     	closeButtonPressed();
     	break;
     case CommandIDs::saveDocument:
-    	mdlController->save();
-        updateTitle();
+        saveDocument();
     	break;
     case CommandIDs::saveDocumentAs:
-    {
-    	mdlController->saveAs();
-        String newFilePath = mdlController->getMDLFile()->getFile().getFullPathName();
-        File newFile(newFilePath);
-        StoredSettings::getInstance()->recentFiles.addFile(newFile);
-        mdlController->close();
-        mdlController->openFromFile(newFile);
-        getMDLFileContentComponent()->reloadMDLFile(mdlController->getMDLFile());
-        SynthAModelerApplication::getApp()->updateRecentProjectList();
-        updateTitle();
-    }
+        saveDocumentAs();
     	break;
     case CommandIDs::saveDocumentAsImage:
         mdlController->saveAsImage();
         break;
     case CommandIDs::generateFaust:
-    {
-    	String consoleText = "Start Synth-A-Modeler...";
-    	String titleText = "Generate FAUST code...\n\n";
-        SAM_CONSOLE("COMMAND: ", titleText, false);
-        consoleText << mdlController->generateFaust();
-    	SAM_CONSOLE("OUTPUT: \n", consoleText, false);
-        SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.\n\n\n", false);
-    }
+        generateFaust();
     	break;
     case CommandIDs::generateExternal:
-    {
-        if(StoredSettings::getInstance()->getExporters().getAllProperties().size() > 0
-            || StoredSettings::getInstance()->getCurrentExporter() != String::empty)
-    	{
-            String titleText = "Generating " + StoredSettings::getInstance()->getCurrentExporter() + " external...\n\n";
-            SAM_CONSOLE("COMMAND: ", titleText, false);
-            String consoleText = mdlController->generateExternal();
-            SAM_CONSOLE("OUTPUT: \n", consoleText, false);
-            SAM_CONSOLE_ADD_LINE("\nFinished!\n\n\n", false);
-        }
-        else
-        {
-            SAM_CONSOLE("Error: ", "There are no exporters defined!", false);
-        }
-    }
+        generateExternal();
     	break;
     case CommandIDs::cleanDataDir:
         mdlController->cleanDataDir();
@@ -373,7 +388,6 @@ bool MainAppWindow::perform (const InvocationInfo& info)
                     false);
         break;
     case CommandIDs::openMdlFileExtern:
-//        Utils::openFileNative(mdlController->getMDLFile()->getFile().getFullPathName());
         Utils::openFileExternal(mdlController->getMDLFile()->getFile().getFullPathName());
         break;
     case CommandIDs::showMDLProperties:

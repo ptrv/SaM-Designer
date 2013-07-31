@@ -99,6 +99,11 @@ private:
 
     ScopedPointer<MDLProperties> mdlPropsComp;
     //==============================================================================
+    void saveDocument();
+    void saveDocumentAs();
+    void generateFaust();
+    void generateExternal();
+    //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 
 };

@@ -176,19 +176,11 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
     {
         String startObj;
         String endObj;
-        if (objController.getSelectedObjects().getNumSelected() == 2)
+        if(getStartEndObjects(startObj, endObj))
         {
-            ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(objController.getSelectedObjects().getSelectedItem(0));
-            ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(objController.getSelectedObjects().getSelectedItem(1));
-            if(oc1 != nullptr && oc2 != nullptr)
-            {
-                startObj = oc1->getData().getProperty(Ids::identifier).toString();
-                endObj = oc2->getData().getProperty(Ids::identifier).toString();
-                DBG(String("Link: ") + startObj + String(", ") + endObj);
-                showLinkPopupMenu(startObj, endObj);
-            }
+            DBG(String("Link: ") + startObj + String(", ") + endObj);
+            showLinkPopupMenu(startObj, endObj);
         }
-
     }
     else if (e.mods.isPopupMenu())
     {
@@ -234,16 +226,74 @@ void ObjectsHolder::reloadMDLFile()
     objController.loadComponents(this);
 }
 
-namespace synthamodeler
+void ObjectsHolder::openFaustcodePanel()
 {
-static const int dx = 20;
-static const int dy = 20;
-static const int dxfine = 5;
-static const int dyfine = 5;
+    if (fcPanel == nullptr)
+    {
+        fcPanel = new FaustcodePanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
+    }
+    fcPanel->show();
 }
 
-int64 lastTime = 0.0f;
-bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::InvocationInfo& info)
+void ObjectsHolder::setSegmentedLinks()
+{
+    StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
+    objController.setLinksSegmented(StoredSettings::getInstance()->getIsSegmentedConnectors());
+    updateComponents();
+    repaint();
+}
+
+void ObjectsHolder::insertNewObject(const Identifier& objType)
+{
+    Point<int> mp = getMouseXYRelativeViewport();
+    insertNewObject(objType, mp);
+}
+
+void ObjectsHolder::insertNewObject(const Identifier& objType,
+                                    const Point<int>& point)
+{
+    String objName = objController.getNewNameForObject(objType);
+    ValueTree objTree = ObjectFactory::createNewObjectTree(objType,
+                                                           objName,
+                                                           point.x,
+                                                           point.y);
+    if(objType != Ids::comment)
+    {
+        objController.addNewObject(this, objTree);
+    }
+    else
+    {
+        objController.addNewComment(this, objTree);
+    }
+}
+
+void ObjectsHolder::insertNewLink(const Identifier& linkType)
+{
+    String startObj, endObj;
+    if(! getStartEndObjects(startObj, endObj))
+        return;
+
+    // For waveguides also find out which is the right and left object
+    if(linkType == Ids::waveguide)
+        if(! getStartEndObjectsLeftRight(startObj, endObj))
+            return;
+
+    insertNewLink(linkType, startObj, endObj);
+}
+
+void ObjectsHolder::insertNewLink(const Identifier& linkType,
+                                  const String& startId,
+                                  const String& endId)
+{
+    String linkName = objController.getNewNameForObject(linkType);
+    ValueTree linkTree = ObjectFactory::createNewLinkObjectTree(linkType,
+                                                                linkName,
+                                                                startId,
+                                                                endId);
+    objController.addNewLinkIfPossible(this, linkTree);
+}
+
+Point<int> ObjectsHolder::getMouseXYRelativeViewport()
 {
     Point<int> mp = getMouseXYRelative();
 
@@ -256,18 +306,73 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
     else if (mp.y > getHeight())
         mp.y = getHeight();
 
-    String startObj;
-    String endObj;
-    if(objController.getSelectedObjects().getNumSelected() == 2)
+    return mp;
+}
+
+bool ObjectsHolder::getStartEndObjects(String& startId, String& endId)
+{
+    SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
+    if(sis.getNumSelected() == 2)
     {
-        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*> (objController.getSelectedObjects().getSelectedItem(0));
-        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*> (objController.getSelectedObjects().getSelectedItem(1));
+        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(0));
+        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(1));
         if (oc1 != nullptr && oc2 != nullptr)
         {
-            startObj = oc1->getData().getProperty(Ids::identifier).toString();
-            endObj = oc2->getData().getProperty(Ids::identifier).toString();
+            startId = oc1->getData().getProperty(Ids::identifier).toString();
+            endId = oc2->getData().getProperty(Ids::identifier).toString();
+            return true;
         }
     }
+    return false;
+}
+
+bool ObjectsHolder::getStartEndObjectsLeftRight(String& startId, String& endId)
+{
+    ObjectComponent* oc1 = objController.getObjectForId(startId);
+    ObjectComponent* oc2 = objController.getObjectForId(endId);
+    if (oc1 != nullptr && oc2 != nullptr)
+    {
+        if (oc1->getPinPos().x < oc2->getPinPos().x)
+        {
+            startId = oc1->getData()[Ids::identifier];
+            endId = oc2->getData()[Ids::identifier];
+        }
+        else
+        {
+            endId = oc1->getData()[Ids::identifier];
+            startId = oc2->getData()[Ids::identifier];
+        }
+        return true;
+    }
+    return false;
+}
+
+void ObjectsHolder::showObjectIds()
+{
+    if (!isDrawingObjectNames)
+        showObjectNames = !showObjectNames;
+    repaint();
+}
+
+void ObjectsHolder::showAudioConnections()
+{
+    bool sac = StoredSettings::getInstance()->getShowAudioConnections();
+    sac = !sac;
+    StoredSettings::getInstance()->setShowAudioConnections(sac);
+    objController.setAudioConnectionVisibility(sac);
+}
+
+namespace synthamodeler
+{
+static const int dx = 20;
+static const int dy = 20;
+static const int dxfine = 5;
+static const int dyfine = 5;
+}
+
+int64 lastTime = 0.0f;
+bool ObjectsHolder::perform(const ApplicationCommandTarget::InvocationInfo& info)
+{
     switch (info.commandID)
     {
     case StandardApplicationCommandIDs::cut:
@@ -289,19 +394,10 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         deleteSelectedObjects();
         break;
     case CommandIDs::defineFaustcode:
-    {
-        if(fcPanel == nullptr)
-        {
-            fcPanel = new FaustcodePanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
-        }
-        fcPanel->show();
-    }
+        openFaustcodePanel();
         break;
     case CommandIDs::segmentedConnectors:
-        StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
-        objController.setLinksSegmented(StoredSettings::getInstance()->getIsSegmentedConnectors());
-        updateComponents();
-        repaint();
+        setSegmentedLinks();
         break;
     case CommandIDs::reverseDirection:
         objController.reverseLinkDirection();
@@ -319,107 +415,47 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         RedrawOptionsPanel::show();
         break;
     case CommandIDs::insertMass:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::mass,
-                                                                      objController.getNewNameForObject(Ids::mass),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::mass);
         break;
     case CommandIDs::insertGround:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::ground,
-                                                                      objController.getNewNameForObject(Ids::ground),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::ground);
         break;
     case CommandIDs::insertResonator:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::resonators,
-                                                                      objController.getNewNameForObject(Ids::resonators),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::resonators);
         break;
     case CommandIDs::insertPort:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::port,
-                                                                      objController.getNewNameForObject(Ids::port),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::port);
         break;
 
     case CommandIDs::insertLink:
-
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::link,
-                                                                                  objController.getNewNameForObject(Ids::link),
-                                                                                  startObj, endObj));
+        insertNewLink(Ids::link);
         break;
     case CommandIDs::insertTouch:
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::touch,
-                                                                                  objController.getNewNameForObject(Ids::touch),
-                                                                                  startObj, endObj));
+        insertNewLink(Ids::touch);
     case CommandIDs::insertPulsetouch:
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::pulsetouch,
-                                                                                  objController.getNewNameForObject(Ids::pulsetouch),
-                                                                                  startObj, endObj));
+        insertNewLink(Ids::pulsetouch);
         break;
     case CommandIDs::insertPluck:
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::pluck,
-                                                                                  objController.getNewNameForObject(Ids::pluck),
-                                                                                  startObj, endObj));
-       
+        insertNewLink(Ids::pluck);
         break;
     case CommandIDs::insertWaveguide:
-    {
-        ObjectComponent* oc1 = objController.getObjectForId(startObj);
-        ObjectComponent* oc2 = objController.getObjectForId(endObj);
-        String tmpSo, tmpEo;
-        if(oc1 != nullptr && oc2 != nullptr)
-        {
-            if (oc1->getPinPos().x < oc2->getPinPos().x)
-            {
-                tmpSo = oc1->getData()[Ids::identifier];
-                tmpEo = oc2->getData()[Ids::identifier];
-            }
-            else
-            {
-                tmpSo = oc2->getData()[Ids::identifier];
-                tmpEo = oc1->getData()[Ids::identifier];
-            }
-        }
-
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::waveguide,
-                                                                                  objController.getNewNameForObject(Ids::waveguide),
-                                                                                  tmpSo, tmpEo));
-    }
+        insertNewLink(Ids::waveguide);
         break;
 
     case CommandIDs::insertAudioOutput:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::audioout,
-                                                                      objController.getNewNameForObject(Ids::audioout),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::audioout);
         break;
     case CommandIDs::insertAudioConnection:
         objController.addNewAudioConnection(this);
         break;
     case CommandIDs::insertJunction:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::junction,
-                                                                      objController.getNewNameForObject(Ids::junction),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::junction);
         break;
     case CommandIDs::insertTermination:
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::termination,
-                                                                      objController.getNewNameForObject(Ids::termination),
-                                                                      mp.x, mp.y));
+        insertNewObject(Ids::termination);
         break;
     case CommandIDs::insertComment:
-        objController.addNewComment(this,
-                                    ObjectFactory::createNewObjectTree(Ids::comment,
-                                                                       objController.getNewNameForObject(Ids::comment),
-                                                                       mp.x, mp.y));
+        insertNewObject(Ids::comment);
         break;
     case CommandIDs::moveUp:
         objController.moveSelectedComps(0, -synthamodeler::dy);
@@ -446,9 +482,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
         objController.moveSelectedComps(synthamodeler::dxfine, 0);
         break;
     case CommandIDs::showObjectNames:
-        if(! isDrawingObjectNames)
-            showObjectNames = !showObjectNames;
-        repaint();
+        showObjectIds();
         break;
     case CommandIDs::enableSnapToGrid:
         setSnappingGrid(getSnappingGridSize(),
@@ -462,12 +496,7 @@ bool ObjectsHolder::dispatchMenuItemClick(const ApplicationCommandTarget::Invoca
                         !isSnapShown());
         break;
     case CommandIDs::showAudioConnections:
-    {
-        bool sac = StoredSettings::getInstance()->getShowAudioConnections();
-        sac = !sac;
-        StoredSettings::getInstance()->setShowAudioConnections(sac);
-        objController.setAudioConnectionVisibility(sac);
-    }
+        showAudioConnections();
         break;
 
     default:
@@ -500,61 +529,35 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
 
     if (r == 1)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::mass,
-                                                                      objController.getNewNameForObject(Ids::mass),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::mass, mPos);
     }
     else if (r == 2)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::ground,
-                                                                      objController.getNewNameForObject(Ids::ground),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::ground, mPos);
     }
     else if (r == 3)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::resonators,
-                                                                      objController.getNewNameForObject(Ids::resonators),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::resonators, mPos);
     }
     else if (r == 4)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::port,
-                                                                      objController.getNewNameForObject(Ids::port),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::port, mPos);
     }
     else if (r == 5)
     {
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::audioout,
-                                                                      objController.getNewNameForObject(Ids::audioout),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::audioout, mPos);
     }
     else if (r == 6)
     {
-//        DBG("Waveguide not implemented!")
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::junction,
-                                                                      objController.getNewNameForObject(Ids::junction),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::junction, mPos);
     }
     else if (r == 7)
     {
-//        DBG("Termination not implemented!")
-        objController.addNewObject(this,
-                                   ObjectFactory::createNewObjectTree(Ids::termination,
-                                                                      objController.getNewNameForObject(Ids::termination),
-                                                                      mPos.x, mPos.y));
+        insertNewObject(Ids::termination, mPos);
     }
     else if (r == 8)
     {
-        objController.addNewComment(this,
-                                    ObjectFactory::createNewObjectTree(Ids::comment,
-                                                                       objController.getNewNameForObject(Ids::comment),
-                                                                       mPos.x, mPos.y));
+        insertNewObject(Ids::comment, mPos);
     }
 }
 
@@ -575,60 +578,28 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 	if (r == 1)
 	{
 		DBG("Add link");
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::link,
-                                                                                  objController.getNewNameForObject(Ids::link),
-                                                                                  so, eo));
-		return;
+        insertNewLink(Ids::link, so, eo);
 	}
 	else if (r == 2)
 	{
 		DBG("Add touch");
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::touch,
-                                                                                  objController.getNewNameForObject(Ids::touch),
-                                                                                  so, eo));
+        insertNewLink(Ids::touch, so, eo);
 	}
 	else if (r == 3)
 	{
 		DBG("Add pulsetouch");
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::pulsetouch,
-                                                                                  objController.getNewNameForObject(Ids::pulsetouch),
-                                                                                  so, eo));
+        insertNewLink(Ids::pulsetouch, so, eo);
 	}
 	else if (r == 4)
 	{
 		DBG("Add pluck");
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::pluck,
-                                                                                  objController.getNewNameForObject(Ids::pluck),
-                                                                                  so, eo));
+        insertNewLink(Ids::pluck, so, eo);
 	}
 	else if (r == 5)
 	{
-//        DBG("Waveguide not implemented!")
 		DBG("Add waveguide");
-        ObjectComponent* oc1 = objController.getObjectForId(so);
-        ObjectComponent* oc2 = objController.getObjectForId(eo);
-        String tmpSo, tmpEo;
-        if(oc1 != nullptr && oc2 != nullptr)
-        {
-            if(oc1->getPinPos().x < oc2->getPinPos().x)
-            {
-                tmpSo = oc1->getData()[Ids::identifier];
-                tmpEo = oc2->getData()[Ids::identifier];
-            }
-            else
-            {
-                tmpSo = oc2->getData()[Ids::identifier];
-                tmpEo = oc1->getData()[Ids::identifier];
-            }
-        }
-        objController.addNewLinkIfPossible(this,
-                                           ObjectFactory::createNewLinkObjectTree(Ids::waveguide,
-                                                                                  objController.getNewNameForObject(Ids::waveguide),
-                                                                                  tmpSo, tmpEo));
+        getStartEndObjectsLeftRight(so, eo);
+        insertNewLink(Ids::waveguide, so, eo);
 	}
     else if (r == 6)
     {
@@ -649,7 +620,8 @@ void ObjectsHolder::showAudioConnectionPopupMenu()
     }
 }
 
-void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results, const Rectangle<int>& lasso)
+void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results,
+                                          const Rectangle<int>& lasso)
 {
     for (int i = 0; i < getNumChildComponents(); ++i)
     {
@@ -765,13 +737,16 @@ int ObjectsHolder::snapPosition (int pos) const throw()
     if (isSnapActive (true))
     {
         jassert (snapGridPixels > 0);
-        pos = ((pos + snapGridPixels * 1024 + snapGridPixels / 2) / snapGridPixels - 1024) * snapGridPixels;
+        pos = ((pos + snapGridPixels * 1024 + snapGridPixels / 2)
+            / snapGridPixels - 1024) * snapGridPixels;
     }
 
     return pos;
 }
 
-void ObjectsHolder::setSnappingGrid (const int numPixels, const bool active, const bool shown)
+void ObjectsHolder::setSnappingGrid (const int numPixels,
+                                     const bool active,
+                                     const bool shown)
 {
     if (numPixels != snapGridPixels
          || active != snapActive
@@ -830,7 +805,9 @@ void ObjectsHolder::redrawObjects(const int cmdId)
         graph = nullptr;
     }
 
-    timeStep = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_timestep", 0.6);
+    timeStep = StoredSettings::getInstance()->getProps()
+        .getDoubleValue("redrawparam_timestep", 0.6);
+
     if(cmdId == CommandIDs::redrawCircle)
     {
         graph = new DirectedGraph();
