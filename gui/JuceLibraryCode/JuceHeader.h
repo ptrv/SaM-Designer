@@ -32,8 +32,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "Synth-A-Modeler-Designer";
-    const char* const  versionString  = "0.2.4dev";
-    const int          versionNumber  = 0x204;
+    const char* const  versionString  = "0.3.0dev";
+    const int          versionNumber  = 0x300;
 }
 
 #endif   // __APPHEADERFILE_VKFX9M__

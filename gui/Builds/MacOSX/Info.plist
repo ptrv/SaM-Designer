@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string>Icon.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>de.tu-berlin.SynthAModelerDesigner</string>
+    <string>net.petervasil.SynthAModelerDesigner</string>
     <key>CFBundleName</key>
     <string>Synth-A-Modeler-Designer</string>
     <key>CFBundlePackageType</key>
@@ -16,9 +16,9 @@
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.2.4dev</string>
+    <string>0.3.0dev</string>
     <key>CFBundleVersion</key>
-    <string>0.2.4dev</string>
+    <string>0.3.0dev</string>
     <key>NSHumanReadableCopyright</key>
     <string></string>
     <key>NSHighResolutionCapable</key>
