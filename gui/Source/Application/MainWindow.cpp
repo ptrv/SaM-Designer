@@ -35,7 +35,7 @@
 #include "../Models/MDLFile.h"
 #include "../View/SelectableObject.h"
 #include "../View/ObjectsHolder.h"
-#include "../View/MDLProperties.h"
+#include "../View/MDLInformation.h"
 
 #include "MainWindow.h"
 
@@ -73,7 +73,7 @@ MainAppWindow::MainAppWindow()
 
     getLookAndFeel().setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
 
-    mdlPropsComp = new MDLProperties();
+    mdlInfoComp = new MDLInformation();
 }
 
 MainAppWindow::~MainAppWindow()
@@ -92,7 +92,7 @@ MainAppWindow::~MainAppWindow()
     mdlController = nullptr;
     objController = nullptr;
 
-    mdlPropsComp = nullptr;
+    mdlInfoComp = nullptr;
 
 }
 
@@ -443,8 +443,8 @@ ObjectsHolder* MainAppWindow::getHolderComponent()
 
 void MainAppWindow::showMDLProperties()
 {
-	Colour color(0,0,0);
-    mdlPropsComp->setContent(getMDLFile()->getInfoString());
-	DialogWindow::showModalDialog("MDL properties", mdlPropsComp,
-                                nullptr, color, true);
+    Colour color(0,0,0);
+    mdlInfoComp->setContent(getMDLFile()->getInfoString());
+    DialogWindow::showModalDialog("MDL Information", mdlInfoComp,
+                                  nullptr, color, true);
 }

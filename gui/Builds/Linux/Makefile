@@ -75,7 +75,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
-  $(OBJDIR)/MDLProperties_591d8947.o \
+  $(OBJDIR)/MDLInformation_73c962e2.o \
   $(OBJDIR)/ObjectPropertiesComponent_e2a1e34a.o \
   $(OBJDIR)/PropertiesWindow_5070b22e.o \
   $(OBJDIR)/RedrawOptionsPanel_f391d648.o \
@@ -249,9 +249,9 @@ $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	@echo "Compiling MDLFile.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/MDLProperties_591d8947.o: ../../Source/View/MDLProperties.cpp
+$(OBJDIR)/MDLInformation_73c962e2.o: ../../Source/View/MDLInformation.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling MDLProperties.cpp"
+	@echo "Compiling MDLInformation.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ObjectPropertiesComponent_e2a1e34a.o: ../../Source/View/ObjectPropertiesComponent.cpp

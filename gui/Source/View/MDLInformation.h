@@ -17,8 +17,8 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_F7E5CB67595E74__
-#define __JUCE_HEADER_F7E5CB67595E74__
+#ifndef __JUCE_HEADER_A710AFACBC9B1556__
+#define __JUCE_HEADER_A710AFACBC9B1556__
 
 //[Headers]     -- You can add your own extra header files here --
 namespace synthamodeler
@@ -35,12 +35,12 @@ namespace synthamodeler
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MDLProperties  : public Component
+class MDLInformation  : public Component
 {
 public:
     //==============================================================================
-    MDLProperties ();
-    ~MDLProperties();
+    MDLInformation ();
+    ~MDLInformation();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -61,11 +61,11 @@ private:
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLProperties)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLInformation)
 };
 
 //[EndFile] You can add extra defines here...
 }
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_F7E5CB67595E74__
+#endif   // __JUCE_HEADER_A710AFACBC9B1556__

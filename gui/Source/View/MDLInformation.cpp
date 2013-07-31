@@ -21,7 +21,7 @@
 #include "JuceHeader.h"
 //[/Headers]
 
-#include "MDLProperties.h"
+#include "MDLInformation.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
@@ -29,7 +29,7 @@ using namespace synthamodeler;
 //[/MiscUserDefs]
 
 //==============================================================================
-MDLProperties::MDLProperties ()
+MDLInformation::MDLInformation ()
 {
     addAndMakeVisible (teMDLProps = new TextEditor ("teMDLProps"));
     teMDLProps->setMultiLine (true);
@@ -51,7 +51,7 @@ MDLProperties::MDLProperties ()
     //[/Constructor]
 }
 
-MDLProperties::~MDLProperties()
+MDLInformation::~MDLInformation()
 {
     //[Destructor_pre]. You can add your own custom destruction code here..
     //[/Destructor_pre]
@@ -64,7 +64,7 @@ MDLProperties::~MDLProperties()
 }
 
 //==============================================================================
-void MDLProperties::paint (Graphics& g)
+void MDLInformation::paint (Graphics& g)
 {
     //[UserPrePaint] Add your own custom painting code here..
     //[/UserPrePaint]
@@ -75,7 +75,7 @@ void MDLProperties::paint (Graphics& g)
     //[/UserPaint]
 }
 
-void MDLProperties::resized()
+void MDLInformation::resized()
 {
     teMDLProps->setBounds (10, 10, 280, 280);
     //[UserResized] Add your own custom resize handling here..
@@ -85,7 +85,7 @@ void MDLProperties::resized()
 
 
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
-void MDLProperties::setContent(const String& s)
+void MDLInformation::setContent(const String& s)
 {
     teMDLProps->clear();
     teMDLProps->setText(s, false);
@@ -102,7 +102,7 @@ void MDLProperties::setContent(const String& s)
 
 BEGIN_JUCER_METADATA
 
-<JUCER_COMPONENT documentType="Component" className="MDLProperties" componentName=""
+<JUCER_COMPONENT documentType="Component" className="MDLInformation" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
                  snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
                  fixedSize="1" initialWidth="300" initialHeight="300">

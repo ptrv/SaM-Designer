@@ -35,7 +35,7 @@ class ContentComp;
 class ObjController;
 class MDLFile;
 class MDLController;
-class MDLProperties;
+class MDLInformation;
 //==============================================================================
 /**
  * The application's main window, which contains the main component with the
@@ -97,7 +97,7 @@ private:
 
     void createMDLFileContentCompIfNeeded();
 
-    ScopedPointer<MDLProperties> mdlPropsComp;
+    ScopedPointer<MDLInformation> mdlInfoComp;
     //==============================================================================
     void saveDocument();
     void saveDocumentAs();
