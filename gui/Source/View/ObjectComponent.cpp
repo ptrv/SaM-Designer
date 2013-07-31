@@ -148,7 +148,7 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
                 
             }
         }
-
+        return;
     }
     else if (e.mods.isPopupMenu())
     {
