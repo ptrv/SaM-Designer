@@ -211,7 +211,7 @@ void MainAppWindow::makeVisible()
     addToDesktop();  // (must add before restoring size so that fullscreen will work)
     restoreWindowPosition();
 
-    getContentComponent()->grabKeyboardFocus();
+//    getContentComponent()->grabKeyboardFocus();
 }
 
 

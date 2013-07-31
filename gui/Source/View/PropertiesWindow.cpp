@@ -44,7 +44,10 @@ using namespace synthamodeler;
 class EmptyComponent : public Component
 {
 public:
-    EmptyComponent() : Component() {}
+    EmptyComponent() : Component()
+    {
+        setComponentID("EmptyComponent");
+    }
     EmptyComponent(const String& compName) : Component(compName) {}
     void paint(Graphics& g)
     {
@@ -55,7 +58,8 @@ public:
 
 PropertiesWindow::PropertiesWindow()
 :
-DocumentWindow("Properties", Colour::greyLevel (0.92f), DocumentWindow::closeButton, true),
+DocumentWindow("Properties", Colour::greyLevel (0.92f),
+               DocumentWindow::closeButton, false),
     currentContentComp(nullptr),
     currentSelection(nullptr)
 {
@@ -81,14 +85,27 @@ PropertiesWindow::~PropertiesWindow()
 
 void PropertiesWindow::makeVisible(bool shouldBeVisible)
 {
-	setVisible(shouldBeVisible);
-    if (shouldBeVisible)
+    if(shouldBeVisible)
     {
-        toFront(true);
-        if (currentSelection != nullptr)
-        {
-            updateProperties();
-        }
+        if(! isOnDesktop())
+            addToDesktop();
+
+        setVisible(true);
+
+        updateProperties();
+
+        Component* cc = getContentComponent();
+        if(cc != nullptr)
+            if(cc->getComponentID().compare("EmptyComponent") != 0)
+                setWantsKeyboardFocus(false);
+
+        if(! isAlwaysOnTop())
+            toFront(true);
+    }
+    else
+    {
+        setVisible(false);
+        removeFromDesktop();
     }
 }
 
@@ -114,14 +131,11 @@ void PropertiesWindow::changeListenerCallback(ChangeBroadcaster* /*source*/)
     if(! isVisible())
         return;
 
-    if(currentSelection != nullptr)
-    {
-        updateProperties();
-    }
+    updateProperties();
 }
 void PropertiesWindow::closeButtonPressed()
 {
-    setVisible(false);
+    makeVisible(false);
 }
 
 bool PropertiesWindow::keyPressed(const KeyPress& kp)
@@ -136,6 +150,9 @@ bool PropertiesWindow::keyPressed(const KeyPress& kp)
 
 void PropertiesWindow::updateProperties()
 {
+    if(currentSelection == nullptr)
+        return;
+
     if(currentSelection->getNumSelected() > 0)
     {
         Array<ValueTree> datas;

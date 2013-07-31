@@ -61,7 +61,7 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
 
     setSize(100, 100);
     setWantsKeyboardFocus(true);
-
+//    grabKeyboardFocus();
 }
 
 ObjectsHolder::~ObjectsHolder()

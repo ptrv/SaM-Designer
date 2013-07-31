@@ -187,6 +187,7 @@ void ObjectPropertiesComponent::readValues()
         teName->setReadOnly(true);
         teName->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
         teName->setText(String::empty, false);
+        teName->setWantsKeyboardFocus(false);
 
         propertiesWindow->setName("Properties: " + String(multipleSelectionText));
     }
@@ -198,6 +199,7 @@ void ObjectPropertiesComponent::readValues()
         teName->setReadOnly(false);
         teName->setTextToShowWhenEmpty(String::empty, Colours::black);
         teName->setText(datas[0][Ids::identifier].toString(), false);
+        teName->setWantsKeyboardFocus(true);
 
         if(datas[0].getType() == Ids::mass
             || datas[0].getType() == Ids::port
@@ -238,7 +240,10 @@ TextEditor* ObjectPropertiesComponent::createEditor(const String& name,
 
     te->setReadOnly(isReadOnly);
     if(isReadOnly)
+    {
         te->setColour(TextEditor::textColourId, Colours::darkgrey);
+        te->setWantsKeyboardFocus(false);
+    }
 
     te->addListener(this);
     if(isMultiline)
