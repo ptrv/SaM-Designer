@@ -256,11 +256,11 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier);
         break;
     case CommandIDs::saveDocumentAs:
-        result.setInfo ("Save as", "Save file as.", CommandCategories::general, 0);
+        result.setInfo ("Save As", "Save file as.", CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::saveDocumentAsImage:
-        result.setInfo ("Save as image", "Save patch as image.", CommandCategories::general, 0);
+        result.setInfo ("Save As Image", "Save patch as image.", CommandCategories::general, 0);
 //        result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::generateFaust:
@@ -272,10 +272,10 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::cleanDataDir:
-    	result.setInfo("Clean Data Dir", "", CommandCategories::tools,0);
+        result.setInfo("Clean Data Directory", "", CommandCategories::tools,0);
     	break;
     case CommandIDs::cleanDataDirAll:
-    	result.setInfo("Clean all in Data Dir", "", CommandCategories::generation,0);
+        result.setInfo("Clean All In Data Directory", "", CommandCategories::generation,0);
     	break;
 #if defined _DEBUG
     case CommandIDs::writeMDLFileAsXml:
@@ -286,11 +286,11 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo("Dump MDL", "", CommandCategories::tools, 0);
         break;
     case CommandIDs::openMdlFileExtern:
-        result.setInfo("Open MDL file extern", "", CommandCategories::tools, 0);
+        result.setInfo("Open MDL File Externally", "", CommandCategories::tools, 0);
         result.addDefaultKeypress('l', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showMDLProperties:
-        result.setInfo("Show MDL properties", "", CommandCategories::general, 0);
+        result.setInfo("Show MDL Information", "", CommandCategories::general, 0);
         result.addDefaultKeypress('i', ModifierKeys::altModifier);
         break;
     default:

@@ -366,11 +366,11 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress('v', ModifierKeys::commandModifier);
         break;
     case StandardApplicationCommandIDs::selectAll:
-        result.setInfo("SelectAll", "", CommandCategories::editing, 0);
+        result.setInfo("Select All", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('a', ModifierKeys::commandModifier);
         break;
     case StandardApplicationCommandIDs::deselectAll:
-        result.setInfo("DeselectAll", "", CommandCategories::editing, 0);
+        result.setInfo("Deselect All", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('a', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case StandardApplicationCommandIDs::del:
@@ -379,7 +379,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress(KeyPress::backspaceKey, 0);
         break;
     case CommandIDs::segmentedConnectors:
-        result.setInfo("Segmented connectors", "", CommandCategories::editing, 0);
+        result.setInfo("Segmented Connectors", "", CommandCategories::editing, 0);
         result.setTicked(StoredSettings::getInstance()->getIsSegmentedConnectors());
         result.addDefaultKeypress('t', ModifierKeys::commandModifier);
         break;
@@ -396,15 +396,15 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress('0', ModifierKeys::altModifier);
         break;
     case CommandIDs::reverseDirection:
-        result.setInfo("Reverse direction", "", CommandCategories::editing, 0);
+        result.setInfo("Reverse Direction", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier);
         break;
     case CommandIDs::defineFaustcode:
-        result.setInfo("Define FAUST code", "", CommandCategories::editing, 0);
+        result.setInfo("Define FAUST Code", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('d', ModifierKeys::commandModifier);
         break;
     case CommandIDs::tidyObjects:
-        result.setInfo("Tidy up", "", CommandCategories::editing, 0);
+        result.setInfo("Tidy Up", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::redrawCircle:
@@ -490,45 +490,45 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.defaultKeypresses.add(KeyPress(KeyPress::spaceKey, 0, 0));
         break;
     case CommandIDs::moveUp:
-        result.setInfo("Move object up", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Up", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::upKey, 0);
         break;
     case CommandIDs::moveUpFine:
-        result.setInfo("Move object up fine", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Up Fine", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::upKey, ModifierKeys::shiftModifier);
         break;
     case CommandIDs::moveDown:
-        result.setInfo("Move object down", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Down", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::downKey, 0);
         break;
     case CommandIDs::moveDownFine:
-        result.setInfo("Move object down fine", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Down Fine", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::downKey, ModifierKeys::shiftModifier);
         break;
     case CommandIDs::moveLeft:
-        result.setInfo("Move object left", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Left", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::leftKey, 0);
         break;
     case CommandIDs::moveLeftFine:
-        result.setInfo("Move object left fine", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Left Fine", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::leftKey, ModifierKeys::shiftModifier);
         break;
     case CommandIDs::moveRight:
-        result.setInfo("Move object right", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Right", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::rightKey, 0);
         break;
     case CommandIDs::moveRightFine:
-        result.setInfo("Move object right fine", "", CommandCategories::generation, 0);
+        result.setInfo("Move Object Right Fine", "", CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showObjectNames:
-        result.setInfo("Show identifiers", "", CommandCategories::editing, 0);
+        result.setInfo("Show Identifiers", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('i', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         result.setTicked(objectsHolder->getShowObjectNames());
         break;
 
     case CommandIDs::enableSnapToGrid:
-        result.setInfo("Enable snap-to-grid",
+        result.setInfo("Enable Snap-to-grid",
                        "Toggles whether components' positions are aligned to a grid.",
                        CommandCategories::view, 0);
         result.setTicked(objectsHolder->isSnapActive(false));
@@ -536,7 +536,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
 
     case CommandIDs::showGrid:
-        result.setInfo("Show grid",
+        result.setInfo("Show Grid",
                        "Toggles whether the snapping grid is displayed on-screen.",
                        CommandCategories::view, 0);
         result.setTicked(objectsHolder->isSnapShown());
@@ -544,7 +544,7 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         break;
 
     case CommandIDs::showAudioConnections:
-        result.setInfo("Show audio connections", "", CommandCategories::view, 0);
+        result.setInfo("Show Audio Connections", "", CommandCategories::view, 0);
         result.setTicked(StoredSettings::getInstance()->getShowAudioConnections());
         break;
     default:

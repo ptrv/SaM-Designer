@@ -33,7 +33,7 @@ using namespace synthamodeler;
 
 OutputWindow::OutputWindow()
 :
-DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Post window",
+DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Post Window",
                Colours::darkseagreen, DocumentWindow::closeButton, false)
 {
     setUsingNativeTitleBar(true);

@@ -310,26 +310,26 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::clearOutputConsole:
-    	result.setInfo("Clear output window", "", CommandCategories::tools,0);
-    	result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        result.setInfo("Clear Output Window", "", CommandCategories::tools,0);
+        result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
     	break;
     case CommandIDs::openDataDir:
-    	result.setInfo("Open data dir", "", CommandCategories::tools, 0);
-    	result.addDefaultKeypress('l', ModifierKeys::commandModifier);
+        result.setInfo("Open Data Directory", "", CommandCategories::tools, 0);
+        result.addDefaultKeypress('l', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::showHelp:
     	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
     	break;
     case CommandIDs::showOutputConsole:
-    	result.setInfo("Show output window", "", CommandCategories::tools,0);
+        result.setInfo("Show Post Window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::showPropertiesWindow:
-    	result.setInfo("Show properties window", "", CommandCategories::windows,0);
+        result.setInfo("Show Properties Window", "", CommandCategories::windows,0);
     	result.addDefaultKeypress('i', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::propertiesWindowOnTop:
-        result.setInfo("properties window always on top", "", CommandCategories::windows,0);
+        result.setInfo("Properties Window Always On Top", "", CommandCategories::windows,0);
         result.setTicked(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
         break;
     default:
@@ -365,8 +365,7 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	Utils::openHelpUrl();
     	break;
     case CommandIDs::showPropertiesWindow:
-//    	propertiesWindow->makeVisible(!propertiesWindow->isVisible());
-    	propertiesWindow->makeVisible();
+        propertiesWindow->makeVisible(true);
     	break;
     case CommandIDs::propertiesWindowOnTop:
         togglePropertiesWindowAlwaysOnTop();
@@ -550,7 +549,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         StoredSettings::getInstance()->recentFiles
         		.createPopupMenuItems (recentFiles, 100, true, true);
 
-        menu.addSubMenu ("Open recent file", recentFiles);
+        menu.addSubMenu ("Open Recent File", recentFiles);
 
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::closeDocument);
@@ -672,7 +671,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         for (int i = 0; i < numElementsInArray (snapSizes); ++i)
             m.addItem (300 + i, String (snapSizes[i]) + " pixels", true, snapSizes[i] == currentSnapSize);
 
-        menu.addSubMenu ("Grid size", m, getApp()->getActiveHolderComponent() != 0);
+        menu.addSubMenu ("Grid Size", m, getApp()->getActiveHolderComponent() != 0);
 
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::showAudioConnections);
