@@ -54,7 +54,7 @@ namespace CommandIDs
     static const int writeMDLFileAsXml      = 0x200073;
     static const int showProjectSettings    = 0x200074;
     static const int insertAudioConnection  = 0x200075;
-    static const int showOutputConsole      = 0x200076;
+    static const int showPostWindow         = 0x200076;
     static const int clearOutputConsole		= 0x200077;
     static const int dumpMDL                = 0x200078;
 

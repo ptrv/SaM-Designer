@@ -25,7 +25,7 @@
 
 #include "CommonHeaders.h"
 #include "../View/PrefsPanel.h"
-#include "../View/OutputWindow.h"
+#include "../View/PostWindow.h"
 #include "../View/PropertiesWindow.h"
 #include "MainWindow.h"
 #include "../Models/MDLFile.h"
@@ -104,7 +104,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 
 	menuModel = new MainMenuModel();
 
-	outputWindow = new OutputWindow();
+	postWindow = new PostWindow();
 
     propertiesWindow = new PropertiesWindow();
 
@@ -166,8 +166,8 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	MenuBarModel::setMacMainMenu (menuModel);
 #endif
 
-	outputWindow->printWelcomeMessage();
-	outputWindow->makeVisible ();
+	postWindow->printWelcomeMessage();
+	postWindow->makeVisible ();
 	getOrCreateFrontmostWindow()->toFront(true);
 
 //    propertiesWindow->makeVisible();
@@ -182,7 +182,7 @@ void SynthAModelerApplication::shutdown()
 #endif
 	menuModel = nullptr;
 
-	outputWindow = nullptr;
+	postWindow = nullptr;
     propertiesWindow = nullptr;
 
 	StoredSettings::deleteInstance();
@@ -281,7 +281,7 @@ void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
     const CommandID ids[] = { CommandIDs::newFile,
                               CommandIDs::open,
                               CommandIDs::showPrefs,
-                              CommandIDs::showOutputConsole,
+                              CommandIDs::showPostWindow,
                               CommandIDs::clearOutputConsole,
                               CommandIDs::openDataDir,
                               CommandIDs::showHelp,
@@ -320,7 +320,7 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     case CommandIDs::showHelp:
     	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
     	break;
-    case CommandIDs::showOutputConsole:
+    case CommandIDs::showPostWindow:
         result.setInfo("Show Post Window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
@@ -352,11 +352,11 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	PrefsPanel::show();
     	break;
 
-    case CommandIDs::showOutputConsole:
-        outputWindow->toFront(true);
+    case CommandIDs::showPostWindow:
+        postWindow->toFront(true);
     	break;
     case CommandIDs::clearOutputConsole:
-    	outputWindow->clear();
+        postWindow->clear();
     	break;
     case CommandIDs::openDataDir:
     	Utils::openDataDir();
@@ -648,7 +648,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     }
     else if (topLevelMenuIndex == 5)
     {
-        menu.addCommandItem(commandManager, CommandIDs::showOutputConsole);
+        menu.addCommandItem(commandManager, CommandIDs::showPostWindow);
         menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::showPropertiesWindow);
@@ -721,16 +721,16 @@ void SynthAModelerApplication::writeToDebugConsole(const String& title,
         if(title.containsIgnoreCase("Error")
             || textToWrite.containsIgnoreCase("error"))
             color = Colours::red;
-		outputWindow->printHeader();
-        outputWindow->setTextColour(color);
-		outputWindow->addText(title, false);
-		outputWindow->addText(textToWrite, isBold);
-		outputWindow->addNewLine();
-        outputWindow->setTextColour(Colours::black);
+		postWindow->printHeader();
+        postWindow->setTextColour(color);
+		postWindow->addText(title, false);
+		postWindow->addText(textToWrite, isBold);
+		postWindow->addNewLine();
+        postWindow->setTextColour(Colours::black);
 	}
 	else
 	{
-		outputWindow->addText("Nothing...\n\n", false);
+		postWindow->addText("Nothing...\n\n", false);
 	}
 
 }
@@ -740,12 +740,12 @@ void SynthAModelerApplication::writeToDebugConsole(const String& textToWrite,
 {
 	if(textToWrite.compare("") != 0)
 	{
-		outputWindow->addText(textToWrite, isBold);
-		outputWindow->addNewLine();
+		postWindow->addText(textToWrite, isBold);
+		postWindow->addNewLine();
 	}
 	else
 	{
-		outputWindow->addText("Nothing...\n\n", false);
+		postWindow->addText("Nothing...\n\n", false);
 	}
 
 }

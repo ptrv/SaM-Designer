@@ -30,7 +30,7 @@
 namespace synthamodeler
 {
 class MainAppWindow;
-class OutputWindow;
+class PostWindow;
 class SAMLookAndFeel;
 class ObjectsHolder;
 //==============================================================================
@@ -97,9 +97,10 @@ public:
     void writeToDebugConsole(const String& title, const String& textToWrite, bool isBold);
     void writeToDebugConsole(const String& textToWrite, bool isBold);
 
-    private:
+
+private:
     OwnedArray<MainAppWindow> mainWindows;
-    ScopedPointer<OutputWindow> outputWindow;
+    ScopedPointer<PostWindow> postWindow;
 
     MainAppWindow* getOrCreateFrontmostWindow();
     MainAppWindow* getOrCreateEmptyWindow();

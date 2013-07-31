@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    DebugWindow.cpp
+    PostWindow.cpp
     Created: 11 Apr 2012 3:18:15pm
     Author:  Peter Vasil
 
@@ -27,11 +27,11 @@
 #include "../View/TextConsole.h"
 #include "../Utilities/StoredSettings.h"
 
-#include "OutputWindow.h"
+#include "PostWindow.h"
 
 using namespace synthamodeler;
 
-OutputWindow::OutputWindow()
+PostWindow::PostWindow()
 :
 DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Post Window",
                Colours::darkseagreen, DocumentWindow::closeButton, false)
@@ -55,7 +55,7 @@ DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Po
 
 }
 
-OutputWindow::~OutputWindow()
+PostWindow::~PostWindow()
 {
     StoredSettings::getInstance()->getProps()
         .setValue ("lastPostWindowPos", getWindowStateAsString());
@@ -63,12 +63,12 @@ OutputWindow::~OutputWindow()
     clearContentComponent();
 }
 
-void OutputWindow::closeButtonPressed()
+void PostWindow::closeButtonPressed()
 {
     SynthAModelerApplication::getApp()->systemRequestedQuit();
 }
 
-void OutputWindow::toggleDebugWindow()
+void PostWindow::toggleDebugWindow()
 {
 	if(isVisible())
 	{
@@ -80,13 +80,13 @@ void OutputWindow::toggleDebugWindow()
 	}
 }
 
-void OutputWindow::clear()
+void PostWindow::clear()
 {
 	if(isVisible())
 		console->clear();
 }
 
-void OutputWindow::addText(const String& compilerText, bool isBold)
+void PostWindow::addText(const String& compilerText, bool isBold)
 {
 	SAM_LOG(compilerText);
     console->setBold(isBold);
@@ -94,7 +94,7 @@ void OutputWindow::addText(const String& compilerText, bool isBold)
     console->setBold(!isBold);
 }
 
-void OutputWindow::printWelcomeMessage()
+void PostWindow::printWelcomeMessage()
 {
 	String welcomeMsg;
 	welcomeMsg << "Hello " << SystemStats::getLogonName() << "!" << newLine;
@@ -104,7 +104,7 @@ void OutputWindow::printWelcomeMessage()
 	welcomeMsg << newLine;
 	console->addLine(welcomeMsg);
 }
-void OutputWindow::printHeader()
+void PostWindow::printHeader()
 {
 	String debugText;
 	debugText << newLine;
@@ -115,44 +115,44 @@ void OutputWindow::printHeader()
 	addText(debugText, false);
 }
 
-void OutputWindow::addNewLine()
+void PostWindow::addNewLine()
 {
 	console->addLine(newLine);
 }
-void OutputWindow::makeVisible()
+void PostWindow::makeVisible()
 {
 	setVisible(true);
 	addToDesktop();
 	StoredSettings::getInstance()->setShowCompilerWindow(true);
 }
 
-void OutputWindow::makeHide()
+void PostWindow::makeHide()
 {
 	setVisible(false);
 	removeFromDesktop();
 	StoredSettings::getInstance()->setShowCompilerWindow(false);
 }
 
-ApplicationCommandTarget* OutputWindow::getNextCommandTarget()
+ApplicationCommandTarget* PostWindow::getNextCommandTarget()
 {
     return findFirstTargetParentComponent();
 }
 
-void OutputWindow::getAllCommands (Array <CommandID>& /*commands*/)
+void PostWindow::getAllCommands (Array <CommandID>& /*commands*/)
 {
 }
 
-void OutputWindow::getCommandInfo (CommandID /*commandID*/,
+void PostWindow::getCommandInfo (CommandID /*commandID*/,
                                    ApplicationCommandInfo& /*result*/)
 {
 }
 
-bool OutputWindow::perform (const InvocationInfo& /*info*/)
+bool PostWindow::perform (const InvocationInfo& /*info*/)
 {
 	return false;
 }
 
-void OutputWindow::setTextColour(const Colour& textColour)
+void PostWindow::setTextColour(const Colour& textColour)
 {
     console->setColour(TextEditor::textColourId, textColour);
 }

@@ -173,7 +173,7 @@
     <ClCompile Include="..\..\Source\View\LinkComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\FaustcodePanel.cpp"/>
     <ClCompile Include="..\..\Source\View\ObjectComponent.cpp"/>
-    <ClCompile Include="..\..\Source\View\OutputWindow.cpp"/>
+    <ClCompile Include="..\..\Source\View\PostWindow.cpp"/>
     <ClCompile Include="..\..\Source\View\PrefsPanel.cpp"/>
     <ClCompile Include="..\..\Source\View\ContentComp.cpp"/>
     <ClCompile Include="..\..\Source\View\ObjectsHolder.cpp"/>
@@ -1039,7 +1039,7 @@
     <ClInclude Include="..\..\Source\View\LinkComponent.h"/>
     <ClInclude Include="..\..\Source\View\FaustcodePanel.h"/>
     <ClInclude Include="..\..\Source\View\ObjectComponent.h"/>
-    <ClInclude Include="..\..\Source\View\OutputWindow.h"/>
+    <ClInclude Include="..\..\Source\View\PostWindow.h"/>
     <ClInclude Include="..\..\Source\View\PrefsPanel.h"/>
     <ClInclude Include="..\..\Source\View\ContentComp.h"/>
     <ClInclude Include="..\..\Source\View\ObjectsHolder.h"/>

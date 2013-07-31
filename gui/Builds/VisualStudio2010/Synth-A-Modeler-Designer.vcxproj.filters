@@ -352,7 +352,7 @@
     <ClCompile Include="..\..\Source\View\ObjectComponent.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\View\OutputWindow.cpp">
+    <ClCompile Include="..\..\Source\View\PostWindow.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\View\PrefsPanel.cpp">
@@ -1398,7 +1398,7 @@
     <ClInclude Include="..\..\Source\View\ObjectComponent.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\View\OutputWindow.h">
+    <ClInclude Include="..\..\Source\View\PostWindow.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\View\PrefsPanel.h">

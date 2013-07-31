@@ -87,7 +87,7 @@ OBJECTS := \
   $(OBJDIR)/LinkComponent_6a391d22.o \
   $(OBJDIR)/FaustcodePanel_375377a7.o \
   $(OBJDIR)/ObjectComponent_96e7177d.o \
-  $(OBJDIR)/OutputWindow_f103bf7c.o \
+  $(OBJDIR)/PostWindow_ee7949db.o \
   $(OBJDIR)/PrefsPanel_2006a45f.o \
   $(OBJDIR)/ContentComp_99fa8a27.o \
   $(OBJDIR)/ObjectsHolder_b334705f.o \
@@ -309,9 +309,9 @@ $(OBJDIR)/ObjectComponent_96e7177d.o: ../../Source/View/ObjectComponent.cpp
 	@echo "Compiling ObjectComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/OutputWindow_f103bf7c.o: ../../Source/View/OutputWindow.cpp
+$(OBJDIR)/PostWindow_ee7949db.o: ../../Source/View/PostWindow.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling OutputWindow.cpp"
+	@echo "Compiling PostWindow.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/PrefsPanel_2006a45f.o: ../../Source/View/PrefsPanel.cpp

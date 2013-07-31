@@ -28,7 +28,7 @@
 #include "CommonHeaders.h"
 #include "Application.h"
 #include "CommandIDs.h"
-#include "../View/OutputWindow.h"
+#include "../View/PostWindow.h"
 #include "../View/ContentComp.h"
 #include "../Controller/ObjController.h"
 #include "../Controller/MDLController.h"

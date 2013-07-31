@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    DebugWindow.h
+    PostWindow.h
     Created: 11 Apr 2012 3:18:15pm
     Author:  Peter Vasil
 
@@ -23,8 +23,8 @@
 
 */
 
-#ifndef __DEBUGWINDOW_H_3A3F156F__
-#define __DEBUGWINDOW_H_3A3F156F__
+#ifndef __POSTWINDOW_H_3A3F156F__
+#define __POSTWINDOW_H_3A3F156F__
 
 namespace synthamodeler
 {
@@ -34,12 +34,12 @@ class TextConsole;
  * A window showing output of Synth-A-Modeler script, faust and other
  * application activity.
  */
-class OutputWindow : public DocumentWindow,
+class PostWindow : public DocumentWindow,
 					public ApplicationCommandTarget
 {
 public:
-	OutputWindow();
-	~OutputWindow();
+	PostWindow();
+	~PostWindow();
 
 	void closeButtonPressed();
 
@@ -99,4 +99,4 @@ private:
 };
 }
 
-#endif  // __DEBUGWINDOW_H_3A3F156F__
+#endif  // __POSTWINDOW_H_3A3F156F__
