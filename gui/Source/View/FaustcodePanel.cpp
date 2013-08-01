@@ -91,6 +91,8 @@ public:
     }
 private:
     ObjController* objController;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FaustCodeEditor)
 };
 class FaustcodeComponent : public Component,
                            public Button::Listener,
@@ -103,52 +105,56 @@ public:
                        ValueTree data_,
                        UndoManager* undoManager_)
     : parent(fcp_),
-    btOk("Ok"),
-    btCancel("Cancel"),
-    btHelp("?"),
-    teFaustCode("faustcode texteditor", objController_),
     data(data_),
     undoManager(undoManager_)
     {
-        btOk.addListener(this);
-        addAndMakeVisible(&btOk);
-        btCancel.addListener(this);
-        addAndMakeVisible(&btCancel);
-        btHelp.addListener(this);
-        addAndMakeVisible(&btHelp);
-        teFaustCode.setMultiLine(true, false);
-        teFaustCode.setReadOnly(false);
-        teFaustCode.addListener(this);
-        teFaustCode.setReturnKeyStartsNewLine(true);
-        addAndMakeVisible(&teFaustCode);
+        addAndMakeVisible(btOk = new TextButton("Ok"));
+        btOk->addListener(this);
+
+        addAndMakeVisible(btCancel = new TextButton("Cancel"));
+        btCancel->addListener(this);
+
+        addAndMakeVisible(btHelp = new TextButton("?"));
+        btHelp->addListener(this);
+
+        addAndMakeVisible(teFaustCode = new FaustCodeEditor("faustcode texteditor",
+                                                            objController_));
+        teFaustCode->setMultiLine(true, false);
+        teFaustCode->setReadOnly(false);
+        teFaustCode->addListener(this);
+        teFaustCode->setReturnKeyStartsNewLine(true);
 
         readFaustcodeValues();
     }
 
     ~FaustcodeComponent()
     {
+        btOk = nullptr;
+        btCancel = nullptr;
+        btHelp = nullptr;
+        teFaustCode = nullptr;
     }
 
     void resized()
     {
-        teFaustCode.setBounds(5, 5, getWidth() - 10, getHeight() - 40);
-        btOk.setBounds(getWidth()/2 - 55, getHeight() - 30, 50, 22);
-        btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 50, 22);
-        btHelp.setBounds(getWidth() - 30, getHeight() - 30, 22, 22);
+        teFaustCode->setBounds(5, 5, getWidth() - 10, getHeight() - 40);
+        btOk->setBounds(getWidth()/2 - 55, getHeight() - 30, 50, 22);
+        btCancel->setBounds(getWidth()/2 + 5, getHeight() - 30, 50, 22);
+        btHelp->setBounds(getWidth() - 30, getHeight() - 30, 22, 22);
     }
 
     void buttonClicked(Button* button)
     {
-        if (button == &btOk)
+        if (button == btOk)
         {
             writeFaustcodeValues();
             parent->closeButtonPressed();
         }
-        else if (button == &btCancel)
+        else if (button == btCancel)
         {
             parent->closeButtonPressed();
         }
-        else if (button == &btHelp)
+        else if (button == btHelp)
         {
             HintComponent* content = new HintComponent();
             CallOutBox::launchAsynchronously(content,
@@ -167,16 +173,16 @@ public:
             faustCodeLines.add(text);
         }
         faustCodeText = faustCodeLines.joinIntoString(newLine);
-        teFaustCode.setText(faustCodeText, false);
+        teFaustCode->setText(faustCodeText, false);
     }
 
     void writeFaustcodeValues()
     {
-        if(faustCodeText.compare(teFaustCode.getText()) != 0)
+        if(faustCodeText.compare(teFaustCode->getText()) != 0)
         {
             DBG("faustcode modified");
             StringArray faustCodeLines;
-            faustCodeLines.addTokens(teFaustCode.getText(), "\n\r", "\"");
+            faustCodeLines.addTokens(teFaustCode->getText(), "\n\r", "\"");
 
             undoManager->beginNewTransaction("Modify faustcode");
             ValueTree fcTree = data.getOrCreateChildWithName(Objects::faustcodeblock,
@@ -225,10 +231,10 @@ public:
 
 private:
     FaustcodePanel* parent;
-    TextButton btOk;
-    TextButton btCancel;
-    TextButton btHelp;
-    FaustCodeEditor teFaustCode;
+    ScopedPointer<TextButton> btOk;
+    ScopedPointer<TextButton> btCancel;
+    ScopedPointer<TextButton> btHelp;
+    ScopedPointer<FaustCodeEditor> teFaustCode;
 	ValueTree data;
     UndoManager* undoManager;
     String faustCodeText;
@@ -266,6 +272,8 @@ private:
         Font font;
         int textW;
     };
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FaustcodeComponent)
 };
 
 

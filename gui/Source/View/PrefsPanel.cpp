@@ -192,57 +192,62 @@ private:
     public:
     	ExporterInputComponent(ExporterInputPanel& parent_, int exporterIndex_)
     	: parent(parent_),
-    	  labelVarName("Exporter"),
-    	  labelVarValue("Command"),
-    	  inputVarName("Input variable"),
-    	  inputVarValue("Input value"),
-    	  btOk("Ok"),
-    	  btCancel("Cancel"),
           exporterIndex(exporterIndex_)
         {
-            labelVarName.setText("Exporter", dontSendNotification);
-            addAndMakeVisible(&labelVarName);
-            labelVarValue.setText("Command", dontSendNotification);
-            addAndMakeVisible(&labelVarValue);
-            inputVarName.addListener(this);
-    		addAndMakeVisible(&inputVarName);
-            inputVarValue.addListener(this);
-    		addAndMakeVisible(&inputVarValue);
-    		btOk.addListener(this);
-    		addAndMakeVisible(&btOk);
-    		btCancel.addListener(this);
-    		addAndMakeVisible(&btCancel);
+            addAndMakeVisible(laVarName = new Label("Exporter"));
+            laVarName->setText("Exporter", dontSendNotification);
+
+            addAndMakeVisible(laVarValue = new Label("Command"));
+            laVarValue->setText("Command", dontSendNotification);
+
+            addAndMakeVisible(teVarName = new TextEditor("Input Variable"));
+            teVarName->addListener(this);
+
+            addAndMakeVisible(teVarValue = new TextEditor("Input Value"));
+            teVarValue->addListener(this);
+
+            addAndMakeVisible(btOk = new TextButton("Ok"));
+            btOk->addListener(this);
+
+            addAndMakeVisible(btCancel = new TextButton("Cancel"));
+            btCancel->addListener(this);
 
             if(exporterIndex >= 0)
             {
                 StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
-                inputVarName.setText(spa.getAllKeys()[exporterIndex], false);
-                inputVarValue.setText(spa.getAllValues()[exporterIndex], false);
+                teVarName->setText(spa.getAllKeys()[exporterIndex], false);
+                teVarValue->setText(spa.getAllValues()[exporterIndex], false);
             }
 
     	}
 
     	~ExporterInputComponent()
     	{
+            laVarName = nullptr;
+            laVarValue = nullptr;
+            teVarName = nullptr;
+            teVarValue = nullptr;
+            btOk = nullptr;
+            btCancel = nullptr;
     	}
 
     	void resized()
     	{
-    		labelVarName.setBounds(0, 5, 60, 22);
-    		inputVarName.setBounds(60, 5, getWidth() - 65, 22);
-    		labelVarValue.setBounds(0, 40, 60, 22);
-    		inputVarValue.setBounds(60, 40, getWidth() - 65, 22);
-    		btOk.setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
-    		btCancel.setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
+            laVarName->setBounds(0, 5, 60, 22);
+            teVarName->setBounds(60, 5, getWidth() - 65, 22);
+            laVarValue->setBounds(0, 40, 60, 22);
+            teVarValue->setBounds(60, 40, getWidth() - 65, 22);
+            btOk->setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
+            btCancel->setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
     	}
 
     	void buttonClicked(Button* button)
     	{
-    		if(button == &btOk)
+            if(button == btOk)
     		{
                 applyEdits();
     		}
-    		else if(button == &btCancel)
+            else if(button == btCancel)
     		{
                 cancelEdits();
     		}
@@ -261,8 +266,8 @@ private:
                     {
                         String currExporter = spa.getAllKeys()[i];
                         if(currExporter.compare(StoredSettings::getInstance()->getCurrentExporter()) == 0)
-                            StoredSettings::getInstance()->setCurrentExporter(inputVarName.getText());
-                        other.set(inputVarName.getText(), inputVarValue.getText());
+                            StoredSettings::getInstance()->setCurrentExporter(teVarName->getText());
+                        other.set(teVarName->getText(), teVarValue->getText());
                     }
                     else
                     {
@@ -275,7 +280,7 @@ private:
             }
             else
             {
-                spa.set(inputVarName.getText(), inputVarValue.getText());
+                spa.set(teVarName->getText(), teVarValue->getText());
             }
             StoredSettings::getInstance()->getExporters().save();
             parent.closeButtonPressed();
@@ -300,12 +305,12 @@ private:
 
     private:
     	ExporterInputPanel& parent;
-    	Label labelVarName;
-    	Label labelVarValue;
-    	TextEditor inputVarName;
-    	TextEditor inputVarValue;
-    	TextButton btOk;
-    	TextButton btCancel;
+        ScopedPointer<Label> laVarName;
+        ScopedPointer<Label> laVarValue;
+        ScopedPointer<TextEditor> teVarName;
+        ScopedPointer<TextEditor> teVarValue;
+        ScopedPointer<TextButton> btOk;
+        ScopedPointer<TextButton> btCancel;
         int exporterIndex;
     };
 
@@ -317,24 +322,24 @@ class ExporterTable : public Component,
 {
 public:
     ExporterTable()
-    : table("Exporter table", this), font(14.0f)
+    : font(14.0f)
     {
         data = &StoredSettings::getInstance()->getExporters().getAllProperties();
 
-        table.setColour (ListBox::outlineColourId, Colours::grey);
-	    table.setOutlineThickness (1);
+		addAndMakeVisible(table = new TableListBox("Exporter table", this));
+        table->setColour (ListBox::outlineColourId, Colours::grey);
+	    table->setOutlineThickness (1);
 
-	    table.getHeader().addColumn("Exporter",1,100);
+	    table->getHeader().addColumn("Exporter",1,100);
 
-	    table.getHeader().addColumn("Command",2, 500);
-        table.autoSizeAllColumns();
-	    table.setMultipleSelectionEnabled(false);
-		addAndMakeVisible(&table);
+	    table->getHeader().addColumn("Command",2, 500);
+        table->autoSizeAllColumns();
+	    table->setMultipleSelectionEnabled(false);
     }
 
     void resized()
 	{
-		table.setBounds(0, 0, getWidth(), getHeight());
+		table->setBounds(0, 0, getWidth(), getHeight());
 	}
 	int getNumRows()
 	{
@@ -368,25 +373,25 @@ public:
 	void addRow()
 	{
         ExporterInputPanel::show(-1);
-        table.updateContent();
-        table.autoSizeAllColumns();
+        table->updateContent();
+        table->autoSizeAllColumns();
 	}
 
 	void editRow()
 	{
-		int rowIndex = table.getSelectedRow();
+		int rowIndex = table->getSelectedRow();
 		if(rowIndex >= 0)
 		{
             ExporterInputPanel::show(rowIndex);
-			table.updateContent();
-			table.repaintRow(rowIndex);
-            table.autoSizeAllColumns();
+			table->updateContent();
+			table->repaintRow(rowIndex);
+            table->autoSizeAllColumns();
 		}
 	}
 
 	void removeSelectedRow()
 	{
-		int rowIndex = table.getLastRowSelected();
+		int rowIndex = table->getLastRowSelected();
 		if(rowIndex >= 0)
 		{
             StringPairArray& spa = StoredSettings::getInstance()->getExporters().getAllProperties();
@@ -395,16 +400,16 @@ public:
                 StoredSettings::getInstance()->setCurrentExporter(String::empty);
             StoredSettings::getInstance()->getExporters().removeValue(spa.getAllKeys()[rowIndex]);
 
-			table.updateContent();
-            table.autoSizeAllColumns();
+			table->updateContent();
+            table->autoSizeAllColumns();
 		}
 	}
     void cellDoubleClicked (int rowNumber, int /*columnId*/, const MouseEvent& /*e*/)
     {
         ExporterInputPanel::show(rowNumber);
-        table.updateContent();
-        table.repaintRow(rowNumber);
-        table.autoSizeAllColumns();
+        table->updateContent();
+        table->repaintRow(rowNumber);
+        table->autoSizeAllColumns();
     }
 
     int getColumnAutoSizeWidth(int columnid)
@@ -431,7 +436,7 @@ public:
         return 0;
     }
 private:
-    TableListBox table;
+    ScopedPointer<TableListBox> table;
     Font font;
     StringPairArray* data;
 };
@@ -440,39 +445,44 @@ class ExporterPage : public Component,
 {
 public:
     ExporterPage()
-    : btAdd("+"),
-	  btRemove("-")
     {
-        btAdd.addListener(this);
-        addAndMakeVisible(&btAdd);
-        btRemove.addListener(this);
-        addAndMakeVisible(&btRemove);
-        addAndMakeVisible(&exporterTable);
+        addAndMakeVisible(btAdd = new TextButton("+"));
+        btAdd->addListener(this);
 
+        addAndMakeVisible(btRemove = new TextButton("-"));
+        btRemove->addListener(this);
+
+        addAndMakeVisible(exporterTable = new ExporterTable());
+    }
+    ~ExporterPage()
+    {
+        btAdd = nullptr;
+        btRemove = nullptr;
+        exporterTable = nullptr;
     }
 
     void resized()
     {
-        exporterTable.setBounds(5, 10, getWidth() - 20, getHeight() - 50);
-        btAdd.setBounds(5, getHeight() - 30, 22, 22);
-		btRemove.setBounds(30, getHeight() - 30, 22, 22);
+        exporterTable->setBounds(5, 10, getWidth() - 20, getHeight() - 50);
+        btAdd->setBounds(5, getHeight() - 30, 22, 22);
+		btRemove->setBounds(30, getHeight() - 30, 22, 22);
     }
 
     void buttonClicked(Button* button)
 	{
-        if(button == &btAdd)
+        if(button == btAdd)
 		{
-			exporterTable.addRow();
+			exporterTable->addRow();
 		}
-		else if( button == &btRemove)
+		else if( button == btRemove)
 		{
-			exporterTable.removeSelectedRow();
+			exporterTable->removeSelectedRow();
 		}
     }
 private:
-  	TextButton btAdd;
-	TextButton btRemove;
-    ExporterTable exporterTable;
+    ScopedPointer<TextButton> btAdd;
+    ScopedPointer<TextButton> btRemove;
+    ScopedPointer<ExporterTable> exporterTable;
 };
 
 //==============================================================================
@@ -480,10 +490,8 @@ class AboutPage   : public Component
 {
 public:
     AboutPage()
-        : link ("https://github.com/ptrv/SaM-Designer",
-                URL ("https://github.com/ptrv/SaM-Designer")),
-          logo (ImageCache::getFromMemory (BinaryData::synthamodeler_icon_png,
-        		  BinaryData::synthamodeler_icon_pngSize))
+    : logo(ImageCache::getFromMemory(BinaryData::synthamodeler_icon_png,
+                                     BinaryData::synthamodeler_icon_pngSize))
     {
         text1.setJustification (Justification::centredTop);
         String infoTxt(BinaryData::about_txt);
@@ -494,8 +502,14 @@ public:
         text2.append ("Synth-A-Modeler-Designer v" + JUCEApplication::getInstance()->getApplicationVersion()
                         + buildDate + ", " + SystemStats::getJUCEVersion(), Font (12.0f, Font::bold));
 
-        addAndMakeVisible (&link);
-        link.setFont (Font (10.0f, Font::bold | Font::underlined), true);
+        addAndMakeVisible (link = new HyperlinkButton("https://github.com/ptrv/SaM-Designer",
+                                                      URL("https://github.com/ptrv/SaM-Designer")));
+        link->setFont (Font (10.0f, Font::bold | Font::underlined), true);
+    }
+
+    ~AboutPage()
+    {
+        link = nullptr;
     }
 
     void paint (Graphics& g)
@@ -511,13 +525,14 @@ public:
 
     void resized()
     {
-        link.setSize (100, 22);
-        link.changeWidthToFitText();
-        link.setTopLeftPosition ((getWidth() - link.getWidth()) / 2, getHeight() - link.getHeight() - 10);
+        link->setSize (100, 22);
+        link->changeWidthToFitText();
+        link->setTopLeftPosition ((getWidth() - link->getWidth()) / 2,
+                                  getHeight() - link->getHeight() - 10);
     }
 
 private:
-    HyperlinkButton link;
+    ScopedPointer<HyperlinkButton> link;
     Image logo;
     AttributedString text1, text2;
 };
