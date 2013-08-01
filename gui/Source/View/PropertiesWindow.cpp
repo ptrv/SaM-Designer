@@ -58,8 +58,10 @@ public:
 
 PropertiesWindow::PropertiesWindow()
 :
-DocumentWindow("Properties", Colour::greyLevel (0.92f),
-               DocumentWindow::closeButton, false),
+DocumentWindow("Properties",
+               Colour::greyLevel (0.92f),
+               DocumentWindow::closeButton | DocumentWindow::minimiseButton,
+               false),
     currentContentComp(nullptr),
     currentSelection(nullptr)
 {
@@ -73,6 +75,10 @@ DocumentWindow("Properties", Colour::greyLevel (0.92f),
     setResizable(true, true);
 
     setAlwaysOnTop(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
+
+	commandManager->registerAllCommandsForTarget(this);
+
+	addKeyListener(commandManager->getKeyMappings());
 }
 
 PropertiesWindow::~PropertiesWindow()
@@ -98,6 +104,9 @@ void PropertiesWindow::makeVisible(bool shouldBeVisible)
         if(cc != nullptr)
             if(cc->getComponentID().compare("EmptyComponent") != 0)
                 setWantsKeyboardFocus(false);
+
+        if(isMinimised())
+            setMinimised(false);
 
         if(! isAlwaysOnTop())
             toFront(true);
@@ -286,3 +295,21 @@ void PropertiesWindow::valueTreeParentChanged (ValueTree& /*tree*/)
 }
 
 //==============================================================================
+ApplicationCommandTarget* PropertiesWindow::getNextCommandTarget()
+{
+    return findFirstTargetParentComponent();
+}
+
+void PropertiesWindow::getAllCommands (Array <CommandID>& /*commands*/)
+{
+}
+
+void PropertiesWindow::getCommandInfo (CommandID /*commandID*/,
+                                       ApplicationCommandInfo& /*result*/)
+{
+}
+
+bool PropertiesWindow::perform (const InvocationInfo& /*info*/)
+{
+	return false;
+}

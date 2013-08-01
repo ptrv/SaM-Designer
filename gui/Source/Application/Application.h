@@ -121,6 +121,7 @@ private:
 
     bool isRunningCommandLine;
 
+    void togglePropertiesWindow();
     void togglePropertiesWindowAlwaysOnTop();
     //==============================================================================
 

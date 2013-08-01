@@ -34,7 +34,8 @@ class MainAppWindow;
 
 class PropertiesWindow : public DocumentWindow,
                          public ChangeListener,
-                         public ValueTree::Listener
+                         public ValueTree::Listener,
+                         public ApplicationCommandTarget
 {
 public:
     PropertiesWindow();
@@ -55,6 +56,12 @@ public:
     void valueTreeParentChanged (ValueTree& tree);
 
     void setCurrentActiveWindow(MainAppWindow& maw);
+
+    ApplicationCommandTarget* getNextCommandTarget();
+    void getAllCommands (Array <CommandID>& commands);
+    void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
+    bool perform (const InvocationInfo& info);
+
 private:
     ContentComp* currentContentComp;
     SelectedItemSet<SelectableObject*>* currentSelection;

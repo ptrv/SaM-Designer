@@ -365,7 +365,7 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	Utils::openHelpUrl();
     	break;
     case CommandIDs::showPropertiesWindow:
-        propertiesWindow->makeVisible(true);
+        togglePropertiesWindow();
     	break;
     case CommandIDs::propertiesWindowOnTop:
         togglePropertiesWindowAlwaysOnTop();
@@ -763,6 +763,16 @@ ObjectsHolder* SynthAModelerApplication::getActiveHolderComponent()
     }
 
     return mainWindows.getLast()->getHolderComponent();
+}
+
+void SynthAModelerApplication::togglePropertiesWindow()
+{
+    if ((propertiesWindow->isVisible() && propertiesWindow->isAlwaysOnTop())
+        || propertiesWindow->isActiveWindow())
+        propertiesWindow->makeVisible(false);
+    else
+        propertiesWindow->makeVisible(true);
+
 }
 
 void SynthAModelerApplication::togglePropertiesWindowAlwaysOnTop()
