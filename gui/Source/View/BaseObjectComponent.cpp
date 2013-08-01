@@ -34,7 +34,7 @@ using namespace synthamodeler;
 BaseObjectComponent::BaseObjectComponent(ObjController& owner_, ValueTree data_)
 : Node(data_), owner(owner_), data(data_)
 {
-    
+    setComponentID("boc_" + data[Ids::identifier].toString());
 }
 
 BaseObjectComponent::~BaseObjectComponent()

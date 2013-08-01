@@ -51,6 +51,8 @@ isEditing(false)
     laName->attachToComponent(teName, true);
     multipleEdit = datas.size() > 1;
 //    addAndMakeVisible(&laDebug);
+
+    setComponentID("opc_" + datas[0].getType().toString());
 }
 
 ObjectPropertiesComponent::~ObjectPropertiesComponent()

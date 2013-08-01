@@ -55,6 +55,10 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
     segmented = StoredSettings::getInstance()->getIsSegmentedConnectors();
     owner.getSelectedObjects().addChangeListener(this);
 //    owner.getSelectedAudioConnections().addChangeListener(this);
+
+    setComponentID("aoc_"
+        + sourceComp->getData()[Ids::identifier].toString()
+        + audioOutComp->getData()[Ids::identifier].toString());
 }
 
 AudioOutConnector::~AudioOutConnector()
