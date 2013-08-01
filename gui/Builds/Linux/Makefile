@@ -75,6 +75,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/RedrawOptionsComponent_e3ca6541.o \
   $(OBJDIR)/MDLInformation_73c962e2.o \
   $(OBJDIR)/ObjectPropertiesComponent_e2a1e34a.o \
   $(OBJDIR)/PropertiesWindow_5070b22e.o \
@@ -247,6 +248,11 @@ $(OBJDIR)/SAMCmd_cf7547a1.o: ../../Source/Models/SAMCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/RedrawOptionsComponent_e3ca6541.o: ../../Source/View/RedrawOptionsComponent.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling RedrawOptionsComponent.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/MDLInformation_73c962e2.o: ../../Source/View/MDLInformation.cpp

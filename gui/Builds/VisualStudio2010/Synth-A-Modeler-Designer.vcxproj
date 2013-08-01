@@ -161,6 +161,7 @@
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp"/>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp"/>
+    <ClCompile Include="..\..\Source\View\RedrawOptionsComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\MDLInformation.cpp"/>
     <ClCompile Include="..\..\Source\View\ObjectPropertiesComponent.cpp"/>
     <ClCompile Include="..\..\Source\View\PropertiesWindow.cpp"/>
@@ -1026,6 +1027,7 @@
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>
     <ClInclude Include="..\..\Source\Models\SAMCmd.h"/>
     <ClInclude Include="..\..\Source\Models\MDLFile.h"/>
+    <ClInclude Include="..\..\Source\View\RedrawOptionsComponent.h"/>
     <ClInclude Include="..\..\Source\View\MDLInformation.h"/>
     <ClInclude Include="..\..\Source\View\ObjectPropertiesComponent.h"/>
     <ClInclude Include="..\..\Source\View\PropertiesWindow.h"/>
