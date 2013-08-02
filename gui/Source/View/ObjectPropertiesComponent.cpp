@@ -42,7 +42,9 @@ laName(nullptr),
 teName(nullptr),
 //laDebug(nullptr),
 dataChanged(false),
-isEditing(false)
+isEditing(false),
+nameExistAlertActive(false),
+canceledEditing(false)
 {
     laName = new Label("laName", "Identifier");
     teName = new TextEditor("teName");
@@ -97,9 +99,9 @@ void ObjectPropertiesComponent::textEditorFocusLost(TextEditor& /*editor*/)
 
 void ObjectPropertiesComponent::applyEditing()
 {
-    undoManager->beginNewTransaction("Change object properties");
-    if (dataChanged)
+    if (dataChanged && ! nameExistAlertActive && ! canceledEditing)
     {
+        undoManager->beginNewTransaction("Change object properties");
         isEditing = true;
         bool writeOk = writeValues();
         isEditing = false;
@@ -113,18 +115,29 @@ void ObjectPropertiesComponent::applyEditing()
                 SAM_LOG("Change " + data.getType().toString() + " " +
                         data[Ids::identifier].toString());
             }
+
+            // read values to refresh display and show fixed values when
+            // Utils::fixParameterValueIfNeeded has been applied
+            if(! multipleEdit)
+                readValues();
+
             dataChanged = false;
         }
         else
         {
             SAM_LOG("Name already exists");
+            nameExistAlertActive = true;
             Alerts::nameAlreadyExists();
+            nameExistAlertActive = false;
+            ObjectPropertiesComponent::readValues();
+            dataChanged = false;
         }
     }
 }
 
 void ObjectPropertiesComponent::cancelEditing()
 {
+    canceledEditing = true;
     for (int i = 0; i < datas.size(); ++i)
     {
         ValueTree data = datas[i];
@@ -500,7 +513,9 @@ bool ResonatorPropertiesComponent::writeValues()
                 for (int j = 0; j < vals.size(); ++j)
                 {
                     ValueTree pa(Utils::resonatorParamIds[k]);
-                    pa.setProperty(Ids::value, vals[j], undoManager);
+                    pa.setProperty(Ids::value,
+                                   Utils::fixParameterValueIfNeeded(vals[j]),
+                                   undoManager);
                     param.addChild(pa, -1, undoManager);
                 }
             }

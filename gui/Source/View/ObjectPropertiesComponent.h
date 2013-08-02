@@ -78,6 +78,11 @@ protected:
     Array<TextEditor*> editors;
     HashMap<TextEditor*,bool> editorsModified;
     void resetEditorsModifiedState();
+
+    bool nameExistAlertActive;
+    bool canceledEditing;
+
+    friend class PropertiesWindow;
 };
 
 class MassPropertiesComponent : public ObjectPropertiesComponent
