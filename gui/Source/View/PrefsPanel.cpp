@@ -44,6 +44,7 @@ public:
 			true, true, false,
 			String::empty, String::empty,
 			"(select the directory where the faust executable resides)"),
+		tbAutoCorrectValues("Autocorrect parameter values"),
 		tbRunSAMBeforeExport("Run Synth-A-Modeler before generating code"),
 		tbExportConfirm("Confirm before generating code"),
         tbOpenFaustExport("Open Faust file after export"),
@@ -68,6 +69,9 @@ public:
         labelDataDir.attachToComponent (&fcDataDir, false);
         addAndMakeVisible (&fcFaustDir);
         labelFaustDir.attachToComponent (&fcFaustDir, false);
+        addAndMakeVisible(&tbAutoCorrectValues);
+        tbAutoCorrectValues.setToggleState(StoredSettings::getInstance()->getAutoCorrectValues(),
+                                            dontSendNotification);
         addAndMakeVisible(&tbRunSAMBeforeExport);
         tbRunSAMBeforeExport.setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(),
                                             dontSendNotification);
@@ -100,6 +104,7 @@ public:
     {
         StoredSettings::getInstance()->setDataDir(fcDataDir.getCurrentFile().getFullPathName());
         StoredSettings::getInstance()->setFaustDir(fcFaustDir.getCurrentFile().getFullPathName());
+        StoredSettings::getInstance()->setAutoCorrectValues(tbAutoCorrectValues.getToggleState());
         StoredSettings::getInstance()->setRunSAMBeforeExternal(tbRunSAMBeforeExport.getToggleState());
         StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
         StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
@@ -118,6 +123,7 @@ public:
     {
         fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
         fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
+        tbAutoCorrectValues.setBounds(10, 140, getWidth() - 20, 22);
         tbRunSAMBeforeExport.setBounds(10, 170, getWidth() - 20, 22);
         tbExportConfirm.setBounds(10, 200, getWidth() - 20, 22);
         tbOpenFaustExport.setBounds(10, 230, getWidth() - 20, 22);
@@ -135,6 +141,7 @@ public:
 private:
     FilenameComponent fcDataDir;
     FilenameComponent fcFaustDir;
+    ToggleButton tbAutoCorrectValues;
     ToggleButton tbRunSAMBeforeExport;
     ToggleButton tbExportConfirm;
     ToggleButton tbOpenFaustExport;

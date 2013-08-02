@@ -362,6 +362,15 @@ void StoredSettings::setRunSAMBeforeExternal (bool runSAMBeforeExternal)
     props->setValue("runSAMBeforeExternal", runSAMBeforeExternal);
 }
 
+bool StoredSettings::getAutoCorrectValues() const
+{
+    return props->getBoolValue("autoCorrectParameterValues", true);
+}
+void StoredSettings::setAutoCorrectValues (bool shouldAutoCorrect)
+{
+    props->setValue("autoCorrectParameterValues", shouldAutoCorrect);
+}
+
 bool StoredSettings::getIsUsingMDLX() const
 {
     return props->getBoolValue("useMDLX", false);

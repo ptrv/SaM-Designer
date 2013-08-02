@@ -103,6 +103,9 @@ public:
     bool getRunSAMBeforeExternal() const;
     void setRunSAMBeforeExternal (bool runSAMBeforeExternal);
 
+    bool getAutoCorrectValues() const;
+    void setAutoCorrectValues (bool shouldAutoCorrect);
+
     bool getIsUsingMDLX() const;
     void setIsUsingMDLX (bool isUsingMDLX);
 

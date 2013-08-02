@@ -311,7 +311,8 @@ void ObjectPropertiesComponent::writeEditors(Array<TextEditor*>& editors_,
 
         String val = editor->getText();
         if(fixValues)
-            val = Utils::fixParameterValueIfNeeded(val);
+            if(StoredSettings::getInstance()->getAutoCorrectValues())
+                val = Utils::fixParameterValueIfNeeded(val);
 
         pa.setProperty(Ids::value, val, undoManager);
     }
@@ -512,10 +513,12 @@ bool ResonatorPropertiesComponent::writeValues()
                 param.removeAllChildren(undoManager);
                 for (int j = 0; j < vals.size(); ++j)
                 {
+                    String pVal = vals[j];
+                    if(StoredSettings::getInstance()->getAutoCorrectValues())
+                        pVal = Utils::fixParameterValueIfNeeded(pVal);
+
                     ValueTree pa(Utils::resonatorParamIds[k]);
-                    pa.setProperty(Ids::value,
-                                   Utils::fixParameterValueIfNeeded(vals[j]),
-                                   undoManager);
+                    pa.setProperty(Ids::value, pVal, undoManager);
                     param.addChild(pa, -1, undoManager);
                 }
             }
@@ -845,10 +848,12 @@ bool WaveguidePropertiesComponent::writeValues()
 
         if(editorsModified[editors[0]])
         {
+            String val = editors[0]->getText();
+            if(StoredSettings::getInstance()->getAutoCorrectValues())
+                val = Utils::fixParameterValueIfNeeded(val);
+
             ValueTree pa1 = paramsTree.getChild(0);
-            pa1.setProperty(Ids::value,
-                    Utils::fixParameterValueIfNeeded(editors[0]->getText()),
-                    undoManager);
+            pa1.setProperty(Ids::value, val, undoManager);
         }
 
         if(editorsModified[editors[1]])
