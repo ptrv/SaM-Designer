@@ -90,9 +90,23 @@ bool IdManager::addId(const Identifier& objId, const String& objName,
     {
         SortedSet<String>* theSet = getSet(objId);
         if (theSet != nullptr && objName != String::empty)
-            return theSet->add(objName) && allIds.add(objName);
-        else
-            return false;
+        {
+            if (allIds.add(objName))
+            {
+                if (theSet->add(objName))
+                {
+                    return true;
+                }
+                else
+                {
+                    // This line should never be reached, because if adding new
+                    // name to allId ssucceeds, adding to theSet should also
+                    // succeed
+                    allIds.removeValue(objName);
+                }
+            }
+        }
+        return false;
     }
 }
 
@@ -186,12 +200,22 @@ bool IdManager::renameId(const Identifier& objId, const String& oldName,
         {
             theSet->removeValue(oldName);
             allIds.removeValue(oldName);
-            return theSet->add(newName) && allIds.add(newName);
+            if (allIds.add(newName))
+            {
+                if (theSet->add(newName))
+                {
+                    return true;
+                }
+                else
+                {
+                    // This line should never be reached, because if adding new
+                    // name to allId ssucceeds, adding to theSet should also
+                    // succeed
+                    allIds.removeValue(newName);
+                }
+            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }
 
