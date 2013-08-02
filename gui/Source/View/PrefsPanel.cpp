@@ -34,129 +34,148 @@ class MiscPage  : public Component
 {
 public:
     MiscPage()
-    : fcDataDir ("Synth-A-Modeler data directory:",
-    		StoredSettings::getInstance()->getDataDir(),
-    		true, true, false,
-            String::empty, String::empty,
-            "(select the Synth-A-Modeler data directory)"),
-    	fcFaustDir ("FAUST directory:",
-			StoredSettings::getInstance()->getFaustDir(),
-			true, true, false,
-			String::empty, String::empty,
-			"(select the directory where the faust executable resides)"),
-		tbAutoCorrectValues("Autocorrect parameter values"),
-		tbRunSAMBeforeExport("Run Synth-A-Modeler before generating code"),
-		tbExportConfirm("Confirm before generating code"),
-        tbOpenFaustExport("Open Faust file after export"),
-        tbUseMDLX("Use MDLX file"),
-#if BUILTIN_SAM_COMPILER
-        tbUseBuiltinCompiler("Use builtin Synth-A-Modeler compiler"),
-#endif
-#ifdef DEBUG
-        tbLoggingOn("Logging (After change, restart required)"),
-#endif
-        labelDataDir (String::empty, "Data Dir"),
-		labelFaustDir (String::empty, "FAUST Dir"),
-        fcExternalEditor ("External editor:",
-			StoredSettings::getInstance()->getExternalEditor(),
-			true, false, false,
-			String::empty, String::empty,
-			"(select external editor executable)"),
-        labelExternalEditor(String::empty, "External editor"),
-        tbRedrawOnLoad("Redraw model when no position data")
     {
-        addAndMakeVisible (&fcDataDir);
-        labelDataDir.attachToComponent (&fcDataDir, false);
-        addAndMakeVisible (&fcFaustDir);
-        labelFaustDir.attachToComponent (&fcFaustDir, false);
-        addAndMakeVisible(&tbAutoCorrectValues);
-        tbAutoCorrectValues.setToggleState(StoredSettings::getInstance()->getAutoCorrectValues(),
+        fcDataDir = new FilenameComponent("Synth-A-Modeler data directory:",
+                                          StoredSettings::getInstance()->getDataDir(),
+                                          true, true, false,
+                                          String::empty, String::empty,
+                                          "(select the Synth-A-Modeler data directory)");
+        addAndMakeVisible(fcDataDir);
+        laDataDir = new Label(String::empty, "Data Dir");
+        laDataDir->attachToComponent (fcDataDir, false);
+
+        fcFaustDir = new FilenameComponent("FAUST directory:",
+                                           StoredSettings::getInstance()->getFaustDir(),
+                                           true, true, false,
+                                           String::empty, String::empty,
+                                           "(select the directory where the faust executable resides)");
+        addAndMakeVisible (fcFaustDir);
+        laFaustDir = new Label(String::empty, "FAUST Dir");
+        laFaustDir->attachToComponent (fcFaustDir, false);
+
+        tbAutoCorrectValues = new ToggleButton("Autocorrect parameter values");
+        addAndMakeVisible(tbAutoCorrectValues);
+        tbAutoCorrectValues->setToggleState(StoredSettings::getInstance()->getAutoCorrectValues(),
                                             dontSendNotification);
-        addAndMakeVisible(&tbRunSAMBeforeExport);
-        tbRunSAMBeforeExport.setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(),
-                                            dontSendNotification);
-        addAndMakeVisible(&tbExportConfirm);
-        tbExportConfirm.setToggleState(StoredSettings::getInstance()->getIsExportConfirm(),
-                                       dontSendNotification);
-        addAndMakeVisible(&tbOpenFaustExport);
-        tbOpenFaustExport.setToggleState(StoredSettings::getInstance()->getOpenFaustExport(),
-                                         dontSendNotification);
-        addAndMakeVisible(&tbUseMDLX);
-        tbUseMDLX.setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(),
-                                 dontSendNotification);
+        
+        tbRunSAMBeforeExport = new ToggleButton("Run Synth-A-Modeler before generating code");
+        addAndMakeVisible(tbRunSAMBeforeExport);
+        tbRunSAMBeforeExport->setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(),
+                                             dontSendNotification);
+        
+        tbExportConfirm = new ToggleButton("Confirm before generating code");
+        addAndMakeVisible(tbExportConfirm);
+        tbExportConfirm->setToggleState(StoredSettings::getInstance()->getIsExportConfirm(),
+                                        dontSendNotification);
+
+        tbOpenFaustExport = new ToggleButton("Open Faust file after export");
+        addAndMakeVisible(tbOpenFaustExport);
+        tbOpenFaustExport->setToggleState(StoredSettings::getInstance()->getOpenFaustExport(),
+                                          dontSendNotification);
+
+        tbUseMDLX = new ToggleButton("Use MDLX file");
+        addAndMakeVisible(tbUseMDLX);
+        tbUseMDLX->setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(),
+                                  dontSendNotification);
 #if BUILTIN_SAM_COMPILER
-        addAndMakeVisible(&tbUseBuiltinCompiler);
-        tbUseBuiltinCompiler.setToggleState(StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler(), false);
+        tbUseBuiltinCompiler = new ToggleButton("Use builtin Synth-A-Modeler compiler");
+        addAndMakeVisible(tbUseBuiltinCompiler);
+        tbUseBuiltinCompiler->setToggleState(StoredSettings::getInstance()->getIsUsingBuiltinSAMCompiler(),
+                                             dontSendNotification);
 #endif
 #ifdef DEBUG
-        addAndMakeVisible(&tbLoggingOn);
-        tbLoggingOn.setToggleState(StoredSettings::getInstance()->getIsLoggingOn(),
-                                   dontSendNotification);
+        tbLoggingOn = new ToggleButton("Logging (After change, restart required)");
+        addAndMakeVisible(tbLoggingOn);
+        tbLoggingOn->setToggleState(StoredSettings::getInstance()->getIsLoggingOn(),
+                                    dontSendNotification);
 #endif
-        addAndMakeVisible(&fcExternalEditor);
-        labelExternalEditor.attachToComponent(&fcExternalEditor, false);
-        tbRedrawOnLoad.setToggleState(StoredSettings::getInstance()->getShouldRedrawOnLoad(),
-                                      dontSendNotification);
-        addAndMakeVisible(&tbRedrawOnLoad);
+        fcExternalEditor = new FilenameComponent("External editor:",
+                                                 StoredSettings::getInstance()->getExternalEditor(),
+                                                 true, false, false,
+                                                 String::empty, String::empty,
+                                                 "(select external editor executable)");
+        addAndMakeVisible(fcExternalEditor);
+        laExternalEditor = new Label(String::empty, "External editor");
+        laExternalEditor->attachToComponent(fcExternalEditor, false);
+
+        tbRedrawOnLoad = new ToggleButton("Redraw model when no position data");
+        addAndMakeVisible(tbRedrawOnLoad);
+        tbRedrawOnLoad->setToggleState(StoredSettings::getInstance()->getShouldRedrawOnLoad(),
+                                       dontSendNotification);
     }
 
     ~MiscPage()
     {
-        StoredSettings::getInstance()->setDataDir(fcDataDir.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setFaustDir(fcFaustDir.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setAutoCorrectValues(tbAutoCorrectValues.getToggleState());
-        StoredSettings::getInstance()->setRunSAMBeforeExternal(tbRunSAMBeforeExport.getToggleState());
-        StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm.getToggleState());
-        StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport.getToggleState());
-        StoredSettings::getInstance()->setIsUsingMDLX(tbUseMDLX.getToggleState());
+        StoredSettings::getInstance()->setDataDir(fcDataDir->getCurrentFile().getFullPathName());
+        fcDataDir = nullptr;
+        StoredSettings::getInstance()->setFaustDir(fcFaustDir->getCurrentFile().getFullPathName());
+        fcFaustDir = nullptr;
+        StoredSettings::getInstance()->setAutoCorrectValues(tbAutoCorrectValues->getToggleState());
+        tbAutoCorrectValues = nullptr;
+        StoredSettings::getInstance()->setRunSAMBeforeExternal(tbRunSAMBeforeExport->getToggleState());
+        tbRunSAMBeforeExport = nullptr;
+        StoredSettings::getInstance()->setIsExportConfirm(tbExportConfirm->getToggleState());
+        tbExportConfirm = nullptr;
+        StoredSettings::getInstance()->setOpenFaustExport(tbOpenFaustExport->getToggleState());
+        tbOpenFaustExport = nullptr;
+        StoredSettings::getInstance()->setIsUsingMDLX(tbUseMDLX->getToggleState());
+        tbUseMDLX = nullptr;
 #if BUILTIN_SAM_COMPILER
-        StoredSettings::getInstance()->setIsUsingBuiltinSAMCompiler(tbUseBuiltinCompiler.getToggleState());
+        StoredSettings::getInstance()->setIsUsingBuiltinSAMCompiler(tbUseBuiltinCompiler->getToggleState());
+        tbUseBuiltinCompiler = nullptr;
 #endif
 #ifdef DEBUG
-        StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn.getToggleState());
+        StoredSettings::getInstance()->setIsLoggingOn(tbLoggingOn->getToggleState());
+        tbLoggingOn = nullptr;
 #endif
-        StoredSettings::getInstance()->setExternalEditor(fcExternalEditor.getCurrentFile().getFullPathName());
-        StoredSettings::getInstance()->setShouldRedrawOnLoad(tbRedrawOnLoad.getToggleState());
+        StoredSettings::getInstance()->setExternalEditor(fcExternalEditor->getCurrentFile().getFullPathName());
+        fcExternalEditor = nullptr;
+        StoredSettings::getInstance()->setShouldRedrawOnLoad(tbRedrawOnLoad->getToggleState());
+        tbRedrawOnLoad = nullptr;
+
+        laDataDir = nullptr;
+        laFaustDir = nullptr;
+        laExternalEditor = nullptr;
     }
 
     void resized()
     {
-        fcDataDir.setBounds (10, 30, getWidth() - 20, 22);
-        fcFaustDir.setBounds (10, 100, getWidth() - 20, 22);
-        tbAutoCorrectValues.setBounds(10, 140, getWidth() - 20, 22);
-        tbRunSAMBeforeExport.setBounds(10, 170, getWidth() - 20, 22);
-        tbExportConfirm.setBounds(10, 200, getWidth() - 20, 22);
-        tbOpenFaustExport.setBounds(10, 230, getWidth() - 20, 22);
-        tbUseMDLX.setBounds(10, 260, getWidth() - 20, 22);
+        fcDataDir->setBounds (10, 30, getWidth() - 20, 22);
+        fcFaustDir->setBounds (10, 100, getWidth() - 20, 22);
+        tbAutoCorrectValues->setBounds(10, 140, getWidth() - 20, 22);
+        tbRunSAMBeforeExport->setBounds(10, 170, getWidth() - 20, 22);
+        tbExportConfirm->setBounds(10, 200, getWidth() - 20, 22);
+        tbOpenFaustExport->setBounds(10, 230, getWidth() - 20, 22);
+        tbUseMDLX->setBounds(10, 260, getWidth() - 20, 22);
 #if BUILTIN_SAM_COMPILER
-        tbUseBuiltinCompiler.setBounds(10, 290, getWidth() - 20, 22);
+        tbUseBuiltinCompiler->setBounds(10, 290, getWidth() - 20, 22);
 #endif
 #ifdef DEBUG
-        tbLoggingOn.setBounds(10, 320, getWidth() - 20, 22);
+        tbLoggingOn->setBounds(10, 320, getWidth() - 20, 22);
 #endif
-        fcExternalEditor.setBounds(10, 380, getWidth() - 20, 22);
-        tbRedrawOnLoad.setBounds(10, 410, getWidth() - 20, 22);
+        fcExternalEditor->setBounds(10, 380, getWidth() - 20, 22);
+        tbRedrawOnLoad->setBounds(10, 410, getWidth() - 20, 22);
     }
 
 private:
-    FilenameComponent fcDataDir;
-    FilenameComponent fcFaustDir;
-    ToggleButton tbAutoCorrectValues;
-    ToggleButton tbRunSAMBeforeExport;
-    ToggleButton tbExportConfirm;
-    ToggleButton tbOpenFaustExport;
-    ToggleButton tbUseMDLX;
+    ScopedPointer<FilenameComponent> fcDataDir;
+    ScopedPointer<FilenameComponent> fcFaustDir;
+    ScopedPointer<ToggleButton> tbAutoCorrectValues;
+    ScopedPointer<ToggleButton> tbRunSAMBeforeExport;
+    ScopedPointer<ToggleButton> tbExportConfirm;
+    ScopedPointer<ToggleButton> tbOpenFaustExport;
+    ScopedPointer<ToggleButton> tbUseMDLX;
 #if BUILTIN_SAM_COMPILER
-    ToggleButton tbUseBuiltinCompiler;
+    ScopedPointer<ToggleButton> tbUseBuiltinCompiler;
 #endif
 #ifdef DEBUG
-    ToggleButton tbLoggingOn;
+    ScopedPointer<ToggleButton> tbLoggingOn;
 #endif
-    Label labelDataDir;
-    Label labelFaustDir;
-    FilenameComponent fcExternalEditor;
-    Label labelExternalEditor;
-    ToggleButton tbRedrawOnLoad;
+    ScopedPointer<Label> laDataDir;
+    ScopedPointer<Label> laFaustDir;
+    ScopedPointer<FilenameComponent> fcExternalEditor;
+    ScopedPointer<Label> laExternalEditor;
+    ScopedPointer<ToggleButton> tbRedrawOnLoad;
 };
 
 //==============================================================================
