@@ -41,7 +41,7 @@ MiscPage::MiscPage ()
     laDatDir->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (fcDataDir = new FilenameComponent ("Synth-A-Modeler data directory:",
-                                                          StoredSettings::getInstance()->getDataDir(),
+                                                          File::nonexistent,
                                                           true, true, false,
                                                           String::empty, String::empty, "(select the Synth-A-Modeler data directory)"));
     fcDataDir->setName ("fcDataDir");
@@ -55,7 +55,7 @@ MiscPage::MiscPage ()
     laFaustDir->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (fcFaustDir = new FilenameComponent ("FAUST directory:",
-                                                           StoredSettings::getInstance()->getFaustDir(),
+                                                           File::nonexistent,
                                                            true, true, false,
                                                            String::empty, String::empty,
                                                            "(select the directory where the faust executable resides)"));
@@ -69,8 +69,7 @@ MiscPage::MiscPage ()
     laExternalEditor->setColour (TextEditor::textColourId, Colours::black);
     laExternalEditor->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
-    addAndMakeVisible (fcExternalEditor = new FilenameComponent ("External editor:",
-                                                                 StoredSettings::getInstance()->getExternalEditor(),
+    addAndMakeVisible (fcExternalEditor = new FilenameComponent ("External editor:", File::nonexistent,
                                                                  true, false, false,
                                                                  String::empty, String::empty,
                                                                  "(select external editor executable)"));
@@ -249,6 +248,12 @@ void MiscPage::filenameComponentChanged(FilenameComponent* fileComponentThatHasC
 
 void MiscPage::readValues()
 {
+    fcDataDir->setCurrentFile(StoredSettings::getInstance()->getDataDir(),
+                              true, dontSendNotification);
+    fcFaustDir->setCurrentFile(StoredSettings::getInstance()->getFaustDir(),
+                               true, dontSendNotification);
+    fcExternalEditor->setCurrentFile(StoredSettings::getInstance()->getExternalEditor(),
+                                     true, dontSendNotification);
     tbAutoCorrect->setToggleState(StoredSettings::getInstance()->getAutoCorrectValues(),
                                   dontSendNotification);
     tbRunSAMBeforeExternal->setToggleState(StoredSettings::getInstance()->getRunSAMBeforeExternal(),
@@ -289,7 +294,7 @@ BEGIN_JUCER_METADATA
          fontsize="15" bold="0" italic="0" justification="33"/>
   <GENERICCOMPONENT name="fcDataDir" id="f24633023217d0b6" memberName="fcDataDir"
                     virtualName="" explicitFocusOrder="0" pos="8 32 16M 24" class="FilenameComponent"
-                    params="&quot;Synth-A-Modeler data directory:&quot;,&#10;StoredSettings::getInstance()-&gt;getDataDir(),&#10;true, true, false,&#10;String::empty, String::empty, &quot;(select the Synth-A-Modeler data directory)&quot;"/>
+                    params="&quot;Synth-A-Modeler data directory:&quot;,&#10;File::nonexistent,&#10;true, true, false,&#10;String::empty, String::empty, &quot;(select the Synth-A-Modeler data directory)&quot;"/>
   <LABEL name="laFaustDir" id="79c7c7ec20ae7bde" memberName="laFaustDir"
          virtualName="" explicitFocusOrder="0" pos="8 64 150 24" edTextCol="ff000000"
          edBkgCol="0" labelText="FAUST Directory" editableSingleClick="0"
@@ -297,7 +302,7 @@ BEGIN_JUCER_METADATA
          fontsize="15" bold="0" italic="0" justification="33"/>
   <GENERICCOMPONENT name="fcFaustDir" id="c593cebcb2a05f1d" memberName="fcFaustDir"
                     virtualName="" explicitFocusOrder="0" pos="8 88 16M 24" class="FilenameComponent"
-                    params="&quot;FAUST directory:&quot;,&#10;StoredSettings::getInstance()-&gt;getFaustDir(),&#10;true, true, false,&#10;String::empty, String::empty,&#10;&quot;(select the directory where the faust executable resides)&quot;"/>
+                    params="&quot;FAUST directory:&quot;,&#10;File::nonexistent,&#10;true, true, false,&#10;String::empty, String::empty,&#10;&quot;(select the directory where the faust executable resides)&quot;"/>
   <LABEL name="laExternalEditor" id="cebcc458dcd6db2b" memberName="laExternalEditor"
          virtualName="" explicitFocusOrder="0" pos="8 120 150 24" edTextCol="ff000000"
          edBkgCol="0" labelText="External Editor" editableSingleClick="0"
@@ -305,7 +310,7 @@ BEGIN_JUCER_METADATA
          fontsize="15" bold="0" italic="0" justification="33"/>
   <GENERICCOMPONENT name="fcExternalEditor" id="34adc001253d375f" memberName="fcExternalEditor"
                     virtualName="" explicitFocusOrder="0" pos="8 144 16M 24" class="FilenameComponent"
-                    params="&quot;External editor:&quot;,&#10;StoredSettings::getInstance()-&gt;getExternalEditor(),&#10;true, false, false,&#10;String::empty, String::empty,&#10;&quot;(select external editor executable)&quot;"/>
+                    params="&quot;External editor:&quot;, File::nonexistent,&#10;true, false, false,&#10;String::empty, String::empty,&#10;&quot;(select external editor executable)&quot;"/>
   <TOGGLEBUTTON name="tbAutoCorrect" id="bf80045c13fd1366" memberName="tbAutoCorrect"
                 virtualName="" explicitFocusOrder="0" pos="8 192 16M 24" buttonText="Autocorrect parameter values"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
