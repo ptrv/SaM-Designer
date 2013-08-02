@@ -139,6 +139,50 @@ void Utils::openFileNative(const String& path)
     }
 }
 
+String fixValue(const String& val)
+{
+    String tmpVal = val.trim();
+    bool hasParentheses = false;
+    String sign = String::empty;
+
+    if(tmpVal.containsAnyOf("()"))
+    {
+        tmpVal = tmpVal.removeCharacters("()");
+        hasParentheses = true;
+    }
+    if(tmpVal.startsWith("-") || tmpVal.startsWith("+"))
+    {
+        sign = tmpVal.substring(0, 1);
+        tmpVal = tmpVal.substring(1);
+    }
+
+    if (tmpVal.containsOnly("0123456789") && tmpVal.indexOf(".") == -1)
+    {
+        // when value has integer notation, i.e 42 results in 42.0
+        tmpVal << ".0";
+    }
+    else if(tmpVal.startsWith("."))
+    {
+        if(tmpVal.substring(1).containsOnly("0123456789"))
+        {
+            // when value has floating point notation but 0 is ommitted,
+            // i.e .42 result in 0.42
+            tmpVal = "0" + tmpVal;
+        }
+    }
+
+    if(sign != String::empty)
+    {
+        tmpVal = sign + tmpVal;
+    }
+    if(hasParentheses)
+    {
+        tmpVal = "(" + tmpVal;
+        tmpVal += ")";
+    }
+    return tmpVal;
+}
+
 String Utils::fixParameterValueIfNeeded(const String& paramVal)
 {
 	if( paramVal == String::empty)
@@ -153,13 +197,40 @@ String Utils::fixParameterValueIfNeeded(const String& paramVal)
         for (int i = 0; i < paramVal.length(); ++i)
         {
             if(paramVal[i] == '*' || paramVal[i] == '+'
-                || paramVal[i] == '-' || paramVal[i] == '/')
+                || paramVal[i] == '/')
             {
                 String op = "";
                 op << paramVal[i];
                 operators.add(op);
                 params.add(tmp);
                 tmp = "";
+            }
+            else if(paramVal[i] == '-' )
+            {
+                if(i == 0)
+                {
+                    tmp << paramVal[i];
+                }
+                else
+                {
+                    int j = 1;
+                    while(paramVal[i - j] == ' ')
+                    {
+                        ++j;
+                    }
+                    if(paramVal[i-j] == '(')
+                    {
+                        tmp << paramVal[i];
+                    }
+                    else
+                    {
+                        String op = "";
+                        op << paramVal[i];
+                        operators.add(op);
+                        params.add(tmp);
+                        tmp = "";
+                    }
+                }
             }
             else
             {
@@ -171,18 +242,18 @@ String Utils::fixParameterValueIfNeeded(const String& paramVal)
 
         for (int i = 0; i < params.size(); ++i)
         {
-            tmpVal << params[i];
-            if(params[i].containsOnly("0123456789") && params[i].indexOf(".") == -1)
-                tmpVal << ".0";
+            if(params[i] == String::empty)
+                tmpVal << "0.0";
+            else
+                tmpVal << fixValue(params[i]);
+
             if(i < operators.size())
                 tmpVal << operators[i];
         }
     }
     else
     {
-        tmpVal = paramVal;
-        if (tmpVal.containsOnly("0123456789") && tmpVal.indexOf(".") == -1)
-            tmpVal << ".0";
+        tmpVal = fixValue(paramVal);
     }
 
 	return tmpVal;
