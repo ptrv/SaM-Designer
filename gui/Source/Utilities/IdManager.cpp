@@ -31,62 +31,28 @@ using namespace synthamodeler;
 
 IdManager::IdManager()
 {
-    
+    for (int i = 0; i < Utils::allObjectIds.size(); ++i)
+    {
+        theIds.add(SortedSet<String>());
+    }
 }
 
 IdManager::~IdManager()
 {
-//    objectIds.clear();
     allIds.clear();
-    massIds.clear();
-    groundIds.clear();
-    portIds.clear();
-    resonatorsIds.clear();
-    linkIds.clear();
-    touchIds.clear();
-    pulsetouchIds.clear();
-    pluckIds.clear();
-    audioOutIds.clear();
-    faustcodeIds.clear();
-    waveguideIds.clear();
-    terminationIds.clear();
-    junctionIds.clear();
-    commentIds.clear();
-
+    for (int i = 0; i < Utils::allObjectIds.size(); ++i)
+    {
+        theIds[i].clear();
+    }
 }
 
 SortedSet<String>* IdManager::getSet(const Identifier& objId)
 {
-    if(objId == Ids::mass)
-        return &massIds;
-    else if(objId == Ids::ground)
-        return &groundIds;
-    else if(objId == Ids::port)
-        return &portIds;
-    else if(objId == Ids::resonators)
-        return &resonatorsIds;
-    else if(objId == Ids::link)
-        return &linkIds;
-    else if(objId == Ids::touch)
-        return &touchIds;
-    else if(objId == Ids::pulsetouch)
-        return &pulsetouchIds;
-    else if(objId == Ids::pluck)
-        return &pluckIds;
-    else if(objId == Ids::audioout)
-        return &audioOutIds;
-    else if(objId == Ids::faustcode)
-        return &faustcodeIds;
-    else if(objId == Ids::waveguide)
-        return &waveguideIds;
-    else if(objId == Ids::termination)
-        return &terminationIds;
-    else if(objId == Ids::junction)
-        return &junctionIds;
-    else if(objId == Ids::comment)
-        return &commentIds;
-    else
+    int objIdx = Utils::allObjectIds.indexOf(objId);
+    if(objIdx == -1)
         return nullptr;
+
+    return &theIds.getReference(objIdx);
 }
 
 class AddIdAction : public UndoableAction
@@ -128,7 +94,6 @@ bool IdManager::addId(const Identifier& objId, const String& objName,
         else
             return false;
     }
-//    return objectIds.add(objName);
 }
 
 class RemoveIdAction : public UndoableAction
@@ -171,8 +136,6 @@ void IdManager::removeId(const Identifier& objId, const String& objName,
 
         allIds.removeValue(objName);
     }
-
-//    objectIds.removeValue(objName);
 }
 
 bool IdManager::contains(const Identifier& objId, const String& objName)
@@ -182,8 +145,6 @@ bool IdManager::contains(const Identifier& objId, const String& objName)
         return theSet->contains(objName) && allIds.contains(objName);
     else
         return false;
-
-//    return objectIds.contains(objName);
 }
 
 class RenameIdAction : public UndoableAction
@@ -232,10 +193,6 @@ bool IdManager::renameId(const Identifier& objId, const String& oldName,
             return false;
         }
     }
-
-//    objectIds.removeValue(oldName);
-//    return objectIds.add(newName);
-
 }
 
 String IdManager::getNextId(const Identifier& objId)

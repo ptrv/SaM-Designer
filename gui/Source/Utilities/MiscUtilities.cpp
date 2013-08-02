@@ -369,8 +369,29 @@ bool Utils::containsStringInValueTree(ValueTree valTree,
     return false;
 }
 
-Identifier Utils::resonatorParamIds[3] = {
+const Identifier resonatorParamIdsArr[3] = {
     Ids::resonatorsFreq,
     Ids::resonatorsDecay,
     Ids::resonatorsEqMass
 };
+
+const Array<Identifier> Utils::resonatorParamIds(resonatorParamIdsArr);
+
+const Identifier allObjectIdsArr[] = {
+    Ids::mass,
+    Ids::ground,
+    Ids::port,
+    Ids::resonators,
+    Ids::link,
+    Ids::touch,
+    Ids::pluck,
+    Ids::pulsetouch,
+    Ids::faustcode,
+    Ids::audioout,
+    Ids::waveguide,
+    Ids::termination,
+    Ids::junction,
+    Ids::comment
+};
+
+const Array<Identifier> Utils::allObjectIds(allObjectIdsArr);

@@ -109,7 +109,9 @@ bool containsStringInValueTree(ValueTree valTree,
                                const String& searchStr,
                                bool isRoot);
 
-extern Identifier resonatorParamIds[3];
+extern const Array<Identifier> resonatorParamIds;
+
+extern const Array<Identifier> allObjectIds;
 
 };
 

@@ -45,25 +45,13 @@ public:
                                  const String& objName,
                                  int timesPasted,
                                  bool groupPaste);
-private:
 
+private:
     SortedSet<String>* getSet(const Identifier& objId);
     String getObjNamePrefix(const Identifier& objId);
+
     SortedSet<String> allIds;
-    SortedSet<String> massIds;
-    SortedSet<String> groundIds;
-    SortedSet<String> portIds;
-    SortedSet<String> resonatorsIds;
-    SortedSet<String> linkIds;
-    SortedSet<String> touchIds;
-    SortedSet<String> pulsetouchIds;
-    SortedSet<String> pluckIds;
-    SortedSet<String> audioOutIds;
-    SortedSet<String> faustcodeIds;
-    SortedSet<String> waveguideIds;
-    SortedSet<String> terminationIds;
-    SortedSet<String> junctionIds;
-    SortedSet<String> commentIds;
+    Array<SortedSet<String> > theIds;
 };
 }
 
