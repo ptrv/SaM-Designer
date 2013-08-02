@@ -38,6 +38,7 @@
 using namespace synthamodeler;
 
 ScopedPointer<PropertiesWindow> synthamodeler::propertiesWindow;
+ScopedPointer<PostWindowController> synthamodeler::postWindow;
 
 #if UNIT_TESTS
 #include "../../Testsuite/TestRunner.h"
@@ -104,7 +105,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 
 	menuModel = new MainMenuModel();
 
-	postWindow = new PostWindow();
+	postWindow = new PostWindowController();
 
     propertiesWindow = new PropertiesWindow();
 
@@ -166,8 +167,8 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 	MenuBarModel::setMacMainMenu (menuModel);
 #endif
 
-	postWindow->printWelcomeMessage();
-	postWindow->makeVisible ();
+    postWindow->init();
+
 	getOrCreateFrontmostWindow()->toFront(true);
 
 //    propertiesWindow->makeVisible();
@@ -353,7 +354,7 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::showPostWindow:
-        postWindow->toFront(true);
+        postWindow->toFront();
     	break;
     case CommandIDs::clearOutputConsole:
         postWindow->clear();
@@ -709,45 +710,6 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
                                                                    getApp()->getActiveHolderComponent()->isSnapShown());
         }
     }
-}
-
-void SynthAModelerApplication::writeToDebugConsole(const String& title,
-                                                   const String& textToWrite,
-                                                   bool isBold)
-{
-	if(textToWrite.compare("") != 0)
-	{
-        Colour color = Colours::black;
-        if(title.containsIgnoreCase("Error")
-            || textToWrite.containsIgnoreCase("error"))
-            color = Colours::red;
-		postWindow->printHeader();
-        postWindow->setTextColour(color);
-		postWindow->addText(title, false);
-		postWindow->addText(textToWrite, isBold);
-		postWindow->addNewLine();
-        postWindow->setTextColour(Colours::black);
-	}
-	else
-	{
-		postWindow->addText("Nothing...\n\n", false);
-	}
-
-}
-
-void SynthAModelerApplication::writeToDebugConsole(const String& textToWrite,
-                                                   bool isBold)
-{
-	if(textToWrite.compare("") != 0)
-	{
-		postWindow->addText(textToWrite, isBold);
-		postWindow->addNewLine();
-	}
-	else
-	{
-		postWindow->addText("Nothing...\n\n", false);
-	}
-
 }
 
 ObjectsHolder* SynthAModelerApplication::getActiveHolderComponent()

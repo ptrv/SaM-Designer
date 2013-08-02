@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\Source\Utilities\Alerts.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\MDLParser.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\StoredSettings.cpp"/>
+    <ClCompile Include="..\..\Source\Controller\PostWindowController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\MDLController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\ObjController.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCompiler.cpp"/>
@@ -1020,6 +1021,7 @@
     <ClInclude Include="..\..\Source\Utilities\Alerts.h"/>
     <ClInclude Include="..\..\Source\Utilities\MDLParser.h"/>
     <ClInclude Include="..\..\Source\Utilities\StoredSettings.h"/>
+    <ClInclude Include="..\..\Source\Controller\PostWindowController.h"/>
     <ClInclude Include="..\..\Source\Controller\MDLController.h"/>
     <ClInclude Include="..\..\Source\Controller\ObjController.h"/>
     <ClInclude Include="..\..\Source\Models\SAMCompiler.h"/>

@@ -35,7 +35,7 @@ class TextConsole;
  * application activity.
  */
 class PostWindow : public DocumentWindow,
-					public ApplicationCommandTarget
+				   public ApplicationCommandTarget
 {
 public:
 	PostWindow();

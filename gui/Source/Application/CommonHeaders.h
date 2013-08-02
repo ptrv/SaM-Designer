@@ -42,11 +42,13 @@
 #include "../Utilities/ResourceLoader.h"
 #include "../View/PropertiesWindow.h"
 #include "Application.h"
+#include "../Controller/PostWindowController.h"
 
 namespace synthamodeler
 {
 extern ScopedPointer<ApplicationCommandManager> commandManager;
 extern ScopedPointer<PropertiesWindow> propertiesWindow;
+extern ScopedPointer<PostWindowController> postWindow;
 
 #ifdef DEBUG
 #define SAM_LOG(message) Utils::SAMLogger(message)
@@ -54,8 +56,8 @@ extern ScopedPointer<PropertiesWindow> propertiesWindow;
 #define SAM_LOG(message)
 #endif
 
-#define SAM_CONSOLE(title, message, bold) SynthAModelerApplication::getApp()->writeToDebugConsole(title, message, bold)
-#define SAM_CONSOLE_ADD_LINE(message, bold) SynthAModelerApplication::getApp()->writeToDebugConsole(message, bold)
+#define SAM_CONSOLE(title, message, bold) postWindow->post(title, message, bold)
+#define SAM_CONSOLE_ADD_LINE(message, bold) postWindow->post(message, bold)
 }
 
 #endif  // __COMMONHEADERS_H_CA475C67__

@@ -128,6 +128,10 @@
               file="Source/Utilities/StoredSettings.h"/>
       </GROUP>
       <GROUP id="{3076B932-78A9-9CF5-9D15-340DC0A8A1FF}" name="Controller">
+        <FILE id="Jvcoku" name="PostWindowController.cpp" compile="1" resource="0"
+              file="Source/Controller/PostWindowController.cpp"/>
+        <FILE id="BlIZsI" name="PostWindowController.h" compile="0" resource="0"
+              file="Source/Controller/PostWindowController.h"/>
         <FILE id="M8Afyp" name="MDLController.cpp" compile="1" resource="0"
               file="Source/Controller/MDLController.cpp"/>
         <FILE id="K00AiB" name="MDLController.h" compile="0" resource="0" file="Source/Controller/MDLController.h"/>
