@@ -56,8 +56,15 @@ extern ScopedPointer<PostWindowController> postWindow;
 #define SAM_LOG(message)
 #endif
 
-#define SAM_CONSOLE(title, message, bold) postWindow->post(title, message, bold)
-#define SAM_CONSOLE_ADD_LINE(message, bold) postWindow->post(message, bold)
+#define SAM_CONSOLE(message, level) postWindow->post(message, level)
+#define SAM_CONSOLE_BOLD(message, level) postWindow->post(message, level, true)
+#define SAM_CONSOLE_LOCKED(message, level) postWindow->postLocked(message, level)
+#define SAM_CONSOLE_LOCKED_ALL(message) postWindow->postLocked(message)
+#define SAM_CONSOLE_LOCKED_BOLD(message, level) postWindow->postLocked(message, level, true)
+#define SAM_CONSOLE_ALL(message) postWindow->post(message)
+//#define SAM_CONSOLE_ADD_LINE(message, bold) postWindow->post(message, bold)
+
+typedef PostWindowController::PostLevel PostLevel;
 }
 
 #endif  // __COMMONHEADERS_H_CA475C67__

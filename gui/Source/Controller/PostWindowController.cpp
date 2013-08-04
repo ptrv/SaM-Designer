@@ -19,6 +19,9 @@ using namespace synthamodeler;
 PostWindowController::PostWindowController()
 {
     postWin = new PostWindow();
+
+//    currentPosLevel = StoredSettings::getInstance()->getCurrentPostLevel();
+    currentPosLevel = ALL;
 }
 
 PostWindowController::~PostWindowController()
@@ -32,49 +35,59 @@ void PostWindowController::init()
 	postWin->makeVisible ();
 }
 
-void PostWindowController::post(const String& title, 
-                                const String& textToWrite,
+void PostWindowController::post(const String& textToWrite,
+                                const PostLevel pl,
                                 bool isBold)
 {
-	if(textToWrite.compare("") != 0)
-	{
-        Colour color = Colours::black;
-        if(title.containsIgnoreCase("Error")
-            || textToWrite.containsIgnoreCase("error"))
-            color = Colours::red;
-		postWin->printHeader();
-        postWin->setTextColour(color);
-		postWin->addText(title, false);
-		postWin->addText(textToWrite, isBold);
-		postWin->addNewLine();
-        postWin->setTextColour(Colours::black);
-	}
-	else
-	{
-		postWin->addText("Nothing...\n\n", false);
-	}
+    if(currentPosLevel <= pl)
+    {
+        if (textToWrite.compare("") != 0)
+        {
+            Colour color = Colours::black;
+            String lvl = String::empty;
+            if (pl == VERBOSE)
+                lvl = "DEBUG: ";
+            else if (pl == NORMAL)
+                lvl = "LOG: ";
+            else if (pl == ERROR)
+                lvl = "ERROR: ";
+            else if (pl == FATAL)
+                lvl = "FATAL: ";
+
+            if (textToWrite.containsIgnoreCase("error")
+                || pl == ERROR || pl == FATAL)
+                color = Colours::red;
+            postWin->printTimeStamp();
+            postWin->setTextColour(color);
+            if(lvl.isNotEmpty())
+                postWin->addText(lvl, false);
+            postWin->addText(textToWrite, isBold);
+            postWin->addNewLine();
+            postWin->setTextColour(Colours::black);
+        }
+    }
 }
 
-void PostWindowController::post(const String& textToWrite, bool isBold)
-{
-	if(textToWrite.compare("") != 0)
-	{
-		postWin->addText(textToWrite, isBold);
-		postWin->addNewLine();
-	}
-	else
-	{
-		postWin->addText("Nothing...\n\n", false);
-	}
-}
+//void PostWindowController::post(const String& textToWrite, bool isBold)
+//{
+//	if(textToWrite.compare("") != 0)
+//	{
+//		postWin->addText(textToWrite, isBold);
+//		postWin->addNewLine();
+//	}
+//	else
+//	{
+//		postWin->addText("Nothing...\n\n", false);
+//	}
+//}
 
-void PostWindowController::postLocked(const String& title,
-                                      const String& textToWrite,
+void PostWindowController::postLocked(const String& textToWrite,
+                                      const PostLevel pl,
                                       bool isBold)
 {
     const MessageManagerLock mmLock;
     if(mmLock.lockWasGained())
-        post(title, textToWrite, isBold);
+        post(textToWrite, pl, isBold);
 }
 
 void PostWindowController::toFront()

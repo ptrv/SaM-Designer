@@ -105,7 +105,7 @@ void PostWindow::printWelcomeMessage()
 	welcomeMsg << newLine;
 	console->addLine(welcomeMsg);
 }
-void PostWindow::printHeader()
+void PostWindow::printTimeStamp()
 {
     String currTime = Time::getCurrentTime().formatted("%F %T");
     currTime << "." << String::formatted("%03d", Utils::getCurrentTimeMillis());

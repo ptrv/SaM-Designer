@@ -389,9 +389,8 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         return mdlController->saveAsXml();
 #endif
     case CommandIDs::dumpMDL:
-        SAM_CONSOLE(mdlController->getMDLName()+"\n\n",
-                    mdlController->getMDLFile()->toString(),
-                    false);
+        SAM_CONSOLE_ALL(mdlController->getMDLName() + "\n\n"
+                        + mdlController->getMDLFile()->toString());
         break;
     case CommandIDs::openMdlFileExtern:
         Utils::openFileExternal(mdlController->getMDLFile()->getFile().getFullPathName());

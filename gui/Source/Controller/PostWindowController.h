@@ -21,17 +21,29 @@ public:
     PostWindowController();
     ~PostWindowController();
 
+    enum PostLevel
+    {
+        ALL = 0,
+        VERBOSE,
+        NORMAL,
+        ERROR,
+        FATAL,
+    };
+
     void init();
     
-    void post(const String& title, const String& textToWrite, bool isBold);
-    void post(const String& textToWrite, bool isBold);
-    void postLocked(const String& title, const String& textToWrite, bool isBold);
+    void post(const String& textToWrite, const PostLevel pl=ALL, bool isBold=false);
+//    void post(const String& textToWrite, bool isBold);
+    void postLocked(const String& textToWrite, const PostLevel pl=ALL,
+                    bool isBold = false);
 
     void toFront();
     void clear();
 
 private:
     ScopedPointer<PostWindow> postWin;
+
+    PostLevel currentPosLevel;
 };
 
 }

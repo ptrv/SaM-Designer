@@ -148,21 +148,22 @@ void SAMCmd::generate(CmdType type)
 
         StringArray args = generateFaustCodeCmd("SAM-preprocessor", tmpInPath, tmpOutPath);
 
-        postWindow->postLocked("Command:", args.joinIntoString(" "), true);
+        postWindow->postLocked("Command: " + args.joinIntoString(" "), PostLevel::ALL, true);
 
-        postWindow->postLocked("Log: ", "Run SAM-preprocessor...", false);
+        postWindow->postLocked("Run SAM-preprocessor...");
 
         processOutput = generateFaustCodeProcess(args);
 
-        postWindow->postLocked("Output: ", processOutput, false);
+        if(processOutput.isNotEmpty())
+            postWindow->postLocked("Output: " + processOutput);
 
-        postWindow->postLocked("Log: ", "Done!", false);
+        postWindow->postLocked("Done!");
 
         args = generateFaustCodeCmd("Synth-A-Modeler", tmpInPath, tmpOutPath);
 
-        postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
+        postWindow->postLocked("Command: " + args.joinIntoString(" "), PostLevel::ALL, true);
 
-        postWindow->postLocked("Log: ", "Run Synth-A-Modeler...", false);
+        postWindow->postLocked("Run Synth-A-Modeler...");
 
         processOutput = generateFaustCodeProcess(args);
 
@@ -171,18 +172,20 @@ void SAMCmd::generate(CmdType type)
             File samLogFile(StoredSettings::getInstance()->getDataDir()
                             + "/" + "SAM-debug-compilation.txt");
             processOutput = samLogFile.loadFileAsString();
+
         }
 
-        postWindow->postLocked("Output: ", processOutput, false);
+        if(processOutput.isNotEmpty())
+            postWindow->postLocked("Output: " + processOutput);
 
-        postWindow->postLocked("Log: ", "Done!", false);
+        postWindow->postLocked("Done!");
 
         if (saveInDataDir)
         {
             File in(tmpInPath);
             if (!in.deleteFile())
             {
-                DBG("Deleting temp file failed!");
+                SAM_CONSOLE("Deleting temp file failed!", PostLevel::ERROR);
             }
         }
     }
@@ -193,22 +196,23 @@ void SAMCmd::generate(CmdType type)
         bool saveInDataDir = copyInfileToDataDirIfNeeded(tmpInPath);
 
         StringArray args = generateExternalCmd(tmpInPath, exporter);
-        postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
+        postWindow->postLocked("Command: "+ args.joinIntoString(" "), PostLevel::ALL, true);
 
-        postWindow->postLocked("Log: ", "Run generate binary...", false);
+        postWindow->postLocked("Run generate binary...");
 
         processOutput = generateExternalProcess(args);
 
-        postWindow->postLocked("Output: ", processOutput, false);
+        if(processOutput.isNotEmpty())
+            postWindow->postLocked("Output: " + processOutput);
 
-        postWindow->postLocked("Log: ", "Done!", false);
+        postWindow->postLocked("Done!");
 
         if (saveInDataDir)
         {
             File in(tmpInPath);
             if (!in.deleteFile())
             {
-                DBG("Deleting temp file failed!");
+                SAM_CONSOLE("Deleting temp file failed!", PostLevel::ERROR);
             }
         }
     }

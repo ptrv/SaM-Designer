@@ -31,19 +31,19 @@ void SAMCmdController::generateDSP(MDLFile* mdl)
 
     if (! Utils::isPerlAvailable())
     {
-        SAM_CONSOLE("Error: ", "Perl is missing!", false);
+        SAM_CONSOLE("Perl is missing!", PostLevel::ERROR);
         Alerts::missingPerl();
         return;
     }
     if (! Utils::isSAMpreprocessorCmdAvailable())
     {
-        SAM_CONSOLE("Error: ", "SAM-preprocessor is missing!", false);
+        SAM_CONSOLE("SAM-preprocessor is missing!", PostLevel::ERROR);
         Alerts::missingSAMpreprocessor();
         return;
     }
     if (! Utils::isSynthAModelerCmdAvailable())
     {
-        SAM_CONSOLE("Error: ", "Synth-A-Modeler is missing!", false);
+        SAM_CONSOLE("Synth-A-Modeler is missing!", PostLevel::ERROR);
         Alerts::missingSAM();
         return;
     }
@@ -52,7 +52,7 @@ void SAMCmdController::generateDSP(MDLFile* mdl)
     {
         if (mdl->save(true, true) != FileBasedDocument::savedOk)
         {
-            SAM_CONSOLE("Log: ", "Generate Faust code canceled!", false);
+            SAM_CONSOLE("Generate Faust code canceled!", PostLevel::ALL);
             return;
         }
 
@@ -67,13 +67,13 @@ void SAMCmdController::generateBinary(MDLFile* mdl)
 {
     if (mdl->getName().compare("Untitled") == 0)
     {
-        SAM_CONSOLE("Error", "No mdl file", false);
+        SAM_CONSOLE("No mdl file", PostLevel::ERROR);
         return;
     }
 
     if (!Utils::isFaustAvailable())
     {
-        SAM_CONSOLE("Error", "Missing faust executable", false);
+        SAM_CONSOLE("Missing faust executable", PostLevel::ERROR);
         Alerts::missingFaust();
         return;
     }
@@ -86,7 +86,7 @@ void SAMCmdController::generateBinary(MDLFile* mdl)
     {
         if (mdl->save(true, true) != FileBasedDocument::savedOk)
         {
-            SAM_CONSOLE("Error", "Generating binary canceled", false);
+            SAM_CONSOLE("Generating binary canceled", PostLevel::ERROR);
             return;
         }
 

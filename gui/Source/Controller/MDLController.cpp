@@ -174,11 +174,11 @@ void MDLController::saveAsImage()
                     
                 if(succeeded)
                 {
-                    SAM_CONSOLE("MSG: ", "Wrote file " + f.getFullPathName(), false);
+                    SAM_CONSOLE("MSG: Wrote file " + f.getFullPathName(), PostLevel::ALL);
                 }
                 else
                 {
-                    SAM_CONSOLE("ERROR: ", "Could not write file " + f.getFullPathName(), false);
+                    SAM_CONSOLE("Could not write file " + f.getFullPathName(), PostLevel::ERROR);
                 }
             }
         }
@@ -314,13 +314,13 @@ void MDLController::cleanDataDir()
     }
     if(outStrOk.isEmpty() && outStrError.isEmpty())
     {
-        SAM_CONSOLE("MSG: ", "No files were deleted.", false);
+        SAM_CONSOLE("MSG: No files were deleted.", PostLevel::ALL);
         return;
     }
     if(outStrOk.isNotEmpty())
-        SAM_CONSOLE("Delete OK:\n", outStrOk, false);
+        SAM_CONSOLE("Delete OK: " + outStrOk, PostLevel::ALL);
     if(outStrError.isNotEmpty())
-        SAM_CONSOLE("Error: ", "Could not delete\n" + outStrError, false);
+        SAM_CONSOLE("Could not delete: " + outStrError, PostLevel::ERROR);
 }
 
 void MDLController::cleanDataDirAll()
@@ -349,13 +349,13 @@ void MDLController::cleanDataDirAll()
     }
     if(outStrOk.isEmpty() && outStrError.isEmpty())
     {
-        SAM_CONSOLE("MSG: ", "No files were deleted.", false);
+        SAM_CONSOLE("MSG: No files were deleted.", PostLevel::ALL);
         return;
     }
     if(outStrOk.isNotEmpty())
-        SAM_CONSOLE("Delete OK:\n", outStrOk, false);
+        SAM_CONSOLE("Delete OK: " + outStrOk, PostLevel::ALL);
     if(outStrError.isNotEmpty())
-        SAM_CONSOLE("Error: ", "Could not delete\n" + outStrError, false);
+        SAM_CONSOLE("Could not delete: " + outStrError, PostLevel::ERROR);
 }
 
 bool MDLController::checkIfMdlCanchedOutside()

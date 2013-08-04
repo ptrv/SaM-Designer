@@ -51,7 +51,7 @@ public:
 	/**
 	 * prints a predefined text as header
 	 */
-	void printHeader();
+	void printTimeStamp();
 
 	/**
 	 * Clears the text in OutputWindow.
