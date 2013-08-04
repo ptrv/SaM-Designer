@@ -666,7 +666,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem (commandManager, CommandIDs::showGrid);
         menu.addCommandItem (commandManager, CommandIDs::enableSnapToGrid);
 
-        const int currentSnapSize = getApp()->getActiveHolderComponent() != 0 ? getApp()->getActiveHolderComponent()->getSnappingGridSize() : 0;
+        const int currentSnapSize = getApp()->getActiveHolderComponent() != 0
+            ? getApp()->getActiveHolderComponent()->getSnappingGridSize() : 0;
 
         PopupMenu m;
         for (int i = 0; i < numElementsInArray (snapSizes); ++i)
