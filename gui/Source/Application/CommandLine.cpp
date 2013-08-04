@@ -100,11 +100,7 @@ bool checkFile(const String& path, File& f, bool checkExistance)
     return true;
 }
 
-#if BUILTIN_SAM_COMPILER
-int compileMdlToDsp (const StringArray& args, bool useBuiltinCompiler)
-#else
 int compileMdlToDsp (const StringArray& args)
-#endif
 {
     hideDockIcon();
     
@@ -129,36 +125,31 @@ int compileMdlToDsp (const StringArray& args)
             return 1;
     }
 
-#if BUILTIN_SAM_COMPILER
-    if(useBuiltinCompiler)
+    SAMCmd cmd;
+    String processOutput;
+    StringArray args2 = cmd.generateFaustCodeCmd("SAM-preprocessor",
+                                                 in.getFullPathName(),
+                                                 outFile.getFullPathName());
+
+    processOutput << cmd.generateFaustCodeProcess(args2);
+
+    args2 = cmd.generateFaustCodeCmd("Synth-A-Modeler",
+                                     in.getFullPathName(),
+                                     outFile.getFullPathName());
+
+
+    processOutput << cmd.generateFaustCodeProcess(args2);
+
+    if (true)
     {
-        ScopedPointer<synthamodeler::MDLFile> mdl;
-        mdl = new MDLFile(in);
 
-        String dsp = synthamodeler::SAMCompiler::compile(mdl->mdlRoot);
-
-        if (synthamodeler::Utils::writeStringToFile(dsp, outFile))
-        {
-            std::cout << "\nSuccessfully created " << outFile.getFullPathName() << std::endl;
-            return 0;
-        }
-        else
-        {
-            std::cout << "\nCreating " << outFile.getFullPathName() << " failed!" << std::endl;
-            return 1;
-        }
+        File samLogFile(StoredSettings::getInstance()->getDataDir()
+                        + "/" + "SAM-debug-compilation.txt");
+        processOutput << samLogFile.loadFileAsString();
     }
-    else
-#endif
-    {
-        SAMCmd cmd;
-        String result = cmd.generateFaustCode(in.getFullPathName(),
-                                              outFile.getFullPathName(),
-                                              false);
 
-        std::cout << "\n" << result << std::endl;
-        return 0;
-    }
+    std::cout << "\n" << processOutput << std::endl;
+    return 0;
 }
 
 int printMdlXml(const StringArray& args)
@@ -210,7 +201,8 @@ int generateBinary(const StringArray& args)
     }
     SAMCmd cmd;
 
-    std::cout << cmd.generateExternal(mdl->getFilePath(), exporterCmd, false) << std::endl;
+    StringArray args2 = cmd.generateExternalCmd(mdl->getFilePath(), exporterCmd);
+    std::cout << cmd.generateExternalProcess(args2) << std::endl;
     return 0;
 }
 

@@ -25,6 +25,7 @@ public:
     
     void post(const String& title, const String& textToWrite, bool isBold);
     void post(const String& textToWrite, bool isBold);
+    void postLocked(const String& title, const String& textToWrite, bool isBold);
 
     void toFront();
     void clear();

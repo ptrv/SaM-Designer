@@ -322,32 +322,34 @@ void MainAppWindow::saveDocumentAs()
     updateTitle();
 }
 
-void MainAppWindow::generateFaust()
-{
-    String consoleText = "Start Synth-A-Modeler...";
-    String titleText = "Generate FAUST code...\n\n";
-    SAM_CONSOLE("COMMAND: ", titleText, false);
-    consoleText << mdlController->generateFaust();
-    SAM_CONSOLE("OUTPUT: \n", consoleText, false);
-    SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.\n\n\n", false);
-}
-
-void MainAppWindow::generateExternal()
-{
-    if (StoredSettings::getInstance()->getExporters().getAllProperties().size() > 0
-        || StoredSettings::getInstance()->getCurrentExporter() != String::empty)
-    {
-        String titleText = "Generating " + StoredSettings::getInstance()->getCurrentExporter() + " external...\n\n";
-        SAM_CONSOLE("COMMAND: ", titleText, false);
-        String consoleText = mdlController->generateExternal();
-        SAM_CONSOLE("OUTPUT: \n", consoleText, false);
-        SAM_CONSOLE_ADD_LINE("\nFinished!\n\n\n", false);
-    }
-    else
-    {
-        SAM_CONSOLE("Error: ", "There are no exporters defined!", false);
-    }
-}
+//void MainAppWindow::generateFaust()
+//{
+//    String consoleText = "Start Synth-A-Modeler...";
+//    String titleText = "Generate FAUST code...\n\n";
+//    SAM_CONSOLE("COMMAND: ", titleText, false);
+////    consoleText << mdlController->generateFaust();
+//    mdlController->generateFaust();
+//    SAM_CONSOLE("OUTPUT: \n", consoleText, false);
+//    SAM_CONSOLE_ADD_LINE("\nSynth-A-Modeler finished.\n\n\n", false);
+//}
+//
+//void MainAppWindow::generateExternal()
+//{
+//    if (StoredSettings::getInstance()->getExporters().getAllProperties().size() > 0
+//        || StoredSettings::getInstance()->getCurrentExporter() != String::empty)
+//    {
+//        String titleText = "Generating " + StoredSettings::getInstance()->getCurrentExporter() + " external...\n\n";
+//        SAM_CONSOLE("COMMAND: ", titleText, false);
+////        String consoleText = mdlController->generateExternal();
+//        mdlController->generateExternal();
+////        SAM_CONSOLE("OUTPUT: \n", consoleText, false);
+//        SAM_CONSOLE_ADD_LINE("\nFinished!\n\n\n", false);
+//    }
+//    else
+//    {
+//        SAM_CONSOLE("Error: ", "There are no exporters defined!", false);
+//    }
+//}
 
 
 bool MainAppWindow::perform (const InvocationInfo& info)
@@ -367,10 +369,10 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         mdlController->saveAsImage();
         break;
     case CommandIDs::generateFaust:
-        generateFaust();
+        mdlController->generateFaust();
     	break;
     case CommandIDs::generateExternal:
-        generateExternal();
+        mdlController->generateExternal();
     	break;
     case CommandIDs::cleanDataDir:
         mdlController->cleanDataDir();

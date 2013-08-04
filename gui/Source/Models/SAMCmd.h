@@ -33,75 +33,102 @@ class MDLFile;
  * This class encapsulates the external commands for generating FAUST code
  * and other externals.
  */
-class SAMCmd
+class SAMCmd : public Thread
 {
 public:
 	SAMCmd();
 	~SAMCmd();
 
+    struct FaustCodeCmdArgs {
+        String inPath;
+        String outPath;
+    };
+    struct ExternalCmdArgs {
+        String mdlPath;
+        String exporter;
+    };
+
+    struct SAMPostMsg {
+        String title;
+        String text;
+        bool isBold;
+    };
 	/**
 	 * Checks wether the Synth-A-Modeler script is available.
 	 *
 	 * @return			true if Synth-A-Modeler is found
 	 */
-	bool isSynthAModelerCmdAvailable();
+	static bool isSynthAModelerCmdAvailable();
 	/**
 	 * Checks wether the SAM-preprocessor script is available.
 	 *
 	 * @return			true if SAM-preprocessor is found
 	 */
-	bool isSAMpreprocessorCmdAvailable();
+	static bool isSAMpreprocessorCmdAvailable();
 	/**
 	 * Checks wether a specifdied command is available.
 	 *
 	 * @param cmdStr	command string
 	 * @return			true if specifdied command is available
 	 */
-	bool isCmdAvailable(const String& cmdStr);
+	static bool isCmdAvailable(const String& cmdStr);
 	/**
 	 * Checks wether perl is available.
 	 *
 	 * @return			true if the perl executable is found
 	 */
-	bool isPerlAvailable();
+	static bool isPerlAvailable();
 	/**
 	 * Checks wether faust executable is available.
 	 *
 	 * @return			true if faust executable is found
 	 */
-	bool isFaustAvailable();
+	static bool isFaustAvailable();
 	/**
-	 * Generates FAUST code for the current mdl file.
-	 *
-	 * @param inPath	path of the mdl file
-	 * @param outPath	path of the output file
-	 * @return			an empty string if generation of faust code succeeded,
-	 * 					else a string with the error message.
-	 */
-	const String generateFaustCode(const String& inPath,
-                                   const String& outPath,
-                                   bool useSamConsole = true);
+     * Generates FAUST code for the current mdl file.
+     *
+     * @param inPath	path of the mdl file
+     * @param outPath	path of the output file
+     * @return			an empty string if generation of faust code succeeded,
+     * 					else a string with the error message.
+     */
+    void generateFaustCode(const String& inPath,
+                           const String& outPath);
+    const StringArray generateFaustCodeCmd(const String& cmdStr,
+                                           const String& inPath,
+                                           const String& outPath);
 
-#if BUILTIN_SAM_COMPILER
-    const String generateFaustCodeBuiltin(ValueTree mdlRoot_,
-                                          const String& outPath,
-                                          bool useSamConsole = true);
-#endif
+    const String generateFaustCodeProcess(const StringArray& args);
+
 	/**
-	 * Generates external using the FAUST compiler.
-	 *
-	 * @return			an empty string if generation succeeded, else a string
-	 * 					with error message
-	 */
-	const String generateExternal(const String& mdlPath,
-                                const String& exporter,
-                                bool useSamConsole = true);
+     * Generates external using the FAUST compiler.
+     *
+     * @return			an empty string if generation succeeded, else a string
+     * 					with error message
+     */
+    void generateExternal(const String& mdlPath,
+                          const String& exporter);
+    const StringArray generateExternalCmd(const String& mdlPath,
+                                         const String& exporter);
+    const String generateExternalProcess(const StringArray& args);
+
+    const String& getProcessOutput() const { return processOutput; }
+
+    void run();
+
+    SAMPostMsg msg;
 
 private:
-    const String runPerlScript(const String& script,
-                               const String& inPath,
-                               const String& outPath,
-                               bool useSamConsole);
+    const StringArray getPerlScriptCmd(const String& script,
+                                       const String& inPath,
+                                       const String& outPath);
+
+    const String runProcess(StringArray args);
+
+    String processOutput;
+    FaustCodeCmdArgs cmdArgsF;
+    ExternalCmdArgs cmdArgsE;
+
 };
 }
 

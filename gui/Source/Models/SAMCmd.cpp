@@ -25,17 +25,14 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
-#if BUILTIN_SAM_COMPILER
-#include "../Models/SAMCompiler.h"
-#endif
 
 #include "SAMCmd.h"
 
 using namespace synthamodeler;
 
 SAMCmd::SAMCmd()
+: Thread("SAM Cmd")
 {
-
 }
 
 SAMCmd::~SAMCmd()
@@ -105,133 +102,164 @@ bool SAMCmd::isFaustAvailable()
 #endif
 	return isCmdAvailable(cmdFaust);
 }
-//const String OutputCmd::runChildProcess(const String& processStr)
-//{
-//	ChildProcess child;
-//	if(child.start(processStr))
-//	{
-//		const String result (child.readAllProcessOutput());
-//
-//		child.waitForProcessToFinish (60 * 1000);
-//
-//		return result;
-//	}
-//	else
-//	{
-//		return "failed to start process";
-//	}
-//}
-static String execProcess(char* cmd) {
-    String result = "";
-#ifdef JUCE_WINDOWS
-	ChildProcess child;
-	if(child.start(cmd))
+
+bool runExternalGen = false;
+bool faustProcessWaits = false;
+void SAMCmd::generateFaustCode(const String& inPath,
+                               const String& outPath)
+{
+    if(isThreadRunning())
+        return;
+
+    runExternalGen = false;
+    cmdArgsF = {inPath, outPath};
+    startThread();
+}
+const String SAMCmd::generateFaustCodeProcess(const StringArray& args)
+{
+    String resultStr = runProcess(args);
+
+    return resultStr;
+}
+const StringArray SAMCmd::generateFaustCodeCmd(const String& cmdStr,
+                                               const String& inPath,
+                                               const String& outPath)
+{
+    File fileOut(outPath);
+    String dataDir = StoredSettings::getInstance()->getDataDir();
+    String pathMDX = dataDir;
+    pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
+
+    if(cmdStr.compare("SAM-preprocessor") == 0)
+        return getPerlScriptCmd(cmdStr, inPath, pathMDX);
+    else if (cmdStr.compare("Synth-A-Modeler") == 0)
+        return getPerlScriptCmd(cmdStr, pathMDX, outPath);
+}
+
+void SAMCmd::generateExternal(const String& mdlPath,
+                              const String& exporter)
+{
+    if(isThreadRunning())
+        return;
+
+    runExternalGen = true;
+    cmdArgsE = {mdlPath, exporter};
+    startThread();
+}
+const StringArray SAMCmd::generateExternalCmd(const String& mdlPath,
+                                              const String& exporter)
+{
+    StringArray args;
+    args.add("/bin/bash");
+    args.add("-c");
+    String processStr = "export PATH=${PATH}:";
+    processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
+    processStr << " && cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
+    processStr << " && " << exporter;
+    processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
+    File mdlFile(mdlPath);
+    processStr = processStr.replace("$(MDL_NAME)", mdlFile.getFileNameWithoutExtension(), true);
+    processStr = processStr.replace("$(FAUST_DIR)", Utils::fixPath(StoredSettings::getInstance()->getFaustDir()), true);
+
+    args.add(processStr);
+
+    return args;
+}
+const String SAMCmd::generateExternalProcess(const StringArray& args)
+{
+    return runProcess(args);
+}
+
+const StringArray SAMCmd::getPerlScriptCmd(const String& script,
+                                           const String& inPath,
+                                           const String& outPath)
+{
+    String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
+    StringArray args;
+    args.add(cmdPerl);
+    args.add(Utils::fixPath(StoredSettings::getInstance()->getDataDir()) + "/" + script);
+    args.add(Utils::fixPath(inPath));
+    args.add(Utils::fixPath(outPath));
+
+    return args;
+}
+
+const String SAMCmd::runProcess(StringArray args)
+{
+    File tmpWorkDir = File::getCurrentWorkingDirectory();
+
+    File dataDir(StoredSettings::getInstance()->getDataDir());
+    dataDir.setAsCurrentWorkingDirectory();
+
+    String resultStr;
+    ChildProcess child;
+    if(child.start(args))
 	{
-		result = child.readAllProcessOutput();
+		resultStr = child.readAllProcessOutput();
 		child.waitForProcessToFinish (60 * 1000);
 	}
 	else
 	{
 		return "failed to start process";
 	}
-#else
-    FILE* pipe = popen(cmd, "r");
-    if (!pipe) return "ERROR";
-    char buffer[128];
-    while(!feof(pipe))
+    tmpWorkDir.setAsCurrentWorkingDirectory();
+    return resultStr;
+}
+
+void SAMCmd::run()
+{
+    if (runExternalGen)
     {
-        if (fgets(buffer, 128, pipe) != NULL)
-        {
-            result += String (CharPointer_UTF8 (buffer));
-        }
+        StringArray args = generateExternalCmd(cmdArgsE.mdlPath,
+                                               cmdArgsE.exporter);
+        postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
+
+        postWindow->postLocked("Log: ", "Run generate binary...", false);
+
+        processOutput = generateExternalProcess(args);
+
+        postWindow->postLocked("Output: ", processOutput, false);
+
+        postWindow->postLocked("Log: ", "Done!", false);
     }
-    pclose(pipe);
-#endif
-    return result;
-}
-const String SAMCmd::generateFaustCode(const String& inPath,
-                                       const String& outPath,
-                                       bool useSamConsole)
-{
-    File fileOut(outPath);
-    String dataDir = StoredSettings::getInstance()->getDataDir();
-    String pathMDX = dataDir;
-    pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
-	String processoutput = runPerlScript("SAM-preprocessor",
-                                         inPath, pathMDX, useSamConsole);
-    processoutput << runPerlScript("Synth-A-Modeler",
-                                   pathMDX, outPath, useSamConsole);
-	return processoutput;
-}
-
-#if BUILTIN_SAM_COMPILER
-const String SAMCmd::generateFaustCodeBuiltin(ValueTree mdlRoot_,
-                                              const String& outPath,
-                                              bool /*useSamConsole*/)
-{
-    String faustCodeString = SAMCompiler::compile(mdlRoot_);
-
-    File fileOut(outPath);
-    if(Utils::writeStringToFile(faustCodeString, fileOut))
-        return "Generating faust code finished!\n";
     else
-        return "Generating faust code failed!\n";
+    {
+        StringArray args = generateFaustCodeCmd("SAM-preprocessor",
+                                                cmdArgsF.inPath,
+                                                cmdArgsF.outPath);
+        postWindow->postLocked("Command:", args.joinIntoString(" "), true);
+
+        postWindow->postLocked("Log: ", "Run SAM-preprocessor...", false);
+
+        processOutput = generateFaustCodeProcess(args);
+
+        postWindow->postLocked("Output: ", processOutput, false);
+
+        postWindow->postLocked("Log: ", "Done!", false);
+
+        args = generateFaustCodeCmd("Synth-A-Modeler",
+                                    cmdArgsF.inPath,
+                                    cmdArgsF.outPath);
+
+        postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
+
+        postWindow->postLocked("Log: ", "Run Synth-A-Modeler...", false);
+
+        processOutput = generateFaustCodeProcess(args);
+
+        if(true)
+        {
+
+            File samLogFile(StoredSettings::getInstance()->getDataDir()
+                            + "/" + "SAM-debug-compilation.txt");
+            processOutput = samLogFile.loadFileAsString();
+        }
+
+        postWindow->postLocked("Output: ", processOutput, false);
+
+        postWindow->postLocked("Log: ", "Done!", false);
+    }
 }
-#endif
-const String SAMCmd::generateExternal(const String& mdlPath,
-                                      const String& exporter,
-                                      bool useSamConsole)
-{
-	String processStr;
-#ifdef JUCE_WINDOWS
-	String msg = "Genarating external code is not implemented yet!";
-	SAM_CONSOLE("MSG:", msg, true);
-	return "";
-#else
-	processStr = "/bin/bash -c \"export PATH=${PATH}:";
-	processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
-	processStr << " ; cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
-    processStr << " ; ";
-    processStr << exporter;
-	processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
-    File mdlFile(mdlPath);
-    processStr = processStr.replace("$(MDL_NAME)", mdlFile.getFileNameWithoutExtension(), true);
-    processStr = processStr.replace("$(FAUST_DIR)", Utils::fixPath(StoredSettings::getInstance()->getFaustDir()), true);
-	processStr << " 2>&1\" 2>&1";
-#endif
-	SAM_LOG("Export command: " + processStr);
-    if(useSamConsole)
-        SAM_CONSOLE_ADD_LINE(processStr+"\n", true);
-	String processoutput = execProcess(processStr.toUTF8().getAddress());
-	return processoutput;
-}
-
-const String SAMCmd::runPerlScript(const String& script,
-                                   const String& inPath,
-                                   const String& outPath,
-                                   bool useSamConsole)
-{
-    String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	String processStr;
-#ifdef JUCE_WINDOWS
-	processStr << "cmd.exe \\/C cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir()) << " & ";
-	processStr << cmdPerl << " " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
-	processStr << "/" << script << " " << Utils::fixPath(inPath) << " " << Utils::fixPath(outPath);// << "'";
-#else
-	processStr = "/bin/bash -c \"";
-    processStr << "cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir()) << ";";
-	processStr << cmdPerl << " " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
-	processStr << "/" << script << " " << Utils::fixPath(inPath) << " " << Utils::fixPath(outPath) << " 2>&1\" 2>&1";
-
-#endif
-	SAM_LOG(script + " command: " + processStr);
-    if(useSamConsole)
-        SAM_CONSOLE_ADD_LINE(processStr + "\n", true);
-	return execProcess(processStr.toUTF8().getAddress());
-//	return runChildProcess(processStr.toUTF8().getAddress());
-}
-
-
 
 //==============================================================================
 #if UNIT_TESTS

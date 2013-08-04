@@ -10,6 +10,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../View/PostWindow.h"
+#include "../Models/SAMCmd.h"
 
 #include "PostWindowController.h"
 
@@ -52,7 +53,6 @@ void PostWindowController::post(const String& title,
 	{
 		postWin->addText("Nothing...\n\n", false);
 	}
-
 }
 
 void PostWindowController::post(const String& textToWrite, bool isBold)
@@ -66,6 +66,15 @@ void PostWindowController::post(const String& textToWrite, bool isBold)
 	{
 		postWin->addText("Nothing...\n\n", false);
 	}
+}
+
+void PostWindowController::postLocked(const String& title,
+                                      const String& textToWrite,
+                                      bool isBold)
+{
+    const MessageManagerLock mmLock;
+    if(mmLock.lockWasGained())
+        post(title, textToWrite, isBold);
 }
 
 void PostWindowController::toFront()

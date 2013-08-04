@@ -30,7 +30,6 @@ namespace synthamodeler
 {
 class MDLFile;
 class SAMCmd;
-class AppController;
 class MainAppWindow;
 
 /**
@@ -54,8 +53,8 @@ public:
 
     bool saveAsXml();
 
-	const String generateFaust();
-	const String generateExternal();
+	void generateFaust();
+	void generateExternal();
 	const String getMDLName();
 
     void cleanDataDir();
@@ -77,6 +76,11 @@ public:
     bool checkIfMdlCanchedOutside();
 
 private:
+
+    const String getInPath();
+    const String getOutPath(const String& inPath);
+    bool copyInfileToDataDirIfNeeded(String& inPath);
+
 	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;
 	ScopedPointer<SAMCmd> samCmd;
