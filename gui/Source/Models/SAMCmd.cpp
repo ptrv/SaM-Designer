@@ -30,87 +30,32 @@
 
 using namespace synthamodeler;
 
-SAMCmd::SAMCmd(const String& input, CmdType cmdType_, bool runSAMBeforeBinary)
-: ThreadPoolJob("SAMCmd job"), cmdType(cmdType_), 
-    compileBeforeExportBinary(runSAMBeforeBinary)
+SAMCmd::SAMCmd()
+: ThreadPoolJob("SAMCmd job"), cmdType(NONE), inPath(String::empty),
+    outPath(String::empty), exporter(String::empty)
 {
     setJobName("SAMCmd job " + Time::getCurrentTime().formatted("%F %T"));
-
-    inPath = input;
-    outPath = getOutPath(inPath);
-
-    String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
-    exporter = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
-
 }
 
 SAMCmd::~SAMCmd()
 {
 }
 
-bool SAMCmd::isSynthAModelerCmdAvailable()
+void SAMCmd::setupJob(const String& input, CmdType cmdType_, bool runSAMBeforeBinary)
 {
-	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/Synth-A-Modeler");
-	if(samCompiler.existsAsFile())
-		return true;
-	else
-		return false;
-}
-bool SAMCmd::isSAMpreprocessorCmdAvailable()
-{
-	File samCompiler(StoredSettings::getInstance()->getDataDir()+ "/SAM-preprocessor");
-	if(samCompiler.existsAsFile())
-		return true;
-	else
-		return false;
+    inPath = input;
+    outPath = getOutPath(inPath);
+    cmdType = cmdType_;
+    compileBeforeExportBinary = runSAMBeforeBinary;
+
+    if (cmdType == BINARY)
+    {
+        String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
+        exporter = StoredSettings::getInstance()->getExporters()
+            .getValue(currentExporter, "");
+    }
 }
 
-bool SAMCmd::isCmdAvailable(const String& cmdStr)
-{
-	String cmdStrTmp = cmdStr;
-#if JUCE_LINUX
-	cmdStrTmp = "which "+cmdStr;
-
-	ChildProcess child;
-	const bool ok = child.start (cmdStrTmp)
-			&& child.readAllProcessOutput().trim().isNotEmpty();
-
-	child.waitForProcessToFinish (60 * 1000);
-	return ok;
-#elif JUCE_MAC || JUCE_WINDOWS
-	if(! File::isAbsolutePath(cmdStr))
-	{
-		cmdStrTmp = File::getCurrentWorkingDirectory().getChildFile(cmdStr).getFullPathName();
-	}
-	File cmdFile(cmdStrTmp);
-#ifdef JUCE_WINDOWS
-	if(cmdFile.exists())
-#else
-	if(cmdFile.existsAsFile())
-#endif
-		return true;
-	else
-		return false;
-#else
-	return false;
-#endif
-}
-
-bool SAMCmd::isPerlAvailable()
-{
-	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
-	return isCmdAvailable(cmdPerl);
-}
-
-bool SAMCmd::isFaustAvailable()
-{
-#ifdef JUCE_WINDOWS
-	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust.exe";
-#else
-	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust";
-#endif
-	return isCmdAvailable(cmdFaust);
-}
 
 const String SAMCmd::generateFaustCodeProcess(const StringArray& args)
 {
@@ -221,7 +166,7 @@ void SAMCmd::generate(CmdType type)
 
         processOutput = generateFaustCodeProcess(args);
 
-        if(true)
+        if(false)
         {
             File samLogFile(StoredSettings::getInstance()->getDataDir()
                             + "/" + "SAM-debug-compilation.txt");
@@ -270,8 +215,6 @@ void SAMCmd::generate(CmdType type)
 }
 ThreadPoolJob::JobStatus SAMCmd::runJob()
 {
-    DBG("Job " + getJobName());
-
     if(cmdType == FAUSTCODE)
     {
         generate(FAUSTCODE);

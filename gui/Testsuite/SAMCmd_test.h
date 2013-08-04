@@ -41,11 +41,11 @@ public:
 
 //		SAMCmd cmd(inPath, SAMCmd::NONE);
 		beginTest("isPerlAvailable");
-		expect(SAMCmd::isPerlAvailable(), "");
+		expect(Utils::isPerlAvailable(), "");
 		beginTest("isSAMpreprocessorCmdAvailable");
-		expect(SAMCmd::isSAMpreprocessorCmdAvailable(), "");
+		expect(Utils::isSAMpreprocessorCmdAvailable(), "");
 		beginTest("isSynthAModelerCmdAvailable");
-		expect(SAMCmd::isSynthAModelerCmdAvailable(), "");
+		expect(Utils::isSynthAModelerCmdAvailable(), "");
 		beginTest("generateFaustCode");
 //		String inPathFull = File::getCurrentWorkingDirectory().getChildFile(inPath).getFullPathName();
 //		String outPathFull = File::getCurrentWorkingDirectory().getChildFile(outPath).getFullPathName();

@@ -125,7 +125,7 @@ int compileMdlToDsp (const StringArray& args)
             return 1;
     }
 
-    SAMCmd cmd(String::empty, SAMCmd::FAUSTCODE);
+    SAMCmd cmd;
     String processOutput;
     StringArray args2 = cmd.generateFaustCodeCmd("SAM-preprocessor",
                                                  in.getFullPathName(),
@@ -199,7 +199,7 @@ int generateBinary(const StringArray& args)
         std::cout << "There is no such exporter: " << exporter << std::endl;
         return 1;
     }
-    SAMCmd cmd(String::empty, SAMCmd::NONE);
+    SAMCmd cmd;
 
     StringArray args2 = cmd.generateExternalCmd(mdl->getFilePath(), exporterCmd);
     std::cout << cmd.generateExternalProcess(args2) << std::endl;

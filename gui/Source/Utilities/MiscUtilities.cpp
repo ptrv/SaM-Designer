@@ -479,3 +479,67 @@ int Utils::getCurrentTimeMillis()
 
     return millis;
 }
+
+bool Utils::isSynthAModelerCmdAvailable()
+{
+	File samCompiler(StoredSettings::getInstance()->getDataDir()+"/Synth-A-Modeler");
+	if(samCompiler.existsAsFile())
+		return true;
+	else
+		return false;
+}
+bool Utils::isSAMpreprocessorCmdAvailable()
+{
+	File samCompiler(StoredSettings::getInstance()->getDataDir()+ "/SAM-preprocessor");
+	if(samCompiler.existsAsFile())
+		return true;
+	else
+		return false;
+}
+
+bool Utils::isCmdAvailable(const String& cmdStr)
+{
+	String cmdStrTmp = cmdStr;
+#if JUCE_LINUX
+	cmdStrTmp = "which "+cmdStr;
+
+	ChildProcess child;
+	const bool ok = child.start (cmdStrTmp)
+			&& child.readAllProcessOutput().trim().isNotEmpty();
+
+	child.waitForProcessToFinish (60 * 1000);
+	return ok;
+#elif JUCE_MAC || JUCE_WINDOWS
+	if(! File::isAbsolutePath(cmdStr))
+	{
+		cmdStrTmp = File::getCurrentWorkingDirectory().getChildFile(cmdStr).getFullPathName();
+	}
+	File cmdFile(cmdStrTmp);
+#ifdef JUCE_WINDOWS
+	if(cmdFile.exists())
+#else
+	if(cmdFile.existsAsFile())
+#endif
+		return true;
+	else
+		return false;
+#else
+	return false;
+#endif
+}
+
+bool Utils::isPerlAvailable()
+{
+	String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
+	return isCmdAvailable(cmdPerl);
+}
+
+bool Utils::isFaustAvailable()
+{
+#ifdef JUCE_WINDOWS
+	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust.exe";
+#else
+	String cmdFaust = StoredSettings::getInstance()->getFaustDir() + "/faust";
+#endif
+	return isCmdAvailable(cmdFaust);
+}

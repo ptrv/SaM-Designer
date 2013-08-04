@@ -44,41 +44,11 @@ public:
         NONE
     };
 
-	SAMCmd(const String& input, CmdType cmdType_,
-        bool runSAMBeforeBinary = false);
+	SAMCmd();
 	~SAMCmd();
 
-	/**
-	 * Checks wether the Synth-A-Modeler script is available.
-	 *
-	 * @return			true if Synth-A-Modeler is found
-	 */
-	static bool isSynthAModelerCmdAvailable();
-	/**
-	 * Checks wether the SAM-preprocessor script is available.
-	 *
-	 * @return			true if SAM-preprocessor is found
-	 */
-	static bool isSAMpreprocessorCmdAvailable();
-	/**
-	 * Checks wether a specifdied command is available.
-	 *
-	 * @param cmdStr	command string
-	 * @return			true if specifdied command is available
-	 */
-	static bool isCmdAvailable(const String& cmdStr);
-	/**
-	 * Checks wether perl is available.
-	 *
-	 * @return			true if the perl executable is found
-	 */
-	static bool isPerlAvailable();
-	/**
-	 * Checks wether faust executable is available.
-	 *
-	 * @return			true if faust executable is found
-	 */
-	static bool isFaustAvailable();
+    void setupJob(const String& input, CmdType cmdType_,
+                  bool runSAMBeforeBinary = false);
     
     const StringArray generateFaustCodeCmd(const String& cmdStr,
                                            const String& inPath_,
@@ -87,12 +57,14 @@ public:
     const String generateFaustCodeProcess(const StringArray& args);
 
     const StringArray generateExternalCmd(const String& mdlPath,
-                                         const String& exporter);
+                                          const String& exporter);
     const String generateExternalProcess(const StringArray& args);
 
     const String& getProcessOutput() const { return processOutput; }
 
     JobStatus runJob();
+
+    CmdType getCurrentType() const { return cmdType; }
 
 private:
     const StringArray getPerlScriptCmd(const String& script,

@@ -25,23 +25,23 @@ SAMCmdController::~SAMCmdController()
 
 void SAMCmdController::generateDSP(MDLFile* mdl)
 {
-        bool r = true;
+    bool r = true;
     if (StoredSettings::getInstance()->getIsExportConfirm())
         r = Alerts::confirmExport("Really export faust");
 
-    if (! SAMCmd::isPerlAvailable())
+    if (! Utils::isPerlAvailable())
     {
         SAM_CONSOLE("Error: ", "Perl is missing!", false);
         Alerts::missingPerl();
         return;
     }
-    if (! SAMCmd::isSAMpreprocessorCmdAvailable())
+    if (! Utils::isSAMpreprocessorCmdAvailable())
     {
         SAM_CONSOLE("Error: ", "SAM-preprocessor is missing!", false);
         Alerts::missingSAMpreprocessor();
         return;
     }
-    if (! SAMCmd::isSynthAModelerCmdAvailable())
+    if (! Utils::isSynthAModelerCmdAvailable())
     {
         SAM_CONSOLE("Error: ", "Synth-A-Modeler is missing!", false);
         Alerts::missingSAM();
@@ -56,8 +56,8 @@ void SAMCmdController::generateDSP(MDLFile* mdl)
             return;
         }
 
-        // if current MDL file is not in data dir make a temp copy in data dir
-        SAMCmd* samCmd = new SAMCmd(mdl->getFilePath(), SAMCmd::FAUSTCODE);
+        SAMCmd* samCmd = new SAMCmd();
+        samCmd->setupJob(mdl->getFilePath(), SAMCmd::FAUSTCODE);
 
         addJobToPool(samCmd);
     }
@@ -71,7 +71,7 @@ void SAMCmdController::generateBinary(MDLFile* mdl)
         return;
     }
 
-    if (!SAMCmd::isFaustAvailable())
+    if (!Utils::isFaustAvailable())
     {
         SAM_CONSOLE("Error", "Missing faust executable", false);
         Alerts::missingFaust();
@@ -90,8 +90,9 @@ void SAMCmdController::generateBinary(MDLFile* mdl)
             return;
         }
 
-        bool runSAM = StoredSettings::getInstance()->getRunSAMBeforeExternal();
-        SAMCmd* samCmd = new SAMCmd(mdl->getFilePath(), SAMCmd::BINARY, runSAM);
+        SAMCmd* samCmd = new SAMCmd();
+        samCmd->setupJob(mdl->getFilePath(), SAMCmd::BINARY,
+                         StoredSettings::getInstance()->getRunSAMBeforeExternal());
 
         addJobToPool(samCmd);
     }

@@ -115,6 +115,38 @@ extern const Array<Identifier> allObjectIds;
 
 int getCurrentTimeMillis();
 
+/**
+ * Checks wether the Synth-A-Modeler script is available.
+ *
+ * @return			true if Synth-A-Modeler is found
+ */
+bool isSynthAModelerCmdAvailable();
+/**
+ * Checks wether the SAM-preprocessor script is available.
+ *
+ * @return			true if SAM-preprocessor is found
+ */
+bool isSAMpreprocessorCmdAvailable();
+/**
+ * Checks wether a specifdied command is available.
+ *
+ * @param cmdStr	command string
+ * @return			true if specifdied command is available
+ */
+bool isCmdAvailable(const String& cmdStr);
+/**
+ * Checks wether perl is available.
+ *
+ * @return			true if the perl executable is found
+ */
+bool isPerlAvailable();
+/**
+ * Checks wether faust executable is available.
+ *
+ * @return			true if faust executable is found
+ */
+bool isFaustAvailable();
+
 };
 
 }
