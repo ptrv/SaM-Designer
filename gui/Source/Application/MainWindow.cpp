@@ -223,8 +223,7 @@ void MainAppWindow::makeVisible()
 //==============================================================================
 ApplicationCommandTarget* MainAppWindow::getNextCommandTarget()
 {
-    return findFirstTargetParentComponent();
-
+    return nullptr;
 }
 
 void MainAppWindow::getAllCommands (Array <CommandID>& commands)
@@ -413,7 +412,6 @@ void MainAppWindow::updateTitle ()
 	String title = JUCEApplication::getInstance()->getApplicationName();
 	title << " - " << mdlController->getMDLFile()->getNameWithStatus();
 	this->setName(title);
-
 }
 
 MDLFile* MainAppWindow::getMDLFile()

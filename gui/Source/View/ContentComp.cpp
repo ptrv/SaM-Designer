@@ -77,6 +77,7 @@ public:
     : panel(panel_),
     isSpaceDown(false)
     {
+        setWantsKeyboardFocus(false);
     }
 
     ~ZoomingViewport()
@@ -136,6 +137,7 @@ private:
         {
             setMouseCursor(MouseCursor::DraggingHandCursor);
             setAlwaysOnTop(true);
+            setWantsKeyboardFocus(false);
         }
 
         ~DraggerOverlayComp()
@@ -199,7 +201,7 @@ objectsHolder(0)
     viewport->setViewedComponent(magnifier = new MagnifierComponent(objectsHolder));
 
     //    objectsHolder->setVisible(true);
-    setWantsKeyboardFocus(true);
+    setWantsKeyboardFocus(false);
 
     commandManager->registerAllCommandsForTarget(this);
     addKeyListener(commandManager->getKeyMappings());
@@ -287,7 +289,7 @@ void ContentComp::updateMainAppWindowTitle(const String& /*newTitle*/)
 
 ApplicationCommandTarget* ContentComp::getNextCommandTarget()
 {
-    // this will return the next parent			 component that is an ApplicationCommandTarget (in this
+    // this will return the next parent component that is an ApplicationCommandTarget (in this
     // case, there probably isn't one, but it's best to use this method in your own apps).
     return findFirstTargetParentComponent();
 }
