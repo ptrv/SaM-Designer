@@ -60,6 +60,8 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
     
     owner.getSelectedObjects().addChangeListener (this);
     selfChangeListenerList.addChangeListener (this);
+
+    setComponentID("Object_" + data[Ids::identifier].toString());
 }
 ObjectComponent::~ObjectComponent()
 {

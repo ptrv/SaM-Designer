@@ -42,6 +42,8 @@ public:
         fRegular.setStyleFlags(Font::plain);
         fBold.setHeight(14);
         fBold.setStyleFlags(Font::bold);
+
+        setComponentID("PostWindowEditor");
 	}
 
 	/**

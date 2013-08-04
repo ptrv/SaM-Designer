@@ -81,6 +81,8 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
         colorSelected = Colours::violet;
     }
     update();
+
+    setComponentID("LinkComponent_" + data[Ids::identifier].toString());
 }
 
 LinkComponent::~LinkComponent()

@@ -108,6 +108,7 @@ public:
 
     void redrawObjects(const int cmdId);
 
+    static int objectsHolderNum;
     //==========================================================================
 private:
 

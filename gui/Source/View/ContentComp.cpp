@@ -180,6 +180,7 @@ private:
 
 //==============================================================================
 
+int ContentComp::contentCompNum = 0;
 ContentComp::ContentComp(MainAppWindow& mainWindow_, ObjController& objController_)
 : mainWindow(mainWindow_),
 objController(objController_),
@@ -203,6 +204,8 @@ objectsHolder(0)
     commandManager->registerAllCommandsForTarget(this);
     addKeyListener(commandManager->getKeyMappings());
 
+    ++contentCompNum;
+    setComponentID("ContentComp_" + String(contentCompNum));
     //[/Constructor]
 }
 
@@ -216,6 +219,7 @@ ContentComp::~ContentComp()
     //[Destructor]. You can add your own custom destruction code here..
 //    objectsHolder = nullptr;
     deleteAllChildren();
+    --contentCompNum;
     //[/Destructor]
 }
 

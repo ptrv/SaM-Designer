@@ -48,6 +48,7 @@
 
 using namespace synthamodeler;
 
+int ObjectsHolder::objectsHolderNum = 0;
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
   dragging(false), isDrawingObjectNames(false), showObjectNames(false),
@@ -67,12 +68,15 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
 
 	addKeyListener(commandManager->getKeyMappings());
 
+    ++objectsHolderNum;
+    setComponentID("ObjectsHolder_" + String(objectsHolderNum));
 }
 
 ObjectsHolder::~ObjectsHolder()
 {
     grid = nullptr;
     fcPanel = nullptr;
+    --objectsHolderNum;
 }
 
 void ObjectsHolder::paint(Graphics& g)

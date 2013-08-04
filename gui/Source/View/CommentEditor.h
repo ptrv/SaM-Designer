@@ -46,6 +46,8 @@ public:
     void performPopupMenuAction (int menuItemID);
     void selectTextColour();
     bool keyPressed(const KeyPress& key);
+
+    static int numCommentEditor;
 private:
     CommentComponent& parent;
     Font font;

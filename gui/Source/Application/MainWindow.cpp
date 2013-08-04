@@ -43,6 +43,7 @@ using namespace synthamodeler;
 
 ScopedPointer<ApplicationCommandManager> synthamodeler::commandManager;
 
+int MainAppWindow::mainAppWindowNum = 0;
 //==============================================================================
 MainAppWindow::MainAppWindow()
     : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
@@ -74,6 +75,9 @@ MainAppWindow::MainAppWindow()
     getLookAndFeel().setColour (ColourSelector::backgroundColourId, Colours::transparentBlack);
 
     mdlInfoComp = new MDLInformation();
+
+    ++mainAppWindowNum;
+    setComponentID("MainAppWindow_" + String(mainAppWindowNum));
 }
 
 MainAppWindow::~MainAppWindow()
@@ -94,6 +98,7 @@ MainAppWindow::~MainAppWindow()
 
     mdlInfoComp = nullptr;
 
+    --mainAppWindowNum;
 }
 
 void MainAppWindow::createMDLFileContentCompIfNeeded()

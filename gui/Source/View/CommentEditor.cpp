@@ -34,6 +34,7 @@
 
 using namespace synthamodeler;
 
+int CommentEditor::numCommentEditor = 0;
 CommentEditor::CommentEditor(CommentComponent& p, float fontHeight, Colour textColour_)
 : TextEditor("CommentEditor"), parent(p)
 {
@@ -57,10 +58,14 @@ CommentEditor::CommentEditor(CommentComponent& p, float fontHeight, Colour textC
 
     setMultiLine(true, false);
     setReturnKeyStartsNewLine(true);
+
+    ++numCommentEditor;
+    setComponentID("commenteditor_" + String(numCommentEditor));
 }
 
 CommentEditor::~CommentEditor()
 {
+    --numCommentEditor;
 }
 
 void CommentEditor::mouseDown(const MouseEvent& e)

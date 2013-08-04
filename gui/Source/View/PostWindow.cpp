@@ -53,6 +53,7 @@ DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Po
 
 	addKeyListener(commandManager->getKeyMappings());
 
+    setComponentID("PostWindow");
 }
 
 PostWindow::~PostWindow()

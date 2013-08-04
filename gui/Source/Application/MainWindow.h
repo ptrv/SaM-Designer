@@ -87,6 +87,7 @@ public:
 
     void showMDLProperties();
 
+    static int mainAppWindowNum;
 private:
     String getProjectWindowPosName() const;
     String getProjectWindowZoomName() const;

@@ -88,6 +88,7 @@ public:
     //==============================================================================
 //    juce_UseDebuggingNewOperator
 
+    static int contentCompNum;
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
 

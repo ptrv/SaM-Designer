@@ -57,6 +57,8 @@ CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
     selfChangeListenerList.addChangeListener (this);
 
     data.addListener(this);
+
+    setComponentID("comment_" + data[Ids::identifier].toString());
 }
 
 CommentComponent::~CommentComponent()

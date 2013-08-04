@@ -81,6 +81,8 @@ DocumentWindow("Properties",
 	commandManager->registerAllCommandsForTarget(this);
 
 	addKeyListener(commandManager->getKeyMappings());
+
+    setComponentID("PropertiesWindow");
 }
 
 PropertiesWindow::~PropertiesWindow()
