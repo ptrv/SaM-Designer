@@ -11,6 +11,7 @@ ChangeLog Synth-A-Modeler Designer
 
 ### Changes ###
 
+* Remove user option 'open *.dsp file after compilation'
 * Fix setting component focus on `ObjectsHolder`
 * Refactor `SAMCmd` to use separate Thread for commands in order to not
   block the user interface
