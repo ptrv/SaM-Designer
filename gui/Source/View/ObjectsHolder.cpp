@@ -367,14 +367,6 @@ void ObjectsHolder::showAudioConnections()
     objController.setAudioConnectionVisibility(sac);
 }
 
-namespace synthamodeler
-{
-static const int dx = 20;
-static const int dy = 20;
-static const int dxfine = 5;
-static const int dyfine = 5;
-}
-
 //==========================================================================
 ApplicationCommandTarget* ObjectsHolder::getNextCommandTarget()
 {
@@ -700,29 +692,29 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         insertNewObject(Ids::comment);
         break;
     case CommandIDs::moveUp:
-        objController.moveSelectedComps(0, -synthamodeler::dy);
+        objController.moveSelectedComps(0, -StoredSettings::getInstance()->getSnapGridPixels());
         break;
-    case CommandIDs::moveUpFine:
-        objController.moveSelectedComps(0, -synthamodeler::dyfine);
-        break;
+//    case CommandIDs::moveUpFine:
+//        objController.moveSelectedComps(0, -StoredSettings::getInstance()->getSnapGridPixels()*2);
+//        break;
     case CommandIDs::moveDown:
-        objController.moveSelectedComps(0, synthamodeler::dy);
+        objController.moveSelectedComps(0, StoredSettings::getInstance()->getSnapGridPixels());
         break;
-    case CommandIDs::moveDownFine:
-        objController.moveSelectedComps(0, synthamodeler::dyfine);
-        break;
+//    case CommandIDs::moveDownFine:
+//        objController.moveSelectedComps(0, StoredSettings::getInstance()->getSnapGridPixels()*2);
+//        break;
     case CommandIDs::moveLeft:
-        objController.moveSelectedComps(-synthamodeler::dx, 0);
+        objController.moveSelectedComps(-StoredSettings::getInstance()->getSnapGridPixels(), 0);
         break;
-    case CommandIDs::moveLeftFine:
-        objController.moveSelectedComps(-synthamodeler::dxfine, 0);
-        break;
+//    case CommandIDs::moveLeftFine:
+//        objController.moveSelectedComps(-StoredSettings::getInstance()->getSnapGridPixels()*2, 0);
+//        break;
     case CommandIDs::moveRight:
-        objController.moveSelectedComps(synthamodeler::dx, 0);
+        objController.moveSelectedComps(StoredSettings::getInstance()->getSnapGridPixels(), 0);
         break;
-    case CommandIDs::moveRightFine:
-        objController.moveSelectedComps(synthamodeler::dxfine, 0);
-        break;
+//    case CommandIDs::moveRightFine:
+//        objController.moveSelectedComps(StoredSettings::getInstance()->getSnapGridPixels()*2, 0);
+//        break;
     case CommandIDs::showObjectNames:
         showObjectIds();
         break;
