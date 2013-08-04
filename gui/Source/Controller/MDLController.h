@@ -29,7 +29,7 @@
 namespace synthamodeler
 {
 class MDLFile;
-class SAMCmd;
+class SAMCmdController;
 class MainAppWindow;
 
 /**
@@ -76,14 +76,9 @@ public:
     bool checkIfMdlCanchedOutside();
 
 private:
-
-    const String getInPath();
-    const String getOutPath(const String& inPath);
-    bool copyInfileToDataDirIfNeeded(String& inPath);
-
 	MainAppWindow& mainAppWindow;
 	ScopedPointer<MDLFile> currentMdl;
-	ScopedPointer<SAMCmd> samCmd;
+	ScopedPointer<SAMCmdController> samCmdCtrl;
 };
 }
 

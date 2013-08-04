@@ -30,9 +30,18 @@
 
 using namespace synthamodeler;
 
-SAMCmd::SAMCmd()
-: Thread("SAM Cmd")
+SAMCmd::SAMCmd(const String& input, CmdType cmdType_, bool runSAMBeforeBinary)
+: ThreadPoolJob("SAMCmd job"), cmdType(cmdType_), 
+    compileBeforeExportBinary(runSAMBeforeBinary)
 {
+    setJobName("SAMCmd job " + Time::getCurrentTime().formatted("%F %T"));
+
+    inPath = input;
+    outPath = getOutPath(inPath);
+
+    String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
+    exporter = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
+
 }
 
 SAMCmd::~SAMCmd()
@@ -103,18 +112,6 @@ bool SAMCmd::isFaustAvailable()
 	return isCmdAvailable(cmdFaust);
 }
 
-bool runExternalGen = false;
-bool faustProcessWaits = false;
-void SAMCmd::generateFaustCode(const String& inPath,
-                               const String& outPath)
-{
-    if(isThreadRunning())
-        return;
-
-    runExternalGen = false;
-    cmdArgsF = {inPath, outPath};
-    startThread();
-}
 const String SAMCmd::generateFaustCodeProcess(const StringArray& args)
 {
     String resultStr = runProcess(args);
@@ -122,32 +119,22 @@ const String SAMCmd::generateFaustCodeProcess(const StringArray& args)
     return resultStr;
 }
 const StringArray SAMCmd::generateFaustCodeCmd(const String& cmdStr,
-                                               const String& inPath,
-                                               const String& outPath)
+                                               const String& inPath_,
+                                               const String& outPath_)
 {
-    File fileOut(outPath);
+    File fileOut(outPath_);
     String dataDir = StoredSettings::getInstance()->getDataDir();
     String pathMDX = dataDir;
     pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
 
     if(cmdStr.compare("SAM-preprocessor") == 0)
-        return getPerlScriptCmd(cmdStr, inPath, pathMDX);
+        return getPerlScriptCmd(cmdStr, inPath_, pathMDX);
     else if (cmdStr.compare("Synth-A-Modeler") == 0)
-        return getPerlScriptCmd(cmdStr, pathMDX, outPath);
+        return getPerlScriptCmd(cmdStr, pathMDX, outPath_);
 }
 
-void SAMCmd::generateExternal(const String& mdlPath,
-                              const String& exporter)
-{
-    if(isThreadRunning())
-        return;
-
-    runExternalGen = true;
-    cmdArgsE = {mdlPath, exporter};
-    startThread();
-}
 const StringArray SAMCmd::generateExternalCmd(const String& mdlPath,
-                                              const String& exporter)
+                                              const String& exporter_)
 {
     StringArray args;
     args.add("/bin/bash");
@@ -155,7 +142,7 @@ const StringArray SAMCmd::generateExternalCmd(const String& mdlPath,
     String processStr = "export PATH=${PATH}:";
     processStr << Utils::fixPath(StoredSettings::getInstance()->getFaustDir());
     processStr << " && cd " << Utils::fixPath(StoredSettings::getInstance()->getDataDir());
-    processStr << " && " << exporter;
+    processStr << " && " << exporter_;
     processStr = processStr.replace("$(DATA_DIR)", Utils::fixPath(StoredSettings::getInstance()->getDataDir()), true);
     File mdlFile(mdlPath);
     processStr = processStr.replace("$(MDL_NAME)", mdlFile.getFileNameWithoutExtension(), true);
@@ -171,15 +158,15 @@ const String SAMCmd::generateExternalProcess(const StringArray& args)
 }
 
 const StringArray SAMCmd::getPerlScriptCmd(const String& script,
-                                           const String& inPath,
-                                           const String& outPath)
+                                           const String& inPath_,
+                                           const String& outPath_)
 {
     String cmdPerl = StoredSettings::getInstance()->getCmdPerl();
     StringArray args;
     args.add(cmdPerl);
     args.add(Utils::fixPath(StoredSettings::getInstance()->getDataDir()) + "/" + script);
-    args.add(Utils::fixPath(inPath));
-    args.add(Utils::fixPath(outPath));
+    args.add(Utils::fixPath(inPath_));
+    args.add(Utils::fixPath(outPath_));
 
     return args;
 }
@@ -206,27 +193,16 @@ const String SAMCmd::runProcess(StringArray args)
     return resultStr;
 }
 
-void SAMCmd::run()
+void SAMCmd::generate(CmdType type)
 {
-    if (runExternalGen)
+    if(type == FAUSTCODE)
     {
-        StringArray args = generateExternalCmd(cmdArgsE.mdlPath,
-                                               cmdArgsE.exporter);
-        postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
+        String tmpInPath = inPath;
+        String tmpOutPath = outPath;
+        bool saveInDataDir = copyInfileToDataDirIfNeeded(tmpInPath);
 
-        postWindow->postLocked("Log: ", "Run generate binary...", false);
+        StringArray args = generateFaustCodeCmd("SAM-preprocessor", tmpInPath, tmpOutPath);
 
-        processOutput = generateExternalProcess(args);
-
-        postWindow->postLocked("Output: ", processOutput, false);
-
-        postWindow->postLocked("Log: ", "Done!", false);
-    }
-    else
-    {
-        StringArray args = generateFaustCodeCmd("SAM-preprocessor",
-                                                cmdArgsF.inPath,
-                                                cmdArgsF.outPath);
         postWindow->postLocked("Command:", args.joinIntoString(" "), true);
 
         postWindow->postLocked("Log: ", "Run SAM-preprocessor...", false);
@@ -237,9 +213,7 @@ void SAMCmd::run()
 
         postWindow->postLocked("Log: ", "Done!", false);
 
-        args = generateFaustCodeCmd("Synth-A-Modeler",
-                                    cmdArgsF.inPath,
-                                    cmdArgsF.outPath);
+        args = generateFaustCodeCmd("Synth-A-Modeler", tmpInPath, tmpOutPath);
 
         postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
 
@@ -249,7 +223,6 @@ void SAMCmd::run()
 
         if(true)
         {
-
             File samLogFile(StoredSettings::getInstance()->getDataDir()
                             + "/" + "SAM-debug-compilation.txt");
             processOutput = samLogFile.loadFileAsString();
@@ -258,7 +231,88 @@ void SAMCmd::run()
         postWindow->postLocked("Output: ", processOutput, false);
 
         postWindow->postLocked("Log: ", "Done!", false);
+
+        if (saveInDataDir)
+        {
+            File in(tmpInPath);
+            if (!in.deleteFile())
+            {
+                DBG("Deleting temp file failed!");
+            }
+        }
     }
+    else if (type == BINARY)
+    {
+        String tmpInPath = inPath;
+
+        bool saveInDataDir = copyInfileToDataDirIfNeeded(tmpInPath);
+
+        StringArray args = generateExternalCmd(tmpInPath, exporter);
+        postWindow->postLocked("Command: ", args.joinIntoString(" "), true);
+
+        postWindow->postLocked("Log: ", "Run generate binary...", false);
+
+        processOutput = generateExternalProcess(args);
+
+        postWindow->postLocked("Output: ", processOutput, false);
+
+        postWindow->postLocked("Log: ", "Done!", false);
+
+        if (saveInDataDir)
+        {
+            File in(tmpInPath);
+            if (!in.deleteFile())
+            {
+                DBG("Deleting temp file failed!");
+            }
+        }
+    }
+}
+ThreadPoolJob::JobStatus SAMCmd::runJob()
+{
+    DBG("Job " + getJobName());
+
+    if(cmdType == FAUSTCODE)
+    {
+        generate(FAUSTCODE);
+    }
+    else if(cmdType == BINARY)
+    {
+        if(compileBeforeExportBinary)
+            generate(FAUSTCODE);
+
+        generate(BINARY);
+    }
+    return jobHasFinished;
+}
+
+bool SAMCmd::copyInfileToDataDirIfNeeded(String& inPath_)
+{
+    File in(inPath_);
+    String dataDir = StoredSettings::getInstance()->getDataDir();
+
+    File inDataDir(dataDir + "/" + in.getFileName());
+    bool saveInDataDir = false;
+    if (in != inDataDir)
+    {
+        saveInDataDir = true;
+        in.copyFileTo(inDataDir);
+        inPath_ = inDataDir.getFullPathName();
+    }
+    return saveInDataDir;
+}
+
+const String SAMCmd::getOutPath(const String& inPath_)
+{
+    File in(inPath_);
+    String outFileName = in.getFileNameWithoutExtension();
+    outFileName << ".dsp";
+
+    String dataDir = StoredSettings::getInstance()->getDataDir();
+    String outPath_ = dataDir;
+    outPath_ << "/" << outFileName;
+
+    return outPath_;
 }
 
 //==============================================================================

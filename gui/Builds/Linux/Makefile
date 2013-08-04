@@ -69,6 +69,7 @@ OBJECTS := \
   $(OBJDIR)/Alerts_379eb1e5.o \
   $(OBJDIR)/MDLParser_674db430.o \
   $(OBJDIR)/StoredSettings_125117b4.o \
+  $(OBJDIR)/SAMCmdController_24b3766b.o \
   $(OBJDIR)/PostWindowController_4e826e00.o \
   $(OBJDIR)/MDLController_4aad0d67.o \
   $(OBJDIR)/ObjController_e2cf3d29.o \
@@ -220,6 +221,11 @@ $(OBJDIR)/MDLParser_674db430.o: ../../Source/Utilities/MDLParser.cpp
 $(OBJDIR)/StoredSettings_125117b4.o: ../../Source/Utilities/StoredSettings.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling StoredSettings.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/SAMCmdController_24b3766b.o: ../../Source/Controller/SAMCmdController.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling SAMCmdController.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/PostWindowController_4e826e00.o: ../../Source/Controller/PostWindowController.cpp

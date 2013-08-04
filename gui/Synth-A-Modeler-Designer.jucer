@@ -128,6 +128,10 @@
               file="Source/Utilities/StoredSettings.h"/>
       </GROUP>
       <GROUP id="{3076B932-78A9-9CF5-9D15-340DC0A8A1FF}" name="Controller">
+        <FILE id="LKOdBg" name="SAMCmdController.cpp" compile="1" resource="0"
+              file="Source/Controller/SAMCmdController.cpp"/>
+        <FILE id="Y4jLoY" name="SAMCmdController.h" compile="0" resource="0"
+              file="Source/Controller/SAMCmdController.h"/>
         <FILE id="Jvcoku" name="PostWindowController.cpp" compile="1" resource="0"
               file="Source/Controller/PostWindowController.cpp"/>
         <FILE id="BlIZsI" name="PostWindowController.h" compile="0" resource="0"

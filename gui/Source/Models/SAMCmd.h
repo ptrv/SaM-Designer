@@ -29,30 +29,25 @@
 namespace synthamodeler
 {
 class MDLFile;
+
 /**
  * This class encapsulates the external commands for generating FAUST code
  * and other externals.
  */
-class SAMCmd : public Thread
+class SAMCmd : public ThreadPoolJob
 {
 public:
-	SAMCmd();
+    enum CmdType
+    {
+        FAUSTCODE,
+        BINARY,
+        NONE
+    };
+
+	SAMCmd(const String& input, CmdType cmdType_,
+        bool runSAMBeforeBinary = false);
 	~SAMCmd();
 
-    struct FaustCodeCmdArgs {
-        String inPath;
-        String outPath;
-    };
-    struct ExternalCmdArgs {
-        String mdlPath;
-        String exporter;
-    };
-
-    struct SAMPostMsg {
-        String title;
-        String text;
-        bool isBold;
-    };
 	/**
 	 * Checks wether the Synth-A-Modeler script is available.
 	 *
@@ -84,51 +79,39 @@ public:
 	 * @return			true if faust executable is found
 	 */
 	static bool isFaustAvailable();
-	/**
-     * Generates FAUST code for the current mdl file.
-     *
-     * @param inPath	path of the mdl file
-     * @param outPath	path of the output file
-     * @return			an empty string if generation of faust code succeeded,
-     * 					else a string with the error message.
-     */
-    void generateFaustCode(const String& inPath,
-                           const String& outPath);
+    
     const StringArray generateFaustCodeCmd(const String& cmdStr,
-                                           const String& inPath,
-                                           const String& outPath);
+                                           const String& inPath_,
+                                           const String& outPath_);
 
     const String generateFaustCodeProcess(const StringArray& args);
 
-	/**
-     * Generates external using the FAUST compiler.
-     *
-     * @return			an empty string if generation succeeded, else a string
-     * 					with error message
-     */
-    void generateExternal(const String& mdlPath,
-                          const String& exporter);
     const StringArray generateExternalCmd(const String& mdlPath,
                                          const String& exporter);
     const String generateExternalProcess(const StringArray& args);
 
     const String& getProcessOutput() const { return processOutput; }
 
-    void run();
-
-    SAMPostMsg msg;
+    JobStatus runJob();
 
 private:
     const StringArray getPerlScriptCmd(const String& script,
-                                       const String& inPath,
-                                       const String& outPath);
+                                       const String& inPath_,
+                                       const String& outPath_);
 
     const String runProcess(StringArray args);
 
-    String processOutput;
-    FaustCodeCmdArgs cmdArgsF;
-    ExternalCmdArgs cmdArgsE;
+    bool copyInfileToDataDirIfNeeded(String& inPath_);
 
+    const String getOutPath(const String& inPath_);
+
+    void generate(CmdType type);
+
+    String processOutput;
+
+    CmdType cmdType;
+    String inPath, outPath, exporter;
+    bool compileBeforeExportBinary;
 };
 }
 

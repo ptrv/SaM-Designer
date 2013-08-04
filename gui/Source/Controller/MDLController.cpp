@@ -26,9 +26,9 @@
 #include "../Application/CommonHeaders.h"
 #include "../Application/MainWindow.h"
 #include "../Models/MDLFile.h"
-#include "../Models/SAMCmd.h"
 #include "../View/ObjectsHolder.h"
 #include "../View/ContentComp.h"
+#include "../Controller/SAMCmdController.h"
 
 #include "MDLController.h"
 
@@ -40,13 +40,13 @@ MDLController::MDLController(MainAppWindow& mainAppWindow_)
 : mainAppWindow(mainAppWindow_),
   currentMdl(nullptr)
 {
-	samCmd = new SAMCmd();
+	samCmdCtrl = new SAMCmdController();
 }
 
 MDLController::~MDLController()
 {
 	currentMdl = nullptr;
-	samCmd = nullptr;
+	samCmdCtrl = nullptr;
 }
 
 void MDLController::newFile()
@@ -210,144 +210,14 @@ bool MDLController::saveAsXml()
     return saveOk;
 }
 
-const String MDLController::getInPath()
-{
-    return currentMdl->getFilePath();
-}
-
-const String MDLController::getOutPath(const String& inPath)
-{
-    File in(inPath);
-    String outFileName = in.getFileNameWithoutExtension();
-    outFileName << ".dsp";
-
-    String dataDir = StoredSettings::getInstance()->getDataDir();
-    String outPath = dataDir;
-    outPath << "/" << outFileName;
-
-    return outPath;
-}
-
-bool MDLController::copyInfileToDataDirIfNeeded(String& inPath)
-{
-    File in(inPath);
-    String dataDir = StoredSettings::getInstance()->getDataDir();
-
-    File inDataDir(dataDir + "/" + in.getFileName());
-    bool saveInDataDir = false;
-    if (in != inDataDir)
-    {
-        saveInDataDir = true;
-        in.copyFileTo(inDataDir);
-        inPath = inDataDir.getFullPathName();
-    }
-    return saveInDataDir;
-}
-
 void MDLController::generateFaust()
 {
-    bool r = true;
-    if (StoredSettings::getInstance()->getIsExportConfirm())
-        r = Alerts::confirmExport("Really export faust");
-
-    if (! SAMCmd::isPerlAvailable())
-    {
-        Alerts::missingPerl();
-        //            return "Missing Perl";
-    }
-    if (! SAMCmd::isSAMpreprocessorCmdAvailable())
-    {
-        Alerts::missingSAMpreprocessor();
-        //            return "Missing SAM-preprocessor";
-    }
-    if (! SAMCmd::isSynthAModelerCmdAvailable())
-    {
-        Alerts::missingSAM();
-        //            return "Missing Synth-A-Modeler";
-    }
-
-    if (r)
-    {
-        if (currentMdl->save(true, true) != FileBasedDocument::savedOk)
-            //                return "Canceled";
-            return;
-
-        String inPath = getInPath();
-        String outPath = getOutPath(inPath);
-
-        // if current MDL file is not in data dir make a temp copy in data dir
-        bool saveInDataDir = copyInfileToDataDirIfNeeded(inPath);
-
-        samCmd->generateFaustCode(inPath, outPath);
-
-        if (StoredSettings::getInstance()->getOpenFaustExport())
-            Utils::openFileNative(outPath);
-
-        // delete temp MDL file
-        if (saveInDataDir)
-        {
-            File in(inPath);
-            if (!in.deleteFile())
-            {
-                DBG("Deleting temp file failed!");
-            }
-        }
-    }
+    samCmdCtrl->generateDSP(currentMdl);
 }
 
 void MDLController::generateExternal()
 {
-	if(currentMdl->getName().compare("Untitled") == 0)
-    {
-        SAM_CONSOLE("Error", "No mdl file", false);
-		return;
-    }
-
-	if(! SAMCmd::isFaustAvailable())
-	{
-		SAM_CONSOLE("Error" , "Missing faust executable", false);
-		Alerts::missingFaust();
-	}
-
-	bool r = true;
-	if(StoredSettings::getInstance()->getIsExportConfirm())
-		r = Alerts::confirmExport("Really export faust");
-
-	if (r)
-	{
-        if(currentMdl->save(true, true) != FileBasedDocument::savedOk)
-        {
-            SAM_CONSOLE("Error" , "Generating binary canceled", false);
-            return;
-        }
-
-        if(StoredSettings::getInstance()->getRunSAMBeforeExternal())
-            generateFaust();
-
-        // if current MDL file is not in data dir make a temp copy in data dir
-        String dataDir = StoredSettings::getInstance()->getDataDir();
-        File inDataDir(dataDir + "/" + currentMdl->getFile().getFileName());
-        bool saveInDataDir = false;
-        if (currentMdl->getFile() != inDataDir)
-        {
-            saveInDataDir = true;
-            currentMdl->getFile().copyFileTo(inDataDir);
-        }
-
-        String currentExporter = StoredSettings::getInstance()->getCurrentExporter();
-        String exporterValue = StoredSettings::getInstance()->getExporters().getValue(currentExporter, "");
-
-        samCmd->generateExternal(inDataDir.getFullPathName(), exporterValue);
-
-        // delete temp MDL file
-        if(saveInDataDir)
-        {
-            if(! inDataDir.deleteFile())
-            {
-                DBG("Deleting temp file failed!");
-            }
-        }
-	}
+    samCmdCtrl->generateBinary(currentMdl);
 }
 
 const String MDLController::getMDLName()

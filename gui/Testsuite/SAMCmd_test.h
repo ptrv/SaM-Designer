@@ -39,7 +39,7 @@ public:
 		String expectedPath = String(TESTSUITE_DATA_PATH) + "test_expected.dsp";
 		String outPath = String(TESTSUITE_DATA_PATH) + "test.dsp";
 
-		SAMCmd cmd;
+//		SAMCmd cmd(inPath, SAMCmd::NONE);
 		beginTest("isPerlAvailable");
 		expect(SAMCmd::isPerlAvailable(), "");
 		beginTest("isSAMpreprocessorCmdAvailable");
