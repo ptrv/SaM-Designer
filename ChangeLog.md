@@ -1,6 +1,19 @@
 ChangeLog Synth-A-Modeler Designer
 ==================================
 
+0.4.0
+-----
+
+### New ###
+
+
+### Changes ###
+
+
+### Bug fixes ###
+
+
+
 0.3.0
 -----
 
