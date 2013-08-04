@@ -70,7 +70,6 @@ private:
     ScopedPointer<ToggleButton> tbAutoCorrect;
     ScopedPointer<ToggleButton> tbRunSAMBeforeExternal;
     ScopedPointer<ToggleButton> tbConfirmBeforeGeneration;
-    ScopedPointer<ToggleButton> tbOpenDSPFileAfterExp;
     ScopedPointer<ToggleButton> tbUseMDLX;
     ScopedPointer<ToggleButton> tbLogging;
     ScopedPointer<ToggleButton> tbRedrawWhenNoPos;

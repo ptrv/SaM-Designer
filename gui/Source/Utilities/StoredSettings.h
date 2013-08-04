@@ -80,9 +80,6 @@ public:
     bool getIsLoggingOn() const;
     void setIsLoggingOn (bool isLoggingOn);
 
-    bool getOpenFaustExport() const;
-    void setOpenFaustExport (bool isOpenMdlAfterExport);
-
     const String getCurrentExporter() const;
     void setCurrentExporter(const String& currentExporter);
 

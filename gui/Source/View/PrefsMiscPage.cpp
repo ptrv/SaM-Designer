@@ -87,10 +87,6 @@ MiscPage::MiscPage ()
     tbConfirmBeforeGeneration->setButtonText ("Confirm before generating code");
     tbConfirmBeforeGeneration->addListener (this);
 
-    addAndMakeVisible (tbOpenDSPFileAfterExp = new ToggleButton ("tbOpenDSPFileAfterExp"));
-    tbOpenDSPFileAfterExp->setButtonText ("Open *.dsp file after compilation");
-    tbOpenDSPFileAfterExp->addListener (this);
-
     addAndMakeVisible (tbUseMDLX = new ToggleButton ("tbUseMDLX"));
     tbUseMDLX->setButtonText ("Use MDLX format");
     tbUseMDLX->addListener (this);
@@ -133,7 +129,6 @@ MiscPage::~MiscPage()
     tbAutoCorrect = nullptr;
     tbRunSAMBeforeExternal = nullptr;
     tbConfirmBeforeGeneration = nullptr;
-    tbOpenDSPFileAfterExp = nullptr;
     tbUseMDLX = nullptr;
     tbLogging = nullptr;
     tbRedrawWhenNoPos = nullptr;
@@ -166,10 +161,9 @@ void MiscPage::resized()
     tbAutoCorrect->setBounds (8, 192, getWidth() - 16, 24);
     tbRunSAMBeforeExternal->setBounds (8, 224, getWidth() - 16, 24);
     tbConfirmBeforeGeneration->setBounds (8, 256, getWidth() - 16, 24);
-    tbOpenDSPFileAfterExp->setBounds (8, 288, getWidth() - 16, 24);
-    tbUseMDLX->setBounds (8, 320, getWidth() - 16, 24);
-    tbLogging->setBounds (8, 352, getWidth() - 16, 24);
-    tbRedrawWhenNoPos->setBounds (8, 384, getWidth() - 16, 24);
+    tbUseMDLX->setBounds (8, 288, getWidth() - 16, 24);
+    tbLogging->setBounds (8, 320, getWidth() - 16, 24);
+    tbRedrawWhenNoPos->setBounds (8, 352, getWidth() - 16, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -196,12 +190,6 @@ void MiscPage::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_tbConfirmBeforeGeneration] -- add your button handler code here..
         StoredSettings::getInstance()->setIsExportConfirm(tbConfirmBeforeGeneration->getToggleState());
         //[/UserButtonCode_tbConfirmBeforeGeneration]
-    }
-    else if (buttonThatWasClicked == tbOpenDSPFileAfterExp)
-    {
-        //[UserButtonCode_tbOpenDSPFileAfterExp] -- add your button handler code here..
-        StoredSettings::getInstance()->setOpenFaustExport(tbOpenDSPFileAfterExp->getToggleState());
-        //[/UserButtonCode_tbOpenDSPFileAfterExp]
     }
     else if (buttonThatWasClicked == tbUseMDLX)
     {
@@ -260,8 +248,6 @@ void MiscPage::readValues()
                                            dontSendNotification);
     tbConfirmBeforeGeneration->setToggleState(StoredSettings::getInstance()->getIsExportConfirm(),
                                               dontSendNotification);
-    tbOpenDSPFileAfterExp->setToggleState(StoredSettings::getInstance()->getOpenFaustExport(),
-                                          dontSendNotification);
     tbUseMDLX->setToggleState(StoredSettings::getInstance()->getIsUsingMDLX(),
                               dontSendNotification);
     tbLogging->setToggleState(StoredSettings::getInstance()->getIsLoggingOn(),
@@ -320,17 +306,14 @@ BEGIN_JUCER_METADATA
   <TOGGLEBUTTON name="tbConfirmBeforeGeneration" id="38d630ddadac6157" memberName="tbConfirmBeforeGeneration"
                 virtualName="" explicitFocusOrder="0" pos="8 256 16M 24" buttonText="Confirm before generating code"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
-  <TOGGLEBUTTON name="tbOpenDSPFileAfterExp" id="e2fc5a93d51d6fc8" memberName="tbOpenDSPFileAfterExp"
-                virtualName="" explicitFocusOrder="0" pos="8 288 16M 24" buttonText="Open *.dsp file after compilation"
-                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <TOGGLEBUTTON name="tbUseMDLX" id="c0223498bd8f5b96" memberName="tbUseMDLX"
-                virtualName="" explicitFocusOrder="0" pos="8 320 16M 24" buttonText="Use MDLX format"
+                virtualName="" explicitFocusOrder="0" pos="8 288 16M 24" buttonText="Use MDLX format"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <TOGGLEBUTTON name="tbLogging" id="69bceff3e30923de" memberName="tbLogging"
-                virtualName="" explicitFocusOrder="0" pos="8 352 16M 24" buttonText="Logging (After change, restart required)"
+                virtualName="" explicitFocusOrder="0" pos="8 320 16M 24" buttonText="Logging (After change, restart required)"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <TOGGLEBUTTON name="tbRedrawWhenNoPos" id="580755024d1dbf83" memberName="tbRedrawWhenNoPos"
-                virtualName="" explicitFocusOrder="0" pos="8 384 16M 24" buttonText="Redraw model when no position data present"
+                virtualName="" explicitFocusOrder="0" pos="8 352 16M 24" buttonText="Redraw model when no position data present"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 

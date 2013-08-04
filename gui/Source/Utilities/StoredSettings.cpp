@@ -310,15 +310,6 @@ void StoredSettings::setIsLoggingOn (bool isLoggingOn)
     props->setValue("loggingOn", isLoggingOn);
 }
 
-bool StoredSettings::getOpenFaustExport() const
-{
-    return props->getBoolValue("openFaustExport", false);
-}
-void StoredSettings::setOpenFaustExport(bool isOpenMdlAfterExport)
-{
-    props->setValue("openFaustExport", isOpenMdlAfterExport);
-}
-
 const String StoredSettings::getCurrentExporter() const
 {
     return props->getValue("currentExporter", "");
