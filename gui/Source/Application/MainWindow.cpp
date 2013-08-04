@@ -63,7 +63,7 @@ MainAppWindow::MainAppWindow()
     centreWithSize (800, 600);
 
 	commandManager->registerAllCommandsForTarget(this);
-    commandManager->registerAllCommandsForTarget (getMDLFileContentComponent());
+//    commandManager->registerAllCommandsForTarget (getMDLFileContentComponent());
 
     // this lets the command manager use keypresses that arrive in our window to send
     // out commands

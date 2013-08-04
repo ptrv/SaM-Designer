@@ -199,6 +199,10 @@ objectsHolder(0)
 
     //    objectsHolder->setVisible(true);
     setWantsKeyboardFocus(true);
+
+    commandManager->registerAllCommandsForTarget(this);
+    addKeyListener(commandManager->getKeyMappings());
+
     //[/Constructor]
 }
 
@@ -287,51 +291,13 @@ ApplicationCommandTarget* ContentComp::getNextCommandTarget()
 void ContentComp::getAllCommands(Array <CommandID>& commands)
 {
     // this returns the set of all commands that this target can perform..
-    const CommandID ids[] = {CommandIDs::undo,
+    const CommandID ids[] = {
+        CommandIDs::undo,
         CommandIDs::redo,
-        StandardApplicationCommandIDs::cut,
-        StandardApplicationCommandIDs::copy,
-        StandardApplicationCommandIDs::paste,
-        StandardApplicationCommandIDs::del,
-        StandardApplicationCommandIDs::selectAll,
-        StandardApplicationCommandIDs::deselectAll,
-        CommandIDs::segmentedConnectors,
         CommandIDs::zoomIn,
         CommandIDs::zoomOut,
         CommandIDs::zoomNormal,
-        CommandIDs::reverseDirection,
-        CommandIDs::defineFaustcode,
-        CommandIDs::tidyObjects,
-        CommandIDs::redrawCircle,
-        CommandIDs::redrawForceDirected,
-        CommandIDs::showRedrawOptions,
-        CommandIDs::insertMass,
-        CommandIDs::insertGround,
-        CommandIDs::insertResonator,
-        CommandIDs::insertPort,
-        CommandIDs::insertLink,
-        CommandIDs::insertTouch,
-        CommandIDs::insertPulsetouch,
-        CommandIDs::insertPluck,
-        CommandIDs::insertAudioOutput,
-        CommandIDs::insertAudioConnection,
-        CommandIDs::insertWaveguide,
-        CommandIDs::insertTermination,
-        CommandIDs::insertJunction,
-        CommandIDs::insertComment,
         CommandIDs::spaceBarDrag,
-        CommandIDs::moveUp,
-        CommandIDs::moveDown,
-        CommandIDs::moveLeft,
-        CommandIDs::moveRight,
-        CommandIDs::moveUpFine,
-        CommandIDs::moveDownFine,
-        CommandIDs::moveLeftFine,
-        CommandIDs::moveRightFine,
-        CommandIDs::showObjectNames,
-        CommandIDs::enableSnapToGrid,
-        CommandIDs::showGrid,
-        CommandIDs::showAudioConnections,
     };
 
     commands.addArray(ids, numElementsInArray(ids));
@@ -353,36 +319,6 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.addDefaultKeypress('z', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
 
-    case StandardApplicationCommandIDs::cut:
-        result.setInfo("Cut", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('x', ModifierKeys::commandModifier);
-        break;
-    case StandardApplicationCommandIDs::copy:
-        result.setInfo("Copy", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('c', ModifierKeys::commandModifier);
-        break;
-    case StandardApplicationCommandIDs::paste:
-        result.setInfo("Paste", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('v', ModifierKeys::commandModifier);
-        break;
-    case StandardApplicationCommandIDs::selectAll:
-        result.setInfo("Select All", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('a', ModifierKeys::commandModifier);
-        break;
-    case StandardApplicationCommandIDs::deselectAll:
-        result.setInfo("Deselect All", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('a', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
-        break;
-    case StandardApplicationCommandIDs::del:
-        result.setInfo("Delete", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress(KeyPress::deleteKey, 0);
-        result.addDefaultKeypress(KeyPress::backspaceKey, 0);
-        break;
-    case CommandIDs::segmentedConnectors:
-        result.setInfo("Segmented Connectors", "", CommandCategories::editing, 0);
-        result.setTicked(StoredSettings::getInstance()->getIsSegmentedConnectors());
-        result.addDefaultKeypress('t', ModifierKeys::commandModifier);
-        break;
     case CommandIDs::zoomIn:
         result.setInfo("Zoom In", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('9', ModifierKeys::altModifier);
@@ -395,157 +331,12 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.setInfo("Zoom Normal", "", CommandCategories::editing, 0);
         result.addDefaultKeypress('0', ModifierKeys::altModifier);
         break;
-    case CommandIDs::reverseDirection:
-        result.setInfo("Reverse Direction", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('r', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::defineFaustcode:
-        result.setInfo("Define FAUST Code", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('d', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::tidyObjects:
-        result.setInfo("Tidy Up", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::redrawCircle:
-        result.setInfo("Circle", "", CommandCategories::editing, 0);
-        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
-        break;
-    case CommandIDs::redrawForceDirected:
-        result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
-        result.setActive(mainWindow.getMDLFile() != nullptr ? (! mainWindow.getMDLFile()->isEmpty()) : false);
-        result.addDefaultKeypress('r', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::showRedrawOptions:
-        result.setInfo("Force-Directed options...", "Open redraw options", CommandCategories::editing, 0);
-        result.addDefaultKeypress('d', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::insertMass:
-        result.setInfo("Mass", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('1', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertGround:
-        result.setInfo("Ground", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('2', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertResonator:
-        result.setInfo("Resonator", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('3', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertPort:
-        result.setInfo("Port", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('4', ModifierKeys::commandModifier);
-        break;
-
-    case CommandIDs::insertLink:
-        result.setInfo("Linear Link", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('5', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertTouch:
-        result.setInfo("Touch Link", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('6', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertPulsetouch:
-        result.setInfo("Pulsetouch Link", "", CommandCategories::inserting, 0);
-//        result.addDefaultKeypress('6', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertPluck:
-        result.setInfo("Pluck Link", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('7', ModifierKeys::commandModifier);
-        break;
-
-    case CommandIDs::insertAudioOutput:
-        result.setInfo("Audio Output", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('8', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertAudioConnection:
-        result.setInfo("Audio Connection", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
-        break;
-    case CommandIDs::insertWaveguide:
-        result.setInfo("Waveguide", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('9', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertTermination:
-        result.setInfo("Termination", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('0', ModifierKeys::commandModifier);
-        break;
-    case CommandIDs::insertJunction:
-        result.setInfo("Junction", "", CommandCategories::inserting, 0);
-        result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
-        break;
-    case CommandIDs::insertComment:
-    {
-        result.setInfo("Comment", "", CommandCategories::inserting, 0);
-//        MDLFile * mdlF = mainWindow.getMDLFile();
-//        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
-//                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
-    }
-        break;
     case CommandIDs::spaceBarDrag:
         result.setInfo("Scroll while dragging mouse",
                        "When held down, this key lets you scroll around by dragging with the mouse.",
                        CommandCategories::view, ApplicationCommandInfo::wantsKeyUpDownCallbacks);
         //        result.setActive(currentPaintRoutine != 0 || currentLayout != 0);
         result.defaultKeypresses.add(KeyPress(KeyPress::spaceKey, 0, 0));
-        break;
-    case CommandIDs::moveUp:
-        result.setInfo("Move Object Up", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::upKey, 0);
-        break;
-    case CommandIDs::moveUpFine:
-        result.setInfo("Move Object Up Fine", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::upKey, ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::moveDown:
-        result.setInfo("Move Object Down", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::downKey, 0);
-        break;
-    case CommandIDs::moveDownFine:
-        result.setInfo("Move Object Down Fine", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::downKey, ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::moveLeft:
-        result.setInfo("Move Object Left", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::leftKey, 0);
-        break;
-    case CommandIDs::moveLeftFine:
-        result.setInfo("Move Object Left Fine", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::leftKey, ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::moveRight:
-        result.setInfo("Move Object Right", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::rightKey, 0);
-        break;
-    case CommandIDs::moveRightFine:
-        result.setInfo("Move Object Right Fine", "", CommandCategories::generation, 0);
-        result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::shiftModifier);
-        break;
-    case CommandIDs::showObjectNames:
-        result.setInfo("Show Identifiers", "", CommandCategories::editing, 0);
-        result.addDefaultKeypress('i', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
-        result.setTicked(objectsHolder->getShowObjectNames());
-        break;
-
-    case CommandIDs::enableSnapToGrid:
-        result.setInfo("Enable Snap-to-grid",
-                       "Toggles whether components' positions are aligned to a grid.",
-                       CommandCategories::view, 0);
-        result.setTicked(objectsHolder->isSnapActive(false));
-//        result.defaultKeypresses.add(KeyPress('g', cmd, 0));
-        break;
-
-    case CommandIDs::showGrid:
-        result.setInfo("Show Grid",
-                       "Toggles whether the snapping grid is displayed on-screen.",
-                       CommandCategories::view, 0);
-        result.setTicked(objectsHolder->isSnapShown());
-//        result.defaultKeypresses.add(KeyPress('g', cmd | shift, 0));
-        break;
-
-    case CommandIDs::showAudioConnections:
-        result.setInfo("Show Audio Connections", "", CommandCategories::view, 0);
-        result.setTicked(StoredSettings::getInstance()->getShowAudioConnections());
         break;
     default:
         break;
@@ -581,7 +372,8 @@ bool ContentComp::perform(const InvocationInfo& info)
         break;
 
     default:
-        return objectsHolder->perform(info);
+        return false;
+//        return objectsHolder->perform(info);
     }
     mainWindow.getUndoManager()->beginNewTransaction();
     return true;

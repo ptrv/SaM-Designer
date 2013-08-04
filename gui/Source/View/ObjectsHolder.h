@@ -44,7 +44,8 @@ class ContentComp;
 class ObjectsHolder : public Component,
                       public LassoSource <SelectableObject*>,
                       public ChangeListener,
-                      public Timer
+                      public Timer,
+                      public ApplicationCommandTarget
 {
 public:
     ObjectsHolder(ObjController& objController_);
@@ -63,7 +64,12 @@ public:
 
     bool keyPressed(const KeyPress& key);
 
-    bool perform(const ApplicationCommandTarget::InvocationInfo& info);
+    //==========================================================================
+    ApplicationCommandTarget* getNextCommandTarget();
+	void getAllCommands(Array<CommandID>& commands);
+	void getCommandInfo(CommandID commandID, ApplicationCommandInfo& result);
+	bool perform(const InvocationInfo& info);
+    //==========================================================================
 
     void setMDLFile(MDLFile* newMDLFile);
     void reloadMDLFile();
