@@ -106,12 +106,16 @@ void PostWindow::printWelcomeMessage()
 }
 void PostWindow::printHeader()
 {
+    String currTime = Time::getCurrentTime().formatted("%F %T");
+    currTime << "." << String::formatted("%03d", Utils::getCurrentTimeMillis());
+
 	String debugText;
 	debugText << newLine;
 	debugText << "[";
-	debugText << Time::getCurrentTime().toString(true,true, true, true);
-	debugText << "]: " << newLine;
-	debugText << newLine;
+	debugText << currTime;
+	debugText << "]: ";
+//	debugText << "]: " << newLine;
+//	debugText << newLine;
 	addText(debugText, false);
 }
 

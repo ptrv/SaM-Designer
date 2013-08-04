@@ -36,6 +36,8 @@
 #include "MiscUtilities.h"
 #include "RegularExpression.h"
 
+#include <sys/time.h>
+
 using namespace synthamodeler;
 
 bool Utils::cancelAnyModalComponents()
@@ -51,9 +53,11 @@ bool Utils::cancelAnyModalComponents()
 
 void Utils::SAMLogger(const String& message)
 {
-String timeString;
+    String timeString;
 //	timeString << "[" << Time::getCurrentTime().formatted("%H:%M:%S")
-	timeString << "[" << Time::getCurrentTime().formatted("%c") << "]: ";
+	timeString << "[" << Time::getCurrentTime().formatted("%F %T");
+    timeString << "." << String::formatted("%03d", getCurrentTimeMillis());
+    timeString << "]: ";
 	String tmp;
 	tmp << timeString << message;
 	Logger::writeToLog(tmp);
@@ -466,3 +470,12 @@ const Identifier allObjectIdsArr[] = {
 };
 
 const Array<Identifier> Utils::allObjectIds(allObjectIdsArr);
+
+int Utils::getCurrentTimeMillis()
+{
+    struct timeval tv;
+    gettimeofday (&tv, nullptr);
+    int millis = tv.tv_usec / 1000;
+
+    return millis;
+}

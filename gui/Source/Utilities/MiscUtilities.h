@@ -113,6 +113,8 @@ extern const Array<Identifier> resonatorParamIds;
 
 extern const Array<Identifier> allObjectIds;
 
+int getCurrentTimeMillis();
+
 };
 
 }
