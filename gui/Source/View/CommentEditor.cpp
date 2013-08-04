@@ -119,7 +119,7 @@ void CommentEditor::addPopupMenuItems(PopupMenu& m, const MouseEvent* mouseClick
     TextEditor::addPopupMenuItems(m, mouseClickEvent);
 
     m.addSeparator();
-    m.addItem(CommandIDs::selectTextColour, "Text Colour");
+    m.addItem(CommandIDs::selectTextColour, "Text Color");
 }
 
 void CommentEditor::performPopupMenuAction(int menuItemID)

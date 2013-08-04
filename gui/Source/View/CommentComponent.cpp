@@ -44,8 +44,8 @@ CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
 			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
 	setComponentEffect (&shadow);
 
-    commentColour = Colour::fromString(data.getProperty(Ids::commentColour, Colours::black.toString()));
-    textField = new CommentEditor(*this, data.getProperty(Ids::fontSize, 16.0f), commentColour);
+    commentColor = Colour::fromString(data.getProperty(Ids::commentColour, Colours::black.toString()));
+    textField = new CommentEditor(*this, data.getProperty(Ids::fontSize, 16.0f), commentColor);
     textField->setText(data[Ids::value].toString(), false);
     textField->addListener(this);
     addAndMakeVisible(textField);
@@ -221,8 +221,8 @@ void CommentComponent::changeListenerCallback (ChangeBroadcaster* source)
 {
     if (ColourSelector* cs = dynamic_cast <ColourSelector*> (source))
     {
-        commentColour = cs->getCurrentColour();
-        textField->setColour (TextEditor::textColourId, commentColour);
+        commentColor = cs->getCurrentColour();
+        textField->setColour (TextEditor::textColourId, commentColor);
         textField->applyFont();
     }
     else
@@ -265,10 +265,10 @@ void CommentComponent::textEditorFocusLost(TextEditor&)
         owner.getUndoManager()->beginNewTransaction("Set comment font height");
         data.setProperty(Ids::fontSize, textField->getFont().getHeight(), owner.getUndoManager());
     }
-    if(data[Ids::commentColour].toString().compare(commentColour.toString()) != 0)
+    if(data[Ids::commentColour].toString().compare(commentColor.toString()) != 0)
     {
-        owner.getUndoManager()->beginNewTransaction("Set comment text colour");
-        data.setProperty(Ids::commentColour, commentColour.toString(), owner.getUndoManager());
+        owner.getUndoManager()->beginNewTransaction("Set comment text color");
+        data.setProperty(Ids::commentColour, commentColor.toString(), owner.getUndoManager());
     }
 
 }
@@ -291,11 +291,11 @@ void CommentComponent::valueTreePropertyChanged(ValueTree& treeWhosePropertyHasC
     }
     if(treeWhosePropertyHasChanged == data && property == Ids::commentColour)
     {
-        Colour textColour = Colour::fromString(data[Ids::commentColour].toString());
-        if(textColour != commentColour)
+        Colour textColor = Colour::fromString(data[Ids::commentColour].toString());
+        if(textColor != commentColor)
         {
-            commentColour = textColour;
-            textField->setColour(TextEditor::textColourId, commentColour);
+            commentColor = textColor;
+            textField->setColour(TextEditor::textColourId, commentColor);
             textField->applyFont();
         }
     }

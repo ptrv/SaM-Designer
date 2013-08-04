@@ -91,7 +91,7 @@ private:
 
     ChangeBroadcaster selfChangeListenerList;
 
-    Colour commentColour;
+    Colour commentColor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CommentComponent);
 };
