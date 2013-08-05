@@ -92,7 +92,6 @@ void PostWindow::addText(const String& compilerText, bool isBold)
 	SAM_LOG(compilerText);
     console->setBold(isBold);
 	console->addLine(compilerText);
-    console->setBold(!isBold);
 }
 
 void PostWindow::printWelcomeMessage()
