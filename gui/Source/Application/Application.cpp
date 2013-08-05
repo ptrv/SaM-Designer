@@ -322,7 +322,7 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
     	break;
     case CommandIDs::showPostWindow:
-        result.setInfo("Show Post Window", "", CommandCategories::tools,0);
+        result.setInfo("Toggle Post Window", "", CommandCategories::tools,0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::showPropertiesWindow:
@@ -354,7 +354,7 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
 
     case CommandIDs::showPostWindow:
-        postWindow->toFront();
+        togglePostWindowFocus();
     	break;
     case CommandIDs::clearOutputConsole:
         postWindow->clear();
@@ -408,6 +408,29 @@ void SynthAModelerApplication::updateRecentProjectList()
     }
 
     StoredSettings::getInstance()->setLastFiles(projects);
+}
+
+void SynthAModelerApplication::togglePostWindowFocus()
+{
+    if(! postWindow->isActiveWindow())
+        postWindow->toFront();
+    else if(MainAppWindow* mw = getFrontmostWindow())
+        mw->toFront(true);
+}
+
+MainAppWindow* SynthAModelerApplication::getFrontmostWindow()
+{
+	if (mainWindows.size() == 0)
+		return nullptr;
+
+	for (int i = Desktop::getInstance().getNumComponents(); --i >= 0;)
+	{
+		MainAppWindow* mw = dynamic_cast <MainAppWindow*> (Desktop::getInstance().getComponent (i));
+		if (mainWindows.contains (mw))
+			return mw;
+	}
+
+	return mainWindows.getLast();
 }
 
 MainAppWindow* SynthAModelerApplication::createNewMainWindow()

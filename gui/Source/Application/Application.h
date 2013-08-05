@@ -94,10 +94,12 @@ public:
     bool closeAllDocuments (bool askUserToSave);
     void updateRecentProjectList();
 
+    void togglePostWindowFocus();
 
 private:
     OwnedArray<MainAppWindow> mainWindows;
 
+    MainAppWindow* getFrontmostWindow();
     MainAppWindow* getOrCreateFrontmostWindow();
     MainAppWindow* getOrCreateEmptyWindow();
     void avoidSuperimposedWindows (MainAppWindow* const mw);

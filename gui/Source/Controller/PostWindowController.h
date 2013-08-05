@@ -37,6 +37,7 @@ public:
     void postLocked(const String& textToWrite, const PostLevel pl=ALL,
                     bool isBold = false);
 
+    bool isActiveWindow();
     void toFront();
     void clear();
 

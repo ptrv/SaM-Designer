@@ -90,6 +90,10 @@ void PostWindowController::postLocked(const String& textToWrite,
         post(textToWrite, pl, isBold);
 }
 
+bool PostWindowController::isActiveWindow()
+{
+    return postWin->isActiveWindow();
+}
 void PostWindowController::toFront()
 {
     postWin->toFront(true);
