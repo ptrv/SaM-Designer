@@ -39,19 +39,23 @@ public:
 	: DialogWindow("Exporter", Colours::lightgrey, true)
 	{
 		ExporterInputComponent* const eic = new ExporterInputComponent(*this, exporterIndex);
-		eic->setSize(350, 100);
+		eic->setSize(350, 200);
 
 		setContentOwned (eic, true);
+
+        restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
+                                      .getValue ("lastPrefsPanelExporterInputPos"));
 
 		centreAroundComponent (0, getWidth(), getHeight());
 
 		setResizable (true, false);
-	}
+    }
 
 	~ExporterInputPanel()
 	{
-
-	}
+        StoredSettings::getInstance()->getProps()
+            .setValue ("lastPrefsPanelExporterInputPos", getWindowStateAsString());
+    }
     void closeButtonPressed()
     {
     	setVisible(false);
@@ -84,6 +88,7 @@ private:
 
             addAndMakeVisible(teVarValue = new TextEditor("Input Value"));
             teVarValue->addListener(this);
+            teVarValue->setMultiLine(true);
 
             addAndMakeVisible(btOk = new TextButton("Ok"));
             btOk->addListener(this);
@@ -115,7 +120,7 @@ private:
             laVarName->setBounds(0, 5, 60, 22);
             teVarName->setBounds(60, 5, getWidth() - 65, 22);
             laVarValue->setBounds(0, 40, 60, 22);
-            teVarValue->setBounds(60, 40, getWidth() - 65, 22);
+            teVarValue->setBounds(60, 40, getWidth() - 65, getHeight()-78);
             btOk->setBounds(getWidth()/2 - 65, getHeight() - 30, 60, 22);
             btCancel->setBounds(getWidth()/2 + 5, getHeight() - 30, 60, 22);
     	}
@@ -464,7 +469,7 @@ public:
 
 
 //==============================================================================
-static String prefsWindowPos;
+//static String prefsWindowPos;
 
 
 PrefsPanel::PrefsPanel()
@@ -476,16 +481,19 @@ PrefsPanel::PrefsPanel()
 
     setContentOwned (p, true);
 
-    if (! restoreWindowStateFromString (prefsWindowPos))
-        centreWithSize(getWidth(), getHeight());
+    const String prefsWindowPos = StoredSettings::getInstance()->getProps()
+                                    .getValue ("lastPrefsPanelWindowPos");
+    restoreWindowStateFromString (prefsWindowPos);
 
+    centreWithSize(getWidth(), getHeight());
     setResizable (true, true);
     setResizeLimits (400, 400, 1000, 800);
 }
 
 PrefsPanel::~PrefsPanel()
 {
-    prefsWindowPos = getWindowStateAsString();
+    StoredSettings::getInstance()->getProps()
+            .setValue ("lastPrefsPanelWindowPos", getWindowStateAsString());
 }
 
 void PrefsPanel::closeButtonPressed()
