@@ -543,3 +543,13 @@ bool Utils::isFaustAvailable()
 #endif
 	return isCmdAvailable(cmdFaust);
 }
+
+const String Utils::getSAMLog()
+{
+    File dataDir = StoredSettings::getInstance()->getDataDir();
+    File samLogFile = dataDir.getChildFile("SAM-debug-compilation.txt");
+    if(samLogFile.existsAsFile())
+        return samLogFile.loadFileAsString();
+    else
+        return "SAM Log not found!";
+}

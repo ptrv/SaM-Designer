@@ -242,6 +242,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
                                 CommandIDs::dumpMDL,
                                 CommandIDs::openMdlFileExtern,
                                 CommandIDs::showMDLProperties,
+                                CommandIDs::printSAMLog,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -288,6 +289,9 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
 #endif
     case CommandIDs::dumpMDL:
         result.setInfo("Dump MDL", "", CommandCategories::tools, 0);
+        break;
+    case CommandIDs::printSAMLog:
+        result.setInfo("Print SAM Log", "", CommandCategories::tools, 0);
         break;
     case CommandIDs::openMdlFileExtern:
         result.setInfo("Open MDL File Externally", "", CommandCategories::tools, 0);
@@ -397,6 +401,9 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         break;
     case CommandIDs::showMDLProperties:
         showMDLProperties();
+        break;
+    case CommandIDs::printSAMLog:
+        SAM_CONSOLE_ALL("SAM compilation output:\n\n" + Utils::getSAMLog());
         break;
 
 	default:

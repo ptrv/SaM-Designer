@@ -631,7 +631,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
                 isTicked = true;
             menu.addItem(200 + i, spa.getAllKeys()[i],true,isTicked);
         }
-
     }
     else if (topLevelMenuIndex == 4)
     {
@@ -640,6 +639,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
       	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::openDataDir);
         menu.addCommandItem(commandManager, CommandIDs::openMdlFileExtern);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::printSAMLog);
         menu.addSeparator();
         menu.addCommandItem(commandManager, CommandIDs::dumpMDL);
 #ifdef _DEBUG

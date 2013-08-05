@@ -147,6 +147,8 @@ bool isPerlAvailable();
  */
 bool isFaustAvailable();
 
+const String getSAMLog();
+
 };
 
 }
