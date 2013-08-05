@@ -32,6 +32,7 @@
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../Controller/ObjController.h"
+#include "../Models/SAMCmd.h"
 
 #include "MiscUtilities.h"
 #include "RegularExpression.h"
@@ -548,8 +549,9 @@ const String Utils::getSAMLog()
 {
     File dataDir = StoredSettings::getInstance()->getDataDir();
     File samLogFile = dataDir.getChildFile("SAM-debug-compilation.txt");
-    if(samLogFile.existsAsFile())
+    if(samLogFile.existsAsFile()
+        && samLogFile.getLastModificationTime() <= SAMCmd::lastFaustCodeGenTime)
         return samLogFile.loadFileAsString();
     else
-        return "SAM Log not found!";
+        return "No SAM Log!";
 }

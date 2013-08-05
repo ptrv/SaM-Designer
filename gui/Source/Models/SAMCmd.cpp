@@ -30,6 +30,8 @@
 
 using namespace synthamodeler;
 
+Time SAMCmd::lastFaustCodeGenTime = Time();
+
 SAMCmd::SAMCmd()
 : ThreadPoolJob("SAMCmd job"), cmdType(NONE), inPath(String::empty),
     outPath(String::empty), exporter(String::empty)
@@ -204,6 +206,8 @@ void SAMCmd::generate(CmdType type)
                 SAM_CONSOLE("Deleting temp file failed!", PostLevel::ERROR);
             }
         }
+
+        lastFaustCodeGenTime = Time::getCurrentTime();
     }
     else if (type == BINARY)
     {

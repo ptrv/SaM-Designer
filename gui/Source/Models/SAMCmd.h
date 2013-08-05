@@ -65,6 +65,8 @@ public:
 
     CmdType getCurrentType() const { return cmdType; }
 
+    static Time lastFaustCodeGenTime;
+
 private:
     const StringArray getPerlScriptCmd(const String& script,
                                        const String& inPath_,
