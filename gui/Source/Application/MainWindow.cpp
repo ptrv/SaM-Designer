@@ -188,6 +188,10 @@ void MainAppWindow::activeWindowStatusChanged()
     {
         propertiesWindow->setCurrentActiveWindow(*this);
     }
+    if(isActiveWindow())
+    {
+        SynthAModelerApplication::getApp()->mainWindowActivityChanged(this);
+    }
 }
 
 void MainAppWindow::restoreWindowPosition()

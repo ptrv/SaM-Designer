@@ -83,6 +83,15 @@ public:
         void menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/);
     };
 
+    enum
+    {
+        recentProjectsBaseID = 100,
+        exportersBaseID = 200,
+        snappingSizesBaseID = 300,
+        activeMDLsBaseID = 400,
+    };
+
+
     ScopedPointer<MainMenuModel> menuModel;
 
     bool openFile(const File& file);
@@ -95,6 +104,8 @@ public:
     void updateRecentProjectList();
 
     void togglePostWindowFocus();
+
+    void mainWindowActivityChanged (MainAppWindow* mainWin);
 
 private:
     OwnedArray<MainAppWindow> mainWindows;
@@ -121,6 +132,11 @@ private:
 
     void togglePropertiesWindow();
     void togglePropertiesWindowAlwaysOnTop();
+
+    void switchToNextWindow();
+    void switchToPreviousWindow();
+
+    Array<MainAppWindow*> activeWindowsList;
     //==============================================================================
 
 };

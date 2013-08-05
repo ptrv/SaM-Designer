@@ -58,6 +58,8 @@ namespace CommandIDs
     static const int clearOutputConsole		= 0x200077;
     static const int printMDL               = 0x200078;
     static const int printSAMLog            = 0x200079;
+    static const int showNextWindow         = 0x20007a;
+    static const int showPreviousWindow     = 0x20007b;
 
     static const int saveAll                = 0x200080;
     static const int undo                   = 0x200090;

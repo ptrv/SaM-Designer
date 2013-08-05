@@ -210,6 +210,7 @@ void SynthAModelerApplication::systemRequestedQuit()
         return;
     }
 
+    activeWindowsList.clearQuick();
     while (mainWindows.size() > 0)
     {
         if (! mainWindows[0]->closeCurrentMDLFile())
@@ -225,6 +226,8 @@ void SynthAModelerApplication::systemRequestedQuit()
 void SynthAModelerApplication::closeWindow (MainAppWindow* w)
 {
     jassert (mainWindows.contains (w));
+    int idx = activeWindowsList.indexOf(w);
+    activeWindowsList.remove(idx);
     mainWindows.removeObject (w);
 
 //#if ! JUCE_MAC
@@ -287,7 +290,9 @@ void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
                               CommandIDs::openDataDir,
                               CommandIDs::showHelp,
                               CommandIDs::showPropertiesWindow,
-                              CommandIDs::propertiesWindowOnTop
+                              CommandIDs::propertiesWindowOnTop,
+                              CommandIDs::showPreviousWindow,
+                              CommandIDs::showNextWindow,
     };
 
     commands.addArray (ids, numElementsInArray (ids));
@@ -333,6 +338,14 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
         result.setInfo("Properties Window Always On Top", "", CommandCategories::windows,0);
         result.setTicked(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
         break;
+    case CommandIDs::showPreviousWindow:
+        result.setInfo("Previous Window", "", CommandCategories::windows,0);
+        result.addDefaultKeypress(KeyPress::pageUpKey, ModifierKeys::commandModifier);
+        break;
+    case CommandIDs::showNextWindow:
+        result.setInfo("Next Window", "", CommandCategories::windows,0);
+        result.addDefaultKeypress(KeyPress::pageDownKey, ModifierKeys::commandModifier);
+        break;
     default:
         JUCEApplication::getCommandInfo (commandID, result);
         break;
@@ -370,6 +383,12 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
     	break;
     case CommandIDs::propertiesWindowOnTop:
         togglePropertiesWindowAlwaysOnTop();
+        break;
+    case CommandIDs::showPreviousWindow:
+        switchToPreviousWindow();
+        break;
+    case CommandIDs::showNextWindow:
+        switchToNextWindow();
         break;
     default:
     	return JUCEApplication::perform (info);
@@ -440,6 +459,7 @@ MainAppWindow* SynthAModelerApplication::createNewMainWindow()
     MainAppWindow* mw = new MainAppWindow();
     mw->setMDLFile(newMDL.release());
     mainWindows.add (mw);
+    activeWindowsList.insert(0, mw);
     mw->restoreWindowPosition();
     avoidSuperimposedWindows (mw);
     return mw;
@@ -555,8 +575,8 @@ SynthAModelerApplication::MainMenuModel::MainMenuModel()
 
 StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
 {
-    const char* const names[] = { "File", "Edit", "Insert",
-    		"Generate", "Tools", "View", "Help", nullptr };
+    const char* const names[] = {"File", "Edit", "Insert", "Generate",
+        "Tools", "View", "Window", "Help", nullptr};
 
     return StringArray (names);
 }
@@ -571,7 +591,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
 
         PopupMenu recentFiles;
         StoredSettings::getInstance()->recentFiles
-        		.createPopupMenuItems (recentFiles, 100, true, true);
+            .createPopupMenuItems(recentFiles, recentProjectsBaseID, true, true);
 
         menu.addSubMenu ("Open Recent File", recentFiles);
 
@@ -652,7 +672,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
             bool isTicked = false;
             if(spa.getAllKeys()[i].compare(currExporter) == 0)
                 isTicked = true;
-            menu.addItem(200 + i, spa.getAllKeys()[i],true,isTicked);
+            menu.addItem(exportersBaseID + i, spa.getAllKeys()[i],true,isTicked);
         }
     }
     else if (topLevelMenuIndex == 4)
@@ -673,12 +693,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     }
     else if (topLevelMenuIndex == 5)
     {
-        menu.addCommandItem(commandManager, CommandIDs::showPostWindow);
-        menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
-        menu.addSeparator();
-        menu.addCommandItem(commandManager, CommandIDs::showPropertiesWindow);
-        menu.addCommandItem(commandManager, CommandIDs::propertiesWindowOnTop);
-        menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::zoomIn);
@@ -695,7 +709,9 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
 
         PopupMenu m;
         for (int i = 0; i < numElementsInArray (snapSizes); ++i)
-            m.addItem (300 + i, String (snapSizes[i]) + " pixels", true, snapSizes[i] == currentSnapSize);
+            m.addItem (snappingSizesBaseID + i,
+                       String (snapSizes[i]) + " pixels",
+                       true, snapSizes[i] == currentSnapSize);
 
         menu.addSubMenu ("Grid Size", m, getApp()->getActiveHolderComponent() != 0);
 
@@ -703,6 +719,27 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::showAudioConnections);
     }
     else if (topLevelMenuIndex == 6)
+    {
+        menu.addCommandItem(commandManager, CommandIDs::showPostWindow);
+        menu.addCommandItem(commandManager, CommandIDs::clearOutputConsole);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showPropertiesWindow);
+        menu.addCommandItem(commandManager, CommandIDs::propertiesWindowOnTop);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showNextWindow);
+        menu.addCommandItem(commandManager, CommandIDs::showPreviousWindow);
+        menu.addSeparator();
+
+        const int numDocs = jmin (50, SynthAModelerApplication::getApp()->mainWindows.size());
+
+        for (int i = 0; i < numDocs; ++i)
+        {
+            MDLFile* mdl = SynthAModelerApplication::getApp()->mainWindows[i]->getMDLFile();
+            menu.addItem (activeMDLsBaseID + i, mdl->getName());
+        }
+
+    }
+    else if (topLevelMenuIndex == 7)
     {
     	menu.addCommandItem(commandManager, CommandIDs::showHelp);
     }
@@ -712,28 +749,39 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
 
 void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
 {
-    if (menuItemID >= 100 && menuItemID < 200)
+    if (menuItemID >= recentProjectsBaseID && menuItemID < recentProjectsBaseID + 100)
     {
 		// open a file from the "recent files" menu
-		const File file (StoredSettings::getInstance()->recentFiles
-				.getFile (menuItemID - 100));
+        const File file(StoredSettings::getInstance()->recentFiles
+                        .getFile(menuItemID - recentProjectsBaseID));
 
 		getApp()->openFile(file);
 		StoredSettings::getInstance()->recentFiles.addFile(file);
     }
-    if(menuItemID >= 200 && menuItemID < 300)
+    if(menuItemID >= exportersBaseID && menuItemID < exportersBaseID + 100)
     {
-        StringPairArray spa = StoredSettings::getInstance()->getExporters().getAllProperties();
-        StoredSettings::getInstance()->setCurrentExporter(spa.getAllKeys()[menuItemID - 200]);
+        StringPairArray spa = StoredSettings::getInstance()
+            ->getExporters().getAllProperties();
+
+        StoredSettings::getInstance()
+            ->setCurrentExporter(spa.getAllKeys()[menuItemID - exportersBaseID]);
     }
-    else if (menuItemID >= 300 && menuItemID < 400)
+    else if (menuItemID >= snappingSizesBaseID && menuItemID < snappingSizesBaseID + 100)
     {
         if (getApp()->getActiveHolderComponent() != 0)
         {
-            getApp()->getActiveHolderComponent()->setSnappingGrid (snapSizes [menuItemID - 300],
-                                                                   getApp()->getActiveHolderComponent()->isSnapActive(false),
-                                                                   getApp()->getActiveHolderComponent()->isSnapShown());
+            getApp()->getActiveHolderComponent()
+                ->setSnappingGrid(snapSizes [menuItemID - snappingSizesBaseID],
+                                  getApp()->getActiveHolderComponent()->isSnapActive(false),
+                                  getApp()->getActiveHolderComponent()->isSnapShown());
         }
+    }
+    else if(menuItemID >= activeMDLsBaseID && menuItemID < activeMDLsBaseID + 100)
+    {
+        int mawId = menuItemID - activeMDLsBaseID;
+        if(mawId < SynthAModelerApplication::getApp()->mainWindows.size())
+            if(MainAppWindow* maw = SynthAModelerApplication::getApp()->mainWindows[mawId])
+                maw->toFront(true);
     }
 }
 
@@ -771,4 +819,33 @@ void SynthAModelerApplication::togglePropertiesWindowAlwaysOnTop()
     propertiesWindow->setAlwaysOnTop(shouldStayOnTop);
 
     settings->setIsPropertiesWindowAlwaysOnTop(shouldStayOnTop);
+}
+
+void SynthAModelerApplication::switchToNextWindow()
+{
+    if(activeWindowsList.size() > 0)
+    {
+        MainAppWindow* maw = activeWindowsList[0];
+        activeWindowsList.remove(0);
+        activeWindowsList.add(maw);
+        activeWindowsList[0]->toFront(true);
+    }
+}
+
+void SynthAModelerApplication::switchToPreviousWindow()
+{
+    if(activeWindowsList.size() > 0)
+    {
+        MainAppWindow* maw = activeWindowsList.getLast();
+        activeWindowsList.remove(activeWindowsList.size()-1);
+        activeWindowsList.insert(0, maw);
+        activeWindowsList[0]->toFront(true);
+    }
+}
+
+void SynthAModelerApplication::mainWindowActivityChanged (MainAppWindow* mainWin)
+{
+    int idx = activeWindowsList.indexOf(mainWin);
+    activeWindowsList.remove(idx);
+    activeWindowsList.insert(0, mainWin);
 }
