@@ -57,11 +57,9 @@ void SAMCmd::setupJob(const String& input, CmdType cmdType_, bool runSAMBeforeBi
 }
 
 
-const String SAMCmd::generateFaustCodeProcess(const StringArray& args)
+bool SAMCmd::generateFaustCodeProcess(const StringArray& args, String& output)
 {
-    String resultStr = runProcess(args);
-
-    return resultStr;
+    return runProcess(args, output);
 }
 const StringArray SAMCmd::generateFaustCodeCmd(const String& cmdStr,
                                                const String& inPath_,
@@ -97,9 +95,9 @@ const StringArray SAMCmd::generateExternalCmd(const String& mdlPath,
 
     return args;
 }
-const String SAMCmd::generateExternalProcess(const StringArray& args)
+bool SAMCmd::generateExternalProcess(const StringArray& args, String& output)
 {
-    return runProcess(args);
+    return runProcess(args, output);
 }
 
 const StringArray SAMCmd::getPerlScriptCmd(const String& script,
@@ -116,26 +114,28 @@ const StringArray SAMCmd::getPerlScriptCmd(const String& script,
     return args;
 }
 
-const String SAMCmd::runProcess(StringArray args)
+bool SAMCmd::runProcess(const StringArray& args, String& output)
 {
     File tmpWorkDir = File::getCurrentWorkingDirectory();
 
     File dataDir(StoredSettings::getInstance()->getDataDir());
     dataDir.setAsCurrentWorkingDirectory();
 
-    String resultStr;
     ChildProcess child;
+    bool execOk = true;
     if(child.start(args))
 	{
-		resultStr = child.readAllProcessOutput();
+		output = child.readAllProcessOutput();
 		child.waitForProcessToFinish (60 * 1000);
 	}
 	else
 	{
-		return "failed to start process";
+		output = "failed to start process";
+        execOk = false;
+
 	}
     tmpWorkDir.setAsCurrentWorkingDirectory();
-    return resultStr;
+    return execOk;
 }
 
 void SAMCmd::generate(CmdType type)
@@ -152,7 +152,13 @@ void SAMCmd::generate(CmdType type)
 
         postWindow->postLocked("Run SAM-preprocessor...");
 
-        processOutput = generateFaustCodeProcess(args);
+        String outputStr;
+        if(! generateFaustCodeProcess(args, outputStr))
+        {
+            postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
+            return;
+        }
+        processOutput = outputStr;
 
         if(processOutput.isNotEmpty())
             postWindow->postLocked("Output: " + processOutput);
@@ -165,7 +171,12 @@ void SAMCmd::generate(CmdType type)
 
         postWindow->postLocked("Run Synth-A-Modeler...");
 
-        processOutput = generateFaustCodeProcess(args);
+        if(! generateFaustCodeProcess(args, outputStr))
+        {
+            postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
+            return;
+        }
+        processOutput = outputStr;
 
         if(false)
         {
@@ -200,7 +211,13 @@ void SAMCmd::generate(CmdType type)
 
         postWindow->postLocked("Run generate binary...");
 
-        processOutput = generateExternalProcess(args);
+        String outputStr;
+        if(! generateExternalProcess(args, outputStr))
+        {
+            postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
+            return;
+        }
+        processOutput = outputStr;
 
         if(processOutput.isNotEmpty())
             postWindow->postLocked("Output: " + processOutput);

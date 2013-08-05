@@ -54,13 +54,13 @@ public:
                                            const String& inPath_,
                                            const String& outPath_);
 
-    const String generateFaustCodeProcess(const StringArray& args);
+    bool generateFaustCodeProcess(const StringArray& args, String& output);
 
     const StringArray generateExternalCmd(const String& mdlPath,
                                           const String& exporter);
-    const String generateExternalProcess(const StringArray& args);
+    bool generateExternalProcess(const StringArray& args, String& output);
 
-    const String& getProcessOutput() const { return processOutput; }
+//    const String& getProcessOutput() const { return processOutput; }
 
     JobStatus runJob();
 
@@ -71,7 +71,7 @@ private:
                                        const String& inPath_,
                                        const String& outPath_);
 
-    const String runProcess(StringArray args);
+    bool runProcess(const StringArray& args, String& output);
 
     bool copyInfileToDataDirIfNeeded(String& inPath_);
 

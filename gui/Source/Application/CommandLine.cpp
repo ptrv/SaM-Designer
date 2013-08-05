@@ -131,14 +131,21 @@ int compileMdlToDsp (const StringArray& args)
                                                  in.getFullPathName(),
                                                  outFile.getFullPathName());
 
-    processOutput << cmd.generateFaustCodeProcess(args2);
+    String outputStr;
+    if(! cmd.generateFaustCodeProcess(args2, outputStr))
+        return 1;
+
+    processOutput << outputStr;
 
     args2 = cmd.generateFaustCodeCmd("Synth-A-Modeler",
                                      in.getFullPathName(),
                                      outFile.getFullPathName());
 
 
-    processOutput << cmd.generateFaustCodeProcess(args2);
+    if(! cmd.generateFaustCodeProcess(args2, outputStr))
+        return 1;
+
+    processOutput << outputStr;
 
     if (true)
     {
@@ -202,7 +209,9 @@ int generateBinary(const StringArray& args)
     SAMCmd cmd;
 
     StringArray args2 = cmd.generateExternalCmd(mdl->getFilePath(), exporterCmd);
-    std::cout << cmd.generateExternalProcess(args2) << std::endl;
+    String outputStr;
+    cmd.generateExternalProcess(args2, outputStr);
+    std::cout << outputStr << std::endl;
     return 0;
 }
 
