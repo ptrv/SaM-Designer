@@ -50,9 +50,8 @@ public:
     void setupJob(const String& input, CmdType cmdType_,
                   bool runSAMBeforeBinary = false);
     
-    const StringArray generateFaustCodeCmd(const String& cmdStr,
-                                           const String& inPath_,
-                                           const String& outPath_);
+    const Array<StringArray> generateFaustCodeCmd(const String& inPath_,
+                                                  const String& outPath_);
 
     bool generateFaustCodeProcess(const StringArray& args, String& output);
 

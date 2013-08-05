@@ -61,19 +61,18 @@ bool SAMCmd::generateFaustCodeProcess(const StringArray& args, String& output)
 {
     return runProcess(args, output);
 }
-const StringArray SAMCmd::generateFaustCodeCmd(const String& cmdStr,
-                                               const String& inPath_,
-                                               const String& outPath_)
+const Array<StringArray> SAMCmd::generateFaustCodeCmd(const String& inPath_,
+                                                      const String& outPath_)
 {
     File fileOut(outPath_);
     String dataDir = StoredSettings::getInstance()->getDataDir();
     String pathMDX = dataDir;
     pathMDX << "/" << fileOut.getFileNameWithoutExtension() << ".mdx";
 
-    if(cmdStr.compare("SAM-preprocessor") == 0)
-        return getPerlScriptCmd(cmdStr, inPath_, pathMDX);
-    else if (cmdStr.compare("Synth-A-Modeler") == 0)
-        return getPerlScriptCmd(cmdStr, pathMDX, outPath_);
+    Array<StringArray> cmdArgs;
+    cmdArgs.add(getPerlScriptCmd("SAM-preprocessor", inPath_, pathMDX));
+    cmdArgs.add(getPerlScriptCmd("Synth-A-Modeler", pathMDX, outPath_));
+    return cmdArgs;
 }
 
 const StringArray SAMCmd::generateExternalCmd(const String& mdlPath,
@@ -146,14 +145,15 @@ void SAMCmd::generate(CmdType type)
         String tmpOutPath = outPath;
         bool saveInDataDir = copyInfileToDataDirIfNeeded(tmpInPath);
 
-        StringArray args = generateFaustCodeCmd("SAM-preprocessor", tmpInPath, tmpOutPath);
+        const Array<StringArray> args = generateFaustCodeCmd(tmpInPath, tmpOutPath);
 
-        postWindow->postLocked("Command: " + args.joinIntoString(" "), PostLevel::ALL, true);
+        postWindow->postLocked("Command: " + args[0].joinIntoString(" "),
+                               PostLevel::ALL, true);
 
         postWindow->postLocked("Run SAM-preprocessor...");
 
         String outputStr;
-        if(! generateFaustCodeProcess(args, outputStr))
+        if(! generateFaustCodeProcess(args[0], outputStr))
         {
             postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
             return;
@@ -165,13 +165,12 @@ void SAMCmd::generate(CmdType type)
 
         postWindow->postLocked("Done!");
 
-        args = generateFaustCodeCmd("Synth-A-Modeler", tmpInPath, tmpOutPath);
-
-        postWindow->postLocked("Command: " + args.joinIntoString(" "), PostLevel::ALL, true);
+        postWindow->postLocked("Command: " + args[1].joinIntoString(" "),
+                               PostLevel::ALL, true);
 
         postWindow->postLocked("Run Synth-A-Modeler...");
 
-        if(! generateFaustCodeProcess(args, outputStr))
+        if(! generateFaustCodeProcess(args[1], outputStr))
         {
             postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
             return;

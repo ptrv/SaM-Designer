@@ -127,22 +127,16 @@ int compileMdlToDsp (const StringArray& args)
 
     SAMCmd cmd;
     String processOutput;
-    StringArray args2 = cmd.generateFaustCodeCmd("SAM-preprocessor",
-                                                 in.getFullPathName(),
-                                                 outFile.getFullPathName());
+    const Array<StringArray> args2 = cmd.generateFaustCodeCmd(in.getFullPathName(),
+                                                              outFile.getFullPathName());
 
     String outputStr;
-    if(! cmd.generateFaustCodeProcess(args2, outputStr))
+    if(! cmd.generateFaustCodeProcess(args2[0], outputStr))
         return 1;
 
     processOutput << outputStr;
 
-    args2 = cmd.generateFaustCodeCmd("Synth-A-Modeler",
-                                     in.getFullPathName(),
-                                     outFile.getFullPathName());
-
-
-    if(! cmd.generateFaustCodeProcess(args2, outputStr))
+    if(! cmd.generateFaustCodeProcess(args2[1], outputStr))
         return 1;
 
     processOutput << outputStr;
