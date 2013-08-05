@@ -56,7 +56,7 @@ namespace CommandIDs
     static const int insertAudioConnection  = 0x200075;
     static const int showPostWindow         = 0x200076;
     static const int clearOutputConsole		= 0x200077;
-    static const int dumpMDL                = 0x200078;
+    static const int printMDL               = 0x200078;
     static const int printSAMLog            = 0x200079;
 
     static const int saveAll                = 0x200080;

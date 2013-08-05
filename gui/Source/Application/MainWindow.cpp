@@ -239,7 +239,7 @@ void MainAppWindow::getAllCommands (Array <CommandID>& commands)
 #ifdef _DEBUG
                                 CommandIDs::writeMDLFileAsXml,
 #endif
-                                CommandIDs::dumpMDL,
+                                CommandIDs::printMDL,
                                 CommandIDs::openMdlFileExtern,
                                 CommandIDs::showMDLProperties,
                                 CommandIDs::printSAMLog,
@@ -287,14 +287,14 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo("MDL -> XML", "Write MDL file as XML", CommandCategories::tools, 0);
         break;
 #endif
-    case CommandIDs::dumpMDL:
-        result.setInfo("Dump MDL", "", CommandCategories::tools, 0);
+    case CommandIDs::printMDL:
+        result.setInfo("Print MDL structure", "", CommandCategories::tools, 0);
         break;
     case CommandIDs::printSAMLog:
         result.setInfo("Print SAM Log", "", CommandCategories::tools, 0);
         break;
     case CommandIDs::openMdlFileExtern:
-        result.setInfo("Open MDL File Externally", "", CommandCategories::tools, 0);
+        result.setInfo("Open MDL In Editor", "", CommandCategories::tools, 0);
         result.addDefaultKeypress('l', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showMDLProperties:
@@ -392,7 +392,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
     case CommandIDs::writeMDLFileAsXml:
         return mdlController->saveAsXml();
 #endif
-    case CommandIDs::dumpMDL:
+    case CommandIDs::printMDL:
         SAM_CONSOLE_ALL(mdlController->getMDLName() + "\n\n"
                         + mdlController->getMDLFile()->toString());
         break;
