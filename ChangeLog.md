@@ -6,6 +6,13 @@ ChangeLog Synth-A-Modeler Designer
 
 ### New ###
 
+* Store window positions of Preferencess Window and Exporter Input
+  Window in user settings
+* Add `Print SAM Log` Tools menu entry for showing contents of
+  `SAM-debug-compilation.txt` in Post Window
+* New Menu Bar entry: Windows. Move some entries from View to Windows
+  and add list with currently open MDL files and two new entries for
+  switching to next or previous window
 
 ### Changes ###
 
