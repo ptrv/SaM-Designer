@@ -693,12 +693,13 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
     }
     else if (topLevelMenuIndex == 5)
     {
-        menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
-        menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::zoomIn);
         menu.addCommandItem (commandManager, CommandIDs::zoomOut);
         menu.addCommandItem (commandManager, CommandIDs::zoomNormal);
         menu.addSeparator();
+        menu.addCommandItem (commandManager, CommandIDs::segmentedConnectors);
+        menu.addSeparator();
+        menu.addCommandItem(commandManager, CommandIDs::showAudioConnections);
         menu.addCommandItem(commandManager, CommandIDs::showObjectNames);
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::showGrid);
@@ -714,9 +715,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
                        true, snapSizes[i] == currentSnapSize);
 
         menu.addSubMenu ("Grid Size", m, getApp()->getActiveHolderComponent() != 0);
-
-        menu.addSeparator();
-        menu.addCommandItem(commandManager, CommandIDs::showAudioConnections);
     }
     else if (topLevelMenuIndex == 6)
     {
@@ -737,7 +735,6 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
             MDLFile* mdl = SynthAModelerApplication::getApp()->mainWindows[i]->getMDLFile();
             menu.addItem (activeMDLsBaseID + i, mdl->getName());
         }
-
     }
     else if (topLevelMenuIndex == 7)
     {
