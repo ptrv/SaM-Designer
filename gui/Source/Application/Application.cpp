@@ -724,8 +724,8 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::showPropertiesWindow);
         menu.addCommandItem(commandManager, CommandIDs::propertiesWindowOnTop);
         menu.addSeparator();
-        menu.addCommandItem(commandManager, CommandIDs::showNextWindow);
         menu.addCommandItem(commandManager, CommandIDs::showPreviousWindow);
+        menu.addCommandItem(commandManager, CommandIDs::showNextWindow);
         menu.addSeparator();
 
         const int numDocs = jmin (50, SynthAModelerApplication::getApp()->mainWindows.size());
