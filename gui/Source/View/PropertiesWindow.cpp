@@ -46,16 +46,34 @@ typedef ObjectPropertiesComponent OPC;
 class EmptyComponent : public Component
 {
 public:
-    EmptyComponent() : Component()
+    EmptyComponent() : Component(), textToShow("No object selected!")
     {
         setComponentID("EmptyComponent");
     }
     EmptyComponent(const String& compName) : Component(compName) {}
     void paint(Graphics& g)
     {
-        g.drawText("No object selected", getWidth()/2 - 75, getHeight()/2 - 25,
-                   150, 50, Justification::centred,false);
+        // The following code is basically the same as
+        // Graphics::drawMultiLineText but with centered text
+        int startX = 20;
+        int baselineY = getHeight() / 2;
+        int maximumLineWidth = getWidth() - 40;
+
+        LowLevelGraphicsContext& context = g.getInternalContext();
+
+        if (textToShow.isNotEmpty() && startX < context.getClipBounds().getRight())
+        {
+            GlyphArrangement arr;
+            arr.addJustifiedText(context.getFont(), textToShow,
+                                 (float) startX, (float) baselineY,
+                                 (float) maximumLineWidth,
+                                 Justification::centred);
+            arr.draw(g);
+        }
     }
+    void setText(const String& newText) { textToShow = newText; /*repaint();*/ }
+private:
+    String textToShow;
 };
 
 PropertiesWindow::PropertiesWindow()
@@ -185,12 +203,28 @@ void PropertiesWindow::updateProperties()
                     selectedId = boc->getData().getType();
 
                 if(selectedId == boc->getData().getType())
+                {
                     datas.add(boc->getData());
+                }
+                else
+                {
+                    showEmptyComponent("Please select objects of the same type "
+                        "in order to edit their properties!");
+                    return;
+                }
             }
             else if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(selectedItems[i]))
             {
                 if (datas.size() == 0)
+                {
                     selectedId = Ids::audioconnector;
+                }
+                else if(selectedId != Ids::audioconnector)
+                {
+                    showEmptyComponent("Please select objects of the same type "
+                        "in order to edit their properties!");
+                    return;
+                }
 
                 String sourceId;
                 if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (aoc->getSourceObject()))
@@ -256,14 +290,12 @@ void PropertiesWindow::updateProperties()
         else
         {
             comp = new EmptyComponent();
-            setName("Properties");
         }
         setContentOwned(comp, false);
     }
     else
     {
         setContentOwned(new EmptyComponent(), false);
-        setName("Properties");
     }
 }
 
@@ -272,6 +304,14 @@ void PropertiesWindow::mdlChanged()
     if(isVisible())
         if (OPC * opc = dynamic_cast<OPC*> (getContentComponent()))
             opc->readValues();
+}
+
+void PropertiesWindow::showEmptyComponent(const String& textToShow)
+{
+    EmptyComponent* ec = new EmptyComponent();
+    if(textToShow.isNotEmpty())
+        ec->setText(textToShow);
+    setContentOwned(ec, false);
 }
 //==============================================================================
 void PropertiesWindow::valueTreePropertyChanged (ValueTree& /*tree*/,

@@ -69,6 +69,8 @@ private:
     void updateProperties();
 
     void mdlChanged();
+
+    void showEmptyComponent(const String& textToShow=String::empty);
 };
 
 }
