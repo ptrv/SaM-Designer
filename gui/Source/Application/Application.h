@@ -110,6 +110,9 @@ public:
 
     void removeFromFileList(const File& f);
 
+    void updateOpenFilesList(bool updateQuick = true);
+    void addToFileList(const File& newFile);
+
 private:
     OwnedArray<MainAppWindow> mainWindows;
 
@@ -134,8 +137,6 @@ private:
     bool isRunningCommandLine;
 
     HashMap<String, String> openFilesList;
-    void addToFileList(const File& newFile);
-    void updateFileList();
 
     void togglePropertiesWindow();
     void togglePropertiesWindowAlwaysOnTop();

@@ -236,6 +236,7 @@ void SAMApplication::closeWindow (MainAppWindow* w)
 //#endif
 
     updateRecentProjectList();
+    updateOpenFilesList();
 }
 
 bool SAMApplication::isCommandActive (const CommandID /*commandID*/)
@@ -558,22 +559,35 @@ bool SAMApplication::openFile(const File& file)
 void SAMApplication::addToFileList(const File& newFile)
 {
     openFilesList.set(newFile.getFullPathName(), newFile.getFileName());
-    updateFileList();
+    updateOpenFilesList();
     for (int i = 0; i < mainWindows.size(); ++i)
         mainWindows[i]->updateTitle();
 }
 
-void SAMApplication::updateFileList()
+void SAMApplication::updateOpenFilesList(bool updateQuick)
 {
-    HashMap<String, String> tmp;
-    for (HashMap<String, String>::Iterator it(openFilesList); it.next();)
+    if (updateQuick)
     {
-        tmp.set(it.getKey(), File::createFileWithoutCheckingPath(it.getValue()).getFileName());
+        HashMap<String, String> tmp;
+        for (HashMap<String, String>::Iterator it(openFilesList); it.next();)
+        {
+            tmp.set(it.getKey(), File::createFileWithoutCheckingPath(it.getValue()).getFileName());
+        }
+        for (HashMap<String, String>::Iterator it(tmp); it.next();)
+        {
+            openFilesList.set(it.getKey(), it.getValue());
+        }
     }
-    for (HashMap<String, String>::Iterator it(tmp); it.next();)
+    else
     {
-        openFilesList.set(it.getKey(), it.getValue());
+        openFilesList.clear();
+        for (int i = 0; i < mainWindows.size(); ++i)
+        {
+            File tmpMdl = mainWindows[i]->getMDLFile()->getFile();
+            openFilesList.set(tmpMdl.getFullPathName(), tmpMdl.getFileName());
+        }
     }
+
 
     Utils::uniquifyPaths(openFilesList);
 }
@@ -586,7 +600,7 @@ String SAMApplication::getUniqueMDLPath(const String& mdlPath)
 void SAMApplication::removeFromFileList(const File& f)
 {
     openFilesList.remove(f.getFullPathName());
-    updateFileList();
+    updateOpenFilesList();
     for (int i = 0; i < mainWindows.size(); ++i)
         mainWindows[i]->updateTitle();
 }

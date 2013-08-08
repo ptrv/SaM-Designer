@@ -339,6 +339,7 @@ void MainAppWindow::saveDocumentAs()
     mdlController->openFromFile(newFile);
     getMDLFileContentComponent()->reloadMDLFile(mdlController->getMDLFile());
     SAMApplication::getApp()->updateRecentProjectList();
+    SAMApplication::getApp()->addToFileList(newFile);
     updateTitle();
 }
 
