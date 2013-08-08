@@ -150,6 +150,8 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
         if(! mdlFile->isUntiled())
             SynthAModelerApplication::getApp()->removeFromFileList(mdlFile->getFile());
 
+        mdlFile->mdlRoot.removeListener(propertiesWindow);
+
         setMDLFile(nullptr);
 //        mdlFile->removeChangeListener(this);
 //        mdlController->close();
@@ -175,6 +177,7 @@ void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
         newMDLFile->addChangeListener(this);
         updateTitle();
 
+        newMDLFile->mdlRoot.addListener(propertiesWindow);
     }
 }
 
