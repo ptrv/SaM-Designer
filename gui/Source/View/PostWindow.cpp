@@ -33,7 +33,7 @@ using namespace synthamodeler;
 
 PostWindow::PostWindow()
 :
-DocumentWindow(SynthAModelerApplication::getApp()->getApplicationName() + " - Post Window",
+DocumentWindow(SAMApplication::getApp()->getApplicationName() + " - Post Window",
                Colours::darkseagreen, DocumentWindow::closeButton, false)
 {
     setUsingNativeTitleBar(true);
@@ -66,7 +66,7 @@ PostWindow::~PostWindow()
 
 void PostWindow::closeButtonPressed()
 {
-    SynthAModelerApplication::getApp()->systemRequestedQuit();
+    SAMApplication::getApp()->systemRequestedQuit();
 }
 
 void PostWindow::toggleDebugWindow()

@@ -96,7 +96,7 @@ void Utils::openHelpPatch(const String& helpId)
     File f = StoredSettings::getInstance()->getDataDir() + "/help-patches/" + helpPatch;
 
     if(f.existsAsFile())
-        SynthAModelerApplication::getApp()->openFile(f);
+        SAMApplication::getApp()->openFile(f);
     else
         openHelpUrl(helpId);
 }

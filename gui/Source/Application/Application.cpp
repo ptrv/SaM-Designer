@@ -47,17 +47,17 @@ ScopedPointer<PostWindowController> synthamodeler::postWindow;
 static const int snapSizes[] = { 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32 };
 //==============================================================================
 
-SynthAModelerApplication::SynthAModelerApplication()
+SAMApplication::SAMApplication()
 : isRunningCommandLine(false)
 {
 }
 
-SynthAModelerApplication::~SynthAModelerApplication()
+SAMApplication::~SAMApplication()
 {
 }
 
 //==============================================================================
-void SynthAModelerApplication::initialise (const String& commandLine)
+void SAMApplication::initialise (const String& commandLine)
 {
 #if UNIT_TESTS
 	if(commandLine.contains("--test"))
@@ -174,7 +174,7 @@ void SynthAModelerApplication::initialise (const String& commandLine)
 //    propertiesWindow->makeVisible();
 }
 
-void SynthAModelerApplication::shutdown()
+void SAMApplication::shutdown()
 {
 	// Do your application's shutdown code here..
 
@@ -202,7 +202,7 @@ void SynthAModelerApplication::shutdown()
 }
 
 //==============================================================================
-void SynthAModelerApplication::systemRequestedQuit()
+void SAMApplication::systemRequestedQuit()
 {
     if (Utils::cancelAnyModalComponents())
     {
@@ -223,7 +223,7 @@ void SynthAModelerApplication::systemRequestedQuit()
 
 }
 
-void SynthAModelerApplication::closeWindow (MainAppWindow* w)
+void SAMApplication::closeWindow (MainAppWindow* w)
 {
     jassert (mainWindows.contains (w));
     int idx = activeWindowsList.indexOf(w);
@@ -238,29 +238,29 @@ void SynthAModelerApplication::closeWindow (MainAppWindow* w)
     updateRecentProjectList();
 }
 
-bool SynthAModelerApplication::isCommandActive (const CommandID /*commandID*/)
+bool SAMApplication::isCommandActive (const CommandID /*commandID*/)
 {
     return true;
 }
 
 
 //==============================================================================
-const String SynthAModelerApplication::getApplicationName()
+const String SAMApplication::getApplicationName()
 {
 	return "Synth-A-Modeler Designer";
 }
 
-const String SynthAModelerApplication::getApplicationVersion()
+const String SAMApplication::getApplicationVersion()
 {
 	return ProjectInfo::versionString;
 }
 
-bool SynthAModelerApplication::moreThanOneInstanceAllowed()
+bool SAMApplication::moreThanOneInstanceAllowed()
 {
 	return true;
 }
 
-void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine)
+void SAMApplication::anotherInstanceStarted (const String& commandLine)
 {
     File f;
     if(File::isAbsolutePath(commandLine))
@@ -272,13 +272,13 @@ void SynthAModelerApplication::anotherInstanceStarted (const String& commandLine
         openFile(f);
 }
 
-SynthAModelerApplication* SynthAModelerApplication::getApp()
+SAMApplication* SAMApplication::getApp()
 {
-    return dynamic_cast<SynthAModelerApplication*> (JUCEApplication::getInstance());
+    return dynamic_cast<SAMApplication*> (JUCEApplication::getInstance());
 }
 
 
-void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
+void SAMApplication::getAllCommands (Array <CommandID>& commands)
 {
     JUCEApplication::getAllCommands (commands);
 
@@ -298,7 +298,7 @@ void SynthAModelerApplication::getAllCommands (Array <CommandID>& commands)
     commands.addArray (ids, numElementsInArray (ids));
 }
 
-void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
+void SAMApplication::getCommandInfo (CommandID commandID, ApplicationCommandInfo& result)
 {
     switch (commandID)
     {
@@ -352,7 +352,7 @@ void SynthAModelerApplication::getCommandInfo (CommandID commandID, ApplicationC
     }
 }
 
-bool SynthAModelerApplication::perform (const InvocationInfo& info)
+bool SAMApplication::perform (const InvocationInfo& info)
 {
     switch (info.commandID)
     {
@@ -399,14 +399,14 @@ bool SynthAModelerApplication::perform (const InvocationInfo& info)
 
 //==============================================================================
 
-void SynthAModelerApplication::creatNewMDLDocument()
+void SAMApplication::creatNewMDLDocument()
 {
 	MainAppWindow* mw = getOrCreateEmptyWindow();
     mw->makeVisible();
 	avoidSuperimposedWindows (mw);
 }
 
-void SynthAModelerApplication::askUserToOpenFile()
+void SAMApplication::askUserToOpenFile()
 {
     FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl;*.mdlx");
 
@@ -414,7 +414,7 @@ void SynthAModelerApplication::askUserToOpenFile()
         openFile (fc.getResult());
 }
 
-void SynthAModelerApplication::updateRecentProjectList()
+void SAMApplication::updateRecentProjectList()
 {
     Array<File> projects;
 
@@ -429,7 +429,7 @@ void SynthAModelerApplication::updateRecentProjectList()
     StoredSettings::getInstance()->setLastFiles(projects);
 }
 
-void SynthAModelerApplication::togglePostWindowFocus()
+void SAMApplication::togglePostWindowFocus()
 {
     if(! postWindow->isActiveWindow())
         postWindow->toFront();
@@ -437,7 +437,7 @@ void SynthAModelerApplication::togglePostWindowFocus()
         mw->toFront(true);
 }
 
-MainAppWindow* SynthAModelerApplication::getFrontmostWindow()
+MainAppWindow* SAMApplication::getFrontmostWindow()
 {
 	if (mainWindows.size() == 0)
 		return nullptr;
@@ -452,7 +452,7 @@ MainAppWindow* SynthAModelerApplication::getFrontmostWindow()
 	return mainWindows.getLast();
 }
 
-MainAppWindow* SynthAModelerApplication::createNewMainWindow()
+MainAppWindow* SAMApplication::createNewMainWindow()
 {
 	ScopedPointer <MDLFile> newMDL (new MDLFile());
 
@@ -467,7 +467,7 @@ MainAppWindow* SynthAModelerApplication::createNewMainWindow()
     return mw;
 }
 
-MainAppWindow* SynthAModelerApplication::getOrCreateFrontmostWindow()
+MainAppWindow* SAMApplication::getOrCreateFrontmostWindow()
 {
 	if (mainWindows.size() == 0)
 		return createNewMainWindow();
@@ -482,7 +482,7 @@ MainAppWindow* SynthAModelerApplication::getOrCreateFrontmostWindow()
 	return mainWindows.getLast();
 }
 
-MainAppWindow* SynthAModelerApplication::getOrCreateEmptyWindow()
+MainAppWindow* SAMApplication::getOrCreateEmptyWindow()
 {
 	if (mainWindows.size() == 0)
 		return createNewMainWindow();
@@ -497,7 +497,7 @@ MainAppWindow* SynthAModelerApplication::getOrCreateEmptyWindow()
 	return createNewMainWindow();
 }
 
-void SynthAModelerApplication::avoidSuperimposedWindows (MainAppWindow* const mw)
+void SAMApplication::avoidSuperimposedWindows (MainAppWindow* const mw)
 {
 	for (int i = mainWindows.size(); --i >= 0;)
 	{
@@ -522,7 +522,7 @@ void SynthAModelerApplication::avoidSuperimposedWindows (MainAppWindow* const mw
 	}
 }
 
-bool SynthAModelerApplication::openFile(const File& file)
+bool SAMApplication::openFile(const File& file)
 {
     for (int j = mainWindows.size(); --j >= 0;)
     {
@@ -555,7 +555,7 @@ bool SynthAModelerApplication::openFile(const File& file)
     return false;
 }
 
-void SynthAModelerApplication::addToFileList(const File& newFile)
+void SAMApplication::addToFileList(const File& newFile)
 {
     openFilesList.set(newFile.getFullPathName(), newFile.getFileName());
     updateFileList();
@@ -563,7 +563,7 @@ void SynthAModelerApplication::addToFileList(const File& newFile)
         mainWindows[i]->updateTitle();
 }
 
-void SynthAModelerApplication::updateFileList()
+void SAMApplication::updateFileList()
 {
     HashMap<String, String> tmp;
     for (HashMap<String, String>::Iterator it(openFilesList); it.next();)
@@ -578,12 +578,12 @@ void SynthAModelerApplication::updateFileList()
     Utils::uniquifyPaths(openFilesList);
 }
 
-String SynthAModelerApplication::getUniqueMDLPath(const String& mdlPath)
+String SAMApplication::getUniqueMDLPath(const String& mdlPath)
 {
     return openFilesList[mdlPath];
 }
 
-void SynthAModelerApplication::removeFromFileList(const File& f)
+void SAMApplication::removeFromFileList(const File& f)
 {
     openFilesList.remove(f.getFullPathName());
     updateFileList();
@@ -593,12 +593,12 @@ void SynthAModelerApplication::removeFromFileList(const File& f)
 
 //==============================================================================
 
-SynthAModelerApplication::AsyncQuitRetrier::AsyncQuitRetrier()
+SAMApplication::AsyncQuitRetrier::AsyncQuitRetrier()
 {
 	startTimer (500);
 }
 
-void SynthAModelerApplication::AsyncQuitRetrier::timerCallback()
+void SAMApplication::AsyncQuitRetrier::timerCallback()
 {
 	stopTimer();
 	delete this;
@@ -609,12 +609,12 @@ void SynthAModelerApplication::AsyncQuitRetrier::timerCallback()
 
 //==============================================================================
 
-SynthAModelerApplication::MainMenuModel::MainMenuModel()
+SAMApplication::MainMenuModel::MainMenuModel()
 {
 	setApplicationCommandManagerToWatch (commandManager);
 }
 
-StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
+StringArray SAMApplication::MainMenuModel::getMenuBarNames()
 {
     const char* const names[] = {"File", "Edit", "Insert", "Generate",
         "Tools", "View", "Window", "Help", nullptr};
@@ -622,7 +622,7 @@ StringArray SynthAModelerApplication::MainMenuModel::getMenuBarNames()
     return StringArray (names);
 }
 
-PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/)
+PopupMenu SAMApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex, const String& /*menuName*/)
 {
 	PopupMenu menu;
     if (topLevelMenuIndex == 0)
@@ -769,11 +769,11 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
         menu.addCommandItem(commandManager, CommandIDs::showNextWindow);
         menu.addSeparator();
 
-        const int numDocs = jmin (50, SynthAModelerApplication::getApp()->mainWindows.size());
+        const int numDocs = jmin (50, SAMApplication::getApp()->mainWindows.size());
 
         for (int i = 0; i < numDocs; ++i)
         {
-            MDLFile* mdl = SynthAModelerApplication::getApp()->mainWindows[i]->getMDLFile();
+            MDLFile* mdl = SAMApplication::getApp()->mainWindows[i]->getMDLFile();
             menu.addItem (activeMDLsBaseID + i, mdl->getName());
         }
     }
@@ -785,7 +785,7 @@ PopupMenu SynthAModelerApplication::MainMenuModel::getMenuForIndex (int topLevel
 	return menu;
 }
 
-void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
+void SAMApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
 {
     if (menuItemID >= recentProjectsBaseID && menuItemID < recentProjectsBaseID + 100)
     {
@@ -817,13 +817,13 @@ void SynthAModelerApplication:: MainMenuModel::menuItemSelected (int menuItemID,
     else if(menuItemID >= activeMDLsBaseID && menuItemID < activeMDLsBaseID + 100)
     {
         int mawId = menuItemID - activeMDLsBaseID;
-        if(mawId < SynthAModelerApplication::getApp()->mainWindows.size())
-            if(MainAppWindow* maw = SynthAModelerApplication::getApp()->mainWindows[mawId])
+        if(mawId < SAMApplication::getApp()->mainWindows.size())
+            if(MainAppWindow* maw = SAMApplication::getApp()->mainWindows[mawId])
                 maw->toFront(true);
     }
 }
 
-ObjectsHolder* SynthAModelerApplication::getActiveHolderComponent()
+ObjectsHolder* SAMApplication::getActiveHolderComponent()
 {
     if (mainWindows.size() == 0)
         return nullptr;
@@ -838,7 +838,7 @@ ObjectsHolder* SynthAModelerApplication::getActiveHolderComponent()
     return mainWindows.getLast()->getHolderComponent();
 }
 
-void SynthAModelerApplication::togglePropertiesWindow()
+void SAMApplication::togglePropertiesWindow()
 {
     if ((propertiesWindow->isVisible() && propertiesWindow->isAlwaysOnTop())
         || propertiesWindow->isActiveWindow())
@@ -848,7 +848,7 @@ void SynthAModelerApplication::togglePropertiesWindow()
 
 }
 
-void SynthAModelerApplication::togglePropertiesWindowAlwaysOnTop()
+void SAMApplication::togglePropertiesWindowAlwaysOnTop()
 {
     StoredSettings* settings = StoredSettings::getInstance();
 
@@ -859,7 +859,7 @@ void SynthAModelerApplication::togglePropertiesWindowAlwaysOnTop()
     settings->setIsPropertiesWindowAlwaysOnTop(shouldStayOnTop);
 }
 
-void SynthAModelerApplication::switchToNextWindow()
+void SAMApplication::switchToNextWindow()
 {
     if(activeWindowsList.size() > 0)
     {
@@ -870,7 +870,7 @@ void SynthAModelerApplication::switchToNextWindow()
     }
 }
 
-void SynthAModelerApplication::switchToPreviousWindow()
+void SAMApplication::switchToPreviousWindow()
 {
     if(activeWindowsList.size() > 0)
     {
@@ -881,7 +881,7 @@ void SynthAModelerApplication::switchToPreviousWindow()
     }
 }
 
-void SynthAModelerApplication::mainWindowActivityChanged (MainAppWindow* mainWin)
+void SAMApplication::mainWindowActivityChanged (MainAppWindow* mainWin)
 {
     int idx = activeWindowsList.indexOf(mainWin);
     activeWindowsList.remove(idx);

@@ -40,12 +40,12 @@ class ObjectsHolder;
  * Here happens all initialization on startup and all cleaning up on shutdown.
  *
  */
-class SynthAModelerApplication  : public JUCEApplication
+class SAMApplication  : public JUCEApplication
 {
 public:
     //==============================================================================
-    SynthAModelerApplication();
-    ~SynthAModelerApplication();
+    SAMApplication();
+    ~SAMApplication();
 
     //==============================================================================
     void initialise (const String& commandLine);
@@ -59,7 +59,7 @@ public:
     bool moreThanOneInstanceAllowed();
     void anotherInstanceStarted (const String& commandLine);
 
-    static SynthAModelerApplication* getApp();
+    static SAMApplication* getApp();
 
     String getUniqueMDLPath(const String& mdlPath);
 

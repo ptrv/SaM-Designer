@@ -57,7 +57,7 @@ MainAppWindow::MainAppWindow()
 	createMDLFileContentCompIfNeeded();
 
 #if ! JUCE_MAC
-	setMenuBar (SynthAModelerApplication::getApp()->menuModel);
+	setMenuBar (SAMApplication::getApp()->menuModel);
 #endif
 
     setResizable (true, false);
@@ -119,7 +119,7 @@ void MainAppWindow::closeButtonPressed()
     if (! closeCurrentMDLFile())
         return;
 
-    SynthAModelerApplication::getApp()->closeWindow (this);
+    SAMApplication::getApp()->closeWindow (this);
 }
 
 void MainAppWindow::changeListenerCallback(ChangeBroadcaster*)
@@ -148,7 +148,7 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
     if (r == FileBasedDocument::savedOk)
     {
         if(! mdlFile->isUntiled())
-            SynthAModelerApplication::getApp()->removeFromFileList(mdlFile->getFile());
+            SAMApplication::getApp()->removeFromFileList(mdlFile->getFile());
 
         mdlFile->mdlRoot.removeListener(propertiesWindow);
 
@@ -174,7 +174,7 @@ void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
     // which will erase the list of recent projects)
     if (newMDLFile != nullptr)
     {
-        SynthAModelerApplication::getApp()->updateRecentProjectList();
+        SAMApplication::getApp()->updateRecentProjectList();
 
         newMDLFile->addChangeListener(this);
         updateTitle();
@@ -198,7 +198,7 @@ void MainAppWindow::activeWindowStatusChanged()
     }
     if(isActiveWindow())
     {
-        SynthAModelerApplication::getApp()->mainWindowActivityChanged(this);
+        SAMApplication::getApp()->mainWindowActivityChanged(this);
     }
 }
 
@@ -338,7 +338,7 @@ void MainAppWindow::saveDocumentAs()
     mdlController->close();
     mdlController->openFromFile(newFile);
     getMDLFileContentComponent()->reloadMDLFile(mdlController->getMDLFile());
-    SynthAModelerApplication::getApp()->updateRecentProjectList();
+    SAMApplication::getApp()->updateRecentProjectList();
     updateTitle();
 }
 
@@ -439,7 +439,7 @@ void MainAppWindow::updateTitle ()
     else
     {
         mdlFilePath = mdlController->getMDLFile()->getFilePath();
-        mdlFilePathUnique = SynthAModelerApplication::getApp()
+        mdlFilePathUnique = SAMApplication::getApp()
             ->getUniqueMDLPath(mdlFilePath);
     }
     bool mdlStatus = mdlController->getMDLFile()->hasChangedSinceSaved();
