@@ -19,6 +19,8 @@ ChangeLog Synth-A-Modeler Designer
 
 ### Bug fixes ###
 
+* Fix #47. Prevent editing properties when multiple objects of different
+  types are selected
 
 
 0.3.0
