@@ -291,6 +291,7 @@ void PropertiesWindow::updateProperties()
         {
             comp = new EmptyComponent();
         }
+        setWantsKeyboardFocus(false);
         setContentOwned(comp, false);
     }
     else
@@ -311,7 +312,9 @@ void PropertiesWindow::showEmptyComponent(const String& textToShow)
     EmptyComponent* ec = new EmptyComponent();
     if(textToShow.isNotEmpty())
         ec->setText(textToShow);
+    setWantsKeyboardFocus(true);
     setContentOwned(ec, false);
+    setName("Properties");
 }
 //==============================================================================
 void PropertiesWindow::valueTreePropertyChanged (ValueTree& /*tree*/,
