@@ -87,6 +87,8 @@ DocumentWindow("Properties",
 {
     setSize(400, 500);
 
+    setUsingNativeTitleBar(true);
+
     // restore the last size and position from our settings file..
 	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
 	                                    .getValue ("lastPropertiesWindowPos"));
