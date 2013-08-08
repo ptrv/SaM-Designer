@@ -341,11 +341,19 @@ void SAMApplication::getCommandInfo (CommandID commandID, ApplicationCommandInfo
         break;
     case CommandIDs::showPreviousWindow:
         result.setInfo("Previous Window", "", CommandCategories::windows,0);
+#ifdef JUCE_MAC
+        result.addDefaultKeypress(KeyPress::leftKey, ModifierKeys::commandModifier | ModifierKeys::altModifier);
+#else
         result.addDefaultKeypress(KeyPress::pageUpKey, ModifierKeys::commandModifier);
+#endif
         break;
     case CommandIDs::showNextWindow:
-        result.setInfo("Next Window", "", CommandCategories::windows,0);
+        result.setInfo("Next Window", "", CommandCategories::windows, 0);
+#ifdef JUCE_MAC
+        result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::commandModifier | ModifierKeys::altModifier);
+#else
         result.addDefaultKeypress(KeyPress::pageDownKey, ModifierKeys::commandModifier);
+#endif
         break;
     default:
         JUCEApplication::getCommandInfo (commandID, result);
