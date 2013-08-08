@@ -152,6 +152,8 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 
         mdlFile->mdlRoot.removeListener(propertiesWindow);
 
+        propertiesWindow->showEmptyComponent();
+
         setMDLFile(nullptr);
 //        mdlFile->removeChangeListener(this);
 //        mdlController->close();

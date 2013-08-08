@@ -62,6 +62,8 @@ public:
     void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
     bool perform (const InvocationInfo& info);
 
+    void showEmptyComponent(const String& textToShow=String::empty);
+
 private:
     ContentComp* currentContentComp;
     SelectedItemSet<SelectableObject*>* currentSelection;
@@ -69,8 +71,6 @@ private:
     void updateProperties();
 
     void mdlChanged();
-
-    void showEmptyComponent(const String& textToShow=String::empty);
 };
 
 }
