@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="VkFX9m" name="Synth-A-Modeler-Designer" projectType="guiapp"
               version="0.4.0dev" bundleIdentifier="net.petervasil.SynthAModelerDesigner"
-              jucerVersion="3.1.0" defines="BUILTIN_SAM_COMPILER=0">
+              jucerVersion="3.1.0" defines="">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
                bigIcon="WodEAp" documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
@@ -55,6 +55,8 @@
             file="BinaryData/synthamodeler_icon.png"/>
     </GROUP>
     <GROUP id="{335554E1-26F8-DC02-DBE7-A8EECB870A14}" name="Testsuite">
+      <FILE id="auv8JW" name="MiscUtilities_test.h" compile="0" resource="0"
+            file="Testsuite/MiscUtilities_test.h"/>
       <FILE id="J05nAI" name="MDLParser_test.h" compile="0" resource="0"
             file="Testsuite/MDLParser_test.h"/>
       <FILE id="LIATDU" name="MDLFile_test.h" compile="0" resource="0" file="Testsuite/MDLFile_test.h"/>
@@ -144,8 +146,6 @@
         <FILE id="G4iqru" name="ObjController.h" compile="0" resource="0" file="Source/Controller/ObjController.h"/>
       </GROUP>
       <GROUP id="{4AC7D49A-66CB-02BF-6612-3C0089D66F4C}" name="Models">
-        <FILE id="p3f3Ep" name="SAMCompiler.cpp" compile="1" resource="0" file="Source/Models/SAMCompiler.cpp"/>
-        <FILE id="HvT7tq" name="SAMCompiler.h" compile="0" resource="0" file="Source/Models/SAMCompiler.h"/>
         <FILE id="G9OIi7" name="ObjectFactory.cpp" compile="1" resource="0"
               file="Source/Models/ObjectFactory.cpp"/>
         <FILE id="Z559dG" name="ObjectFactory.h" compile="0" resource="0" file="Source/Models/ObjectFactory.h"/>

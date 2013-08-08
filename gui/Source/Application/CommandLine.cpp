@@ -24,7 +24,6 @@
 */
 
 #include "../Application/CommonHeaders.h"
-#include "../Models/SAMCompiler.h"
 #include "../Models/MDLFile.h"
 #include "../Models/SAMCmd.h"
 #include "../Controller/MDLController.h"
@@ -53,11 +52,6 @@ int showHelp()
         << " Synth-A-Modeler-Designer --compile /path/to/mdl_file /path/to/dsp_file" << std::endl
         << "    Compiles a mdl_file to a dsp_file." << std::endl
         << std::endl
-#if BUILTIN_SAM_COMPILER
-        << " Synth-A-Modeler-Designer --compile-builtin /path/to/mdl_file /path/to/dsp_file" << std::endl
-        << "    Compiles a mdl_file to a dsp_file." << std::endl
-        << std::endl
-#endif
         << " Synth-A-Modeler-Designer --binary exporter_name mdl_file" << std::endl
         << "    Generates a binary." << std::endl
         << std::endl
@@ -338,12 +332,7 @@ int synthamodeler::performCommandLine (const String& commandLine)
     args.trim();
 
     if (matchArgument(args[0], "help"))              return showHelp();
-#if BUILTIN_SAM_COMPILER
-    if (matchArgument(args[0], "compile"))           return compileMdlToDsp(args, false);
-    if (matchArgument(args[0], "compile-builtin"))   return compileMdlToDsp(args, true);
-#else
     if (matchArgument(args[0], "compile"))           return compileMdlToDsp(args);
-#endif
     if (matchArgument(args[0], "binary"))            return generateBinary(args);
     if (matchArgument(args[0], "list-exporters"))    return listExporters(false);
     if (matchArgument(args[0], "list-exportersd"))   return listExporters(true);

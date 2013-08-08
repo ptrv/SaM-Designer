@@ -370,14 +370,6 @@ void StoredSettings::setIsUsingMDLX(bool isUsingMDLX)
 {
     props->setValue("useMDLX", isUsingMDLX);
 }
-bool StoredSettings::getIsUsingBuiltinSAMCompiler() const
-{
-    return props->getBoolValue("useBuiltinCompiler", false);
-}
-void StoredSettings::setIsUsingBuiltinSAMCompiler(bool isUsingBuiltinSAMCompiler)
-{
-    props->setValue("useBuiltinCompiler", isUsingBuiltinSAMCompiler);
-}
 bool StoredSettings::getShowAudioConnections() const
 {
     return props->getBoolValue("showAudioConnections", true);

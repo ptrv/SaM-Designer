@@ -56,7 +56,7 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;BUILTIN_SAM_COMPILER=0;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -100,7 +100,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;BUILTIN_SAM_COMPILER=0;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
@@ -159,7 +159,6 @@
     <ClCompile Include="..\..\Source\Controller\PostWindowController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\MDLController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\ObjController.cpp"/>
-    <ClCompile Include="..\..\Source\Models\SAMCompiler.cpp"/>
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp"/>
     <ClCompile Include="..\..\Source\Models\SAMCmd.cpp"/>
     <ClCompile Include="..\..\Source\Models\MDLFile.cpp"/>
@@ -995,6 +994,7 @@
     <ClCompile Include="..\..\..\juce\modules\juce_gui_extra\juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Testsuite\MiscUtilities_test.h"/>
     <ClInclude Include="..\..\Testsuite\MDLParser_test.h"/>
     <ClInclude Include="..\..\Testsuite\MDLFile_test.h"/>
     <ClInclude Include="..\..\Testsuite\TestUtils.h"/>
@@ -1026,7 +1026,6 @@
     <ClInclude Include="..\..\Source\Controller\PostWindowController.h"/>
     <ClInclude Include="..\..\Source\Controller\MDLController.h"/>
     <ClInclude Include="..\..\Source\Controller\ObjController.h"/>
-    <ClInclude Include="..\..\Source\Models\SAMCompiler.h"/>
     <ClInclude Include="..\..\Source\Models\ObjectFactory.h"/>
     <ClInclude Include="..\..\Source\Models\ObjectActions.h"/>
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>

@@ -106,9 +106,6 @@ public:
     bool getIsUsingMDLX() const;
     void setIsUsingMDLX (bool isUsingMDLX);
 
-    bool getIsUsingBuiltinSAMCompiler() const;
-    void setIsUsingBuiltinSAMCompiler (bool isUsingBuiltinSAMCompiler);
-
     bool getShowAudioConnections() const;
     void setShowAudioConnections (bool showAudioConnections);
 

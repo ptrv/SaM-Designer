@@ -310,9 +310,6 @@
     <ClCompile Include="..\..\Source\Controller\ObjController.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Models\SAMCompiler.cpp">
-      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Models\ObjectFactory.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClCompile>
@@ -1266,6 +1263,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Testsuite\MiscUtilities_test.h">
+      <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Testsuite\MDLParser_test.h">
       <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
     </ClInclude>
@@ -1358,9 +1358,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Controller\ObjController.h">
       <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Models\SAMCompiler.h">
-      <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Models\ObjectFactory.h">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
