@@ -149,6 +149,8 @@ bool isFaustAvailable();
 
 const String getSAMLog();
 
+void uniquifyPaths(HashMap<String, String>& paths);
+
 };
 
 }

@@ -147,6 +147,9 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 
     if (r == FileBasedDocument::savedOk)
     {
+        if(! mdlFile->isUntiled())
+            SynthAModelerApplication::getApp()->removeFromFileList(mdlFile->getFile());
+
         setMDLFile(nullptr);
 //        mdlFile->removeChangeListener(this);
 //        mdlController->close();
@@ -420,7 +423,23 @@ bool MainAppWindow::perform (const InvocationInfo& info)
 void MainAppWindow::updateTitle ()
 {
 	String title = JUCEApplication::getInstance()->getApplicationName();
-	title << " - " << mdlController->getMDLFile()->getNameWithStatus();
+    String mdlFilePath;// = mdlController->getMDLFile()->getFilePath();
+    String mdlFilePathUnique;
+    if (mdlController->getMDLFile()->getName().compare("Untitled") == 0 ||
+        mdlController->getMDLFile()->getName().compare("Untitled*") == 0)
+    {
+        mdlFilePath = mdlController->getMDLFile()->getName();
+        mdlFilePathUnique = mdlFilePath;
+    }
+    else
+    {
+        mdlFilePath = mdlController->getMDLFile()->getFilePath();
+        mdlFilePathUnique = SynthAModelerApplication::getApp()
+            ->getUniqueMDLPath(mdlFilePath);
+    }
+    bool mdlStatus = mdlController->getMDLFile()->hasChangedSinceSaved();
+	title << " - " << (mdlStatus ? mdlFilePathUnique + "*" : mdlFilePathUnique);
+//    title << " - " << mdlController->getMDLFile()->getNameWithStatus();
 	this->setName(title);
 }
 

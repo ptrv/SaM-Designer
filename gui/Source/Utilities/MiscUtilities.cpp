@@ -555,3 +555,84 @@ const String Utils::getSAMLog()
     else
         return "No SAM Log!";
 }
+
+void Utils::uniquifyPaths(HashMap<String,String>& paths)
+{
+    // Get all file paths that have the same filename (i.e. /foo/bar.mdl and /bar.mdl)
+    SortedSet<String> fileSet;
+    for (HashMap<String, String>::Iterator i (paths); i.next();)
+    {
+        for (HashMap<String, String>::Iterator j(paths); j.next();)
+        {
+            if(i.getKey() != j.getKey())
+            {
+                File fi = i.getKey();
+                File fj = j.getKey();
+                if(fi.getFileName().compare(fj.getFileName()) == 0)
+                {
+                    fileSet.add(fj.getFullPathName());
+                }
+            }
+        }
+    }
+
+    //if there are no same filenames just return
+    if(fileSet.size() == 0)
+        return;
+
+    // Split paths to an Array
+    HashMap<String, StringArray> sameFiles;
+    for (int i = 0; i < fileSet.size(); ++i)
+    {
+        StringArray arr;
+        arr.addTokens(fileSet[i], File::separatorString, "\"");
+        sameFiles.set(fileSet[i], arr);
+    }
+
+    // Create unique paths by adding a parent directory to the files until
+    // the path is unique
+    bool uniquePaths = false;
+    int lvl = 0;
+    HashMap<String, String> sameFiles2;
+    while(! uniquePaths)
+    {
+        SortedSet<String> tmpSet;
+        ++lvl;
+        for (HashMap<String, StringArray>::Iterator k(sameFiles); k.next();)
+        {
+            StringArray arr = k.getValue();
+            int arrSize = arr.size();
+            String tmpPath2;
+            if(arrSize - lvl > 0)
+            {
+                StringArray tmpPath;
+                for (int l = lvl; --l >= 0;)
+                {
+                    tmpPath.add(arr[arrSize - 1 - l]);
+                }
+                tmpPath2 = tmpPath.joinIntoString(File::separatorString);
+            }
+            else
+            {
+                tmpPath2 = k.getValue().joinIntoString(File::separatorString);
+            }
+            tmpSet.add(tmpPath2);
+            sameFiles2.set(k.getKey(), tmpPath2);
+        }
+        if(tmpSet.size() == fileSet.size())
+        {
+            uniquePaths = true;
+        }
+    }
+    for (HashMap<String, String>::Iterator it(sameFiles2); it.next();)
+    {
+        paths.set(it.getKey(), it.getValue());
+    }
+}
+
+//==============================================================================
+#if UNIT_TESTS
+
+#include "../../Testsuite/MiscUtilities_test.h"
+
+#endif

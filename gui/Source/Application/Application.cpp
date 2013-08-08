@@ -462,6 +462,8 @@ MainAppWindow* SynthAModelerApplication::createNewMainWindow()
     activeWindowsList.insert(0, mw);
     mw->restoreWindowPosition();
     avoidSuperimposedWindows (mw);
+    addToFileList(mw->getMDLFile()->getFile());
+    mw->updateTitle();
     return mw;
 }
 
@@ -541,6 +543,8 @@ bool SynthAModelerApplication::openFile(const File& file)
             w->setMDLFile(newMDL.release());
             w->makeVisible();
             avoidSuperimposedWindows (w);
+            addToFileList(w->getMDLFile()->getFile());
+            w->updateTitle();
             return true;
         }
     }
@@ -550,6 +554,43 @@ bool SynthAModelerApplication::openFile(const File& file)
     }
     return false;
 }
+
+void SynthAModelerApplication::addToFileList(const File& newFile)
+{
+    openFilesList.set(newFile.getFullPathName(), newFile.getFileName());
+    updateFileList();
+    for (int i = 0; i < mainWindows.size(); ++i)
+        mainWindows[i]->updateTitle();
+}
+
+void SynthAModelerApplication::updateFileList()
+{
+    HashMap<String, String> tmp;
+    for (HashMap<String, String>::Iterator it(openFilesList); it.next();)
+    {
+        tmp.set(it.getKey(), File::createFileWithoutCheckingPath(it.getValue()).getFileName());
+    }
+    for (HashMap<String, String>::Iterator it(tmp); it.next();)
+    {
+        openFilesList.set(it.getKey(), it.getValue());
+    }
+
+    Utils::uniquifyPaths(openFilesList);
+}
+
+String SynthAModelerApplication::getUniqueMDLPath(const String& mdlPath)
+{
+    return openFilesList[mdlPath];
+}
+
+void SynthAModelerApplication::removeFromFileList(const File& f)
+{
+    openFilesList.remove(f.getFullPathName());
+    updateFileList();
+    for (int i = 0; i < mainWindows.size(); ++i)
+        mainWindows[i]->updateTitle();
+}
+
 //==============================================================================
 
 SynthAModelerApplication::AsyncQuitRetrier::AsyncQuitRetrier()

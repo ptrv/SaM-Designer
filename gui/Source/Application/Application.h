@@ -61,6 +61,7 @@ public:
 
     static SynthAModelerApplication* getApp();
 
+    String getUniqueMDLPath(const String& mdlPath);
 
     void getAllCommands (Array <CommandID>& commands);
     void getCommandInfo (CommandID commandID, ApplicationCommandInfo& result);
@@ -107,6 +108,8 @@ public:
 
     void mainWindowActivityChanged (MainAppWindow* mainWin);
 
+    void removeFromFileList(const File& f);
+
 private:
     OwnedArray<MainAppWindow> mainWindows;
 
@@ -129,6 +132,10 @@ private:
 #endif
 
     bool isRunningCommandLine;
+
+    HashMap<String, String> openFilesList;
+    void addToFileList(const File& newFile);
+    void updateFileList();
 
     void togglePropertiesWindow();
     void togglePropertiesWindowAlwaysOnTop();
