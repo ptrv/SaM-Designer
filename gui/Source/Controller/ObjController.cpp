@@ -1393,9 +1393,9 @@ void ObjController::setLinksSegmented(bool isSegmented)
 
 void ObjController::destroy()
 {
-    objects.clear();
     links.clear();
     audioConnections.clear();
+    objects.clear();
     sObjects.deselectAll();
     idMgr = nullptr;
     idMgr = new IdManager();
