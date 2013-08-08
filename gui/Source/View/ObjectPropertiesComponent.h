@@ -70,7 +70,6 @@ protected:
 	UndoManager* undoManager;
 	Label* laName;
 	TextEditor* teName;
-//    Label laDebug;
     bool dataChanged;
     bool multipleEdit;
     bool isEditing;

@@ -154,7 +154,8 @@ void PropertiesWindow::setCurrentActiveWindow(MainAppWindow& maw)
             {
 //                DBG("current active window changed");
                 currentContentComp = cc;
-                currentSelection = &cc->getHolderComponent()->getObjController().getSelectedObjects();
+                currentSelection = &cc->getHolderComponent()->getObjController()
+                    .getSelectedObjects();
                 currentSelection->sendChangeMessage();
             }
         }

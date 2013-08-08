@@ -785,7 +785,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
                     owner.getHolderComponent()->snapPosition(startY + dy));
 
             //c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
-            c->setPosition(Point<int>(r.x, r.y)-c->getPinOffset(), true);
+            c->setPosition(r - c->getPinOffset(), true);
         }
         else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
         {

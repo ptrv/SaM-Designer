@@ -40,7 +40,6 @@ datas(datas_),
 undoManager(undoManager_),
 laName(nullptr),
 teName(nullptr),
-//laDebug(nullptr),
 dataChanged(false),
 isEditing(false),
 nameExistAlertActive(false),
@@ -52,7 +51,6 @@ canceledEditing(false)
     teName->addListener(this);
     laName->attachToComponent(teName, true);
     multipleEdit = datas.size() > 1;
-//    addAndMakeVisible(&laDebug);
 
     setComponentID("opc_" + datas[0].getType().toString());
 }
@@ -65,7 +63,6 @@ ObjectPropertiesComponent::~ObjectPropertiesComponent()
 void ObjectPropertiesComponent::resized()
 {
     teName->setBounds(100, 10, getWidth() - 110, 22);
-//    laDebug.setBounds(65, getHeight() - 60, 200, 22);
 }
 
 void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& editor)
@@ -160,7 +157,8 @@ bool ObjectPropertiesComponent::writeIdentifier()
         }
         else
         {
-            if (!objController->renameId(data.getType(), oldName, newName, undoManager))
+            if (!objController->renameId(data.getType(), oldName, newName,
+                                         undoManager))
                 return false;
         }
 
@@ -169,21 +167,26 @@ bool ObjectPropertiesComponent::writeIdentifier()
             || data.getType() == Ids::ground || data.getType() == Ids::resonators)
         {
             objController->changeObjectNameInLink(oldName, newName, undoManager);
-            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName,
+                                                          undoManager);
         }
         else if(data.getType() == Ids::link || data.getType() == Ids::touch
             || data.getType() == Ids::pluck || data.getType() == Ids::pulsetouch)
         {
-            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName,
+                                                          undoManager);
         }
         else if(data.getType() == Ids::junction)
         {
-            objController->changeObjectNameInLink(oldName, newName, undoManager);
-            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+            objController->changeObjectNameInLink(oldName, newName,
+                                                  undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName,
+                                                          undoManager);
         }
         else if(data.getType() == Ids::termination)
         {
-            objController->changeObjectNameInAudioSources(oldName, newName, undoManager);
+            objController->changeObjectNameInAudioSources(oldName, newName,
+                                                          undoManager);
         }
 
         data.setProperty(Ids::identifier, newName, undoManager);
@@ -196,9 +199,6 @@ void ObjectPropertiesComponent::readValues()
 {
     if(multipleEdit)
     {
-//        laDebug.setText("Pos: " + String(multipleSelectionText),
-//                        dontSendNotification);
-
         teName->setReadOnly(true);
         teName->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
         teName->setText(String::empty, false);
@@ -208,9 +208,6 @@ void ObjectPropertiesComponent::readValues()
     }
     else
     {
-//        laDebug.setText("Pos: " + datas[0][Ids::posX].toString() + String(" ") +
-//                        datas[0][Ids::posY].toString(), dontSendNotification);
-
         teName->setReadOnly(false);
         teName->setTextToShowWhenEmpty(String::empty, Colours::black);
         teName->setText(datas[0][Ids::identifier].toString(), false);

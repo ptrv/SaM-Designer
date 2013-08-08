@@ -36,7 +36,7 @@
 using namespace synthamodeler;
 
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
-: BaseObjectComponent(owner_, data_)
+: BaseObjectComponent(owner_, data_), dragging(false), mouseDownSelectStatus(false)
 {
 	shadow.setShadowProperties (
 			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
@@ -330,7 +330,9 @@ bool ObjectComponent::canBeConnectedToLinks()
 {
     if(data.getType() == Ids::mass || data.getType() == Ids::ground ||
         data.getType() == Ids::port || data.getType() == Ids::resonators)
+    {
         return true;
+    }
     else if(data.getType() == Ids::junction)
     {
         // only 1 link allowed for junctions.
@@ -344,7 +346,9 @@ bool ObjectComponent::canBeConnectedToLinks()
         return connections == 0 ? true : false;
     }
     else
+    {
         return false;
+    }
 }
 bool ObjectComponent::canBeConnectedToWaveguides()
 {
