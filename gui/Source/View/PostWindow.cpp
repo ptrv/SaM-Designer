@@ -97,8 +97,8 @@ void PostWindow::addText(const String& compilerText, bool isBold)
 void PostWindow::printWelcomeMessage()
 {
 	String welcomeMsg;
-	welcomeMsg << "Hello " << SystemStats::getLogonName() << "!" << newLine;
-	welcomeMsg << "Welcome to Synth-A-Modeler Designer. Happy physical modelling!";
+    welcomeMsg << TRANS("Hello") << " " << SystemStats::getLogonName() << "!" << newLine;
+    welcomeMsg << TRANS("Welcome to Synth-A-Modeler Designer. Happy physical modelling!");
     welcomeMsg << newLine;
 //	welcomeMsg << "----------------------------------------------";
 	welcomeMsg << newLine;

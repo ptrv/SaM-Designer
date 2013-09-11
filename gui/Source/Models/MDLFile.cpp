@@ -34,7 +34,8 @@ using namespace synthamodeler;
 const char* MDLFile::mdlFileExtension = ".mdl;.mdlx";
 
 MDLFile::MDLFile()
-: FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
+: FileBasedDocument(".mdl", "*.mdl;*.mdlx",
+                    TRANS("Open mdl file"), TRANS("Save mdl file")),
   mdlRoot(Objects::synthamodeler), isUntitledFile(true)
 {
 	initMDL();
@@ -42,7 +43,8 @@ MDLFile::MDLFile()
     mdlRoot.addListener(propertiesWindow);
 }
 MDLFile::MDLFile(const File& file)
-: FileBasedDocument(".mdl", "*.mdl;*.mdlx", "Open mdl file", "Save mdl file"),
+: FileBasedDocument(".mdl", "*.mdl;*.mdlx",
+                    TRANS("Open mdl file"), TRANS("Save mdl file")),
   mdlRoot(Objects::synthamodeler), isUntitledFile(false)
 {
 	initMDL();

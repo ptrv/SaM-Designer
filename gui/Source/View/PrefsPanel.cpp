@@ -36,7 +36,7 @@ class ExporterInputPanel : public DialogWindow
 {
 public:
 	ExporterInputPanel(int exporterIndex)
-	: DialogWindow("Exporter", Colours::lightgrey, true)
+    : DialogWindow(TRANS("Exporter"), Colours::lightgrey, true)
 	{
 		ExporterInputComponent* const eic = new ExporterInputComponent(*this, exporterIndex);
 		eic->setSize(350, 200);
@@ -78,22 +78,22 @@ private:
           exporterIndex(exporterIndex_)
         {
             addAndMakeVisible(laVarName = new Label("Exporter"));
-            laVarName->setText("Exporter", dontSendNotification);
+            laVarName->setText(TRANS("Exporter"), dontSendNotification);
 
             addAndMakeVisible(laVarValue = new Label("Command"));
-            laVarValue->setText("Command", dontSendNotification);
+            laVarValue->setText(TRANS("Command"), dontSendNotification);
 
-            addAndMakeVisible(teVarName = new TextEditor("Input Variable"));
+            addAndMakeVisible(teVarName = new TextEditor(TRANS("Input Variable")));
             teVarName->addListener(this);
 
-            addAndMakeVisible(teVarValue = new TextEditor("Input Value"));
+            addAndMakeVisible(teVarValue = new TextEditor(TRANS("Input Value")));
             teVarValue->addListener(this);
             teVarValue->setMultiLine(true);
 
             addAndMakeVisible(btOk = new TextButton("Ok"));
             btOk->addListener(this);
 
-            addAndMakeVisible(btCancel = new TextButton("Cancel"));
+            addAndMakeVisible(btCancel = new TextButton(TRANS("Cancel")));
             btCancel->addListener(this);
 
             if(exporterIndex >= 0)
@@ -214,9 +214,9 @@ public:
         table->setColour (ListBox::outlineColourId, Colours::grey);
 	    table->setOutlineThickness (1);
 
-	    table->getHeader().addColumn("Exporter",1,100);
+        table->getHeader().addColumn(TRANS("Exporter"), 1, 100);
 
-	    table->getHeader().addColumn("Command",2, 500);
+        table->getHeader().addColumn(TRANS("Command"), 2, 500);
         table->autoSizeAllColumns();
 	    table->setMultipleSelectionEnabled(false);
     }
@@ -423,9 +423,9 @@ private:
 
 
 //==============================================================================
-static const char* miscPage = "Misc";
-static const char* exporterPage = "Exporter";
-static const char* aboutPage = "About";
+static const String miscPage = TRANS("Misc");
+static const String exporterPage = TRANS("Exporter");
+static const String aboutPage = TRANS("About");
 
 class PrefsTabComp  : public PreferencesPanel
 {
@@ -473,7 +473,7 @@ public:
 
 
 PrefsPanel::PrefsPanel()
-    : DialogWindow ("Synth-A-Modeler-Designer Preferences",
+: DialogWindow(TRANS("Synth-A-Modeler-Designer Preferences"),
                     Colour::greyLevel (0.92f), true)
 {
     PrefsTabComp* const p = new PrefsTabComp();

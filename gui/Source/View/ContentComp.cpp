@@ -317,29 +317,31 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     switch (commandID)
     {
     case CommandIDs::undo:
-        result.setInfo("Undo", "Undo last edit", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Undo"), TRANS("Undo last edit"),
+                       CommandCategories::editing, 0);
         result.addDefaultKeypress('z', ModifierKeys::commandModifier);
         break;
     case CommandIDs::redo:
-        result.setInfo("Redo", "Undo last undo", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Redo"), TRANS("Undo last undo"),
+                       CommandCategories::editing, 0);
         result.addDefaultKeypress('z', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
 
     case CommandIDs::zoomIn:
-        result.setInfo("Zoom In", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Zoom In"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('9', ModifierKeys::altModifier);
         break;
     case CommandIDs::zoomOut:
-        result.setInfo("Zoom Out", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Zoom Out"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('8', ModifierKeys::altModifier);
         break;
     case CommandIDs::zoomNormal:
-        result.setInfo("Zoom Normal", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Zoom Normal"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('0', ModifierKeys::altModifier);
         break;
     case CommandIDs::spaceBarDrag:
-        result.setInfo("Scroll while dragging mouse",
-                       "When held down, this key lets you scroll around by dragging with the mouse.",
+        result.setInfo(TRANS("Scroll while dragging mouse"),
+                       TRANS("When held down, this key lets you scroll around by dragging with the mouse."),
                        CommandCategories::view, ApplicationCommandInfo::wantsKeyUpDownCallbacks);
         //        result.setActive(currentPaintRoutine != 0 || currentLayout != 0);
         result.defaultKeypresses.add(KeyPress(KeyPress::spaceKey, 0, 0));

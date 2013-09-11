@@ -46,7 +46,7 @@ typedef ObjectPropertiesComponent OPC;
 class EmptyComponent : public Component
 {
 public:
-    EmptyComponent() : Component(), textToShow("No object selected!")
+    EmptyComponent() : Component(), textToShow(TRANS("No object selected!"))
     {
         setComponentID("EmptyComponent");
     }
@@ -78,7 +78,7 @@ private:
 
 PropertiesWindow::PropertiesWindow()
 :
-DocumentWindow("Properties",
+DocumentWindow(TRANS("Properties"),
                Colour::greyLevel (0.92f),
                DocumentWindow::closeButton | DocumentWindow::minimiseButton,
                false),
@@ -211,8 +211,8 @@ void PropertiesWindow::updateProperties()
                 }
                 else
                 {
-                    showEmptyComponent("Please select objects of the same type "
-                        "in order to edit their properties!");
+                    showEmptyComponent(TRANS("Please select objects of the same type "
+                                             "in order to edit their properties!"));
                     return;
                 }
             }
@@ -224,8 +224,8 @@ void PropertiesWindow::updateProperties()
                 }
                 else if(selectedId != Ids::audioconnector)
                 {
-                    showEmptyComponent("Please select objects of the same type "
-                        "in order to edit their properties!");
+                    showEmptyComponent(TRANS("Please select objects of the same type "
+                                             "in order to edit their properties!"));
                     return;
                 }
 
@@ -317,7 +317,7 @@ void PropertiesWindow::showEmptyComponent(const String& textToShow)
         ec->setText(textToShow);
     setWantsKeyboardFocus(true);
     setContentOwned(ec, false);
-    setName("Properties");
+    setName(TRANS("Properties"));
 }
 //==============================================================================
 void PropertiesWindow::valueTreePropertyChanged (ValueTree& /*tree*/,

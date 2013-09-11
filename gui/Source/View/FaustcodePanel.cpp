@@ -111,7 +111,7 @@ public:
         addAndMakeVisible(btOk = new TextButton("Ok"));
         btOk->addListener(this);
 
-        addAndMakeVisible(btCancel = new TextButton("Cancel"));
+        addAndMakeVisible(btCancel = new TextButton(TRANS("Cancel")));
         btCancel->addListener(this);
 
         addAndMakeVisible(btHelp = new TextButton("?"));
@@ -283,7 +283,7 @@ static String faustcodeWindowPos;
 FaustcodePanel::FaustcodePanel(ObjController* objController,
                                ValueTree data,
                                UndoManager* undoManager)
-    : DialogWindow ("Define FAUST code for "+data[Ids::mdlName].toString(),
+: DialogWindow(TRANS("Define FAUST code for") + " " + data[Ids::mdlName].toString(),
                     Colour::greyLevel (0.92f), true)
 {
     FaustcodeComponent * const fc = new FaustcodeComponent(this,

@@ -270,7 +270,7 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="MiscPage" componentName="MiscPage"
                  parentClasses="public Component, public FilenameComponentListener"
                  constructorParams="" variableInitialisers="" snapPixels="8" snapActive="1"
-                 snapShown="1" overlayOpacity="0.330000013" fixedSize="0" initialWidth="600"
+                 snapShown="1" overlayOpacity="0.33" fixedSize="0" initialWidth="600"
                  initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff"/>
   <LABEL name="laDatDir" id="484351012dae21b6" memberName="laDatDir" virtualName=""

@@ -33,7 +33,7 @@ using namespace synthamodeler;
 static String variablesWindowPos;
 //==============================================================================
 RedrawOptionsPanel::RedrawOptionsPanel()
-: DialogWindow("Redraw Options", Colours::grey, true)
+: DialogWindow(TRANS("Redraw Options"), Colours::grey, true)
 {
     RedrawOptionsComponent * const roc = new RedrawOptionsComponent(this);
     roc->setSize (400, 350);

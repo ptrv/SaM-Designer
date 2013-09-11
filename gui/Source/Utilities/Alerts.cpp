@@ -31,35 +31,35 @@ using namespace synthamodeler;
 
 void Alerts::missingPerl()
 {
-	String title = "Missing perl executable";
-	String msg = "Please install perl >= 5.10";
+    String title = TRANS("Missing perl executable");
+    String msg = TRANS("Please install perl >= 5.10");
 	missingAlert(title, msg);
 }
 void Alerts::missingSAMpreprocessor()
 {
-	String title = "Missing SAM-preprocessor compiler";
-	String msg = "Please set the path for the DATA_DIR which consists ";
-	msg << "the SAM-preprocessor script.";
+    String title = TRANS("Missing SAM-preprocessor compiler");
+    String msg = TRANS("Please set the path for the DATA_DIR which consists " \
+                       "the SAM-preprocessor script");
 	missingAlert(title, msg);
 }
 void Alerts::missingSAM()
 {
-	String title = "Missing Synth-A-Modeler compiler";
-	String msg = "Please set the path for the DATA_DIR which consists ";
-	msg << "the Synth-A-Modeler script.";
+    String title = TRANS("Missing Synth-A-Modeler compiler");
+    String msg = TRANS("Please set the path for the DATA_DIR which consists " \
+                       "the Synth-A-Modeler script");
 	missingAlert(title, msg);
 }
 void Alerts::missingFaust()
 {
-	String title = "Missing faust executable";
-	String msg = "Please install faust and set path in preferences.";
+    String title = TRANS("Missing faust executable");
+    String msg = TRANS("Please install faust and set path in preferences");
 	missingAlert(title, msg);
 }
 
 void Alerts::wrongFileType()
 {
-	String title = "You tried to open a wrong file type";
-	String msg = "Open a file with the extension .mdl";
+    String title = TRANS("You tried to open a wrong file type");
+    String msg = TRANS("Open a file with the extension .mdl");
 	missingAlert(title, msg);
 }
 void Alerts::missingAlert(const String& title, const String& msg)
@@ -68,13 +68,13 @@ void Alerts::missingAlert(const String& title, const String& msg)
 }
 bool Alerts::confirmExport(const String& text)
 {
-	String title = "Export external";
+    String title = TRANS("Export external");
 	return AlertWindow::showOkCancelBox(AlertWindow::WarningIcon, title, text);
 }
 
 void Alerts::nameAlreadyExists()
 {
-    String title = "Name error";
-    String msg = "Identifier already exists!";
+    String title = TRANS("Name error");
+    String msg = TRANS("Identifier already exists!");
     AlertWindow::showMessageBox(AlertWindow::WarningIcon, title, msg, "OK");
 }

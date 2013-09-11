@@ -88,11 +88,11 @@ void MDLController::save()
     if (currentMdl->checkIfChecksumChanged())
     {
         int res = AlertWindow::showYesNoCancelBox(AlertWindow::WarningIcon,
-                                                  "MDL file changed outside!",
+                                                  TRANS("MDL file changed outside!"),
                                                   "",
-                                                  "Load from disk",
-                                                  "Overwrite",
-                                                  "Cancel");
+                                                  TRANS("Load from disk"),
+                                                  TRANS("Overwrite"),
+                                                  TRANS("Cancel"));
         switch (res)
         {
         case 0:
@@ -141,8 +141,8 @@ void MDLController::saveAsImage()
                      << "/" << currentMdl->getFile().getFileNameWithoutExtension()
                      << "_" << Time::getCurrentTime().formatted("%Y%m%d%H%M%S")
                      << ".png";
-                
-        FileChooser fc("Please select the filename for the image...",
+
+        FileChooser fc(TRANS("Please select the filename for the image") + "...",
                        File::createFileWithoutCheckingPath(initFilePath),
                        "*.png;*.jpg;*.jpeg", true);
 
@@ -196,7 +196,7 @@ void MDLController::close()
 bool MDLController::saveAsXml()
 {
     bool saveOk = false;
-    FileChooser fc("Select XML file to save...",
+    FileChooser fc(TRANS("Select XML file to save") + "...",
                    File::getSpecialLocation(File::userHomeDirectory),
                    "*.xml");
 

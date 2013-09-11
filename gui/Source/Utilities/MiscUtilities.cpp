@@ -630,6 +630,27 @@ void Utils::uniquifyPaths(HashMap<String,String>& paths)
     }
 }
 
+void Utils::setLocale()
+{
+    //    String currLocale = std::locale("").name().c_str();
+    //    String currCountryCode = currLocale.substring(0, 2);
+    //
+    //    String localStr;
+    //    if (currCountryCode.compare("de") == 0
+    //        || currCountryCode.compare("at") == 0
+    //        || currLocale.compare("ch") == 0)
+    //    {
+    //        localStr = String::createStringFromData(BinaryData::trans_german_txt,
+    //                                                BinaryData::trans_german_txtSize);
+    //    }
+
+    //    if (localStr.isNotEmpty())
+    //    {
+    //        LocalisedStrings* localisedStrings = new LocalisedStrings(localStr, true);
+    //        LocalisedStrings::setCurrentMappings(localisedStrings);
+    //    }
+}
+
 //==============================================================================
 #if UNIT_TESTS
 

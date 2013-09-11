@@ -265,52 +265,72 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
     switch (commandID)
     {
     case CommandIDs::closeDocument:
-        result.setInfo("Close", "Close file.", CommandCategories::general, 0);
+        result.setInfo(TRANS("Close"), TRANS("Close file"),
+                       CommandCategories::general, 0);
         result.addDefaultKeypress('w', ModifierKeys::commandModifier);
         break;
     case CommandIDs::saveDocument:
-        result.setInfo ("Save", "Save file.", CommandCategories::general, 0);
+        result.setInfo(TRANS("Save"), TRANS("Save file"),
+                       CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier);
         break;
     case CommandIDs::saveDocumentAs:
-        result.setInfo ("Save As", "Save file as.", CommandCategories::general, 0);
+        result.setInfo(TRANS("Save As"), TRANS("Save file as"),
+                       CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::saveDocumentAsImage:
-        result.setInfo ("Save As Image", "Save patch as image.", CommandCategories::general, 0);
+        result.setInfo(TRANS("Save As Image"), TRANS("Save patch as image"),
+                       CommandCategories::general, 0);
 //        result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::generateFaust:
-    	result.setInfo("Generic Faust Code", "", CommandCategories::generation,0);
+        result.setInfo(TRANS("Generic Faust Code"),
+                       TRANS("Generate generic FAUST code"),
+                       CommandCategories::generation, 0);
     	result.addDefaultKeypress('g', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::generateExternal:
-    	result.setInfo("Binary", "", CommandCategories::generation,0);
+        result.setInfo(TRANS("Binary"), TRANS("Generate binary file"),
+                       CommandCategories::generation, 0);
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::cleanDataDir:
-        result.setInfo("Clean Data Directory", "", CommandCategories::tools,0);
+        result.setInfo(TRANS("Clean Data Directory"),
+                       TRANS("Delete intermediate files of current model in Data Dir"),
+                       CommandCategories::tools, 0);
     	break;
     case CommandIDs::cleanDataDirAll:
-        result.setInfo("Clean All In Data Directory", "", CommandCategories::generation,0);
+        result.setInfo(TRANS("Clean All In Data Directory"),
+                       TRANS("Delete intermediate files of all models in Data Dir"),
+                       CommandCategories::generation, 0);
     	break;
 #if defined _DEBUG
     case CommandIDs::writeMDLFileAsXml:
-        result.setInfo("MDL -> XML", "Write MDL file as XML", CommandCategories::tools, 0);
+        result.setInfo("MDL -> XML", TRANS("Write MDL file as XML"),
+                       CommandCategories::tools, 0);
         break;
 #endif
     case CommandIDs::printMDL:
-        result.setInfo("Print MDL structure", "", CommandCategories::tools, 0);
+        result.setInfo(TRANS("Print MDL structure"),
+                       TRANS("Print internal MDL structure in post window"),
+                       CommandCategories::tools, 0);
         break;
     case CommandIDs::printSAMLog:
-        result.setInfo("Print SAM Log", "", CommandCategories::tools, 0);
+        result.setInfo(TRANS("Print SAM Log"),
+                       TRANS("Print contents of SAM logfile in post window"),
+                       CommandCategories::tools, 0);
         break;
     case CommandIDs::openMdlFileExtern:
-        result.setInfo("Open MDL In Editor", "", CommandCategories::tools, 0);
+        result.setInfo(TRANS("Open MDL In Editor"),
+                       TRANS("Open MDL file in external editor"),
+                       CommandCategories::tools, 0);
         result.addDefaultKeypress('l', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showMDLProperties:
-        result.setInfo("Show MDL Information", "", CommandCategories::general, 0);
+        result.setInfo(TRANS("Show MDL Information"),
+                       TRANS("Show properties of MDL file"),
+                       CommandCategories::general, 0);
         result.addDefaultKeypress('i', ModifierKeys::altModifier);
         break;
     default:
@@ -416,7 +436,7 @@ bool MainAppWindow::perform (const InvocationInfo& info)
         showMDLProperties();
         break;
     case CommandIDs::printSAMLog:
-        SAM_CONSOLE_ALL("SAM compilation output:\n\n" + Utils::getSAMLog());
+        SAM_CONSOLE_ALL(TRANS("SAM compilation output") + ":\n\n" + Utils::getSAMLog());
         break;
 
 	default:
@@ -485,6 +505,6 @@ void MainAppWindow::showMDLProperties()
 {
     Colour color(0,0,0);
     mdlInfoComp->setContent(getMDLFile()->getInfoString());
-    DialogWindow::showModalDialog("MDL Information", mdlInfoComp,
-                                  nullptr, color, true);
+    DialogWindow::showModalDialog(TRANS("MDL Information"),
+                                  mdlInfoComp, nullptr, color, true);
 }

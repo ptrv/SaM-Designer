@@ -29,7 +29,7 @@
 
 using namespace synthamodeler;
 
-const char* multipleSelectionText = "(multiple selected)";
+const String multipleSelectionText = TRANS("(multiple selected)");
 
 ObjectPropertiesComponent::ObjectPropertiesComponent(ObjController* objController_,
                                                      Array<ValueTree> datas_,
@@ -204,7 +204,7 @@ void ObjectPropertiesComponent::readValues()
         teName->setText(String::empty, false);
         teName->setWantsKeyboardFocus(false);
 
-        propertiesWindow->setName("Properties: " + String(multipleSelectionText));
+        propertiesWindow->setName(TRANS("Properties") + ": " + String(multipleSelectionText));
     }
     else
     {
@@ -222,13 +222,13 @@ void ObjectPropertiesComponent::readValues()
             || datas[0].getType() == Ids::audioout
             || datas[0].getType() == Ids::comment)
         {
-            propertiesWindow->setName("Properties: " + teName->getText() + " ("
+            propertiesWindow->setName(TRANS("Properties") + ": " + teName->getText() + " ("
                                       + datas[0][Ids::posX].toString() + String(", ")
                                       + datas[0][Ids::posY].toString() + ")");
         }
         else
         {
-            propertiesWindow->setName("Properties: " + teName->getText());
+            propertiesWindow->setName(TRANS("Properties") + ": " + teName->getText());
         }
     }
 }
@@ -341,7 +341,7 @@ MassPropertiesComponent::MassPropertiesComponent(ObjController* objController_,
 {
     editors.add(createEditor("Mass", "Mass (kg)", true));
     editors.add(createEditor("Pos", "Position (m)", true));
-    editors.add(createEditor("Vel", "Valocity (m/s)", true));
+    editors.add(createEditor("Vel", "Velocity (m/s)", true));
 
     readValues();
 }
@@ -1045,7 +1045,7 @@ void GainComponent::readValues()
         teGain->setText(String::empty, false);
         teGain->setTextToShowWhenEmpty(multipleSelectionText, Colours::black);
 
-        propertiesWindow->setName("Properties: " + String(multipleSelectionText));
+        propertiesWindow->setName(TRANS("Properties") + ": " + String(multipleSelectionText));
     }
     else
     {
@@ -1056,7 +1056,7 @@ void GainComponent::readValues()
         teGain->setText(oldGain, false);
         teGain->setTextToShowWhenEmpty(String::empty, Colours::black);
 
-        propertiesWindow->setName("Properties: " + sourceIds[0]);
+        propertiesWindow->setName(TRANS("Properties") + ": " + sourceIds[0]);
     }
 
 }
