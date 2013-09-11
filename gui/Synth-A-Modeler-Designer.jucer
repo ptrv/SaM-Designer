@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="VkFX9m" name="Synth-A-Modeler-Designer" projectType="guiapp"
               version="0.4.0dev" bundleIdentifier="net.petervasil.SynthAModelerDesigner"
-              jucerVersion="3.1.0" defines="">
+              jucerVersion="3.1.0" defines="" includeBinaryInAppConfig="1">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
                bigIcon="WodEAp" documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
