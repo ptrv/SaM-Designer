@@ -156,32 +156,32 @@ void SAMCmd::generate(CmdType type)
 
         const Array<StringArray> args = generateFaustCodeCmd(tmpInPath, tmpOutPath);
 
-        postWindow->postLocked("Command: " + args[0].joinIntoString(" "),
+        postWindow->postLocked(TRANS("Command") + ": " + args[0].joinIntoString(" "),
                                PostLevel::ALL, true);
 
-        postWindow->postLocked("Run SAM-preprocessor...");
+        postWindow->postLocked(TRANS("Run SAM-preprocessor") + "...");
 
         String outputStr;
         if(! generateFaustCodeProcess(args[0], outputStr))
         {
-            postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
+            postWindow->postLocked(TRANS("Something went wrong!"), PostLevel::ERROR);
             return;
         }
         processOutput = outputStr;
 
         if(processOutput.isNotEmpty())
-            postWindow->postLocked("Output: " + processOutput);
+            postWindow->postLocked(TRANS("Output") + ": " + processOutput);
 
-        postWindow->postLocked("Done!");
+        postWindow->postLocked(TRANS("Done!"));
 
-        postWindow->postLocked("Command: " + args[1].joinIntoString(" "),
+        postWindow->postLocked(TRANS("Command") + ": " + args[1].joinIntoString(" "),
                                PostLevel::ALL, true);
 
-        postWindow->postLocked("Run Synth-A-Modeler...");
+        postWindow->postLocked(TRANS("Run Synth-A-Modeler") + "...");
 
         if(! generateFaustCodeProcess(args[1], outputStr))
         {
-            postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
+            postWindow->postLocked(TRANS("Something went wrong!"), PostLevel::ERROR);
             return;
         }
         processOutput = outputStr;
@@ -216,22 +216,23 @@ void SAMCmd::generate(CmdType type)
         bool saveInDataDir = copyInfileToDataDirIfNeeded(tmpInPath);
 
         StringArray args = generateExternalCmd(tmpInPath, exporter);
-        postWindow->postLocked("Command: "+ args.joinIntoString(" "), PostLevel::ALL, true);
+        postWindow->postLocked(TRANS("Command") + ": " + args.joinIntoString(" "),
+                               PostLevel::ALL, true);
 
-        postWindow->postLocked("Run generate binary...");
+        postWindow->postLocked(TRANS("Run generate binary") + "...");
 
         String outputStr;
         if(! generateExternalProcess(args, outputStr))
         {
-            postWindow->postLocked("Something went wrong!", PostLevel::ERROR);
+            postWindow->postLocked(TRANS("Something went wrong!"), PostLevel::ERROR);
             return;
         }
         processOutput = outputStr;
 
         if(processOutput.isNotEmpty())
-            postWindow->postLocked("Output: " + processOutput);
+            postWindow->postLocked(TRANS("Output") + ": " + processOutput);
 
-        postWindow->postLocked("Done!");
+        postWindow->postLocked(TRANS("Done!"));
 
         if (saveInDataDir)
         {

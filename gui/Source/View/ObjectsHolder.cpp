@@ -428,124 +428,132 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
     switch (commandID)
     {
     case StandardApplicationCommandIDs::cut:
-        result.setInfo("Cut", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Cut"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('x', ModifierKeys::commandModifier);
         break;
     case StandardApplicationCommandIDs::copy:
-        result.setInfo("Copy", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Copy"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('c', ModifierKeys::commandModifier);
         break;
     case StandardApplicationCommandIDs::paste:
-        result.setInfo("Paste", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Paste"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('v', ModifierKeys::commandModifier);
         break;
     case StandardApplicationCommandIDs::selectAll:
-        result.setInfo("Select All", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Select All"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('a', ModifierKeys::commandModifier);
         break;
     case StandardApplicationCommandIDs::deselectAll:
-        result.setInfo("Deselect All", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Deselect All"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('a', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case StandardApplicationCommandIDs::del:
-        result.setInfo("Delete", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Delete"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress(KeyPress::deleteKey, 0);
         result.addDefaultKeypress(KeyPress::backspaceKey, 0);
         break;
     case CommandIDs::segmentedConnectors:
-        result.setInfo("Segmented Connectors", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Segmented Connectors"), "",
+                       CommandCategories::editing, 0);
         result.setTicked(StoredSettings::getInstance()->getIsSegmentedConnectors());
         result.addDefaultKeypress('t', ModifierKeys::commandModifier);
         break;
     case CommandIDs::reverseDirection:
-        result.setInfo("Reverse Direction", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Reverse Direction"), "",
+                       CommandCategories::editing, 0);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier);
         break;
     case CommandIDs::defineFaustcode:
-        result.setInfo("Define FAUST Code", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Define FAUST Code"), "",
+                       CommandCategories::editing, 0);
         result.addDefaultKeypress('d', ModifierKeys::commandModifier);
         break;
     case CommandIDs::tidyObjects:
-        result.setInfo("Tidy Up", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Tidy Up"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::redrawCircle:
-        result.setInfo("Circle", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Circle"), "", CommandCategories::editing, 0);
         result.setActive(mdlFile != nullptr ? (! mdlFile->isEmpty()) : false);
         break;
     case CommandIDs::redrawForceDirected:
-        result.setInfo("Force-Directed", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Force-Directed"), "",
+                       CommandCategories::editing, 0);
         result.setActive(mdlFile != nullptr ? (! mdlFile->isEmpty()) : false);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showRedrawOptions:
-        result.setInfo("Force-Directed options...", "Open redraw options", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Force-Directed options") + "...",
+                       TRANS("Open redraw options"), CommandCategories::editing, 0);
         result.addDefaultKeypress('d', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::insertMass:
-        result.setInfo("Mass", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Mass"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('1', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertGround:
-        result.setInfo("Ground", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Ground"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('2', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertResonator:
-        result.setInfo("Resonator", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Resonator"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('3', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertPort:
-        result.setInfo("Port", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Port"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('4', ModifierKeys::commandModifier);
         break;
 
     case CommandIDs::insertLink:
-        result.setInfo("Linear Link", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Linear Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('5', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertTouch:
-        result.setInfo("Touch Link", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Touch Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('6', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertPulsetouch:
-        result.setInfo("Pulsetouch Link", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Pulsetouch Link"), "",
+                       CommandCategories::inserting, 0);
 //        result.addDefaultKeypress('6', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertPluck:
-        result.setInfo("Pluck Link", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Pluck Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('7', ModifierKeys::commandModifier);
         break;
 
     case CommandIDs::insertAudioOutput:
-        result.setInfo("Audio Output", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Audio Output"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertAudioConnection:
-        result.setInfo("Audio Connection", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Audio Connection"), "",
+                       CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::insertWaveguide:
-        result.setInfo("Waveguide", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Waveguide"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('9', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertTermination:
-        result.setInfo("Termination", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Termination"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('0', ModifierKeys::commandModifier);
         break;
     case CommandIDs::insertJunction:
-        result.setInfo("Junction", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Junction"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('0', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         break;
     case CommandIDs::insertComment:
     {
-        result.setInfo("Comment", "", CommandCategories::inserting, 0);
+        result.setInfo(TRANS("Comment"), "", CommandCategories::inserting, 0);
 //        MDLFile * mdlF = mainWindow.getMDLFile();
 //        result.setActive(StoredSettings::getInstance()->getIsUsingMDLX()
 //                         || (mdlF != nullptr ? mdlF->getFile().hasFileExtension(".mdlx") : false));
     }
         break;
     case CommandIDs::moveUp:
-        result.setInfo("Move Object Up", "", CommandCategories::generation, 0);
+        result.setInfo(TRANS("Move Object Up"), "",
+                       CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::upKey, 0);
         break;
 //    case CommandIDs::moveUpFine:
@@ -553,7 +561,8 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
 //        result.addDefaultKeypress(KeyPress::upKey, ModifierKeys::shiftModifier);
 //        break;
     case CommandIDs::moveDown:
-        result.setInfo("Move Object Down", "", CommandCategories::generation, 0);
+        result.setInfo(TRANS("Move Object Down"), "",
+                       CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::downKey, 0);
         break;
 //    case CommandIDs::moveDownFine:
@@ -561,7 +570,8 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
 //        result.addDefaultKeypress(KeyPress::downKey, ModifierKeys::shiftModifier);
 //        break;
     case CommandIDs::moveLeft:
-        result.setInfo("Move Object Left", "", CommandCategories::generation, 0);
+        result.setInfo(TRANS("Move Object Left"), "",
+                       CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::leftKey, 0);
         break;
 //    case CommandIDs::moveLeftFine:
@@ -569,7 +579,8 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
 //        result.addDefaultKeypress(KeyPress::leftKey, ModifierKeys::shiftModifier);
 //        break;
     case CommandIDs::moveRight:
-        result.setInfo("Move Object Right", "", CommandCategories::generation, 0);
+        result.setInfo(TRANS("Move Object Right"), "",
+                       CommandCategories::generation, 0);
         result.addDefaultKeypress(KeyPress::rightKey, 0);
         break;
 //    case CommandIDs::moveRightFine:
@@ -577,29 +588,31 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
 //        result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::shiftModifier);
 //        break;
     case CommandIDs::showObjectNames:
-        result.setInfo("Show Identifiers", "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Show Identifiers"), "",
+                       CommandCategories::editing, 0);
         result.addDefaultKeypress('i', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         result.setTicked(getShowObjectNames());
         break;
 
     case CommandIDs::enableSnapToGrid:
-        result.setInfo("Enable Snap-to-grid",
-                       "Toggles whether components' positions are aligned to a grid.",
+        result.setInfo(TRANS("Enable Snap-to-grid"),
+                       TRANS("Toggles whether components' positions are aligned to a grid."),
                        CommandCategories::view, 0);
         result.setTicked(isSnapActive(false));
 //        result.defaultKeypresses.add(KeyPress('g', cmd, 0));
         break;
 
     case CommandIDs::showGrid:
-        result.setInfo("Show Grid",
-                       "Toggles whether the snapping grid is displayed on-screen.",
+        result.setInfo(TRANS("Show Grid"),
+                       TRANS("Toggles whether the snapping grid is displayed on-screen."),
                        CommandCategories::view, 0);
         result.setTicked(isSnapShown());
 //        result.defaultKeypresses.add(KeyPress('g', cmd | shift, 0));
         break;
 
     case CommandIDs::showAudioConnections:
-        result.setInfo("Show Audio Connections", "", CommandCategories::view, 0);
+        result.setInfo(TRANS("Show Audio Connections"), "",
+                       CommandCategories::view, 0);
         result.setTicked(StoredSettings::getInstance()->getShowAudioConnections());
         break;
     default:
@@ -747,21 +760,21 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
 void ObjectsHolder::showContextMenu(const Point<int> mPos)
 {
     PopupMenu m;
-    m.addSectionHeader("Insert...");
-    m.addItem(1, "Mass");
-    m.addItem(2, "Ground");
-    m.addItem(3, "Resonator");
-    m.addItem(4, "Port");
+    m.addSectionHeader(TRANS("Insert") + "...");
+    m.addItem(1, TRANS("Mass"));
+    m.addItem(2, TRANS("Ground"));
+    m.addItem(3, TRANS("Resonator"));
+    m.addItem(4, TRANS("Port"));
     m.addSeparator();
-    m.addItem(5, "Audio Out");
+    m.addItem(5, TRANS("Audio Out"));
     m.addSeparator();
-    m.addItem(6, "Junction");
-    m.addItem(7, "Termination");
+    m.addItem(6, TRANS("Junction"));
+    m.addItem(7, TRANS("Termination"));
     m.addSeparator();
 //    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
 //    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
 //    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
-    m.addItem(8, "Comment");
+    m.addItem(8, TRANS("Comment"));
 
     const int r = m.show();
 
@@ -802,15 +815,15 @@ void ObjectsHolder::showContextMenu(const Point<int> mPos)
 void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 {
 	PopupMenu m;
-    m.addSectionHeader("Add...");
-	m.addItem (1, "Linear Link");
-	m.addItem (2, "Touch Link");
-	m.addItem (3, "Pulsetouch Link");
-	m.addItem (4, "Pluck Link");
+    m.addSectionHeader(TRANS("Add") + "...");
+    m.addItem(1, TRANS("Linear Link"));
+    m.addItem(2, TRANS("Touch Link"));
+    m.addItem(3, TRANS("Pulsetouch Link"));
+    m.addItem(4, TRANS("Pluck Link"));
     m.addSeparator();
-    m.addItem (5, "Waveguide");
+    m.addItem(5, TRANS("Waveguide"));
     m.addSeparator();
-    m.addItem (6, "Audio Connection");
+    m.addItem(6, TRANS("Audio Connection"));
 	const int r = m.show();
 
 	if (r == 1)
@@ -849,8 +862,8 @@ void ObjectsHolder::showLinkPopupMenu(String so, String eo)
 void ObjectsHolder::showAudioConnectionPopupMenu()
 {
     PopupMenu m;
-    m.addSectionHeader("Add...");
-	m.addItem (1, "Audio Connection");
+    m.addSectionHeader(TRANS("Add") + "...");
+    m.addItem(1, TRANS("Audio Connection"));
     const int r = m.show();
     if( r == 1)
     {

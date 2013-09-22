@@ -736,9 +736,6 @@
     <ClCompile Include="..\..\..\juce\modules\juce_graphics\geometry\juce_PathStrokeType.cpp">
       <Filter>Juce Modules\juce_graphics\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\juce\modules\juce_graphics\placement\juce_Justification.cpp">
-      <Filter>Juce Modules\juce_graphics\placement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\juce\modules\juce_graphics\placement\juce_RectanglePlacement.cpp">
       <Filter>Juce Modules\juce_graphics\placement</Filter>
     </ClCompile>
@@ -1470,6 +1467,9 @@
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_StringPool.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_StringRef.h">
+      <Filter>Juce Modules\juce_core\text</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\text\juce_TextDiff.h">
       <Filter>Juce Modules\juce_core\text</Filter>
     </ClInclude>
@@ -1492,6 +1492,9 @@
       <Filter>Juce Modules\juce_core\memory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\memory\juce_ByteOrder.h">
+      <Filter>Juce Modules\juce_core\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_core\memory\juce_ContainerDeletePolicy.h">
       <Filter>Juce Modules\juce_core\memory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_core\memory\juce_HeapBlock.h">
@@ -1795,6 +1798,9 @@
       <Filter>Juce Modules\juce_events\messages</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_DeletedAtShutdown.h">
+      <Filter>Juce Modules\juce_events\messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_Initialisation.h">
       <Filter>Juce Modules\juce_events\messages</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_events\messages\juce_Message.h">
@@ -2338,9 +2344,6 @@
       <Filter>Juce Modules\juce_gui_basics\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\application\juce_Application.h">
-      <Filter>Juce Modules\juce_gui_basics\application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\application\juce_Initialisation.h">
       <Filter>Juce Modules\juce_gui_basics\application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\juce\modules\juce_gui_basics\native\juce_MultiTouchMapper.h">

@@ -34,7 +34,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     : rop(rop_), pf(StoredSettings::getInstance()->getProps())
 {
     addAndMakeVisible (laAlpha = new Label ("laAlpha",
-                                            "Mass"));
+                                            TRANS("Mass")));
     laAlpha->setFont (Font (15.00f, Font::plain));
     laAlpha->setJustificationType (Justification::centredLeft);
     laAlpha->setEditable (false, false, false);
@@ -48,7 +48,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slAlpha->addListener (this);
 
     addAndMakeVisible (laBeta = new Label ("laBeta",
-                                           "Charge"));
+                                           TRANS("Charge")));
     laBeta->setFont (Font (15.00f, Font::plain));
     laBeta->setJustificationType (Justification::centredLeft);
     laBeta->setEditable (false, false, false);

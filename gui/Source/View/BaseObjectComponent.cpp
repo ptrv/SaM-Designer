@@ -55,10 +55,10 @@ ObjectsHolder* BaseObjectComponent::getObjectsHolder() const noexcept
 void BaseObjectComponent::showContextMenu()
 {
 	PopupMenu m;
-	m.addItem (1, "Edit");
-    m.addItem (2, "Delete");
+    m.addItem(1, TRANS("Edit"));
+    m.addItem(2, TRANS("Delete"));
 	m.addSeparator();
-	m.addItem (3, "Help");
+    m.addItem(3, TRANS("Help"));
 
 	const int r = m.show();
 

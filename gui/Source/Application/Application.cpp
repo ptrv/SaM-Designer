@@ -61,12 +61,17 @@ void SAMApplication::initialise (const String& commandLine)
 {
 #if UNIT_TESTS
 	if(commandLine.contains("--test"))
-	{
-		TestRunner::doTests();
+    {
+#if JUCE_MAC
+        Process::setDockIconVisible(false);
+#endif
+        TestRunner::doTests();
 		quit();
 		return;
 	}
 #endif
+
+    Utils::setLocale();
 
 	// Do your application's initialisation code here
 	samLookAndFeel = new SAMLookAndFeel();
@@ -304,43 +309,60 @@ void SAMApplication::getCommandInfo (CommandID commandID, ApplicationCommandInfo
     switch (commandID)
     {
     case CommandIDs::newFile:
-        result.setInfo("New", "Create new *.mdl file.", CommandCategories::general, 0);
+        result.setInfo(TRANS("New"), TRANS("Create new *.mdl file."),
+                       CommandCategories::general, 0);
         result.addDefaultKeypress('n', ModifierKeys::commandModifier);
         break;
     case CommandIDs::open:
-        result.setInfo ("Open", "Open *.mdl file.", CommandCategories::general, 0);
+        result.setInfo(TRANS("Open"), TRANS("Open *.mdl file."),
+                       CommandCategories::general, 0);
         result.addDefaultKeypress ('o', ModifierKeys::commandModifier);
         break;
     case CommandIDs::showPrefs:
-    	result.setInfo ("Preferences...", "Open preferences window",
-    			CommandCategories::general, 0);
+        result.setInfo(TRANS("Preferences..."),
+                       TRANS("Open preferences window"),
+                       CommandCategories::general, 0);
     	result.addDefaultKeypress(',', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::clearOutputConsole:
-        result.setInfo("Clear Output Window", "", CommandCategories::tools,0);
+        result.setInfo(TRANS("Clear Output Window"),
+                       TRANS("Delete text in the output window"),
+                       CommandCategories::tools, 0);
         result.addDefaultKeypress('k', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
     	break;
     case CommandIDs::openDataDir:
-        result.setInfo("Open Data Directory", "", CommandCategories::tools, 0);
+        result.setInfo(TRANS("Open Data Directory"),
+                       TRANS("Open data directory in file manager"),
+                       CommandCategories::tools, 0);
         result.addDefaultKeypress('l', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::showHelp:
-    	result.setInfo("Online Help", "Open online help in web browser.", CommandCategories::help, 0);
-    	break;
+        result.setInfo(TRANS("Online Help"),
+                       TRANS("Open online help in web browser."),
+                       CommandCategories::help, 0);
+        break;
     case CommandIDs::showPostWindow:
-        result.setInfo("Toggle Post Window", "", CommandCategories::tools,0);
+        result.setInfo(TRANS("Toggle Post Window"),
+                       TRANS("Show/hide post window"),
+                       CommandCategories::tools, 0);
     	result.addDefaultKeypress('k', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::showPropertiesWindow:
-        result.setInfo("Show Properties Window", "", CommandCategories::windows,0);
+        result.setInfo(TRANS("Show Properties Window"),
+                       TRANS("Show properties window"),
+                       CommandCategories::windows, 0);
     	result.addDefaultKeypress('i', ModifierKeys::commandModifier);
     	break;
     case CommandIDs::propertiesWindowOnTop:
-        result.setInfo("Properties Window Always On Top", "", CommandCategories::windows,0);
+        result.setInfo(TRANS("Properties Window Always On Top"),
+                       TRANS("Toggle always on top"),
+                       CommandCategories::windows, 0);
         result.setTicked(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
         break;
     case CommandIDs::showPreviousWindow:
-        result.setInfo("Previous Window", "", CommandCategories::windows,0);
+        result.setInfo(TRANS("Previous Window"),
+                       TRANS("Display previous window"),
+                       CommandCategories::windows, 0);
 #ifdef JUCE_MAC
         result.addDefaultKeypress(KeyPress::leftKey, ModifierKeys::commandModifier | ModifierKeys::altModifier);
 #else
@@ -348,7 +370,9 @@ void SAMApplication::getCommandInfo (CommandID commandID, ApplicationCommandInfo
 #endif
         break;
     case CommandIDs::showNextWindow:
-        result.setInfo("Next Window", "", CommandCategories::windows, 0);
+        result.setInfo(TRANS("Next Window"),
+                       TRANS("Display next window"),
+                       CommandCategories::windows, 0);
 #ifdef JUCE_MAC
         result.addDefaultKeypress(KeyPress::rightKey, ModifierKeys::commandModifier | ModifierKeys::altModifier);
 #else
@@ -417,7 +441,7 @@ void SAMApplication::creatNewMDLDocument()
 
 void SAMApplication::askUserToOpenFile()
 {
-    FileChooser fc ("Open MDL File", File::nonexistent, "*.mdl;*.mdlx");
+    FileChooser fc(TRANS("Open MDL File"), File::nonexistent, "*.mdl;*.mdlx");
 
     if (fc.browseForFileToOpen())
         openFile (fc.getResult());
@@ -656,7 +680,7 @@ PopupMenu SAMApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex,
         StoredSettings::getInstance()->recentFiles
             .createPopupMenuItems(recentFiles, recentProjectsBaseID, true, true);
 
-        menu.addSubMenu ("Open Recent File", recentFiles);
+        menu.addSubMenu(TRANS("Open Recent File"), recentFiles);
 
         menu.addSeparator();
         menu.addCommandItem (commandManager, CommandIDs::closeDocument);
@@ -699,7 +723,7 @@ PopupMenu SAMApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex,
         redrawModelMenu.addSeparator();
         redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawForceDirected);
         redrawModelMenu.addCommandItem(commandManager, CommandIDs::showRedrawOptions);
-        menu.addSubMenu("Redraw Model", redrawModelMenu);
+        menu.addSubMenu(TRANS("Redraw Model"), redrawModelMenu);
     }
     else if (topLevelMenuIndex == 2)
     {
@@ -774,10 +798,10 @@ PopupMenu SAMApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex,
         PopupMenu m;
         for (int i = 0; i < numElementsInArray (snapSizes); ++i)
             m.addItem (snappingSizesBaseID + i,
-                       String (snapSizes[i]) + " pixels",
+                       String(snapSizes[i]) + " " + TRANS("pixels"),
                        true, snapSizes[i] == currentSnapSize);
 
-        menu.addSubMenu ("Grid Size", m, getApp()->getActiveHolderComponent() != 0);
+        menu.addSubMenu(TRANS("Grid Size"), m, getApp()->getActiveHolderComponent() != 0);
     }
     else if (topLevelMenuIndex == 6)
     {
@@ -825,6 +849,9 @@ void SAMApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*top
 
         StoredSettings::getInstance()
             ->setCurrentExporter(spa.getAllKeys()[menuItemID - exportersBaseID]);
+#ifdef JUCE_MAC
+        menuItemsChanged();
+#endif
     }
     else if (menuItemID >= snappingSizesBaseID && menuItemID < snappingSizesBaseID + 100)
     {

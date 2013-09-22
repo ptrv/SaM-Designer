@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="VkFX9m" name="Synth-A-Modeler-Designer" projectType="guiapp"
-              version="0.3.1" bundleIdentifier="net.petervasil.SynthAModelerDesigner"
-              jucerVersion="3.1.0" defines="">
+              version="0.3.2" bundleIdentifier="net.petervasil.SynthAModelerDesigner"
+              jucerVersion="3.1.0" defines="" includeBinaryInAppConfig="1">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" juceFolder="../juce/modules"
                bigIcon="WodEAp" documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
