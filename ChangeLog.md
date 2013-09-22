@@ -1,19 +1,25 @@
 ChangeLog Synth-A-Modeler Designer
 ==================================
 
-0.4.0
------
+### 0.4.0 ###
 
 #### New ####
 
-
 #### Changes ####
-
 
 #### Bug fixes ####
 
+0.3.2
+-----
 
-### 0.3.1 ###
+#### Bug fixes ####
+
+* Fix typo in PropertiesWindow
+* Fix compile error with clang with recent JUCE
+* Fix a bug that caused the Mac main menu not to update properly
+
+0.3.1
+-----
 
 #### New ####
 
