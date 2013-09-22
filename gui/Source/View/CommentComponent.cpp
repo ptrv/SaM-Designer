@@ -44,7 +44,8 @@ CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
 			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
 	setComponentEffect (&shadow);
 
-    commentColor = Colour::fromString(data.getProperty(Ids::commentColour, Colours::black.toString()));
+    const String commentColorStr = data.getProperty(Ids::commentColour, Colours::black.toString());
+    commentColor = Colour::fromString(commentColorStr);
     textField = new CommentEditor(*this, data.getProperty(Ids::fontSize, 16.0f), commentColor);
     textField->setText(data[Ids::value].toString(), false);
     textField->addListener(this);
