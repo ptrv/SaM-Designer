@@ -38,10 +38,6 @@ private:
 public:
     static void doTests()
     {
-#if JUCE_MAC
-        Process::setDockIconVisible(false);
-#endif
-
         UnitTestRunner runner;
         runner.setAssertOnFailure(false);
         runner.runAllTests();

@@ -61,8 +61,11 @@ void SAMApplication::initialise (const String& commandLine)
 {
 #if UNIT_TESTS
 	if(commandLine.contains("--test"))
-	{
-		TestRunner::doTests();
+    {
+#if JUCE_MAC
+        Process::setDockIconVisible(false);
+#endif
+        TestRunner::doTests();
 		quit();
 		return;
 	}
