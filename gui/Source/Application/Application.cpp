@@ -846,6 +846,9 @@ void SAMApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*top
 
         StoredSettings::getInstance()
             ->setCurrentExporter(spa.getAllKeys()[menuItemID - exportersBaseID]);
+#ifdef JUCE_MAC
+        menuItemsChanged();
+#endif
     }
     else if (menuItemID >= snappingSizesBaseID && menuItemID < snappingSizesBaseID + 100)
     {
