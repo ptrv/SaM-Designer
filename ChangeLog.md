@@ -10,7 +10,8 @@ ChangeLog Synth-A-Modeler Designer
 * Fix compile error with clang with recent JUCE
 * Fix a bug that caused the Mac main menu not to update properly
 
-### 0.3.1 ###
+0.3.1
+-----
 
 #### New ####
 
