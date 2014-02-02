@@ -865,4 +865,17 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     return 0;
 }
 
+const char* namedResourceList[] =
+{
+    "default_values_xml",
+    "default_exporters_xml",
+    "prefs_export_png",
+    "mdl_file_header_txt",
+    "about_txt",
+    "prefs_about_png",
+    "prefs_misc_png",
+    "icons_zip",
+    "synthamodeler_icon_png"
+};
+
 }
