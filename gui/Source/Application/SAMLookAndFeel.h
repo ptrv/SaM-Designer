@@ -13,28 +13,24 @@
 
 namespace synthamodeler
 {
+
 /**
  * This class is the theme for the application's widgets (buttons, text, etc...)
  */
-class SAMLookAndFeel : public LookAndFeel {
+class SAMLookAndFeel : public LookAndFeel_V3
+{
 public:
-	SAMLookAndFeel();
-
-    void drawButtonBackground (Graphics& g, Button& button, const Colour& backgroundColour,
-                               bool isMouseOverButton, bool isButtonDown);
-
-    void drawPopupMenuItem (Graphics& g,
-                            int width, int height,
-                            bool isSeparator,
-                            bool isActive,
-                            bool isHighlighted,
-                            bool isTicked,
-                            bool hasSubMenu,
-                            const String& text,
-                            const String& shortcutKeyText,
-                            Image* image,
-                            const Colour * const textColour);
-private:
+    void drawPopupMenuItem(Graphics& g,
+                           const Rectangle<int>& area,
+                           bool isSeparator,
+                           bool isActive,
+                           bool isHighlighted,
+                           bool isTicked,
+                           bool hasSubMenu,
+                           const String& text,
+                           const String& shortcutKeyText,
+                           const Drawable* icon,
+                           const Colour * const textColour);
 };
 }
 
