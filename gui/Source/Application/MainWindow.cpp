@@ -345,7 +345,14 @@ bool MainAppWindow::isCommandActive (const CommandID /*commandID*/)
 
 void MainAppWindow::saveDocument()
 {
-    mdlController->save();
+    bool documentExists = mdlController->getMDLFile()->getFile().existsAsFile();
+    bool saveOk = mdlController->save();
+
+    if (!documentExists && saveOk)
+    {
+        const File& newFile = mdlController->getMDLFile()->getFile();
+        SAMApplication::getApp()->addToFileList(newFile);
+    }
     updateTitle();
 }
 

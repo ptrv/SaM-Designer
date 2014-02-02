@@ -83,7 +83,7 @@ void MDLController::openFromFile(const File& mdlFile)
 		currentMdl->loadFrom(mdlFile, true);
 	}
 }
-void MDLController::save()
+bool MDLController::save()
 {
     if (currentMdl->checkIfChecksumChanged())
     {
@@ -96,24 +96,25 @@ void MDLController::save()
         switch (res)
         {
         case 0:
-            break;
+            return false;
         case 1:
             currentMdl->close();
             openFromFile(currentMdl->getFile());
             mainAppWindow.getMDLFileContentComponent()->reloadMDLFile(getMDLFile());
             getUndoManager().clearUndoHistory();
-            break;
+            return false;
         case 2:
-            currentMdl->save(false, true);
-            break;
+            return currentMdl->save(false, true) == FileBasedDocument::savedOk;
         }
     }
     else
     {
-        if (currentMdl->save(true, true) != FileBasedDocument::savedOk)
+        bool saveOk = currentMdl->save(true, true) == FileBasedDocument::savedOk;
+        if (!saveOk)
         {
             SAM_LOG("Something went wrong saving the mdl file.");
         }
+        return saveOk;
     }
 }
 void MDLController::saveAs()
