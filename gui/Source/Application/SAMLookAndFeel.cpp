@@ -14,21 +14,21 @@
 
 using namespace synthamodeler;
 
-static const Colour menuColourInsertMass(0xffff0000);
-//static const Colour menuColourInsertGround(0xff800000);
-static const Colour menuColourInsertGround(0xff935632);
-static const Colour menuColourInsertResonator(0xff660066);
-//static const Colour menuColourInsertPort(0xffae0600);
-static const Colour menuColourInsertPort(0xffc67b2d);
-static const Colour menuColourInsertLink(0xff00b700);
-static const Colour menuColourInsertTouch(0xff006f00);
-static const Colour menuColourInsertPluck(0xff006f00);
-static const Colour menuColourInsertPulsetouch(0xff006f00);
-static const Colour menuColourInsertAudioOut(0xff000000);
-static const Colour menuColourInsertAudioConnection(0xff333333);
-static const Colour menuColourInsertWaveguide(0xff000090);
-static const Colour menuColourInsertJunction(0xff000090);
-static const Colour menuColourInsertTermination(0xff000090);
+static const uint32 menuColourInsertMass = 0xffff0000;
+//static const uint32 menuColourInsertGround = 0xff800000;
+static const uint32 menuColourInsertGround = 0xff935632;
+static const uint32 menuColourInsertResonator = 0xff660066;
+//static const uint32 menuColourInsertPort = 0xffae0600;
+static const uint32 menuColourInsertPort = 0xffc67b2d;
+static const uint32 menuColourInsertLink = 0xff00b700;
+static const uint32 menuColourInsertTouch = 0xff006f00;
+static const uint32 menuColourInsertPluck = 0xff006f00;
+static const uint32 menuColourInsertPulsetouch = 0xff006f00;
+static const uint32 menuColourInsertAudioOut = 0xff000000;
+static const uint32 menuColourInsertAudioConnection = 0xff333333;
+static const uint32 menuColourInsertWaveguide = 0xff000090;
+static const uint32 menuColourInsertJunction = 0xff000090;
+static const uint32 menuColourInsertTermination = 0xff000090;
 
 void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
                                        const Rectangle<int>& area,
