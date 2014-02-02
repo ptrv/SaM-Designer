@@ -10,6 +10,9 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 
+#include "../Models/ObjectIDs.h"
+#include "../Utilities/ResourceLoader.h"
+
 #include "SAMLookAndFeel.h"
 
 using namespace synthamodeler;
@@ -43,39 +46,79 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
                                        const Colour * const textColourToUse)
 {
     ScopedPointer<Colour> textColour;
+    Drawable* objectIcon = nullptr;
 
-    if (!isSeparator && !isHighlighted)
+    if (!isSeparator)
     {
         if (text.compare("Mass") == 0)
+        {
             textColour = new Colour(menuColourInsertMass);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::mass);
+        }
         else if (text.compare("Ground") == 0)
+        {
             textColour = new Colour(menuColourInsertGround);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::ground);
+        }
         else if (text.compare("Resonator") == 0)
+        {
             textColour = new Colour(menuColourInsertResonator);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::resonators);
+        }
         else if (text.compare("Port") == 0)
+        {
             textColour = new Colour(menuColourInsertPort);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::port);
+        }
         else if (text.compare("Linear Link") == 0)
+        {
             textColour = new Colour(menuColourInsertLink);
+            objectIcon = ResourceLoader::getInstance()->createSVGDrawable("link-no-connectors.svg");
+        }
         else if (text.compare("Touch Link") == 0)
+        {
             textColour = new Colour(menuColourInsertTouch);
+            objectIcon = ResourceLoader::getInstance()->createSVGDrawable("touch-no-connectors.svg");
+        }
         else if (text.compare("Pulsetouch Link") == 0)
+        {
             textColour = new Colour(menuColourInsertPulsetouch);
+        }
         else if (text.compare("Pluck Link") == 0)
+        {
             textColour = new Colour(menuColourInsertPluck);
-        else if (text.compare("Audio Out") == 0)
+            objectIcon = ResourceLoader::getInstance()->createSVGDrawable("pluck-no-connectors.svg");
+        }
+        else if (text.compare("Audio Out") == 0
+            || text.compare("Audio Output") == 0)
+        {
             textColour = new Colour(menuColourInsertAudioOut);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::audioout);
+        }
         else if (text.compare("Audio Connection") == 0)
+        {
             textColour = new Colour(menuColourInsertAudioConnection);
+        }
         else if (text.compare("Waveguide") == 0)
+        {
             textColour = new Colour(menuColourInsertWaveguide);
+            objectIcon = ResourceLoader::getInstance()->createSVGDrawable("waveguide-short.svg");
+        }
         else if (text.compare("Junction") == 0)
+        {
             textColour = new Colour(menuColourInsertJunction);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::junction);
+        }
         else if (text.compare("Termination") == 0)
+        {
             textColour = new Colour(menuColourInsertTermination);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::termination);
+        }
     }
 
     LookAndFeel_V3::drawPopupMenuItem(g, area, isSeparator, isActive,
                                       isHighlighted, isTicked, hasSubMenu, text,
-                                      shortcutKeyText, icon,
+                                      shortcutKeyText,
+                                      objectIcon ? objectIcon : icon,
                                       textColour ? textColour.get() : textColourToUse);
 }
