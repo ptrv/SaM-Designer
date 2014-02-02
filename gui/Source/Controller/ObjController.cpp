@@ -71,7 +71,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
     if(undoable)
     {
         AddObjectAction* action = new AddObjectAction(this, objValues, holder);
-        owner.getUndoManager()->perform(action, "Add new Object");
+        owner.getUndoManager().perform(action, "Add new Object");
 
         return objects[action->indexAdded];
     }
@@ -108,7 +108,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
     if(undoable)
     {
         AddLinkAction* action = new AddLinkAction(this, linkValues, holder);
-        owner.getUndoManager()->perform(action, "Add new Link");
+        owner.getUndoManager().perform(action, "Add new Link");
 
         return links[action->indexAdded];
     }
@@ -210,7 +210,7 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
                                                                         source,
                                                                         audioOutComp,
                                                                         holder);
-        owner.getUndoManager()->perform(action, "Add new audio connection");
+        owner.getUndoManager().perform(action, "Add new audio connection");
 
         return audioConnections[action->indexAdded];
     }
@@ -314,7 +314,7 @@ CommentComponent* ObjController::addComment(ObjectsHolder* holder,
     if(undoable)
     {
         AddCommentAction* action = new AddCommentAction(this, commentValues, holder);
-        owner.getUndoManager()->perform(action, "Add new Comment");
+        owner.getUndoManager().perform(action, "Add new Comment");
 
         return comments[action->indexAdded];
     }
@@ -350,7 +350,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
 {
     if (undoable)
     {
-        owner.getUndoManager()->perform(new RemoveObjectAction(holder, objComp, this));
+        owner.getUndoManager().perform(new RemoveObjectAction(holder, objComp, this));
     }
     else
     {
@@ -440,7 +440,7 @@ void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
 {
     if(undoable)
     {
-        owner.getUndoManager()->perform(new RemoveAudioConnectionAction(holder, aocComp, this));
+        owner.getUndoManager().perform(new RemoveAudioConnectionAction(holder, aocComp, this));
     }
     else
     {
@@ -467,7 +467,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
 {
     if (undoable)
     {
-        owner.getUndoManager()->perform(new RemoveLinkAction(holder, linkComp, this));
+        owner.getUndoManager().perform(new RemoveLinkAction(holder, linkComp, this));
     }
     else
     {
@@ -495,7 +495,7 @@ void ObjController::removeComment(CommentComponent* commentComp,
 {
     if(undoable)
     {
-        owner.getUndoManager()->perform(new RemoveCommentAction(holder, commentComp, this));
+        owner.getUndoManager().perform(new RemoveCommentAction(holder, commentComp, this));
     }
     else
     {
@@ -763,12 +763,12 @@ void ObjController::startDragging()
         c->getProperties().set("yDragStart", r.getY());
     }
 
-    owner.getUndoManager()->beginNewTransaction();
+    owner.getUndoManager().beginNewTransaction();
 }
 
 void ObjController::dragSelectedComps(int dx, int dy)
 {
-    owner.getUndoManager()->undoCurrentTransactionOnly();
+    owner.getUndoManager().undoCurrentTransactionOnly();
 
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
@@ -812,7 +812,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
 void ObjController::endDragging()
 {
-    owner.getUndoManager()->beginNewTransaction();
+    owner.getUndoManager().beginNewTransaction();
 }
 
 void ObjController::moveSelectedComps (int dxFromMoveStart, int dyFromMoveStart)
@@ -822,7 +822,7 @@ void ObjController::moveSelectedComps (int dxFromMoveStart, int dyFromMoveStart)
     endDragging();
 }
 
-UndoManager* ObjController::getUndoManager()
+UndoManager& ObjController::getUndoManager()
 {
     return owner.getUndoManager();
 }
@@ -876,19 +876,19 @@ CommentComponent* ObjController::getCommentForId(const String& idString) const t
 
 void ObjController::reverseLinkDirection()
 {
-    owner.getUndoManager()->beginNewTransaction();
+    owner.getUndoManager().beginNewTransaction();
 
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
         if(LinkComponent* lc = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(i)))
         {
             ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(lc,this);
-            owner.getUndoManager()->perform(action, "reverse link direction");
+            owner.getUndoManager().perform(action, "reverse link direction");
         }
     }
     changed();
 
-    owner.getUndoManager()->beginNewTransaction();
+    owner.getUndoManager().beginNewTransaction();
 }
 
 Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)

@@ -356,14 +356,14 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
 
 bool ContentComp::perform(const InvocationInfo& info)
 {
-    mainWindow.getUndoManager()->beginNewTransaction();
+    mainWindow.getUndoManager().beginNewTransaction();
     switch (info.commandID)
     {
     case CommandIDs::undo:
-        mainWindow.getUndoManager()->undo();
+        mainWindow.getUndoManager().undo();
         break;
     case CommandIDs::redo:
-        mainWindow.getUndoManager()->redo();
+        mainWindow.getUndoManager().redo();
         break;
 
     case CommandIDs::zoomIn:
@@ -383,7 +383,7 @@ bool ContentComp::perform(const InvocationInfo& info)
         return false;
 //        return objectsHolder->perform(info);
     }
-    mainWindow.getUndoManager()->beginNewTransaction();
+    mainWindow.getUndoManager().beginNewTransaction();
     return true;
 }
 

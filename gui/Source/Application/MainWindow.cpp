@@ -474,9 +474,9 @@ MDLFile* MainAppWindow::getMDLFile()
 	return mdlController->getMDLFile();
 }
 
-UndoManager* MainAppWindow::getUndoManager()
+UndoManager& MainAppWindow::getUndoManager()
 {
-	return mdlController->getUndoManager();
+    return mdlController->getUndoManager();
 }
 
 String MainAppWindow::getProjectWindowPosName() const

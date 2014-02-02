@@ -101,7 +101,7 @@ void MDLController::save()
             currentMdl->close();
             openFromFile(currentMdl->getFile());
             mainAppWindow.getMDLFileContentComponent()->reloadMDLFile(getMDLFile());
-            getUndoManager()->clearUndoHistory();
+            getUndoManager().clearUndoHistory();
             break;
         case 2:
             currentMdl->save(false, true);
@@ -225,26 +225,15 @@ const String MDLController::getMDLName()
 	return currentMdl->getName();
 }
 
-UndoManager* MDLController::getUndoManager()
+UndoManager& MDLController::getUndoManager()
 {
-	if(currentMdl == nullptr)
-		return nullptr;
-
-	return &currentMdl->getUndoMgr();
-
+    return currentMdl->getUndoMgr();
 }
 
 bool MDLController::perform (UndoableAction* const action, const String& actionName)
 {
-	if(getUndoManager() != nullptr)
-	{
-		getUndoManager()->beginNewTransaction(actionName);
-		return getUndoManager()->perform(action, actionName);
-	}
-	else
-	{
-		return false;
-	}
+    getUndoManager().beginNewTransaction(actionName);
+    return getUndoManager().perform(action, actionName);
 }
 
 ValueTree MDLController::getMDLTree()

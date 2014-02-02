@@ -59,8 +59,8 @@ public:
 
     void cleanDataDir();
     void cleanDataDirAll();
-    
-	UndoManager* getUndoManager();
+
+    UndoManager& getUndoManager();
 
 	bool perform (UndoableAction* const action, const String& actionName);
 

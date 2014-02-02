@@ -180,8 +180,8 @@ void CommentComponent::setPosition(Point<int> newPos, bool undoable)
     {
         if (undoable)
         {
-            owner.getUndoManager()->perform(new MoveCommentAction(this, newPos, &owner),
-                                            "Move comment");
+            owner.getUndoManager().perform(new MoveCommentAction(this, newPos, &owner),
+                                           "Move comment");
         }
         else
         {
@@ -260,18 +260,18 @@ void CommentComponent::textEditorFocusLost(TextEditor&)
 
     if(data[Ids::value].toString().compare(textField->getText()) != 0)
     {
-        owner.getUndoManager()->beginNewTransaction("Set comment text");
-        data.setProperty(Ids::value, textField->getText(), owner.getUndoManager());
+        owner.getUndoManager().beginNewTransaction("Set comment text");
+        data.setProperty(Ids::value, textField->getText(), &owner.getUndoManager());
     }
     if(float(data[Ids::fontSize]) != textField->getFont().getHeight())
     {
-        owner.getUndoManager()->beginNewTransaction("Set comment font height");
-        data.setProperty(Ids::fontSize, textField->getFont().getHeight(), owner.getUndoManager());
+        owner.getUndoManager().beginNewTransaction("Set comment font height");
+        data.setProperty(Ids::fontSize, textField->getFont().getHeight(), &owner.getUndoManager());
     }
     if(data[Ids::commentColour].toString().compare(commentColor.toString()) != 0)
     {
-        owner.getUndoManager()->beginNewTransaction("Set comment text color");
-        data.setProperty(Ids::commentColour, commentColor.toString(), owner.getUndoManager());
+        owner.getUndoManager().beginNewTransaction("Set comment text color");
+        data.setProperty(Ids::commentColour, commentColor.toString(), &owner.getUndoManager());
     }
 
 }

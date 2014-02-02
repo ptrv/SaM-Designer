@@ -143,7 +143,7 @@ public:
     void endDragging();
     
     void moveSelectedComps (int dxFromMoveStart, int dyFromMoveStart);
-    UndoManager* getUndoManager();
+    UndoManager& getUndoManager();
 
     ObjectComponent* getObject(int index) const throw() { return objects[index]; }
     ObjectComponent* getObjectUnchecked(int index) const throw() { return objects.getUnchecked(index); }

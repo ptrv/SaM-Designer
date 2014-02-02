@@ -83,7 +83,7 @@ public:
 //    ApplicationCommandManager commandManager;
     ContentComp* getMDLFileContentComponent() const;
     ObjectsHolder* getHolderComponent();
-    UndoManager* getUndoManager();
+    UndoManager& getUndoManager();
 
     void showMDLProperties();
 

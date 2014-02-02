@@ -756,7 +756,7 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
     default:
         return false;
     }
-    objController.getUndoManager()->beginNewTransaction();
+    objController.getUndoManager().beginNewTransaction();
     return true;
 }
 
