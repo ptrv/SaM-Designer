@@ -39,7 +39,7 @@ BaseObjectComponent::BaseObjectComponent(ObjController& owner_, ValueTree data_)
 
 BaseObjectComponent::~BaseObjectComponent()
 {
-    
+    masterReference.clear();
 }
 
 ValueTree BaseObjectComponent::getData()

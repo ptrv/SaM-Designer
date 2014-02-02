@@ -45,9 +45,12 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 {
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
-    
-    startComp->addLinkToObject(this);
-    endComp->addLinkToObject(this);
+
+    if (startComp.get() != nullptr && endComp.get() != nullptr)
+    {
+        startComp->addLinkToObject(this);
+        endComp->addLinkToObject(this);
+    }
 
     owner.getSelectedObjects().addChangeListener(this);
 
@@ -87,8 +90,16 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 
 LinkComponent::~LinkComponent()
 {
-    startComp->removeLinkFromObject(this);
-    endComp->removeLinkFromObject(this);
+    masterReference.clear();
+
+    if (!startComp.wasObjectDeleted())
+    {
+        startComp->removeLinkFromObject(this);
+    }
+    if (!endComp.wasObjectDeleted())
+    {
+        endComp->removeLinkFromObject(this);
+    }
     
     owner.getSelectedObjects().removeChangeListener(this);
 }
@@ -220,14 +231,14 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
     x2 = lastOutputX;
     y2 = lastOutputY;
 
-    if (startComp != nullptr)
+    if (!startComp.wasObjectDeleted())
     {
         Point<int> startPos = startComp->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
     }
 
-    if (endComp != nullptr)
+    if (!endComp.wasObjectDeleted())
     {
         Point<int> endPos = endComp->getPinPos();
         x2 = endPos.x;
@@ -497,9 +508,15 @@ void LinkComponent::reverseDirection()
     
     data.setProperty(Ids::startVertex, tempEnd, nullptr);
     data.setProperty(Ids::endVertex, tempStart, nullptr);
-    
-    startComp = owner.getObjectForId(tempEnd);
-    endComp = owner.getObjectForId(tempStart);
+
+    if (!startComp.wasObjectDeleted())
+    {
+        startComp = owner.getObjectForId(tempEnd);
+    }
+    if (!endComp.wasObjectDeleted())
+    {
+        endComp = owner.getObjectForId(tempStart);
+    }
 
     update();
 }

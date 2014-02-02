@@ -40,7 +40,7 @@ public:
     virtual ~BaseObjectComponent();
     
     ValueTree getData();
-    
+
 protected:
     ObjectsHolder* getObjectsHolder() const noexcept;
     void showContextMenu();
@@ -48,6 +48,10 @@ protected:
 
     ObjController& owner;
     ValueTree data;
+
+private:
+    WeakReference<BaseObjectComponent>::Master masterReference;
+    friend class WeakReference<BaseObjectComponent>;
 };
 };
 

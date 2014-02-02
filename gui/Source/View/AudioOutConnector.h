@@ -73,8 +73,8 @@ private:
 
     bool segmented;
     bool mouseDownSelectStatus;
-    BaseObjectComponent* sourceComp;
-    ObjectComponent* audioOutComp;
+    WeakReference<BaseObjectComponent> sourceComp;
+    WeakReference<ObjectComponent> audioOutComp;
     
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
     {

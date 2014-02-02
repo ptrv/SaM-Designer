@@ -153,6 +153,9 @@ private:
     bool getStartEndObjectsLeftRight(String& startId, String& endId);
     void showObjectIds();
     void showAudioConnections();
+
+    WeakReference<ObjectsHolder>::Master masterReference;
+    friend class WeakReference<ObjectsHolder>;
 //==============================================================================
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);

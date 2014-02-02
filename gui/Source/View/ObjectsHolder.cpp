@@ -77,6 +77,7 @@ ObjectsHolder::~ObjectsHolder()
     grid = nullptr;
     fcPanel = nullptr;
     --objectsHolderNum;
+    masterReference.clear();
 }
 
 void ObjectsHolder::paint(Graphics& g)
@@ -237,7 +238,7 @@ void ObjectsHolder::reloadMDLFile()
 
 void ObjectsHolder::openFaustcodePanel()
 {
-    if (fcPanel == nullptr)
+    if (fcPanel == nullptr && mdlFile)
     {
         fcPanel = new FaustcodePanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
     }
@@ -359,7 +360,9 @@ bool ObjectsHolder::getStartEndObjectsLeftRight(String& startId, String& endId)
 void ObjectsHolder::showObjectIds()
 {
     if (!isDrawingObjectNames)
+    {
         showObjectNames = !showObjectNames;
+    }
     repaint();
 }
 
@@ -474,12 +477,12 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         break;
     case CommandIDs::redrawCircle:
         result.setInfo(TRANS("Circle"), "", CommandCategories::editing, 0);
-        result.setActive(mdlFile != nullptr ? (! mdlFile->isEmpty()) : false);
+        result.setActive(mdlFile != nullptr ? (!mdlFile->isEmpty()) : false);
         break;
     case CommandIDs::redrawForceDirected:
         result.setInfo(TRANS("Force-Directed"), "",
                        CommandCategories::editing, 0);
-        result.setActive(mdlFile != nullptr ? (! mdlFile->isEmpty()) : false);
+        result.setActive(mdlFile != nullptr ? (!mdlFile->isEmpty()) : false);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::showRedrawOptions:

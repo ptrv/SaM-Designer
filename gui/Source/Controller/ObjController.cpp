@@ -58,6 +58,7 @@ ObjController::~ObjController()
     comments.clear(true);
     idMgr = nullptr;
     sObjects.removeChangeListener(propertiesWindow);
+    masterReference.clear();
 }
 
 bool ObjController::perform(UndoableAction * const action, const String& actionName)

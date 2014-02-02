@@ -67,9 +67,9 @@ public:
     void removeLinkFromObject(LinkComponent* link);
     
     Array<LinkComponent*> getAttachedLinks() { return connectedLinks; }
-    
-    Point<int> getPinPos();
-    Point<int> getPinOffset();
+
+    Point<int> getPinPos() const;
+    Point<int> getPinOffset() const;
 
     bool canBeConnected(const Identifier& objId);
 private:
@@ -89,8 +89,11 @@ private:
     bool dragging, mouseDownSelectStatus;
     
     ChangeBroadcaster selfChangeListenerList;
-    
+
     Array<LinkComponent*> connectedLinks;
+
+    WeakReference<ObjectComponent>::Master masterReference;
+    friend class WeakReference<ObjectComponent>;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };

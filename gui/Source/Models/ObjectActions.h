@@ -44,7 +44,7 @@ namespace synthamodeler
 class AddObjectAction : public UndoableAction
 {
 public:
-	AddObjectAction(ObjController* objController_,
+    AddObjectAction(ObjController* objController_,
                     ValueTree objTree_, ObjectsHolder* holder_)
 	: objTree(objTree_.createCopy()), 
         holderComp(holder_), 
@@ -56,7 +56,11 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
         ObjectComponent* objComp = objController->addObject(holderComp, objTree, -1,false);
         indexAdded = objController->indexOfObject(objComp);
         String logText = "Add ";
@@ -66,7 +70,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         objController->removeObject(objController->getObject(indexAdded), false, holderComp);
 
         String logText = "Undo add ";
@@ -77,8 +86,8 @@ public:
     int indexAdded;
 private:
     ValueTree objTree;
-	ObjectsHolder* holderComp;
-    ObjController* objController;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
 };
 
 class RemoveObjectAction : public UndoableAction
@@ -87,10 +96,10 @@ public:
     RemoveObjectAction(ObjectsHolder* objHolderComp_,
                        ObjectComponent* componentToRemove,
                        ObjController* objController_)
-    : 
+    :
+    oldIndex(-1),
     holderComp(objHolderComp_),
-    objController(objController_),
-    oldIndex(-1)
+    objController(objController_)
 	{
         oldValue = componentToRemove->getData().createCopy();
         oldIndex = objController->indexOfObject(componentToRemove);
@@ -100,7 +109,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
         ObjectComponent* oc = objController->getObject(oldIndex);
         if(objController->getSelectedObjects().getNumSelected() == 0)
@@ -112,7 +126,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
         ObjectComponent* oc = objController->addObject(holderComp, oldValue, oldIndex, false);
@@ -141,10 +160,11 @@ public:
 		return true;
 	}
 private:
-	ObjectsHolder* holderComp;
 	ValueTree oldValue;
-    ObjController* objController;
     int oldIndex;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
+
 };
 
 class MoveObjectAction : public UndoableAction {
@@ -165,20 +185,28 @@ public:
 	}
 
 	bool perform()
-	{
-        ObjectComponent* oc = objController->getObject(indexOfObjectToMove);
-        oc->setPosition(newPos, false);
-		return true;
+    {
+        if (!objController.wasObjectDeleted())
+        {
+            ObjectComponent* oc = objController->getObject(indexOfObjectToMove);
+            oc->setPosition(newPos, false);
+            return true;
+        }
+        return false;
 	}
 
 	bool undo()
-	{
-        ObjectComponent* oc = objController->getObject(indexOfObjectToMove);
-        oc->setPosition(oldPos, false);
-		return true;
+    {
+        if (!objController.wasObjectDeleted())
+        {
+            ObjectComponent* oc = objController->getObject(indexOfObjectToMove);
+            oc->setPosition(oldPos, false);
+            return true;
+        }
+        return false;
 	}
 private:
-    ObjController* objController;
+    WeakReference<ObjController> objController;
 	Point<int> newPos;
     Point<int> oldPos;
     int indexOfObjectToMove;
@@ -199,7 +227,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+        
         LinkComponent* linkComp = objController->addLink(holderComp, linkTree, -1, false);
         indexAdded = objController->indexOfLink(linkComp);
 
@@ -210,7 +243,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         objController->removeLink(objController->getLink(indexAdded), false, holderComp);
         String logText = "Undo add ";
         logText <<  linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
@@ -220,8 +258,9 @@ public:
     int indexAdded;
 private:
     ValueTree linkTree;
-	ObjectsHolder* holderComp;
-    ObjController* objController;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
+
 };
 
 class RemoveLinkAction : public UndoableAction
@@ -230,10 +269,10 @@ public:
     RemoveLinkAction(ObjectsHolder* objHolderComp_,
                      LinkComponent* linkToRemove,
                      ObjController* objController_)
-    : 
+    :
+    oldIndex(-1),
     holderComp(objHolderComp_),
-    objController(objController_),
-    oldIndex(-1)
+    objController(objController_)
 	{
         oldValue = linkToRemove->getData().createCopy();
         oldIndex = objController->indexOfLink(linkToRemove);
@@ -243,7 +282,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
         LinkComponent* lc = objController->getLink(oldIndex);
         if(objController->getSelectedObjects().getNumSelected() == 0)
@@ -256,7 +300,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
         LinkComponent* lc = objController->addLink(holderComp, oldValue, oldIndex, false);
@@ -268,10 +317,11 @@ public:
 		return true;
 	}
 private:
-	ObjectsHolder* holderComp;
 	ValueTree oldValue;
-    ObjController* objController;
     int oldIndex;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
+
 };
 
 class ReverseLinkDirectionAction : public UndoableAction
@@ -291,29 +341,32 @@ public:
 	bool perform()
 	{
 //        SAM_LOG("Reverse direction"+oldValue[Ids::identifier].toString());
-        reverse();
-		return true;
+        return reverse();
 	}
 
 	bool undo()
 	{
 //        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
-        reverse();
-		return true;
+        return reverse();
 	}
 private:
-    void reverse()
+    bool reverse()
     {
-        LinkComponent* lc = objController->getLink(linkIndex);
-        if(objController->getSelectedObjects().getNumSelected() == 0)
+        if (!objController.wasObjectDeleted())
         {
-            objController->getSelectedObjects().selectOnly(lc);
+            LinkComponent* lc = objController->getLink(linkIndex);
+            if (objController->getSelectedObjects().getNumSelected() == 0)
+            {
+                objController->getSelectedObjects().selectOnly(lc);
+            }
+            lc->reverseDirection();
+            return true;
         }
-        lc->reverseDirection();
+        return false;
     }
 
 	ValueTree linkTree;
-    ObjController* objController;
+    WeakReference<ObjController> objController;
     String oldStart;
     String oldEnd;
     int linkIndex;
@@ -349,7 +402,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         BaseObjectComponent* sourceComp;
         if(sourceIsLink)
         {
@@ -373,8 +431,12 @@ public:
 	}
 
 	bool undo()
-	{
-        
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         objController->removeAudioConnection(objController->getAudioConnector(indexAdded), false, holderComp);
 //        String logText = "Undo add ";
 //        logText <<  linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
@@ -383,8 +445,8 @@ public:
 	}
     int indexAdded;
 private:
-	ObjectsHolder* holderComp;
-    ObjController* objController;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
     ValueTree sourceTree;
     int indexSource;
     int indexAudioOut;
@@ -431,7 +493,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         AudioOutConnector* aoc = objController->getAudioConnector(oldIndex);
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
@@ -443,7 +510,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
 //        SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
         BaseObjectComponent* sourceComp;
@@ -464,8 +536,8 @@ public:
 		return true;
 	}
 private:
-	ObjectsHolder* holderComp;
-    ObjController* objController;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
     ValueTree sourceTree;
     int oldIndex;
     int oldIndexSource;
@@ -488,7 +560,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         CommentComponent* commentComp = objController->addComment(holderComp, objTree, -1,false);
         indexAdded = objController->indexOfComment(commentComp);
         String logText = "Add ";
@@ -498,7 +575,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         objController->removeComment(objController->getComment(indexAdded), false, holderComp);
 
         String logText = "Undo add ";
@@ -509,8 +591,8 @@ public:
     int indexAdded;
 private:
     ValueTree objTree;
-	ObjectsHolder* holderComp;
-    ObjController* objController;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
 
 
 };
@@ -522,9 +604,9 @@ public:
                        CommentComponent* componentToRemove,
                        ObjController* objController_)
     :
+    oldIndex(-1),
     holderComp(objHolderComp_),
-    objController(objController_),
-    oldIndex(-1)
+    objController(objController_)
 	{
         oldValue = componentToRemove->getData().createCopy();
         oldIndex = objController->indexOfComment(componentToRemove);
@@ -534,7 +616,12 @@ public:
 	}
 
 	bool perform()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         SAM_LOG("Remove "+oldValue[Ids::identifier].toString());
         CommentComponent* cc = objController->getComment(oldIndex);
         if(objController->getSelectedObjects().getNumSelected() == 0)
@@ -546,7 +633,12 @@ public:
 	}
 
 	bool undo()
-	{
+    {
+        if (objController.wasObjectDeleted() || holderComp.wasObjectDeleted())
+        {
+            return false;
+        }
+
         SAM_LOG("Undo remove "+oldValue[Ids::identifier].toString());
 
         CommentComponent* oc = objController->addComment(holderComp, oldValue, oldIndex, false);
@@ -558,10 +650,11 @@ public:
 		return true;
 	}
 private:
-	ObjectsHolder* holderComp;
 	ValueTree oldValue;
-    ObjController* objController;
     int oldIndex;
+    WeakReference<ObjectsHolder> holderComp;
+    WeakReference<ObjController> objController;
+
 };
 class MoveCommentAction : public UndoableAction {
 public:
@@ -581,20 +674,28 @@ public:
 	}
 
 	bool perform()
-	{
-        CommentComponent* cc = objController->getComment(indexOfCommentToMove);
-        cc->setPosition(newPos, false);
-		return true;
+    {
+        if (!objController.wasObjectDeleted())
+        {
+            CommentComponent* cc = objController->getComment(indexOfCommentToMove);
+            cc->setPosition(newPos, false);
+            return true;
+        }
+        return false;
 	}
 
 	bool undo()
-	{
-        CommentComponent* cc = objController->getComment(indexOfCommentToMove);
-        cc->setPosition(oldPos, false);
-		return true;
+    {
+        if (!objController.wasObjectDeleted())
+        {
+            CommentComponent* cc = objController->getComment(indexOfCommentToMove);
+            cc->setPosition(oldPos, false);
+            return true;
+        }
+        return false;
 	}
 private:
-    ObjController* objController;
+    WeakReference<ObjController> objController;
 	Point<int> newPos;
     Point<int> oldPos;
     int indexOfCommentToMove;

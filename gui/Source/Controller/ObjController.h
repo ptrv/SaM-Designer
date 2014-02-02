@@ -215,6 +215,9 @@ private:
     SelectedItemSet<SelectableObject*> sObjects;
     ScopedPointer<IdManager> idMgr;
     int timesPasted;
+
+    WeakReference<ObjController>::Master masterReference;
+    friend class WeakReference<ObjController>;
 };
 }
 

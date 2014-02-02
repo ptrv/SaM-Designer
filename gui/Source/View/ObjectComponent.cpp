@@ -65,6 +65,7 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 }
 ObjectComponent::~ObjectComponent()
 {
+    masterReference.clear();
     selfChangeListenerList.removeChangeListener(this);
     owner.getSelectedObjects().removeChangeListener (this);
 }
@@ -286,13 +287,13 @@ void ObjectComponent::removeLinkFromObject(LinkComponent* link)
     connectedLinks.removeAllInstancesOf(link);
 }
 
-Point<int> ObjectComponent::getPinPos()
+Point<int> ObjectComponent::getPinPos() const
 {
     Point<int> pinPos = getActualPos();
     return pinPos + getPinOffset();
 }
 
-Point<int> ObjectComponent::getPinOffset()
+Point<int> ObjectComponent::getPinOffset() const
 {
     Point<int> pinPos(0,0);
     if (data.getType() == Ids::ground)

@@ -84,9 +84,9 @@ private:
     Point<float> iconPos;
     int iconWidth;
     int iconHeight;
-    
-    ObjectComponent* startComp;
-    ObjectComponent* endComp;
+
+    WeakReference<ObjectComponent> startComp;
+    WeakReference<ObjectComponent> endComp;
 
     Colour color;
     Colour colorSelected;
@@ -99,6 +99,9 @@ private:
         distanceFromStart = juce_hypot (x - (x1 - getX()), y - (y1 - getY()));
         distanceFromEnd = juce_hypot (x - (x2 - getX()), y - (y2 - getY()));
     }
+
+    WeakReference<LinkComponent>::Master masterReference;
+    friend class WeakReference<LinkComponent>;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (LinkComponent);
 };

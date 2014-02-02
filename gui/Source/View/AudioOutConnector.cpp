@@ -197,18 +197,18 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
     x2 = lastOutputX;
     y2 = lastOutputY;
 
-    if (sourceComp != nullptr)
+    if (!sourceComp.wasObjectDeleted())
     {
         Point<int> startPos;
-        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(sourceComp))
+        if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (sourceComp.get()))
             startPos = oc->getPinPos();
-        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(sourceComp))
+        else if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (sourceComp.get()))
             startPos = lc->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
     }
 
-    if (audioOutComp != nullptr)
+    if (!audioOutComp.wasObjectDeleted())
     {
         Point<int> endPos = audioOutComp->getPinPos();
         x2 = endPos.x;
