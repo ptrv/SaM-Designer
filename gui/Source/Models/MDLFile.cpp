@@ -278,7 +278,7 @@ void MDLFile::valueTreeParentChanged (ValueTree& /*tree*/)
 
 //==============================================================================
 
-String MDLFile::toString()
+String MDLFile::toString() const
 {
     String mdlStr = mdlRoot.toXmlString();
     return mdlStr;

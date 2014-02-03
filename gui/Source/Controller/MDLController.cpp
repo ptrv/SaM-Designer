@@ -181,7 +181,7 @@ ValueTree MDLController::getMDLTree()
 	if(currentMdl == nullptr)
 		return ValueTree::invalid;
 
-	return currentMdl->mdlRoot;
+    return currentMdl->getMDLRoot();
 }
 
 bool MDLController::mdlCheckAndSaveIfNeeded()

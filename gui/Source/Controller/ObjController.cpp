@@ -516,7 +516,7 @@ void ObjController::removeComment(CommentComponent* commentComp,
 void ObjController::loadComponents(ObjectsHolder* holder)
 {
     MDLFile* mf = owner.getMDLFile();
-    ValueTree mdl = mf->mdlRoot;
+    ValueTree mdl = mf->getMDLRoot();
     int numObjects = 0;
     int numNodesZeroPos = 0;
 

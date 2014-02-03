@@ -35,7 +35,7 @@ class MDLFile;
 class MDLWriter
 {
 public:
-	MDLWriter(MDLFile& mdlFile_);
+    MDLWriter(const MDLFile& mdlFile_);
 
 	/**
 	 * Writes MDLFile to specified file.
@@ -49,7 +49,7 @@ public:
 
 private:
     String getMDLString();
-	MDLFile& mdlFile;
+    const MDLFile& mdlFile;
 };
 }
 

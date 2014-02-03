@@ -151,7 +151,7 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
         if(! mdlFile->isUntiled())
             SAMApplication::getApp()->removeFromFileList(mdlFile->getFile());
 
-        mdlFile->mdlRoot.removeListener(propertiesWindow);
+        mdlFile->getMDLRoot().removeListener(propertiesWindow);
 
         propertiesWindow->showEmptyComponent();
 
@@ -180,7 +180,7 @@ void MainAppWindow::setMDLFile (MDLFile* newMDLFile)
         newMDLFile->addChangeListener(this);
         updateTitle();
 
-        newMDLFile->mdlRoot.addListener(propertiesWindow);
+        newMDLFile->getMDLRoot().addListener(propertiesWindow);
     }
 }
 

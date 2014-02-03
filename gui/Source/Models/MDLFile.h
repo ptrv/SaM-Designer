@@ -51,49 +51,61 @@ public:
 
 	bool perform (UndoableAction* const action, const String& actionName);
 
-	UndoManager& getUndoMgr() throw() { return undoMgr; }
+    UndoManager& getUndoMgr() throw ()
+    {
+        return undoMgr;
+    }
 
-//    ValueTree getMDLRoot() { return mdlRoot; }
-	ValueTree mdlRoot;
-    
-    void valueTreePropertyChanged (ValueTree& tree, const Identifier& property);
-    void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved);
-    void valueTreeChildOrderChanged (ValueTree& parentTree);
-    void valueTreeParentChanged (ValueTree& tree);
+    const ValueTree& getMDLRoot() const
+    {
+        return mdlRoot;
+    }
+    ValueTree& getMDLRoot()
+    {
+        return mdlRoot;
+    }
+
+    void valueTreePropertyChanged(ValueTree& tree, const Identifier& property);
+    void valueTreeChildAdded(ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
+    void valueTreeChildRemoved(ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved);
+    void valueTreeChildOrderChanged(ValueTree& parentTree);
+    void valueTreeParentChanged(ValueTree& tree);
 
     void mdlChanged();
-
 
     static const char* mdlFileExtension;
 
     bool isEmpty();
     bool isUntiled();
 
-    String toString();
+    String toString() const;
 
     bool checkIfChecksumChanged();
-    
+
 protected:
-	String getDocumentTitle();
-	Result loadDocument (const File& file);
-	Result saveDocument (const File& file);
-	File getLastDocumentOpened();
-	void setLastDocumentOpened (const File& file);
+    String getDocumentTitle();
+    Result loadDocument(const File& file);
+    Result saveDocument(const File& file);
+    File getLastDocumentOpened();
+    void setLastDocumentOpened(const File& file);
 
 private:
 
-	void initMDL();
-	void destroyMDL();
+    void initMDL();
+    void destroyMDL();
 
-	static File lastDocumentOpened;
+    ValueTree mdlRoot;
     
-	UndoManager undoMgr;
-    
+    static File lastDocumentOpened;
+
+    UndoManager undoMgr;
+
     bool isUntitledFile;
 
     MD5 md5;
 
+    friend class MDLParser;
+    friend class MDLWriter;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLFile);
 

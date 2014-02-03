@@ -30,7 +30,7 @@
 
 using namespace synthamodeler;
 
-MDLWriter::MDLWriter(MDLFile& mdlFile_)
+MDLWriter::MDLWriter(const MDLFile& mdlFile_)
 : mdlFile(mdlFile_)
 {
 }

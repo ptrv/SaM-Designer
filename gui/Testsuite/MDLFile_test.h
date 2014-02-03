@@ -46,7 +46,7 @@ public:
 		expect(loadOk, "Error opening MDL file");
 
 		beginTest("getMasses");
-		const ValueTree m = mdlFile->mdlRoot.getChildWithName(Objects::masses);
+        const ValueTree m = mdlFile->getMDLRoot().getChildWithName(Objects::masses);
         // test 1
         expect(m.getNumChildren() == 5, "have "+String(m.getNumChildren())+" masses");
 
@@ -103,7 +103,7 @@ public:
 
 		beginTest("getLinks");
 
-		ValueTree ls = mdlFile->mdlRoot.getChildWithName(Objects::links);
+        ValueTree ls = mdlFile->getMDLRoot().getChildWithName(Objects::links);
         // test 1
 		expect(ls.getNumChildren() == 3, "have "+String(ls.getNumChildren())+" links");
 
@@ -166,7 +166,7 @@ public:
 
 		beginTest("getFaustcode");
 
-		ValueTree faustcodeObjs = mdlFile->mdlRoot.getChildWithName(Objects::faustcodeblock);
+        ValueTree faustcodeObjs = mdlFile->getMDLRoot().getChildWithName(Objects::faustcodeblock);
         // test 1
 		expect(faustcodeObjs.getNumChildren() == 2, "have "+String(faustcodeObjs.getNumChildren())+" variables");
         // test 2
@@ -228,7 +228,7 @@ public:
 
 		beginTest("getAudioObjects");
 
-		ValueTree aus = mdlFile->mdlRoot.getChildWithName(Objects::audioobjects);
+        ValueTree aus = mdlFile->getMDLRoot().getChildWithName(Objects::audioobjects);
         // test 1
 		expect(aus.getNumChildren() == 2, "have "+String(aus.getNumChildren())+" audio objects");
 

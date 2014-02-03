@@ -242,7 +242,8 @@ void ObjectsHolder::openFaustcodePanel()
 {
     if (fcPanel == nullptr && mdlFile)
     {
-        fcPanel = new FaustcodePanel(&objController, mdlFile->mdlRoot, &mdlFile->getUndoMgr());
+        fcPanel = new FaustcodePanel(&objController, mdlFile->getMDLRoot(),
+                                     &mdlFile->getUndoMgr());
     }
     fcPanel->show();
 }
