@@ -884,12 +884,18 @@ void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results,
     {
         SelectableObject* const e = dynamic_cast <SelectableObject*> (getChildComponent (i));
         bool isIntersecting;
-        if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(e))
+        if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (e))
+        {
             isIntersecting = lasso.contains(lc->getIntersectioBounds());
-        else if(AudioOutConnector* const aoc = dynamic_cast<AudioOutConnector*>(e))
+        }
+        else if (AudioOutConnector * const aoc = dynamic_cast<AudioOutConnector*> (e))
+        {
             isIntersecting = lasso.contains(aoc->getIntersectioBounds());
+        }
         else
-            isIntersecting = getChildComponent(i)->getBounds().intersects (lasso);
+        {
+            isIntersecting = getChildComponent(i)->getBounds().intersects(lasso);
+        }
         if (e != 0 && isIntersecting)
         {
             results.add (e);

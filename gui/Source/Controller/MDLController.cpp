@@ -120,6 +120,7 @@ bool MDLController::save()
         return saveOk;
     }
 }
+
 void MDLController::saveAs()
 {
 	if(currentMdl->saveAsInteractive(true) != FileBasedDocument::savedOk)
@@ -188,12 +189,9 @@ ValueTree MDLController::getMDLTree()
 
 bool MDLController::mdlCheckAndSaveIfNeeded()
 {
-	FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
-	if(sr == FileBasedDocument::userCancelledSave)
-		return false;
-	else
-		return true;
+    FileBasedDocument::SaveResult sr = currentMdl->saveIfNeededAndUserAgrees();
 
+    return sr != FileBasedDocument::userCancelledSave;
 }
 
 MDLFile* MDLController::getMDLFile() const

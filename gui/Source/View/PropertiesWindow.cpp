@@ -117,27 +117,38 @@ void PropertiesWindow::makeVisible(bool shouldBeVisible)
 {
     if(shouldBeVisible)
     {
-        if(! isOnDesktop())
+        if (!isOnDesktop())
+        {
             addToDesktop();
+        }
 
         setVisible(true);
 
         updateProperties();
 
         Component* cc = getContentComponent();
-        if(cc != nullptr)
-            if(cc->getComponentID().compare("EmptyComponent") != 0)
-                setWantsKeyboardFocus(false);
+        if (cc != nullptr && cc->getComponentID().compare("EmptyComponent") != 0)
+        {
+            setWantsKeyboardFocus(false);
+        }
 
         if (OPC * const opc = dynamic_cast<OPC*> (cc))
-            if(opc->canceledEditing)
+        {
+            if (opc->canceledEditing)
+            {
                 opc->canceledEditing = false;
+            }
+        }
 
-        if(isMinimised())
+        if (isMinimised())
+        {
             setMinimised(false);
+        }
 
-        if(! isAlwaysOnTop())
+        if (!isAlwaysOnTop())
+        {
             toFront(true);
+        }
     }
     else
     {
@@ -166,10 +177,10 @@ void PropertiesWindow::setCurrentActiveWindow(MainAppWindow& maw)
 
 void PropertiesWindow::changeListenerCallback(ChangeBroadcaster* /*source*/)
 {
-    if(! isVisible())
-        return;
-
-    updateProperties();
+    if (isVisible())
+    {
+        updateProperties();
+    }
 }
 void PropertiesWindow::closeButtonPressed()
 {
@@ -178,7 +189,7 @@ void PropertiesWindow::closeButtonPressed()
 
 bool PropertiesWindow::keyPressed(const KeyPress& kp)
 {
-    if(kp == KeyPress::escapeKey)
+    if (kp == KeyPress::escapeKey)
     {
         closeButtonPressed();
         return true;
@@ -188,8 +199,10 @@ bool PropertiesWindow::keyPressed(const KeyPress& kp)
 
 void PropertiesWindow::updateProperties()
 {
-    if(currentSelection == nullptr)
+    if (currentSelection == nullptr)
+    {
         return;
+    }
 
     if(currentSelection->getNumSelected() > 0)
     {
@@ -202,10 +215,12 @@ void PropertiesWindow::updateProperties()
             if(BaseObjectComponent* boc = dynamic_cast<BaseObjectComponent*>(selectedItems[i]))
             {
                 // get first id type. This is the type for a multiple selection
-                if(datas.size() == 0)
+                if (datas.size() == 0)
+                {
                     selectedId = boc->getData().getType();
+                }
 
-                if(selectedId == boc->getData().getType())
+                if (selectedId == boc->getData().getType())
                 {
                     datas.add(boc->getData());
                 }
@@ -231,17 +246,23 @@ void PropertiesWindow::updateProperties()
 
                 String sourceId;
                 if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (aoc->getSourceObject()))
+                {
                     sourceId = oc->getData()[Ids::identifier].toString();
+                }
                 else if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (aoc->getSourceObject()))
+                {
                     sourceId = lc->getData()[Ids::identifier].toString();
+                }
 
                 audioSourceIds.add(sourceId);
                 datas.add(aoc->getAudioObject()->getData());
             }
         }
 
-        if(datas.size() == 0)
+        if (datas.size() == 0)
+        {
             return;
+        }
         
         Component* comp;
         ObjController& objCtrl = currentContentComp->getHolderComponent()->getObjController();
@@ -305,16 +326,22 @@ void PropertiesWindow::updateProperties()
 
 void PropertiesWindow::mdlChanged()
 {
-    if(isVisible())
+    if (isVisible())
+    {
         if (OPC * opc = dynamic_cast<OPC*> (getContentComponent()))
+        {
             opc->readValues();
+        }
+    }
 }
 
 void PropertiesWindow::showEmptyComponent(const String& textToShow)
 {
     EmptyComponent* ec = new EmptyComponent();
-    if(textToShow.isNotEmpty())
+    if (textToShow.isNotEmpty())
+    {
         ec->setText(textToShow);
+    }
     setWantsKeyboardFocus(true);
     setContentOwned(ec, false);
     setName(TRANS("Properties"));

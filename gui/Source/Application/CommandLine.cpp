@@ -234,7 +234,8 @@ int cleanDataDir()
     for (int i = 0; i < 4; ++i)
     {
         DirectoryIterator iter(StoredSettings::getInstance()->getDataDir(),
-                               false, "*"+String(MDLController::fileTypesToDelete[i]));
+                               false,
+                               "*" + String(MDLController::fileTypesToDelete[i]));
         while (iter.next())
         {
             filePathsToDelete.add(iter.getFile().getFullPathName());

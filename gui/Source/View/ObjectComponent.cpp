@@ -72,9 +72,13 @@ ObjectComponent::~ObjectComponent()
 
 bool ObjectComponent::hitTest (int x, int y)
 {
-	for (int i = getNumChildComponents(); --i >= 0;)
-		if (getChildComponent(i)->getBounds().contains (x, y))
-			return true;
+    for (int i = getNumChildComponents(); --i >= 0;)
+    {
+        if (getChildComponent(i)->getBounds().contains(x, y))
+        {
+            return true;
+        }
+    }
 
 	return x >= 4 && x < getWidth() - 4 && y >= 4 && y < getHeight() - 4;
 }
@@ -223,10 +227,9 @@ void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
         }
         else
         {
-            if(newPos.getX() < 0)
-                newPos.x = 0;
-            if(newPos.getY() < 0)
-                newPos.y = 0;
+            newPos.x = jmax(0, newPos.x);
+            newPos.y = jmax(0, newPos.y);
+
             data.setProperty(Ids::posX, newPos.getX(), nullptr);
             data.setProperty(Ids::posY, newPos.getY(), nullptr);
             setActualPosition(newPos);
@@ -260,10 +263,7 @@ void ObjectComponent::setSelected(bool shouldBeSelected)
 
 void ObjectComponent::toggleSelected()
 {
-	if(selected)
-		setSelected(false);
-	else
-		setSelected(true);
+    setSelected(!selected);
 	repaint();
 }
 
@@ -344,7 +344,7 @@ bool ObjectComponent::canBeConnectedToLinks()
                 ++connections;
 
         }
-        return connections == 0 ? true : false;
+        return connections == 0;
     }
     else
     {

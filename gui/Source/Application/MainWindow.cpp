@@ -148,8 +148,10 @@ bool MainAppWindow::closeMDLFile (MDLFile* mdlFile)
 
     if (r == FileBasedDocument::savedOk)
     {
-        if(! mdlFile->isUntiled())
+        if (!mdlFile->isUntiled())
+        {
             SAMApplication::getApp()->removeFromFileList(mdlFile->getFile());
+        }
 
         mdlFile->getMDLRoot().removeListener(propertiesWindow);
 
