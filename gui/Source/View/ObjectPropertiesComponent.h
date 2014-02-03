@@ -33,9 +33,9 @@ class ObjectPropertiesComponent : public Component,
                                   public TextEditor::Listener
 {
 public:
-	ObjectPropertiesComponent(ObjController* objController_,
-                             Array<ValueTree> datas_,
-                             UndoManager* undoManager_);
+    ObjectPropertiesComponent(ObjController& objController_,
+                              Array<ValueTree> datas_,
+                              UndoManager* undoManager_);
 
 	virtual ~ObjectPropertiesComponent();
 
@@ -56,18 +56,18 @@ protected:
     TextEditor* createEditor(const String& name, const String& text,
                              bool isMultiline, bool isReadOnly = false);
 
-    void readEditorsMultipleSelection(Array<TextEditor*>& editors_,
-                                      Colour c = Colours::black);
-    void readEditorsSingleSelection(Array<TextEditor*>& editors_,
-                                    StringArray params,
-                                    Colour c = Colours::black);
-    void writeEditors(Array<TextEditor*>& editors_,
+    void readEditorsMultipleSelection(const Array<TextEditor*>& editors_,
+                                      const Colour c = Colours::black);
+    void readEditorsSingleSelection(const Array<TextEditor*>& editors_,
+                                    const StringArray& params,
+                                    const Colour c = Colours::black);
+    void writeEditors(const Array<TextEditor*>& editors_,
                       ValueTree params, bool fixValues);
-    StringArray getParamsStrings(int numParams, ValueTree params);
+    StringArray getParamsStrings(int numParams, const ValueTree params);
 
-    ObjController* objController;
+    ObjController& objController;
 	Array<ValueTree> datas;
-	UndoManager* undoManager;
+    UndoManager* undoManager;
 	Label* laName;
 	TextEditor* teName;
     bool dataChanged;
@@ -87,9 +87,9 @@ protected:
 class MassPropertiesComponent : public ObjectPropertiesComponent
 {
 public:
-	MassPropertiesComponent(ObjController* objController_,
-                         Array<ValueTree> datas_,
-                         UndoManager* undoManager_);
+    MassPropertiesComponent(ObjController& objController_,
+                            Array<ValueTree> datas_,
+                            UndoManager* undoManager_);
 	~MassPropertiesComponent();
 	void resized();
 	void readValues();
@@ -99,9 +99,9 @@ public:
 class PortPropertiesComponent : public ObjectPropertiesComponent
 {
 public:
-	PortPropertiesComponent(ObjController* objController_,
-                         Array<ValueTree> datas_,
-                         UndoManager* undoManager_);
+    PortPropertiesComponent(ObjController& objController_,
+                            Array<ValueTree> datas_,
+                            UndoManager* undoManager_);
     virtual ~PortPropertiesComponent();
 	void resized();
 	void readValues();
@@ -110,7 +110,7 @@ public:
 
 class ResonatorPropertiesComponent : public ObjectPropertiesComponent {
 public:
-	ResonatorPropertiesComponent(ObjController* objController_,
+    ResonatorPropertiesComponent(ObjController& objController_,
                                  Array<ValueTree> datas_,
                                  UndoManager* undoManager_);
 	virtual ~ResonatorPropertiesComponent();
@@ -121,9 +121,9 @@ public:
 
 class GroundPropertiesComponent : public ObjectPropertiesComponent {
 public:
-	GroundPropertiesComponent(ObjController* objController_,
-                             Array<ValueTree> datas_,
-                             UndoManager* undoManager_);
+    GroundPropertiesComponent(ObjController& objController_,
+                              Array<ValueTree> datas_,
+                              UndoManager* undoManager_);
 	virtual ~GroundPropertiesComponent();
 
 	void resized();
@@ -133,7 +133,7 @@ public:
 
 class LinkPropertiesComponent : public ObjectPropertiesComponent {
 public:
-    LinkPropertiesComponent(ObjController* objController_,
+    LinkPropertiesComponent(ObjController& objController_,
                             Array<ValueTree> datas_,
                             UndoManager* undoManager_);
 	virtual ~LinkPropertiesComponent();
@@ -148,7 +148,7 @@ private:
 
 class AudiooutPropertiesComponent : public ObjectPropertiesComponent {
 public:
-    AudiooutPropertiesComponent(ObjController* objController_,
+    AudiooutPropertiesComponent(ObjController& objController_,
                                 Array<ValueTree> datas_,
                                 UndoManager* undoManager_);
 	virtual ~AudiooutPropertiesComponent();
@@ -159,7 +159,7 @@ public:
 
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
 public:
-	WaveguidePropertiesComponent(ObjController* objController_,
+    WaveguidePropertiesComponent(ObjController& objController_,
                                  Array<ValueTree> datas_,
                                  UndoManager* undoManager_);
 	virtual ~WaveguidePropertiesComponent();
@@ -172,9 +172,9 @@ private:
 
 class TerminationPropertiesComponent : public ObjectPropertiesComponent {
 public:
-	TerminationPropertiesComponent(ObjController* objController_,
-                                 Array<ValueTree> datas_,
-                                 UndoManager* undoManager_);
+    TerminationPropertiesComponent(ObjController& objController_,
+                                   Array<ValueTree> datas_,
+                                   UndoManager* undoManager_);
 	virtual ~TerminationPropertiesComponent();
 	void resized();
 	void readValues();
@@ -183,9 +183,9 @@ public:
 
 class JunctionPropertiesComponent : public ObjectPropertiesComponent {
 public:
-	JunctionPropertiesComponent(ObjController* objController_,
-                             Array<ValueTree> datas_,
-                             UndoManager* undoManager_);
+    JunctionPropertiesComponent(ObjController& objController_,
+                                Array<ValueTree> datas_,
+                                UndoManager* undoManager_);
 	virtual ~JunctionPropertiesComponent();
 	void resized();
 	void readValues();
@@ -197,7 +197,7 @@ class GainComponent : public Component,
 {
 public:
 
-    GainComponent(StringArray sourceIds_,
+    GainComponent(const StringArray& sourceIds_,
                   Array<ValueTree> datas_,
                   UndoManager* undoManager_);
     ~GainComponent();

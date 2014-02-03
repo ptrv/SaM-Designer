@@ -244,8 +244,8 @@ void PropertiesWindow::updateProperties()
             return;
         
         Component* comp;
-        ObjController* objCtrl = &currentContentComp->getHolderComponent()->getObjController();
-        UndoManager* undoManager_ = objCtrl->getUndoManager();
+        ObjController& objCtrl = currentContentComp->getHolderComponent()->getObjController();
+        UndoManager* undoManager_ = &objCtrl.getUndoManager();
 
         if (selectedId == Ids::mass)
         {
