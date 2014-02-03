@@ -33,179 +33,110 @@
 
 using namespace synthamodeler;
 
+static ValueTree createResonatorParamsTree(StringArray p);
+
+static ValueTree createMewMassLikeTree(const Identifier& massType,
+                                       const String& newName, int x, int y,
+                                       const StringPairArray& paramsStringPairs)
+{
+    if (massType != Ids::mass && massType != Ids::ground
+        && massType != Ids::resonators && massType != Ids::termination
+        && massType != Ids::junction && massType != Ids::port)
+    {
+        return ValueTree();
+    }
+
+    StoredSettings& settings = *StoredSettings::getInstance();
+    ValueTree newTree(massType);
+
+    newTree.setProperty(Ids::posX, x, nullptr);
+    newTree.setProperty(Ids::posY, y, nullptr);
+
+    StringArray paramsStrings;
+    for (int i = 0; i < paramsStringPairs.size(); ++i)
+    {
+        const String& paramName = paramsStringPairs.getAllKeys()[i];
+        const String& paramValue = paramsStringPairs.getAllValues()[i];
+
+        paramsStrings.add(settings.getDefaultValue(paramName, paramValue));
+    }
+    if (paramsStrings.size() > 0)
+    {
+        ValueTree paramsTree;
+        if (massType == Ids::resonators)
+        {
+            paramsTree = createResonatorParamsTree(paramsStrings);
+        }
+        else
+        {
+            paramsTree = ObjectFactory::createParamsTree(paramsStrings);
+        }
+        newTree.addChild(paramsTree, -1, nullptr);
+    }
+    newTree.setProperty(Ids::identifier, newName, nullptr);
+
+    return newTree;
+}
 
 static ValueTree createNewMassTree(const String& newName, int x, int y)
 {
-    StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::mass);
+    StringPairArray defaultValues;
+    defaultValues.set("mass_kg", "0.001");
+    defaultValues.set("mass_init_position", "0.0");
+    defaultValues.set("mass_init_velocity", "0.0");
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
-
-    StringArray p;
-    p.add(settings.getDefaultValue("mass_kg", "0.001"));
-    p.add(settings.getDefaultValue("mass_init_position", "0.0"));
-    p.add(settings.getDefaultValue("mass_init_velocity", "0.0"));
-	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
-	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier, newName, nullptr);
-
-	return newTree;
+    return createMewMassLikeTree(Ids::mass, newName, x, y, defaultValues);
 }
 
 static ValueTree createNewPortTree(const String& newName, int x, int y)
 {
-	ValueTree newTree(Ids::port);
-
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-
-	return newTree;
+    return createMewMassLikeTree(Ids::port, newName, x, y, StringPairArray());
 }
 
 static ValueTree createNewGroundTree(const String& newName, int x, int y)
 {
-    StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::ground);
+    StringPairArray defaultValues;
+    defaultValues.set("ground_init_position", "0.0");
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
-	ValueTree paramsTree(Ids::parameters);
-    ValueTree pa1(Ids::parameter);
-	pa1.setProperty(Ids::value,
-                    settings.getDefaultValue("ground_init_position", "0.0"),
-                    nullptr);
-    paramsTree.addChild(pa1, -1, nullptr);
-	newTree.addChild(paramsTree, -1, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-
-	return newTree;
+    return createMewMassLikeTree(Ids::ground, newName, x, y, defaultValues);
 }
 
 static ValueTree createNewResonatorsTree(const String& newName, int x, int y)
 {
-    StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::resonators);
+    StringPairArray defaultValues;
+    defaultValues.set("resonators_frequency", "200.0");
+    defaultValues.set("resonators_decay_time", "1.5");
+    defaultValues.set("resonators_eq_mass", "0.01");
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
+    return createMewMassLikeTree(Ids::resonators, newName, x, y, defaultValues);
+}
 
-    StringArray p;
-    p.add(settings.getDefaultValue("resonators_frequency", "200.0"));
-    p.add(settings.getDefaultValue("resonators_decay_time", "1.5"));
-    p.add(settings.getDefaultValue("resonators_eq_mass", "0.01"));
-
-    ValueTree paramsTree(Ids::parameters);
-
-    for (int i = 0; i < 3; ++i)
+static ValueTree createNewLinkLikeTree(const Identifier& linkType,
+                                   const String& newName,
+                                   const String& startObject,
+                                   const String& endObject,
+                                       const StringPairArray& paramsStringPairs)
+{
+    if (linkType != Ids::link && linkType != Ids::touch
+        && linkType != Ids::pluck && linkType != Ids::pulsetouch
+        && linkType != Ids::waveguide)
     {
-        ValueTree value(Ids::parameter);
-        ValueTree subval(Utils::resonatorParamIds[i]);
-        subval.setProperty(Ids::value, p[i].trim(), nullptr);
-        value.addChild(subval, -1, nullptr);
-        paramsTree.addChild(value, -1, nullptr);
-
+        return ValueTree();
     }
 
-    newTree.addChild(paramsTree, -1, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-
-	return newTree;
-}
-
-static ValueTree createNewLinkTree(const String& newName,
-                                   const String& startObject,
-                                   const String& endObject)
-{
     StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::link);
-    StringArray p;
-    p.add(settings.getDefaultValue("link_stiffness", "100.0"));
-    p.add(settings.getDefaultValue("link_damping", "0.1"));
-    p.add(settings.getDefaultValue("link_offset", "0.0"));
-	ValueTree paramsTree = ObjectFactory::createParamsTree(p);
-	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier, newName, nullptr);
-	newTree.setProperty(Ids::startVertex, startObject, nullptr);
-	newTree.setProperty(Ids::endVertex, endObject, nullptr);
+    ValueTree newTree(linkType);
 
-	return newTree;
-}
-
-static ValueTree createNewTouchTree(const String& newName,
-                                    const String& startObject, 
-                                    const String& endObject)
-{
-    StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::touch);
     StringArray p;
-    p.add(settings.getDefaultValue("touch_stiffness", "100.0"));
-    p.add(settings.getDefaultValue("touch_damping", "0.1"));
-    p.add(settings.getDefaultValue("touch_offset", "0.0"));
+    for (int i = 0; i < paramsStringPairs.size(); ++i)
+    {
+        const String& valName = paramsStringPairs.getAllKeys()[i];
+        const String& value = paramsStringPairs.getAllValues()[i];
+        p.add(settings.getDefaultValue(valName, value));
+    }
+
     ValueTree paramsTree = ObjectFactory::createParamsTree(p);
     newTree.addChild(paramsTree, -1, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-    newTree.setProperty(Ids::startVertex, startObject, nullptr);
-	newTree.setProperty(Ids::endVertex, endObject, nullptr);
-
-	return newTree;
-}
-static ValueTree createNewPulsetouchTree(const String& newName,
-                                         const String& startObject,
-                                         const String& endObject)
-{
-    StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::pulsetouch);
-    StringArray p;
-    p.add(settings.getDefaultValue("pulsetouch_stiffness", "100.0"));
-    p.add(settings.getDefaultValue("pulsetouch_damping", "0.1"));
-    p.add(settings.getDefaultValue("pulsetouch_offset", "0.0"));
-    p.add(settings.getDefaultValue("pulsetouch_pulsemult", "0.0"));
-    p.add(settings.getDefaultValue("pulsetouch_pulsetau", "0.0"));
-    p.add(settings.getDefaultValue("pulsetouch_pulselen", "0.0"));
-    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
-    newTree.addChild(paramsTree, -1, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-    newTree.setProperty(Ids::startVertex, startObject, nullptr);
-	newTree.setProperty(Ids::endVertex, endObject, nullptr);
-
-	return newTree;
-}
-
-static ValueTree createNewPluckTree(const String& newName,
-                                    const String& startObject, 
-                                    const String& endObject)
-{
-    StoredSettings& settings = *StoredSettings::getInstance();
-	ValueTree newTree(Ids::pluck);
-
-    StringArray p;
-    p.add(settings.getDefaultValue("pluck_stiffness", "300.0"));
-    p.add(settings.getDefaultValue("pluck_damping", "0.1"));
-    p.add(settings.getDefaultValue("pluck_displacement", "0.003"));
-    p.add(settings.getDefaultValue("pluck_offset", "0.0"));
-    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
-	newTree.addChild(paramsTree, -1, nullptr);
-	newTree.setProperty(Ids::identifier, newName, nullptr);
-	newTree.setProperty(Ids::startVertex, startObject, nullptr);
-	newTree.setProperty(Ids::endVertex, endObject, nullptr);
-
-	return newTree;
-}
-
-static ValueTree createNewWaveguideTree(const String& newName,
-                                        const String& startObject,
-                                        const String& endObject)
-{
-    StoredSettings& settings = *StoredSettings::getInstance();
-    ValueTree newTree(Ids::waveguide);
-
-    StringArray p;
-    p.add(settings.getDefaultValue("waveguide_impedance", "1.0"));
-    p.add(settings.getDefaultValue("waveguide_string_type", "simpleString(0.033,0.017)"));
-    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
-	newTree.addChild(paramsTree, -1, nullptr);
 
     newTree.setProperty(Ids::identifier, newName, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
@@ -214,44 +145,87 @@ static ValueTree createNewWaveguideTree(const String& newName,
     return newTree;
 }
 
+static ValueTree createNewLinkTree(const String& newName,
+                                   const String& startObject,
+                                   const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("link_stiffness", "100.0");
+    defaultValues.set("link_damping", "0.1");
+    defaultValues.set("link_offset", "0.0");
+
+    return createNewLinkLikeTree(Ids::link, newName, startObject, endObject,
+                                 defaultValues);
+}
+
+static ValueTree createNewTouchTree(const String& newName,
+                                    const String& startObject, 
+                                    const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("touch_stiffness", "100.0");
+    defaultValues.set("touch_damping", "0.1");
+    defaultValues.set("touch_offset", "0.0");
+
+    return createNewLinkLikeTree(Ids::touch, newName, startObject, endObject,
+                                 defaultValues);
+}
+static ValueTree createNewPulsetouchTree(const String& newName,
+                                         const String& startObject,
+                                         const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("pulsetouch_stiffness", "100.0");
+    defaultValues.set("pulsetouch_damping", "0.1");
+    defaultValues.set("pulsetouch_offset", "0.0");
+    defaultValues.set("pulsetouch_pulsemult", "0.0");
+    defaultValues.set("pulsetouch_pulsetau", "0.0");
+    defaultValues.set("pulsetouch_pulselen", "0.0");
+
+    return createNewLinkLikeTree(Ids::pulsetouch, newName, startObject, endObject,
+                                 defaultValues);
+}
+
+static ValueTree createNewPluckTree(const String& newName,
+                                    const String& startObject, 
+                                    const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("pluck_stiffness", "300.0");
+    defaultValues.set("pluck_damping", "0.1");
+    defaultValues.set("pluck_displacement", "0.003");
+    defaultValues.set("pluck_offset", "0.0");
+
+    return createNewLinkLikeTree(Ids::pluck, newName, startObject, endObject,
+                                 defaultValues);
+}
+
+static ValueTree createNewWaveguideTree(const String& newName,
+                                        const String& startObject,
+                                        const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("waveguide_impedance", "1.0");
+    defaultValues.set("waveguide_string_type", "simpleString(0.033,0.017)");
+
+    return createNewLinkLikeTree(Ids::waveguide, newName, startObject, endObject,
+                                 defaultValues);
+}
+
 static ValueTree createNewTerminationTree(const String& newName, int x, int y)
 {
-    StoredSettings& settings = *StoredSettings::getInstance();
-    ValueTree newTree(Ids::termination);
+    StringPairArray defaultValues;
+    defaultValues.set("term_type", "simpleStringTerm(-0.996, 20)");
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
-    ValueTree paramsTree(Ids::parameters);
-    ValueTree term(Ids::parameter);
-    term.setProperty(Ids::value,
-                     settings.getDefaultValue("term_type", "simpleStringTerm(-0.996, 20)"),
-                     nullptr);
-    paramsTree.addChild(term, -1, nullptr);
-
-    newTree.addChild(paramsTree, -1, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-
-    return newTree;
+    return createMewMassLikeTree(Ids::termination, newName, x, y, defaultValues);
 }
 
 static ValueTree createNewJunctionTree(const String& newName, int x, int y)
 {
-    StoredSettings& settings = *StoredSettings::getInstance();
-    ValueTree newTree(Ids::junction);
+    StringPairArray defaultValues;
+    defaultValues.set("junct_displacement", "0.0");
 
-	newTree.setProperty(Ids::posX, x, nullptr);
-	newTree.setProperty(Ids::posY, y, nullptr);
-    ValueTree paramsTree(Ids::parameters);
-    ValueTree pa(Ids::parameter);
-    pa.setProperty(Ids::value,
-                   settings.getDefaultValue("junct_displacement", "0.0"),
-                   nullptr);
-    paramsTree.addChild(pa, -1, nullptr);
-
-    newTree.addChild(paramsTree, -1, nullptr);
-    newTree.setProperty(Ids::identifier, newName, nullptr);
-
-    return newTree;
+    return createMewMassLikeTree(Ids::junction, newName, x, y, defaultValues);
 }
 
 static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
@@ -322,6 +296,7 @@ ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
     else
 		return ValueTree::invalid;
 }
+
 ValueTree ObjectFactory::createParamsTree(StringArray p)
 {
     ValueTree paramsTree(Ids::parameters);
@@ -330,6 +305,25 @@ ValueTree ObjectFactory::createParamsTree(StringArray p)
         ValueTree value(Ids::parameter);
         value.setProperty(Ids::value, p[i].trim(), nullptr);
         paramsTree.addChild(value, -1, nullptr);
+    }
+    return paramsTree;
+}
+
+static ValueTree createResonatorParamsTree(StringArray p)
+{
+
+    ValueTree paramsTree(Ids::parameters);
+
+    if (p.size() != 3)
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            ValueTree value(Ids::parameter);
+            ValueTree subval(Utils::resonatorParamIds[i]);
+            subval.setProperty(Ids::value, p[i].trim(), nullptr);
+            value.addChild(subval, -1, nullptr);
+            paramsTree.addChild(value, -1, nullptr);
+        }
     }
     return paramsTree;
 }
