@@ -157,8 +157,15 @@ public:
     
     AudioOutConnector* getAudioConnector(int index) const throw() 
     { return audioConnections[index]; }
-    int indexOfAudioConnector (AudioOutConnector* e) const throw() 
-    { return audioConnections.indexOf (e); }
+    int indexOfAudioConnector (AudioOutConnector* e) const throw()
+    {
+        return audioConnections.indexOf(e);
+    }
+
+    int getNumAudioConnections() const
+    {
+        return audioConnections.size();
+    }
 
     CommentComponent* getComment(int index) const throw() { return comments[index]; }
     CommentComponent* getCommentUnchecked(int index) const throw() { return comments.getUnchecked(index); }
@@ -173,32 +180,17 @@ public:
     
     void reverseLinkDirection();
     
-    static const char* const clipboardXmlTag;
-    void copySelectedToClipboard();
-    void paste(ObjectsHolder* holder);
-    void cut(ObjectsHolder* holder);
-    
     bool checkIfIdExists(const Identifier& objId, const String& idStr);
     bool renameId(const Identifier& objId, const String& oldId,
                   const String& newId, UndoManager* undoManager_);
-    bool changeObjectNameInLink(const String& oldName, 
-                                const String& newName,
-                                UndoManager* undManager);
-    void changeObjectNameInAudioSources(const String& oldName,
-                                        const String& newName,
-                                        UndoManager* undManager);
     
     String getNewNameForObject(const Identifier& objId);
 
     IdManager* getIdManager() { return idMgr; }
 
-    void tidyUp();
-
     void setLinksSegmented(bool isSegmented);
 
     void destroy();
-
-    void makeGraph(DirectedGraph* g);
 
     void setAudioConnectionVisibility(bool shouldBeVisible);
 private:

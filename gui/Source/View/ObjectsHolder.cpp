@@ -43,6 +43,8 @@
 #include "AudioOutConnector.h"
 #include "CommentComponent.h"
 #include "PropertiesWindow.h"
+#include "../Utilities/ObjectsHelper.h"
+#include "../Utilities/ObjectsClipboard.h"
 
 #include "ObjectsHolder.h"
 
@@ -630,13 +632,13 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
     switch (info.commandID)
     {
     case StandardApplicationCommandIDs::cut:
-        objController.cut(this);
+        ObjectsClipboard::cut(objController, *this);
         break;
     case StandardApplicationCommandIDs::copy:
-        objController.copySelectedToClipboard();
+        ObjectsClipboard::copySelected(objController);
         break;
     case StandardApplicationCommandIDs::paste:
-        objController.paste(this);
+        ObjectsClipboard::paste(objController, *this);
         break;
     case StandardApplicationCommandIDs::selectAll:
         objController.selectAll(true);
@@ -657,7 +659,7 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         objController.reverseLinkDirection();
         break;
     case CommandIDs::tidyObjects:
-        objController.tidyUp();
+        ObjectsHelper::tidyUpObjects(objController);
         break;
     case CommandIDs::redrawCircle:
         redrawObjects(CommandIDs::redrawCircle);
@@ -1065,12 +1067,12 @@ void ObjectsHolder::redrawObjects(const int cmdId)
     if(cmdId == CommandIDs::redrawCircle)
     {
         graph = new DirectedGraph();
-        objController.makeGraph(graph.get());
+        ObjectsHelper::makeGraph(objController, *graph.get());
     }
     else if(cmdId == CommandIDs::redrawForceDirected)
     {
         graph = new DirectedGraph();
-        objController.makeGraph(graph.get());
+        ObjectsHelper::makeGraph(objController, *graph.get());
 //        DBG(graph->toString());
 //        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
         graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());

@@ -144,6 +144,9 @@
     <ClCompile Include="..\..\Source\Application\MainWindow.cpp"/>
     <ClCompile Include="..\..\Source\Application\Application.cpp"/>
     <ClCompile Include="..\..\Source\Application\Main.cpp"/>
+    <ClCompile Include="..\..\Source\Utilities\ObjectsClipboard.cpp"/>
+    <ClCompile Include="..\..\Source\Utilities\ObjectsHelper.cpp"/>
+    <ClCompile Include="..\..\Source\Utilities\MDLHelper.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\SAMRegex.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\RegularExpression.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\IdManager.cpp"/>
@@ -1029,6 +1032,9 @@
     <ClInclude Include="..\..\Source\Application\Application.h"/>
     <ClInclude Include="..\..\Source\Application\CommandIDs.h"/>
     <ClInclude Include="..\..\Source\Application\CommonHeaders.h"/>
+    <ClInclude Include="..\..\Source\Utilities\ObjectsClipboard.h"/>
+    <ClInclude Include="..\..\Source\Utilities\ObjectsHelper.h"/>
+    <ClInclude Include="..\..\Source\Utilities\MDLHelper.h"/>
     <ClInclude Include="..\..\Source\Utilities\SAMRegex.h"/>
     <ClInclude Include="..\..\Source\Utilities\RegularExpression.h"/>
     <ClInclude Include="..\..\Source\Utilities\IdManager.h"/>

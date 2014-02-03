@@ -78,7 +78,10 @@ public:
     void paint (Graphics& g);
     void resized();
 
-    ObjectsHolder* getHolderComponent() { return objectsHolder; }
+    ObjectsHolder* getHolderComponent() const
+    {
+        return objectsHolder;
+    }
 
     const MainAppWindow* getMainAppWindow() const { return &mainWindow; }
 

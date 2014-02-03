@@ -24,6 +24,7 @@
 */
 #include "../Application/CommonHeaders.h"
 #include "../Controller/ObjController.h"
+#include "../Utilities/ObjectsHelper.h"
 
 #include "ObjectPropertiesComponent.h"
 
@@ -166,26 +167,32 @@ bool ObjectPropertiesComponent::writeIdentifier()
         if(data.getType() == Ids::mass || data.getType() == Ids::port
             || data.getType() == Ids::ground || data.getType() == Ids::resonators)
         {
-            objController->changeObjectNameInLink(oldName, newName, undoManager);
-            objController->changeObjectNameInAudioSources(oldName, newName,
+            ObjectsHelper::changeObjectNameInLink(objController,
+                                                  oldName, newName, undoManager);
+            ObjectsHelper::changeObjectNameInAudioSources(objController,
+                                                          oldName, newName,
                                                           undoManager);
         }
         else if(data.getType() == Ids::link || data.getType() == Ids::touch
             || data.getType() == Ids::pluck || data.getType() == Ids::pulsetouch)
         {
-            objController->changeObjectNameInAudioSources(oldName, newName,
+            ObjectsHelper::changeObjectNameInAudioSources(objController,
+                                                          oldName, newName,
                                                           undoManager);
         }
         else if(data.getType() == Ids::junction)
         {
-            objController->changeObjectNameInLink(oldName, newName,
-                                                  undoManager);
-            objController->changeObjectNameInAudioSources(oldName, newName,
+            ObjectsHelper::changeObjectNameInLink(objController,
+                                                  oldName, newName, undoManager);
+
+            ObjectsHelper::changeObjectNameInAudioSources(objController,
+                                                          oldName, newName,
                                                           undoManager);
         }
         else if(data.getType() == Ids::termination)
         {
-            objController->changeObjectNameInAudioSources(oldName, newName,
+            ObjectsHelper::changeObjectNameInAudioSources(objController,
+                                                          oldName, newName,
                                                           undoManager);
         }
 

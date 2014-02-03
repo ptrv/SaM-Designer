@@ -36,6 +36,7 @@
 #include "../View/SelectableObject.h"
 #include "../View/ObjectsHolder.h"
 #include "../View/MDLInformation.h"
+#include "../Utilities/MDLHelper.h"
 
 #include "MainWindow.h"
 
@@ -511,7 +512,7 @@ ObjectsHolder* MainAppWindow::getHolderComponent()
 void MainAppWindow::showMDLProperties()
 {
     Colour color(0,0,0);
-    mdlInfoComp->setContent(getMDLFile()->getInfoString());
+    mdlInfoComp->setContent(MDLHelper::getMDLInfoString(*getMDLFile()));
     DialogWindow::showModalDialog(TRANS("MDL Information"),
                                   mdlInfoComp, nullptr, color, true);
 }

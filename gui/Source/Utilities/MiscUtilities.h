@@ -30,6 +30,7 @@ namespace synthamodeler
 {
 class BaseObjectComponent;
 class ObjController;
+class MDLFile;
 /**
  * Namespace for
  */
@@ -152,6 +153,10 @@ const String getSAMLog();
 void uniquifyPaths(HashMap<String, String>& paths);
 
 void setLocale();
+
+void cleanDataDir(const MDLFile& mdlFile);
+
+void cleanDataDirAll();
 };
 
 }

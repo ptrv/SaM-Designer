@@ -64,7 +64,6 @@ public:
 
     void mdlChanged();
 
-    ValueTree getObjectWithName(const String& objName);
 
     static const char* mdlFileExtension;
 
@@ -72,7 +71,6 @@ public:
     bool isUntiled();
 
     String toString();
-    String getInfoString();
 
     bool checkIfChecksumChanged();
     
@@ -96,7 +94,6 @@ private:
 
     MD5 md5;
 
-    void checkForOutputDSPVar();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MDLFile);
 

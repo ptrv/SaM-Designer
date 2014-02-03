@@ -62,6 +62,9 @@ OBJECTS := \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Application_7b202ed2.o \
   $(OBJDIR)/Main_70df61c1.o \
+  $(OBJDIR)/ObjectsClipboard_39921570.o \
+  $(OBJDIR)/ObjectsHelper_8190e55e.o \
+  $(OBJDIR)/MDLHelper_81a283f.o \
   $(OBJDIR)/SAMRegex_b144d836.o \
   $(OBJDIR)/RegularExpression_7b2cba50.o \
   $(OBJDIR)/IdManager_97f65d0e.o \
@@ -175,6 +178,21 @@ $(OBJDIR)/Application_7b202ed2.o: ../../Source/Application/Application.cpp
 $(OBJDIR)/Main_70df61c1.o: ../../Source/Application/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ObjectsClipboard_39921570.o: ../../Source/Utilities/ObjectsClipboard.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjectsClipboard.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ObjectsHelper_8190e55e.o: ../../Source/Utilities/ObjectsHelper.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ObjectsHelper.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/MDLHelper_81a283f.o: ../../Source/Utilities/MDLHelper.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling MDLHelper.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/SAMRegex_b144d836.o: ../../Source/Utilities/SAMRegex.cpp

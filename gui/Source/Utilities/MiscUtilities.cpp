@@ -21,18 +21,17 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-*/
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Application/Application.h"
-#include "StoredSettings.h"
-#include "../Models/ObjectIDs.h"
+ */
+#include "../Application/CommonHeaders.h"
 #include "../Graph/Node.h"
 #include "../View/BaseObjectComponent.h"
 #include "../View/SelectableObject.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../Controller/ObjController.h"
+#include "../Controller/MDLController.h"
 #include "../Models/SAMCmd.h"
+#include "../Models/MDLFile.h"
 
 #include "MiscUtilities.h"
 #include "RegularExpression.h"
@@ -649,6 +648,78 @@ void Utils::setLocale()
     //        LocalisedStrings* localisedStrings = new LocalisedStrings(localStr, true);
     //        LocalisedStrings::setCurrentMappings(localisedStrings);
     //    }
+}
+
+//static const char* fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
+void Utils::cleanDataDir(const MDLFile& mdlFile)
+{
+    File f = mdlFile.getFile();
+
+    String dataDir = StoredSettings::getInstance()->getDataDir();
+    String mdlName = f.getFileNameWithoutExtension();
+
+    String outStrOk;
+    String outStrError;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        String filePathToDelete = dataDir + "/" + mdlName
+            + MDLController::fileTypesToDelete[i];
+        File ftd(filePathToDelete);
+        if (!ftd.existsAsFile())
+            continue;
+        if (ftd.moveToTrash())
+            outStrOk << filePathToDelete << "\n";
+        else
+            outStrError << filePathToDelete << "\n";
+    }
+
+    if (outStrOk.isEmpty() && outStrError.isEmpty())
+    {
+        SAM_CONSOLE("MSG: No files were deleted.", PostLevel::ALL);
+        return;
+    }
+    if (outStrOk.isNotEmpty())
+        SAM_CONSOLE("Delete OK: " + outStrOk, PostLevel::ALL);
+    if (outStrError.isNotEmpty())
+        SAM_CONSOLE("Could not delete: " + outStrError, PostLevel::ERROR);
+
+}
+
+void Utils::cleanDataDirAll()
+{
+    StringArray filePathsToDelete;
+    for (int i = 0; i < 4; ++i)
+    {
+        DirectoryIterator iter(StoredSettings::getInstance()->getDataDir(),
+                               false,
+                               "*" + String(MDLController::fileTypesToDelete[i]));
+        while (iter.next())
+        {
+            filePathsToDelete.add(iter.getFile().getFullPathName());
+        }
+    }
+    String outStrOk;
+    String outStrError;
+    for (int j = 0; j < filePathsToDelete.size(); ++j)
+    {
+        File f(filePathsToDelete[j]);
+        if (!f.existsAsFile())
+            continue;
+        if (f.moveToTrash())
+            outStrOk << filePathsToDelete[j] << "\n";
+        else
+            outStrError << filePathsToDelete[j] << "\n";
+    }
+    if (outStrOk.isEmpty() && outStrError.isEmpty())
+    {
+        SAM_CONSOLE("MSG: No files were deleted.", PostLevel::ALL);
+        return;
+    }
+    if (outStrOk.isNotEmpty())
+        SAM_CONSOLE("Delete OK: " + outStrOk, PostLevel::ALL);
+    if (outStrError.isNotEmpty())
+        SAM_CONSOLE("Could not delete: " + outStrError, PostLevel::ERROR);
 }
 
 //==============================================================================

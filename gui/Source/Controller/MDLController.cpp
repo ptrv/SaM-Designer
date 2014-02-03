@@ -29,6 +29,7 @@
 #include "../View/ObjectsHolder.h"
 #include "../View/ContentComp.h"
 #include "../Controller/SAMCmdController.h"
+#include "../Utilities/MDLHelper.h"
 
 #include "MDLController.h"
 
@@ -132,58 +133,8 @@ void MDLController::saveAs()
 
 void MDLController::saveAsImage()
 {
-    if(ContentComp* const c = mainAppWindow.getMDLFileContentComponent())
-    {
-        ObjectsHolder* const oh = c->getHolderComponent();
-        Image img = oh->createComponentSnapshot(oh->getObjectsBounds());
-
-        String initFilePath;
-        initFilePath << currentMdl->getFile().getParentDirectory().getFullPathName()
-                     << "/" << currentMdl->getFile().getFileNameWithoutExtension()
-                     << "_" << Time::getCurrentTime().formatted("%Y%m%d%H%M%S")
-                     << ".png";
-
-        FileChooser fc(TRANS("Please select the filename for the image") + "...",
-                       File::createFileWithoutCheckingPath(initFilePath),
-                       "*.png;*.jpg;*.jpeg", true);
-
-        if(fc.browseForFileToSave(true))
-        {
-            File f(fc.getResult());
-            TemporaryFile temp(f);
-
-            ScopedPointer <FileOutputStream> out(temp.getFile().createOutputStream());
-
-            if (out != nullptr)
-            {
-                bool imgToStreamOk = false;
-                if(f.hasFileExtension(".png"))
-                {
-                    PNGImageFormat png;
-                    imgToStreamOk = png.writeImageToStream(img, *out.get());
-                }
-                else if(f.hasFileExtension(".jpg;.jpeg"))
-                {
-                    JPEGImageFormat jpeg;
-                    imgToStreamOk = jpeg.writeImageToStream(img, *out.get());
-                }
-                out = nullptr;
-
-                bool succeeded = false;
-                if(imgToStreamOk)
-                    succeeded = temp.overwriteTargetFileWithTemporary();
-                    
-                if(succeeded)
-                {
-                    SAM_CONSOLE("MSG: Wrote file " + f.getFullPathName(), PostLevel::ALL);
-                }
-                else
-                {
-                    SAM_CONSOLE("Could not write file " + f.getFullPathName(), PostLevel::ERROR);
-                }
-            }
-        }
-    }
+    MDLHelper::saveMDLFileAsImage(*currentMdl.get(),
+                                  mainAppWindow.getMDLFileContentComponent());
 }
 void MDLController::close()
 {
@@ -196,19 +147,7 @@ void MDLController::close()
 
 bool MDLController::saveAsXml()
 {
-    bool saveOk = false;
-    FileChooser fc(TRANS("Select XML file to save") + "...",
-                   File::getSpecialLocation(File::userHomeDirectory),
-                   "*.xml");
-
-    if (fc.browseForFileToSave(true))
-    {
-        File xmlFile (fc.getResult());
-        String mdlXmlStr = currentMdl->toString();
-
-        saveOk = Utils::writeStringToFile(mdlXmlStr, xmlFile);
-    }
-    return saveOk;
+    return MDLHelper::saveMDLFileAsXml(*currentMdl.get());
 }
 
 void MDLController::generateFaust()
@@ -283,69 +222,12 @@ ObjectsHolder* MDLController::getHolderComponent()
 
 void MDLController::cleanDataDir()
 {
-    File f = getMDLFile()->getFile();
-
-    String dataDir = StoredSettings::getInstance()->getDataDir();
-    String mdlName = f.getFileNameWithoutExtension();
-
-    String outStrOk;
-    String outStrError;
-
-    for (int i = 0; i < 4; ++i)
-    {
-        String filePathToDelete = dataDir+"/"+mdlName+fileTypesToDelete[i];
-        File ftd(filePathToDelete);
-        if(! ftd.existsAsFile())
-            continue;
-        if(ftd.moveToTrash())
-            outStrOk << filePathToDelete << "\n";
-        else
-            outStrError << filePathToDelete << "\n";
-    }
-    if(outStrOk.isEmpty() && outStrError.isEmpty())
-    {
-        SAM_CONSOLE("MSG: No files were deleted.", PostLevel::ALL);
-        return;
-    }
-    if(outStrOk.isNotEmpty())
-        SAM_CONSOLE("Delete OK: " + outStrOk, PostLevel::ALL);
-    if(outStrError.isNotEmpty())
-        SAM_CONSOLE("Could not delete: " + outStrError, PostLevel::ERROR);
+    Utils::cleanDataDir(*currentMdl.get());
 }
 
 void MDLController::cleanDataDirAll()
 {
-    StringArray filePathsToDelete;
-    for (int i = 0; i < 4; ++i)
-    {
-        DirectoryIterator iter(StoredSettings::getInstance()->getDataDir(),
-                               false, "*"+String(fileTypesToDelete[i]));
-        while (iter.next())
-        {
-            filePathsToDelete.add(iter.getFile().getFullPathName());
-        }
-    }
-    String outStrOk;
-    String outStrError;
-    for (int j = 0; j < filePathsToDelete.size(); ++j)
-    {
-        File f(filePathsToDelete[j]);
-        if(! f.existsAsFile())
-            continue;
-        if (f.moveToTrash())
-            outStrOk << filePathsToDelete[j] << "\n";
-        else
-            outStrError << filePathsToDelete[j] << "\n";
-    }
-    if(outStrOk.isEmpty() && outStrError.isEmpty())
-    {
-        SAM_CONSOLE("MSG: No files were deleted.", PostLevel::ALL);
-        return;
-    }
-    if(outStrOk.isNotEmpty())
-        SAM_CONSOLE("Delete OK: " + outStrOk, PostLevel::ALL);
-    if(outStrError.isNotEmpty())
-        SAM_CONSOLE("Could not delete: " + outStrError, PostLevel::ERROR);
+    Utils::cleanDataDirAll();
 }
 
 bool MDLController::checkIfMdlCanchedOutside()

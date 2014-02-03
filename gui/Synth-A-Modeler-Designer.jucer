@@ -129,6 +129,15 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="oz45dZ" name="ObjectsClipboard.cpp" compile="1" resource="0"
+              file="Source/Utilities/ObjectsClipboard.cpp"/>
+        <FILE id="Exm0uH" name="ObjectsClipboard.h" compile="0" resource="0"
+              file="Source/Utilities/ObjectsClipboard.h"/>
+        <FILE id="l0vS9u" name="ObjectsHelper.cpp" compile="1" resource="0"
+              file="Source/Utilities/ObjectsHelper.cpp"/>
+        <FILE id="nsMw8M" name="ObjectsHelper.h" compile="0" resource="0" file="Source/Utilities/ObjectsHelper.h"/>
+        <FILE id="WYuRaS" name="MDLHelper.cpp" compile="1" resource="0" file="Source/Utilities/MDLHelper.cpp"/>
+        <FILE id="clmKkv" name="MDLHelper.h" compile="0" resource="0" file="Source/Utilities/MDLHelper.h"/>
         <FILE id="wRkKvF" name="SAMRegex.cpp" compile="1" resource="0" file="Source/Utilities/SAMRegex.cpp"/>
         <FILE id="SaedNO" name="SAMRegex.h" compile="0" resource="0" file="Source/Utilities/SAMRegex.h"/>
         <FILE id="B931w7" name="RegularExpression.cpp" compile="1" resource="0"

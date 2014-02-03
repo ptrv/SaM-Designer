@@ -26,6 +26,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Utilities/MDLParser.h"
 #include "../Utilities/MDLWriter.h"
+#include "../Utilities/MDLHelper.h"
 
 #include "MDLFile.h"
 
@@ -161,7 +162,7 @@ Result MDLFile::loadDocument (const File& file)
         isUntitledFile = false;
         md5 = MD5(file);
 
-        checkForOutputDSPVar();
+        MDLHelper::addOutputDSPVarIfNotExists(*this);
 
         return Result::ok();
     }
@@ -175,7 +176,7 @@ Result MDLFile::loadDocument (const File& file)
 }
 Result MDLFile::saveDocument (const File& file)
 {
-    checkForOutputDSPVar();
+    MDLHelper::addOutputDSPVarIfNotExists(*this);
 
     bool saveOk;
     String errorMsg;
@@ -277,131 +278,10 @@ void MDLFile::valueTreeParentChanged (ValueTree& /*tree*/)
 
 //==============================================================================
 
-ValueTree MDLFile::getObjectWithName(const String& objName)
-{
-	for (int i = 0; i < mdlRoot.getNumChildren(); ++i) {
-		for (int j = 0; j < mdlRoot.getChild(i).getNumChildren(); ++j) {
-			ValueTree ch = mdlRoot.getChild(i).getChild(j);
-			if(ch[Ids::identifier].toString().compare(objName) == 0)
-			{
-				return ch;
-			}
-		}
-	}
-	return ValueTree::invalid;
-}
-
 String MDLFile::toString()
 {
     String mdlStr = mdlRoot.toXmlString();
     return mdlStr;
-}
-
-String MDLFile::getInfoString()
-{
-    String props;
-    props << "MDL path: " << mdlRoot[Ids::mdlPath].toString() << newLine;
-    props << newLine;
-
-    int numMasses, numRes, numGrounds, numPorts, numLinks, numTouchs, numPlucks,
-    numPulsetouchs, numAudioOuts, numWaveguides, numTerms, numJuncts,
-    numFauscode;
-    numMasses = numRes = numGrounds = numPorts = numLinks = numTouchs = numPlucks
-    = numPulsetouchs = numAudioOuts = numWaveguides = numTerms = numJuncts
-    = numFauscode = 0;
-    if(mdlRoot.getChildWithName(Objects::masses).isValid())
-    {
-        ValueTree masses = mdlRoot.getChildWithName(Objects::masses);
-        for (int i = 0; i < masses.getNumChildren(); ++i)
-        {
-            if (masses.getChild(i).getType() == Ids::mass)
-            {
-                ++numMasses;
-            }
-            else if (masses.getChild(i).getType() == Ids::ground)
-            {
-                ++numGrounds;
-            }
-            else if (masses.getChild(i).getType() == Ids::port)
-            {
-                ++numPorts;
-            }
-            else if (masses.getChild(i).getType() == Ids::resonators)
-            {
-                ++numRes;
-            }
-        }
-    }
-    if(mdlRoot.getChildWithName(Objects::links).isValid())
-    {
-        ValueTree links = mdlRoot.getChildWithName(Objects::links);
-        for (int i = 0; i < links.getNumChildren(); ++i)
-        {
-            if (links.getChild(i).getType() == Ids::link)
-            {
-                ++numLinks;
-            }
-            else if (links.getChild(i).getType() == Ids::touch)
-            {
-                ++numTouchs;
-            }
-            else if (links.getChild(i).getType() == Ids::pluck)
-            {
-                ++numPlucks;
-            }
-            else if (links.getChild(i).getType() == Ids::pulsetouch)
-            {
-                ++numPulsetouchs;
-            }
-        }
-    }
-    if(mdlRoot.getChildWithName(Objects::audioobjects).isValid())
-    {
-        numAudioOuts = mdlRoot.getChildWithName(Objects::audioobjects).getNumChildren();
-    }
-    if(mdlRoot.getChildWithName(Objects::waveguides).isValid())
-    {
-        numWaveguides = mdlRoot.getChildWithName(Objects::waveguides).getNumChildren();
-    }
-    if(mdlRoot.getChildWithName(Objects::terminations).isValid())
-    {
-        numTerms = mdlRoot.getChildWithName(Objects::terminations).getNumChildren();
-    }
-    if(mdlRoot.getChildWithName(Objects::junctions).isValid())
-    {
-        numJuncts = mdlRoot.getChildWithName(Objects::junctions).getNumChildren();
-    }
-    if(mdlRoot.getChildWithName(Objects::faustcodeblock).isValid())
-    {
-        numFauscode = mdlRoot.getChildWithName(Objects::faustcodeblock).getNumChildren();
-    }
-    props << "Masses: " << numMasses << newLine;
-    props << "Grounds: " << numGrounds << newLine;
-    props << "Ports: " << numPorts << newLine;
-    props << "Resonators: " << numRes << newLine;
-    props << "Links: " << numLinks << newLine;
-    props << "Touchs: " << numTouchs << newLine;
-    props << "Plucks: " << numPlucks << newLine;
-    props << "Pulsetouchs: " << numPulsetouchs << newLine;
-    props << "AudioOuts: " << numAudioOuts << newLine;
-    props << "Waveguides: " << numWaveguides << newLine;
-    props << "Terminations: " << numTerms << newLine;
-    props << "Junctions: " << numJuncts << newLine;
-    props << "Faustcode lines: " << numFauscode << newLine;
-
-    props << newLine;
-
-    props << "---------------------" << newLine;
-
-    props << newLine;
-
-    const File& tmpFile = getFile();
-    props << "Size: " << String(tmpFile.getSize() / 1024.0, 3) << " KB" << newLine;
-    props << "Creation time: " << tmpFile.getCreationTime().formatted("%c") << newLine;
-    props << "Modification time: " << tmpFile.getLastModificationTime().formatted("%c") << newLine;
-    props << "On harddisk: " << tmpFile.isOnHardDisk() << newLine;
-
-    return props;
 }
 
 bool MDLFile::checkIfChecksumChanged()
@@ -413,30 +293,6 @@ bool MDLFile::checkIfChecksumChanged()
         return false;
 }
 
-void MDLFile::checkForOutputDSPVar()
-{
-    ValueTree fcb = mdlRoot.getOrCreateChildWithName(Objects::faustcodeblock, nullptr);
-    bool outputDSPExists = false;
-    for(int i = 0; i < fcb.getNumChildren(); ++i)
-    {
-        ValueTree fc = fcb.getChild(i);
-        if(fc.hasProperty(Ids::value))
-        {
-            String fcStr = fc[Ids::value].toString();
-            if(fcStr.startsWith("outputDSP"))
-            {
-                outputDSPExists = true;
-                break;
-            }
-        }
-    }
-    if(! outputDSPExists)
-    {
-        ValueTree fc(Ids::faustcode);
-        fc.setProperty(Ids::value, "outputDSP=SAMlimiter:highpass(4,20.0);", nullptr);
-        fcb.addChild(fc, -1, nullptr);
-    }
-}
 //==============================================================================
 #if UNIT_TESTS
 
