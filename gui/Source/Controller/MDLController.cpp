@@ -38,10 +38,10 @@ using namespace synthamodeler;
 const char* MDLController::fileTypesToDelete[] = {".dsp", ".mdx", ".dsp.xml", ".cpp"};
 
 MDLController::MDLController(MainAppWindow& mainAppWindow_)
-: mainAppWindow(mainAppWindow_),
-  currentMdl(nullptr)
+: mainAppWindow(mainAppWindow_)
+, currentMdl(new MDLFile())
+, samCmdCtrl(new SAMCmdController())
 {
-	samCmdCtrl = new SAMCmdController();
 }
 
 MDLController::~MDLController()
@@ -106,6 +106,8 @@ bool MDLController::save()
             return false;
         case 2:
             return currentMdl->save(false, true) == FileBasedDocument::savedOk;
+        default:
+            return false;
         }
     }
     else
@@ -201,12 +203,16 @@ MDLFile* MDLController::getMDLFile() const
 
 void MDLController::setMDLFile(MDLFile* mdlFile)
 {
-	currentMdl = mdlFile;
-	if(currentMdl != nullptr)
-	{
-		StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
-		StoredSettings::getInstance()->flush();
-	}
+    if (mdlFile != nullptr)
+    {
+        currentMdl = mdlFile;
+        StoredSettings::getInstance()->recentFiles.addFile(currentMdl->getFile());
+        StoredSettings::getInstance()->flush();
+    }
+    else
+    {
+        currentMdl = new MDLFile();
+    }
 }
 
 void MDLController::changed()
