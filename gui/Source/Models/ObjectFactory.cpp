@@ -127,16 +127,19 @@ static ValueTree createNewLinkLikeTree(const Identifier& linkType,
     StoredSettings& settings = *StoredSettings::getInstance();
     ValueTree newTree(linkType);
 
-    StringArray p;
+    StringArray paramsStrings;
     for (int i = 0; i < paramsStringPairs.size(); ++i)
     {
         const String& valName = paramsStringPairs.getAllKeys()[i];
         const String& value = paramsStringPairs.getAllValues()[i];
-        p.add(settings.getDefaultValue(valName, value));
+        paramsStrings.add(settings.getDefaultValue(valName, value));
     }
 
-    ValueTree paramsTree = ObjectFactory::createParamsTree(p);
-    newTree.addChild(paramsTree, -1, nullptr);
+    if (paramsStrings.size() > 0)
+    {
+        ValueTree paramsTree = ObjectFactory::createParamsTree(paramsStrings);
+        newTree.addChild(paramsTree, -1, nullptr);
+    }
 
     newTree.setProperty(Ids::identifier, newName, nullptr);
     newTree.setProperty(Ids::startVertex, startObject, nullptr);
