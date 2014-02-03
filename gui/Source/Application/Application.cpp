@@ -101,6 +101,7 @@ void SAMApplication::initialise (const String& commandLine)
     if (sendCommandLineToPreexistingInstance())
     {
         DBG("Another instance is running - quitting...");
+        shutdown();
         quit();
         return;
     }
