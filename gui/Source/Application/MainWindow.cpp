@@ -475,7 +475,11 @@ void MainAppWindow::updateTitle ()
     }
     bool mdlStatus = mdlController->getMDLFile()->hasChangedSinceSaved();
 	title << " - " << (mdlStatus ? mdlFilePathUnique + "*" : mdlFilePathUnique);
-//    title << " - " << mdlController->getMDLFile()->getNameWithStatus();
+    //    title << " - " << mdlController->getMDLFile()->getNameWithStatus();
+    if (mdlController->getMDLFile()->isReadOnly())
+    {
+        title << " (READ-ONLY)";
+    }
 	this->setName(title);
 }
 

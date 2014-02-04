@@ -82,6 +82,16 @@ public:
 
     bool checkIfChecksumChanged();
 
+    void setReadOnly(bool shouldBeReadOnly)
+    {
+        readOnly = shouldBeReadOnly;
+    }
+
+    bool isReadOnly() const
+    {
+        return readOnly;
+    }
+    
 protected:
     String getDocumentTitle();
     Result loadDocument(const File& file);
@@ -104,6 +114,8 @@ private:
 
     MD5 md5;
 
+    bool readOnly;
+    
     friend class MDLParser;
     friend class MDLWriter;
 

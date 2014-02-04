@@ -110,6 +110,10 @@ bool MDLController::save()
             return false;
         }
     }
+    else if (currentMdl->isReadOnly())
+    {
+        return saveAs();
+    }
     else
     {
         bool saveOk = currentMdl->save(true, true) == FileBasedDocument::savedOk;
@@ -121,12 +125,14 @@ bool MDLController::save()
     }
 }
 
-void MDLController::saveAs()
+bool MDLController::saveAs()
 {
-	if(currentMdl->saveAsInteractive(true) != FileBasedDocument::savedOk)
+    bool saveOk = currentMdl->saveAsInteractive(true) == FileBasedDocument::savedOk;
+    if (!saveOk)
 	{
 		SAM_LOG("Something went wrong saving the mdl file.");
-	}
+    }
+    return saveOk;
 //    else
 //    {
 //        close();

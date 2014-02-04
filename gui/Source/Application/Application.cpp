@@ -556,7 +556,7 @@ void SAMApplication::avoidSuperimposedWindows (MainAppWindow* const mw)
 	}
 }
 
-bool SAMApplication::openFile(const File& file)
+bool SAMApplication::openFile(const File& file, bool readOnly)
 {
     for (int j = mainWindows.size(); --j >= 0;)
     {
@@ -573,6 +573,7 @@ bool SAMApplication::openFile(const File& file)
 
         if (newMDL->loadFrom (file, true))
         {
+            newMDL->setReadOnly(readOnly);
             MainAppWindow* w = getOrCreateEmptyWindow();
             w->setMDLFile(newMDL.release());
             w->makeVisible();

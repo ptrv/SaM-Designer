@@ -47,7 +47,7 @@ public:
 	void open();
 	void openFromFile(const File& mdlFile);
     bool save();
-	void saveAs();
+    bool saveAs();
 	void saveAsImage();
 	void close();
 

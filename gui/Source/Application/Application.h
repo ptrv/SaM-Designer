@@ -95,7 +95,7 @@ public:
 
     ScopedPointer<MainMenuModel> menuModel;
 
-    bool openFile(const File& file);
+    bool openFile(const File& file, bool readOnly = false);
 
     virtual MainAppWindow* createNewMainWindow();
 

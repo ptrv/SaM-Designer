@@ -37,7 +37,7 @@ const char* MDLFile::mdlFileExtension = ".mdl;.mdlx";
 MDLFile::MDLFile()
 : FileBasedDocument(".mdl", "*.mdl;*.mdlx",
                     TRANS("Open mdl file"), TRANS("Save mdl file")),
-  mdlRoot(Objects::synthamodeler), isUntitledFile(true)
+mdlRoot(Objects::synthamodeler), isUntitledFile(true), readOnly(false)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -46,7 +46,7 @@ MDLFile::MDLFile()
 MDLFile::MDLFile(const File& file)
 : FileBasedDocument(".mdl", "*.mdl;*.mdlx",
                     TRANS("Open mdl file"), TRANS("Save mdl file")),
-  mdlRoot(Objects::synthamodeler), isUntitledFile(false)
+mdlRoot(Objects::synthamodeler), isUntitledFile(false), readOnly(false)
 {
 	initMDL();
 	mdlRoot.addListener(this);
@@ -125,7 +125,8 @@ void MDLFile::close()
 
 String MDLFile::getDocumentTitle()
 {
-    return mdlRoot.getProperty(Ids::mdlName).toString();
+    String docTitle = mdlRoot.getProperty(Ids::mdlName).toString();
+    return readOnly ? docTitle + " (READ-ONLY)" : docTitle;
 }
 Result MDLFile::loadDocument (const File& file)
 {
@@ -176,6 +177,11 @@ Result MDLFile::loadDocument (const File& file)
 }
 Result MDLFile::saveDocument (const File& file)
 {
+    if (readOnly && file == getFile())
+    {
+        return Result::fail("File is read-only");
+    }
+
     MDLHelper::addOutputDSPVarIfNotExists(*this);
 
     bool saveOk;

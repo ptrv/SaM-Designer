@@ -95,7 +95,7 @@ void Utils::openHelpPatch(const String& helpId)
     File f = StoredSettings::getInstance()->getDataDir() + "/help-patches/" + helpPatch;
 
     if(f.existsAsFile())
-        SAMApplication::getApp()->openFile(f);
+        SAMApplication::getApp()->openFile(f, true);
     else
         openHelpUrl(helpId);
 }
