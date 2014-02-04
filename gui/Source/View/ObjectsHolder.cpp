@@ -45,6 +45,7 @@
 #include "PropertiesWindow.h"
 #include "../Utilities/ObjectsHelper.h"
 #include "../Utilities/ObjectsClipboard.h"
+#include "../Utilities/ContextMenus.h"
 
 #include "ObjectsHolder.h"
 
@@ -191,12 +192,12 @@ void ObjectsHolder::mouseDown(const MouseEvent& e)
         if(getStartEndObjects(startObj, endObj))
         {
             DBG(String("Link: ") + startObj + String(", ") + endObj);
-            showLinkPopupMenu(startObj, endObj);
+            ContextMenus::showLinkPopupMenu(*this, startObj, endObj);
         }
     }
     else if (e.mods.isPopupMenu())
     {
-        showContextMenu(e.getMouseDownPosition());
+        ContextMenus::showObjectsMenu(*this, e.getMouseDownPosition());
     }
     else
     {
@@ -304,6 +305,11 @@ void ObjectsHolder::insertNewLink(const Identifier& linkType,
                                                                 startId,
                                                                 endId);
     objController.addNewLinkIfPossible(this, linkTree);
+}
+
+void ObjectsHolder::insertNewAudioConnection()
+{
+    objController.addNewAudioConnection(this);
 }
 
 Point<int> ObjectsHolder::getMouseXYRelativeViewport()
@@ -761,120 +767,6 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
     }
     objController.getUndoManager().beginNewTransaction();
     return true;
-}
-
-void ObjectsHolder::showContextMenu(const Point<int> mPos)
-{
-    PopupMenu m;
-    m.addSectionHeader(TRANS("Insert") + "...");
-    m.addItem(1, TRANS("Mass"));
-    m.addItem(2, TRANS("Ground"));
-    m.addItem(3, TRANS("Resonator"));
-    m.addItem(4, TRANS("Port"));
-    m.addSeparator();
-    m.addItem(5, TRANS("Audio Out"));
-    m.addSeparator();
-    m.addItem(6, TRANS("Junction"));
-    m.addItem(7, TRANS("Termination"));
-    m.addSeparator();
-//    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
-//    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
-//    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
-    m.addItem(8, TRANS("Comment"));
-
-    const int r = m.show();
-
-    if (r == 1)
-    {
-        insertNewObject(Ids::mass, mPos);
-    }
-    else if (r == 2)
-    {
-        insertNewObject(Ids::ground, mPos);
-    }
-    else if (r == 3)
-    {
-        insertNewObject(Ids::resonators, mPos);
-    }
-    else if (r == 4)
-    {
-        insertNewObject(Ids::port, mPos);
-    }
-    else if (r == 5)
-    {
-        insertNewObject(Ids::audioout, mPos);
-    }
-    else if (r == 6)
-    {
-        insertNewObject(Ids::junction, mPos);
-    }
-    else if (r == 7)
-    {
-        insertNewObject(Ids::termination, mPos);
-    }
-    else if (r == 8)
-    {
-        insertNewObject(Ids::comment, mPos);
-    }
-}
-
-void ObjectsHolder::showLinkPopupMenu(String so, String eo)
-{
-	PopupMenu m;
-    m.addSectionHeader(TRANS("Add") + "...");
-    m.addItem(1, TRANS("Linear Link"));
-    m.addItem(2, TRANS("Touch Link"));
-    m.addItem(3, TRANS("Pulsetouch Link"));
-    m.addItem(4, TRANS("Pluck Link"));
-    m.addSeparator();
-    m.addItem(5, TRANS("Waveguide"));
-    m.addSeparator();
-    m.addItem(6, TRANS("Audio Connection"));
-	const int r = m.show();
-
-	if (r == 1)
-	{
-		DBG("Add link");
-        insertNewLink(Ids::link, so, eo);
-	}
-	else if (r == 2)
-	{
-		DBG("Add touch");
-        insertNewLink(Ids::touch, so, eo);
-	}
-	else if (r == 3)
-	{
-		DBG("Add pulsetouch");
-        insertNewLink(Ids::pulsetouch, so, eo);
-	}
-	else if (r == 4)
-	{
-		DBG("Add pluck");
-        insertNewLink(Ids::pluck, so, eo);
-	}
-	else if (r == 5)
-	{
-		DBG("Add waveguide");
-        getStartEndObjectsLeftRight(so, eo);
-        insertNewLink(Ids::waveguide, so, eo);
-	}
-    else if (r == 6)
-    {
-        DBG("Add audio connection");
-        objController.addNewAudioConnection(this);
-    }
-}
-
-void ObjectsHolder::showAudioConnectionPopupMenu()
-{
-    PopupMenu m;
-    m.addSectionHeader(TRANS("Add") + "...");
-    m.addItem(1, TRANS("Audio Connection"));
-    const int r = m.show();
-    if( r == 1)
-    {
-        objController.addNewAudioConnection(this);
-    }
 }
 
 void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results,

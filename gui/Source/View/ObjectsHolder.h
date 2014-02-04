@@ -86,8 +86,6 @@ public:
     ObjController& getObjController() const { return objController; }
 
 //    const Rectangle<int> getComponentArea() const;
-    void showLinkPopupMenu(String so, String eo);
-    void showAudioConnectionPopupMenu();
 
     void deleteSelectedObjects();
 
@@ -113,8 +111,6 @@ public:
 private:
 
     ContentComp* getContentComp();
-
-    void showContextMenu(const Point<int> mPos);
 
     void showRedrawOptions();
 
@@ -148,6 +144,8 @@ private:
     void insertNewLink(const Identifier& linkType,
                        const String& startId,
                        const String& endId);
+    void insertNewAudioConnection();
+
     Point<int> getMouseXYRelativeViewport();
     bool getStartEndObjects(String& startId, String& endId);
     bool getStartEndObjectsLeftRight(String& startId, String& endId);
@@ -156,6 +154,8 @@ private:
 
     WeakReference<ObjectsHolder>::Master masterReference;
     friend class WeakReference<ObjectsHolder>;
+
+    friend class ContextMenus;
 //==============================================================================
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ObjectsHolder);

@@ -30,6 +30,7 @@
 #include "BaseObjectComponent.h"
 #include "ObjectsHolder.h"
 #include "../Models/ObjectActions.h"
+#include "../Utilities/ContextMenus.h"
 
 #include "ObjectComponent.h"
 
@@ -134,14 +135,14 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
             startObj = oc1->getData().getProperty(Ids::identifier).toString();
             endObj = oc2->getData().getProperty(Ids::identifier).toString();
             DBG(String("Link: ") + startObj + String(", ") + endObj);
-            getObjectsHolder()->showLinkPopupMenu(startObj, endObj);
+            ContextMenus::showLinkPopupMenu(*getObjectsHolder(), startObj, endObj);
         }
         else if (oc1 == nullptr)
         {
             LinkComponent* lc1 = dynamic_cast<LinkComponent*> (sis.getSelectedItem(0));
             if (lc1 != nullptr)
             {
-                getObjectsHolder()->showAudioConnectionPopupMenu();
+                ContextMenus::showAudioConnectionPopupMenu(*getObjectsHolder());
             }
         }
         else if (oc2 == nullptr)
@@ -149,7 +150,7 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
             LinkComponent* lc2 = dynamic_cast<LinkComponent*> (sis.getSelectedItem(1));
             if (lc2 != nullptr)
             {
-                getObjectsHolder()->showAudioConnectionPopupMenu();
+                ContextMenus::showAudioConnectionPopupMenu(*getObjectsHolder());
             }
         }
         return;

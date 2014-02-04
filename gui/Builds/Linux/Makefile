@@ -62,6 +62,7 @@ OBJECTS := \
   $(OBJDIR)/MainWindow_3e8328d1.o \
   $(OBJDIR)/Application_7b202ed2.o \
   $(OBJDIR)/Main_70df61c1.o \
+  $(OBJDIR)/ContextMenus_196bd813.o \
   $(OBJDIR)/ObjectsClipboard_39921570.o \
   $(OBJDIR)/ObjectsHelper_8190e55e.o \
   $(OBJDIR)/MDLHelper_81a283f.o \
@@ -178,6 +179,11 @@ $(OBJDIR)/Application_7b202ed2.o: ../../Source/Application/Application.cpp
 $(OBJDIR)/Main_70df61c1.o: ../../Source/Application/Main.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling Main.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/ContextMenus_196bd813.o: ../../Source/Utilities/ContextMenus.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling ContextMenus.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/ObjectsClipboard_39921570.o: ../../Source/Utilities/ObjectsClipboard.cpp
