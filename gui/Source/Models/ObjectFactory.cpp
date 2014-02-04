@@ -33,11 +33,13 @@
 
 using namespace synthamodeler;
 
-static ValueTree createResonatorParamsTree(StringArray p);
+//------------------------------------------------------------------------------
+// Mass-like objects
+//------------------------------------------------------------------------------
 
-static ValueTree createMewMassLikeTree(const Identifier& massType,
-                                       const String& newName, int x, int y,
-                                       const StringPairArray& paramsStringPairs)
+ValueTree ObjectFactory::createMewMassLikeTree(const Identifier& massType,
+                                               const String& newName, int x, int y,
+                                               const StringPairArray& paramsStringPairs)
 {
     if (massType != Ids::mass && massType != Ids::ground
         && massType != Ids::resonators && massType != Ids::termination
@@ -78,7 +80,9 @@ static ValueTree createMewMassLikeTree(const Identifier& massType,
     return newTree;
 }
 
-static ValueTree createNewMassTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewMassTree(const String& newName, int x, int y)
 {
     StringPairArray defaultValues;
     defaultValues.set("mass_kg", "0.001");
@@ -88,12 +92,16 @@ static ValueTree createNewMassTree(const String& newName, int x, int y)
     return createMewMassLikeTree(Ids::mass, newName, x, y, defaultValues);
 }
 
-static ValueTree createNewPortTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewPortTree(const String& newName, int x, int y)
 {
     return createMewMassLikeTree(Ids::port, newName, x, y, StringPairArray());
 }
 
-static ValueTree createNewGroundTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewGroundTree(const String& newName, int x, int y)
 {
     StringPairArray defaultValues;
     defaultValues.set("ground_init_position", "0.0");
@@ -101,7 +109,10 @@ static ValueTree createNewGroundTree(const String& newName, int x, int y)
     return createMewMassLikeTree(Ids::ground, newName, x, y, defaultValues);
 }
 
-static ValueTree createNewResonatorsTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewResonatorsTree(const String& newName,
+                                                 int x, int y)
 {
     StringPairArray defaultValues;
     defaultValues.set("resonators_frequency", "200.0");
@@ -111,11 +122,15 @@ static ValueTree createNewResonatorsTree(const String& newName, int x, int y)
     return createMewMassLikeTree(Ids::resonators, newName, x, y, defaultValues);
 }
 
-static ValueTree createNewLinkLikeTree(const Identifier& linkType,
-                                   const String& newName,
-                                   const String& startObject,
-                                   const String& endObject,
-                                       const StringPairArray& paramsStringPairs)
+//------------------------------------------------------------------------------
+// Link-like objects
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewLinkLikeTree(const Identifier& linkType,
+                                               const String& newName,
+                                               const String& startObject,
+                                               const String& endObject,
+                                               const StringPairArray& paramsStringPairs)
 {
     if (linkType != Ids::link && linkType != Ids::touch
         && linkType != Ids::pluck && linkType != Ids::pulsetouch
@@ -148,9 +163,11 @@ static ValueTree createNewLinkLikeTree(const Identifier& linkType,
     return newTree;
 }
 
-static ValueTree createNewLinkTree(const String& newName,
-                                   const String& startObject,
-                                   const String& endObject)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewLinkTree(const String& newName,
+                                           const String& startObject,
+                                           const String& endObject)
 {
     StringPairArray defaultValues;
     defaultValues.set("link_stiffness", "100.0");
@@ -161,9 +178,11 @@ static ValueTree createNewLinkTree(const String& newName,
                                  defaultValues);
 }
 
-static ValueTree createNewTouchTree(const String& newName,
-                                    const String& startObject, 
-                                    const String& endObject)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewTouchTree(const String& newName,
+                                            const String& startObject,
+                                            const String& endObject)
 {
     StringPairArray defaultValues;
     defaultValues.set("touch_stiffness", "100.0");
@@ -173,9 +192,12 @@ static ValueTree createNewTouchTree(const String& newName,
     return createNewLinkLikeTree(Ids::touch, newName, startObject, endObject,
                                  defaultValues);
 }
-static ValueTree createNewPulsetouchTree(const String& newName,
-                                         const String& startObject,
-                                         const String& endObject)
+
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewPulsetouchTree(const String& newName,
+                                                 const String& startObject,
+                                                 const String& endObject)
 {
     StringPairArray defaultValues;
     defaultValues.set("pulsetouch_stiffness", "100.0");
@@ -189,9 +211,11 @@ static ValueTree createNewPulsetouchTree(const String& newName,
                                  defaultValues);
 }
 
-static ValueTree createNewPluckTree(const String& newName,
-                                    const String& startObject, 
-                                    const String& endObject)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewPluckTree(const String& newName,
+                                            const String& startObject,
+                                            const String& endObject)
 {
     StringPairArray defaultValues;
     defaultValues.set("pluck_stiffness", "300.0");
@@ -203,9 +227,13 @@ static ValueTree createNewPluckTree(const String& newName,
                                  defaultValues);
 }
 
-static ValueTree createNewWaveguideTree(const String& newName,
-                                        const String& startObject,
-                                        const String& endObject)
+//------------------------------------------------------------------------------
+// Waveguide objects
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewWaveguideTree(const String& newName,
+                                                const String& startObject,
+                                                const String& endObject)
 {
     StringPairArray defaultValues;
     defaultValues.set("waveguide_impedance", "1.0");
@@ -215,7 +243,10 @@ static ValueTree createNewWaveguideTree(const String& newName,
                                  defaultValues);
 }
 
-static ValueTree createNewTerminationTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewTerminationTree(const String& newName,
+                                                  int x, int y)
 {
     StringPairArray defaultValues;
     defaultValues.set("term_type", "simpleStringTerm(-0.996, 20)");
@@ -223,7 +254,10 @@ static ValueTree createNewTerminationTree(const String& newName, int x, int y)
     return createMewMassLikeTree(Ids::termination, newName, x, y, defaultValues);
 }
 
-static ValueTree createNewJunctionTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewJunctionTree(const String& newName,
+                                               int x, int y)
 {
     StringPairArray defaultValues;
     defaultValues.set("junct_displacement", "0.0");
@@ -231,7 +265,11 @@ static ValueTree createNewJunctionTree(const String& newName, int x, int y)
     return createMewMassLikeTree(Ids::junction, newName, x, y, defaultValues);
 }
 
-static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+// Other
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewAudioOutTree(const String& newName, int x, int y)
 {
 	ValueTree newTree(Ids::audioout);
 
@@ -244,7 +282,9 @@ static ValueTree createNewAudioOutTree(const String& newName, int x, int y)
 	return newTree;
 }
 
-static ValueTree createNewCommentTree(const String& newName, int x, int y)
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewCommentTree(const String& newName, int x, int y)
 {
     ValueTree newTree(Ids::comment);
 
@@ -256,6 +296,10 @@ static ValueTree createNewCommentTree(const String& newName, int x, int y)
     newTree.setProperty(Ids::commentColour, Colours::black.toString(), nullptr);
     return newTree;
 }
+
+//------------------------------------------------------------------------------
+// Public functions
+//------------------------------------------------------------------------------
 
 ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
                                              const String& newName,
@@ -281,6 +325,8 @@ ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
 		return ValueTree::invalid;
 }
 
+//------------------------------------------------------------------------------
+
 ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
                                   const String& newName,
                                   const String& startObject, 
@@ -300,6 +346,8 @@ ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
 		return ValueTree::invalid;
 }
 
+//------------------------------------------------------------------------------
+
 ValueTree ObjectFactory::createParamsTree(StringArray p)
 {
     ValueTree paramsTree(Ids::parameters);
@@ -312,7 +360,11 @@ ValueTree ObjectFactory::createParamsTree(StringArray p)
     return paramsTree;
 }
 
-static ValueTree createResonatorParamsTree(StringArray p)
+//------------------------------------------------------------------------------
+// Helper
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createResonatorParamsTree(StringArray p)
 {
 
     ValueTree paramsTree(Ids::parameters);
@@ -330,3 +382,5 @@ static ValueTree createResonatorParamsTree(StringArray p)
     }
     return paramsTree;
 }
+
+//------------------------------------------------------------------------------

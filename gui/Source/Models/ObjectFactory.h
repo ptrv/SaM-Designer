@@ -28,29 +28,59 @@
 
 namespace synthamodeler
 {
-/**
- * Namespace for object creation functions.
- */
-namespace ObjectFactory
-{
 
-	/**
-	 * Creates a new object value tree.
-	 *
-	 * @param objType			the object type id (i.e. Ids::mass)
-	 * @param x					initial x position
-	 * @param y					initial y position
-	 * @return					a new ValueTree with default values
-	 */
-	ValueTree createNewObjectTree(const Identifier& objType, 
-                                  const String& newName,
-                                  int x, int y);
-    ValueTree createNewLinkObjectTree(const Identifier& linkType,
-                                      const String& newName,
-                                      const String& startObject,
-                                      const String& endObject);
-    ValueTree createParamsTree(StringArray p);
-}
+class ObjectFactory
+{
+public:
+    static ValueTree createNewObjectTree(const Identifier& objType,
+                                         const String& newName,
+                                         int x, int y);
+    static ValueTree createNewLinkObjectTree(const Identifier& linkType,
+                                             const String& newName,
+                                             const String& startObject,
+                                             const String& endObject);
+    static ValueTree createParamsTree(StringArray p);
+
+private:
+    static ValueTree createMewMassLikeTree(const Identifier& massType,
+                                           const String& newName, int x, int y,
+                                           const StringPairArray& paramsStringPairs);
+    
+    static ValueTree createNewMassTree(const String& newName, int x, int y);
+    static ValueTree createNewPortTree(const String& newName, int x, int y);
+    static ValueTree createNewGroundTree(const String& newName, int x, int y);
+    static ValueTree createNewResonatorsTree(const String& newName, int x, int y);
+
+    static ValueTree createNewLinkLikeTree(const Identifier& linkType,
+                                           const String& newName,
+                                           const String& startObject,
+                                           const String& endObject,
+                                           const StringPairArray& paramsStringPairs);
+
+    static ValueTree createNewLinkTree(const String& newName,
+                                       const String& startObject,
+                                       const String& endObject);
+    static ValueTree createNewTouchTree(const String& newName,
+                                        const String& startObject,
+                                        const String& endObject);
+    static ValueTree createNewPulsetouchTree(const String& newName,
+                                             const String& startObject,
+                                             const String& endObject);
+    static ValueTree createNewPluckTree(const String& newName,
+                                        const String& startObject,
+                                        const String& endObject);
+    static ValueTree createNewWaveguideTree(const String& newName,
+                                            const String& startObject,
+                                            const String& endObject);
+
+    static ValueTree createNewTerminationTree(const String& newName, int x, int y);
+    static ValueTree createNewJunctionTree(const String& newName, int x, int y);
+
+    static ValueTree createNewAudioOutTree(const String& newName, int x, int y);
+    static ValueTree createNewCommentTree(const String& newName, int x, int y);
+
+    static ValueTree createResonatorParamsTree(StringArray p);
+};
 }
 
 #endif  // __OBJECTFACTORY_H_2132166E__
