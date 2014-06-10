@@ -25,6 +25,7 @@
 
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
+#include "../Utilities/CmdHelper.h"
 
 #include "SAMCmd.h"
 

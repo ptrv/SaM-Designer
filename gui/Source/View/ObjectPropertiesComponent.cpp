@@ -326,7 +326,7 @@ void ObjectPropertiesComponent::writeEditors(const Array<TextEditor*>& editors_,
         String val = editor->getText();
         if(fixValues)
             if(StoredSettings::getInstance()->getAutoCorrectValues())
-                val = Utils::fixParameterValueIfNeeded(val);
+                val = ObjectsHelper::fixParameterValueIfNeeded(val);
 
         pa.setProperty(Ids::value, val, undoManager);
     }
@@ -532,9 +532,9 @@ bool ResonatorPropertiesComponent::writeValues()
                 {
                     String pVal = vals[j];
                     if(StoredSettings::getInstance()->getAutoCorrectValues())
-                        pVal = Utils::fixParameterValueIfNeeded(pVal);
+                        pVal = ObjectsHelper::fixParameterValueIfNeeded(pVal);
 
-                    ValueTree pa(Utils::getResonatorParamsIds()[k]);
+                    ValueTree pa(ObjectsHelper::getResonatorParamsIds()[k]);
                     pa.setProperty(Ids::value, pVal, undoManager);
                     param.addChild(pa, -1, undoManager);
                 }
@@ -873,7 +873,7 @@ bool WaveguidePropertiesComponent::writeValues()
         {
             String val = editors[0]->getText();
             if(StoredSettings::getInstance()->getAutoCorrectValues())
-                val = Utils::fixParameterValueIfNeeded(val);
+                val = ObjectsHelper::fixParameterValueIfNeeded(val);
 
             ValueTree pa1 = paramsTree.getChild(0);
             pa1.setProperty(Ids::value, val, undoManager);
@@ -1081,7 +1081,7 @@ void GainComponent::readValues()
     {
         ValueTree sources = datas[0].getChildWithName(Ids::sources);
 
-        String oldGain = Utils::getGainForSourceId(sources, sourceIds[0]);
+        String oldGain = ObjectsHelper::getGainForSourceId(sources, sourceIds[0]);
 
         teGain->setText(oldGain, false);
         teGain->setTextToShowWhenEmpty(String::empty, Colours::black);
@@ -1102,7 +1102,7 @@ void GainComponent::applyEditing()
         for (int i = 0; i < datas.size(); ++i)
         {
             ValueTree sources = datas[i].getChildWithName(Ids::sources);
-            Utils::setGainForSourceId(sources, sourceIds[i], newGain, undoManager);
+            ObjectsHelper::setGainForSourceId(sources, sourceIds[i], newGain, undoManager);
         }
         if (undoManager)
         {

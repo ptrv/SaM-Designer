@@ -59,6 +59,8 @@ void SAMLogger(const String& message);
  */
 FileLogger* getLogger();
 
+const String getSAMLog();
+
 /**
  * Opens help webpage in default browser.
  */
@@ -75,22 +77,6 @@ void openFileExternal(const String& path);
 
 void openFileNative(const String& path);
 
-/**
- * Formats parameter value to have decmal point and zero.
- *
- * @param paramVal		the parameter value to format
- * @return				return a formatted parameter value
- */
-String fixParameterValueIfNeeded(const String& paramVal);
-
-String getGainForSourceId(ValueTree& sources, const String& sourceId);
-void setGainForSourceId(ValueTree& sources, const String& sourceId,
-                        const String& gainVal, UndoManager* undoManager);
-
-BaseObjectComponent* getBaseObjectFromSource(ObjController* objController, ValueTree& source);
-
-const Identifier& getObjectGroup(const Identifier& ident);
-
 String fixPath(const String& path);
 
 bool writeStringToFile(const String& s, const File& f);
@@ -106,48 +92,7 @@ T constrain(T actual, T min, T max)
         return actual;
 }
 
-bool containsStringInValueTree(ValueTree valTree,
-                               const String& searchStr,
-                               bool isRoot);
-
-const Array<Identifier>& getResonatorParamsIds();
-const Array<Identifier>& getAllObjectIds();
-
 int getCurrentTimeMillis();
-
-/**
- * Checks wether the Synth-A-Modeler script is available.
- *
- * @return			true if Synth-A-Modeler is found
- */
-bool isSynthAModelerCmdAvailable();
-/**
- * Checks wether the SAM-preprocessor script is available.
- *
- * @return			true if SAM-preprocessor is found
- */
-bool isSAMpreprocessorCmdAvailable();
-/**
- * Checks wether a specifdied command is available.
- *
- * @param cmdStr	command string
- * @return			true if specifdied command is available
- */
-bool isCmdAvailable(const String& cmdStr);
-/**
- * Checks wether perl is available.
- *
- * @return			true if the perl executable is found
- */
-bool isPerlAvailable();
-/**
- * Checks wether faust executable is available.
- *
- * @return			true if faust executable is found
- */
-bool isFaustAvailable();
-
-const String getSAMLog();
 
 void uniquifyPaths(HashMap<String, String>& paths);
 
@@ -156,6 +101,7 @@ void setLocale();
 void cleanDataDir(const MDLFile& mdlFile);
 
 void cleanDataDirAll();
+
 };
 
 }

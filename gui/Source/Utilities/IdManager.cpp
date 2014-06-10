@@ -24,6 +24,7 @@
  */
 
 #include "../Application/CommonHeaders.h"
+#include "../Utilities/ObjectsHelper.h"
 
 #include "IdManager.h"
 
@@ -31,7 +32,7 @@ using namespace synthamodeler;
 
 IdManager::IdManager()
 {
-    for (int i = 0; i < Utils::getAllObjectIds().size(); ++i)
+    for (int i = 0; i < ObjectsHelper::getAllObjectIds().size(); ++i)
     {
         theIds.add(SortedSet<String>());
     }
@@ -40,7 +41,7 @@ IdManager::IdManager()
 IdManager::~IdManager()
 {
     allIds.clear();
-    for (int i = 0; i < Utils::getAllObjectIds().size(); ++i)
+    for (int i = 0; i < ObjectsHelper::getAllObjectIds().size(); ++i)
     {
         theIds[i].clear();
     }
@@ -48,7 +49,7 @@ IdManager::~IdManager()
 
 SortedSet<String>* IdManager::getSet(const Identifier& objId)
 {
-    int objIdx = Utils::getAllObjectIds().indexOf(objId);
+    int objIdx = ObjectsHelper::getAllObjectIds().indexOf(objId);
     if(objIdx == -1)
         return nullptr;
 

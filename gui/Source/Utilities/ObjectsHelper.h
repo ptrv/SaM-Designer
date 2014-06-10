@@ -50,6 +50,25 @@ public:
     static void tidyUpObjects(ObjController& objController);
 
     static void makeGraph(const ObjController& objController, DirectedGraph& graph);
+
+    static String fixParameterValueIfNeeded(const String& paramVal);
+
+    static String getGainForSourceId(ValueTree& sources, const String& sourceId);
+    static void setGainForSourceId(ValueTree& sources, const String& sourceId,
+                                   const String& gainVal, UndoManager* undoManager);
+
+    static BaseObjectComponent* getBaseObjectFromSource(ObjController* objController,
+                                                        ValueTree& source);
+
+    static const Identifier& getObjectGroup(const Identifier& ident);
+
+    static bool containsStringInValueTree(ValueTree valTree,
+                                          const String& searchStr,
+                                          bool isRoot);
+
+    static const Array<Identifier>& getResonatorParamsIds();
+    static const Array<Identifier>& getAllObjectIds();
+
 };
 
 }

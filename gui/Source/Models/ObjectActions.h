@@ -37,6 +37,7 @@
 #include "../Controller/ObjController.h"
 #include "../View/SelectableObject.h"
 #include "../View/CommentComponent.h"
+#include "../Utilities/ObjectsHelper.h"
 #include "ObjectIDs.h"
 
 namespace synthamodeler
@@ -147,7 +148,7 @@ public:
                 for (int i = 0; i < sources.getNumChildren(); ++i)
                 {
                     ValueTree src = sources.getChild(i);
-                    BaseObjectComponent* boc = Utils::getBaseObjectFromSource(objController, src);
+                    BaseObjectComponent* boc = ObjectsHelper::getBaseObjectFromSource(objController, src);
 
 //                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
                     objController->addAudioConnection(holderComp, boc, oc, src, -1, false);

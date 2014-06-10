@@ -278,3 +278,317 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
 }
 
 //------------------------------------------------------------------------------
+
+String fixValue(const String& val)
+{
+    String tmpVal = val.trim();
+    bool hasParentheses = false;
+    String sign = String::empty;
+
+    if(tmpVal.containsAnyOf("()"))
+    {
+        tmpVal = tmpVal.removeCharacters("()");
+        hasParentheses = true;
+    }
+    if(tmpVal.startsWith("-") || tmpVal.startsWith("+"))
+    {
+        sign = tmpVal.substring(0, 1);
+        tmpVal = tmpVal.substring(1);
+    }
+
+    if (tmpVal.containsOnly("0123456789") && tmpVal.indexOf(".") == -1)
+    {
+        // when value has integer notation, i.e 42 results in 42.0
+        tmpVal << ".0";
+    }
+    else if(tmpVal.startsWith("."))
+    {
+        if(tmpVal.substring(1).containsOnly("0123456789"))
+        {
+            // when value has floating point notation but 0 is ommitted,
+            // i.e .42 result in 0.42
+            tmpVal = "0" + tmpVal;
+        }
+    }
+
+    if(sign != String::empty)
+    {
+        tmpVal = sign + tmpVal;
+    }
+    if(hasParentheses)
+    {
+        tmpVal = "(" + tmpVal;
+        tmpVal += ")";
+    }
+    return tmpVal;
+}
+
+//------------------------------------------------------------------------------
+
+String ObjectsHelper::fixParameterValueIfNeeded(const String& paramVal)
+{
+    if( paramVal == String::empty)
+        return "0.0";
+
+    String tmpVal;
+    StringArray operators;
+    StringArray params;
+    if(paramVal.containsAnyOf("*+-/"))
+    {
+        String tmp = "";
+        for (int i = 0; i < paramVal.length(); ++i)
+        {
+            if(paramVal[i] == '*' || paramVal[i] == '+'
+                || paramVal[i] == '/')
+            {
+                String op = "";
+                op << paramVal[i];
+                operators.add(op);
+                params.add(tmp);
+                tmp = "";
+            }
+            else if(paramVal[i] == '-' )
+            {
+                if(i == 0)
+                {
+                    tmp << paramVal[i];
+                }
+                else
+                {
+                    int j = 1;
+                    while(paramVal[i - j] == ' ')
+                    {
+                        ++j;
+                    }
+                    if(paramVal[i-j] == '(')
+                    {
+                        tmp << paramVal[i];
+                    }
+                    else
+                    {
+                        String op = "";
+                        op << paramVal[i];
+                        operators.add(op);
+                        params.add(tmp);
+                        tmp = "";
+                    }
+                }
+            }
+            else
+            {
+                tmp << paramVal[i];
+            }
+        }
+        if(tmp.compare("") != 0)
+            params.add(tmp);
+
+        for (int i = 0; i < params.size(); ++i)
+        {
+            if(params[i] == String::empty)
+                tmpVal << "0.0";
+            else
+                tmpVal << fixValue(params[i]);
+
+            if(i < operators.size())
+                tmpVal << operators[i];
+        }
+    }
+    else
+    {
+        tmpVal = fixValue(paramVal);
+    }
+
+    return tmpVal;
+}
+
+//------------------------------------------------------------------------------
+
+String ObjectsHelper::getGainForSourceId(ValueTree& sources, const String& sourceId)
+{
+    String gainStr;
+    for (int i = 0; i < sources.getNumChildren(); ++i)
+    {
+        ValueTree source = sources.getChild(i);
+        StringArray vals;
+        vals.addTokens(source[Ids::value].toString(), "*", "\"");
+        int srcIdx = -1;
+        for (int j = 0; j < vals.size(); ++j)
+        {
+            if(vals[j].contains(sourceId))
+            {
+                srcIdx = j;
+                break;
+            }
+        }
+        if(srcIdx != -1)
+        {
+            int gainVals = 0;
+            for (int j = 0; j < vals.size(); ++j)
+            {
+                if(j != srcIdx)
+                {
+                    if (gainVals >= 1)
+                        gainStr << "*";
+                    gainStr << vals[j];
+                    ++ gainVals;
+                }
+            }
+            break;
+        }
+    }
+    return gainStr;
+}
+
+void ObjectsHelper::setGainForSourceId(ValueTree& sources, const String& sourceId,
+                                       const String& gainVal, UndoManager* undoManager)
+{
+    String gainStr;
+    for (int i = 0; i < sources.getNumChildren(); ++i)
+    {
+        ValueTree source = sources.getChild(i);
+        StringArray vals;
+        vals.addTokens(source[Ids::value].toString(), "*", "\"");
+        int srcIdx = -1;
+        for (int j = 0; j < vals.size(); ++j)
+        {
+            if(vals[j].contains(sourceId))
+            {
+                srcIdx = j;
+                break;
+            }
+        }
+        if(srcIdx != -1)
+        {
+            gainStr << sourceId << "*";
+            gainStr << gainVal;
+            source.setProperty(Ids::value, gainStr, undoManager);
+            break;
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(ObjController* objController,
+                                                            ValueTree& source)
+{
+    String srcVal = source[Ids::value].toString();
+    StringArray srcArray;
+    srcArray.addTokens(srcVal, "*", "\"");
+    for (int i = 0; i < srcArray.size(); ++i)
+    {
+        if (ObjectComponent* oc = objController->getObjectForId(srcArray[i]))
+        {
+            return oc;
+        }
+        else if(LinkComponent* lc = objController->getLinkForId(srcArray[i]))
+        {
+            return lc;
+        }
+    }
+    return nullptr;
+}
+
+//------------------------------------------------------------------------------
+
+const Identifier& ObjectsHelper::getObjectGroup(const Identifier& ident)
+{
+    if(ident == Ids::mass || ident == Ids::port
+            || ident == Ids::ground	|| ident == Ids::resonators)
+        return Objects::masses;
+    else if(ident == Ids::link || ident == Ids::touch
+            || ident == Ids::pluck || ident == Ids::pulsetouch)
+        return Objects::links;
+    else if(ident == Ids::audioout)
+        return Objects::audioobjects;
+    else if(ident == Ids::waveguide)
+        return Objects::waveguides;
+    else if(ident == Ids::termination)
+        return Objects::terminations;
+    else if(ident == Ids::junction)
+        return Objects::junctions;
+    else if(ident == Ids::faustcode)
+        return Objects::faustcodeblock;
+    else if(ident == Ids::comment)
+        return Objects::comments;
+
+    else
+        return Objects::invalid;
+}
+
+//------------------------------------------------------------------------------
+
+bool ObjectsHelper::containsStringInValueTree(ValueTree valTree,
+                                              const String& searchStr,
+                                              bool isRoot)
+{
+    if (isRoot)
+    {
+        for (int k = 0; k < valTree.getNumProperties(); ++k)
+        {
+            if (valTree.getProperty(valTree.getPropertyName(k)).toString().containsWholeWord(searchStr))
+            {
+                return true;
+            }
+        }
+    }
+    else
+    {
+        for (int k = 0; k < valTree.getParent().getNumChildren(); ++k)
+        {
+            ValueTree c = valTree.getParent().getChild(k);
+            for (int j = 0; j < c.getNumProperties(); ++j)
+            {
+                if (c.getProperty(c.getPropertyName(j)).toString().containsWholeWord(searchStr))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    for (int i = 0; i < valTree.getNumChildren(); ++i)
+    {
+        ValueTree c = valTree.getChild(i);
+        return containsStringInValueTree(c, searchStr, false);
+    }
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+const Array<Identifier>& ObjectsHelper::getResonatorParamsIds()
+{
+    static const Identifier resonatorParamIdsArr[] = {
+        Ids::resonatorsFreq,
+        Ids::resonatorsDecay,
+        Ids::resonatorsEqMass
+    };
+    static const Array<Identifier> resonatorParamIds(resonatorParamIdsArr, 3);
+    return resonatorParamIds;
+}
+
+//------------------------------------------------------------------------------
+
+const Array<Identifier>& ObjectsHelper::getAllObjectIds()
+{
+    static const Identifier allObjectIdsArr[] = {
+        Ids::mass,
+        Ids::ground,
+        Ids::port,
+        Ids::resonators,
+        Ids::link,
+        Ids::touch,
+        Ids::pluck,
+        Ids::pulsetouch,
+        Ids::faustcode,
+        Ids::audioout,
+        Ids::waveguide,
+        Ids::termination,
+        Ids::junction,
+        Ids::comment
+    };
+    static const Array<Identifier> allObjectIds(allObjectIdsArr, 14);
+    return allObjectIds;
+}
+
+//------------------------------------------------------------------------------

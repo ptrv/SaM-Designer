@@ -10,6 +10,7 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 #include "../Models/SAMCmd.h"
+#include "../Utilities/CmdHelper.h"
 
 #include "SAMCmdController.h"
 
@@ -29,19 +30,19 @@ void SAMCmdController::generateDSP(MDLFile* mdl)
     if (StoredSettings::getInstance()->getIsExportConfirm())
         r = Alerts::confirmExport("Really export faust");
 
-    if (! Utils::isPerlAvailable())
+    if (! CmdHelper::isPerlAvailable())
     {
         SAM_CONSOLE("Perl is missing!", PostLevel::ERROR);
         Alerts::missingPerl();
         return;
     }
-    if (! Utils::isSAMpreprocessorCmdAvailable())
+    if (! CmdHelper::isSAMpreprocessorCmdAvailable())
     {
         SAM_CONSOLE("SAM-preprocessor is missing!", PostLevel::ERROR);
         Alerts::missingSAMpreprocessor();
         return;
     }
-    if (! Utils::isSynthAModelerCmdAvailable())
+    if (! CmdHelper::isSynthAModelerCmdAvailable())
     {
         SAM_CONSOLE("Synth-A-Modeler is missing!", PostLevel::ERROR);
         Alerts::missingSAM();
@@ -71,7 +72,7 @@ void SAMCmdController::generateBinary(MDLFile* mdl)
         return;
     }
 
-    if (!Utils::isFaustAvailable())
+    if (!CmdHelper::isFaustAvailable())
     {
         SAM_CONSOLE("Missing faust executable", PostLevel::ERROR);
         Alerts::missingFaust();

@@ -78,7 +78,7 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
     }
     else
     {
-        const Identifier& groupName = Utils::getObjectGroup(objValues.getType().toString());
+        const Identifier& groupName = ObjectsHelper::getObjectGroup(objValues.getType().toString());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
@@ -115,7 +115,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
     }
     else
     {
-        const Identifier& gruopName = Utils::getObjectGroup(linkValues.getType());
+        const Identifier& gruopName = ObjectsHelper::getObjectGroup(linkValues.getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(gruopName, nullptr);
 		subTree.addChild(linkValues,-1, nullptr);
@@ -321,7 +321,7 @@ CommentComponent* ObjController::addComment(ObjectsHolder* holder,
     }
     else
     {
-        const Identifier& groupName = Utils::getObjectGroup(commentValues.getType().toString());
+        const Identifier& groupName = ObjectsHelper::getObjectGroup(commentValues.getType().toString());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
@@ -375,7 +375,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
             removeAudioConnection(getAudioConnector(aoIndices[i]), !isAudioOut, holder);
         }
 
-        const Identifier& groupName = Utils::getObjectGroup(objComp->getData().getType());
+        const Identifier& groupName = ObjectsHelper::getObjectGroup(objComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(objComp->getData().getType(),
@@ -481,7 +481,7 @@ void ObjController::removeLink(LinkComponent* linkComp, bool undoable, ObjectsHo
             removeAudioConnection(getAudioConnector(aoIndices[i]), true, holder);
         }
 
-        const Identifier& groupName = Utils::getObjectGroup(linkComp->getData().getType());
+        const Identifier& groupName = ObjectsHelper::getObjectGroup(linkComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(linkComp->getData().getType(),
@@ -503,7 +503,7 @@ void ObjController::removeComment(CommentComponent* commentComp,
         sObjects.deselect(commentComp);
         sObjects.changed(true);
 
-        const Identifier& groupName = Utils::getObjectGroup(commentComp->getData().getType());
+        const Identifier& groupName = ObjectsHelper::getObjectGroup(commentComp->getData().getType());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
         idMgr->removeId(commentComp->getData().getType(),
@@ -632,7 +632,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
                 ValueTree source = aoSources.getChild(j);
 //                ObjectComponent* oc = getObjectForId(src);
 //                LinkComponent* lc = getLinkForId(src);
-                BaseObjectComponent* sourceComp = Utils::getBaseObjectFromSource(this, source);
+                BaseObjectComponent* sourceComp = ObjectsHelper::getBaseObjectFromSource(this, source);
 //                if(oc != nullptr)
 //                    sourceComp = oc;
 //                else if(lc != nullptr)
@@ -732,13 +732,13 @@ void ObjController::selectObjectsIfContainText(const String& selectionText)
     for (int i = 0; i < objects.size(); ++i)
     {
         ObjectComponent* oc = objects.getUnchecked(i);
-        if(Utils::containsStringInValueTree(oc->getData(), selectionText, true))
+        if(ObjectsHelper::containsStringInValueTree(oc->getData(), selectionText, true))
             sObjects.addToSelection(oc);
     }
     for (int j = 0; j < links.size(); ++j)
     {
         LinkComponent* lc = links.getUnchecked(j);
-        if(Utils::containsStringInValueTree(lc->getData(), selectionText, true))
+        if(ObjectsHelper::containsStringInValueTree(lc->getData(), selectionText, true))
             sObjects.addToSelection(lc);
     }
 }

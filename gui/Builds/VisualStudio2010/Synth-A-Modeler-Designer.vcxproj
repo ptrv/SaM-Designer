@@ -144,6 +144,7 @@
     <ClCompile Include="..\..\Source\Application\MainWindow.cpp"/>
     <ClCompile Include="..\..\Source\Application\Application.cpp"/>
     <ClCompile Include="..\..\Source\Application\Main.cpp"/>
+    <ClCompile Include="..\..\Source\Utilities\CmdHelper.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\ContextMenus.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\ObjectsClipboard.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\ObjectsHelper.cpp"/>
@@ -1036,6 +1037,7 @@
     <ClInclude Include="..\..\Source\Application\Application.h"/>
     <ClInclude Include="..\..\Source\Application\CommandIDs.h"/>
     <ClInclude Include="..\..\Source\Application\CommonHeaders.h"/>
+    <ClInclude Include="..\..\Source\Utilities\CmdHelper.h"/>
     <ClInclude Include="..\..\Source\Utilities\ContextMenus.h"/>
     <ClInclude Include="..\..\Source\Utilities\ObjectsClipboard.h"/>
     <ClInclude Include="..\..\Source\Utilities\ObjectsHelper.h"/>

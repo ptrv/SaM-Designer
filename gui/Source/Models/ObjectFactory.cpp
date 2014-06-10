@@ -29,6 +29,7 @@
 #include "../View/BaseObjectComponent.h"
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
+#include "../Utilities/ObjectsHelper.h"
 #include "ObjectFactory.h"
 
 using namespace synthamodeler;
@@ -374,7 +375,7 @@ ValueTree ObjectFactory::createResonatorParamsTree(StringArray p)
         for (int i = 0; i < 3; ++i)
         {
             ValueTree value(Ids::parameter);
-            ValueTree subval(Utils::getResonatorParamsIds()[i]);
+            ValueTree subval(ObjectsHelper::getResonatorParamsIds()[i]);
             subval.setProperty(Ids::value, p[i].trim(), nullptr);
             value.addChild(subval, -1, nullptr);
             paramsTree.addChild(value, -1, nullptr);

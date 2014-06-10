@@ -129,6 +129,8 @@
         <FILE id="OqzYy0" name="Main.cpp" compile="1" resource="0" file="Source/Application/Main.cpp"/>
       </GROUP>
       <GROUP id="{5C2794F2-25BF-2B09-D23D-F14386D23FEA}" name="Utilities">
+        <FILE id="KgYowk" name="CmdHelper.cpp" compile="1" resource="0" file="Source/Utilities/CmdHelper.cpp"/>
+        <FILE id="N2TW6H" name="CmdHelper.h" compile="0" resource="0" file="Source/Utilities/CmdHelper.h"/>
         <FILE id="NnLKBf" name="ContextMenus.cpp" compile="1" resource="0"
               file="Source/Utilities/ContextMenus.cpp"/>
         <FILE id="TaF2uO" name="ContextMenus.h" compile="0" resource="0" file="Source/Utilities/ContextMenus.h"/>

@@ -33,9 +33,9 @@
 #include "../View/AudioOutConnector.h"
 #include "../View/CommentComponent.h"
 #include "../Utilities/IdManager.h"
+#include "ObjectsHelper.h"
 
 #include "ObjectsClipboard.h"
-#include "IdManager.h"
 
 using namespace synthamodeler;
 
@@ -103,10 +103,10 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
         forEachXmlChildElement(*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if (Utils::getObjectGroup(valTree.getType()) == Objects::masses ||
+            if (ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::masses ||
                 //Utils::getObjectGroup(valTree.getType()) == Objects::audioobjects ||
-                Utils::getObjectGroup(valTree.getType()) == Objects::terminations ||
-                Utils::getObjectGroup(valTree.getType()) == Objects::junctions)
+                ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::terminations ||
+                ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::junctions)
             {
                 int posX = int(valTree.getProperty(Ids::posX));
                 int posY = int(valTree.getProperty(Ids::posY));
@@ -156,8 +156,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
         forEachXmlChildElement(*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if (Utils::getObjectGroup(valTree.getType()) == Objects::links ||
-                Utils::getObjectGroup(valTree.getType()) == Objects::waveguides)
+            if (ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::links ||
+                ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::waveguides)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if (idMgr->contains(valTree.getType(), objName))
@@ -219,7 +219,7 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             {
                 ValueTree source = sources.getChild(j);
                 BaseObjectComponent* sourceComp =
-                    Utils::getBaseObjectFromSource(&objController, source);
+                    ObjectsHelper::getBaseObjectFromSource(&objController, source);
                 
                 String oldSrcName = sourceComp->getData()[Ids::identifier];
                 if (objectNamesOldNewForAudio.contains(oldSrcName))
@@ -271,8 +271,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             {
                 ValueTree source = sources.getChild(j);
                 BaseObjectComponent* sourceComp =
-                    Utils::getBaseObjectFromSource(&objController, source);
-                sourceComp = Utils::getBaseObjectFromSource(&objController, source);
+                    ObjectsHelper::getBaseObjectFromSource(&objController, source);
+                sourceComp = ObjectsHelper::getBaseObjectFromSource(&objController, source);
 
                 if (sourceComp != nullptr)
                 {

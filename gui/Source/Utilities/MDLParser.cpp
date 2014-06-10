@@ -28,11 +28,12 @@
 #include "../Application/CommonHeaders.h"
 #include "../Models/MDLFile.h"
 #include "../Models/ObjectFactory.h"
+#include "RegularExpression.h"
+#include "../Utilities/SAMRegex.h"
+#include "../Utilities/ObjectsHelper.h"
 
 #include "MDLParser.h"
 
-#include "RegularExpression.h"
-#include "../Utilities/SAMRegex.h"
 
 using namespace synthamodeler;
 
@@ -142,7 +143,7 @@ bool MDLParser::parseMDL(const File& f)
 
                         for (int n = 0; n < paramsArray.size(); ++n)
                         {
-                            ValueTree subVal(Utils::getResonatorParamsIds()[n % 3]);
+                            ValueTree subVal(ObjectsHelper::getResonatorParamsIds()[n % 3]);
                             subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
 
                             valuesArr[n % 3].addChild(subVal, -1, nullptr);
