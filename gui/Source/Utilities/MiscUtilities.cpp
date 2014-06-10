@@ -444,32 +444,38 @@ bool Utils::containsStringInValueTree(ValueTree valTree,
     return false;
 }
 
-const Identifier resonatorParamIdsArr[3] = {
-    Ids::resonatorsFreq,
-    Ids::resonatorsDecay,
-    Ids::resonatorsEqMass
-};
+const Array<Identifier>& Utils::getResonatorParamsIds()
+{
+    static const Identifier resonatorParamIdsArr[] = {
+        Ids::resonatorsFreq,
+        Ids::resonatorsDecay,
+        Ids::resonatorsEqMass
+    };
+    static const Array<Identifier> resonatorParamIds(resonatorParamIdsArr, 3);
+    return resonatorParamIds;
+}
 
-const Array<Identifier> Utils::resonatorParamIds(resonatorParamIdsArr);
-
-const Identifier allObjectIdsArr[] = {
-    Ids::mass,
-    Ids::ground,
-    Ids::port,
-    Ids::resonators,
-    Ids::link,
-    Ids::touch,
-    Ids::pluck,
-    Ids::pulsetouch,
-    Ids::faustcode,
-    Ids::audioout,
-    Ids::waveguide,
-    Ids::termination,
-    Ids::junction,
-    Ids::comment
-};
-
-const Array<Identifier> Utils::allObjectIds(allObjectIdsArr);
+const Array<Identifier>& Utils::getAllObjectIds()
+{
+    static const Identifier allObjectIdsArr[] = {
+        Ids::mass,
+        Ids::ground,
+        Ids::port,
+        Ids::resonators,
+        Ids::link,
+        Ids::touch,
+        Ids::pluck,
+        Ids::pulsetouch,
+        Ids::faustcode,
+        Ids::audioout,
+        Ids::waveguide,
+        Ids::termination,
+        Ids::junction,
+        Ids::comment
+    };
+    static const Array<Identifier> allObjectIds(allObjectIdsArr, 14);
+    return allObjectIds;
+}
 
 int Utils::getCurrentTimeMillis()
 {

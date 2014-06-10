@@ -110,9 +110,8 @@ bool containsStringInValueTree(ValueTree valTree,
                                const String& searchStr,
                                bool isRoot);
 
-extern const Array<Identifier> resonatorParamIds;
-
-extern const Array<Identifier> allObjectIds;
+const Array<Identifier>& getResonatorParamsIds();
+const Array<Identifier>& getAllObjectIds();
 
 int getCurrentTimeMillis();
 

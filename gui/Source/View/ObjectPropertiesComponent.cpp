@@ -534,7 +534,7 @@ bool ResonatorPropertiesComponent::writeValues()
                     if(StoredSettings::getInstance()->getAutoCorrectValues())
                         pVal = Utils::fixParameterValueIfNeeded(pVal);
 
-                    ValueTree pa(Utils::resonatorParamIds[k]);
+                    ValueTree pa(Utils::getResonatorParamsIds()[k]);
                     pa.setProperty(Ids::value, pVal, undoManager);
                     param.addChild(pa, -1, undoManager);
                 }

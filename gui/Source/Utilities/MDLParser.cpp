@@ -142,7 +142,7 @@ bool MDLParser::parseMDL(const File& f)
 
                         for (int n = 0; n < paramsArray.size(); ++n)
                         {
-                            ValueTree subVal(Utils::resonatorParamIds[n % 3]);
+                            ValueTree subVal(Utils::getResonatorParamsIds()[n % 3]);
                             subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
 
                             valuesArr[n % 3].addChild(subVal, -1, nullptr);

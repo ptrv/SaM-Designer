@@ -374,7 +374,7 @@ ValueTree ObjectFactory::createResonatorParamsTree(StringArray p)
         for (int i = 0; i < 3; ++i)
         {
             ValueTree value(Ids::parameter);
-            ValueTree subval(Utils::resonatorParamIds[i]);
+            ValueTree subval(Utils::getResonatorParamsIds()[i]);
             subval.setProperty(Ids::value, p[i].trim(), nullptr);
             value.addChild(subval, -1, nullptr);
             paramsTree.addChild(value, -1, nullptr);
