@@ -41,6 +41,8 @@ public:
     
     ValueTree getData();
 
+    Point<int> getCenter() const;
+
 protected:
     ObjectsHolder* getObjectsHolder() const noexcept;
     void showContextMenu();

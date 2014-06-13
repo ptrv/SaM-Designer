@@ -56,7 +56,6 @@ public:
     void resized();
 
     void changeListenerCallback(ChangeBroadcaster*);
-    void updateComponents();
 
     void mouseDown(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);

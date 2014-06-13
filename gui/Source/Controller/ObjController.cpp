@@ -89,7 +89,6 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
         objects.insert(index, objComp);
 
         holder->addAndMakeVisible(objComp);
-        holder->updateComponents();
         changed();
         return objComp;
     }
@@ -125,7 +124,7 @@ LinkComponent* ObjController::addLink(ObjectsHolder* holder, ValueTree linkValue
         links.insert(index, linkComp);
 
 		holder->addAndMakeVisible(linkComp);
-        holder->updateComponents();
+        linkComp->toBack();
         changed();
         return linkComp;
     }
@@ -177,7 +176,6 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
             && (! checkIfLinkExitsts(linkValues)))
         {
             addLink(holder, linkValues, -1, true);
-            holder->updateComponents();
         }
         else
         {
@@ -223,7 +221,6 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
             sources.addChild(source, -1, nullptr);
         audioConnections.insert(index, aoc);
         holder->addAndMakeVisible(aoc);
-        holder->updateComponents();
         return aoc;
     }
     return nullptr;
@@ -334,7 +331,6 @@ CommentComponent* ObjController::addComment(ObjectsHolder* holder,
         comments.insert(index, commentComp);
 
         holder->addAndMakeVisible(commentComp);
-        holder->updateComponents();
         changed();
         return commentComp;
     }
@@ -529,7 +525,6 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             ObjectComponent* objComp = new ObjectComponent(*this, obj);
             objects.add(objComp);
             holder->addAndMakeVisible(objComp);
-            objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
             if(float(obj[Ids::posX]) < 0.00001f
@@ -550,7 +545,6 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             ObjectComponent* objComp = new ObjectComponent(*this, obj);
             objects.add(objComp);
             holder->addAndMakeVisible(objComp);
-            objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
             if(float(obj[Ids::posX]) < 0.00001f
@@ -571,7 +565,6 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             ObjectComponent* objComp = new ObjectComponent(*this, obj);
             objects.add(objComp);
             holder->addAndMakeVisible(objComp);
-            objComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
             if(float(obj[Ids::posX]) < 0.00001f
@@ -592,7 +585,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             LinkComponent* linkComp = new LinkComponent(*this, obj);
             links.add(linkComp);
             holder->addAndMakeVisible(linkComp);
-            linkComp->update();
+            linkComp->toBack();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
         }
     }
@@ -605,7 +598,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             LinkComponent* linkComp = new LinkComponent(*this, obj);
             links.add(linkComp);
             holder->addAndMakeVisible(linkComp);
-            linkComp->update();
+            linkComp->toBack();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
         }
     }
@@ -619,7 +612,6 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             ObjectComponent* audioOutComp = new ObjectComponent(*this, obj);
             objects.add(audioOutComp);
             holder->addAndMakeVisible(audioOutComp);
-            audioOutComp->update();
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
             if(float(obj[Ids::posX]) < 0.00001f
@@ -688,7 +680,6 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     }
 
     setAudioConnectionVisibility(StoredSettings::getInstance()->getShowAudioConnections());
-    holder->updateComponents();
 
     if(StoredSettings::getInstance()->getShouldRedrawOnLoad())
         if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
@@ -749,7 +740,7 @@ void ObjController::startDragging()
     {
         ObjectComponent * const c = objects.getUnchecked(i);
 
-        Point<int> r(c->getPosition());
+        const Point<int>& r = c->getCenter();
 
         c->getProperties().set("xDragStart", r.getX());
         c->getProperties().set("yDragStart", r.getY());
@@ -758,7 +749,7 @@ void ObjController::startDragging()
     {
         CommentComponent * const c = comments.getUnchecked(i);
 
-        Point<int> r(c->getPosition());
+        const Point<int>& r = c->getCenter();
 
         c->getProperties().set("xDragStart", r.getX());
         c->getProperties().set("yDragStart", r.getY());
@@ -769,50 +760,51 @@ void ObjController::startDragging()
 
 void ObjController::dragSelectedComps(int dx, int dy)
 {
-    owner.getUndoManager().undoCurrentTransactionOnly();
-
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
         if(ObjectComponent * const c = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i)))
         {
-//            const int startX = c->getProperties() ["xDragStart"];
-//            const int startY = c->getProperties() ["yDragStart"];
+           const int startX = c->getProperties() ["xDragStart"];
+           const int startY = c->getProperties() ["yDragStart"];
 
-            const int startX = c->getPinPos().x;
-            const int startY = c->getPinPos().y;
-
-            Point<int> r(c->getPosition());
+            Point<int> r = c->getCenter();
 
             r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
                     owner.getHolderComponent()->snapPosition(startY + dy));
 
-            //c->setPosition(Point<int>(r.x + c->getWidth() / 2, r.y + c->getHeight() / 2), true);
-            c->setPosition(r - c->getPinOffset(), true);
+            c->setActualPosition(r);
         }
         else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
         {
             const int startX = cc->getProperties() ["xDragStart"];
             const int startY = cc->getProperties() ["yDragStart"];
-//            const int startX = cc->getPosition().x;
-//            const int startY = cc->getPosition().y;
 
-            Point<int> r(cc->getPosition());
+            Point<int> r(cc->getCenter());
 
             r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
                     owner.getHolderComponent()->snapPosition(startY + dy));
 
-            cc->setPosition(Point<int>(r.x + cc->getWidth() / 2, r.y + cc->getHeight() / 2), true);
-//            c->setPosition(Point<int>(r.x, r.y)-cc->getPinOffset(), true);
-
+            cc->setActualPosition(r);
         }
     }
-
-    changed();
-    owner.getMDLFile()->changed();
 }
 
 void ObjController::endDragging()
 {
+    for (int i = 0; i < sObjects.getNumSelected(); ++i)
+    {
+        if(ObjectComponent * const c = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(i)))
+        {
+            c->setPosition(c->getActualPos(), true);
+        }
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
+        {
+            cc->setPosition(cc->getPosition(), true);
+        }
+    }
+
+    changed();
+
     owner.getUndoManager().beginNewTransaction();
 }
 

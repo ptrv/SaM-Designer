@@ -36,6 +36,7 @@ class ObjectComponent;
 
 class LinkComponent : public BaseObjectComponent,
                       public ChangeListener,
+                      public ChangeBroadcaster,
                       public SettableTooltipClient,
                       public SelectableObject
 {
@@ -60,17 +61,22 @@ public:
     
     void getPoints (float& x1, float& y1, float& x2, float& y2) const;
     
-    void changeListenerCallback (ChangeBroadcaster*);
+    void changeListenerCallback (ChangeBroadcaster* source);
     
     bool sameStartEnd(ValueTree linkTree);
     
     void reverseDirection();
     
-    Rectangle<int> getIntersectioBounds();
+    Rectangle<int> getIntersectioBounds() const;
     
-    Point<int> getPinPos();
+    Point<int> getPinPos() const;
 
     void setSegmented(bool isSegmented) { segmented = isSegmented; resized(); }
+
+    void addChangeListener (ChangeListener* listener);
+    void removeChangeListener (ChangeListener* listener);
+    void removeAllChangeListeners();
+
 private:
     void drawPath(Graphics& g);
 
@@ -87,6 +93,8 @@ private:
 
     WeakReference<ObjectComponent> startComp;
     WeakReference<ObjectComponent> endComp;
+
+    int numListener;
 
     Colour color;
     Colour colorSelected;

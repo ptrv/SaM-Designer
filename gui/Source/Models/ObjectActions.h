@@ -175,7 +175,7 @@ public:
                     ObjController* objController_)
 	: objController(objController_),
 	  newPos(newPos_),
-      oldPos(componentToMove->getActualPos())
+      oldPos(componentToMove->getOldPos())
 	{
         indexOfObjectToMove = objController->indexOfObject(componentToMove);
 	}

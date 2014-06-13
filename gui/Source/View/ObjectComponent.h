@@ -57,7 +57,7 @@ public:
     void toggleSelected();
 
     void setPosition(Point<int> newPos, bool undoable);
-    void setActualPosition(Point<int> pos);
+    void setActualPosition(Point<int> pos, NotificationType n = sendNotification);
 
     Point<int> getActualPos() const { return actualPos; }
 
@@ -72,6 +72,11 @@ public:
     Point<int> getPinOffset() const;
 
     bool canBeConnected(const Identifier& objId);
+
+    void setOldPos(const Point<int>& p) { oldPos = p; }
+    const Point<int>& getOldPos() const { return oldPos; }
+
+
 private:
     void showLinkPopupMenu();
 
@@ -86,6 +91,8 @@ private:
     Point<int> actualPos;
     Point<int> originalPos;
 
+    Point<int> oldPos;
+
     bool dragging, mouseDownSelectStatus;
     
     ChangeBroadcaster selfChangeListenerList;
@@ -94,7 +101,7 @@ private:
 
     WeakReference<ObjectComponent>::Master masterReference;
     friend class WeakReference<ObjectComponent>;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ObjectComponent);
 };
 }

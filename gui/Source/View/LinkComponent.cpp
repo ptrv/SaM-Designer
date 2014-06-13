@@ -37,11 +37,12 @@ using namespace synthamodeler;
 
 LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
 : BaseObjectComponent(owner_, linkTree),
-    lastInputX (0),
-    lastInputY (0),
-    lastOutputX (0),
-    lastOutputY (0),
-    segmented(false)
+  lastInputX (0),
+  lastInputY (0),
+  lastOutputX (0),
+  lastOutputY (0),
+  segmented(false),
+  numListener(0)
 {
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
@@ -246,16 +247,27 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
     }
 }
 
-void LinkComponent::changeListenerCallback (ChangeBroadcaster*)
+void LinkComponent::changeListenerCallback (ChangeBroadcaster* const source)
 {
-    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
-
-    if (selected != nowSelected)
+    if (source == startComp || source == endComp)
     {
-        selected = nowSelected;
-        repaint();
+        update();
+
+        if (numListener > 0)
+        {
+            sendChangeMessage();
+        }
     }
-    update();
+    else if (source == &owner.getSelectedObjects())
+    {
+        const bool nowSelected = owner.getSelectedObjects().isSelected (this);
+
+        if (selected != nowSelected)
+        {
+            selected = nowSelected;
+            repaint();
+        }
+    }
 }
 
 bool LinkComponent::sameStartEnd(ValueTree linkTree)
@@ -263,6 +275,23 @@ bool LinkComponent::sameStartEnd(ValueTree linkTree)
     return linkTree.getProperty(Ids::startVertex) == data.getProperty(Ids::startVertex) 
         && linkTree.getProperty(Ids::endVertex) == data.getProperty(Ids::endVertex);
 }
+
+void LinkComponent::addChangeListener (ChangeListener* const listener)
+{
+    ChangeBroadcaster::addChangeListener(listener);
+    ++numListener;
+}
+void LinkComponent::removeChangeListener (ChangeListener* const listener)
+{
+    ChangeBroadcaster::removeChangeListener(listener);
+    ++numListener;
+}
+void LinkComponent::removeAllChangeListeners()
+{
+    ChangeBroadcaster::removeAllChangeListeners();
+    numListener = 0;
+}
+
 
 void LinkComponent::drawPath(Graphics& g)
 {
@@ -521,7 +550,7 @@ void LinkComponent::reverseDirection()
     update();
 }
 
-Rectangle<int> LinkComponent::getIntersectioBounds()
+Rectangle<int> LinkComponent::getIntersectioBounds() const
 {
     const Rectangle<int> intersectionBounds((int) jmin(lastInputX, lastOutputX),
                                             (int) jmin(lastInputY, lastOutputY),
@@ -530,7 +559,7 @@ Rectangle<int> LinkComponent::getIntersectioBounds()
     return intersectionBounds;
 }
 
-Point<int> LinkComponent::getPinPos()
+Point<int> LinkComponent::getPinPos() const
 {
     return getIntersectioBounds().getCentre();
 }

@@ -36,7 +36,7 @@
 
 using namespace synthamodeler;
 
-AudioOutConnector::AudioOutConnector(ObjController& owner_, 
+AudioOutConnector::AudioOutConnector(ObjController& owner_,
                                      BaseObjectComponent* objComp_,
                                      ObjectComponent* audioOutComp_)
     :
@@ -56,6 +56,19 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
     owner.getSelectedObjects().addChangeListener(this);
 //    owner.getSelectedAudioConnections().addChangeListener(this);
 
+    audioOutComp->addChangeListener(this);
+
+    if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp.get()))
+    {
+        objectComp = oc;
+        objectComp->addChangeListener(this);
+    }
+    else if (LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp.get()))
+    {
+        linkComp = lc;
+        linkComp->addChangeListener(this);
+    }
+
     setComponentID("aoc_"
         + sourceComp->getData()[Ids::identifier].toString()
         + audioOutComp->getData()[Ids::identifier].toString());
@@ -64,6 +77,14 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
 AudioOutConnector::~AudioOutConnector()
 {
     owner.getSelectedObjects().removeChangeListener(this);
+    if (objectComp)
+    {
+        objectComp->removeChangeListener(this);
+    }
+    else if (linkComp)
+    {
+        linkComp->removeChangeListener(this);
+    }
 }
 
 void AudioOutConnector::resized()
@@ -200,10 +221,10 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
     if (!sourceComp.wasObjectDeleted())
     {
         Point<int> startPos;
-        if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (sourceComp.get()))
-            startPos = oc->getPinPos();
-        else if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (sourceComp.get()))
-            startPos = lc->getPinPos();
+        if (objectComp)
+            startPos = objectComp->getPinPos();
+        else if (linkComp)
+            startPos = linkComp->getPinPos();
         x1 = startPos.x;
         y1 = startPos.y;
     }
@@ -216,16 +237,22 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
     }
 }
 
-void AudioOutConnector::changeListenerCallback (ChangeBroadcaster*)
+void AudioOutConnector::changeListenerCallback (ChangeBroadcaster* const source)
 {
-    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
-
-    if (selected != nowSelected)
+    if (source == objectComp || source == linkComp || source == audioOutComp)
     {
-        selected = nowSelected;
-        repaint();
+        update();
     }
-    update();
+    else if (source == &owner.getSelectedObjects())
+    {
+        const bool nowSelected = owner.getSelectedObjects().isSelected (this);
+
+        if (selected != nowSelected)
+        {
+            selected = nowSelected;
+            repaint();
+        }
+    }
 }
 
 void AudioOutConnector::mouseDown(const MouseEvent& e)

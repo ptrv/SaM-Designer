@@ -54,7 +54,7 @@ public:
     
     void getPoints(float& x1, float& y1, float& x2, float& y2) const;
 
-    void changeListenerCallback (ChangeBroadcaster*);
+    void changeListenerCallback (ChangeBroadcaster* source);
     
     void mouseDown(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);
@@ -75,6 +75,9 @@ private:
     bool mouseDownSelectStatus;
     WeakReference<BaseObjectComponent> sourceComp;
     WeakReference<ObjectComponent> audioOutComp;
+
+    WeakReference<ObjectComponent> objectComp;
+    WeakReference<LinkComponent> linkComp;
     
     void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
     {

@@ -47,6 +47,11 @@ ValueTree BaseObjectComponent::getData()
     return data;
 }
 
+Point<int> BaseObjectComponent::getCenter() const
+{
+    return getBounds().getCentre();
+}
+
 ObjectsHolder* BaseObjectComponent::getObjectsHolder() const noexcept
 {
     return findParentComponentOfClass<ObjectsHolder>();

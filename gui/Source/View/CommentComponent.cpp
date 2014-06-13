@@ -188,7 +188,6 @@ void CommentComponent::setPosition(Point<int> newPos, bool undoable)
             data.setProperty(Ids::posX, newPos.getX(), nullptr);
             data.setProperty(Ids::posY, newPos.getY(), nullptr);
             setActualPosition(newPos);
-            getObjectsHolder()->updateComponents();
         }
     }
 }
@@ -220,7 +219,7 @@ void CommentComponent::toggleSelected()
 	repaint();
 }
 
-void CommentComponent::changeListenerCallback (ChangeBroadcaster* source)
+void CommentComponent::changeListenerCallback (ChangeBroadcaster* const source)
 {
     if (ColourSelector* cs = dynamic_cast <ColourSelector*> (source))
     {
@@ -243,7 +242,6 @@ void CommentComponent::changeListenerCallback (ChangeBroadcaster* source)
 void CommentComponent::textEditorTextChanged(TextEditor&)
 {
     resized();
-    getObjectsHolder()->updateComponents();
 }
 void CommentComponent::textEditorReturnKeyPressed(TextEditor&)
 {

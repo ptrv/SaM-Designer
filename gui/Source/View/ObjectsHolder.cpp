@@ -100,7 +100,7 @@ void ObjectsHolder::paint(Graphics& g)
         for(int i = 0; i < objController.getNumLinks(); ++i)
         {
             LinkComponent* lc = objController.getLinkUnchecked(i);
-            Point<int> tl = lc->getBounds().getCentre();
+            Point<int> tl = lc->getCenter();
             g.drawSingleLineText(lc->getData()[Ids::identifier].toString(), tl.x, tl.y-5, Justification::left);
         }
 
@@ -110,57 +110,14 @@ void ObjectsHolder::paint(Graphics& g)
 
 void ObjectsHolder::resized()
 {
-    updateComponents();
     if(grid->updateFromDesign(*this))
         repaint();
 }
 
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 {
-    updateComponents();
     if(ContentComp* const cp = findParentComponentOfClass<ContentComp>())
         cp->resized();
-}
-
-void ObjectsHolder::updateComponents()
-{
-    // TODO Find faster solution for updating componenans
-    int i;
-    Array<LinkComponent*> links;
-    Array<AudioOutConnector*> aocs;
-    for (i = getNumChildComponents(); --i >= 0;)
-    {
-        if (ObjectComponent * const bobj = dynamic_cast<ObjectComponent*> (getChildComponent(i)))
-        {
-            checkExtent(bobj->getBounds());
-            bobj->update();
-        }
-        else if (LinkComponent * const lobj = dynamic_cast<LinkComponent*> (getChildComponent(i)))
-        {
-            links.add(lobj);
-        }
-        else if (AudioOutConnector * const aobj = dynamic_cast<AudioOutConnector*> (getChildComponent(i)))
-        {
-            aocs.add(aobj);
-        }
-        else if (CommentComponent* const cobj = dynamic_cast<CommentComponent*> (getChildComponent(i)))
-        {
-            checkExtent(cobj->getBounds());
-            cobj->update();
-        }
-    }
-    for (i = 0; i < links.size(); ++i)
-    {
-        links[i]->update();
-        links[i]->toBack();
-    }
-    for (i = 0; i < aocs.size(); ++i)
-    {
-        aocs[i]->update();
-        aocs[i]->toBack();
-    }
-//    if(grid->updateFromDesign(*this))
-//        repaint();
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -251,9 +208,12 @@ void ObjectsHolder::openFaustcodePanel()
 
 void ObjectsHolder::setSegmentedLinks()
 {
-    StoredSettings::getInstance()->setIsSegmentedConnectors(!StoredSettings::getInstance()->getIsSegmentedConnectors());
-    objController.setLinksSegmented(StoredSettings::getInstance()->getIsSegmentedConnectors());
-    updateComponents();
+    StoredSettings::getInstance()->setIsSegmentedConnectors(
+        !StoredSettings::getInstance()->getIsSegmentedConnectors());
+
+    objController.setLinksSegmented(
+        StoredSettings::getInstance()->getIsSegmentedConnectors());
+
     repaint();
 }
 
@@ -267,10 +227,9 @@ void ObjectsHolder::insertNewObject(const Identifier& objType,
                                     const Point<int>& point)
 {
     String objName = objController.getNewNameForObject(objType);
-    ValueTree objTree = ObjectFactory::createNewObjectTree(objType,
-                                                           objName,
-                                                           point.x,
-                                                           point.y);
+    ValueTree objTree = ObjectFactory::createNewObjectTree(
+        objType, objName, point.x, point.y);
+
     if(objType != Ids::comment)
     {
         objController.addNewObject(this, objTree);
@@ -300,10 +259,9 @@ void ObjectsHolder::insertNewLink(const Identifier& linkType,
                                   const String& endId)
 {
     String linkName = objController.getNewNameForObject(linkType);
-    ValueTree linkTree = ObjectFactory::createNewLinkObjectTree(linkType,
-                                                                linkName,
-                                                                startId,
-                                                                endId);
+    ValueTree linkTree = ObjectFactory::createNewLinkObjectTree(
+        linkType, linkName, startId, endId);
+
     objController.addNewLinkIfPossible(this, linkTree);
 }
 
@@ -928,13 +886,11 @@ void ObjectsHolder::timerCallback()
 //        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
 //        float dT = (currentTime-lastTime)/1000.0f;
 
-
         bool done = graph->reflow(getContentComp()->getViewPosition().x,
                                   getContentComp()->getViewPosition().y,
                                   getContentComp()->getViewWidth(),
                                   getContentComp()->getViewHeight(),
                                   objController, timeStep);
-        updateComponents();
         repaint();
         if(done)
         {
@@ -981,6 +937,8 @@ void ObjectsHolder::redrawObjects(const int cmdId)
                               getContentComp()->getViewHeight());
 
     }
+
+    objController.getUndoManager().beginNewTransaction();
 
     lastTime = Time::getCurrentTime().currentTimeMillis();
     startTimer(10);

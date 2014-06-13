@@ -193,6 +193,7 @@ public:
     void destroy();
 
     void setAudioConnectionVisibility(bool shouldBeVisible);
+
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);

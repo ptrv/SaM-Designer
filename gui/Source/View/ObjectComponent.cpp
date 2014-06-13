@@ -39,9 +39,9 @@ using namespace synthamodeler;
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_), dragging(false), mouseDownSelectStatus(false)
 {
-	shadow.setShadowProperties (
-			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
-	setComponentEffect (&shadow);
+    shadow.setShadowProperties (
+            DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
+    setComponentEffect (&shadow);
 
     if(data.getType() == Ids::mass)
         setSize(35, 35);
@@ -55,10 +55,16 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
         setSize(25,25);
     else
         setSize(50, 50);
-	originalPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
-	actualPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
-	icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(data.getType()));
-    
+
+    const Point<int> currentPos(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
+
+    setCentrePosition(currentPos.x, currentPos.y);
+    originalPos = currentPos;
+    actualPos = currentPos;
+    oldPos = currentPos;
+
+    icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(data.getType()));
+
     owner.getSelectedObjects().addChangeListener (this);
     selfChangeListenerList.addChangeListener (this);
 
@@ -192,7 +198,6 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
             owner.dragSelectedComps (e.getDistanceFromDragStartX(),
                                       e.getDistanceFromDragStartY());
         }
-        update();
     }
 }
 
@@ -208,18 +213,17 @@ void ObjectComponent::mouseUp (const MouseEvent& e)
 
     owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging, 
                                                         mouseDownSelectStatus);
-
-    update();
 }
 
 void ObjectComponent::update()
 {
-	setCentrePosition((float) actualPos.x, (float) actualPos.y);
+    setCentrePosition((float) actualPos.x, (float) actualPos.y);
+    oldPos = getCenter();
 }
 
 void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
 {
-    if (actualPos != newPos)
+    if (getOldPos() != newPos)
     {
         if (undoable)
         {
@@ -234,13 +238,19 @@ void ObjectComponent::setPosition(Point<int> newPos, bool undoable)
             data.setProperty(Ids::posX, newPos.getX(), nullptr);
             data.setProperty(Ids::posY, newPos.getY(), nullptr);
             setActualPosition(newPos);
-            getObjectsHolder()->updateComponents();
+            setOldPos(getCenter());
         }
     }
 }
-void ObjectComponent::setActualPosition(Point<int> pos)
+void ObjectComponent::setActualPosition(Point<int> pos, NotificationType n)
 {
-	actualPos = pos;
+    actualPos = pos;
+    setCentrePosition(pos.x, pos.y);
+
+    if (n == sendNotification)
+    {
+        sendChangeMessage();
+    }
 }
 
 void ObjectComponent::setData(ValueTree dataTree)
@@ -282,10 +292,12 @@ void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)
 void ObjectComponent::addLinkToObject(LinkComponent* link)
 {
     connectedLinks.add(link);
+    addChangeListener(link);
 }
 void ObjectComponent::removeLinkFromObject(LinkComponent* link)
 {
     connectedLinks.removeAllInstancesOf(link);
+    removeChangeListener(link);
 }
 
 Point<int> ObjectComponent::getPinPos() const

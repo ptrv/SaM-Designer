@@ -157,7 +157,7 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
                 vx = oc->getActualPos().x;
                 vy = oc->getActualPos().y;
             }
-            oc->setPosition(Point<int>(vx, vy), false);
+            oc->setActualPosition(Point<int>(vx, vy));
             v->setNX(vx);
             v->setNY(vy);
         }
@@ -174,7 +174,16 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
                                    + totalEnergy.y * totalEnergy.y);
 //    DBG(lengthTotalEnergy);
     if(lengthTotalEnergy < stopEnergy)
+    {
+        for (int i = 0; i < nodes.size(); ++i)
+        {
+            Node* const v = nodes.getUnchecked(i);
+            ObjectComponent* oc = static_cast<ObjectComponent*>(v);
+            oc->setPosition(oc->getActualPos(), true);
+        }
+
         return true;
+    }
 
     return false;
 }
