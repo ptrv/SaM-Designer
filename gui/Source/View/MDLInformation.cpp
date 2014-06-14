@@ -104,7 +104,7 @@ BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="MDLInformation" componentName=""
                  parentClasses="public Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
+                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
                  fixedSize="1" initialWidth="300" initialHeight="300">
   <BACKGROUND backgroundColour="ffffffff"/>
   <TEXTEDITOR name="teMDLProps" id="3d321bae99f7e300" memberName="teMDLProps"

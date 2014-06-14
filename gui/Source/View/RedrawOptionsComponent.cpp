@@ -62,7 +62,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slBeta->addListener (this);
 
     addAndMakeVisible (laK = new Label ("laK",
-                                        "Spring Constant k"));
+                                        TRANS("Spring Constant k")));
     laK->setFont (Font (15.00f, Font::plain));
     laK->setJustificationType (Justification::centredLeft);
     laK->setEditable (false, false, false);
@@ -76,7 +76,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slK->addListener (this);
 
     addAndMakeVisible (laDamp = new Label ("laDamp",
-                                           "Damping"));
+                                           TRANS("Damping")));
     laDamp->setFont (Font (15.00f, Font::plain));
     laDamp->setJustificationType (Justification::centredLeft);
     laDamp->setEditable (false, false, false);
@@ -90,7 +90,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slDamp->addListener (this);
 
     addAndMakeVisible (laDij = new Label ("laDij",
-                                          "Ideal Distance"));
+                                          TRANS("Ideal Distance")));
     laDij->setFont (Font (15.00f, Font::plain));
     laDij->setJustificationType (Justification::centredLeft);
     laDij->setEditable (false, false, false);
@@ -104,7 +104,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slDij->addListener (this);
 
     addAndMakeVisible (laEnergy = new Label ("laEnergy",
-                                             "Energy"));
+                                             TRANS("Energy")));
     laEnergy->setFont (Font (15.00f, Font::plain));
     laEnergy->setJustificationType (Justification::centredLeft);
     laEnergy->setEditable (false, false, false);
@@ -118,7 +118,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slEnergy->addListener (this);
 
     addAndMakeVisible (laTimestep = new Label ("laTimestep",
-                                               "Timestep"));
+                                               TRANS("Timestep")));
     laTimestep->setFont (Font (15.00f, Font::plain));
     laTimestep->setJustificationType (Justification::centredLeft);
     laTimestep->setEditable (false, false, false);
@@ -132,18 +132,22 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slTimestep->addListener (this);
 
     addAndMakeVisible (btOk = new TextButton ("btOk"));
-    btOk->setButtonText ("Ok");
+    btOk->setButtonText (TRANS("Ok"));
     btOk->addListener (this);
 
     addAndMakeVisible (btCancel = new TextButton ("btCancel"));
-    btCancel->setButtonText ("Cancel");
+    btCancel->setButtonText (TRANS("Cancel"));
     btCancel->addListener (this);
+
+    addAndMakeVisible (btToggleRandomize = new ToggleButton ("toggleRandomize"));
+    btToggleRandomize->setButtonText (TRANS("randomize nodes before start"));
+    btToggleRandomize->addListener (this);
 
 
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (400, 350);
+    setSize (400, 380);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -172,6 +176,7 @@ RedrawOptionsComponent::~RedrawOptionsComponent()
     slTimestep = nullptr;
     btOk = nullptr;
     btCancel = nullptr;
+    btToggleRandomize = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -192,22 +197,23 @@ void RedrawOptionsComponent::paint (Graphics& g)
 
 void RedrawOptionsComponent::resized()
 {
-    laAlpha->setBounds (10, 10, 104, 24);
-    slAlpha->setBounds (120, 10, 250, 24);
-    laBeta->setBounds (10, 50, 104, 24);
-    slBeta->setBounds (120, 50, 250, 24);
-    laK->setBounds (10, 90, 104, 24);
-    slK->setBounds (120, 90, 250, 24);
-    laDamp->setBounds (10, 130, 104, 24);
-    slDamp->setBounds (120, 130, 250, 24);
-    laDij->setBounds (10, 170, 104, 24);
-    slDij->setBounds (120, 170, 250, 24);
-    laEnergy->setBounds (10, 210, 104, 24);
-    slEnergy->setBounds (120, 210, 250, 24);
-    laTimestep->setBounds (12, 250, 104, 24);
-    slTimestep->setBounds (120, 250, 250, 24);
+    laAlpha->setBounds (12, 52, 104, 24);
+    slAlpha->setBounds (122, 52, 250, 24);
+    laBeta->setBounds (12, 92, 104, 24);
+    slBeta->setBounds (122, 92, 250, 24);
+    laK->setBounds (12, 132, 104, 24);
+    slK->setBounds (122, 132, 250, 24);
+    laDamp->setBounds (12, 172, 104, 24);
+    slDamp->setBounds (122, 172, 250, 24);
+    laDij->setBounds (12, 212, 104, 24);
+    slDij->setBounds (122, 212, 250, 24);
+    laEnergy->setBounds (12, 252, 104, 24);
+    slEnergy->setBounds (122, 252, 250, 24);
+    laTimestep->setBounds (14, 292, 104, 24);
+    slTimestep->setBounds (122, 292, 250, 24);
     btOk->setBounds ((getWidth() / 2) + -40 - ((60) / 2), getHeight() - 20 - 20, 60, 20);
     btCancel->setBounds ((getWidth() / 2) + 40 - ((60) / 2), getHeight() - 20 - 20, 60, 20);
+    btToggleRandomize->setBounds (14, 16, 348, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -275,6 +281,11 @@ void RedrawOptionsComponent::buttonClicked (Button* buttonThatWasClicked)
         rop->closeButtonPressed();
         //[/UserButtonCode_btCancel]
     }
+    else if (buttonThatWasClicked == btToggleRandomize)
+    {
+        //[UserButtonCode_btToggleRandomize] -- add your button handler code here..
+        //[/UserButtonCode_btToggleRandomize]
+    }
 
     //[UserbuttonClicked_Post]
     //[/UserbuttonClicked_Post]
@@ -292,6 +303,7 @@ void RedrawOptionsComponent::readOptions()
     slDij->setValue(pf.getDoubleValue("redrawparam_dij", 200.0));
     slEnergy->setValue(pf.getDoubleValue("redrawparam_energy", 0.5));
     slTimestep->setValue(pf.getDoubleValue("redrawparam_timestep", 0.5));
+    btToggleRandomize->setToggleState(pf.getBoolValue("redrawparam_randomize", true), dontSendNotification);
 }
 
 void RedrawOptionsComponent::saveOptions()
@@ -303,6 +315,7 @@ void RedrawOptionsComponent::saveOptions()
     pf.setValue("redrawparam_energy", slEnergy->getValue());
     pf.setValue("redrawparam_dij", slDij->getValue());
     pf.setValue("redrawparam_timestep", slTimestep->getValue());
+    pf.setValue("redrawparam_randomize", btToggleRandomize->getToggleState());
 }
 //[/MiscUserCode]
 
@@ -319,78 +332,86 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="RedrawOptionsComponent" componentName=""
                  parentClasses="public Component" constructorParams="RedrawOptionsPanel* rop_"
                  variableInitialisers="rop(rop_), pf(StoredSettings::getInstance()-&gt;getProps())"
-                 snapPixels="2" snapActive="1" snapShown="1" overlayOpacity="0.330000013"
-                 fixedSize="1" initialWidth="400" initialHeight="350">
+                 snapPixels="2" snapActive="1" snapShown="1" overlayOpacity="0.330"
+                 fixedSize="1" initialWidth="400" initialHeight="380">
   <BACKGROUND backgroundColour="ffffffff"/>
   <LABEL name="laAlpha" id="6898834d3ae53f44" memberName="laAlpha" virtualName=""
-         explicitFocusOrder="0" pos="10 10 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 52 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Mass" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slAlpha" id="a0467824d6e9c8e7" memberName="slAlpha" virtualName=""
-          explicitFocusOrder="0" pos="120 10 250 24" min="0.1" max="10"
-          int="0.1" style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
-          textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          explicitFocusOrder="0" pos="122 52 250 24" min="0.10000000000000000555"
+          max="10" int="0.10000000000000000555" style="LinearHorizontal"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laBeta" id="afe5e0051dcb27a9" memberName="laBeta" virtualName=""
-         explicitFocusOrder="0" pos="10 50 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 92 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Charge" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slBeta" id="ba31f1fe67c537d6" memberName="slBeta" virtualName=""
-          explicitFocusOrder="0" pos="120 50 250 24" min="0" max="2" int="0.001"
+          explicitFocusOrder="0" pos="122 92 250 24" min="0" max="2" int="0.0010000000000000000208"
           style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laK" id="b7409306b3a8c462" memberName="laK" virtualName=""
-         explicitFocusOrder="0" pos="10 90 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 132 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Spring Constant k" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="slK" id="99f94ecb3460b725" memberName="slK" virtualName=""
-          explicitFocusOrder="0" pos="120 90 250 24" min="0.01" max="5"
-          int="0.01" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          explicitFocusOrder="0" pos="122 132 250 24" min="0.010000000000000000208"
+          max="5" int="0.010000000000000000208" style="LinearHorizontal"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laDamp" id="311a6937b8c46091" memberName="laDamp" virtualName=""
-         explicitFocusOrder="0" pos="10 130 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 172 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Damping" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slDamp" id="f398c64eb286e1ca" memberName="slDamp" virtualName=""
-          explicitFocusOrder="0" pos="120 130 250 24" min="0.1" max="0.99"
-          int="0.01" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          explicitFocusOrder="0" pos="122 172 250 24" min="0.10000000000000000555"
+          max="0.98999999999999999112" int="0.010000000000000000208" style="LinearHorizontal"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laDij" id="1aabd2cf39f133f3" memberName="laDij" virtualName=""
-         explicitFocusOrder="0" pos="10 170 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 212 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Ideal Distance" editableSingleClick="0"
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="slDij" id="3cf24959fd2487f9" memberName="slDij" virtualName=""
-          explicitFocusOrder="0" pos="120 170 250 24" min="0.1" max="500"
-          int="0.01" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          explicitFocusOrder="0" pos="122 212 250 24" min="0.10000000000000000555"
+          max="500" int="0.010000000000000000208" style="LinearHorizontal"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laEnergy" id="57ee54815d583117" memberName="laEnergy" virtualName=""
-         explicitFocusOrder="0" pos="10 210 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 252 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Energy" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slEnergy" id="31979231a22fd55b" memberName="slEnergy" virtualName=""
-          explicitFocusOrder="0" pos="120 210 250 24" min="0" max="10"
-          int="0.01" style="LinearHorizontal" textBoxPos="TextBoxLeft"
+          explicitFocusOrder="0" pos="122 252 250 24" min="0" max="10"
+          int="0.010000000000000000208" style="LinearHorizontal" textBoxPos="TextBoxLeft"
           textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laTimestep" id="428812339125c8eb" memberName="laTimestep"
-         virtualName="" explicitFocusOrder="0" pos="12 250 104 24" edTextCol="ff000000"
+         virtualName="" explicitFocusOrder="0" pos="14 292 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Timestep" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slTimestamp" id="f34538af30f4ec8d" memberName="slTimestep"
-          virtualName="" explicitFocusOrder="0" pos="120 250 250 24" min="0.1"
-          max="0.99" int="0.01" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          virtualName="" explicitFocusOrder="0" pos="122 292 250 24" min="0.10000000000000000555"
+          max="0.98999999999999999112" int="0.010000000000000000208" style="LinearHorizontal"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="1"/>
   <TEXTBUTTON name="btOk" id="21b281d5f8eed9a" memberName="btOk" virtualName=""
               explicitFocusOrder="0" pos="-40Cc 20Rr 60 20" buttonText="Ok"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
   <TEXTBUTTON name="btCancel" id="beef51685737d7ba" memberName="btCancel" virtualName=""
               explicitFocusOrder="0" pos="40Cc 20Rr 60 20" buttonText="Cancel"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
+  <TOGGLEBUTTON name="toggleRandomize" id="b2ec4b9e873e1741" memberName="btToggleRandomize"
+                virtualName="" explicitFocusOrder="0" pos="14 16 348 24" buttonText="randomize nodes before start"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 
 END_JUCER_METADATA

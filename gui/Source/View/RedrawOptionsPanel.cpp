@@ -36,7 +36,7 @@ RedrawOptionsPanel::RedrawOptionsPanel()
 : DialogWindow(TRANS("Redraw Options"), Colours::grey, true)
 {
     RedrawOptionsComponent * const roc = new RedrawOptionsComponent(this);
-    roc->setSize (400, 350);
+    roc->setSize (400, 380);
 
     setContentOwned (roc, true);
 

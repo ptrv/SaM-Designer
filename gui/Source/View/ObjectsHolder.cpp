@@ -171,6 +171,7 @@ bool ObjectsHolder::keyPressed(const KeyPress& key)
         {
             DBG("redraw cancelled!");
             stopTimer();
+            reflow();
             return true;
         }
     }
@@ -881,6 +882,16 @@ double timeStep = 0.6;
 void ObjectsHolder::timerCallback()
 {
 //    DBG("tick");
+    if(reflow())
+    {
+        graph = nullptr;
+        stopTimer();
+        DBG("stop timer");
+    }
+}
+
+bool ObjectsHolder::reflow()
+{
     if (graph != nullptr)
     {
 //        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
@@ -892,13 +903,9 @@ void ObjectsHolder::timerCallback()
                                   getContentComp()->getViewHeight(),
                                   objController, timeStep);
         repaint();
-        if(done)
-        {
-            graph = nullptr;
-            stopTimer();
-            DBG("stop timer");
-        }
+        return done;
     }
+    return true;
 }
 
 ContentComp* ObjectsHolder::getContentComp()
@@ -931,10 +938,17 @@ void ObjectsHolder::redrawObjects(const int cmdId)
 //        DBG(graph->toString());
 //        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
         graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
-        graph->randomizeNodes(getContentComp()->getViewPosition().x,
-                              getContentComp()->getViewPosition().y,
-                              getContentComp()->getViewWidth(),
-                              getContentComp()->getViewHeight());
+
+        const bool randomizeNodes =
+            StoredSettings::getInstance()->getProps()
+                .getBoolValue("redrawparam_randomize", true);
+        if (randomizeNodes)
+        {
+            graph->randomizeNodes(getContentComp()->getViewPosition().x,
+                                  getContentComp()->getViewPosition().y,
+                                  getContentComp()->getViewWidth(),
+                                  getContentComp()->getViewHeight());
+        }
 
     }
 

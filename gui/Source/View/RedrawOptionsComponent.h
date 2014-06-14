@@ -82,6 +82,7 @@ private:
     ScopedPointer<Slider> slTimestep;
     ScopedPointer<TextButton> btOk;
     ScopedPointer<TextButton> btCancel;
+    ScopedPointer<ToggleButton> btToggleRandomize;
 
 
     //==============================================================================
