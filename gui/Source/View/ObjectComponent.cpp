@@ -134,8 +134,8 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
     {
         String startObj;
         String endObj;
-        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(0));
-        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(1));
+        ObjectComponent* oc1 = ObjectsHelper::getObject(sis.getSelectedItem(0));
+        ObjectComponent* oc2 = ObjectsHelper::getObject(sis.getSelectedItem(1));
         if (oc1 != nullptr && oc2 != nullptr)
         {
             startObj = oc1->getData().getProperty(Ids::identifier).toString();
@@ -145,7 +145,7 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
         }
         else if (oc1 == nullptr)
         {
-            LinkComponent* lc1 = dynamic_cast<LinkComponent*> (sis.getSelectedItem(0));
+            LinkComponent* lc1 = ObjectsHelper::getLink (sis.getSelectedItem(0));
             if (lc1 != nullptr)
             {
                 ContextMenus::showAudioConnectionPopupMenu(*getObjectsHolder());
@@ -153,7 +153,7 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
         }
         else if (oc2 == nullptr)
         {
-            LinkComponent* lc2 = dynamic_cast<LinkComponent*> (sis.getSelectedItem(1));
+            LinkComponent* lc2 = ObjectsHelper::getLink (sis.getSelectedItem(1));
             if (lc2 != nullptr)
             {
                 ContextMenus::showAudioConnectionPopupMenu(*getObjectsHolder());

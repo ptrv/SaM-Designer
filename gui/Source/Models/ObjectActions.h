@@ -386,12 +386,12 @@ public:
     objController(objController_),
     sourceTree(sourceTree_.createCopy())
 	{
-        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(source))
+        if(ObjectComponent* const oc = ObjectsHelper::getObject(source))
         {
             sourceIsLink = false;
             indexSource = objController->indexOfObject(oc);
         }
-        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(source))
+        else if(LinkComponent* const lc = ObjectsHelper::getLink(source))
         {
             sourceIsLink = true;
             indexSource = objController->indexOfLink(lc);
@@ -460,20 +460,19 @@ public:
     RemoveAudioConnectionAction(ObjectsHolder* objHolderComp_,
                                 AudioOutConnector* aocToRemove,
                                 ObjController* objController_)
-    : 
-    holderComp(objHolderComp_),
-    objController(objController_),
-    oldIndex(-1)
-	{
+    : holderComp(objHolderComp_),
+      objController(objController_),
+      oldIndex(-1)
+    {
         oldIndex = objController->indexOfAudioConnector(aocToRemove);
         String srcName;
-        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject()))
+        if(ObjectComponent* const oc = ObjectsHelper::getObject(aocToRemove->getSourceObject()))
         {
             sourceIsLink = false;
             oldIndexSource = objController->indexOfObject(oc);
             srcName = oc->getData()[Ids::identifier];
         }
-        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject()))
+        else if(LinkComponent* const lc = ObjectsHelper::getLink(aocToRemove->getSourceObject()))
         {
             sourceIsLink = true;
             oldIndexSource = objController->indexOfLink(lc);

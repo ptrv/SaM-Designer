@@ -35,6 +35,7 @@
 #include "SelectableObject.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
+#include "../Utilities/ObjectsHelper.h"
 
 #include "PropertiesWindow.h"
 #include "AudioOutConnector.h"
@@ -245,11 +246,11 @@ void PropertiesWindow::updateProperties()
                 }
 
                 String sourceId;
-                if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (aoc->getSourceObject()))
+                if (ObjectComponent * const oc = ObjectsHelper::getObject (aoc->getSourceObject()))
                 {
                     sourceId = oc->getData()[Ids::identifier].toString();
                 }
-                else if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (aoc->getSourceObject()))
+                else if (LinkComponent * const lc = ObjectsHelper::getLink (aoc->getSourceObject()))
                 {
                     sourceId = lc->getData()[Ids::identifier].toString();
                 }

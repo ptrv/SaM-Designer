@@ -57,12 +57,12 @@ void ObjectsClipboard::copySelected(ObjController& objController)
 
     for (int i = 0; i < selectedObjects.getNumSelected(); ++i)
     {
-        if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*> (selectedObjects.getSelectedItem(i)))
+        if (ObjectComponent * const oc = ObjectsHelper::getObject (selectedObjects.getSelectedItem(i)))
         {
             XmlElement * const e = oc->getData().createXml();
             clip.addChildElement(e);
         }
-        else if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (selectedObjects.getSelectedItem(i)))
+        else if (LinkComponent * const lc = ObjectsHelper::getLink (selectedObjects.getSelectedItem(i)))
         {
             XmlElement * const e = lc->getData().createXml();
             clip.addChildElement(e);

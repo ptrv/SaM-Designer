@@ -592,3 +592,26 @@ const Array<Identifier>& ObjectsHelper::getAllObjectIds()
 }
 
 //------------------------------------------------------------------------------
+
+template <typename BaseCompType>
+ObjectComponent* ObjectsHelper::getObject(BaseCompType* baseCompType)
+{
+    return dynamic_cast<ObjectComponent*>(baseCompType);
+}
+
+template ObjectComponent* ObjectsHelper::getObject(BaseObjectComponent*);
+template ObjectComponent* ObjectsHelper::getObject(SelectableObject*);
+template ObjectComponent* ObjectsHelper::getObject(Component*);
+
+//------------------------------------------------------------------------------
+
+template <typename BaseCompType>
+LinkComponent* ObjectsHelper::getLink(BaseCompType* baseCompType)
+{
+    return dynamic_cast<LinkComponent*>(baseCompType);
+}
+
+template LinkComponent* ObjectsHelper::getLink(BaseObjectComponent*);
+template LinkComponent* ObjectsHelper::getLink(SelectableObject*);
+
+//------------------------------------------------------------------------------

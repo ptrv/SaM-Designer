@@ -291,8 +291,8 @@ bool ObjectsHolder::getStartEndObjects(String& startId, String& endId)
     SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
     if(sis.getNumSelected() == 2)
     {
-        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(0));
-        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*> (sis.getSelectedItem(1));
+        ObjectComponent* oc1 = ObjectsHelper::getObject (sis.getSelectedItem(0));
+        ObjectComponent* oc2 = ObjectsHelper::getObject (sis.getSelectedItem(1));
         if (oc1 != nullptr && oc2 != nullptr)
         {
             startId = oc1->getData().getProperty(Ids::identifier).toString();
@@ -734,7 +734,7 @@ void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results,
     {
         SelectableObject* const e = dynamic_cast <SelectableObject*> (getChildComponent (i));
         bool isIntersecting;
-        if (LinkComponent * const lc = dynamic_cast<LinkComponent*> (e))
+        if (LinkComponent * const lc = ObjectsHelper::getLink (e))
         {
             isIntersecting = lasso.contains(lc->getIntersectioBounds());
         }
@@ -808,7 +808,7 @@ const Rectangle<int> ObjectsHolder::getObjectsBounds() const
     for (int i = 0; i < getNumChildComponents(); ++i)
     {
         Component* const comp = getChildComponent(i);
-        ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(comp);
+        ObjectComponent* const oc = ObjectsHelper::getObject(comp);
         CommentComponent* const cc = dynamic_cast<CommentComponent*>(comp);
         if(oc != nullptr || cc != nullptr)
         {

@@ -32,6 +32,8 @@ namespace synthamodeler
 
 class ObjController;
 class DirectedGraph;
+class ObjectComponent;
+class LinkComponent;
 
 class ObjectsHelper
 {
@@ -69,6 +71,11 @@ public:
     static const Array<Identifier>& getResonatorParamsIds();
     static const Array<Identifier>& getAllObjectIds();
 
+    template<typename BaseCompType>
+    static ObjectComponent* getObject(BaseCompType* baseCompType);
+
+    template<typename BaseCompType>
+    static LinkComponent* getLink(BaseCompType* baseCompType);
 };
 
 }

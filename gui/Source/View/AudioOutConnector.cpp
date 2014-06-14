@@ -31,6 +31,7 @@
 #include "LinkComponent.h"
 #include "../Controller/ObjController.h"
 #include "ObjectsHolder.h"
+#include "../Utilities/ObjectsHelper.h"
 
 #include "AudioOutConnector.h"
 
@@ -58,12 +59,12 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
 
     audioOutComp->addChangeListener(this);
 
-    if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp.get()))
+    if (ObjectComponent* oc = ObjectsHelper::getObject(sourceComp.get()))
     {
         objectComp = oc;
         objectComp->addChangeListener(this);
     }
-    else if (LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp.get()))
+    else if (LinkComponent* lc = ObjectsHelper::getLink(sourceComp.get()))
     {
         linkComp = lc;
         linkComp->addChangeListener(this);
