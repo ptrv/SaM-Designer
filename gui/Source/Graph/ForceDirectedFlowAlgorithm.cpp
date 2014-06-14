@@ -59,10 +59,9 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g,
 
     int reset = 0;
 
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const n : nodes)
     {
         DBG("width: " +String(width)+ " height: " +String(height));
-        Node* n = nodes.getUnchecked(i);
         Array<Node*>& incoming = n->getIncomingLinks();
 //        Array<Node*>& outcoming = n->getOutgoingLinks();
         int nx = n->getNX();
@@ -72,9 +71,8 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g,
         int dx = 0;
         int dy = 0;
 
-        for (int j = 0; j < incoming.size(); ++j)
+        for (Node* const ni : incoming)
         {
-            Node* ni = incoming.getUnchecked(j);
             dx += (ni->getNX() - n->getNX());
             dy += (ni->getNY() - n->getNY());
         }

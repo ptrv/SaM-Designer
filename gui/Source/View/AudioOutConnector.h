@@ -60,8 +60,10 @@ public:
     void mouseDrag(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
 
-    BaseObjectComponent* getSourceObject() { return sourceComp; }
-    ObjectComponent* getAudioObject() { return audioOutComp; }
+    BaseObjectComponent* getSourceObject()             { return sourceComp; }
+    const BaseObjectComponent* getSourceObject() const { return sourceComp; }
+    ObjectComponent* getAudioObject()                  { return audioOutComp; }
+    const ObjectComponent* getAudioObject() const      { return audioOutComp; }
     
     Rectangle<int> getIntersectioBounds();
 

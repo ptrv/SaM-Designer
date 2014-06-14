@@ -269,7 +269,7 @@ void ObjectComponent::setSelected(bool shouldBeSelected)
     {
         owner.getSelectedObjects().deselect(this);
     }
-   	repaint();
+    repaint();
 }
 
 void ObjectComponent::toggleSelected()

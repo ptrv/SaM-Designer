@@ -39,7 +39,8 @@ public:
     BaseObjectComponent(ObjController& _owner, ValueTree data_);
     virtual ~BaseObjectComponent();
     
-    ValueTree getData();
+    ValueTree getData()       { return data; }
+    ValueTree getData() const { return data; }
 
     Point<int> getCenter() const;
 

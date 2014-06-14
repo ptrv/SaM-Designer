@@ -71,9 +71,8 @@ Array<Node*> DirectedGraph::getRoots()
 {
     Array<Node*> roots;
 
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const n : nodes)
     {
-        Node* n = nodes.getUnchecked(i);
         if(n->getIncomingLinksCount() == 0)
             roots.add(n);
     }
@@ -85,9 +84,8 @@ Array<Node*> DirectedGraph::getLeaves()
 {
     Array<Node*> leaves;
 
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const n : nodes)
     {
-        Node* n = nodes.getUnchecked(i);
         if(n->getOutgoingLinksCount() == 0)
             leaves.add(n);
     }
@@ -105,10 +103,8 @@ bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height,
 void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int height)
 {
     Random rnd(Time::currentTimeMillis());
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const n : nodes)
     {
-        Node* n = nodes[i];
-
 //        int x = n->getNX();
 //        int y = n->getNY();
 //        float f1 = 1.0f;
@@ -149,9 +145,8 @@ void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int heig
 String DirectedGraph::toString()
 {
     String s;
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const n : nodes)
     {
-        Node* n = nodes[i];
         s << n->getLabel() << "\n";
         for (int j = 0; j < n->getOutgoingLinks().size(); ++j)
         {

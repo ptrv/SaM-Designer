@@ -41,10 +41,8 @@ IdManager::IdManager()
 IdManager::~IdManager()
 {
     allIds.clear();
-    for (int i = 0; i < ObjectsHelper::getAllObjectIds().size(); ++i)
-    {
-        theIds[i].clear();
-    }
+    std::for_each(theIds.begin(), theIds.end(),
+                  [](SortedSet<String>& s) { s.clear(); });
 }
 
 SortedSet<String>* IdManager::getSet(const Identifier& objId)

@@ -135,6 +135,12 @@ PropertiesFile& StoredSettings::getProps()
     return *props;
 }
 
+PropertiesFile& StoredSettings::getProps() const
+{
+    jassert (props != nullptr);
+    return *props;
+}
+
 PropertiesFile& StoredSettings::getExporters()
 {
     jassert (exporters != nullptr);

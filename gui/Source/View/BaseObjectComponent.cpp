@@ -42,11 +42,6 @@ BaseObjectComponent::~BaseObjectComponent()
     masterReference.clear();
 }
 
-ValueTree BaseObjectComponent::getData()
-{
-    return data;
-}
-
 Point<int> BaseObjectComponent::getCenter() const
 {
     return getBounds().getCentre();

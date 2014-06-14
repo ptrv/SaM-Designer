@@ -90,14 +90,15 @@ DocumentWindow(TRANS("Properties"),
 
     setUsingNativeTitleBar(true);
 
+    const StoredSettings& settings = *StoredSettings::getInstance();
     // restore the last size and position from our settings file..
-	restoreWindowStateFromString (StoredSettings::getInstance()->getProps()
-	                                    .getValue ("lastPropertiesWindowPos"));
+	restoreWindowStateFromString (
+        settings.getProps().getValue("lastPropertiesWindowPos"));
 
     setContentOwned(new EmptyComponent(), false);
     setResizable(true, true);
 
-    setAlwaysOnTop(StoredSettings::getInstance()->getIsPropertiesWindowAlwaysOnTop());
+    setAlwaysOnTop(settings.getIsPropertiesWindowAlwaysOnTop());
 
 	commandManager->registerAllCommandsForTarget(this);
 

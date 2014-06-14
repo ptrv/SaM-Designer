@@ -270,7 +270,7 @@ void LinkComponent::changeListenerCallback (ChangeBroadcaster* const source)
     }
 }
 
-bool LinkComponent::sameStartEnd(ValueTree linkTree)
+bool LinkComponent::sameStartEnd(ValueTree linkTree) const
 {
     return linkTree.getProperty(Ids::startVertex) == data.getProperty(Ids::startVertex) 
         && linkTree.getProperty(Ids::endVertex) == data.getProperty(Ids::endVertex);

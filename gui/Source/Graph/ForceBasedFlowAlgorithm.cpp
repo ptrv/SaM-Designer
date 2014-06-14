@@ -52,9 +52,8 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
     float dij = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_dij", 200.0);
 //    float deltaT = 0.1f;
 
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const v : nodes)
     {
-        Node* v = nodes.getUnchecked(i);
         v->force.x = v->force.y = 0.0f;
 
 //        alpha = v->getMass();
@@ -90,12 +89,10 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
 //            fy += res.getY();
 //        }
 
-        for (int j = 0; j < nodes.size(); ++j)
+        for (Node* const u : nodes)
         {
-            if(i == j)
+            if (v == u)
                 continue;
-
-            Node* u = nodes.getUnchecked(j);
 
             Point<float> up(u->getNX(), u->getNY());
 
@@ -112,12 +109,10 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
             fx += res.getX();// /v->getMass();
             fy += res.getY();// /v->getMass();
         }
-        for (int j = 0; j < nodes.size(); ++j)
+        for (Node* const u : nodes)
         {
-            if(i == j)
+            if (v == u)
                 continue;
-
-            Node* u = nodes.getUnchecked(j);
 
             Point<float> up(u->getNX(), u->getNY());
 
@@ -141,9 +136,8 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
     }
 
 //    objController.getSelectedObjects().deselectAll();
-    for (int i = 0; i < nodes.size(); ++i)
+    for (Node* const v : nodes)
     {
-        Node* v = nodes.getUnchecked(i);
         float vx = v->getNX();
         float vy = v->getNY();
 
@@ -175,9 +169,8 @@ bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*of
 //    DBG(lengthTotalEnergy);
     if(lengthTotalEnergy < stopEnergy)
     {
-        for (int i = 0; i < nodes.size(); ++i)
+        for (Node* const v : nodes)
         {
-            Node* const v = nodes.getUnchecked(i);
             ObjectComponent* oc = static_cast<ObjectComponent*>(v);
             oc->setPosition(oc->getActualPos(), true);
         }

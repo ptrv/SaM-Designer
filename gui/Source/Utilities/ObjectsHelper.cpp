@@ -48,27 +48,22 @@ bool ObjectsHelper::changeObjectNameInLink(const ObjController& objController,
     if (oc == nullptr)
         oc = objController.getObjectForId(oldName);
 
-    if (oc != nullptr)
-    {
-        Array<LinkComponent*> linksTmp = oc->getAttachedLinks();
-        for (int i = 0; i < linksTmp.size(); ++i)
-        {
-            LinkComponent* elem = linksTmp[i];
-            if (elem->getData()[Ids::startVertex] == oldName)
-            {
-                elem->getData().setProperty(Ids::startVertex, newName, undoManager);
-            }
-            else if (elem->getData()[Ids::endVertex] == oldName)
-            {
-                elem->getData().setProperty(Ids::endVertex, newName, undoManager);
-            }
-        }
-        return true;
-    }
-    else
-    {
+    if (oc == nullptr)
         return false;
-    }
+
+    Array<LinkComponent*> linksTmp = oc->getAttachedLinks();
+    std::for_each(linksTmp.begin(), linksTmp.end(), [&](LinkComponent* const lc)
+    {
+        if (lc->getData()[Ids::startVertex] == oldName)
+        {
+            lc->getData().setProperty(Ids::startVertex, newName, undoManager);
+        }
+        else if (lc->getData()[Ids::endVertex] == oldName)
+        {
+            lc->getData().setProperty(Ids::endVertex, newName, undoManager);
+        }
+    });
+    return true;
 }
 
 //------------------------------------------------------------------------------

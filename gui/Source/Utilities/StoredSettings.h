@@ -41,6 +41,7 @@ public:
     juce_DeclareSingleton (StoredSettings, false)
 
     PropertiesFile& getProps();
+    PropertiesFile& getProps() const;
     PropertiesFile& getExporters();
     PropertiesFile& getDefaultValues();
     void flush();

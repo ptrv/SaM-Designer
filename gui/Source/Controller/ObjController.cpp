@@ -41,6 +41,8 @@
 
 #include "ObjController.h"
 
+#include <algorithm>
+
 using namespace synthamodeler;
 
 ObjController::ObjController(MDLController& owner_)
@@ -135,34 +137,30 @@ void ObjController::addNewLink(ObjectsHolder* holder, ValueTree linkValues)
 {
     addLink(holder, linkValues, -1, true);
 }
+
 bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
 {
-    for (int i = 0; i < links.size(); i++)
+    return std::any_of(links.begin(), links.end(), [&](const LinkComponent* const lc)
     {
-        if(links.getUnchecked(i)->sameStartEnd(linkTree))
-        {
-            return true;
-        }
-    }
-    return false;
-
+        return lc->sameStartEnd(linkTree);
+    });
 }
 
 bool ObjController::checkIfAudioConnectionExitsts(ValueTree source,
                                                   ValueTree audioOut)
 {
-    for (int i = 0; i < audioConnections.size(); i++)
+    auto fnCompareAudioConnections = [&](const AudioOutConnector* const aoc)
     {
-        ValueTree sourceComp = audioConnections.getUnchecked(i)->getSourceObject()->getData();
-        ValueTree aoComp = audioConnections.getUnchecked(i)->getAudioObject()->getData();
-        if(sourceComp[Ids::identifier] == source[Ids::identifier]
-            && aoComp[Ids::identifier] == audioOut[Ids::identifier])
-        {
-            return true;
-        }
-    }
-    return false;
+        const ValueTree& sourceComp = aoc->getSourceObject()->getData();
+        const ValueTree& aoComp = aoc->getAudioObject()->getData();
+
+        return sourceComp[Ids::identifier] == source[Ids::identifier]
+            && aoComp[Ids::identifier] == audioOut[Ids::identifier];
+    };
+    return std::any_of(audioConnections.begin(), audioConnections.end(),
+                       fnCompareAudioConnections);
 }
+
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
 {
     if(sObjects.getNumSelected() == 2)
@@ -733,41 +731,32 @@ void ObjController::selectObjectsIfContainText(const String& selectionText)
 
 void ObjController::startDragging()
 {
-    for (int i = 0; i < objects.size(); ++i)
+    auto fnSetDragStart = [](BaseObjectComponent* const boc)
     {
-        ObjectComponent * const c = objects.getUnchecked(i);
-
-        const Point<int>& r = c->getCenter();
-
-        c->getProperties().set("xDragStart", r.getX());
-        c->getProperties().set("yDragStart", r.getY());
-    }
-    for (int i = 0; i < comments.size(); ++i)
-    {
-        CommentComponent * const c = comments.getUnchecked(i);
-
-        const Point<int>& r = c->getCenter();
-
-        c->getProperties().set("xDragStart", r.getX());
-        c->getProperties().set("yDragStart", r.getY());
-    }
+        const Point<int>& r = boc->getCenter();
+        boc->getProperties().set("xDragStart", r.getX());
+        boc->getProperties().set("yDragStart", r.getY());
+    };
+    std::for_each(objects.begin(), objects.end(), fnSetDragStart);
+    std::for_each(comments.begin(), comments.end(), fnSetDragStart);
 
     owner.getUndoManager().beginNewTransaction();
 }
 
 void ObjController::dragSelectedComps(int dx, int dy)
 {
+    const ObjectsHolder& holder = *owner.getHolderComponent();
+
     for (int i = 0; i < sObjects.getNumSelected(); ++i)
     {
         if(ObjectComponent * const c = ObjectsHelper::getObject(sObjects.getSelectedItem(i)))
         {
-           const int startX = c->getProperties() ["xDragStart"];
-           const int startY = c->getProperties() ["yDragStart"];
+            const int startX = c->getProperties() ["xDragStart"];
+            const int startY = c->getProperties() ["yDragStart"];
 
-            Point<int> r = c->getCenter();
+            Point<int> r(c->getCenter());
 
-            r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
-                    owner.getHolderComponent()->snapPosition(startY + dy));
+            r.setXY(holder.snapPosition(startX + dx), holder.snapPosition(startY + dy));
 
             c->setActualPosition(r);
         }
@@ -778,8 +767,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
             Point<int> r(cc->getCenter());
 
-            r.setXY(owner.getHolderComponent()->snapPosition(startX + dx),
-                    owner.getHolderComponent()->snapPosition(startY + dy));
+            r.setXY(holder.snapPosition(startX + dx), holder.snapPosition(startY + dy));
 
             cc->setActualPosition(r);
         }
@@ -788,7 +776,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
 void ObjController::endDragging()
 {
-    for (int i = 0; i < sObjects.getNumSelected(); ++i)
+    std::for_each(sObjects.begin(), sObjects.end(), [](SelectableObject* obj)
     {
         if(ObjectComponent * const c = ObjectsHelper::getObject(obj))
         {
@@ -798,7 +786,7 @@ void ObjController::endDragging()
         {
             cc->setPosition(cc->getActualPos(), true);
         }
-    }
+    });
 
     changed();
 
@@ -822,46 +810,33 @@ void ObjController::changed()
     owner.changed();
 }
 
+struct ObjectIdComparator
+{
+    ObjectIdComparator(const String& idStr) : idStr_(idStr){}
+
+    String idStr_;
+    bool operator()(const BaseObjectComponent* const boc)
+    {
+        return idStr_.compare(boc->getData().getProperty(Ids::identifier).toString()) == 0;
+    }
+};
+
 ObjectComponent* ObjController::getObjectForId(const String& idString) const throw()
 {
-    for (int i = 0; i < objects.size(); i++)
-    {
-        ObjectComponent* elem = objects.getUnchecked(i);
-        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
-        {
-            return elem;
-        }
-    }
-    return nullptr;
-
+    auto it = std::find_if(objects.begin(), objects.end(), ObjectIdComparator(idString));
+    return it != objects.end() ? *it : nullptr;
 }
 
 LinkComponent* ObjController::getLinkForId(const String& idString) const throw()
 {
-    for (int i = 0; i < links.size(); i++)
-    {
-        LinkComponent* elem = links.getUnchecked(i);
-        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
-        {
-            return elem;
-        }
-    }
-    return nullptr;
-
+    auto it = std::find_if(links.begin(), links.end(), ObjectIdComparator(idString));
+    return it != links.end() ? *it : nullptr;
 }
 
 CommentComponent* ObjController::getCommentForId(const String& idString) const throw()
 {
-    for (int i = 0; i < comments.size(); i++)
-    {
-        CommentComponent* elem = comments.getUnchecked(i);
-        if(idString.compare(elem->getData().getProperty(Ids::identifier).toString()) == 0)
-        {
-            return elem;
-        }
-    }
-    return nullptr;
-
+    auto it = std::find_if(comments.begin(), comments.end(), ObjectIdComparator(idString));
+    return it != comments.end() ? *it : nullptr;
 }
 
 void ObjController::reverseLinkDirection()
@@ -895,6 +870,7 @@ Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
             linkIndices.add(i);
         }
     }
+
     return linkIndices;
 }
 

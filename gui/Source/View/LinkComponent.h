@@ -63,7 +63,7 @@ public:
     
     void changeListenerCallback (ChangeBroadcaster* source);
     
-    bool sameStartEnd(ValueTree linkTree);
+    bool sameStartEnd(ValueTree linkTree) const;
     
     void reverseDirection();
     
