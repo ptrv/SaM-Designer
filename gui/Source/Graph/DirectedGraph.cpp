@@ -95,9 +95,11 @@ Array<Node*> DirectedGraph::getLeaves()
     return leaves;
 }
 
-bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height, ObjController& objController, float deltaTime)
+bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height,
+                           ObjController& objController, float deltaTime)
 {
-    return flower->reflow(this, offsetX, offsetY, width, height, objController, deltaTime);
+    return flower->reflow(
+        this, offsetX, offsetY, width, height, objController, deltaTime);
 }
 
 void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int height)

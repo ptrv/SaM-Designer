@@ -274,9 +274,9 @@ String IdManager::getObjNamePrefix(const Identifier& objId)
 }
 
 String IdManager::getObjNameForPaste(const Identifier& objId,
-                                        const String& objName,
-                                        int timesPasted,
-                                        bool groupPaste)
+                                     const String& objName,
+                                     int timesPasted,
+                                     bool groupPaste)
 {
     if(groupPaste)
     {

@@ -257,8 +257,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             {
                 if(! checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
                 {
-                    ValueTree src = createAudioSourceTree(oc2->getData()[Ids::identifier].toString(),
-                                                          "*1.0");
+                    ValueTree src = createAudioSourceTree(
+                        oc2->getData()[Ids::identifier].toString(), "*1.0");
 //                    ValueTree sources = oc1->getData().getOrCreateChildWithName(Ids::sources)
                     addAudioConnection(holder, oc2, oc1, src, -1, true);
                 }
@@ -268,8 +268,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             {
                 if(! checkIfAudioConnectionExitsts(oc1->getData(), oc2->getData()))
                 {
-                    ValueTree src = createAudioSourceTree(oc1->getData()[Ids::identifier].toString(),
-                                                          "*1.0");
+                    ValueTree src = createAudioSourceTree(
+                        oc1->getData()[Ids::identifier].toString(), "*1.0");
                     addAudioConnection(holder, oc1, oc2, src, -1, true);
                 }
             }
@@ -283,8 +283,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
         {
             if( ! checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
             {
-                ValueTree src = createAudioSourceTree(lc1->getData()[Ids::identifier].toString(),
-                                                          "*1.0");
+                ValueTree src = createAudioSourceTree(
+                    lc1->getData()[Ids::identifier].toString(), "*1.0");
                 addAudioConnection(holder, lc1, oc2, src, -1, true);
             }
         }
@@ -293,8 +293,8 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
         {
             if( ! checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
             {
-                ValueTree src = createAudioSourceTree(lc2->getData()[Ids::identifier].toString(),
-                                                      "*1.0");
+                ValueTree src = createAudioSourceTree(
+                    lc2->getData()[Ids::identifier].toString(), "*1.0");
                 addAudioConnection(holder, lc2, oc1, src, -1, true);
             }
         }
@@ -527,8 +527,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f
-                && float(obj[Ids::posY]) < 0.00001f)
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
                 ++numNodesZeroPos;
         }
         else
@@ -547,8 +546,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f
-                && float(obj[Ids::posY]) < 0.00001f)
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
                 ++numNodesZeroPos;
         }
         else
@@ -567,8 +565,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(objComp);
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f
-                && float(obj[Ids::posY]) < 0.00001f)
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
                 ++numNodesZeroPos;
         }
         else
@@ -614,8 +611,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             holder->addAndMakeVisible(audioOutComp);
             SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
             ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f
-                && float(obj[Ids::posY]) < 0.00001f)
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
                 ++numNodesZeroPos;
 
             ValueTree aoSources = obj.getChildWithName(Ids::sources);
@@ -632,9 +628,8 @@ void ObjController::loadComponents(ObjectsHolder* holder)
 
                 if( sourceComp != nullptr )
                 {
-                    AudioOutConnector* aoc = new AudioOutConnector(*this,
-                                                                   sourceComp,
-                                                                   audioOutComp);
+                    AudioOutConnector* aoc = new AudioOutConnector(
+                        *this, sourceComp, audioOutComp);
                     audioConnections.add(aoc);
                     holder->addAndMakeVisible(aoc);
                     aoc->update();
