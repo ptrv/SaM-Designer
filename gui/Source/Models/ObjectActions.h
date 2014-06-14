@@ -552,8 +552,8 @@ public:
 	AddCommentAction(ObjController* objController_,
                     ValueTree objTree_, ObjectsHolder* holder_)
 	: objTree(objTree_.createCopy()),
-        holderComp(holder_),
-        objController(objController_)
+      holderComp(holder_),
+      objController(objController_)
 	{
 	}
 	~AddCommentAction()
@@ -664,7 +664,7 @@ public:
                     ObjController* objController_)
 	: objController(objController_),
 	  newPos(newPos_),
-      oldPos(componentToMove->getActualPos())
+      oldPos(componentToMove->getOldPos())
 	{
         indexOfCommentToMove = objController->indexOfComment(componentToMove);
 	}

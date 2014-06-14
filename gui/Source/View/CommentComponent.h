@@ -78,6 +78,10 @@ public:
     void valueTreeChildOrderChanged(ValueTree& parentTreeWhoseChildrenHaveMoved);
     void valueTreeParentChanged(ValueTree& treeWhoseParentHasChanged);
 
+    void setOldPos(const Point<int>& p) { oldPos = p; }
+    const Point<int>& getOldPos() const { return oldPos; }
+
+
 private:
     void changeListenerCallback (ChangeBroadcaster*);
 
@@ -86,6 +90,7 @@ private:
 
     Point<int> actualPos;
     Point<int> originalPos;
+    Point<int> oldPos;
 
     bool dragging, mouseDownSelectStatus;
 

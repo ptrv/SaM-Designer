@@ -221,6 +221,8 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
             sources.addChild(source, -1, nullptr);
         audioConnections.insert(index, aoc);
         holder->addAndMakeVisible(aoc);
+        aoc->update();
+        aoc->toBack();
         return aoc;
     }
     return nullptr;
@@ -331,6 +333,7 @@ CommentComponent* ObjController::addComment(ObjectsHolder* holder,
         comments.insert(index, commentComp);
 
         holder->addAndMakeVisible(commentComp);
+        commentComp->update();
         changed();
         return commentComp;
     }
@@ -668,8 +671,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
             cComp->update();
             SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
             ++numObjects;
-            if(float(comment[Ids::posX]) < 0.00001f
-                && float(comment[Ids::posY]) < 0.00001f)
+            if(float(comment[Ids::posX]) < 0.00001f && float(comment[Ids::posY]) < 0.00001f)
                 ++numNodesZeroPos;
         }
     }
@@ -794,7 +796,7 @@ void ObjController::endDragging()
         }
         else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
         {
-            cc->setPosition(cc->getPosition(), true);
+            cc->setPosition(cc->getActualPos(), true);
         }
     }
 

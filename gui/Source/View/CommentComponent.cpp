@@ -51,8 +51,12 @@ CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
     textField->addListener(this);
     addAndMakeVisible(textField);
 
-    originalPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
-	actualPos.setXY(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
+    const Point<int> currentPos(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
+
+    setCentrePosition(currentPos.x, currentPos.y);
+    originalPos = currentPos;
+    actualPos = currentPos;
+    oldPos = currentPos;
 
     owner.getSelectedObjects().addChangeListener (this);
     selfChangeListenerList.addChangeListener (this);
@@ -133,7 +137,6 @@ void CommentComponent::mouseDown (const MouseEvent& e)
 
 void CommentComponent::mouseDrag (const MouseEvent& e)
 {
-
     if (! e.mods.isPopupMenu())
     {
         jassert (dynamic_cast <ObjectsHolder*> (getParentComponent()) != 0);
@@ -152,9 +155,8 @@ void CommentComponent::mouseDrag (const MouseEvent& e)
         if (dragging)
         {
             owner.dragSelectedComps (e.getDistanceFromDragStartX(),
-                                      e.getDistanceFromDragStartY());
+                                     e.getDistanceFromDragStartY());
         }
-        update();
     }
 }
 
@@ -163,20 +165,20 @@ void CommentComponent::mouseUp (const MouseEvent& e)
     if (dragging)
         owner.endDragging();
 
-    owner.getSelectedObjects().addToSelectionOnMouseUp (this, e.mods, dragging,
-                                                        mouseDownSelectStatus);
-    update();
+    owner.getSelectedObjects().addToSelectionOnMouseUp (
+        this, e.mods, dragging, mouseDownSelectStatus);
 }
 
 void CommentComponent::update()
 {
-	setCentrePosition((float) actualPos.x, (float) actualPos.y);
     resized();
+    setCentrePosition((float) actualPos.x, (float) actualPos.y);
+    oldPos = getCenter();
 }
 
 void CommentComponent::setPosition(Point<int> newPos, bool undoable)
 {
-    if (actualPos != newPos)
+    if (getOldPos() != newPos)
     {
         if (undoable)
         {
@@ -188,12 +190,14 @@ void CommentComponent::setPosition(Point<int> newPos, bool undoable)
             data.setProperty(Ids::posX, newPos.getX(), nullptr);
             data.setProperty(Ids::posY, newPos.getY(), nullptr);
             setActualPosition(newPos);
+            setOldPos(getCenter());
         }
     }
 }
 void CommentComponent::setActualPosition(Point<int> pos)
 {
-	actualPos = pos;
+    actualPos = pos;
+    setCentrePosition(pos.x, pos.y);
 }
 
 void CommentComponent::setSelected(bool shouldBeSelected)
@@ -207,7 +211,7 @@ void CommentComponent::setSelected(bool shouldBeSelected)
     {
         owner.getSelectedObjects().deselect(this);
     }
-   	repaint();
+    repaint();
 }
 
 void CommentComponent::toggleSelected()
