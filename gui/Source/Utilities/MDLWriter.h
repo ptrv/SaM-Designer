@@ -48,7 +48,7 @@ public:
     bool writeMDLX(const File& saveFile);
 
 private:
-    String getMDLString();
+    void getMDLString(String& mdlContent);
     const MDLFile& mdlFile;
 };
 }

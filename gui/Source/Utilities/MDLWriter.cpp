@@ -35,11 +35,11 @@ MDLWriter::MDLWriter(const MDLFile& mdlFile_)
 {
 }
 
-String MDLWriter::getMDLString()
+void MDLWriter::getMDLString(String& mdlContent)
 {
     String mdlHeader(BinaryData::mdl_file_header_txt);
 
-	String mdlContent;
+	mdlContent = String::empty;
 	mdlContent << mdlHeader;
 
 	// ------------------------------------------------------------------------
@@ -265,17 +265,14 @@ String MDLWriter::getMDLString()
         mdlContent << ",";
         mdlContent << comm.getProperty(Ids::posY, "0").toString();
 		mdlContent << "\n";
-
     }
-
-
-    return mdlContent;
 }
 bool MDLWriter::writeMDL(const File& saveFile)
 {
 	const File& outFile = saveFile;//(savePath);
 
-    String mdlContent = getMDLString();
+    String mdlContent;
+    getMDLString(mdlContent);
     // ------------------------------------------------------------------------
     return Utils::writeStringToFile(mdlContent, outFile);
 }
