@@ -74,8 +74,6 @@ private:
     ScopedPointer<Slider> slK;
     ScopedPointer<Label> laDamp;
     ScopedPointer<Slider> slDamp;
-    ScopedPointer<Label> laDij;
-    ScopedPointer<Slider> slDij;
     ScopedPointer<Label> laEnergy;
     ScopedPointer<Slider> slEnergy;
     ScopedPointer<Label> laTimestep;

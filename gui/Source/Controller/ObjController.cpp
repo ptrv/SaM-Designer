@@ -776,6 +776,11 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
 void ObjController::endDragging()
 {
+    if (owner.getHolderComponent()->isTimerRunning())
+    {
+        return;
+    }
+
     std::for_each(sObjects.begin(), sObjects.end(), [](SelectableObject* obj)
     {
         if(ObjectComponent * const c = ObjectsHelper::getObject(obj))

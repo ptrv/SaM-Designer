@@ -102,7 +102,7 @@ public:
 
 
     void timerCallback();
-    bool reflow();
+    bool reflow(bool setPosition);
 
     void redrawObjects(const int cmdId);
 

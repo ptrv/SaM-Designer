@@ -51,6 +51,19 @@ void DirectedGraph::setFlowAlgorithm(FlowAlgorithm* f)
     flower = f;
 }
 
+void DirectedGraph::init(const int numNodes)
+{
+    for (int i = 0; i < numNodes; ++i)
+    {
+        Array<bool> a;
+        for (int j = 0; j < numNodes; ++j)
+        {
+           a.add(false);
+        }
+        edges.add(a);
+    }
+}
+
 void DirectedGraph::addNode(Node* n)
 {
     nodes.addIfNotAlreadyThere(n);
@@ -62,6 +75,10 @@ bool DirectedGraph::linkNodes(Node* n1, Node* n2)
     {
         n1->addOutgoingLink(n2);
         n2->addIncomingLink(n1);
+        Array<bool>& edgesA = edges.getReference(nodes.indexOf(n1));
+        Array<bool>& edgesB = edges.getReference(nodes.indexOf(n2));
+        edgesA.set(nodes.indexOf(n2), true);
+        edgesB.set(nodes.indexOf(n1), true);
         return true;
     }
     return false;
@@ -94,10 +111,11 @@ Array<Node*> DirectedGraph::getLeaves()
 }
 
 bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height,
-                           ObjController& objController, float deltaTime)
+                           ObjController& objController, float deltaTime,
+                           const bool setPosition)
 {
     return flower->reflow(
-        this, offsetX, offsetY, width, height, objController, deltaTime);
+        this, offsetX, offsetY, width, height, objController, deltaTime, setPosition);
 }
 
 void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int height)

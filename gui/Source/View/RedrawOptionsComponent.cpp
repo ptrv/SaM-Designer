@@ -56,7 +56,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laBeta->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slBeta = new Slider ("slBeta"));
-    slBeta->setRange (0, 2, 0.001);
+    slBeta->setRange (100, 2000, 1);
     slBeta->setSliderStyle (Slider::LinearHorizontal);
     slBeta->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slBeta->addListener (this);
@@ -70,10 +70,11 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laK->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slK = new Slider ("slK"));
-    slK->setRange (0.01, 5, 0.01);
+    slK->setRange (0.001, 0.3, 0.001);
     slK->setSliderStyle (Slider::LinearHorizontal);
     slK->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slK->addListener (this);
+    slK->setSkewFactor (0.6);
 
     addAndMakeVisible (laDamp = new Label ("laDamp",
                                            TRANS("Damping")));
@@ -89,20 +90,6 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slDamp->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slDamp->addListener (this);
 
-    addAndMakeVisible (laDij = new Label ("laDij",
-                                          TRANS("Ideal Distance")));
-    laDij->setFont (Font (15.00f, Font::plain));
-    laDij->setJustificationType (Justification::centredLeft);
-    laDij->setEditable (false, false, false);
-    laDij->setColour (TextEditor::textColourId, Colours::black);
-    laDij->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
-
-    addAndMakeVisible (slDij = new Slider ("slDij"));
-    slDij->setRange (0.1, 500, 0.01);
-    slDij->setSliderStyle (Slider::LinearHorizontal);
-    slDij->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
-    slDij->addListener (this);
-
     addAndMakeVisible (laEnergy = new Label ("laEnergy",
                                              TRANS("Energy")));
     laEnergy->setFont (Font (15.00f, Font::plain));
@@ -112,10 +99,11 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laEnergy->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slEnergy = new Slider ("slEnergy"));
-    slEnergy->setRange (0, 10, 0.01);
+    slEnergy->setRange (0.001, 10, 0.001);
     slEnergy->setSliderStyle (Slider::LinearHorizontal);
     slEnergy->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slEnergy->addListener (this);
+    slEnergy->setSkewFactor (0.35);
 
     addAndMakeVisible (laTimestep = new Label ("laTimestep",
                                                TRANS("Timestep")));
@@ -126,7 +114,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laTimestep->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slTimestep = new Slider ("slTimestamp"));
-    slTimestep->setRange (0.1, 0.99, 0.01);
+    slTimestep->setRange (0.1, 2, 0.01);
     slTimestep->setSliderStyle (Slider::LinearHorizontal);
     slTimestep->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slTimestep->addListener (this);
@@ -147,7 +135,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     //[UserPreSize]
     //[/UserPreSize]
 
-    setSize (400, 380);
+    setSize (400, 350);
 
 
     //[Constructor] You can add your own custom stuff here..
@@ -168,8 +156,6 @@ RedrawOptionsComponent::~RedrawOptionsComponent()
     slK = nullptr;
     laDamp = nullptr;
     slDamp = nullptr;
-    laDij = nullptr;
-    slDij = nullptr;
     laEnergy = nullptr;
     slEnergy = nullptr;
     laTimestep = nullptr;
@@ -205,12 +191,10 @@ void RedrawOptionsComponent::resized()
     slK->setBounds (122, 132, 250, 24);
     laDamp->setBounds (12, 172, 104, 24);
     slDamp->setBounds (122, 172, 250, 24);
-    laDij->setBounds (12, 212, 104, 24);
-    slDij->setBounds (122, 212, 250, 24);
-    laEnergy->setBounds (12, 252, 104, 24);
-    slEnergy->setBounds (122, 252, 250, 24);
-    laTimestep->setBounds (14, 292, 104, 24);
-    slTimestep->setBounds (122, 292, 250, 24);
+    laEnergy->setBounds (12, 212, 104, 24);
+    slEnergy->setBounds (122, 212, 250, 24);
+    laTimestep->setBounds (14, 252, 104, 24);
+    slTimestep->setBounds (122, 252, 250, 24);
     btOk->setBounds ((getWidth() / 2) + -40 - ((60) / 2), getHeight() - 20 - 20, 60, 20);
     btCancel->setBounds ((getWidth() / 2) + 40 - ((60) / 2), getHeight() - 20 - 20, 60, 20);
     btToggleRandomize->setBounds (14, 16, 348, 24);
@@ -242,11 +226,6 @@ void RedrawOptionsComponent::sliderValueChanged (Slider* sliderThatWasMoved)
     {
         //[UserSliderCode_slDamp] -- add your slider handling code here..
         //[/UserSliderCode_slDamp]
-    }
-    else if (sliderThatWasMoved == slDij)
-    {
-        //[UserSliderCode_slDij] -- add your slider handling code here..
-        //[/UserSliderCode_slDij]
     }
     else if (sliderThatWasMoved == slEnergy)
     {
@@ -297,11 +276,10 @@ void RedrawOptionsComponent::buttonClicked (Button* buttonThatWasClicked)
 void RedrawOptionsComponent::readOptions()
 {
     slAlpha->setValue(pf.getDoubleValue("redrawparam_alpha", 1.0));
-    slBeta->setValue(pf.getDoubleValue("redrawparam_beta", 1.0));
-    slK->setValue(pf.getDoubleValue("redrawparam_k", 0.1));
-    slDamp->setValue(pf.getDoubleValue("redrawparam_damp", 0.75));
-    slDij->setValue(pf.getDoubleValue("redrawparam_dij", 200.0));
-    slEnergy->setValue(pf.getDoubleValue("redrawparam_energy", 0.5));
+    slBeta->setValue(pf.getDoubleValue("redrawparam_beta", 1000));
+    slK->setValue(pf.getDoubleValue("redrawparam_k", 0.02));
+    slDamp->setValue(pf.getDoubleValue("redrawparam_damp", 0.85));
+    slEnergy->setValue(pf.getDoubleValue("redrawparam_energy", 0.01));
     slTimestep->setValue(pf.getDoubleValue("redrawparam_timestep", 0.5));
     btToggleRandomize->setToggleState(pf.getBoolValue("redrawparam_randomize", true), dontSendNotification);
 }
@@ -313,7 +291,6 @@ void RedrawOptionsComponent::saveOptions()
     pf.setValue("redrawparam_k", slK->getValue());
     pf.setValue("redrawparam_damp", slDamp->getValue());
     pf.setValue("redrawparam_energy", slEnergy->getValue());
-    pf.setValue("redrawparam_dij", slDij->getValue());
     pf.setValue("redrawparam_timestep", slTimestep->getValue());
     pf.setValue("redrawparam_randomize", btToggleRandomize->getToggleState());
 }
@@ -333,7 +310,7 @@ BEGIN_JUCER_METADATA
                  parentClasses="public Component" constructorParams="RedrawOptionsPanel* rop_"
                  variableInitialisers="rop(rop_), pf(StoredSettings::getInstance()-&gt;getProps())"
                  snapPixels="2" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="1" initialWidth="400" initialHeight="380">
+                 fixedSize="1" initialWidth="400" initialHeight="350">
   <BACKGROUND backgroundColour="ffffffff"/>
   <LABEL name="laAlpha" id="6898834d3ae53f44" memberName="laAlpha" virtualName=""
          explicitFocusOrder="0" pos="12 52 104 24" edTextCol="ff000000"
@@ -351,8 +328,8 @@ BEGIN_JUCER_METADATA
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slBeta" id="ba31f1fe67c537d6" memberName="slBeta" virtualName=""
-          explicitFocusOrder="0" pos="122 92 250 24" min="0" max="2" int="0.0010000000000000000208"
-          style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
+          explicitFocusOrder="0" pos="122 92 250 24" min="100" max="2000"
+          int="1" style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laK" id="b7409306b3a8c462" memberName="laK" virtualName=""
          explicitFocusOrder="0" pos="12 132 104 24" edTextCol="ff000000"
@@ -360,10 +337,10 @@ BEGIN_JUCER_METADATA
          editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
          fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="slK" id="99f94ecb3460b725" memberName="slK" virtualName=""
-          explicitFocusOrder="0" pos="122 132 250 24" min="0.010000000000000000208"
-          max="5" int="0.010000000000000000208" style="LinearHorizontal"
+          explicitFocusOrder="0" pos="122 132 250 24" min="0.0010000000000000000208"
+          max="0.2999999999999999889" int="0.0010000000000000000208" style="LinearHorizontal"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          textBoxHeight="20" skewFactor="0.5999999999999999778"/>
   <LABEL name="laDamp" id="311a6937b8c46091" memberName="laDamp" virtualName=""
          explicitFocusOrder="0" pos="12 172 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Damping" editableSingleClick="0" editableDoubleClick="0"
@@ -374,33 +351,24 @@ BEGIN_JUCER_METADATA
           max="0.98999999999999999112" int="0.010000000000000000208" style="LinearHorizontal"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
-  <LABEL name="laDij" id="1aabd2cf39f133f3" memberName="laDij" virtualName=""
-         explicitFocusOrder="0" pos="12 212 104 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Ideal Distance" editableSingleClick="0"
-         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
-         fontsize="15" bold="0" italic="0" justification="33"/>
-  <SLIDER name="slDij" id="3cf24959fd2487f9" memberName="slDij" virtualName=""
-          explicitFocusOrder="0" pos="122 212 250 24" min="0.10000000000000000555"
-          max="500" int="0.010000000000000000208" style="LinearHorizontal"
-          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laEnergy" id="57ee54815d583117" memberName="laEnergy" virtualName=""
-         explicitFocusOrder="0" pos="12 252 104 24" edTextCol="ff000000"
+         explicitFocusOrder="0" pos="12 212 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Energy" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slEnergy" id="31979231a22fd55b" memberName="slEnergy" virtualName=""
-          explicitFocusOrder="0" pos="122 252 250 24" min="0" max="10"
-          int="0.010000000000000000208" style="LinearHorizontal" textBoxPos="TextBoxLeft"
-          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
+          explicitFocusOrder="0" pos="122 212 250 24" min="0.0010000000000000000208"
+          max="10" int="0.0010000000000000000208" style="LinearHorizontal"
+          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
+          textBoxHeight="20" skewFactor="0.3499999999999999778"/>
   <LABEL name="laTimestep" id="428812339125c8eb" memberName="laTimestep"
-         virtualName="" explicitFocusOrder="0" pos="14 292 104 24" edTextCol="ff000000"
+         virtualName="" explicitFocusOrder="0" pos="14 252 104 24" edTextCol="ff000000"
          edBkgCol="0" labelText="Timestep" editableSingleClick="0" editableDoubleClick="0"
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slTimestamp" id="f34538af30f4ec8d" memberName="slTimestep"
-          virtualName="" explicitFocusOrder="0" pos="122 292 250 24" min="0.10000000000000000555"
-          max="0.98999999999999999112" int="0.010000000000000000208" style="LinearHorizontal"
+          virtualName="" explicitFocusOrder="0" pos="122 252 250 24" min="0.10000000000000000555"
+          max="2" int="0.010000000000000000208" style="LinearHorizontal"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <TEXTBUTTON name="btOk" id="21b281d5f8eed9a" memberName="btOk" virtualName=""

@@ -247,29 +247,25 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
 
 void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph& graph)
 {
-    //    ScopedPointer<DirectedGraph> g;
+    const int numNodes = objController.getNumLinks();
 
-    for (int i = 0; i < objController.getNumLinks(); ++i)
+    graph.init(numNodes);
+
+    for (int i = 0; i < numNodes; ++i)
     {
-        LinkComponent* l = objController.getLink(i);
+        const LinkComponent* const l = objController.getLink(i);
 
-        graph.addNode(objController.getObjectForId(l->getData()[Ids::startVertex].toString()));
-        graph.addNode(objController.getObjectForId(l->getData()[Ids::endVertex].toString()));
+        ObjectComponent* const ocStart =
+            objController.getObjectForId(l->getData()[Ids::startVertex].toString());
+        ObjectComponent* const ocEnd =
+            objController.getObjectForId(l->getData()[Ids::endVertex].toString());
 
-        graph.linkNodes(objController.getObjectForId(l->getData()[Ids::startVertex].toString()),
-                     objController.getObjectForId(l->getData()[Ids::endVertex].toString()));
+        graph.addNode(ocStart);
+        graph.addNode(ocEnd);
+
+        graph.linkNodes(ocStart, ocEnd);
 
     }
-    //    for (int k = 0; k < audioConnections.size(); ++k)
-    //    {
-    //        AudioOutConnector* ac = audioConnections.getUnchecked(k);
-    //        g->addNode(ac->getSourceObject());
-    //        g->addNode(ac->getAudioObject());
-    //
-    //        g->linkNodes(ac->getSourceObject(), ac->getAudioObject());
-    //    }
-
-    graph.shuffleNodes();
 }
 
 //------------------------------------------------------------------------------

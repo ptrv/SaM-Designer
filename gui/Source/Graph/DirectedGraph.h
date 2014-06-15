@@ -40,7 +40,9 @@ public:
     virtual ~DirectedGraph();
 
     void setFlowAlgorithm(FlowAlgorithm* f);
-    
+
+    void init(int numNodes);
+
     void addNode(Node* n);
     int size() const { return nodes.size(); }
     bool linkNodes(Node* n1, Node* n2);
@@ -52,16 +54,19 @@ public:
     Array<Node*> getLeaves();
 
     bool reflow(int offsetX, int offsetY, int width, int height,
-                ObjController& objControler, float deltaTime);
+                ObjController& objControler, float deltaTime,
+                bool setPosition);
 
     void randomizeNodes(int offsetX, int offsetY, int width, int height);
 
     String toString();
 
     void shuffleNodes();
-    
+
     Array<Node*> nodes;
     ScopedPointer<FlowAlgorithm> flower;
+    Array<Array<bool> > edges;
+
 private:
 
 };

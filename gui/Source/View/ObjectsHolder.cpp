@@ -171,7 +171,7 @@ bool ObjectsHolder::keyPressed(const KeyPress& key)
         {
             DBG("redraw cancelled!");
             stopTimer();
-            reflow();
+            reflow(true);
             return true;
         }
     }
@@ -882,7 +882,7 @@ double timeStep = 0.6;
 void ObjectsHolder::timerCallback()
 {
 //    DBG("tick");
-    if(reflow())
+    if(reflow(false))
     {
         graph = nullptr;
         stopTimer();
@@ -890,7 +890,7 @@ void ObjectsHolder::timerCallback()
     }
 }
 
-bool ObjectsHolder::reflow()
+bool ObjectsHolder::reflow(const bool setPosition)
 {
     if (graph != nullptr)
     {
@@ -901,7 +901,7 @@ bool ObjectsHolder::reflow()
                                   getContentComp()->getViewPosition().y,
                                   getContentComp()->getViewWidth(),
                                   getContentComp()->getViewHeight(),
-                                  objController, timeStep);
+                                  objController, timeStep, setPosition);
         repaint();
         return done;
     }
@@ -920,8 +920,9 @@ void ObjectsHolder::redrawObjects(const int cmdId)
     if (isTimerRunning())
     {
         stopTimer();
-        graph = nullptr;
     }
+
+    graph = nullptr;
 
     timeStep = StoredSettings::getInstance()->getProps()
         .getDoubleValue("redrawparam_timestep", 0.6);
@@ -936,8 +937,7 @@ void ObjectsHolder::redrawObjects(const int cmdId)
         graph = new DirectedGraph();
         ObjectsHelper::makeGraph(objController, *graph.get());
 //        DBG(graph->toString());
-//        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
-        graph->setFlowAlgorithm(new ForceBasedFlowAlgorithm());
+        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
 
         const bool randomizeNodes =
             StoredSettings::getInstance()->getProps()
@@ -955,7 +955,7 @@ void ObjectsHolder::redrawObjects(const int cmdId)
     objController.getUndoManager().beginNewTransaction();
 
     lastTime = Time::getCurrentTime().currentTimeMillis();
-    startTimer(10);
+    startTimer(100 * timeStep);
 
 }
 //==============================================================================

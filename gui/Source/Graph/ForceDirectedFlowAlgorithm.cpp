@@ -33,15 +33,17 @@
 #include "../View/SelectableObject.h"
 #include "../View/ObjectComponent.h"
 #include "GraphUtils.h"
+#include "../Utilities/ObjectsHelper.h"
+#include "../Utilities/MiscUtilities.h"
+#include "../Utilities/StoredSettings.h"
 
 #include "ForceDirectedFlowAlgorithm.h"
 
 using namespace synthamodeler;
 
 ForceDirectedFlowAlgorithm::ForceDirectedFlowAlgorithm()
-: minSize(80.0f), elasticity(200.0f), repulsion(4.0f)
 {
-
+    initParameters();
 }
 
 ForceDirectedFlowAlgorithm::~ForceDirectedFlowAlgorithm()
@@ -49,77 +51,117 @@ ForceDirectedFlowAlgorithm::~ForceDirectedFlowAlgorithm()
 
 }
 
+
+void ForceDirectedFlowAlgorithm::initParameters()
+{
+    mass = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_alpha", 1.0);
+    charge = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_beta", 1000);
+    k = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_k", 0.02);
+    damp = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_damp", 0.85);
+    stopEnergy = StoredSettings::getInstance()->getProps().getDoubleValue("redrawparam_energy", 0.01);
+}
+
+
 bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g,
                                         int /*offsetX*/, int /*offsetY*/,
                                         int width, int height,
                                         ObjController& objController,
-                                        float /*deltaTime*/)
+                                        float /*deltaTime*/,
+                                        const bool setPosition)
 {
-    Array<Node*>& nodes = g->getNodes();
+    const Array<Node*>& nodes = g->getNodes();
+    const Array<Array<bool>>& edges = g->edges;
+    const int numNodes = nodes.size();
 
-    int reset = 0;
+    Point<float> totalEnergy(0.0, 0.0);
 
-    for (Node* const n : nodes)
+    for (int i = 0; i < numNodes; ++i)
     {
-        DBG("width: " +String(width)+ " height: " +String(height));
-        Array<Node*>& incoming = n->getIncomingLinks();
-//        Array<Node*>& outcoming = n->getOutgoingLinks();
-        int nx = n->getNX();
-        int ny = n->getNY();
+        Node* const v = nodes.getUnchecked(i);
 
-        // compute the total push force acting on this node
-        int dx = 0;
-        int dy = 0;
+        // const int vi = nodes.indexOf(v);
 
-        for (Node* const ni : incoming)
-        {
-            dx += (ni->getNX() - n->getNX());
-            dy += (ni->getNY() - n->getNY());
-        }
+        v->force = Point<float>();
 
-//        float len = sqrt(dx * dx + dy * dy);
-        float angle = GraphUtils::getDirection(dx, dy);
-        Point<int> motion = GraphUtils::rotateCoordinate(0.9 * repulsion,
-                                                         0.0, angle);
+        float vx = v->getNX();
+        float vy = v->getNY();
 
-        int px = n->getNX();
-        int py = n->getNY();
-        nx += motion.x;
-        ny += motion.y;
+        for (int j = 0; j < numNodes; ++j)
+        {
+            if (i == j)
+                continue;
 
-        if (n->getNX() < 0)
-        {
-            nx = 0;
-        }
-        else if (n->getNX() > width)
-        {
-            nx = width;
-        }
-        if (n->getNY() < 0)
-        {
-            ny = 0;
-        }
-        else if (n->getNY() > height)
-        {
-            ny = height;
-        }
-        // undo repositioning if elasticity is violated
-        float shortest = n->getShortestLinkLength();
-        DBG(shortest);
-        if (shortest < minSize || shortest > elasticity * 2)
-        {
-            ++reset;
-            nx = px;
-            ny = py;
-        }
-        objController.getSelectedObjects().deselectAll();
+            Node* const u = nodes.getUnchecked(j);
 
-        if(ObjectComponent* oc = objController.getObjectForId(n->getLabel()))
+            float ux = u->getNX();
+            float uy = u->getNY();
+
+            float dsq = ((vx - ux) * (vx - ux) + (vy - uy) * (vy - uy));
+
+            if (dsq == 0.f)
+                dsq = 0.001f;
+
+            float coul = (charge / numNodes) / dsq;
+
+            v->force.x += coul * (vx - ux);
+            v->force.y += coul * (vy - uy);
+        }
+        for (int j = 0; j < numNodes; ++j)
         {
-            oc->setPosition(Point<int>(nx, ny), false);
+            if (!edges[i][j])
+                continue;
+
+            Node* const u = nodes.getUnchecked(j);
+
+            float ux = u->getNX();
+            float uy = u->getNY();
+
+            v->force.x += k * (ux - vx);
+            v->force.y += k * (uy - vy);
         }
     }
-    DBG("reset: " << reset << ", node size: " << nodes.size() );
-    objController.changed();
-    return reset == nodes.size();
+    for (Node* const v : nodes)
+    {
+
+        if (ObjectComponent* oc = objController.getObjectForId(v->getLabel()))
+        {
+            float vx = v->getNX();
+            float vy = v->getNY();
+
+            if (oc->isMouseButtonDown())
+            {
+                vx = oc->getActualPos().x;
+                vy = oc->getActualPos().y;
+            }
+            else
+            {
+                v->velocity = (v->velocity + v->force) * damp;
+
+                totalEnergy = totalEnergy + (v->velocity * v->velocity);
+
+                vx += v->velocity.x;
+                vy += v->velocity.y;
+                vx = Utils::constrain<float>(vx, 0, width);
+                vy = Utils::constrain<float>(vy, 0, height);
+            }
+            v->setNX(vx);
+            v->setNY(vy);
+            oc->setActualPosition(Point<int>(vx, vy));
+        }
+    }
+
+    float lenTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x + totalEnergy.y * totalEnergy.y);
+
+    if (lenTotalEnergy < stopEnergy || setPosition)
+    {
+        for (Node* const v : nodes)
+        {
+            ObjectComponent* oc = static_cast<ObjectComponent*>(v);
+            oc->setPosition(oc->getActualPos(), true);
+        }
+
+        return true;
+    }
+
+    return false;
 }
