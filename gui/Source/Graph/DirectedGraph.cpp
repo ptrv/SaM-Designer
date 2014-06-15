@@ -33,6 +33,7 @@
 #include "../View/BaseObjectComponent.h"
 #include "../View/SelectableObject.h"
 #include "../View/ObjectComponent.h"
+#include "GraphUtils.h"
 
 #include "DirectedGraph.h"
 
@@ -59,9 +60,7 @@ void DirectedGraph::setFlowAlgorithm(FlowAlgorithm* f)
 
 void DirectedGraph::init(const int numNodes)
 {
-    Array<bool> arr;
-    arr.insertMultiple(0, false, numNodes);
-    edges.insertMultiple(0, arr, numNodes);
+    GraphUtils::initEdgesMatrix(edges, numNodes);
 }
 
 void DirectedGraph::addNode(Node* n)

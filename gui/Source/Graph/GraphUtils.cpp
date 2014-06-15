@@ -117,13 +117,20 @@ Point<float> GraphUtils::hookeForce(Point<float> p1, Point<float> p2, float dij,
     return Point<float>(c * dx, c * dy);
 }
 
+void GraphUtils::initEdgesMatrix(Array<Array<bool>>& edgesMatrix, int numNodes)
+{
+    Array<bool> row;
+    row.insertMultiple(0, false, numNodes);
+    edgesMatrix.insertMultiple(0, row, numNodes);
+}
+
 void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 {
     tNodes& nodes = g.nodes;
     tEdgesMatrix& allEdges = g.edges;
     Array<tNodesAndEdges>& connectedGroups = g.connectedGroups;
 
-    Array<int> checkedNodes;
+    Array<int> visitedNodes;
 
     connectedGroups.clear();
 
@@ -165,9 +172,9 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
             S.pop();
 
             int idxW = nodes.indexOf(w);
-            if (!checkedNodes.contains(idxW))
+            if (!visitedNodes.contains(idxW))
             {
-                checkedNodes.add(idxW);
+                visitedNodes.add(idxW);
 
                 const tNodes neighbours = fnGetNeightbours(idxW);
                 w->setNeighbours(neighbours);
@@ -214,13 +221,11 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
     {
         int numNodes = ne.nodes.size();
 
-        Array<bool> arr;
-        arr.insertMultiple(0, false, numNodes);
-        ne.edges.insertMultiple(0, arr, numNodes);
+        initEdgesMatrix(ne.edges, numNodes);
 
         for (int i = 0; i < numNodes; ++i)
         {
-            Node* const n = ne.nodes.getUnchecked(i);
+            const Node* const n = ne.nodes.getUnchecked(i);
             Array<bool>& ed = ne.edges.getReference(i);
             const tNodes& neighbours = n->getNeighbours();
             for (Node* const u : neighbours)
