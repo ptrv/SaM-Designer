@@ -61,11 +61,9 @@ public:
 
     Point<int> getActualPos() const { return actualPos; }
 
-    void setOriginalPosition();
-    
     void addLinkToObject(LinkComponent* link);
     void removeLinkFromObject(LinkComponent* link);
-    
+
     Array<LinkComponent*> getAttachedLinks() { return connectedLinks; }
 
     Point<int> getPinPos() const;
@@ -89,7 +87,6 @@ private:
     DropShadowEffect shadow;
 
     Point<int> actualPos;
-    Point<int> originalPos;
 
     Point<int> oldPos;
 

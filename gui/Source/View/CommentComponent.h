@@ -62,8 +62,6 @@ public:
 
     Point<int> getActualPos() const { return actualPos; }
 
-    void setOriginalPosition();
-
     void textEditorTextChanged(TextEditor&);
     void textEditorReturnKeyPressed(TextEditor&);
     void textEditorEscapeKeyPressed(TextEditor&);
@@ -89,7 +87,6 @@ private:
     DropShadowEffect shadow;
 
     Point<int> actualPos;
-    Point<int> originalPos;
     Point<int> oldPos;
 
     bool dragging, mouseDownSelectStatus;

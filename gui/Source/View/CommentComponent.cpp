@@ -54,7 +54,6 @@ CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
     const Point<int> currentPos(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
 
     setCentrePosition(currentPos.x, currentPos.y);
-    originalPos = currentPos;
     actualPos = currentPos;
     oldPos = currentPos;
 
@@ -70,7 +69,7 @@ CommentComponent::~CommentComponent()
 {
     selfChangeListenerList.removeChangeListener(this);
     owner.getSelectedObjects().removeChangeListener (this);
-    
+
     deleteAllChildren();
 }
 
@@ -118,16 +117,9 @@ void CommentComponent::paint(Graphics& g)
 	}
 }
 
-void CommentComponent::setOriginalPosition()
-{
-	originalPos = localPointToGlobal (Point<int>());
-}
-
 void CommentComponent::mouseDown (const MouseEvent& e)
 {
-	originalPos = localPointToGlobal (Point<int>());
-
-	toFront (true);
+    toFront (true);
 
     dragging = false;
 

@@ -59,7 +59,6 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
     const Point<int> currentPos(data.getProperty(Ids::posX), data.getProperty(Ids::posY));
 
     setCentrePosition(currentPos.x, currentPos.y);
-    originalPos = currentPos;
     actualPos = currentPos;
     oldPos = currentPos;
 
@@ -115,17 +114,9 @@ void ObjectComponent::paint(Graphics& g)
 	}
 }
 
-void ObjectComponent::setOriginalPosition()
-{
-	originalPos = localPointToGlobal (Point<int>());
-
-}
-
 void ObjectComponent::mouseDown (const MouseEvent& e)
 {
-	originalPos = localPointToGlobal (Point<int>());
-
-	toFront (true);
+    toFront (true);
 
     dragging = false;
 
