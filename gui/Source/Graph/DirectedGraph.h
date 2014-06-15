@@ -54,14 +54,15 @@ public:
     Array<Node*> getLeaves();
 
     bool reflow(int offsetX, int offsetY, int width, int height,
-                ObjController& objControler, float deltaTime,
-                bool setPosition);
+                ObjController& objControler, float deltaTime);
 
     void randomizeNodes(int offsetX, int offsetY, int width, int height);
 
     String toString();
 
     void shuffleNodes();
+
+    void setPositions();
 
     Array<Node*> nodes;
     ScopedPointer<FlowAlgorithm> flower;

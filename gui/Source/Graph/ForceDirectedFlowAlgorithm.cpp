@@ -62,15 +62,14 @@ void ForceDirectedFlowAlgorithm::initParameters()
 }
 
 
-bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g,
+bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
                                         int /*offsetX*/, int /*offsetY*/,
                                         int width, int height,
                                         ObjController& objController,
-                                        float /*deltaTime*/,
-                                        const bool setPosition)
+                                        float /*deltaTime*/)
 {
-    const Array<Node*>& nodes = g->getNodes();
-    const Array<Array<bool>>& edges = g->edges;
+    const Array<Node*>& nodes = g.getNodes();
+    const Array<Array<bool>>& edges = g.edges;
     const int numNodes = nodes.size();
 
     Point<float> totalEnergy(0.0, 0.0);
@@ -152,14 +151,9 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g,
 
     float lenTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x + totalEnergy.y * totalEnergy.y);
 
-    if (lenTotalEnergy < stopEnergy || setPosition)
+    if (lenTotalEnergy < stopEnergy)
     {
-        for (Node* const v : nodes)
-        {
-            ObjectComponent* oc = static_cast<ObjectComponent*>(v);
-            oc->setPosition(oc->getActualPos(), true);
-        }
-
+        g.setPositions();
         return true;
     }
 

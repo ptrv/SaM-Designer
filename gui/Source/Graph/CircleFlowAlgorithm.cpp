@@ -38,21 +38,21 @@
 
 using namespace synthamodeler;
 
-bool CircleFlowAlgorithm::reflow(DirectedGraph* g, int offsetX, int offsetY,
+bool CircleFlowAlgorithm::reflow(DirectedGraph& g, int offsetX, int offsetY,
                                  int width, int height, ObjController& objController,
-                                 float /*deltaTime*/, bool /*setPosition*/)
+                                 float /*deltaTime*/)
 {
-    float interval = 2 * M_PI / (float) g->size();
+    float interval = 2 * M_PI / (float) g.size();
     int cx = width/2;
     int cy = height/2;
 //    float vl = cx - (2 * g->getNode(0)->r1) - 10;
     float vl = cx - 100;
-    for (int a = 0; a < g->size(); ++a)
+    for (int a = 0; a < g.size(); ++a)
     {
         Point<int> nc = GraphUtils::rotateCoordinate(vl, 0, (float) a * interval);
         nc.x += offsetX;
         nc.y += offsetY;
-        if(ObjectComponent* oc = objController.getObjectForId(g->getNode(a)->getLabel()))
+        if(ObjectComponent* oc = objController.getObjectForId(g.getNode(a)->getLabel()))
         {
             Point<int> p(cx + nc.x*0.8, cy + nc.y*0.8);
             oc->setPosition(p, false);

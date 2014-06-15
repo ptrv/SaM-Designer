@@ -35,11 +35,11 @@ ForceBasedFlowAlgorithm::~ForceBasedFlowAlgorithm()
 }
 
 //bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph* g, int /*width*/, int /*height*/, ObjController& objController)
-bool ForceBasedFlowAlgorithm::reflow(DirectedGraph* g, int /*offsetX*/, int /*offsetY*/,
+bool ForceBasedFlowAlgorithm::reflow(DirectedGraph& g, int /*offsetX*/, int /*offsetY*/,
                                      int /*width*/, int /*height*/, ObjController& objController,
                                      float deltaT)
 {
-    Array<Node*>& nodes = g->getNodes();
+    Array<Node*>& nodes = g.getNodes();
 
     Point<float> totalEnergy(0, 0);
 //    float dis = 0.0f;

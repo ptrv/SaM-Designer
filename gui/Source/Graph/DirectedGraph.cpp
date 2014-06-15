@@ -30,6 +30,9 @@
 //#include "ForceDirectedFlowAlgorithm.h"
 #include "CircleFlowAlgorithm.h"
 #include "../Controller/ObjController.h"
+#include "../View/BaseObjectComponent.h"
+#include "../View/SelectableObject.h"
+#include "../View/ObjectComponent.h"
 
 #include "DirectedGraph.h"
 
@@ -111,11 +114,10 @@ Array<Node*> DirectedGraph::getLeaves()
 }
 
 bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height,
-                           ObjController& objController, float deltaTime,
-                           const bool setPosition)
+                           ObjController& objController, float deltaTime)
 {
     return flower->reflow(
-        this, offsetX, offsetY, width, height, objController, deltaTime, setPosition);
+        *this, offsetX, offsetY, width, height, objController, deltaTime);
 }
 
 void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int height)
@@ -191,5 +193,14 @@ void DirectedGraph::shuffleNodes()
 //        Node* temp = nodes[numNodes2];
 //        nodes[numNodes2] = nodes[k];
 //        nodes[k] = temp;
+    }
+}
+
+void DirectedGraph::setPositions()
+{
+    for (Node* const n : nodes)
+    {
+        ObjectComponent* oc = static_cast<ObjectComponent*>(n);
+        oc->setPosition(oc->getActualPos(), true);
     }
 }

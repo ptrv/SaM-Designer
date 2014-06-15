@@ -171,7 +171,7 @@ bool ObjectsHolder::keyPressed(const KeyPress& key)
         {
             DBG("redraw cancelled!");
             stopTimer();
-            reflow(true);
+            graph->setPositions();
             return true;
         }
     }
@@ -882,7 +882,7 @@ double timeStep = 0.6;
 void ObjectsHolder::timerCallback()
 {
 //    DBG("tick");
-    if(reflow(false))
+    if(reflow())
     {
         graph = nullptr;
         stopTimer();
@@ -890,7 +890,7 @@ void ObjectsHolder::timerCallback()
     }
 }
 
-bool ObjectsHolder::reflow(const bool setPosition)
+bool ObjectsHolder::reflow()
 {
     if (graph != nullptr)
     {
@@ -901,7 +901,7 @@ bool ObjectsHolder::reflow(const bool setPosition)
                                   getContentComp()->getViewPosition().y,
                                   getContentComp()->getViewWidth(),
                                   getContentComp()->getViewHeight(),
-                                  objController, timeStep, setPosition);
+                                  objController, timeStep);
         repaint();
         return done;
     }

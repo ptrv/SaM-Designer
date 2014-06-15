@@ -31,6 +31,7 @@
 namespace synthamodeler
 {
 
+class Node;
 class FlowAlgorithm;
 class DirectedGraph;
 class ObjController;
@@ -40,13 +41,12 @@ public:
     ForceDirectedFlowAlgorithm();
     virtual ~ForceDirectedFlowAlgorithm();
 
-    bool reflow(DirectedGraph* g, int offsetX, int offsetY, int width, int height,
-                ObjController& objController, float deltaTime, bool setPosition);
-
     void initParameters();
 
-private:
+    bool reflow(DirectedGraph& g, int offsetX, int offsetY, int width, int height,
+                ObjController& objController, float deltaTime);
 
+private:
 
     float mass;
     float charge;

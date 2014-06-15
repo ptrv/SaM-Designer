@@ -24,7 +24,7 @@ public:
     ForceBasedFlowAlgorithm();
     virtual ~ForceBasedFlowAlgorithm();
 
-    bool reflow(DirectedGraph* g, int offsetX, int offsetY,
+    bool reflow(DirectedGraph& g, int offsetX, int offsetY,
                 int width, int height, ObjController& objController,
                 float deltaT);
 
