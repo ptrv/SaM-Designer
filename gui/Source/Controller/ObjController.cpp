@@ -864,13 +864,12 @@ void ObjController::reverseLinkDirection()
 Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
 {
     Array<int> linkIndices;
-//    ValueTree objTree = objComp->getData();
     for (int i = 0; i < links.size(); i++)
     {
-        ValueTree linkTree = links.getUnchecked(i)->getData();
+        const ValueTree linkTree = links.getUnchecked(i)->getData();
 
-        if(linkTree.getProperty(Ids::startVertex) == objTree.getProperty(Ids::identifier)
-            || linkTree.getProperty(Ids::endVertex) == objTree.getProperty(Ids::identifier))
+        if(linkTree.getProperty(Ids::startVertex) == objTree.getProperty(Ids::identifier) ||
+           linkTree.getProperty(Ids::endVertex) == objTree.getProperty(Ids::identifier))
         {
             linkIndices.add(i);
         }
@@ -881,18 +880,21 @@ Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
 
 Array<int> ObjController::checkIfObjectHasAudioConnections(ValueTree objTree)
 {
-    Array<int> aoIndices;
+    Array<int> aocIndices;
     for (int i = 0; i < audioConnections.size(); ++i)
     {
-        AudioOutConnector* aoc = audioConnections.getUnchecked(i);
+        const AudioOutConnector* const aoc = audioConnections.getUnchecked(i);
 
-        ValueTree aoDataSource = aoc->getSourceObject()->getData();
-        ValueTree aoDataAudioObject = aoc->getAudioObject()->getData();
-        if(aoDataSource[Ids::identifier] == objTree[Ids::identifier]
-            || aoDataAudioObject[Ids::identifier] == objTree[Ids::identifier])
-            aoIndices.add(i);
+        const ValueTree aocSource = aoc->getSourceObject()->getData();
+        const ValueTree aocAudioObject = aoc->getAudioObject()->getData();
+
+        if(aocSource[Ids::identifier] == objTree[Ids::identifier] ||
+           aocAudioObject[Ids::identifier] == objTree[Ids::identifier])
+        {
+            aocIndices.add(i);
+        }
     }
-    return aoIndices;
+    return aocIndices;
 }
 
 //==============================================================================
