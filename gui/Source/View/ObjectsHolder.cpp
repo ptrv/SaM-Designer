@@ -949,7 +949,6 @@ void ObjectsHolder::redrawObjects(const int cmdId)
                                   getContentComp()->getViewWidth(),
                                   getContentComp()->getViewHeight());
         }
-
     }
 
     objController.getUndoManager().beginNewTransaction();

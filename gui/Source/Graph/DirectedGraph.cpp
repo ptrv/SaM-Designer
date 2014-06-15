@@ -56,15 +56,9 @@ void DirectedGraph::setFlowAlgorithm(FlowAlgorithm* f)
 
 void DirectedGraph::init(const int numNodes)
 {
-    for (int i = 0; i < numNodes; ++i)
-    {
-        Array<bool> a;
-        for (int j = 0; j < numNodes; ++j)
-        {
-           a.add(false);
-        }
-        edges.add(a);
-    }
+    Array<bool> arr;
+    arr.insertMultiple(0, false, numNodes);
+    edges.insertMultiple(0, arr, numNodes);
 }
 
 void DirectedGraph::addNode(Node* n)

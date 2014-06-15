@@ -247,11 +247,10 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
 
 void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph& graph)
 {
-    const int numNodes = objController.getNumLinks();
+    const int numLinks = objController.getNumLinks();
 
-    graph.init(numNodes);
-
-    for (int i = 0; i < numNodes; ++i)
+    // add nodes
+    for (int i = 0; i < numLinks; ++i)
     {
         const LinkComponent* const l = objController.getLink(i);
 
@@ -260,15 +259,30 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
         ObjectComponent* const ocEnd =
             objController.getObjectForId(l->getData()[Ids::endVertex].toString());
 
-        ocStart->initNodeData();
-        ocEnd->initNodeData();
-
         graph.addNode(ocStart);
         graph.addNode(ocEnd);
+    }
+
+    Array<Node*>& nodes = graph.nodes;
+
+    graph.init(nodes.size());
+
+    // link nodes
+    for (int i = 0; i < numLinks; ++i)
+    {
+        const LinkComponent* const l = objController.getLink(i);
+
+        ObjectComponent* const ocStart =
+            objController.getObjectForId(l->getData()[Ids::startVertex].toString());
+        ObjectComponent* const ocEnd =
+            objController.getObjectForId(l->getData()[Ids::endVertex].toString());
 
         graph.linkNodes(ocStart, ocEnd);
-
     }
+
+    // init node data
+    std::for_each(nodes.begin(), nodes.end(),
+                  [](Node* const n) {n->initNodeData();});
 }
 
 //------------------------------------------------------------------------------

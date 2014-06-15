@@ -85,9 +85,13 @@ bool CommentComponent::hitTest (int x, int y)
 void CommentComponent::resized()
 {
     if(textField->getText().isEmpty())
+    {
         setSize(100, textField->getTextHeight()+10);
+    }
     else
+    {
         setSize(textField->getTextWidth()+10, textField->getTextHeight()+10);
+    }
     textField->setBounds(5, 5, getWidth()-10, getHeight() -10);
     
     repaint();
