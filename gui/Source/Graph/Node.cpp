@@ -31,13 +31,27 @@
 
 using namespace synthamodeler;
 
-Node::Node(ValueTree data)
-: force(0,0), velocity(0, 0)
+Node::Node(ValueTree data_)
+    : force(0,0), velocity(0, 0), data(data_)
+{
+    initNodeData();
+
+}
+
+Node::~Node()
+{
+}
+
+void Node::initNodeData()
 {
     nx = float(data[Ids::posX]);
     ny = float(data[Ids::posY]);
-    
+
+    force = Point<float>(0, 0);
+    velocity = Point<float>(0, 0);
+
     label = data[Ids::identifier].toString();
+
     mass = 1.0f;
     if(data.getType() == Ids::mass)
     {
@@ -59,11 +73,6 @@ Node::Node(ValueTree data)
     {
 
     }
-
-}
-
-Node::~Node()
-{
 }
 
 void Node::addIncomingLink(Node* n)

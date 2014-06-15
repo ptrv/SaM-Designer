@@ -260,6 +260,9 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
         ObjectComponent* const ocEnd =
             objController.getObjectForId(l->getData()[Ids::endVertex].toString());
 
+        ocStart->initNodeData();
+        ocEnd->initNodeData();
+
         graph.addNode(ocStart);
         graph.addNode(ocEnd);
 

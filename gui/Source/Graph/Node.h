@@ -35,6 +35,8 @@ public:
     Node(ValueTree data);
     virtual ~Node();
 
+    void initNodeData();
+
     void addIncomingLink(Node* n);
     Array<Node*>& getIncomingLinks() { return inLinks; }
     int getIncomingLinksCount() const { return inLinks.size(); }
@@ -60,6 +62,7 @@ public:
     Point<float> velocity;
 private:
 
+    ValueTree data;
     float nx, ny;
 //    ValueTree data;
     String label;
