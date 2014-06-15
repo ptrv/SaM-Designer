@@ -33,6 +33,9 @@ namespace synthamodeler
 class FlowAlgorithm;
 class Node;
 class ObjController;
+
+typedef Array<Node*> tNodes;
+
 class DirectedGraph
 {
 public:
@@ -65,6 +68,9 @@ public:
     void setPositions();
 
     Array<Node*> nodes;
+
+    tNodes nodes;
+    Array<tNodes> connectedNodes;
     ScopedPointer<FlowAlgorithm> flower;
     Array<Array<bool> > edges;
 

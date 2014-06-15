@@ -27,6 +27,10 @@
 #include "../../JuceLibraryCode/JuceHeader.h"
 
 #include "GraphUtils.h"
+#include "Node.h"
+#include "DirectedGraph.h"
+
+#include <stack>
 
 using namespace synthamodeler;
 
@@ -111,4 +115,84 @@ Point<float> GraphUtils::hookeForce(Point<float> p1, Point<float> p2, float dij,
         c = k * dl / ds;
 
     return Point<float>(c * dx, c * dy);
+}
+
+void GraphUtils::depthFirstSearch(DirectedGraph& g)
+{
+    tNodes& nodes = g.nodes;
+    Array<tNodes>& connectedNodes = g.connectedNodes;
+    Array<int> checkedNodes;
+
+    connectedNodes.clear();
+
+    auto fnIsInConnecteds = [&](Node* const n)
+    {
+        for(tNodes ns : connectedNodes)
+        {
+            if (ns.contains(n))
+            {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    auto fnGetNeightbours = [&](int idx)
+    {
+        Array<bool>& ed = g.edges.getReference(idx);
+        tNodes no;
+
+        for (int i = 0; i < ed.size(); ++i)
+        {
+            if (ed.getUnchecked(i))
+            {
+                no.add(nodes[i]);
+            }
+        }
+        return no;
+    };
+    auto fnDFS = [&](Node* const n, tNodes& currentGroup)
+    {
+        std::stack<Node*> S;
+        S.push(n);
+        while (!S.empty())
+        {
+            Node* w = S.top();
+            S.pop();
+
+            int idxW = nodes.indexOf(w);
+            if (!checkedNodes.contains(idxW))
+            {
+                checkedNodes.add(idxW);
+                currentGroup.add(w);
+
+                Array<Node*> neighbours = fnGetNeightbours(idxW);
+                for (Node* const x : neighbours)
+                {
+                    S.push(x);
+                }
+            }
+        }
+    };
+    for (Node* const v : nodes)
+    {
+        if (!fnIsInConnecteds(v))
+        {
+            tNodes na;
+            // na.add(v);
+            fnDFS(v, na);
+            connectedNodes.add(na);
+        }
+    }
+
+    // String outStr;
+    // for (tNodes group : connectedNodes)
+    // {
+    //     for (Node* const n : group)
+    //     {
+    //         outStr << n->getLabel() << " ";
+    //     }
+    //     outStr << newLine;
+    // }
+    // DBG(outStr);
 }

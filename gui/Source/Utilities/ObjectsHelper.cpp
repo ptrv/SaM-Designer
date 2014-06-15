@@ -32,6 +32,7 @@
 #include "../View/LinkComponent.h"
 #include "../View/AudioOutConnector.h"
 #include "../Controller/ObjController.h"
+#include "../Graph/GraphUtils.h"
 
 #include "ObjectsHelper.h"
 
@@ -283,6 +284,8 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
     // init node data
     std::for_each(nodes.begin(), nodes.end(),
                   [](Node* const n) {n->initNodeData();});
+
+    GraphUtils::depthFirstSearch(graph);
 }
 
 //------------------------------------------------------------------------------

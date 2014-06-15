@@ -30,16 +30,18 @@
 
 namespace synthamodeler
 {
-
-namespace GraphUtils
+class DirectedGraph;
+class GraphUtils
 {
 
-float getDirection(double dx, double dy);
-Point<int> rotateCoordinate(float x, float y, float angle);
-Point<float> coulombForce(Point<float> p1, Point<float> p2, float beta);
-Point<float> hookeForce(Point<float> p1, Point<float> p2, float dij, float k);
+public:
+    static float getDirection(double dx, double dy);
+    static Point<int> rotateCoordinate(float x, float y, float angle);
+    static Point<float> coulombForce(Point<float> p1, Point<float> p2, float beta);
+    static Point<float> hookeForce(Point<float> p1, Point<float> p2, float dij, float k);
 
-}
+    static void depthFirstSearch(DirectedGraph& g);
+};
 
 }
 
