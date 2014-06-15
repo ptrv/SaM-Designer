@@ -709,7 +709,7 @@ void ObjController::selectAll(bool shouldBeSelected)
     }
 }
 
-void ObjController::selectObjectsIfContainText(const String& selectionText)
+void ObjController::selectObjectsIfContainsText(const String& selectionText)
 {
     sObjects.deselectAll();
     if(selectionText.isEmpty())

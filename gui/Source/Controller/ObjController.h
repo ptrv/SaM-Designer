@@ -119,7 +119,7 @@ public:
 	 */
 	void selectAll(bool shouldBeSelected);
 
-    void selectObjectsIfContainText(const String& selectionText);
+    void selectObjectsIfContainsText(const String& selectionText);
   
 //    SelectedItemSet <ObjectComponent*>& getSelectedObjects() throw()
 //    { 

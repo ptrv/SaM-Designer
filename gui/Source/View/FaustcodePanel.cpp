@@ -44,7 +44,7 @@ public:
     {
         TextEditor::mouseDoubleClick(e);
         if(! getHighlightedRegionIfVar().isEmpty())
-            objController->selectObjectsIfContainText(getHighlightedText());
+            objController->selectObjectsIfContainsText(getHighlightedText());
         else
             objController->selectAll(false);
     }
@@ -53,7 +53,7 @@ public:
         TextEditor::keyPressed(kp);
         if(! getHighlightedRegionIfVar().isEmpty())
         {
-            objController->selectObjectsIfContainText(getHighlightedText());
+            objController->selectObjectsIfContainsText(getHighlightedText());
         }
         else
         {
@@ -66,7 +66,7 @@ public:
         TextEditor::mouseUp(md);
         if(! getHighlightedRegionIfVar().isEmpty())
         {
-            objController->selectObjectsIfContainText(getHighlightedText());
+            objController->selectObjectsIfContainsText(getHighlightedText());
         }
         else
         {
