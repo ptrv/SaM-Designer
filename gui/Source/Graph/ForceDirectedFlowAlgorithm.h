@@ -27,13 +27,13 @@
 #ifndef __FORCEDIRECTEDFLOWALGORITHM_H_F765C202__
 #define __FORCEDIRECTEDFLOWALGORITHM_H_F765C202__
 
+#include "DirectedGraph.h"
 
 namespace synthamodeler
 {
 
 class Node;
 class FlowAlgorithm;
-class DirectedGraph;
 class ObjController;
 class ForceDirectedFlowAlgorithm : public FlowAlgorithm
 {
@@ -47,6 +47,9 @@ public:
                 ObjController& objController, float deltaTime);
 
 private:
+
+    void applyForces(Point<float>& totalEnergy, tNodesAndEdges& group,
+                     int width, int height, ObjController& objController);
 
     float mass;
     float charge;

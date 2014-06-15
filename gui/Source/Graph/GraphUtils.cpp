@@ -117,19 +117,21 @@ Point<float> GraphUtils::hookeForce(Point<float> p1, Point<float> p2, float dij,
     return Point<float>(c * dx, c * dy);
 }
 
-void GraphUtils::depthFirstSearch(DirectedGraph& g)
+void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 {
     tNodes& nodes = g.nodes;
-    Array<tNodes>& connectedNodes = g.connectedNodes;
+    tEdgesMatrix& allEdges = g.edges;
+    Array<tNodesAndEdges>& connectedNodes = g.connectedNodes;
+
     Array<int> checkedNodes;
 
     connectedNodes.clear();
 
-    auto fnIsInConnecteds = [&](Node* const n)
+    auto fnIsInConnecteds = [&connectedNodes](Node* const node)
     {
-        for(tNodes ns : connectedNodes)
+        for(const tNodesAndEdges& group : connectedNodes)
         {
-            if (ns.contains(n))
+            if (group.nodes.contains(node))
             {
                 return true;
             }
@@ -137,20 +139,22 @@ void GraphUtils::depthFirstSearch(DirectedGraph& g)
         return false;
     };
 
-    auto fnGetNeightbours = [&](int idx)
+    auto fnGetNeightbours = [&allEdges, &nodes](int idx)
     {
-        Array<bool>& ed = g.edges.getReference(idx);
+        const Array<bool>& edges = allEdges.getReference(idx);
         tNodes no;
 
-        for (int i = 0; i < ed.size(); ++i)
+        for (int i = 0; i < edges.size(); ++i)
         {
-            if (ed.getUnchecked(i))
+            if (edges.getUnchecked(i))
             {
                 no.add(nodes[i]);
             }
         }
         return no;
     };
+
+    // depth first search
     auto fnDFS = [&](Node* const n, tNodes& currentGroup)
     {
         std::stack<Node*> S;
@@ -174,25 +178,75 @@ void GraphUtils::depthFirstSearch(DirectedGraph& g)
             }
         }
     };
+
     for (Node* const v : nodes)
     {
         if (!fnIsInConnecteds(v))
         {
-            tNodes na;
-            // na.add(v);
-            fnDFS(v, na);
-            connectedNodes.add(na);
+            tNodes group;
+            tNodesAndEdges nodesAndEdges;
+
+            fnDFS(v, group);
+            nodesAndEdges.nodes = group;
+            connectedNodes.add(nodesAndEdges);
         }
     }
 
-    // String outStr;
-    // for (tNodes group : connectedNodes)
+    // // dbg output
     // {
-    //     for (Node* const n : group)
+    //     String outStr;
+    //     for (tNodesAndEdges group : connectedNodes)
     //     {
-    //         outStr << n->getLabel() << " ";
+    //         for (Node* const n : group.nodes)
+    //         {
+    //             outStr << n->getLabel() << " ";
+    //         }
+    //         outStr << newLine;
+    //     }
+    //     DBG(outStr);
+    // }
+
+    // find egges for group nodes
+    for (tNodesAndEdges& ne : g.connectedNodes)
+    {
+        int numNodes = ne.nodes.size();
+
+        Array<bool> arr;
+        arr.insertMultiple(0, false, numNodes);
+        ne.edges.insertMultiple(0, arr, numNodes);
+
+        for (int i = 0; i < numNodes; ++i)
+        {
+            Node* const n = ne.nodes.getUnchecked(i);
+            const tNodes& in = n->getIncomingLinks();
+            const tNodes& ou = n->getOutgoingLinks();
+
+            Array<bool>& e1 = ne.edges.getReference(i);
+            for (Node* const u : in)
+            {
+                int inIdx = ne.nodes.indexOf(u);
+                e1.set(inIdx, true);
+            }
+            for (Node* const v : ou)
+            {
+                int ouIdx = ne.nodes.indexOf(v);
+                e1.set(ouIdx, true);
+            }
+        }
+    }
+
+    // for (tNodesAndEdges& ne : g.connectedNodes)
+    // {
+    //     String outStr;
+    //     for (int i = 0; i < ne.edges.size(); ++i)
+    //     {
+    //         for (int j = 0; j < ne.edges[i].size(); ++j)
+    //         {
+    //             outStr << (ne.edges[i][j] ? "1" : "0");
+    //         }
+    //         outStr << newLine;
     //     }
     //     outStr << newLine;
+    //     DBG(outStr);
     // }
-    // DBG(outStr);
 }

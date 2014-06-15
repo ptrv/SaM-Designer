@@ -40,7 +40,8 @@ public:
     static Point<float> coulombForce(Point<float> p1, Point<float> p2, float beta);
     static Point<float> hookeForce(Point<float> p1, Point<float> p2, float dij, float k);
 
-    static void depthFirstSearch(DirectedGraph& g);
+    static void calculateConnectedGroups(DirectedGraph& g);
+
 };
 
 }

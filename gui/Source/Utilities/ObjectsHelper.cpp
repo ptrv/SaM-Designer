@@ -264,7 +264,7 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
         graph.addNode(ocEnd);
     }
 
-    Array<Node*>& nodes = graph.nodes;
+    tNodes& nodes = graph.nodes;
 
     graph.init(nodes.size());
 
@@ -285,7 +285,19 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
     std::for_each(nodes.begin(), nodes.end(),
                   [](Node* const n) {n->initNodeData();});
 
-    GraphUtils::depthFirstSearch(graph);
+    // find combined groups in graph
+    GraphUtils::calculateConnectedGroups(graph);
+
+    // String outStr;
+    // for (int i = 0; i < graph.edges.size(); ++i)
+    // {
+    //     for (int j = 0; j < graph.edges[i].size(); ++j)
+    //     {
+    //         outStr << (graph.edges[i][j] ? "1" : "0");
+    //     }
+    //     outStr << newLine;
+    // }
+    // DBG(outStr);
 }
 
 //------------------------------------------------------------------------------

@@ -68,17 +68,45 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
                                         ObjController& objController,
                                         float /*deltaTime*/)
 {
-    const Array<Node*>& nodes = g.getNodes();
-    const Array<Array<bool>>& edges = g.edges;
-    const int numNodes = nodes.size();
+    // const Array<Node*>& nodes = g.getNodes();
+    // const Array<Array<bool>>& edges = g.edges;
 
     Point<float> totalEnergy(0.0, 0.0);
 
+    for (tNodesAndEdges& group : g.connectedNodes)
+    {
+        applyForces(totalEnergy, group, width, height, objController);
+    }
+
+
+    float lenTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x + totalEnergy.y * totalEnergy.y);
+
+    if (lenTotalEnergy < stopEnergy)
+    {
+        g.setPositions();
+        return true;
+    }
+
+    return false;
+}
+
+void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
+                                             tNodesAndEdges& nodesAndEdges,
+                                             int width, int height,
+                                             ObjController& objController)
+{
+    const tNodes& group = nodesAndEdges.nodes;
+    const tEdgesMatrix& edges = nodesAndEdges.edges;
+
+    const int numNodes = group.size();
     for (int i = 0; i < numNodes; ++i)
     {
-        Node* const v = nodes.getUnchecked(i);
+        Node* const v = group.getUnchecked(i);
 
         // const int vi = nodes.indexOf(v);
+
+        const tNodes in = v->getIncomingLinks();
+        const tNodes on = v->getOutgoingLinks();
 
         v->force = Point<float>();
 
@@ -90,7 +118,7 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
             if (i == j)
                 continue;
 
-            Node* const u = nodes.getUnchecked(j);
+            Node* const u = group.getUnchecked(j);
 
             float ux = u->getNX();
             float uy = u->getNY();
@@ -110,7 +138,10 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
             if (!edges[i][j])
                 continue;
 
-            Node* const u = nodes.getUnchecked(j);
+            Node* const u = group.getUnchecked(j);
+
+            // if (!in.contains(u) && !on.contains(u))
+            //     continue;
 
             float ux = u->getNX();
             float uy = u->getNY();
@@ -119,7 +150,7 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
             v->force.y += k * (uy - vy);
         }
     }
-    for (Node* const v : nodes)
+    for (Node* const v : group)
     {
 
         if (ObjectComponent* oc = objController.getObjectForId(v->getLabel()))
@@ -148,14 +179,4 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
             oc->setActualPosition(Point<int>(vx, vy));
         }
     }
-
-    float lenTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x + totalEnergy.y * totalEnergy.y);
-
-    if (lenTotalEnergy < stopEnergy)
-    {
-        g.setPositions();
-        return true;
-    }
-
-    return false;
 }
