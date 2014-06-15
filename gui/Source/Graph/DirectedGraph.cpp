@@ -46,6 +46,9 @@ DirectedGraph::DirectedGraph()
 DirectedGraph::~DirectedGraph()
 {
     flower = nullptr;
+    nodes.clear();
+    connectedGroups.clear();
+    edges.clear();
 }
 
 void DirectedGraph::setFlowAlgorithm(FlowAlgorithm* f)

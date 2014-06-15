@@ -73,13 +73,15 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
 
     Point<float> totalEnergy(0.0, 0.0);
 
-    for (tNodesAndEdges& group : g.connectedNodes)
+    for (tNodesAndEdges& group : g.connectedGroups)
     {
         applyForces(totalEnergy, group, width, height, objController);
     }
 
 
     float lenTotalEnergy = sqrt(totalEnergy.x * totalEnergy.x + totalEnergy.y * totalEnergy.y);
+
+    // DBG(lenTotalEnergy);
 
     if (lenTotalEnergy < stopEnergy)
     {

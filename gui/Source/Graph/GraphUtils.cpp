@@ -121,15 +121,15 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 {
     tNodes& nodes = g.nodes;
     tEdgesMatrix& allEdges = g.edges;
-    Array<tNodesAndEdges>& connectedNodes = g.connectedNodes;
+    Array<tNodesAndEdges>& connectedGroups = g.connectedGroups;
 
     Array<int> checkedNodes;
 
-    connectedNodes.clear();
+    connectedGroups.clear();
 
-    auto fnIsInConnecteds = [&connectedNodes](Node* const node)
+    auto fnIsInConnecteds = [&connectedGroups](Node* const node)
     {
-        for(const tNodesAndEdges& group : connectedNodes)
+        for(const tNodesAndEdges& group : connectedGroups)
         {
             if (group.nodes.contains(node))
             {
@@ -142,16 +142,16 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
     auto fnGetNeightbours = [&allEdges, &nodes](int idx)
     {
         const Array<bool>& edges = allEdges.getReference(idx);
-        tNodes no;
+        tNodes neighbours;
 
         for (int i = 0; i < edges.size(); ++i)
         {
             if (edges.getUnchecked(i))
             {
-                no.add(nodes[i]);
+                neighbours.add(nodes[i]);
             }
         }
-        return no;
+        return neighbours;
     };
 
     // depth first search
@@ -168,9 +168,12 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
             if (!checkedNodes.contains(idxW))
             {
                 checkedNodes.add(idxW);
+
+                const tNodes neighbours = fnGetNeightbours(idxW);
+                w->setNeighbours(neighbours);
+
                 currentGroup.add(w);
 
-                Array<Node*> neighbours = fnGetNeightbours(idxW);
                 for (Node* const x : neighbours)
                 {
                     S.push(x);
@@ -188,7 +191,7 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 
             fnDFS(v, group);
             nodesAndEdges.nodes = group;
-            connectedNodes.add(nodesAndEdges);
+            connectedGroups.add(nodesAndEdges);
         }
     }
 
@@ -206,8 +209,8 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
     //     DBG(outStr);
     // }
 
-    // find egges for group nodes
-    for (tNodesAndEdges& ne : g.connectedNodes)
+    // find edges for group nodes
+    for (tNodesAndEdges& ne : g.connectedGroups)
     {
         int numNodes = ne.nodes.size();
 
@@ -218,24 +221,17 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
         for (int i = 0; i < numNodes; ++i)
         {
             Node* const n = ne.nodes.getUnchecked(i);
-            const tNodes& in = n->getIncomingLinks();
-            const tNodes& ou = n->getOutgoingLinks();
-
-            Array<bool>& e1 = ne.edges.getReference(i);
-            for (Node* const u : in)
+            Array<bool>& ed = ne.edges.getReference(i);
+            const tNodes& neighbours = n->getNeighbours();
+            for (Node* const u : neighbours)
             {
-                int inIdx = ne.nodes.indexOf(u);
-                e1.set(inIdx, true);
-            }
-            for (Node* const v : ou)
-            {
-                int ouIdx = ne.nodes.indexOf(v);
-                e1.set(ouIdx, true);
+                const int inIdx = ne.nodes.indexOf(u);
+                ed.set(inIdx, true);
             }
         }
     }
 
-    // for (tNodesAndEdges& ne : g.connectedNodes)
+    // for (tNodesAndEdges& ne : g.connectedGroups)
     // {
     //     String outStr;
     //     for (int i = 0; i < ne.edges.size(); ++i)

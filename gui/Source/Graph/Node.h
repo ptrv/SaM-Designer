@@ -45,6 +45,8 @@ public:
     Array<Node*>& getOutgoingLinks() { return outLinks; }
     int getOutgoingLinksCount() const { return outLinks.size(); }
 
+    void setNeighbours(const Array<Node*>& n);
+    const Array<Node*>& getNeighbours() const;
     float getShortestLinkLength();
 
     bool equals(const Node* other);
@@ -68,6 +70,7 @@ private:
     String label;
     Array<Node*> inLinks;
     Array<Node*> outLinks;
+    Array<Node*> neighbours;
 
     float mass;
 };

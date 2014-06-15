@@ -79,7 +79,7 @@ public:
 
 
     tNodes nodes;
-    Array<tNodesAndEdges> connectedNodes;
+    Array<tNodesAndEdges> connectedGroups;
     ScopedPointer<FlowAlgorithm> flower;
     Array<Array<bool> > edges;
 

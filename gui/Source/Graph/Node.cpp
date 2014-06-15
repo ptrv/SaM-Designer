@@ -85,6 +85,16 @@ void Node::addOutgoingLink(Node* n)
     outLinks.addIfNotAlreadyThere(n);
 }
 
+void Node::setNeighbours(const Array<Node*>& n)
+{
+    neighbours = n;
+}
+
+const Array<Node*>& Node::getNeighbours() const
+{
+    return neighbours;
+}
+
 float Node::getShortestLinkLength()
 {
     if(inLinks.size() == 0 && outLinks.size() == 0)
