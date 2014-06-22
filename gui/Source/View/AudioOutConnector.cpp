@@ -258,6 +258,8 @@ void AudioOutConnector::changeListenerCallback (ChangeBroadcaster* const source)
 
 void AudioOutConnector::mouseDown(const MouseEvent& e)
 {
+    owner.setAsFromtmostLink(*this);
+
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 

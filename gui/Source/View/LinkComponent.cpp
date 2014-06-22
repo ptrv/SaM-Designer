@@ -170,6 +170,8 @@ void LinkComponent::paint(Graphics& g)
 
 void LinkComponent::mouseDown(const MouseEvent& e)
 {
+    owner.setAsFromtmostLink(*this);
+
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 

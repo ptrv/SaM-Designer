@@ -949,3 +949,18 @@ void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
         audioConnections[i]->repaint();
     }
 }
+
+template<typename T>
+void ObjController::setAsFromtmostLink(T& t)
+{
+    auto fnToBehind = [&t](Component* const c)
+    {
+        c->toBehind(&t);
+    };
+
+    std::for_each(links.begin(), links.end(), fnToBehind);
+    std::for_each(audioConnections.begin(), audioConnections.end(), fnToBehind);
+}
+
+template void ObjController::setAsFromtmostLink<LinkComponent>(LinkComponent& t);
+template void ObjController::setAsFromtmostLink<AudioOutConnector>(AudioOutConnector& t);

@@ -197,6 +197,9 @@ public:
     void setIsReflowing(bool bReflowing) { isReflowing = bReflowing; }
     bool getIsReflowing() const { return isReflowing; }
 
+    template<typename T>
+    void setAsFromtmostLink(T& t);
+
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
