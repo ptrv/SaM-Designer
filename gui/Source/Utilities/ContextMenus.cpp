@@ -97,8 +97,8 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
     m.addSectionHeader(TRANS("Add") + "...");
     m.addItem(1, TRANS("Linear Link"));
     m.addItem(2, TRANS("Touch Link"));
-    m.addItem(4, TRANS("Pluck Link"));
-    m.addItem(3, TRANS("Pulsetouch Link"));
+    m.addItem(3, TRANS("Pluck Link"));
+    m.addItem(4, TRANS("Pulsetouch Link"));
     m.addSeparator();
     m.addItem(5, TRANS("Waveguide"));
     m.addSeparator();
