@@ -133,7 +133,6 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.cpp"/>
     <ClCompile Include="..\..\Source\Graph\CircleFlowAlgorithm.cpp"/>
     <ClCompile Include="..\..\Source\Graph\GraphUtils.cpp"/>
     <ClCompile Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.cpp"/>
@@ -1024,7 +1023,6 @@
     <ClInclude Include="..\..\Testsuite\TestUtils.h"/>
     <ClInclude Include="..\..\Testsuite\SAMCmd_test.h"/>
     <ClInclude Include="..\..\Testsuite\TestRunner.h"/>
-    <ClInclude Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.h"/>
     <ClInclude Include="..\..\Source\Graph\CircleFlowAlgorithm.h"/>
     <ClInclude Include="..\..\Source\Graph\GraphUtils.h"/>
     <ClInclude Include="..\..\Source\Graph\ForceDirectedFlowAlgorithm.h"/>

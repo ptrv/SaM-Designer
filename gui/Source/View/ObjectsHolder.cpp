@@ -29,7 +29,6 @@
 #include "SelectableObject.h"
 #include "../Graph/FlowAlgorithm.h"
 #include "../Graph/ForceDirectedFlowAlgorithm.h"
-#include "../Graph/ForceBasedFlowAlgorithm.h"
 #include "../Graph/DirectedGraph.h"
 #include "../Graph/Node.h"
 #include "BaseObjectComponent.h"

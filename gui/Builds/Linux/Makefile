@@ -51,7 +51,6 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
-  $(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o \
   $(OBJDIR)/CircleFlowAlgorithm_8478b2f1.o \
   $(OBJDIR)/GraphUtils_6816740d.o \
   $(OBJDIR)/ForceDirectedFlowAlgorithm_3998fbd8.o \
@@ -126,11 +125,6 @@ clean:
 strip:
 	@echo Stripping Synth-A-Modeler-Designer
 	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
-
-$(OBJDIR)/ForceBasedFlowAlgorithm_2d9e5b9.o: ../../Source/Graph/ForceBasedFlowAlgorithm.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling ForceBasedFlowAlgorithm.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/CircleFlowAlgorithm_8478b2f1.o: ../../Source/Graph/CircleFlowAlgorithm.cpp
 	-@mkdir -p $(OBJDIR)

@@ -235,9 +235,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.cpp">
-      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Graph\CircleFlowAlgorithm.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClCompile>
@@ -1313,9 +1310,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Testsuite\TestRunner.h">
       <Filter>Synth-A-Modeler-Designer\Testsuite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Graph\ForceBasedFlowAlgorithm.h">
-      <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Graph\CircleFlowAlgorithm.h">
       <Filter>Synth-A-Modeler-Designer\Source\Graph</Filter>
