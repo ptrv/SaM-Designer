@@ -121,6 +121,12 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
     dragging = false;
 
     SelectedItemSet<SelectableObject*>& sis = owner.getSelectedObjects();
+
+    if (owner.getIsReflowing())
+    {
+        sis.selectOnly(this);
+    }
+
     if (e.mods.isPopupMenu() && sis.getNumSelected() == 2)
     {
         String startObj;

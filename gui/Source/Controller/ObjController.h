@@ -194,6 +194,9 @@ public:
 
     void setAudioConnectionVisibility(bool shouldBeVisible);
 
+    void setIsReflowing(bool bReflowing) { isReflowing = bReflowing; }
+    bool getIsReflowing() const { return isReflowing; }
+
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
@@ -208,6 +211,7 @@ private:
     SelectedItemSet<SelectableObject*> sObjects;
     ScopedPointer<IdManager> idMgr;
     int timesPasted;
+    bool isReflowing;
 
     WeakReference<ObjController>::Master masterReference;
     friend class WeakReference<ObjController>;

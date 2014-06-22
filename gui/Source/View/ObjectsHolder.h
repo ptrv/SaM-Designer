@@ -100,7 +100,8 @@ public:
 
     int snapPosition (int pos) const throw();
 
-
+    void startTimer(int intervalInMilliseconds);
+    void stopTimer();
     void timerCallback();
     bool reflow();
 

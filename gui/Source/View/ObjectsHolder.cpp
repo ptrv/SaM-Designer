@@ -878,6 +878,18 @@ void ObjectsHolder::setSnappingGrid (const int numPixels,
     }
 }
 
+void ObjectsHolder::startTimer(int intervalInMilliseconds)
+{
+    objController.setIsReflowing(true);
+    Timer::startTimer(intervalInMilliseconds);
+}
+
+void ObjectsHolder::stopTimer()
+{
+    objController.setIsReflowing(false);
+    Timer::stopTimer();
+}
+
 double timeStep = 0.6;
 void ObjectsHolder::timerCallback()
 {

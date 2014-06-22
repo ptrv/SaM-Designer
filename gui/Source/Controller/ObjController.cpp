@@ -47,7 +47,8 @@ using namespace synthamodeler;
 
 ObjController::ObjController(MDLController& owner_)
 : owner(owner_),
-  timesPasted(0)
+  timesPasted(0),
+  isReflowing(false)
 {
     idMgr = new IdManager();
     sObjects.addChangeListener(propertiesWindow);
@@ -776,7 +777,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
 void ObjController::endDragging()
 {
-    if (owner.getHolderComponent()->isTimerRunning())
+    if (isReflowing)
     {
         return;
     }
