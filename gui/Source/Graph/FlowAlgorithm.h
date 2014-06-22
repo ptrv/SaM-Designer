@@ -32,7 +32,8 @@ namespace synthamodeler
 
 class DirectedGraph;
 class ObjController;
-class FlowAlgorithm{
+class FlowAlgorithm
+{
 public:
     virtual ~FlowAlgorithm(){}
     virtual bool reflow(DirectedGraph& g, int offsetX, int offsetY,

@@ -31,6 +31,7 @@
 #include "../Graph/ForceDirectedFlowAlgorithm.h"
 #include "../Graph/DirectedGraph.h"
 #include "../Graph/Node.h"
+#include "../Graph/GraphUtils.h"
 #include "BaseObjectComponent.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
@@ -893,7 +894,7 @@ double timeStep = 0.6;
 void ObjectsHolder::timerCallback()
 {
 //    DBG("tick");
-    if(reflow())
+    if (reflow())
     {
         graph = nullptr;
         stopTimer();
@@ -955,10 +956,11 @@ void ObjectsHolder::redrawObjects(const int cmdId)
                 .getBoolValue("redrawparam_randomize", true);
         if (randomizeNodes)
         {
-            graph->randomizeNodes(getContentComp()->getViewPosition().x,
-                                  getContentComp()->getViewPosition().y,
-                                  getContentComp()->getViewWidth(),
-                                  getContentComp()->getViewHeight());
+            GraphUtils::randomizeNodes(*graph,
+                                       getContentComp()->getViewPosition().x,
+                                       getContentComp()->getViewPosition().y,
+                                       getContentComp()->getViewWidth(),
+                                       getContentComp()->getViewHeight());
         }
     }
 

@@ -37,10 +37,13 @@ class GraphUtils
 public:
     static float getDirection(double dx, double dy);
     static Point<int> rotateCoordinate(float x, float y, float angle);
-    static Point<float> coulombForce(Point<float> p1, Point<float> p2, float beta);
-    static Point<float> hookeForce(Point<float> p1, Point<float> p2, float dij, float k);
+    static Point<float> coulombForce(const Point<float>& p1, const Point<float>& p2, float beta);
+    static Point<float> hookeForce(const Point<float>& p1, const Point<float>& p2, float k);
 
-    static void initEdgesMatrix(Array<Array<bool>>& edgesMatrix, int numNodes);
+    static void randomizeNodes(DirectedGraph& g, int offsetX, int offsetY, int width, int height);
+    static void shuffleNodes(DirectedGraph& g);
+
+    static void initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes);
 
     static void calculateConnectedGroups(DirectedGraph& g);
 

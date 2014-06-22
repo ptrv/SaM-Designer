@@ -33,7 +33,6 @@ namespace synthamodeler
 class FlowAlgorithm;
 class Node;
 class ObjController;
-// class tNodes;
 
 typedef Array<Node*> tNodes;
 typedef Array<Array<bool> > tEdgesMatrix;
@@ -62,28 +61,33 @@ public:
 
     Node* getNode(int index) { return nodes[index]; }
 
-    Array<Node*>& getNodes() { return nodes; }
-    Array<Node*> getRoots();
-    Array<Node*> getLeaves();
+    tNodes& getNodes() { return nodes; }
+    const tNodes& getNodes() const { return nodes; }
+    Array<tNodesAndEdges>& getConnectedGroups() { return connectedGroups; }
+    const Array<tNodesAndEdges>& getConnectedGroups() const { return connectedGroups; }
+    Array<Array<bool> >& getEdges() { return edges; }
+    const Array<Array<bool> >& getEdges() const { return edges; }
+
+    FlowAlgorithm* getFlowAlgorithm() { return flower; }
+    const FlowAlgorithm* getFlowAlgorithm() const { return flower; }
+
+    tNodes getRoots();
+    tNodes getLeaves();
 
     bool reflow(int offsetX, int offsetY, int width, int height,
                 ObjController& objControler, float deltaTime);
 
-    void randomizeNodes(int offsetX, int offsetY, int width, int height);
-
     String toString();
-
-    void shuffleNodes();
 
     void setPositions();
 
+
+private:
 
     tNodes nodes;
     Array<tNodesAndEdges> connectedGroups;
     ScopedPointer<FlowAlgorithm> flower;
     Array<Array<bool> > edges;
-
-private:
 
 };
 

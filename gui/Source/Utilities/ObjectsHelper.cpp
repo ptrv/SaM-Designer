@@ -264,7 +264,7 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
         graph.addNode(ocEnd);
     }
 
-    tNodes& nodes = graph.nodes;
+    tNodes& nodes = graph.getNodes();
 
     graph.init(nodes.size());
 

@@ -54,19 +54,23 @@ public:
     void setLabel(const String& s) { label = s; }
     const String& getLabel() { return label; }
 
-    void setNX(float x_);
-    void setNY(float y_);
-    float getNX();
-    float getNY();
+    void setPosF(float x_, float y_) { posF.setXY(x_, y_); };
+    const Point<float>& getPosF() const { return posF; };
+    Point<float>& getPosF() { return posF; };
 
     float getMass();
-    Point<float> force;
-    Point<float> velocity;
+    Point<float>& getForce() { return force; };
+    const Point<float>& getForce() const { return force; };
+    Point<float>& getVelocity() { return velocity; };
+    const Point<float>& getVelocity() const { return velocity; };
+
 private:
 
+    Point<float> posF;
+    Point<float> force;
+    Point<float> velocity;
+
     ValueTree data;
-    float nx, ny;
-//    ValueTree data;
     String label;
     Array<Node*> inLinks;
     Array<Node*> outLinks;

@@ -84,40 +84,89 @@ Point<int> GraphUtils::rotateCoordinate(float x, float y, float angle)
     return rc;
 }
 
-Point<float> GraphUtils::coulombForce(Point<float> p1, Point<float> p2, float beta)
+Point<float> GraphUtils::coulombForce(const Point<float>& p1, const Point<float>& p2, float beta)
+{
+    float dx = p1.x - p2.x;
+    float dy = p1.y - p2.y;
+
+    float dsq = dx * dx + dy * dy;
+
+    if (dsq == 0.f)
+        dsq = 0.001f;
+
+    float coul = beta / dsq;
+
+    return Point<float>(coul * dx, coul * dy);
+}
+
+Point<float> GraphUtils::hookeForce(const Point<float>& p1, const Point<float>& p2, float k)
 {
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
 
-    float ds2 = dx * dx + dy * dy;
-    float ds = sqrt(ds2);
-//    float dsTmp = ds2 * ds;
-    float c = 0.0f;
-//    if(dsTmp != 0.0f)
-//        c = beta / dsTmp;
-//        c = beta / ds2;
-        c = beta / ds;
-
-    return Point<float>(-c * dx, -c * dy);
+    return Point<float>(k * dx, k * dy);
 }
 
-Point<float> GraphUtils::hookeForce(Point<float> p1, Point<float> p2, float dij, float k)
+void GraphUtils::randomizeNodes(DirectedGraph& g, int offsetX, int offsetY, int width, int height)
 {
-    float dx = p2.x - p1.x;
-    float dy = p2.y - p1.y;
+    tNodes& nodes = g.getNodes();
+    Random rnd(Time::currentTimeMillis());
+    for (Node* const n : nodes)
+    {
+//        int x = n->getNX();
+//        int y = n->getNY();
+//        float f1 = 1.0f;
+//        float f2 = f1/2.0f;
+////        int rx = x + rnd.nextInt(width*f1) - width*f2;
+////        int ry = y + rnd.nextInt(height*f1) - height*f2;
+        int rx = rnd.nextInt(width) + offsetX;
+        int ry = rnd.nextInt(height) + offsetY;
 
-    float ds2 = dx * dx + dy * dy;
-    float ds = sqrt(ds2);
-    float dl = ds - dij;
-    float c = 0.0f;
+//        while(rx < 0 || ry > width)
+//            rx = x + rnd.nextInt(width*f1) - width*f2;
+//        while(ry < 0 || ry > height)
+//            ry = y + rnd.nextInt(height*f1) - height*f2;
 
-    if(ds != 0.0f)
-        c = k * dl / ds;
+//        if(rx < 0)
+//            rx = abs(rx);
+//        else if(rx > width)
+//            rx = width - (rx - width);
+//        if(ry < 0)
+//            ry = abs(ry);
+//        else if(ry > height)
+//            ry = height - (ry - height);
+        if(rx < offsetX)
+            rx = offsetX;
+        else if(rx > width + offsetX)
+            rx = width + offsetX;
+        if(ry < offsetY)
+            ry = offsetY;
+        else if(ry > height + offsetY)
+            ry = height + offsetY;
 
-    return Point<float>(c * dx, c * dy);
+        n->setPosF(rx, ry);
+    }
 }
 
-void GraphUtils::initEdgesMatrix(Array<Array<bool>>& edgesMatrix, int numNodes)
+// http://stackoverflow.com/questions/922256/c-array-shuffle
+void GraphUtils::shuffleNodes(DirectedGraph& g)
+{
+    tNodes& nodes = g.getNodes();
+    const int numNodes = nodes.size();
+    int numNodes2 = numNodes;
+    while(numNodes2 > 1)
+    {
+        long int k = lrand48();
+        k = k % numNodes;
+        numNodes2--;
+        nodes.swap(numNodes2, k);
+//        Node* temp = nodes[numNodes2];
+//        nodes[numNodes2] = nodes[k];
+//        nodes[k] = temp;
+    }
+}
+
+void GraphUtils::initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes)
 {
     Array<bool> row;
     row.insertMultiple(0, false, numNodes);
@@ -126,9 +175,9 @@ void GraphUtils::initEdgesMatrix(Array<Array<bool>>& edgesMatrix, int numNodes)
 
 void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 {
-    tNodes& nodes = g.nodes;
-    tEdgesMatrix& allEdges = g.edges;
-    Array<tNodesAndEdges>& connectedGroups = g.connectedGroups;
+    tNodes& nodes = g.getNodes();
+    tEdgesMatrix& allEdges = g.getEdges();
+    Array<tNodesAndEdges>& connectedGroups = g.getConnectedGroups();
 
     Array<int> visitedNodes;
 
@@ -161,25 +210,26 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
         return neighbours;
     };
 
-    // depth first search
-    auto fnDFS = [&](Node* const n, tNodes& currentGroup)
+    auto fnDepthFirstSearch = [&nodes, &visitedNodes, &fnGetNeightbours]
+        (Node* const n, tNodes& currentGroup)
     {
         std::stack<Node*> S;
         S.push(n);
+
         while (!S.empty())
         {
-            Node* w = S.top();
+            Node* aNode = S.top();
             S.pop();
 
-            int idxW = nodes.indexOf(w);
-            if (!visitedNodes.contains(idxW))
+            int aNodeIndex = nodes.indexOf(aNode);
+            if (!visitedNodes.contains(aNodeIndex))
             {
-                visitedNodes.add(idxW);
+                visitedNodes.add(aNodeIndex);
 
-                const tNodes neighbours = fnGetNeightbours(idxW);
-                w->setNeighbours(neighbours);
+                const tNodes neighbours = fnGetNeightbours(aNodeIndex);
+                aNode->setNeighbours(neighbours);
 
-                currentGroup.add(w);
+                currentGroup.add(aNode);
 
                 for (Node* const x : neighbours)
                 {
@@ -193,11 +243,9 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
     {
         if (!fnIsInConnecteds(v))
         {
-            tNodes group;
             tNodesAndEdges nodesAndEdges;
 
-            fnDFS(v, group);
-            nodesAndEdges.nodes = group;
+            fnDepthFirstSearch(v, nodesAndEdges.nodes);
             connectedGroups.add(nodesAndEdges);
         }
     }
@@ -217,7 +265,7 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
     // }
 
     // find edges for group nodes
-    for (tNodesAndEdges& ne : g.connectedGroups)
+    for (tNodesAndEdges& ne : g.getConnectedGroups())
     {
         int numNodes = ne.nodes.size();
 

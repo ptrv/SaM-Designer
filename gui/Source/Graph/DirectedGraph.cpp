@@ -116,48 +116,6 @@ bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height,
         *this, offsetX, offsetY, width, height, objController, deltaTime);
 }
 
-void DirectedGraph::randomizeNodes(int offsetX, int offsetY, int width, int height)
-{
-    Random rnd(Time::currentTimeMillis());
-    for (Node* const n : nodes)
-    {
-//        int x = n->getNX();
-//        int y = n->getNY();
-//        float f1 = 1.0f;
-//        float f2 = f1/2.0f;
-////        int rx = x + rnd.nextInt(width*f1) - width*f2;
-////        int ry = y + rnd.nextInt(height*f1) - height*f2;
-        int rx = rnd.nextInt(width) + offsetX;
-        int ry = rnd.nextInt(height) + offsetY;
-
-//        while(rx < 0 || ry > width)
-//            rx = x + rnd.nextInt(width*f1) - width*f2;
-//        while(ry < 0 || ry > height)
-//            ry = y + rnd.nextInt(height*f1) - height*f2;
-
-//        if(rx < 0)
-//            rx = abs(rx);
-//        else if(rx > width)
-//            rx = width - (rx - width);
-//        if(ry < 0)
-//            ry = abs(ry);
-//        else if(ry > height)
-//            ry = height - (ry - height);
-        if(rx < offsetX)
-            rx = offsetX;
-        else if(rx > width + offsetX)
-            rx = width + offsetX;
-        if(ry < offsetY)
-            ry = offsetY;
-        else if(ry > height + offsetY)
-            ry = height + offsetY;
-
-        n->setNX(rx);
-        n->setNY(ry);
-    }
-
-}
-
 String DirectedGraph::toString()
 {
     String s;
@@ -173,23 +131,6 @@ String DirectedGraph::toString()
         s << "\n";
     }
     return s;
-}
-
-// http://stackoverflow.com/questions/922256/c-array-shuffle
-void DirectedGraph::shuffleNodes()
-{
-    const int numNodes = nodes.size();
-    int numNodes2 = numNodes;
-    while(numNodes2 > 1)
-    {
-        long int k = lrand48();
-        k = k % numNodes;
-        numNodes2--;
-        nodes.swap(numNodes2, k);
-//        Node* temp = nodes[numNodes2];
-//        nodes[numNodes2] = nodes[k];
-//        nodes[k] = temp;
-    }
 }
 
 void DirectedGraph::setPositions()

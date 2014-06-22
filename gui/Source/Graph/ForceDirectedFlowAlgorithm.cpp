@@ -73,7 +73,8 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
 
     Point<float> totalEnergy(0.0, 0.0);
 
-    for (tNodesAndEdges& group : g.connectedGroups)
+
+    for (tNodesAndEdges& group : g.getConnectedGroups())
     {
         applyForces(totalEnergy, group, width, height, objController);
     }
@@ -104,16 +105,11 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
     for (int i = 0; i < numNodes; ++i)
     {
         Node* const v = group.getUnchecked(i);
+        Point<float>& force = v->getForce();
+        force = Point<float>();
 
-        // const int vi = nodes.indexOf(v);
-
-        const tNodes in = v->getIncomingLinks();
-        const tNodes on = v->getOutgoingLinks();
-
-        v->force = Point<float>();
-
-        float vx = v->getNX();
-        float vy = v->getNY();
+        float vx = v->getPosF().x;
+        float vy = v->getPosF().y;
 
         for (int j = 0; j < numNodes; ++j)
         {
@@ -122,18 +118,19 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
 
             Node* const u = group.getUnchecked(j);
 
-            float ux = u->getNX();
-            float uy = u->getNY();
+            float ux = u->getPosF().x;
+            float uy = u->getPosF().y;
 
             float dsq = ((vx - ux) * (vx - ux) + (vy - uy) * (vy - uy));
 
             if (dsq == 0.f)
                 dsq = 0.001f;
 
-            float coul = (charge / numNodes) / dsq;
+            float beta = (charge / numNodes);
+            float coul = beta / dsq;
 
-            v->force.x += coul * (vx - ux);
-            v->force.y += coul * (vy - uy);
+            force.x += coul * (vx - ux);
+            force.y += coul * (vy - uy);
         }
         for (int j = 0; j < numNodes; ++j)
         {
@@ -142,23 +139,22 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
 
             Node* const u = group.getUnchecked(j);
 
-            // if (!in.contains(u) && !on.contains(u))
-            //     continue;
+            float ux = u->getPosF().x;
+            float uy = u->getPosF().y;
 
-            float ux = u->getNX();
-            float uy = u->getNY();
-
-            v->force.x += k * (ux - vx);
-            v->force.y += k * (uy - vy);
+            force.x += k * (ux - vx);
+            force.y += k * (uy - vy);
         }
     }
     for (Node* const v : group)
     {
+        Point<float>& force = v->getForce();
+        Point<float>& velocity = v->getVelocity();
 
         if (ObjectComponent* oc = objController.getObjectForId(v->getLabel()))
         {
-            float vx = v->getNX();
-            float vy = v->getNY();
+            float vx = v->getPosF().x;
+            float vy = v->getPosF().y;
 
             if (oc->isMouseButtonDown())
             {
@@ -167,17 +163,16 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
             }
             else
             {
-                v->velocity = (v->velocity + v->force) * damp;
+                velocity = (velocity + force) * damp;
 
-                totalEnergy = totalEnergy + (v->velocity * v->velocity);
+                totalEnergy = totalEnergy + (velocity * velocity);
 
-                vx += v->velocity.x;
-                vy += v->velocity.y;
-                vx = Utils::constrain<float>(vx, 0, width);
-                vy = Utils::constrain<float>(vy, 0, height);
+                vx += velocity.x;
+                vy += velocity.y;
+                vx = Utils::constrain<float>(vx, 50, width-50);
+                vy = Utils::constrain<float>(vy, 50, height-50);
             }
-            v->setNX(vx);
-            v->setNY(vy);
+            v->setPosF(vx, vy);
             oc->setActualPosition(Point<int>(vx, vy));
         }
     }

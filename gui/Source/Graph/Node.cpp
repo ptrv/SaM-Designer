@@ -44,8 +44,8 @@ Node::~Node()
 
 void Node::initNodeData()
 {
-    nx = float(data[Ids::posX]);
-    ny = float(data[Ids::posY]);
+    posF.x = float(data[Ids::posX]);
+    posF.y = float(data[Ids::posY]);
 
     force = Point<float>(0, 0);
     velocity = Point<float>(0, 0);
@@ -105,8 +105,8 @@ float Node::getShortestLinkLength()
     float l = 10000.0f;
     for (int i = 0; i < inLinks.size(); ++i)
     {
-        int dx = inLinks.getUnchecked(i)->getNX() - this->getNX();
-        int dy = inLinks.getUnchecked(i)->getNY() - this->getNY();
+        int dx = inLinks.getUnchecked(i)->getPosF().x - posF.x;
+        int dy = inLinks.getUnchecked(i)->getPosF().y - posF.y;
 
         float il = sqrt(dx*dx + dy*dy);
         if(il < l)
@@ -115,8 +115,8 @@ float Node::getShortestLinkLength()
 
     for (int j = 0; j < outLinks.size(); ++j)
     {
-        int dx = outLinks.getUnchecked(j)->getNX() - this->getNX();
-        int dy = outLinks.getUnchecked(j)->getNY() - this->getNY();
+        int dx = outLinks.getUnchecked(j)->getPosF().x - posF.x;
+        int dy = outLinks.getUnchecked(j)->getPosF().y - posF.y;
 
         float ol = sqrt(dx*dx + dy*dy);
         if(ol < l)
@@ -131,23 +131,6 @@ bool Node::equals(const Node* other)
         return true;
 
     return label.equalsIgnoreCase(other->label);
-}
-
-void Node::setNX(float x_)
-{
-    nx = x_;
-}
-void Node::setNY(float y_)
-{
-    ny = y_;
-}
-float Node::getNX()
-{
-    return nx;
-}
-float Node::getNY()
-{
-    return ny;
 }
 
 float Node::getMass()
