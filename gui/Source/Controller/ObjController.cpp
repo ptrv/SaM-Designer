@@ -687,22 +687,16 @@ void ObjController::selectAll(bool shouldBeSelected)
     if(shouldBeSelected)
     {
         sObjects.deselectAll();
-        for (int i = 0; i < objects.size(); ++i)
+
+        auto fnAddToSelection = [&](SelectableObject* const obj)
         {
-            sObjects.addToSelection(objects.getUnchecked(i));
-        }
-        for (int j = 0; j < links.size(); ++j)
-        {
-            sObjects.addToSelection(links.getUnchecked(j));
-        }
-        for (int k = 0; k < audioConnections.size(); ++k)
-        {
-            sObjects.addToSelection(audioConnections.getUnchecked(k));
-        }
-        for (int l = 0; l < comments.size(); ++l)
-        {
-            sObjects.addToSelection(comments.getUnchecked(l));
-        }
+            sObjects.addToSelection(obj);
+        };
+
+        std::for_each(objects.begin(), objects.end(), fnAddToSelection);
+        std::for_each(links.begin(), links.end(), fnAddToSelection);
+        std::for_each(audioConnections.begin(), audioConnections.end(), fnAddToSelection);
+        std::for_each(comments.begin(), comments.end(), fnAddToSelection);
     }
     else
     {
@@ -716,17 +710,19 @@ void ObjController::selectObjectsIfContainsText(const String& selectionText)
     if(selectionText.isEmpty())
         return;
 
-    for (int i = 0; i < objects.size(); ++i)
+    for (ObjectComponent* const oc : objects)
     {
-        ObjectComponent* oc = objects.getUnchecked(i);
         if(ObjectsHelper::containsStringInValueTree(oc->getData(), selectionText, true))
+        {
             sObjects.addToSelection(oc);
+        }
     }
-    for (int j = 0; j < links.size(); ++j)
+    for (LinkComponent* const lc : links)
     {
-        LinkComponent* lc = links.getUnchecked(j);
         if(ObjectsHelper::containsStringInValueTree(lc->getData(), selectionText, true))
+        {
             sObjects.addToSelection(lc);
+        }
     }
 }
 
@@ -918,16 +914,15 @@ String ObjController::getNewNameForObject(const Identifier& objId)
 
 void ObjController::setLinksSegmented(bool isSegmented)
 {
-    for (int i = 0; i < links.size(); ++i)
+    std::for_each(links.begin(), links.end(), [=](LinkComponent* const lc)
     {
-        LinkComponent* const lc = links.getUnchecked(i);
         lc->setSegmented(isSegmented);
-    }
-    for (int i = 0; i < audioConnections.size(); ++i)
+    });
+    std::for_each(audioConnections.begin(), audioConnections.end(),
+                  [=](AudioOutConnector* const aoc)
     {
-        AudioOutConnector* const aoc = audioConnections.getUnchecked(i);
         aoc->setSegmented(isSegmented);
-    }
+    });
 }
 
 void ObjController::destroy()
@@ -943,10 +938,10 @@ void ObjController::destroy()
 
 void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
 {
-    for (int i = 0; i < audioConnections.size(); ++i)
+    for (AudioOutConnector* const aoc : audioConnections)
     {
-        audioConnections[i]->setVisible(shouldBeVisible);
-        audioConnections[i]->repaint();
+        aoc->setVisible(shouldBeVisible);
+        aoc->repaint();
     }
 }
 

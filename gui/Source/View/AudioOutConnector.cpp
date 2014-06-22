@@ -270,7 +270,7 @@ void AudioOutConnector::mouseDrag(const MouseEvent& /*e*/)
 
 void AudioOutConnector::mouseUp(const MouseEvent& e)
 {
-   	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
+    if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
         propertiesWindow->makeVisible(true);
 	}

@@ -192,8 +192,8 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 
         if (dragging)
         {
-            owner.dragSelectedComps (e.getDistanceFromDragStartX(),
-                                      e.getDistanceFromDragStartY());
+            owner.dragSelectedComps(e.getDistanceFromDragStartX(),
+                                    e.getDistanceFromDragStartY());
         }
     }
 }
@@ -201,7 +201,9 @@ void ObjectComponent::mouseDrag (const MouseEvent& e)
 void ObjectComponent::mouseUp (const MouseEvent& e)
 {
     if (dragging)
+    {
         owner.endDragging();
+    }
 
 	if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
@@ -291,6 +293,7 @@ void ObjectComponent::addLinkToObject(LinkComponent* link)
     connectedLinks.add(link);
     addChangeListener(link);
 }
+
 void ObjectComponent::removeLinkFromObject(LinkComponent* link)
 {
     connectedLinks.removeAllInstancesOf(link);
@@ -329,13 +332,19 @@ Point<int> ObjectComponent::getPinOffset() const
 
 bool ObjectComponent::canBeConnected(const Identifier& objId)
 {
-    if(objId == Ids::link || objId == Ids::touch || 
+    if(objId == Ids::link || objId == Ids::touch ||
         objId == Ids::pluck || objId == Ids::pulsetouch)
+    {
         return canBeConnectedToLinks();
+    }
     else if(objId == Ids::waveguide)
+    {
         return canBeConnectedToWaveguides();
+    }
     else
+    {
         return false;
+    }
 }
 bool ObjectComponent::canBeConnectedToLinks()
 {
@@ -364,7 +373,11 @@ bool ObjectComponent::canBeConnectedToLinks()
 bool ObjectComponent::canBeConnectedToWaveguides()
 {
     if(data.getType() == Ids::termination || data.getType() == Ids::junction)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
