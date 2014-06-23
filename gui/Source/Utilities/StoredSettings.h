@@ -122,7 +122,13 @@ public:
     bool getIsPropertiesWindowAlwaysOnTop() const;
     void setIsPropertiesWindowAlwaysOnTop (bool alwaysOnTop);
 
+    void setLastOpenDirectory(const File& lastOpenDir);
+    const File getLastOpenDirectory() const;
+
 private:
+
+    File getDirectory(const String& dirPath) const;
+
     ScopedPointer<PropertiesFile> props;
     ScopedPointer<PropertiesFile> exporters;
     ScopedPointer<PropertiesFile> defaultValues;

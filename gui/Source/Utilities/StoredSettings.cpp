@@ -412,3 +412,25 @@ void StoredSettings::setIsPropertiesWindowAlwaysOnTop (bool alwaysOnTop)
 {
     props->setValue("propertiesWindowAlwaysOnTop", alwaysOnTop);
 }
+
+const File StoredSettings::getLastOpenDirectory() const
+{
+    const String lastOpenDirPath = props->getValue("lastOpenDirectory");
+
+    return getDirectory(lastOpenDirPath);
+}
+
+void StoredSettings::setLastOpenDirectory(const File& lastOpenDir)
+{
+    DBG(lastOpenDir.getFullPathName());
+    props->setValue("lastOpenDirectory", lastOpenDir.getFullPathName());
+}
+
+File StoredSettings::getDirectory(const String& dirPath) const
+{
+    File aDir = dirPath;
+
+    return aDir.exists() && aDir.isDirectory()
+        ? aDir
+        : File::nonexistent;
+}

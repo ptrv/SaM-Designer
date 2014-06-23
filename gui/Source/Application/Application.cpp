@@ -442,10 +442,17 @@ void SAMApplication::creatNewMDLDocument()
 
 void SAMApplication::askUserToOpenFile()
 {
-    FileChooser fc(TRANS("Open MDL File"), File::nonexistent, "*.mdl;*.mdlx");
+    File lastOpenDir = StoredSettings::getInstance()->getLastOpenDirectory();
+
+    FileChooser fc(TRANS("Open MDL File"), lastOpenDir, "*.mdl;*.mdlx");
 
     if (fc.browseForFileToOpen())
-        openFile (fc.getResult());
+    {
+        File fileToOpen = fc.getResult();
+        openFile(fileToOpen);
+        StoredSettings::getInstance()->setLastOpenDirectory(
+            fileToOpen.getParentDirectory());
+    }
 }
 
 void SAMApplication::updateRecentProjectList()
