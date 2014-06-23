@@ -683,6 +683,13 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     if(StoredSettings::getInstance()->getShouldRedrawOnLoad())
         if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
             holder->redrawObjects(CommandIDs::redrawForceDirected);
+
+    auto fnObjectToFront = [](Component* const comp)
+    {
+        comp->toFront(false);
+    };
+    std::for_each(objects.begin(), objects.end(), fnObjectToFront);
+    std::for_each(comments.begin(), comments.end(), fnObjectToFront);
 }
 
 void ObjController::selectAll(bool shouldBeSelected)
