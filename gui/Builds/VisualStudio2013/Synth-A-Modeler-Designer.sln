@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual Studio 2013
 Project("{4F4FA98E-362F-8C84-6FAD-2EA31001B92B}") = "Synth-A-Modeler-Designer", "Synth-A-Modeler-Designer.vcxproj", "{D9CA3016-E563-38BD-1869-389E254F74EA}"
 EndProject
 Global
