@@ -77,7 +77,8 @@ public:
             return false;
         }
 
-        objController->removeObject(objController->getObject(indexAdded), false, holderComp);
+        ObjectComponent* objComp = objController->getObject(indexAdded);
+        objController->removeObject(objComp, false, holderComp);
 
         String logText = "Undo add ";
         logText <<  objTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();

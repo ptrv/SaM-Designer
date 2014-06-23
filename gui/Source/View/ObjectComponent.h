@@ -36,7 +36,7 @@ class SelectableObject;
 /**
  * The object component.
  */
-class ObjectComponent : public BaseObjectComponent, 
+class ObjectComponent : public BaseObjectComponent,
                         public ChangeListener,
                         public ChangeBroadcaster,
                         public SelectableObject

@@ -172,10 +172,10 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
         ObjectComponent* oc1 = ObjectsHelper::getObject(sObjects.getSelectedItem(0));
         ObjectComponent* oc2 = ObjectsHelper::getObject(sObjects.getSelectedItem(1));
 
-        if(oc1 != nullptr && oc2 != nullptr
-            && oc1->canBeConnected(linkValues.getType())
-            && oc2->canBeConnected(linkValues.getType())
-            && (! checkIfLinkExitsts(linkValues)))
+        if (oc1 != nullptr && oc2 != nullptr &&
+            oc1->canBeConnected(linkValues.getType()) &&
+            oc2->canBeConnected(linkValues.getType()) &&
+            !checkIfLinkExitsts(linkValues))
         {
             addLink(holder, linkValues, -1, true);
         }
@@ -687,10 +687,10 @@ void ObjController::loadComponents(ObjectsHolder* holder)
 
 void ObjController::selectAll(bool shouldBeSelected)
 {
-    if(shouldBeSelected)
-    {
-        sObjects.deselectAll();
+    sObjects.deselectAll();
 
+    if (shouldBeSelected)
+    {
         auto fnAddToSelection = [&](SelectableObject* const obj)
         {
             sObjects.addToSelection(obj);
@@ -701,31 +701,30 @@ void ObjController::selectAll(bool shouldBeSelected)
         std::for_each(audioConnections.begin(), audioConnections.end(), fnAddToSelection);
         std::for_each(comments.begin(), comments.end(), fnAddToSelection);
     }
-    else
-    {
-        sObjects.deselectAll();
-    }
 }
 
 void ObjController::selectObjectsIfContainsText(const String& selectionText)
 {
     sObjects.deselectAll();
-    if(selectionText.isEmpty())
+
+    if (selectionText.isEmpty())
         return;
+
+    auto fnSelectIfContainsText = [&](const ValueTree& data_, SelectableObject* const obj)
+    {
+        if (ObjectsHelper::containsStringInValueTree(data_, selectionText, true))
+        {
+            sObjects.addToSelection(obj);
+        }
+    };
 
     for (ObjectComponent* const oc : objects)
     {
-        if(ObjectsHelper::containsStringInValueTree(oc->getData(), selectionText, true))
-        {
-            sObjects.addToSelection(oc);
-        }
+        fnSelectIfContainsText(oc->getData(), oc);
     }
     for (LinkComponent* const lc : links)
     {
-        if(ObjectsHelper::containsStringInValueTree(lc->getData(), selectionText, true))
-        {
-            sObjects.addToSelection(lc);
-        }
+        fnSelectIfContainsText(lc->getData(), lc);
     }
 }
 
