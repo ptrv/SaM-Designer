@@ -38,6 +38,7 @@ class SelectableObject;
 class IdManager;
 class CommentComponent;
 class DirectedGraph;
+class GraphReflowController;
 /**
  * The ObjController controlls all ObjectComponents.
  */
@@ -200,6 +201,9 @@ public:
     template<typename T>
     void setAsFromtmostLink(T& t);
 
+    void startReflow(ObjectsHolder* objectsHolder, int cmdId);
+    void stopReflow();
+
 private:
     
     bool checkIfLinkExitsts(ValueTree linkTree);
@@ -215,6 +219,8 @@ private:
     ScopedPointer<IdManager> idMgr;
     int timesPasted;
     bool isReflowing;
+
+    ScopedPointer<GraphReflowController> reflowController;
 
     WeakReference<ObjController>::Master masterReference;
     friend class WeakReference<ObjController>;

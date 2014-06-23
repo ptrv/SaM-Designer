@@ -44,7 +44,6 @@ class ContentComp;
 class ObjectsHolder : public Component,
                       public LassoSource <SelectableObject*>,
                       public ChangeListener,
-                      public Timer,
                       public ApplicationCommandTarget
 {
 public:
@@ -100,18 +99,13 @@ public:
 
     int snapPosition (int pos) const throw();
 
-    void startTimer(int intervalInMilliseconds);
-    void stopTimer();
-    void timerCallback();
-    bool reflow();
-
     void redrawObjects(const int cmdId);
 
     static int objectsHolderNum;
     //==========================================================================
-private:
-
     ContentComp* getContentComp();
+
+private:
 
     void showRedrawOptions();
 
@@ -135,7 +129,6 @@ private:
     bool snapActive, snapShown;
 
     ScopedPointer<FaustcodePanel> fcPanel;
-    ScopedPointer<DirectedGraph> graph;
 //==============================================================================
     void openFaustcodePanel();
     void setSegmentedLinks();

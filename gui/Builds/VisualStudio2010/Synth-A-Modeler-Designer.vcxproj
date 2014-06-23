@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\Source\Utilities\Alerts.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\MDLParser.cpp"/>
     <ClCompile Include="..\..\Source\Utilities\StoredSettings.cpp"/>
+    <ClCompile Include="..\..\Source\Controller\GraphReflowController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\SAMCmdController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\PostWindowController.cpp"/>
     <ClCompile Include="..\..\Source\Controller\MDLController.cpp"/>
@@ -1049,6 +1050,7 @@
     <ClInclude Include="..\..\Source\Utilities\Alerts.h"/>
     <ClInclude Include="..\..\Source\Utilities\MDLParser.h"/>
     <ClInclude Include="..\..\Source\Utilities\StoredSettings.h"/>
+    <ClInclude Include="..\..\Source\Controller\GraphReflowController.h"/>
     <ClInclude Include="..\..\Source\Controller\SAMCmdController.h"/>
     <ClInclude Include="..\..\Source\Controller\PostWindowController.h"/>
     <ClInclude Include="..\..\Source\Controller\MDLController.h"/>

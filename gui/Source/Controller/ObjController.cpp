@@ -38,6 +38,7 @@
 //#include "../Graph/ForceDirectedFlowAlgorithm.h"
 #include "../Graph/DirectedGraph.h"
 #include "../Utilities/ObjectsHelper.h"
+#include "GraphReflowController.h"
 
 #include "ObjController.h"
 
@@ -48,7 +49,8 @@ using namespace synthamodeler;
 ObjController::ObjController(MDLController& owner_)
 : owner(owner_),
   timesPasted(0),
-  isReflowing(false)
+  isReflowing(false),
+  reflowController(new GraphReflowController(*this))
 {
     idMgr = new IdManager();
     sObjects.addChangeListener(propertiesWindow);
@@ -63,6 +65,7 @@ ObjController::~ObjController()
     idMgr = nullptr;
     sObjects.removeChangeListener(propertiesWindow);
     masterReference.clear();
+    reflowController = nullptr;
 }
 
 bool ObjController::perform(UndoableAction * const action, const String& actionName)
@@ -959,3 +962,13 @@ void ObjController::setAsFromtmostLink(T& t)
 
 template void ObjController::setAsFromtmostLink<LinkComponent>(LinkComponent& t);
 template void ObjController::setAsFromtmostLink<AudioOutConnector>(AudioOutConnector& t);
+
+void ObjController::startReflow(ObjectsHolder* const objectsHolder, const int cmdId)
+{
+    reflowController->startReflow(objectsHolder, cmdId);
+}
+
+void ObjController::stopReflow()
+{
+    reflowController->stopReflow();
+}

@@ -167,11 +167,10 @@ bool ObjectsHolder::keyPressed(const KeyPress& key)
 {
     if(key == KeyPress::escapeKey)
     {
-        if(isTimerRunning())
+        if(objController.getIsReflowing())
         {
             DBG("redraw cancelled!");
-            stopTimer();
-            graph->setPositions();
+            objController.stopReflow();
             return true;
         }
     }
@@ -878,48 +877,6 @@ void ObjectsHolder::setSnappingGrid (const int numPixels,
     }
 }
 
-void ObjectsHolder::startTimer(int intervalInMilliseconds)
-{
-    objController.setIsReflowing(true);
-    Timer::startTimer(intervalInMilliseconds);
-}
-
-void ObjectsHolder::stopTimer()
-{
-    objController.setIsReflowing(false);
-    Timer::stopTimer();
-}
-
-double timeStep = 0.6;
-void ObjectsHolder::timerCallback()
-{
-//    DBG("tick");
-    if (reflow())
-    {
-        graph = nullptr;
-        stopTimer();
-        DBG("stop timer");
-    }
-}
-
-bool ObjectsHolder::reflow()
-{
-    if (graph != nullptr)
-    {
-//        int64 currentTime = Time::getCurrentTime().currentTimeMillis();
-//        float dT = (currentTime-lastTime)/1000.0f;
-
-        bool done = graph->reflow(getContentComp()->getViewPosition().x,
-                                  getContentComp()->getViewPosition().y,
-                                  getContentComp()->getViewWidth(),
-                                  getContentComp()->getViewHeight(),
-                                  objController, timeStep);
-        repaint();
-        return done;
-    }
-    return true;
-}
-
 ContentComp* ObjectsHolder::getContentComp()
 {
     return findParentComponentOfClass<ContentComp>();
@@ -929,45 +886,7 @@ void ObjectsHolder::redrawObjects(const int cmdId)
 {
     grabKeyboardFocus();
     DBG("redraw objects");
-    if (isTimerRunning())
-    {
-        stopTimer();
-    }
-
-    graph = nullptr;
-
-    timeStep = StoredSettings::getInstance()->getProps()
-        .getDoubleValue("redrawparam_timestep", 0.6);
-
-    if(cmdId == CommandIDs::redrawCircle)
-    {
-        graph = new DirectedGraph();
-        ObjectsHelper::makeGraph(objController, *graph.get());
-    }
-    else if(cmdId == CommandIDs::redrawForceDirected)
-    {
-        graph = new DirectedGraph();
-        ObjectsHelper::makeGraph(objController, *graph.get());
-//        DBG(graph->toString());
-        graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
-
-        const bool randomizeNodes =
-            StoredSettings::getInstance()->getProps()
-                .getBoolValue("redrawparam_randomize", true);
-        if (randomizeNodes)
-        {
-            GraphUtils::randomizeNodes(*graph,
-                                       getContentComp()->getViewPosition().x,
-                                       getContentComp()->getViewPosition().y,
-                                       getContentComp()->getViewWidth(),
-                                       getContentComp()->getViewHeight());
-        }
-    }
-
-    objController.getUndoManager().beginNewTransaction();
-
-    lastTime = Time::getCurrentTime().currentTimeMillis();
-    startTimer(100 * timeStep);
-
+    objController.startReflow(this, cmdId);
 }
+
 //==============================================================================

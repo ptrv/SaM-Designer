@@ -307,6 +307,9 @@
     <ClCompile Include="..\..\Source\Utilities\StoredSettings.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Controller\GraphReflowController.cpp">
+      <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Controller\SAMCmdController.cpp">
       <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClCompile>
@@ -1388,6 +1391,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Utilities\StoredSettings.h">
       <Filter>Synth-A-Modeler-Designer\Source\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Controller\GraphReflowController.h">
+      <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Controller\SAMCmdController.h">
       <Filter>Synth-A-Modeler-Designer\Source\Controller</Filter>

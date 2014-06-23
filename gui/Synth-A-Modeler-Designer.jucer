@@ -166,6 +166,10 @@
               file="Source/Utilities/StoredSettings.h"/>
       </GROUP>
       <GROUP id="{3076B932-78A9-9CF5-9D15-340DC0A8A1FF}" name="Controller">
+        <FILE id="OL4m57" name="GraphReflowController.cpp" compile="1" resource="0"
+              file="Source/Controller/GraphReflowController.cpp"/>
+        <FILE id="lYinmS" name="GraphReflowController.h" compile="0" resource="0"
+              file="Source/Controller/GraphReflowController.h"/>
         <FILE id="LKOdBg" name="SAMCmdController.cpp" compile="1" resource="0"
               file="Source/Controller/SAMCmdController.cpp"/>
         <FILE id="Y4jLoY" name="SAMCmdController.h" compile="0" resource="0"
