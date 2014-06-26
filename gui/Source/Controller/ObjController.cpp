@@ -167,10 +167,13 @@ bool ObjController::checkIfAudioConnectionExitsts(ValueTree source,
 
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
 {
-    if(sObjects.getNumSelected() == 2)
+    Array<ObjectComponent*> selectedObjects;
+    ObjectsHelper::getSelectedObjectComponents(*this, selectedObjects);
+
+    if(selectedObjects.size() == 2)
     {
-        ObjectComponent* oc1 = ObjectsHelper::getObject(sObjects.getSelectedItem(0));
-        ObjectComponent* oc2 = ObjectsHelper::getObject(sObjects.getSelectedItem(1));
+        ObjectComponent* oc1 = selectedObjects[0];
+        ObjectComponent* oc2 = selectedObjects[1];
 
         if (oc1 != nullptr && oc2 != nullptr &&
             oc1->canBeConnected(linkValues.getType()) &&

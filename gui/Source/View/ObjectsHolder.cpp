@@ -288,11 +288,13 @@ Point<int> ObjectsHolder::getMouseXYRelativeViewport()
 
 bool ObjectsHolder::getStartEndObjects(String& startId, String& endId)
 {
-    SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
-    if(sis.getNumSelected() == 2)
+    Array<ObjectComponent*> selectedObjects;
+    ObjectsHelper::getSelectedObjectComponents(objController, selectedObjects);
+
+    if(selectedObjects.size() == 2)
     {
-        ObjectComponent* oc1 = ObjectsHelper::getObject (sis.getSelectedItem(0));
-        ObjectComponent* oc2 = ObjectsHelper::getObject (sis.getSelectedItem(1));
+        const ObjectComponent* const oc1 = selectedObjects[0];
+        const ObjectComponent* const oc2 = selectedObjects[1];
         if (oc1 != nullptr && oc2 != nullptr)
         {
             startId = oc1->getData().getProperty(Ids::identifier).toString();

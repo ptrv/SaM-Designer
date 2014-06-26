@@ -638,3 +638,19 @@ template LinkComponent* ObjectsHelper::getLink(BaseObjectComponent*);
 template LinkComponent* ObjectsHelper::getLink(SelectableObject*);
 
 //------------------------------------------------------------------------------
+
+void ObjectsHelper::getSelectedObjectComponents(ObjController& objController,
+                                                Array<ObjectComponent*>& selectedObjs)
+{
+    const SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
+    selectedObjs.clear();
+    for (SelectableObject* const selectedItem : sis.getItemArray())
+    {
+        if (ObjectComponent* const oc = getObject(selectedItem))
+        {
+            selectedObjs.add(oc);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------

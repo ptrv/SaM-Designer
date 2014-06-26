@@ -76,6 +76,10 @@ public:
 
     template<typename BaseCompType>
     static LinkComponent* getLink(BaseCompType* baseCompType);
+
+    static void getSelectedObjectComponents(ObjController& objController,
+                                            Array<ObjectComponent*>& selectedObjs);
+
 };
 
 }
