@@ -307,8 +307,8 @@ bool ObjectsHolder::getStartEndObjects(String& startId, String& endId)
 
 bool ObjectsHolder::getStartEndObjectsLeftRight(String& startId, String& endId)
 {
-    ObjectComponent* oc1 = objController.getObjectForId(startId);
-    ObjectComponent* oc2 = objController.getObjectForId(endId);
+    const ObjectComponent* const oc1 = objController.getObjectForId(startId);
+    const ObjectComponent* const oc2 = objController.getObjectForId(endId);
     if (oc1 != nullptr && oc2 != nullptr)
     {
         if (oc1->getPinPos().x < oc2->getPinPos().x)

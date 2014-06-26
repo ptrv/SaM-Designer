@@ -138,7 +138,7 @@ public:
     {
         return sObjects;
     }
-    
+
     void startDragging();
     void dragSelectedComps (int dxFromDragStart, int dyFromDragStart);
     void endDragging();
@@ -175,9 +175,9 @@ public:
     
     void changed();
     
-    ObjectComponent* getObjectForId(const String& idString) const throw();
-    LinkComponent* getLinkForId(const String& idString) const throw();
-    CommentComponent* getCommentForId(const String& idString) const throw();
+    ObjectComponent* getObjectForId(const String& idString) const;
+    LinkComponent* getLinkForId(const String& idString) const;
+    CommentComponent* getCommentForId(const String& idString) const;
     
     void reverseLinkDirection();
     

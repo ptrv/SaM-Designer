@@ -756,9 +756,9 @@ void ObjController::dragSelectedComps(int dx, int dy)
 {
     const ObjectsHolder& holder = *owner.getHolderComponent();
 
-    for (int i = 0; i < sObjects.getNumSelected(); ++i)
+    for (SelectableObject* const selectedItem : sObjects.getItemArray())
     {
-        if(ObjectComponent * const c = ObjectsHelper::getObject(sObjects.getSelectedItem(i)))
+        if(ObjectComponent * const c = ObjectsHelper::getObject(selectedItem))
         {
             const int startX = c->getProperties() ["xDragStart"];
             const int startY = c->getProperties() ["yDragStart"];
@@ -769,7 +769,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
             c->setActualPosition(r);
         }
-        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(sObjects.getSelectedItem(i)))
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(selectedItem))
         {
             const int startX = cc->getProperties() ["xDragStart"];
             const int startY = cc->getProperties() ["yDragStart"];
@@ -835,19 +835,19 @@ struct ObjectIdComparator
     }
 };
 
-ObjectComponent* ObjController::getObjectForId(const String& idString) const throw()
+ObjectComponent* ObjController::getObjectForId(const String& idString) const
 {
     auto it = std::find_if(objects.begin(), objects.end(), ObjectIdComparator(idString));
     return it != objects.end() ? *it : nullptr;
 }
 
-LinkComponent* ObjController::getLinkForId(const String& idString) const throw()
+LinkComponent* ObjController::getLinkForId(const String& idString) const
 {
     auto it = std::find_if(links.begin(), links.end(), ObjectIdComparator(idString));
     return it != links.end() ? *it : nullptr;
 }
 
-CommentComponent* ObjController::getCommentForId(const String& idString) const throw()
+CommentComponent* ObjController::getCommentForId(const String& idString) const
 {
     auto it = std::find_if(comments.begin(), comments.end(), ObjectIdComparator(idString));
     return it != comments.end() ? *it : nullptr;
@@ -857,9 +857,9 @@ void ObjController::reverseLinkDirection()
 {
     owner.getUndoManager().beginNewTransaction();
 
-    for (int i = 0; i < sObjects.getNumSelected(); ++i)
+    for (SelectableObject* const selectedItem : sObjects.getItemArray())
     {
-        if(LinkComponent* lc = ObjectsHelper::getLink(sObjects.getSelectedItem(i)))
+        if(LinkComponent* lc = ObjectsHelper::getLink(selectedItem))
         {
             ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(lc,this);
             owner.getUndoManager().perform(action, "reverse link direction");
