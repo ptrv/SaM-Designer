@@ -38,10 +38,14 @@
 
 using namespace synthamodeler;
 
-bool CircleFlowAlgorithm::reflow(DirectedGraph& g, int offsetX, int offsetY,
-                                 int width, int height, ObjController& objController,
-                                 float /*deltaTime*/)
+bool CircleFlowAlgorithm::reflow(DirectedGraph& g,const Rectangle<int>& area,
+                                 ObjController& objController, float /*deltaTime*/)
 {
+    const int offsetX = area.getX();
+    const int offsetY = area.getY();
+    const int width = area.getWidth();
+    const int height = area.getHeight();
+
     float interval = 2 * M_PI / (float) g.size();
     int cx = width/2;
     int cy = height/2;

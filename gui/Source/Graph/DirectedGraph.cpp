@@ -74,10 +74,12 @@ bool DirectedGraph::linkNodes(Node* n1, Node* n2)
     {
         n1->addOutgoingLink(n2);
         n2->addIncomingLink(n1);
-        Array<bool>& edgesA = edges.getReference(nodes.indexOf(n1));
-        Array<bool>& edgesB = edges.getReference(nodes.indexOf(n2));
-        edgesA.set(nodes.indexOf(n2), true);
-        edgesB.set(nodes.indexOf(n1), true);
+        const int nodeIndex1 = nodes.indexOf(n1);
+        const int nodeIndex2 = nodes.indexOf(n2);
+        Array<bool>& edgesA = edges.getReference(nodeIndex1);
+        Array<bool>& edgesB = edges.getReference(nodeIndex2);
+        edgesA.set(nodeIndex2, true);
+        edgesB.set(nodeIndex1, true);
         return true;
     }
     return false;
@@ -109,11 +111,11 @@ Array<Node*> DirectedGraph::getLeaves()
     return leaves;
 }
 
-bool DirectedGraph::reflow(int offsetX, int offsetY, int width, int height,
-                           ObjController& objController, float deltaTime)
+bool DirectedGraph::reflow(const Rectangle<int>& area,
+                           ObjController& objController,
+                           float deltaTime)
 {
-    return flower->reflow(
-        *this, offsetX, offsetY, width, height, objController, deltaTime);
+    return flower->reflow(*this, area, objController, deltaTime);
 }
 
 String DirectedGraph::toString()

@@ -201,7 +201,7 @@ public:
     template<typename T>
     void setAsFromtmostLink(T& t);
 
-    void startReflow(ObjectsHolder* objectsHolder, int cmdId);
+    void startReflow(ObjectsHolder& objHolder, int cmdId);
     void stopReflow();
 
 private:

@@ -43,7 +43,7 @@ public:
 
     void initParameters();
 
-    bool reflow(DirectedGraph& g, int offsetX, int offsetY, int width, int height,
+    bool reflow(DirectedGraph& g, const Rectangle<int>& area,
                 ObjController& objController, float deltaTime);
 
 private:

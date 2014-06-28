@@ -23,7 +23,7 @@ class GraphReflowController : public Timer
 public:
     GraphReflowController(ObjController& objCtrl);
 
-    void startReflow(ObjectsHolder* objectsHolder, int cmdId);
+    void startReflow(ObjectsHolder& objectsHolder, int cmdId);
     void stopReflow();
 
 private:
@@ -36,6 +36,8 @@ private:
     ObjController& objController;
     ObjectsHolder* objHolder;
     ScopedPointer<DirectedGraph> graph;
+
+    Rectangle<int> bounds;
 };
 
 }

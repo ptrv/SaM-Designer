@@ -888,7 +888,7 @@ void ObjectsHolder::redrawObjects(const int cmdId)
 {
     grabKeyboardFocus();
     DBG("redraw objects");
-    objController.startReflow(this, cmdId);
+    objController.startReflow(*this, cmdId);
 }
 
 //==============================================================================

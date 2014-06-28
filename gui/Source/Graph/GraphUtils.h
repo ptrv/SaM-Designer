@@ -40,7 +40,7 @@ public:
     static Point<float> coulombForce(const Point<float>& p1, const Point<float>& p2, float beta);
     static Point<float> hookeForce(const Point<float>& p1, const Point<float>& p2, float k);
 
-    static void randomizeNodes(DirectedGraph& g, int offsetX, int offsetY, int width, int height);
+    static void randomizeNodes(DirectedGraph& g, const Rectangle<int>& area);
     static void shuffleNodes(DirectedGraph& g);
 
     static void initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes);

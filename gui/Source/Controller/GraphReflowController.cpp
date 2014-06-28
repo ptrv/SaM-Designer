@@ -24,7 +24,7 @@
 #include "../Graph/CircleFlowAlgorithm.h"
 #include "../Graph/ForceDirectedFlowAlgorithm.h"
 #include "../Controller/ObjController.h"
-#
+
 
 #include "GraphReflowController.h"
 
@@ -64,21 +64,16 @@ bool GraphReflowController::reflow()
 {
     if (graph != nullptr && objHolder != nullptr)
     {
-
-        bool done = graph->reflow(objHolder->getContentComp()->getViewPosition().x,
-                                  objHolder->getContentComp()->getViewPosition().y,
-                                  objHolder->getContentComp()->getViewWidth(),
-                                  objHolder->getContentComp()->getViewHeight(),
-                                  objController, timeStep);
+        bool done = graph->reflow(bounds, objController, timeStep);
         objHolder->repaint();
         return done;
     }
     return true;
 }
 
-void GraphReflowController::startReflow(ObjectsHolder* const objectsHolder, const int cmdId)
+void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int cmdId)
 {
-    objHolder = objectsHolder;
+    objHolder = &objectsHolder;
 
     if (isTimerRunning())
     {
@@ -105,13 +100,13 @@ void GraphReflowController::startReflow(ObjectsHolder* const objectsHolder, cons
         const bool randomizeNodes =
             StoredSettings::getInstance()->getProps()
                 .getBoolValue("redrawparam_randomize", true);
+
+        const ContentComp* const cc = objHolder->getContentComp();
+        bounds = Rectangle<int>(cc->getViewPosition().x, cc->getViewPosition().y,
+                                cc->getViewWidth(), cc->getViewHeight());
         if (randomizeNodes)
         {
-            GraphUtils::randomizeNodes(*graph,
-                                       objHolder->getContentComp()->getViewPosition().x,
-                                       objHolder->getContentComp()->getViewPosition().y,
-                                       objHolder->getContentComp()->getViewWidth(),
-                                       objHolder->getContentComp()->getViewHeight());
+            GraphUtils::randomizeNodes(*graph, bounds);
         }
     }
 
@@ -124,6 +119,6 @@ void GraphReflowController::stopReflow()
 {
     stopTimer();
     graph->setPositions();
-    objHolder = nullptr;
     graph = nullptr;
+    objHolder = nullptr;
 }

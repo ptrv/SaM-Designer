@@ -37,9 +37,8 @@ class ObjController;
 class CircleFlowAlgorithm : public FlowAlgorithm
 {
 public:
-    bool reflow(DirectedGraph& g, int offsetX, int offsetY,
-                int width, int height, ObjController& objController,
-                float deltaTime);
+    bool reflow(DirectedGraph& g, const Rectangle<int>& area,
+                ObjController& objController, float deltaTime);
 };
 
 

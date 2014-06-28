@@ -972,9 +972,9 @@ void ObjController::setAsFromtmostLink(T& t)
 template void ObjController::setAsFromtmostLink<LinkComponent>(LinkComponent& t);
 template void ObjController::setAsFromtmostLink<AudioOutConnector>(AudioOutConnector& t);
 
-void ObjController::startReflow(ObjectsHolder* const objectsHolder, const int cmdId)
+void ObjController::startReflow(ObjectsHolder& objHolder, const int cmdId)
 {
-    reflowController->startReflow(objectsHolder, cmdId);
+    reflowController->startReflow(objHolder, cmdId);
 }
 
 void ObjController::stopReflow()

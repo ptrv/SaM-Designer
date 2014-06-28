@@ -63,8 +63,7 @@ void ForceDirectedFlowAlgorithm::initParameters()
 
 
 bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
-                                        int /*offsetX*/, int /*offsetY*/,
-                                        int width, int height,
+                                        const Rectangle<int>& area,
                                         ObjController& objController,
                                         float /*deltaTime*/)
 {
@@ -76,7 +75,7 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
 
     for (tNodesAndEdges& group : g.getConnectedGroups())
     {
-        applyForces(totalEnergy, group, width, height, objController);
+        applyForces(totalEnergy, group, area.getWidth(), area.getHeight(), objController);
     }
 
 

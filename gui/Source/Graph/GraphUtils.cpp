@@ -107,10 +107,16 @@ Point<float> GraphUtils::hookeForce(const Point<float>& p1, const Point<float>& 
     return Point<float>(k * dx, k * dy);
 }
 
-void GraphUtils::randomizeNodes(DirectedGraph& g, int offsetX, int offsetY, int width, int height)
+void GraphUtils::randomizeNodes(DirectedGraph& g, const Rectangle<int>& area)
 {
     tNodes& nodes = g.getNodes();
     Random rnd(Time::currentTimeMillis());
+
+    const int offsetX = area.getX();
+    const int offsetY = area.getY();
+    const int width = area.getWidth();
+    const int height = area.getHeight();
+
     for (Node* const n : nodes)
     {
 //        int x = n->getNX();

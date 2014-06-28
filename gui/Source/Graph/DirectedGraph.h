@@ -74,8 +74,9 @@ public:
     tNodes getRoots();
     tNodes getLeaves();
 
-    bool reflow(int offsetX, int offsetY, int width, int height,
-                ObjController& objControler, float deltaTime);
+    bool reflow(const Rectangle<int>& area,
+                ObjController& objControler,
+                float deltaTime);
 
     String toString();
 
