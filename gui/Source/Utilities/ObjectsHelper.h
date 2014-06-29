@@ -34,6 +34,7 @@ class ObjController;
 class DirectedGraph;
 class ObjectComponent;
 class LinkComponent;
+class CommentComponent;
 
 class ObjectsHelper
 {
@@ -76,6 +77,9 @@ public:
 
     template<typename BaseCompType>
     static LinkComponent* getLink(BaseCompType* baseCompType);
+
+    template<typename BaseCompType>
+    static CommentComponent* getComment(BaseCompType* baseCompType);
 
     static void getSelectedObjectComponents(ObjController& objController,
                                             Array<ObjectComponent*>& selectedObjs);

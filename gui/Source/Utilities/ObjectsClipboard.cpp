@@ -67,7 +67,7 @@ void ObjectsClipboard::copySelected(ObjController& objController)
             XmlElement * const e = lc->getData().createXml();
             clip.addChildElement(e);
         }
-        else if (CommentComponent * const cc = dynamic_cast<CommentComponent*> (selectedObjects.getSelectedItem(i)))
+        else if (CommentComponent * const cc = ObjectsHelper::getComment(selectedObjects.getSelectedItem(i)))
         {
             XmlElement * const e = cc->getData().createXml();
             clip.addChildElement(e);

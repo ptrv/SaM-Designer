@@ -811,7 +811,7 @@ const Rectangle<int> ObjectsHolder::getObjectsBounds() const
     {
         Component* const comp = getChildComponent(i);
         ObjectComponent* const oc = ObjectsHelper::getObject(comp);
-        CommentComponent* const cc = dynamic_cast<CommentComponent*>(comp);
+        CommentComponent* const cc = ObjectsHelper::getComment(comp);
         if(oc != nullptr || cc != nullptr)
         {
             Rectangle<int> rect = comp->getBounds();

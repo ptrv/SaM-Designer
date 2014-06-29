@@ -31,6 +31,7 @@
 #include "../View/ObjectComponent.h"
 #include "../View/LinkComponent.h"
 #include "../View/AudioOutConnector.h"
+#include "../View/CommentComponent.h"
 #include "../Controller/ObjController.h"
 #include "../Graph/GraphUtils.h"
 
@@ -636,6 +637,18 @@ LinkComponent* ObjectsHelper::getLink(BaseCompType* baseCompType)
 
 template LinkComponent* ObjectsHelper::getLink(BaseObjectComponent*);
 template LinkComponent* ObjectsHelper::getLink(SelectableObject*);
+
+//------------------------------------------------------------------------------
+
+template <typename BaseCompType>
+CommentComponent* ObjectsHelper::getComment(BaseCompType* baseCompType)
+{
+    return dynamic_cast<CommentComponent*>(baseCompType);
+}
+
+template CommentComponent* ObjectsHelper::getComment(BaseObjectComponent*);
+template CommentComponent* ObjectsHelper::getComment(SelectableObject*);
+template CommentComponent* ObjectsHelper::getComment(Component*);
 
 //------------------------------------------------------------------------------
 

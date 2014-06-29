@@ -424,7 +424,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
             {
                 removeObject(oc, true, holder);
             }
-            else if(CommentComponent* cc = dynamic_cast<CommentComponent*>(temp.getSelectedItem(i)))
+            else if(CommentComponent* cc = ObjectsHelper::getComment(temp.getSelectedItem(i)))
             {
                 removeComment(cc, true, holder);
             }
@@ -796,7 +796,7 @@ void ObjController::endDragging()
         {
             c->setPosition(c->getActualPos(), true);
         }
-        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(obj))
+        else if(CommentComponent* const cc = ObjectsHelper::getComment(obj))
         {
             cc->setPosition(cc->getActualPos(), true);
         }
