@@ -62,5 +62,5 @@ bool CircleFlowAlgorithm::reflow(DirectedGraph& g,const Rectangle<int>& area,
             oc->setPosition(p, false);
         }
     }
-    return true;
+    return false;
 }

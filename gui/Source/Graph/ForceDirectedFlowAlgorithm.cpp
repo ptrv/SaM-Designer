@@ -86,10 +86,10 @@ bool ForceDirectedFlowAlgorithm::reflow(DirectedGraph& g,
     if (lenTotalEnergy < stopEnergy)
     {
         g.setPositions();
-        return true;
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,

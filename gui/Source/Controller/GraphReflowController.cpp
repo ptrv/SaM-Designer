@@ -49,11 +49,9 @@ void GraphReflowController::stopTimer()
 
 void GraphReflowController::timerCallback()
 {
-    if (reflow())
+    if (!reflow())
     {
-        graph = nullptr;
-        objHolder = nullptr;
-        stopTimer();
+        stopReflow();
         DBG("stop timer");
     }
 }
@@ -64,11 +62,11 @@ bool GraphReflowController::reflow()
 {
     if (graph != nullptr && objHolder != nullptr)
     {
-        bool done = graph->reflow(bounds, objController, timeStep);
+        bool needsIteration = graph->reflow(bounds, objController, timeStep);
         objHolder->repaint();
-        return done;
+        return needsIteration;
     }
-    return true;
+    return false;
 }
 
 void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int cmdId)
