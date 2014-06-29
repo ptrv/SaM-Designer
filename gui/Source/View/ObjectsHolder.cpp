@@ -116,8 +116,6 @@ void ObjectsHolder::resized()
 
 void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
 {
-    if(ContentComp* const cp = findParentComponentOfClass<ContentComp>())
-        cp->resized();
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -834,10 +832,26 @@ const Rectangle<int> ObjectsHolder::getObjectsBounds() const
 
 void ObjectsHolder::checkExtent(const Rectangle<int>& r)
 {
+    bool shouldResize = false;
+
     if(r.getRight() > maxX)
+    {
         maxX = r.getRight();
+        shouldResize = true;
+    }
     if(r.getBottom() > maxY)
+    {
         maxY = r.getBottom();
+        shouldResize = true;
+    }
+
+    if (shouldResize)
+    {
+        if(ContentComp* const cp = findParentComponentOfClass<ContentComp>())
+        {
+            cp->resized();
+        }
+    }
 
 }
 

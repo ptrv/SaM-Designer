@@ -628,15 +628,19 @@ void ObjController::endDragging()
         return;
     }
 
-    std::for_each(sObjects.begin(), sObjects.end(), [](SelectableObject* obj)
+    ObjectsHolder& holder = *owner.getHolderComponent();
+
+    std::for_each(sObjects.begin(), sObjects.end(), [&holder](SelectableObject* obj)
     {
         if(ObjectComponent * const c = ObjectsHelper::getObject(obj))
         {
             c->setPosition(c->getActualPos(), true);
+            holder.checkExtent(c->getBounds());
         }
         else if(CommentComponent* const cc = ObjectsHelper::getComment(obj))
         {
             cc->setPosition(cc->getActualPos(), true);
+            holder.checkExtent(c->getBounds());
         }
     });
 

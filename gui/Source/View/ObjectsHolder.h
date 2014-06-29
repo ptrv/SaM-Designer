@@ -105,11 +105,12 @@ public:
     //==========================================================================
     ContentComp* getContentComp();
 
+    void checkExtent(const Rectangle<int>& r);
+
 private:
 
     void showRedrawOptions();
 
-    void checkExtent(const Rectangle<int>& r);
     ObjController& objController;
     MDLFile* mdlFile;
 
