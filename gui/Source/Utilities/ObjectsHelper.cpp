@@ -114,6 +114,7 @@ void ObjectsHelper::changeObjectNameInAudioSources(const ObjController& objContr
 void ObjectsHelper::tidyUpObjects(ObjController& objController)
 {
     objController.startDragging();
+
     const int YTOLERANCE = 30;
     const int XTOLERANCE = 100;
     const int NHIST = 350;
@@ -140,9 +141,7 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
                         int dy = obj1->getPinPos().y - obj2->getPinPos().y;
                         const int startX = obj2->getProperties() ["xDragStart"];
                         const int startY = obj2->getProperties() ["yDragStart"];
-                        Point<int> r(obj2->getPosition());
-                        r.setXY(startX + dx, startY + dy);
-                        obj2->setPosition(Point<int>(r.x + obj2->getWidth() / 2, r.y + obj2->getHeight() / 2), true);
+                        obj2->setActualPosition(Point<int>(startX + dx, startY + dy));
                     }
                 }
             }
@@ -166,12 +165,6 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
                 if (obj2 != obj1 && (obj2->isSelected() || all))
                 {
 
-                    //                    Rectangle<int> obj2rect = obj2->getBounds();
-                    //                    if (obj2rect.getX() <= obj1rect.getRight() + XTOLERANCE &&
-                    //                        obj2rect.getX() >= obj1->getPinPos().x - XTOLERANCE)
-                    //
-                    //                    int px2 = obj2->getPinPos().x;
-                    //                    int px1 = obj1->getPinPos().x;
                     if (obj2->getPinPos().x <= obj1->getPinPos().x + XTOLERANCE &&
                         obj2->getPinPos().x >= obj1->getPinPos().x - XTOLERANCE)
                     {
@@ -230,9 +223,7 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
                             int dy = vmove;
                             const int startX = obj2->getProperties() ["xDragStart"];
                             const int startY = obj2->getProperties() ["yDragStart"];
-                            Point<int> r(obj2->getPosition());
-                            r.setXY(startX + dx, startY + dy);
-                            obj2->setPosition(Point<int>(r.x + obj2->getWidth() / 2, r.y + obj2->getHeight() / 2), true);
+                            obj2->setActualPosition(Point<int>(startX + dx, startY + dy));
 
                             ay = by + vmove;
 
