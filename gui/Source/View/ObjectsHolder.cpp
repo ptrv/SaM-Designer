@@ -106,6 +106,11 @@ void ObjectsHolder::paint(Graphics& g)
 
     }
     grid->draw(g);
+
+    if (objController.getIsReflowing())
+    {
+        g.drawSingleLineText("Redrawing...", 5, 10);
+    }
 }
 
 void ObjectsHolder::resized()
