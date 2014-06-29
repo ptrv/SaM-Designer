@@ -58,7 +58,7 @@ void GraphReflowController::timerCallback()
     }
 }
 
-double timeStep = 0.6;
+int timeStep = 60;
 
 bool GraphReflowController::reflow()
 {
@@ -83,7 +83,7 @@ void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int 
     graph = nullptr;
 
     timeStep = StoredSettings::getInstance()->getProps()
-        .getDoubleValue("redrawparam_timestep", 0.6);
+        .getDoubleValue("redrawparam_timestep", 60);
 
     graph = new DirectedGraph();
     ObjectsHelper::makeGraph(objController, *graph.get());
@@ -107,7 +107,7 @@ void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int 
 
     objController.getUndoManager().beginNewTransaction();
 
-    startTimer(100 * timeStep);
+    startTimer(timeStep);
 }
 
 void GraphReflowController::stopReflow()

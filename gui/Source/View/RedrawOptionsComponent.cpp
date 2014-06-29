@@ -106,7 +106,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     slEnergy->setSkewFactor (0.35);
 
     addAndMakeVisible (laTimestep = new Label ("laTimestep",
-                                               TRANS("Timestep")));
+                                               TRANS("Timestep (ms)")));
     laTimestep->setFont (Font (15.00f, Font::plain));
     laTimestep->setJustificationType (Justification::centredLeft);
     laTimestep->setEditable (false, false, false);
@@ -114,7 +114,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laTimestep->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slTimestep = new Slider ("slTimestamp"));
-    slTimestep->setRange (0.1, 2, 0.01);
+    slTimestep->setRange (10, 200, 1);
     slTimestep->setSliderStyle (Slider::LinearHorizontal);
     slTimestep->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slTimestep->addListener (this);
@@ -363,14 +363,13 @@ BEGIN_JUCER_METADATA
           textBoxHeight="20" skewFactor="0.3499999999999999778"/>
   <LABEL name="laTimestep" id="428812339125c8eb" memberName="laTimestep"
          virtualName="" explicitFocusOrder="0" pos="14 252 104 24" edTextCol="ff000000"
-         edBkgCol="0" labelText="Timestep" editableSingleClick="0" editableDoubleClick="0"
-         focusDiscardsChanges="0" fontname="Default font" fontsize="15"
-         bold="0" italic="0" justification="33"/>
+         edBkgCol="0" labelText="Timestep (ms)" editableSingleClick="0"
+         editableDoubleClick="0" focusDiscardsChanges="0" fontname="Default font"
+         fontsize="15" bold="0" italic="0" justification="33"/>
   <SLIDER name="slTimestamp" id="f34538af30f4ec8d" memberName="slTimestep"
-          virtualName="" explicitFocusOrder="0" pos="122 252 250 24" min="0.10000000000000000555"
-          max="2" int="0.010000000000000000208" style="LinearHorizontal"
-          textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
-          textBoxHeight="20" skewFactor="1"/>
+          virtualName="" explicitFocusOrder="0" pos="122 252 250 24" min="10"
+          max="200" int="1" style="LinearHorizontal" textBoxPos="TextBoxLeft"
+          textBoxEditable="1" textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <TEXTBUTTON name="btOk" id="21b281d5f8eed9a" memberName="btOk" virtualName=""
               explicitFocusOrder="0" pos="-40Cc 20Rr 60 20" buttonText="Ok"
               connectedEdges="0" needsCallback="1" radioGroupId="0"/>
