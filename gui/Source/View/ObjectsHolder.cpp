@@ -174,6 +174,7 @@ bool ObjectsHolder::keyPressed(const KeyPress& key)
         {
             DBG("redraw cancelled!");
             objController.stopReflow();
+            repaint();
             return true;
         }
     }
