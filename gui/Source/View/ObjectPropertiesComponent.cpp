@@ -616,12 +616,12 @@ LinkPropertiesComponent::LinkPropertiesComponent(ObjController& objController_,
     if(datas[0].getType() == Ids::pluck)
     {
         editors.add(createEditor("MinDisplace", "Minimum displace diff", true));
-//        editors.add(createRow("Pos", "Position offste (m)", true));
+//        editors.add(createRow("Pos", "Position offset (m)", true));
     }
-    editors.add(createEditor("Pos", "Position offste (m)", true));
+    editors.add(createEditor("Pos", "Position offset (m)", true));
     if(datas[0].getType() == Ids::pulsetouch)
     {
-//        editors.add(createRow("Pos", "Position offste (m)", true));
+//        editors.add(createRow("Pos", "Position offset (m)", true));
         editors.add(createEditor("PulseMult", "Pulse multiplier", true));
         editors.add(createEditor("PulseTau", "Pulse tau", true));
         editors.add(createEditor("PulseLen", "Pulse length", true));
