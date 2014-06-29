@@ -634,7 +634,7 @@ void ObjController::endDragging()
         else if(CommentComponent* const cc = ObjectsHelper::getComment(obj))
         {
             cc->setPosition(cc->getActualPos(), true);
-            holder.checkExtent(c->getBounds());
+            holder.checkExtent(cc->getBounds());
         }
     });
 
