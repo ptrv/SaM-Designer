@@ -54,7 +54,7 @@ using namespace synthamodeler;
 int ObjectsHolder::objectsHolderNum = 0;
 ObjectsHolder::ObjectsHolder(ObjController& objController_)
 : objController(objController_), mdlFile(nullptr),
-  dragging(false), isDrawingObjectNames(false), showObjectNames(false),
+  dragging(false), showObjectNames(false),
   maxX(0), maxY(0), fcPanel(nullptr)
 {
     snapGridPixels = StoredSettings::getInstance()->getSnapGridPixels();
@@ -89,22 +89,6 @@ void ObjectsHolder::paint(Graphics& g)
 
     g.setColour(Colours::black);
 
-    if(isDrawingObjectNames || showObjectNames)
-    {
-        for(int i = 0; i < objController.getNumObjects(); ++i)
-        {
-            ObjectComponent* oc = objController.getObjectUnchecked(i);
-            Point<int> tl = oc->getBounds().getTopLeft();
-            g.drawSingleLineText(oc->getData()[Ids::identifier].toString(), tl.x, tl.y, Justification::left);
-        }
-        for(int i = 0; i < objController.getNumLinks(); ++i)
-        {
-            LinkComponent* lc = objController.getLinkUnchecked(i);
-            Point<int> tl = lc->getCenter();
-            g.drawSingleLineText(lc->getData()[Ids::identifier].toString(), tl.x, tl.y-5, Justification::left);
-        }
-
-    }
     grid->draw(g);
 
     if (objController.getIsReflowing())
@@ -332,11 +316,34 @@ bool ObjectsHolder::getStartEndObjectsLeftRight(String& startId, String& endId)
 
 void ObjectsHolder::showObjectIds()
 {
-    if (!isDrawingObjectNames)
+    showObjectNames = !showObjectNames;
+
+    auto fnSetIdLabelVisible = [=](BaseObjectComponent* const obj)
     {
-        showObjectNames = !showObjectNames;
+        obj->setIdLabelVisible(showObjectNames);
+    };
+
+    SelectedItemSet<SelectableObject*>& sis =
+        objController.getSelectedObjects();
+
+    if (sis.getNumSelected() == 0 || !showObjectNames)
+    {
+        tObjects& objs = objController.getObjects();
+        tLinks& lnks = objController.getLinks();
+        std::for_each(objs.begin(), objs.end(), fnSetIdLabelVisible);
+        std::for_each(lnks.begin(), lnks.end(), fnSetIdLabelVisible);
     }
-    repaint();
+    else
+    {
+        for (SelectableObject* const selectedItem : sis.getItemArray())
+        {
+            if (BaseObjectComponent* const obj = dynamic_cast<BaseObjectComponent*>(selectedItem))
+            {
+                fnSetIdLabelVisible(obj);
+            }
+        }
+    }
+
 }
 
 void ObjectsHolder::showAudioConnections()

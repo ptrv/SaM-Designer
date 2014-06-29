@@ -26,13 +26,14 @@
 #include "../Application/CommonHeaders.h"
 #include "../Graph/Node.h"
 #include "ObjectsHolder.h"
+#include "IdLabel.h"
 
 #include "BaseObjectComponent.h"
 
 using namespace synthamodeler;
 
 BaseObjectComponent::BaseObjectComponent(ObjController& owner_, ValueTree data_)
-: Node(data_), owner(owner_), data(data_)
+    : Node(data_), owner(owner_), data(data_), isIdLabelVisible(false)
 {
     setComponentID("boc_" + data[Ids::identifier].toString());
 }
@@ -47,6 +48,29 @@ Point<int> BaseObjectComponent::getCenter() const
     return getBounds().getCentre();
 }
 
+void BaseObjectComponent::setIdLabelVisible(const bool visible)
+{
+    isIdLabelVisible = visible;
+
+    if (isIdLabelVisible)
+    {
+        idLabel = createIdLabel();
+    }
+    else
+    {
+        idLabel = nullptr;
+    }
+}
+
+IdLabelComp& BaseObjectComponent::getIdLabelComp()
+{
+    if (idLabelComp == nullptr)
+    {
+        idLabelComp = new IdLabelComp(getData()[Ids::identifier].toString());
+    }
+    return *idLabelComp;
+}
+
 ObjectsHolder* BaseObjectComponent::getObjectsHolder() const noexcept
 {
     return findParentComponentOfClass<ObjectsHolder>();
@@ -54,24 +78,24 @@ ObjectsHolder* BaseObjectComponent::getObjectsHolder() const noexcept
 
 void BaseObjectComponent::showContextMenu()
 {
-	PopupMenu m;
+    PopupMenu m;
     m.addItem(1, TRANS("Edit"));
     m.addItem(2, TRANS("Delete"));
-	m.addSeparator();
+    m.addSeparator();
     m.addItem(3, TRANS("Help"));
 
-	const int r = m.show();
+    const int r = m.show();
 
-	if (r == 1)
-	{
+    if (r == 1)
+    {
         propertiesWindow->makeVisible(true);
-	}
-	else if (r == 2)
-	{
+    }
+    else if (r == 2)
+    {
         getObjectsHolder()->deleteSelectedObjects();
-	}
-	else if (r == 3)
-	{
+    }
+    else if (r == 3)
+    {
         Utils::openHelpPatch(data.getType().toString());
-	}
+    }
 }

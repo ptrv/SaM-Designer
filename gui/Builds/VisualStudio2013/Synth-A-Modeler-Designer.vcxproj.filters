@@ -1422,6 +1422,9 @@
     <ClInclude Include="..\..\Source\Models\MDLFile.h">
       <Filter>Synth-A-Modeler-Designer\Source\Models</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\View\IdLabel.h">
+      <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\View\PrefsMiscPage.h">
       <Filter>Synth-A-Modeler-Designer\Source\View</Filter>
     </ClInclude>

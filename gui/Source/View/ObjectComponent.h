@@ -32,6 +32,7 @@ class ObjectsHolder;
 class ObjController;
 class LinkComponent;
 class SelectableObject;
+class IdLabel;
 
 /**
  * The object component.
@@ -74,7 +75,6 @@ public:
     void setOldPos(const Point<int>& p) { oldPos = p; }
     const Point<int>& getOldPos() const { return oldPos; }
 
-
 private:
     void showLinkPopupMenu();
 
@@ -82,6 +82,8 @@ private:
 
     bool canBeConnectedToLinks();
     bool canBeConnectedToWaveguides();
+
+    IdLabel* createIdLabel() override;
 
     DrawableComposite* icon;
     DropShadowEffect shadow;

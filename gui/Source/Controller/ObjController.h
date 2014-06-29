@@ -39,6 +39,12 @@ class IdManager;
 class CommentComponent;
 class DirectedGraph;
 class GraphReflowController;
+
+typedef OwnedArray<ObjectComponent> tObjects;
+typedef OwnedArray<LinkComponent> tLinks;
+typedef OwnedArray<AudioOutConnector> tAudioConnections;
+typedef OwnedArray<CommentComponent> tComments;
+
 /**
  * The ObjController controlls all ObjectComponents.
  */
@@ -151,12 +157,14 @@ public:
     int indexOfObject (ObjectComponent* e) const throw() { return objects.indexOf (e); }
     int getNumObjects() const { return objects.size(); }
     void addObjectComp(ObjectComponent* o) { objects.add(o); }
+    tObjects& getObjects() { return objects; }
 
     LinkComponent* getLink(int index) const throw() { return links[index]; }
     LinkComponent* getLinkUnchecked(int index) const throw() { return links.getUnchecked(index); }
     int indexOfLink (LinkComponent* e) const throw() { return links.indexOf (e); }
     int getNumLinks() const { return links.size(); }
     void addLinkComp(LinkComponent* l) { links.add(l); }
+    tLinks& getLinks() { return links; }
 
     AudioOutConnector* getAudioConnector(int index) const throw() 
     { return audioConnections[index]; }

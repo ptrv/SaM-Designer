@@ -1066,6 +1066,7 @@
     <ClInclude Include="..\..\Source\Models\ObjectIDs.h"/>
     <ClInclude Include="..\..\Source\Models\SAMCmd.h"/>
     <ClInclude Include="..\..\Source\Models\MDLFile.h"/>
+    <ClInclude Include="..\..\Source\View\IdLabel.h"/>
     <ClInclude Include="..\..\Source\View\PrefsMiscPage.h"/>
     <ClInclude Include="..\..\Source\View\RedrawOptionsComponent.h"/>
     <ClInclude Include="..\..\Source\View\MDLInformation.h"/>

@@ -30,6 +30,7 @@
 #include "SelectableObject.h"
 #include "ObjectComponent.h"
 #include "ObjectsHolder.h"
+#include "IdLabel.h"
 
 #include "LinkComponent.h"
 
@@ -172,6 +173,11 @@ void LinkComponent::mouseDown(const MouseEvent& e)
 {
     owner.setAsFromtmostLink(*this);
 
+    if (idLabel)
+    {
+        idLabel->toFront(false);
+    }
+
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 
@@ -254,6 +260,12 @@ void LinkComponent::changeListenerCallback (ChangeBroadcaster* const source)
     if (source == startComp || source == endComp)
     {
         update();
+
+        if (idLabel)
+        {
+            const Rectangle<int> area(getCenter().x, getCenter().y, 5, 5);
+            idLabel->updatePosition(area, getObjectsHolder()->getLocalBounds());
+        }
 
         if (numListener > 0)
         {
@@ -564,4 +576,10 @@ Rectangle<int> LinkComponent::getIntersectioBounds() const
 Point<int> LinkComponent::getPinPos() const
 {
     return getIntersectioBounds().getCentre();
+}
+
+IdLabel* LinkComponent::createIdLabel()
+{
+    const Rectangle<int> area(getCenter().x, getCenter().y, 5, 5);
+    return new IdLabel(getIdLabelComp(), area, getObjectsHolder());
 }

@@ -31,6 +31,8 @@ namespace synthamodeler
 class ObjController;
 class ObjectsHolder;
 class Node;
+class IdLabel;
+class IdLabelComp;
 
 class BaseObjectComponent : public Component,
                             public Node
@@ -38,21 +40,31 @@ class BaseObjectComponent : public Component,
 public:
     BaseObjectComponent(ObjController& _owner, ValueTree data_);
     virtual ~BaseObjectComponent();
-    
+
     ValueTree getData()       { return data; }
     ValueTree getData() const { return data; }
 
     Point<int> getCenter() const;
 
+    void setIdLabelVisible(bool visible);
+    bool getIsIdLabelVisible() const { return isIdLabelVisible; }
+
 protected:
     ObjectsHolder* getObjectsHolder() const noexcept;
     void showContextMenu();
 
-
     ObjController& owner;
     ValueTree data;
 
+    virtual IdLabel* createIdLabel() { return nullptr; }
+    ScopedPointer<IdLabel> idLabel;
+    bool isIdLabelVisible;
+
+    IdLabelComp& getIdLabelComp();
+
 private:
+    ScopedPointer<IdLabelComp> idLabelComp;
+
     WeakReference<BaseObjectComponent>::Master masterReference;
     friend class WeakReference<BaseObjectComponent>;
 };

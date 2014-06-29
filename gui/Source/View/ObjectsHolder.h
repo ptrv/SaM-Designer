@@ -121,7 +121,6 @@ private:
     LassoComponent<SelectableObject*> lassoComp;
     ScopedPointer<SnapGridPainter> grid;
 
-    bool isDrawingObjectNames;
     bool showObjectNames;
 
     int maxX, maxY;

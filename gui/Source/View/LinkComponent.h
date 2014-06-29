@@ -33,6 +33,7 @@ class SelectableObject;
 class BaseObjectComponent;
 class ObjController;
 class ObjectComponent;
+class IdLabel;
 
 class LinkComponent : public BaseObjectComponent,
                       public ChangeListener,
@@ -79,6 +80,8 @@ public:
 
 private:
     void drawPath(Graphics& g);
+
+    IdLabel* createIdLabel() override;
 
     float lastInputX, lastInputY, lastOutputX, lastOutputY;
     float curInputX, curInputY, curOutputX, curOutputY;

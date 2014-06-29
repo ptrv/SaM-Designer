@@ -31,6 +31,7 @@
 #include "ObjectsHolder.h"
 #include "../Models/ObjectActions.h"
 #include "../Utilities/ContextMenus.h"
+#include "../View/IdLabel.h"
 
 #include "ObjectComponent.h"
 
@@ -117,6 +118,11 @@ void ObjectComponent::paint(Graphics& g)
 void ObjectComponent::mouseDown (const MouseEvent& e)
 {
     toFront (true);
+
+    if (idLabel)
+    {
+        idLabel->toFront(false);
+    }
 
     dragging = false;
 
@@ -250,6 +256,11 @@ void ObjectComponent::setActualPosition(Point<int> pos, NotificationType n)
     {
         sendChangeMessage();
     }
+
+    if (idLabel)
+    {
+        idLabel->updatePosition(getBounds(), getObjectsHolder()->getLocalBounds());
+    }
 }
 
 void ObjectComponent::setData(ValueTree dataTree)
@@ -380,4 +391,9 @@ bool ObjectComponent::canBeConnectedToWaveguides()
     {
         return false;
     }
+}
+
+IdLabel* ObjectComponent::createIdLabel()
+{
+    return new IdLabel(getIdLabelComp(), getBounds(), getObjectsHolder());
 }
