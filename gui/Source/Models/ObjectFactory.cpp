@@ -362,6 +362,19 @@ ValueTree ObjectFactory::createParamsTree(StringArray p)
 }
 
 //------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createAudioSourceTree(const String& srcName,
+                                               const String& srcVal)
+{
+    ValueTree src(Ids::audiosource);
+    String aSrc;
+    aSrc << srcName;
+    aSrc << srcVal;
+    src.setProperty(Ids::value, aSrc, nullptr);
+    return src;
+}
+
+//------------------------------------------------------------------------------
 // Helper
 //------------------------------------------------------------------------------
 

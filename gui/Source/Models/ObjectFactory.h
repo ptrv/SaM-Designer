@@ -41,6 +41,9 @@ public:
                                              const String& endObject);
     static ValueTree createParamsTree(StringArray p);
 
+    static ValueTree createAudioSourceTree(const String& srcName,
+                                           const String& srcVal);
+
 private:
     static ValueTree createMewMassLikeTree(const Identifier& massType,
                                            const String& newName, int x, int y,

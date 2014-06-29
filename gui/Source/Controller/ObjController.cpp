@@ -233,15 +233,6 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
     return nullptr;
 }
 
-static ValueTree createAudioSourceTree(const String& srcName, const String& srcVal)
-{
-    ValueTree src(Ids::audiosource);
-    String aSrc;
-    aSrc << srcName;
-    aSrc << srcVal;
-    src.setProperty(Ids::value, aSrc, nullptr);
-    return src;
-}
 void ObjController::addNewAudioConnection(ObjectsHolder* holder)
 {
     if(sObjects.getNumSelected() == 2)
@@ -264,7 +255,7 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             {
                 if(! checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
                 {
-                    ValueTree src = createAudioSourceTree(
+                    ValueTree src = ObjectFactory::createAudioSourceTree(
                         oc2->getData()[Ids::identifier].toString(), "*1.0");
 //                    ValueTree sources = oc1->getData().getOrCreateChildWithName(Ids::sources)
                     addAudioConnection(holder, oc2, oc1, src, -1, true);
@@ -275,7 +266,7 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             {
                 if(! checkIfAudioConnectionExitsts(oc1->getData(), oc2->getData()))
                 {
-                    ValueTree src = createAudioSourceTree(
+                    ValueTree src = ObjectFactory::createAudioSourceTree(
                         oc1->getData()[Ids::identifier].toString(), "*1.0");
                     addAudioConnection(holder, oc1, oc2, src, -1, true);
                 }
@@ -290,7 +281,7 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
         {
             if( ! checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
             {
-                ValueTree src = createAudioSourceTree(
+                ValueTree src = ObjectFactory::createAudioSourceTree(
                     lc1->getData()[Ids::identifier].toString(), "*1.0");
                 addAudioConnection(holder, lc1, oc2, src, -1, true);
             }
@@ -300,7 +291,7 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
         {
             if( ! checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
             {
-                ValueTree src = createAudioSourceTree(
+                ValueTree src = ObjectFactory::createAudioSourceTree(
                     lc2->getData()[Ids::identifier].toString(), "*1.0");
                 addAudioConnection(holder, lc2, oc1, src, -1, true);
             }
