@@ -185,7 +185,7 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
         fcPanel = nullptr;
         mdlFile = newMDLFile;
         mdlFile->addChangeListener(this);
-        objController.loadComponents(this);
+        objController.loadComponents(*this);
     }
 }
 
@@ -193,7 +193,7 @@ void ObjectsHolder::reloadMDLFile()
 {
     fcPanel = nullptr;
     objController.destroy();
-    objController.loadComponents(this);
+    objController.loadComponents(*this);
 }
 
 void ObjectsHolder::openFaustcodePanel()

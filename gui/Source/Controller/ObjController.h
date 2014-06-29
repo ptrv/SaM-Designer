@@ -111,7 +111,7 @@ public:
 	 * Loads the object components of a patch when a mdl file is opened.
 	 * @param holder
 	 */
-	void loadComponents(ObjectsHolder* holder);
+	void loadComponents(ObjectsHolder& holder);
 
 	/**
 	 * Marks all object as selected or deselects.
@@ -150,28 +150,31 @@ public:
     ObjectComponent* getObjectUnchecked(int index) const throw() { return objects.getUnchecked(index); }
     int indexOfObject (ObjectComponent* e) const throw() { return objects.indexOf (e); }
     int getNumObjects() const { return objects.size(); }
+    void addObjectComp(ObjectComponent* o) { objects.add(o); }
 
     LinkComponent* getLink(int index) const throw() { return links[index]; }
     LinkComponent* getLinkUnchecked(int index) const throw() { return links.getUnchecked(index); }
     int indexOfLink (LinkComponent* e) const throw() { return links.indexOf (e); }
     int getNumLinks() const { return links.size(); }
-    
+    void addLinkComp(LinkComponent* l) { links.add(l); }
+
     AudioOutConnector* getAudioConnector(int index) const throw() 
     { return audioConnections[index]; }
     int indexOfAudioConnector (AudioOutConnector* e) const throw()
     {
         return audioConnections.indexOf(e);
     }
-
     int getNumAudioConnections() const
     {
         return audioConnections.size();
     }
+    void addAudioConnectionComp(AudioOutConnector* a) { audioConnections.add(a); }
 
     CommentComponent* getComment(int index) const throw() { return comments[index]; }
     CommentComponent* getCommentUnchecked(int index) const throw() { return comments.getUnchecked(index); }
     int indexOfComment (CommentComponent* e) const throw() { return comments.indexOf (e); }
     int getNumComment() const { return comments.size(); }
+    void addCommentComp(CommentComponent* c) { comments.add(c); }
     
     void changed();
     
@@ -187,7 +190,7 @@ public:
     
     String getNewNameForObject(const Identifier& objId);
 
-    IdManager* getIdManager() { return idMgr; }
+    IdManager& getIdManager() { return *idMgr; }
 
     void setLinksSegmented(bool isSegmented);
 

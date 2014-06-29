@@ -35,6 +35,7 @@ class DirectedGraph;
 class ObjectComponent;
 class LinkComponent;
 class CommentComponent;
+class MDLFile;
 
 class ObjectsHelper
 {
@@ -83,6 +84,9 @@ public:
 
     static void getSelectedObjectComponents(ObjController& objController,
                                             Array<ObjectComponent*>& selectedObjs);
+
+    static void loadComponents(ObjController& objController, ObjectsHolder& objHolder,
+                               const MDLFile& mdlFile, int& numObjects, int& numZeroPos);
 
 };
 

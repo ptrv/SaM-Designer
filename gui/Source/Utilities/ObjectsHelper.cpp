@@ -32,8 +32,11 @@
 #include "../View/LinkComponent.h"
 #include "../View/AudioOutConnector.h"
 #include "../View/CommentComponent.h"
+#include "../View/ObjectsHolder.h"
 #include "../Controller/ObjController.h"
 #include "../Graph/GraphUtils.h"
+#include "../Models/MDLFile.h"
+#include "IdManager.h"
 
 #include "ObjectsHelper.h"
 
@@ -662,6 +665,180 @@ void ObjectsHelper::getSelectedObjectComponents(ObjController& objController,
         if (ObjectComponent* const oc = getObject(selectedItem))
         {
             selectedObjs.add(oc);
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void ObjectsHelper::loadComponents(ObjController& objController,
+                                   ObjectsHolder& objHolder,
+                                   const MDLFile& mdlFile,
+                                   int& numObjects, int& numZeroPos)
+{
+    const ValueTree& mdl = mdlFile.getMDLRoot();
+
+    IdManager& idMgr = objController.getIdManager();
+    // tObjects& objects = objController.getObjects();
+    // tLinks& links = objController.getLinks();
+    // tAudioConnections& audioConnections = objController.getAudioConnections();
+    // tComments& comments = objController.getComments();
+
+    ValueTree massObjects = mdl.getChildWithName(Objects::masses);
+    for (int i = 0; i < massObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = massObjects.getChild(i);
+        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            ObjectComponent* objComp = new ObjectComponent(objController, obj);
+            objController.addObjectComp(objComp);
+            objHolder.addAndMakeVisible(objComp);
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
+                ++numZeroPos;
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
+    ValueTree termObjects = mdl.getChildWithName(Objects::terminations);
+    for (int i = 0; i < termObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = termObjects.getChild(i);
+        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            ObjectComponent* objComp = new ObjectComponent(objController, obj);
+            objController.addObjectComp(objComp);
+            objHolder.addAndMakeVisible(objComp);
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
+                ++numZeroPos;
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
+    ValueTree junctObjects = mdl.getChildWithName(Objects::junctions);
+    for (int i = 0; i < junctObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = junctObjects.getChild(i);
+        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            ObjectComponent* objComp = new ObjectComponent(objController, obj);
+            objController.addObjectComp(objComp);
+            objHolder.addAndMakeVisible(objComp);
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
+                ++numZeroPos;
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
+    ValueTree linkObjects = mdl.getChildWithName(Objects::links);
+    for (int i = 0; i < linkObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = linkObjects.getChild(i);
+        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            LinkComponent* linkComp = new LinkComponent(objController, obj);
+            objController.addLinkComp(linkComp);
+            objHolder.addAndMakeVisible(linkComp);
+            linkComp->toBack();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+    }
+    ValueTree waveguideObjects = mdl.getChildWithName(Objects::waveguides);
+    for (int i = 0; i < waveguideObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = waveguideObjects.getChild(i);
+        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            LinkComponent* linkComp = new LinkComponent(objController, obj);
+            objController.addLinkComp(linkComp);
+            objHolder.addAndMakeVisible(linkComp);
+            linkComp->toBack();
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+        }
+    }
+
+    ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
+    for (int i = 0; i < audioObjects.getNumChildren(); i++)
+    {
+        ValueTree obj = audioObjects.getChild(i);
+        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+        {
+            ObjectComponent* audioOutComp = new ObjectComponent(objController, obj);
+            objController.addObjectComp(audioOutComp);
+            objHolder.addAndMakeVisible(audioOutComp);
+            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+            ++numObjects;
+            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
+                ++numZeroPos;
+
+            ValueTree aoSources = obj.getChildWithName(Ids::sources);
+            for (int j = 0; j < aoSources.getNumChildren(); ++j)
+            {
+                ValueTree source = aoSources.getChild(j);
+//                ObjectComponent* oc = getObjectForId(src);
+//                LinkComponent* lc = getLinkForId(src);
+                BaseObjectComponent* sourceComp =
+                    ObjectsHelper::getBaseObjectFromSource(&objController, source);
+//                if(oc != nullptr)
+//                    sourceComp = oc;
+//                else if(lc != nullptr)
+//                    sourceComp = lc;
+
+                if( sourceComp != nullptr )
+                {
+                    AudioOutConnector* aoc = new AudioOutConnector(
+                        objController, sourceComp, audioOutComp);
+                    objController.addAudioConnectionComp(aoc);
+                    objHolder.addAndMakeVisible(aoc);
+                    aoc->update();
+                }
+            }
+        }
+        else
+        {
+            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+        }
+    }
+
+    ValueTree faustcodeblock = mdl.getChildWithName(Objects::faustcodeblock);
+    for (int i = 0; i < faustcodeblock.getNumChildren(); i++)
+    {
+        ValueTree obj = faustcodeblock.getChild(i);
+//        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+//        {
+//            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
+//        }
+//        else
+//        {
+//            faustcodeblock.removeChild(obj, nullptr);
+//        }
+    }
+
+    ValueTree commentsTree = mdl.getChildWithName(Objects::comments);
+    for (int i = 0; i < commentsTree.getNumChildren(); ++i)
+    {
+        ValueTree comment = commentsTree.getChild(i);
+        if(idMgr.addId(comment.getType(), comment[Ids::identifier].toString(), nullptr))
+        {
+            CommentComponent* cComp = new CommentComponent(objController, comment);
+            objController.addCommentComp(cComp);
+            objHolder.addAndMakeVisible(cComp);
+            cComp->update();
+            SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
+            ++numObjects;
+            if(float(comment[Ids::posX]) < 0.00001f && float(comment[Ids::posY]) < 0.00001f)
+                ++numZeroPos;
         }
     }
 }

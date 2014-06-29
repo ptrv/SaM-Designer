@@ -508,175 +508,21 @@ void ObjController::removeComment(CommentComponent* commentComp,
     }
 }
 
-void ObjController::loadComponents(ObjectsHolder* holder)
+void ObjController::loadComponents(ObjectsHolder& holder)
 {
-    MDLFile* mf = owner.getMDLFile();
-    ValueTree mdl = mf->getMDLRoot();
+
     int numObjects = 0;
-    int numNodesZeroPos = 0;
+    int numZeroPos = 0;
 
-    ValueTree massObjects = mdl.getChildWithName(Objects::masses);
-    for (int i = 0; i < massObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = massObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* objComp = new ObjectComponent(*this, obj);
-            objects.add(objComp);
-            holder->addAndMakeVisible(objComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numNodesZeroPos;
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree termObjects = mdl.getChildWithName(Objects::terminations);
-    for (int i = 0; i < termObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = termObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* objComp = new ObjectComponent(*this, obj);
-            objects.add(objComp);
-            holder->addAndMakeVisible(objComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numNodesZeroPos;
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree junctObjects = mdl.getChildWithName(Objects::junctions);
-    for (int i = 0; i < junctObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = junctObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* objComp = new ObjectComponent(*this, obj);
-            objects.add(objComp);
-            holder->addAndMakeVisible(objComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numNodesZeroPos;
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree linkObjects = mdl.getChildWithName(Objects::links);
-    for (int i = 0; i < linkObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = linkObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            LinkComponent* linkComp = new LinkComponent(*this, obj);
-            links.add(linkComp);
-            holder->addAndMakeVisible(linkComp);
-            linkComp->toBack();
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree waveguideObjects = mdl.getChildWithName(Objects::waveguides);
-    for (int i = 0; i < waveguideObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = waveguideObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            LinkComponent* linkComp = new LinkComponent(*this, obj);
-            links.add(linkComp);
-            holder->addAndMakeVisible(linkComp);
-            linkComp->toBack();
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-        }
-    }
-
-    ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
-    for (int i = 0; i < audioObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = audioObjects.getChild(i);
-        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* audioOutComp = new ObjectComponent(*this, obj);
-            objects.add(audioOutComp);
-            holder->addAndMakeVisible(audioOutComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numNodesZeroPos;
-
-            ValueTree aoSources = obj.getChildWithName(Ids::sources);
-            for (int j = 0; j < aoSources.getNumChildren(); ++j)
-            {
-                ValueTree source = aoSources.getChild(j);
-//                ObjectComponent* oc = getObjectForId(src);
-//                LinkComponent* lc = getLinkForId(src);
-                BaseObjectComponent* sourceComp = ObjectsHelper::getBaseObjectFromSource(this, source);
-//                if(oc != nullptr)
-//                    sourceComp = oc;
-//                else if(lc != nullptr)
-//                    sourceComp = lc;
-
-                if( sourceComp != nullptr )
-                {
-                    AudioOutConnector* aoc = new AudioOutConnector(
-                        *this, sourceComp, audioOutComp);
-                    audioConnections.add(aoc);
-                    holder->addAndMakeVisible(aoc);
-                    aoc->update();
-                }
-            }
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-
-    ValueTree faustcodeblock = mdl.getChildWithName(Objects::faustcodeblock);
-    for (int i = 0; i < faustcodeblock.getNumChildren(); i++)
-    {
-        ValueTree obj = faustcodeblock.getChild(i);
-//        if(idMgr->addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-//        {
-//            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-//        }
-//        else
-//        {
-//            faustcodeblock.removeChild(obj, nullptr);
-//        }
-    }
-
-    ValueTree commentsTree = mdl.getChildWithName(Objects::comments);
-    for (int i = 0; i < commentsTree.getNumChildren(); ++i)
-    {
-        ValueTree comment = commentsTree.getChild(i);
-        if(idMgr->addId(comment.getType(), comment[Ids::identifier].toString(), nullptr))
-        {
-            CommentComponent* cComp = new CommentComponent(*this, comment);
-            comments.add(cComp);
-            holder->addAndMakeVisible(cComp);
-            cComp->update();
-            SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
-            ++numObjects;
-            if(float(comment[Ids::posX]) < 0.00001f && float(comment[Ids::posY]) < 0.00001f)
-                ++numNodesZeroPos;
-        }
-    }
+    ObjectsHelper::loadComponents(*this, holder, *owner.getMDLFile(),
+                                  numObjects, numZeroPos);
 
     setAudioConnectionVisibility(StoredSettings::getInstance()->getShowAudioConnections());
 
     if(StoredSettings::getInstance()->getShouldRedrawOnLoad())
-        if(numNodesZeroPos >= numObjects || numNodesZeroPos > 1)
-            holder->redrawObjects(CommandIDs::redrawForceDirected);
+        if(numZeroPos >= numObjects || numZeroPos > 1)
+            holder.redrawObjects(CommandIDs::redrawForceDirected);
+
 
     auto fnObjectToFront = [](Component* const comp)
     {
@@ -684,6 +530,7 @@ void ObjController::loadComponents(ObjectsHolder* holder)
     };
     std::for_each(objects.begin(), objects.end(), fnObjectToFront);
     std::for_each(comments.begin(), comments.end(), fnObjectToFront);
+
 }
 
 void ObjController::selectAll(bool shouldBeSelected)

@@ -87,8 +87,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
         SelectedItemSet <SelectableObject*>& selectedObjects =
             objController.getSelectedObjects();
 
-        IdManager* idMgr = objController.getIdManager();
-        
+        IdManager& idMgr = objController.getIdManager();
+
         ++timesPasted;
 
         int numObjs = doc->getNumChildElements();
@@ -114,7 +114,7 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 valTree.setProperty(Ids::posY, posY + 10, nullptr);
 
                 String objName = valTree.getProperty(Ids::identifier).toString();
-                if (idMgr->contains(valTree.getType(), objName))
+                if (idMgr.contains(valTree.getType(), objName))
                 {
                     String newName = idMgr->getObjNameForPaste(valTree.getType(),
                                                                objName,
@@ -137,7 +137,7 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             else if (valTree.getType() == Ids::comment)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
-                if (idMgr->contains(valTree.getType(), objName))
+                if (idMgr.contains(valTree.getType(), objName))
                 {
                     String newName = idMgr->getObjNameForPaste(valTree.getType(),
                                                                objName,
@@ -160,7 +160,7 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::waveguides)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
-                if (idMgr->contains(valTree.getType(), objName))
+                if (idMgr.contains(valTree.getType(), objName))
                 {
                     String newName = idMgr->getObjNameForPaste(valTree.getType(),
                                                                objName,
@@ -199,7 +199,7 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             valTree.setProperty(Ids::posY, posY + 10, nullptr);
 
             String objName = valTree.getProperty(Ids::identifier).toString();
-            if (idMgr->contains(valTree.getType(), objName))
+            if (idMgr.contains(valTree.getType(), objName))
             {
                 String newName = idMgr->getObjNameForPaste(valTree.getType(),
                                                            objName,
