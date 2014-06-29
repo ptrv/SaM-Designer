@@ -85,16 +85,11 @@ void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int 
     timeStep = StoredSettings::getInstance()->getProps()
         .getDoubleValue("redrawparam_timestep", 0.6);
 
-    if(cmdId == CommandIDs::redrawCircle)
+    graph = new DirectedGraph();
+    ObjectsHelper::makeGraph(objController, *graph.get());
+
+    if(cmdId == CommandIDs::redrawForceDirected)
     {
-        graph = new DirectedGraph();
-        ObjectsHelper::makeGraph(objController, *graph.get());
-    }
-    else if(cmdId == CommandIDs::redrawForceDirected)
-    {
-        graph = new DirectedGraph();
-        ObjectsHelper::makeGraph(objController, *graph.get());
-//        DBG(graph->toString());
         graph->setFlowAlgorithm(new ForceDirectedFlowAlgorithm());
 
         const bool randomizeNodes =

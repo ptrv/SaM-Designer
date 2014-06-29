@@ -103,10 +103,11 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
         forEachXmlChildElement(*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if (ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::masses ||
-                //Utils::getObjectGroup(valTree.getType()) == Objects::audioobjects ||
-                ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::terminations ||
-                ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::junctions)
+            const Identifier& groupId = ObjectsHelper::getObjectGroup(valTree.getType());
+            if (groupId == Objects::masses ||
+                //groupId == Objects::audioobjects ||
+                groupId == Objects::terminations ||
+                groupId == Objects::junctions)
             {
                 int posX = int(valTree.getProperty(Ids::posX));
                 int posY = int(valTree.getProperty(Ids::posY));
@@ -156,8 +157,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
         forEachXmlChildElement(*doc, e)
         {
             ValueTree valTree = ValueTree::fromXml(*e);
-            if (ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::links ||
-                ObjectsHelper::getObjectGroup(valTree.getType()) == Objects::waveguides)
+            const Identifier& groupId = ObjectsHelper::getObjectGroup(valTree.getType());
+            if (groupId == Objects::links || groupId == Objects::waveguides)
             {
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if (idMgr.contains(valTree.getType(), objName))

@@ -601,22 +601,16 @@ void ObjController::dragSelectedComps(int dx, int dy)
             const int startX = c->getProperties() ["xDragStart"];
             const int startY = c->getProperties() ["yDragStart"];
 
-            Point<int> r(c->getCenter());
-
-            r.setXY(holder.snapPosition(startX + dx), holder.snapPosition(startY + dy));
-
-            c->setActualPosition(r);
+            c->setActualPosition(Point<int>(holder.snapPosition(startX + dx),
+                                            holder.snapPosition(startY + dy)));
         }
-        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(selectedItem))
+        else if(CommentComponent* const cc = ObjectsHelper::getComment(selectedItem))
         {
             const int startX = cc->getProperties() ["xDragStart"];
             const int startY = cc->getProperties() ["yDragStart"];
 
-            Point<int> r(cc->getCenter());
-
-            r.setXY(holder.snapPosition(startX + dx), holder.snapPosition(startY + dy));
-
-            cc->setActualPosition(r);
+            cc->setActualPosition(Point<int>(holder.snapPosition(startX + dx),
+                                             holder.snapPosition(startY + dy)));
         }
     }
 }
@@ -795,7 +789,6 @@ void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
     for (AudioOutConnector* const aoc : audioConnections)
     {
         aoc->setVisible(shouldBeVisible);
-        aoc->repaint();
     }
 }
 
