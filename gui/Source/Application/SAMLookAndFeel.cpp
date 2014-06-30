@@ -53,22 +53,22 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
         if (text.compare("Mass") == 0)
         {
             textColour = new Colour(menuColourInsertMass);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::mass);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::mass);
         }
         else if (text.compare("Ground") == 0)
         {
             textColour = new Colour(menuColourInsertGround);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::ground);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::ground);
         }
         else if (text.compare("Resonator") == 0)
         {
             textColour = new Colour(menuColourInsertResonator);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::resonators);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::resonators);
         }
         else if (text.compare("Port") == 0)
         {
             textColour = new Colour(menuColourInsertPort);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::port);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::port);
         }
         else if (text.compare("Linear Link") == 0)
         {
@@ -93,7 +93,7 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
             || text.compare("Audio Output") == 0)
         {
             textColour = new Colour(menuColourInsertAudioOut);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::audioout);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::audioout);
         }
         else if (text.compare("Audio Connection") == 0)
         {
@@ -107,12 +107,12 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
         else if (text.compare("Junction") == 0)
         {
             textColour = new Colour(menuColourInsertJunction);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::junction);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::junction);
         }
         else if (text.compare("Termination") == 0)
         {
             textColour = new Colour(menuColourInsertTermination);
-            objectIcon = ResourceLoader::getInstance()->getDrawableForId(Ids::termination);
+            objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::termination);
         }
     }
 

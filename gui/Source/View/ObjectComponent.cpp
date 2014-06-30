@@ -63,7 +63,7 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
     actualPos = currentPos;
     oldPos = currentPos;
 
-    icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForId(data.getType()));
+    icon = dynamic_cast<DrawableComposite*> (ResourceLoader::getInstance()->getDrawableForObjectId(data.getType()));
 
     owner.getSelectedObjects().addChangeListener (this);
     selfChangeListenerList.addChangeListener (this);

@@ -44,23 +44,23 @@ juce_ImplementSingleton (ResourceLoader)
 
 void ResourceLoader::initObjectIconMap()
 {
-	objectIcons.set(Ids::mass.toString(),"mass.svg");
-	objectIcons.set(Ids::port.toString(), "port.svg");
-	objectIcons.set(Ids::resonators.toString(), "resonator.svg");
-	objectIcons.set(Ids::ground.toString(), "ground.svg");
-	objectIcons.set(Ids::link.toString(), "link.svg");
-	objectIcons.set(Ids::touch.toString(), "touch.svg");
-	objectIcons.set(Ids::pluck.toString(), "pluck.svg");
-	objectIcons.set(Ids::termination.toString(), "termination.svg");
-	objectIcons.set(Ids::waveguide.toString(), "waveguide.svg");
-	objectIcons.set(Ids::junction.toString(), "junction.svg");
-    objectIcons.set(Ids::audioout.toString(), "audioout.svg");
+	objectIcons.set(Ids::mass, "mass.svg");
+	objectIcons.set(Ids::port, "port.svg");
+	objectIcons.set(Ids::resonators, "resonator.svg");
+	objectIcons.set(Ids::ground, "ground.svg");
+	objectIcons.set(Ids::link, "link.svg");
+	objectIcons.set(Ids::touch, "touch.svg");
+	objectIcons.set(Ids::pluck, "pluck.svg");
+	objectIcons.set(Ids::termination, "termination.svg");
+	objectIcons.set(Ids::waveguide, "waveguide.svg");
+	objectIcons.set(Ids::junction, "junction.svg");
+    objectIcons.set(Ids::audioout, "audioout.svg");
 }
-Drawable* ResourceLoader::getDrawableForId(const Identifier& objId)
+Drawable* ResourceLoader::getDrawableForObjectId(const Identifier& objId)
 {
-	return createSVGDrawable(objectIcons[objId.toString()]);
+	return createSVGDrawable(objectIcons[objId]);
 }
-Drawable* ResourceLoader::createSVGDrawable(const String& filename)
+Drawable* ResourceLoader::createSVGDrawable(const String& filename, const bool createCopy)
 {
 	initObjectIconMap();
 
@@ -82,8 +82,24 @@ Drawable* ResourceLoader::createSVGDrawable(const String& filename)
         }
     }
 
-    return iconsFromZipFile [iconNames.indexOf (filename)];//->createCopy();
+    if (createCopy)
+    {
+        return iconsFromZipFile [iconNames.indexOf (filename)]->createCopy();
+    }
+    else
+    {
+        return iconsFromZipFile [iconNames.indexOf (filename)];//->createCopy();
+    }
 }
+
+ToolbarButton* ResourceLoader::createButtonFromZipFileSVG (const int itemId,
+                                                           const String& text,
+                                                           const String& filename)
+{
+    Drawable* image = createSVGDrawable(filename, true);
+    return new ToolbarButton(itemId, text, image, nullptr);
+}
+
 Path ResourceLoader::getPathForLink(float /*x*/, float /*y*/, float w, float h)
 {
     Path linkPath;

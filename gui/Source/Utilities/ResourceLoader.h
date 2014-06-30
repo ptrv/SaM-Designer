@@ -44,15 +44,18 @@ public:
 	 * @param objId		Id of object
 	 * @return			a Drawable
 	 */
-	Drawable* getDrawableForId(const Identifier& objId);
+	Drawable* getDrawableForObjectId(const Identifier& objId);
 	/**
 	 * Creates a SVG drawable from a zip file.
 	 *
 	 * @param filename	string filename of SVG image
 	 * @return			a Drawable
 	 */
-	Drawable* createSVGDrawable(const String& filename);
-    
+	Drawable* createSVGDrawable(const String& filename, bool createCopy = false);
+
+    ToolbarButton* createButtonFromZipFileSVG (
+        const int itemId, const String& text, const String& filename);
+
     Path getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h);
 
 private:
@@ -60,8 +63,16 @@ private:
     Path getPathForLink(float x, float y, float w, float h);
     Path getPathForTouch(float x, float y, float w, float h);
     Path getPathForPluck(float x, float y, float w, float h);
-    
-	HashMap<String,String> objectIcons;
+
+    struct IdHashGenerator
+    {
+        int generateHash(const Identifier& key, int upperLimit) const
+        {
+            return defaultHashFunction.generateHash(key.toString(), upperLimit);
+        }
+        DefaultHashFunctions defaultHashFunction;
+    };
+	HashMap<const Identifier&, String, IdHashGenerator> objectIcons;
 	StringArray iconNames;
 	OwnedArray<Drawable> iconsFromZipFile;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ResourceLoader);
