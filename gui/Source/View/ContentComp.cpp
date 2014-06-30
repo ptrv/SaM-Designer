@@ -246,10 +246,12 @@ void ContentComp::resized()
     viewport->setBounds(4, 4, getWidth(), getHeight() - 8);
 
     if (false)
-    objectsHolder->setSize(jmax(mainWindow.getWidth() - 8,
-                                roundToInt((viewport->getWidth() - viewport->getScrollBarThickness()) / getZoom())),
-                           jmax(mainWindow.getHeight() - LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight() - 8,
-                                roundToInt((viewport->getHeight() - viewport->getScrollBarThickness()) / getZoom())));
+    {
+        objectsHolder->setSize(jmax(mainWindow.getWidth() - 8,
+                                    roundToInt((viewport->getWidth() - viewport->getScrollBarThickness()) / getZoom())),
+                               jmax(mainWindow.getHeight() - LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight() - 8,
+                                    roundToInt((viewport->getHeight() - viewport->getScrollBarThickness()) / getZoom())));
+    }
     else
     {
         Rectangle<int> rect = objectsHolder->getObjectsExtent();

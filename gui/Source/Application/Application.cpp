@@ -843,12 +843,12 @@ void SAMApplication:: MainMenuModel::menuItemSelected (int menuItemID, int /*top
 {
     if (menuItemID >= recentProjectsBaseID && menuItemID < recentProjectsBaseID + 100)
     {
-		// open a file from the "recent files" menu
+        // open a file from the "recent files" menu
         const File file(StoredSettings::getInstance()->recentFiles
                         .getFile(menuItemID - recentProjectsBaseID));
 
-		getApp()->openFile(file);
-		StoredSettings::getInstance()->recentFiles.addFile(file);
+        getApp()->openFile(file);
+        StoredSettings::getInstance()->recentFiles.addFile(file);
     }
     if(menuItemID >= exportersBaseID && menuItemID < exportersBaseID + 100)
     {

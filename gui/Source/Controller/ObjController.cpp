@@ -84,11 +84,12 @@ ObjectComponent* ObjController::addObject(ObjectsHolder* holder, ValueTree objVa
     }
     else
     {
-        const Identifier& groupName = ObjectsHelper::getObjectGroup(objValues.getType().toString());
+        const Identifier& groupName =
+            ObjectsHelper::getObjectGroup(objValues.getType().toString());
         ValueTree mdl = owner.getMDLTree();
         ValueTree subTree = mdl.getOrCreateChildWithName(groupName, nullptr);
 
-		subTree.addChild(objValues,-1, nullptr);
+        subTree.addChild(objValues,-1, nullptr);
         idMgr->addId(objValues.getType(), objValues[Ids::identifier].toString(), nullptr);
 
         ObjectComponent* objComp = new ObjectComponent(*this, objValues);
@@ -209,11 +210,8 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
 {
     if(undoable)
     {
-        AddAudioConnectionAction* action = new AddAudioConnectionAction(this,
-                                                                        objComp,
-                                                                        source,
-                                                                        audioOutComp,
-                                                                        holder);
+        AddAudioConnectionAction* action = new AddAudioConnectionAction(
+            this, objComp, source, audioOutComp, holder);
         owner.getUndoManager().perform(action, "Add new audio connection");
 
         return audioConnections[action->indexAdded];

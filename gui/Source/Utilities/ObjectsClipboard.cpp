@@ -117,10 +117,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if (idMgr.contains(valTree.getType(), objName))
                 {
-                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
-                                                               objName,
-                                                               timesPasted,
-                                                               groupPaste);
+                    String newName = idMgr.getObjNameForPaste(
+                        valTree.getType(), objName, timesPasted, groupPaste);
                     objectNamesOldNew.set(objName, newName);
                     objectNamesOldNewForAudio.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
@@ -140,10 +138,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if (idMgr.contains(valTree.getType(), objName))
                 {
-                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
-                                                               objName,
-                                                               timesPasted,
-                                                               groupPaste);
+                    String newName = idMgr.getObjNameForPaste(
+                        valTree.getType(), objName, timesPasted, groupPaste);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                 }
                 CommentComponent* newCommentComp =
@@ -163,10 +159,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 String objName = valTree.getProperty(Ids::identifier).toString();
                 if (idMgr.contains(valTree.getType(), objName))
                 {
-                    String newName = idMgr->getObjNameForPaste(valTree.getType(),
-                                                               objName,
-                                                               timesPasted,
-                                                               groupPaste);
+                    String newName = idMgr.getObjNameForPaste(
+                        valTree.getType(), objName, timesPasted, groupPaste);
                     objectNamesOldNewForAudio.set(objName, newName);
                     valTree.setProperty(Ids::identifier, newName, nullptr);
                 }
@@ -202,10 +196,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             String objName = valTree.getProperty(Ids::identifier).toString();
             if (idMgr.contains(valTree.getType(), objName))
             {
-                String newName = idMgr->getObjNameForPaste(valTree.getType(),
-                                                           objName,
-                                                           timesPasted,
-                                                           groupPaste);
+                String newName = idMgr.getObjNameForPaste(
+                    valTree.getType(), objName, timesPasted, groupPaste);
                 objectNamesOldNew.set(objName, newName);
                 objectNamesOldNewForAudio.set(objName, newName);
                 valTree.setProperty(Ids::identifier, newName, nullptr);
