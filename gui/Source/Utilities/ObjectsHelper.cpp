@@ -40,6 +40,8 @@
 
 #include "ObjectsHelper.h"
 
+#include <functional>
+
 using namespace synthamodeler;
 
 //------------------------------------------------------------------------------
@@ -243,13 +245,9 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
 
 void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph& graph)
 {
-    const int numLinks = objController.getNumLinks();
-
     // add nodes
-    for (int i = 0; i < numLinks; ++i)
+    for (const LinkComponent* const l : objController.getLinks())
     {
-        const LinkComponent* const l = objController.getLink(i);
-
         ObjectComponent* const ocStart =
             objController.getObjectForId(l->getData()[Ids::startVertex].toString());
         ObjectComponent* const ocEnd =
@@ -264,10 +262,8 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
     graph.init(nodes.size());
 
     // link nodes
-    for (int i = 0; i < numLinks; ++i)
+    for (const LinkComponent* const l : objController.getLinks())
     {
-        const LinkComponent* const l = objController.getLink(i);
-
         ObjectComponent* const ocStart =
             objController.getObjectForId(l->getData()[Ids::startVertex].toString());
         ObjectComponent* const ocEnd =
@@ -278,7 +274,7 @@ void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph&
 
     // init node data
     std::for_each(nodes.begin(), nodes.end(),
-                  [](Node* const n) {n->initNodeData();});
+                  [](Node* const n) { n->initNodeData(); });
 
     // find combined groups in graph
     GraphUtils::calculateConnectedGroups(graph);
@@ -668,170 +664,93 @@ void ObjectsHelper::loadComponents(ObjController& objController,
                                    int& numObjects, int& numZeroPos)
 {
     const ValueTree& mdl = mdlFile.getMDLRoot();
-
     IdManager& idMgr = objController.getIdManager();
-    // tObjects& objects = objController.getObjects();
-    // tLinks& links = objController.getLinks();
-    // tAudioConnections& audioConnections = objController.getAudioConnections();
-    // tComments& comments = objController.getComments();
 
-    ValueTree massObjects = mdl.getChildWithName(Objects::masses);
-    for (int i = 0; i < massObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = massObjects.getChild(i);
-        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* objComp = new ObjectComponent(objController, obj);
-            objController.addObjectComp(objComp);
-            objHolder.addAndMakeVisible(objComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numZeroPos;
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree termObjects = mdl.getChildWithName(Objects::terminations);
-    for (int i = 0; i < termObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = termObjects.getChild(i);
-        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* objComp = new ObjectComponent(objController, obj);
-            objController.addObjectComp(objComp);
-            objHolder.addAndMakeVisible(objComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numZeroPos;
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree junctObjects = mdl.getChildWithName(Objects::junctions);
-    for (int i = 0; i < junctObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = junctObjects.getChild(i);
-        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* objComp = new ObjectComponent(objController, obj);
-            objController.addObjectComp(objComp);
-            objHolder.addAndMakeVisible(objComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numZeroPos;
-        }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree linkObjects = mdl.getChildWithName(Objects::links);
-    for (int i = 0; i < linkObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = linkObjects.getChild(i);
-        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            LinkComponent* linkComp = new LinkComponent(objController, obj);
-            objController.addLinkComp(linkComp);
-            objHolder.addAndMakeVisible(linkComp);
-            linkComp->toBack();
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-        }
-    }
-    ValueTree waveguideObjects = mdl.getChildWithName(Objects::waveguides);
-    for (int i = 0; i < waveguideObjects.getNumChildren(); i++)
-    {
-        ValueTree obj = waveguideObjects.getChild(i);
-        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            LinkComponent* linkComp = new LinkComponent(objController, obj);
-            objController.addLinkComp(linkComp);
-            objHolder.addAndMakeVisible(linkComp);
-            linkComp->toBack();
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-        }
-    }
+    // helper functions
 
-    ValueTree audioObjects = mdl.getChildWithName(Objects::audioobjects);
-    for (int i = 0; i < audioObjects.getNumChildren(); i++)
+    auto fnAddObjectComponent = [&](const ValueTree& objTree)
     {
-        ValueTree obj = audioObjects.getChild(i);
-        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-        {
-            ObjectComponent* audioOutComp = new ObjectComponent(objController, obj);
-            objController.addObjectComp(audioOutComp);
-            objHolder.addAndMakeVisible(audioOutComp);
-            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-            ++numObjects;
-            if(float(obj[Ids::posX]) < 0.00001f && float(obj[Ids::posY]) < 0.00001f)
-                ++numZeroPos;
+        ObjectComponent* objComp = new ObjectComponent(objController, objTree);
+        objController.addObjectComp(objComp);
+        objHolder.addAndMakeVisible(objComp);
+        SAM_LOG("Load " + objTree.getType().toString() + " " + objTree[Ids::identifier].toString());
+        ++numObjects;
+        if(float(objTree[Ids::posX]) < 0.00001f && float(objTree[Ids::posY]) < 0.00001f)
+            ++numZeroPos;
 
-            ValueTree aoSources = obj.getChildWithName(Ids::sources);
-            for (int j = 0; j < aoSources.getNumChildren(); ++j)
+        return objComp;
+    };
+
+    auto fnAddLinkComponent = [&](const ValueTree& linkTree)
+    {
+        LinkComponent* linkComp = new LinkComponent(objController, linkTree);
+        objController.addLinkComp(linkComp);
+        objHolder.addAndMakeVisible(linkComp);
+        linkComp->toBack();
+        SAM_LOG("Load " + linkTree.getType().toString() + " " + linkTree[Ids::identifier].toString());
+    };
+
+    auto fnIterateObjectGroup = [&](const Identifier& groupId,
+                                    const std::function<void(const ValueTree&)>& addFunctor)
+    {
+        ValueTree objGroup = mdl.getChildWithName(groupId);
+        for (int i = 0; i < objGroup.getNumChildren(); ++i)
+        {
+            ValueTree obj = objGroup.getChild(i);
+            if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
             {
-                ValueTree source = aoSources.getChild(j);
-//                ObjectComponent* oc = getObjectForId(src);
-//                LinkComponent* lc = getLinkForId(src);
-                BaseObjectComponent* sourceComp =
-                    ObjectsHelper::getBaseObjectFromSource(&objController, source);
-//                if(oc != nullptr)
-//                    sourceComp = oc;
-//                else if(lc != nullptr)
-//                    sourceComp = lc;
-
-                if( sourceComp != nullptr )
-                {
-                    AudioOutConnector* aoc = new AudioOutConnector(
-                        objController, sourceComp, audioOutComp);
-                    objController.addAudioConnectionComp(aoc);
-                    objHolder.addAndMakeVisible(aoc);
-                    aoc->update();
-                }
+                addFunctor(obj);
+            }
+            else
+            {
+                SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
             }
         }
-        else
-        {
-            SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
-        }
-    }
+    };
 
-    ValueTree faustcodeblock = mdl.getChildWithName(Objects::faustcodeblock);
-    for (int i = 0; i < faustcodeblock.getNumChildren(); i++)
-    {
-        ValueTree obj = faustcodeblock.getChild(i);
-//        if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
-//        {
-//            SAM_LOG("Load " + obj.getType().toString() + " " + obj[Ids::identifier].toString());
-//        }
-//        else
-//        {
-//            faustcodeblock.removeChild(obj, nullptr);
-//        }
-    }
+    // objects and links
 
-    ValueTree commentsTree = mdl.getChildWithName(Objects::comments);
-    for (int i = 0; i < commentsTree.getNumChildren(); ++i)
+    fnIterateObjectGroup(Objects::masses, fnAddObjectComponent);
+    fnIterateObjectGroup(Objects::terminations, fnAddObjectComponent);
+    fnIterateObjectGroup(Objects::junctions, fnAddObjectComponent);
+    fnIterateObjectGroup(Objects::links, fnAddLinkComponent);
+    fnIterateObjectGroup(Objects::waveguides, fnAddLinkComponent);
+
+    // audio objects and comments
+
+    fnIterateObjectGroup(Objects::audioobjects, [&](const ValueTree& aoTree)
     {
-        ValueTree comment = commentsTree.getChild(i);
-        if(idMgr.addId(comment.getType(), comment[Ids::identifier].toString(), nullptr))
+        ObjectComponent* audioOutComp = fnAddObjectComponent(aoTree);
+
+        ValueTree aoSources = aoTree.getChildWithName(Ids::sources);
+        for (int j = 0; j < aoSources.getNumChildren(); ++j)
         {
-            CommentComponent* cComp = new CommentComponent(objController, comment);
-            objController.addCommentComp(cComp);
-            objHolder.addAndMakeVisible(cComp);
-            cComp->update();
-            SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
-            ++numObjects;
-            if(float(comment[Ids::posX]) < 0.00001f && float(comment[Ids::posY]) < 0.00001f)
-                ++numZeroPos;
+            ValueTree source = aoSources.getChild(j);
+            BaseObjectComponent* sourceComp =
+                ObjectsHelper::getBaseObjectFromSource(&objController, source);
+
+            if (sourceComp != nullptr)
+            {
+                AudioOutConnector* aoc = new AudioOutConnector(
+                    objController, sourceComp, audioOutComp);
+                objController.addAudioConnectionComp(aoc);
+                objHolder.addAndMakeVisible(aoc);
+                aoc->update();
+            }
         }
-    }
+    });
+
+    fnIterateObjectGroup(Objects::comments, [&](const ValueTree& comment)
+    {
+        CommentComponent* cComp = new CommentComponent(objController, comment);
+        objController.addCommentComp(cComp);
+        objHolder.addAndMakeVisible(cComp);
+        cComp->update();
+        SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
+        ++numObjects;
+        if(float(comment[Ids::posX]) < 0.00001f && float(comment[Ids::posY]) < 0.00001f)
+            ++numZeroPos;
+    });
 }
 
 //------------------------------------------------------------------------------

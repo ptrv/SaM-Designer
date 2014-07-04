@@ -165,6 +165,7 @@ public:
     int getNumLinks() const { return links.size(); }
     void addLinkComp(LinkComponent* l) { links.add(l); }
     tLinks& getLinks() { return links; }
+    const tLinks& getLinks() const { return links; }
 
     AudioOutConnector* getAudioConnector(int index) const throw() 
     { return audioConnections[index]; }
