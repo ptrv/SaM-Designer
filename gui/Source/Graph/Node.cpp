@@ -75,12 +75,12 @@ void Node::initNodeData()
     }
 }
 
-void Node::addIncomingLink(Node* n)
+void Node::addIncomingLink(Node* const n)
 {
     inLinks.addIfNotAlreadyThere(n);
 }
 
-void Node::addOutgoingLink(Node* n)
+void Node::addOutgoingLink(Node* const n)
 {
     outLinks.addIfNotAlreadyThere(n);
 }
@@ -95,37 +95,39 @@ const Array<Node*>& Node::getNeighbours() const
     return neighbours;
 }
 
+void Node::addNeighbour(Node* n)
+{
+    neighbours.add(n);
+}
+
 float Node::getShortestLinkLength()
 {
-    if(inLinks.size() == 0 && outLinks.size() == 0)
+    if (inLinks.size() == 0 && outLinks.size() == 0)
     {
         return -1.0f;
     }
 
-    float l = 10000.0f;
-    for (int i = 0; i < inLinks.size(); ++i)
+    float shortestLength = std::numeric_limits<float>::max();
+
+    auto fnGetLengthIfShorter = [&](Node* const n)
     {
-        int dx = inLinks.getUnchecked(i)->getPosF().x - posF.x;
-        int dy = inLinks.getUnchecked(i)->getPosF().y - posF.y;
+        if (n != this)
+        {
+            int dx = n->getPosF().x - posF.x;
+            int dy = n->getPosF().y - posF.y;
 
-        float il = sqrt(dx*dx + dy*dy);
-        if(il < l)
-            l = il;
-    }
+            float len = sqrt(dx*dx + dy*dy);
+            if(len < shortestLength)
+                shortestLength = len;
+        }
+    };
+    std::for_each(inLinks.begin(), inLinks.end(), fnGetLengthIfShorter);
+    std::for_each(outLinks.begin(), outLinks.end(), fnGetLengthIfShorter);
 
-    for (int j = 0; j < outLinks.size(); ++j)
-    {
-        int dx = outLinks.getUnchecked(j)->getPosF().x - posF.x;
-        int dy = outLinks.getUnchecked(j)->getPosF().y - posF.y;
-
-        float ol = sqrt(dx*dx + dy*dy);
-        if(ol < l)
-            l = ol;
-    }
-    return l;
+    return shortestLength;
 }
 
-bool Node::equals(const Node* other)
+bool Node::equals(const Node* const other)
 {
     if(this == other)
         return true;

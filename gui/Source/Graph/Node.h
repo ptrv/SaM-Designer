@@ -47,6 +47,7 @@ public:
 
     void setNeighbours(const Array<Node*>& n);
     const Array<Node*>& getNeighbours() const;
+    void addNeighbour(Node* n);
     float getShortestLinkLength();
 
     bool equals(const Node* other);

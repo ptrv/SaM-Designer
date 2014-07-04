@@ -201,22 +201,7 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
         return false;
     };
 
-    auto fnGetNeightbours = [&allEdges, &nodes](int idx)
-    {
-        const Array<bool>& edges = allEdges.getReference(idx);
-        tNodes neighbours;
-
-        for (int i = 0; i < edges.size(); ++i)
-        {
-            if (edges.getUnchecked(i))
-            {
-                neighbours.add(nodes[i]);
-            }
-        }
-        return neighbours;
-    };
-
-    auto fnDepthFirstSearch = [&nodes, &visitedNodes, &fnGetNeightbours]
+    auto fnDepthFirstSearch = [&nodes, &visitedNodes]
         (Node* const n, tNodes& currentGroup)
     {
         std::stack<Node*> S;
@@ -232,12 +217,9 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
             {
                 visitedNodes.add(aNodeIndex);
 
-                const tNodes neighbours = fnGetNeightbours(aNodeIndex);
-                aNode->setNeighbours(neighbours);
-
                 currentGroup.add(aNode);
 
-                for (Node* const x : neighbours)
+                for (Node* const x : aNode->getNeighbours())
                 {
                     S.push(x);
                 }

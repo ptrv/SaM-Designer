@@ -72,6 +72,8 @@ bool DirectedGraph::linkNodes(Node* n1, Node* n2)
 {
     if(nodes.contains(n1) && nodes.contains(n2))
     {
+        n1->addNeighbour(n2);
+        n2->addNeighbour(n1);
         n1->addOutgoingLink(n2);
         n2->addIncomingLink(n1);
         const int nodeIndex1 = nodes.indexOf(n1);
