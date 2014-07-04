@@ -582,8 +582,18 @@ void ObjController::startDragging()
         boc->getProperties().set("xDragStart", r.getX());
         boc->getProperties().set("yDragStart", r.getY());
     };
-    std::for_each(objects.begin(), objects.end(), fnSetDragStart);
-    std::for_each(comments.begin(), comments.end(), fnSetDragStart);
+
+    for (SelectableObject* const obj : sObjects.getItemArray())
+    {
+        if (ObjectComponent * const oc = ObjectsHelper::getObject(obj))
+        {
+            fnSetDragStart(oc);
+        }
+        else if(CommentComponent* const cc = ObjectsHelper::getComment(obj))
+        {
+            fnSetDragStart(cc);
+        }
+    }
 
     owner.getUndoManager().beginNewTransaction();
 }
@@ -594,7 +604,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
     for (SelectableObject* const selectedItem : sObjects.getItemArray())
     {
-        if(ObjectComponent * const c = ObjectsHelper::getObject(selectedItem))
+        if (ObjectComponent * const c = ObjectsHelper::getObject(selectedItem))
         {
             const int startX = c->getProperties() ["xDragStart"];
             const int startY = c->getProperties() ["yDragStart"];
@@ -660,12 +670,12 @@ void ObjController::changed()
 
 struct ObjectIdComparator
 {
-    ObjectIdComparator(const String& idStr) : idStr_(idStr){}
+    ObjectIdComparator(const String& idString) : idStr(idString){}
 
-    String idStr_;
-    bool operator()(const BaseObjectComponent* const boc)
+    String idStr;
+    bool operator()(const BaseObjectComponent* const obj)
     {
-        return idStr_.compare(boc->getData().getProperty(Ids::identifier).toString()) == 0;
+        return idStr.compare(obj->getData()[Ids::identifier].toString()) == 0;
     }
 };
 

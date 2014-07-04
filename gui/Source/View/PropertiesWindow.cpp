@@ -212,9 +212,9 @@ void PropertiesWindow::updateProperties()
         StringArray audioSourceIds;
         const Array<SelectableObject*>& selectedItems = currentSelection->getItemArray();
         Identifier selectedId;
-        for (int i = 0; i < selectedItems.size(); ++i)
+        for (SelectableObject* const selectedItem : selectedItems)
         {
-            if(BaseObjectComponent* boc = dynamic_cast<BaseObjectComponent*>(selectedItems[i]))
+            if(BaseObjectComponent* boc = dynamic_cast<BaseObjectComponent*>(selectedItem))
             {
                 // get first id type. This is the type for a multiple selection
                 if (datas.size() == 0)
@@ -233,7 +233,7 @@ void PropertiesWindow::updateProperties()
                     return;
                 }
             }
-            else if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(selectedItems[i]))
+            else if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(selectedItem))
             {
                 if (datas.size() == 0)
                 {
