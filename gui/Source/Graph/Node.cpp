@@ -109,20 +109,17 @@ float Node::getShortestLinkLength()
 
     float shortestLength = std::numeric_limits<float>::max();
 
-    auto fnGetLengthIfShorter = [&](Node* const n)
+    for (const Node* const n : neighbours)
     {
-        if (n != this)
-        {
-            int dx = n->getPosF().x - posF.x;
-            int dy = n->getPosF().y - posF.y;
+        int dx = n->getPosF().x - posF.x;
+        int dy = n->getPosF().y - posF.y;
 
-            float len = sqrt(dx*dx + dy*dy);
-            if(len < shortestLength)
-                shortestLength = len;
+        float len = sqrt(dx*dx + dy*dy);
+        if (len < shortestLength)
+        {
+            shortestLength = len;
         }
     };
-    std::for_each(inLinks.begin(), inLinks.end(), fnGetLengthIfShorter);
-    std::for_each(outLinks.begin(), outLinks.end(), fnGetLengthIfShorter);
 
     return shortestLength;
 }
