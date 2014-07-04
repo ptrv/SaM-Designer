@@ -181,60 +181,51 @@ void GraphUtils::initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes)
 
 void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 {
-    tNodes& nodes = g.getNodes();
-    tEdgesMatrix& allEdges = g.getEdges();
-    Array<tNodesAndEdges>& connectedGroups = g.getConnectedGroups();
+    tNodes& allNodes = g.getNodes();
+    Array<tNodesAndEdges>& groups = g.getConnectedGroups();
+
+    groups.clear();
 
     Array<int> visitedNodes;
 
-    connectedGroups.clear();
-
-    auto fnIsInConnecteds = [&connectedGroups](Node* const node)
+    for (Node* const v : allNodes)
     {
-        for(const tNodesAndEdges& group : connectedGroups)
+        const bool isNodeInAnyGroup =
+            std::any_of(groups.begin(), groups.end(),
+                        [&v](const tNodesAndEdges& group)
         {
-            if (group.nodes.contains(node))
-            {
-                return true;
-            }
-        }
-        return false;
-    };
+            return group.first.contains(v);
+        });
 
-    auto fnDepthFirstSearch = [&nodes, &visitedNodes]
-        (Node* const n, tNodes& currentGroup)
-    {
-        std::stack<Node*> S;
-        S.push(n);
-
-        while (!S.empty())
+        if (!isNodeInAnyGroup)
         {
-            Node* aNode = S.top();
-            S.pop();
+            tNodesAndEdges ne;
+            tNodes& group = ne.first;
 
-            int aNodeIndex = nodes.indexOf(aNode);
-            if (!visitedNodes.contains(aNodeIndex))
+            // depth-first search
+            std::stack<Node*> S;
+            S.push(v);
+
+            while (!S.empty())
             {
-                visitedNodes.add(aNodeIndex);
+                Node* aNode = S.top();
+                S.pop();
 
-                currentGroup.add(aNode);
-
-                for (Node* const x : aNode->getNeighbours())
+                int aNodeIndex = allNodes.indexOf(aNode);
+                if (!visitedNodes.contains(aNodeIndex))
                 {
-                    S.push(x);
+                    visitedNodes.add(aNodeIndex);
+
+                    group.add(aNode);
+
+                    for (Node* const x : aNode->getNeighbours())
+                    {
+                        S.push(x);
+                    }
                 }
             }
-        }
-    };
 
-    for (Node* const v : nodes)
-    {
-        if (!fnIsInConnecteds(v))
-        {
-            tNodesAndEdges nodesAndEdges;
-
-            fnDepthFirstSearch(v, nodesAndEdges.nodes);
-            connectedGroups.add(nodesAndEdges);
+            groups.add(ne);
         }
     }
 
@@ -253,20 +244,23 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
     // }
 
     // find edges for group nodes
-    for (tNodesAndEdges& ne : g.getConnectedGroups())
+    for (tNodesAndEdges& ne : groups)
     {
-        int numNodes = ne.nodes.size();
+        const tNodes& nodes = ne.first;
+        tEdgesMatrix& edges = ne.second;
 
-        initEdgesMatrix(ne.edges, numNodes);
+        const int numNodes = nodes.size();
+
+        initEdgesMatrix(edges, numNodes);
 
         for (int i = 0; i < numNodes; ++i)
         {
-            const Node* const n = ne.nodes.getUnchecked(i);
-            Array<bool>& ed = ne.edges.getReference(i);
+            const Node* const n = nodes.getUnchecked(i);
+            Array<bool>& ed = edges.getReference(i);
             const tNodes& neighbours = n->getNeighbours();
             for (Node* const u : neighbours)
             {
-                const int inIdx = ne.nodes.indexOf(u);
+                const int inIdx = nodes.indexOf(u);
                 ed.set(inIdx, true);
             }
         }

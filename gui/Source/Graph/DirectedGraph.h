@@ -36,12 +36,7 @@ class ObjController;
 
 typedef Array<Node*> tNodes;
 typedef Array<Array<bool> > tEdgesMatrix;
-
-struct tNodesAndEdges
-{
-    tNodes nodes;
-    tEdgesMatrix edges;
-};
+typedef std::pair<tNodes, tEdgesMatrix> tNodesAndEdges;
 
 class DirectedGraph
 {

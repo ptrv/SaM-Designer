@@ -97,8 +97,8 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
                                              int width, int height,
                                              ObjController& objController)
 {
-    const tNodes& group = nodesAndEdges.nodes;
-    const tEdgesMatrix& edges = nodesAndEdges.edges;
+    const tNodes& group = nodesAndEdges.first;
+    const tEdgesMatrix& edges = nodesAndEdges.second;
 
     const int numNodes = group.size();
     for (int i = 0; i < numNodes; ++i)
