@@ -58,8 +58,7 @@ bool ObjectsHelper::changeObjectNameInLink(const ObjController& objController,
     if (oc == nullptr)
         return false;
 
-    Array<LinkComponent*> linksTmp = oc->getAttachedLinks();
-    std::for_each(linksTmp.begin(), linksTmp.end(), [&](LinkComponent* const lc)
+    for (LinkComponent* const lc : oc->getAttachedLinks())
     {
         if (lc->getData()[Ids::startVertex] == oldName)
         {
@@ -69,7 +68,7 @@ bool ObjectsHelper::changeObjectNameInLink(const ObjController& objController,
         {
             lc->getData().setProperty(Ids::endVertex, newName, undoManager);
         }
-    });
+    }
     return true;
 }
 
@@ -695,13 +694,15 @@ void ObjectsHelper::loadComponents(ObjController& objController,
         for (int i = 0; i < objGroup.getNumChildren(); ++i)
         {
             ValueTree obj = objGroup.getChild(i);
-            if(idMgr.addId(obj.getType(), obj[Ids::identifier].toString(), nullptr))
+            const String& objName = obj[Ids::identifier].toString();
+            
+            if(idMgr.addId(obj.getType(), objName, nullptr))
             {
                 addFunctor(obj);
             }
             else
             {
-                SAM_LOG("Couldn't add duplicate Object " + obj[Ids::identifier].toString());
+                SAM_LOG("Couldn't add duplicate Object " + objName);
             }
         }
     };
