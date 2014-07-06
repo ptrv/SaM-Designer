@@ -562,7 +562,11 @@ bool ObjectsHelper::containsStringInValueTree(ValueTree valTree,
     for (int i = 0; i < valTree.getNumChildren(); ++i)
     {
         ValueTree c = valTree.getChild(i);
-        return containsStringInValueTree(c, searchStr, false);
+        if (containsStringInValueTree(c, searchStr, false))
+        {
+            return true;
+        }
+
     }
     return false;
 }
