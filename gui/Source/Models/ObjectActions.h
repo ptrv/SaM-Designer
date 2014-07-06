@@ -149,7 +149,8 @@ public:
                 for (int i = 0; i < sources.getNumChildren(); ++i)
                 {
                     ValueTree src = sources.getChild(i);
-                    BaseObjectComponent* boc = ObjectsHelper::getBaseObjectFromSource(objController, src);
+                    BaseObjectComponent* boc =
+                        ObjectsHelper::getBaseObjectFromSource(*objController.get(), src);
 
 //                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
                     objController->addAudioConnection(holderComp, boc, oc, src, -1, false);

@@ -212,7 +212,7 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             {
                 ValueTree source = sources.getChild(j);
                 BaseObjectComponent* sourceComp =
-                    ObjectsHelper::getBaseObjectFromSource(&objController, source);
+                    ObjectsHelper::getBaseObjectFromSource(objController, source);
                 
                 String oldSrcName = sourceComp->getData()[Ids::identifier];
                 if (objectNamesOldNewForAudio.contains(oldSrcName))
@@ -264,8 +264,8 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
             {
                 ValueTree source = sources.getChild(j);
                 BaseObjectComponent* sourceComp =
-                    ObjectsHelper::getBaseObjectFromSource(&objController, source);
-                sourceComp = ObjectsHelper::getBaseObjectFromSource(&objController, source);
+                    ObjectsHelper::getBaseObjectFromSource(objController, source);
+                sourceComp = ObjectsHelper::getBaseObjectFromSource(objController, source);
 
                 if (sourceComp != nullptr)
                 {
@@ -285,5 +285,5 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
 void ObjectsClipboard::cut(ObjController& objController, ObjectsHolder& holder)
 {
     ObjectsClipboard::copySelected(objController);
-    objController.removeSelectedObjects(&holder);
+    objController.removeSelectedObjects(holder);
 }

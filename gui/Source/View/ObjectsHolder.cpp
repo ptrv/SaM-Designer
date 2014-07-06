@@ -791,7 +791,7 @@ SelectedItemSet <SelectableObject*>& ObjectsHolder::getLassoSelection()
 
 void ObjectsHolder::deleteSelectedObjects()
 {
-    objController.removeSelectedObjects(this);
+    objController.removeSelectedObjects(*this);
 }
 
 const Rectangle<int> ObjectsHolder::getObjectsExtent() const

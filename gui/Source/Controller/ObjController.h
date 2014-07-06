@@ -80,7 +80,7 @@ public:
 	 *
 	 * @param holder		the holder component which consists the objects.
 	 */
-	void removeSelectedObjects(ObjectsHolder* holder);
+	void removeSelectedObjects(ObjectsHolder& holder);
 
     void removeObject(ObjectComponent* objComp, bool undoable, ObjectsHolder* holder);
 

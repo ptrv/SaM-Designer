@@ -61,7 +61,7 @@ public:
     static void setGainForSourceId(ValueTree& sources, const String& sourceId,
                                    const String& gainVal, UndoManager* undoManager);
 
-    static BaseObjectComponent* getBaseObjectFromSource(ObjController* objController,
+    static BaseObjectComponent* getBaseObjectFromSource(const ObjController& objController,
                                                         ValueTree& source);
 
     static const Identifier& getObjectGroup(const Identifier& ident);

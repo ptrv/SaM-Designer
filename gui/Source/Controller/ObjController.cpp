@@ -379,7 +379,7 @@ void ObjController::removeObject(ObjectComponent* objComp, bool undoable, Object
 
 }
 
-void ObjController::removeSelectedObjects(ObjectsHolder* holder)
+void ObjController::removeSelectedObjects(ObjectsHolder& holder)
 {
     SelectedItemSet <SelectableObject*> temp;
     temp = sObjects;
@@ -394,7 +394,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
             if(LinkComponent* lc = ObjectsHelper::getLink(temp.getSelectedItem(i)))
             {
                 temp.deselect(lc);
-                removeLink(lc, true, holder);
+                removeLink(lc, true, &holder);
             }
         }
         // then objects and remaining links connected to the objects
@@ -403,7 +403,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
             if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i)))
             {
                 temp.deselect(aoc);
-                removeAudioConnection(aoc, true, holder);
+                removeAudioConnection(aoc, true, &holder);
                 continue;
             }
         }
@@ -411,11 +411,11 @@ void ObjController::removeSelectedObjects(ObjectsHolder* holder)
         {
             if(ObjectComponent* oc = ObjectsHelper::getObject(temp.getSelectedItem(i)))
             {
-                removeObject(oc, true, holder);
+                removeObject(oc, true, &holder);
             }
             else if(CommentComponent* cc = ObjectsHelper::getComment(temp.getSelectedItem(i)))
             {
-                removeComment(cc, true, holder);
+                removeComment(cc, true, &holder);
             }
 //            LinkComponent* lc = ObjectsHelper::getLink(temp.getSelectedItem(i));
 //            if(lc != nullptr)

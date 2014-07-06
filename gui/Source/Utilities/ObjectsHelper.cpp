@@ -483,19 +483,19 @@ void ObjectsHelper::setGainForSourceId(ValueTree& sources, const String& sourceI
 
 //------------------------------------------------------------------------------
 
-BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(ObjController* objController,
+BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(const ObjController& objController,
                                                             ValueTree& source)
 {
     String srcVal = source[Ids::value].toString();
     StringArray srcArray;
     srcArray.addTokens(srcVal, "*", "\"");
-    for (int i = 0; i < srcArray.size(); ++i)
+    for (const String& src : srcArray)
     {
-        if (ObjectComponent* oc = objController->getObjectForId(srcArray[i]))
+        if (ObjectComponent* oc = objController.getObjectForId(src))
         {
             return oc;
         }
-        else if(LinkComponent* lc = objController->getLinkForId(srcArray[i]))
+        else if(LinkComponent* lc = objController.getLinkForId(src))
         {
             return lc;
         }
@@ -728,7 +728,7 @@ void ObjectsHelper::loadComponents(ObjController& objController,
         {
             ValueTree source = aoSources.getChild(j);
             BaseObjectComponent* sourceComp =
-                ObjectsHelper::getBaseObjectFromSource(&objController, source);
+                ObjectsHelper::getBaseObjectFromSource(objController, source);
 
             if (sourceComp != nullptr)
             {
