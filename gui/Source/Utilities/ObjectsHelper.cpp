@@ -677,8 +677,6 @@ void ObjectsHelper::loadComponents(ObjController& objController,
         ++numObjects;
         if(float(objTree[Ids::posX]) < 0.00001f && float(objTree[Ids::posY]) < 0.00001f)
             ++numZeroPos;
-
-        return objComp;
     };
 
     auto fnAddLinkComponent = [&](const ValueTree& linkTree)
@@ -720,8 +718,11 @@ void ObjectsHelper::loadComponents(ObjController& objController,
 
     fnIterateObjectGroup(Objects::audioobjects, [&](const ValueTree& aoTree)
     {
-        ObjectComponent* audioOutComp = fnAddObjectComponent(aoTree);
-
+        fnAddObjectComponent(aoTree);
+        
+        ObjectComponent* const audioOutComp =
+            objController.getObjectForId(aoTree[Ids::identifier].toString());
+        
         ValueTree aoSources = aoTree.getChildWithName(Ids::sources);
         for (int j = 0; j < aoSources.getNumChildren(); ++j)
         {
