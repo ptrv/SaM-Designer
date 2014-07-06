@@ -29,6 +29,9 @@
 namespace synthamodeler
 {
 
+class Node;
+typedef Array<Node*> tNodes;
+
 class Node
 {
 public:
@@ -38,15 +41,15 @@ public:
     void initNodeData();
 
     void addIncomingLink(Node* n);
-    Array<Node*>& getIncomingLinks() { return inLinks; }
+    tNodes& getIncomingLinks() { return inLinks; }
     int getIncomingLinksCount() const { return inLinks.size(); }
 
     void addOutgoingLink(Node* n);
-    Array<Node*>& getOutgoingLinks() { return outLinks; }
+    tNodes& getOutgoingLinks() { return outLinks; }
     int getOutgoingLinksCount() const { return outLinks.size(); }
 
     void setNeighbours(const Array<Node*>& n);
-    const Array<Node*>& getNeighbours() const;
+    const tNodes& getNeighbours() const;
     void addNeighbour(Node* n);
     float getShortestLinkLength();
 
@@ -73,9 +76,9 @@ private:
 
     ValueTree data;
     String label;
-    Array<Node*> inLinks;
-    Array<Node*> outLinks;
-    Array<Node*> neighbours;
+    tNodes inLinks;
+    tNodes outLinks;
+    tNodes neighbours;
 
     float mass;
 };

@@ -27,6 +27,7 @@
 #ifndef __DIRECTEDGRAPH_H_72CA91E6__
 #define __DIRECTEDGRAPH_H_72CA91E6__
 
+#include "Node.h"
 
 namespace synthamodeler
 {
@@ -34,9 +35,9 @@ class FlowAlgorithm;
 class Node;
 class ObjController;
 
-typedef Array<Node*> tNodes;
 typedef Array<Array<bool> > tEdgesMatrix;
 typedef std::pair<tNodes, tEdgesMatrix> tNodesAndEdges;
+typedef Array<tNodesAndEdges> tNodeGroups;
 
 class DirectedGraph
 {
@@ -58,10 +59,10 @@ public:
 
     tNodes& getNodes() { return nodes; }
     const tNodes& getNodes() const { return nodes; }
-    Array<tNodesAndEdges>& getConnectedGroups() { return connectedGroups; }
-    const Array<tNodesAndEdges>& getConnectedGroups() const { return connectedGroups; }
-    Array<Array<bool> >& getEdges() { return edges; }
-    const Array<Array<bool> >& getEdges() const { return edges; }
+    tNodeGroups& getConnectedGroups() { return connectedGroups; }
+    const tNodeGroups& getConnectedGroups() const { return connectedGroups; }
+    tEdgesMatrix& getEdges() { return edges; }
+    const tEdgesMatrix& getEdges() const { return edges; }
 
     FlowAlgorithm* getFlowAlgorithm() { return flower; }
     const FlowAlgorithm* getFlowAlgorithm() const { return flower; }
@@ -81,9 +82,9 @@ public:
 private:
 
     tNodes nodes;
-    Array<tNodesAndEdges> connectedGroups;
+    tNodeGroups connectedGroups;
     ScopedPointer<FlowAlgorithm> flower;
-    Array<Array<bool> > edges;
+    tEdgesMatrix edges;
 
 };
 

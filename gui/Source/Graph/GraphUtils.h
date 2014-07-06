@@ -27,10 +27,11 @@
 #ifndef __GRAPHUTILS_H_ECA0AD77__
 #define __GRAPHUTILS_H_ECA0AD77__
 
+#include "DirectedGraph.h"
 
 namespace synthamodeler
 {
-class DirectedGraph;
+
 class GraphUtils
 {
 
@@ -43,7 +44,7 @@ public:
     static void randomizeNodes(DirectedGraph& g, const Rectangle<int>& area);
     static void shuffleNodes(DirectedGraph& g);
 
-    static void initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes);
+    static void initEdgesMatrix(tEdgesMatrix& edgesMatrix, int numNodes);
 
     static void calculateConnectedGroups(DirectedGraph& g);
 

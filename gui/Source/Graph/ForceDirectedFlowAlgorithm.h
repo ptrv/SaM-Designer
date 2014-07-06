@@ -35,6 +35,7 @@ namespace synthamodeler
 class Node;
 class FlowAlgorithm;
 class ObjController;
+
 class ForceDirectedFlowAlgorithm : public FlowAlgorithm
 {
 public:

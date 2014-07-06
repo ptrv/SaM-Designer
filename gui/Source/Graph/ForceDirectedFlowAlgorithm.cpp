@@ -26,7 +26,6 @@
 
 #include "../../JuceLibraryCode/JuceHeader.h"
 #include "FlowAlgorithm.h"
-#include "DirectedGraph.h"
 #include "Node.h"
 #include "../Controller/ObjController.h"
 #include "../View/BaseObjectComponent.h"

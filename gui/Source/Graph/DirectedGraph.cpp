@@ -87,9 +87,9 @@ bool DirectedGraph::linkNodes(Node* n1, Node* n2)
     return false;
 }
 
-Array<Node*> DirectedGraph::getRoots()
+tNodes DirectedGraph::getRoots()
 {
-    Array<Node*> roots;
+    tNodes roots;
 
     for (Node* const n : nodes)
     {
@@ -100,9 +100,9 @@ Array<Node*> DirectedGraph::getRoots()
     return roots;
 }
 
-Array<Node*> DirectedGraph::getLeaves()
+tNodes DirectedGraph::getLeaves()
 {
-    Array<Node*> leaves;
+    tNodes leaves;
 
     for (Node* const n : nodes)
     {

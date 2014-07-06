@@ -28,7 +28,6 @@
 
 #include "GraphUtils.h"
 #include "Node.h"
-#include "DirectedGraph.h"
 
 #include <stack>
 
@@ -172,7 +171,7 @@ void GraphUtils::shuffleNodes(DirectedGraph& g)
     }
 }
 
-void GraphUtils::initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes)
+void GraphUtils::initEdgesMatrix(tEdgesMatrix& edgesMatrix, int numNodes)
 {
     Array<bool> row;
     row.insertMultiple(0, false, numNodes);
@@ -182,7 +181,7 @@ void GraphUtils::initEdgesMatrix(Array<Array<bool> >& edgesMatrix, int numNodes)
 void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 {
     tNodes& allNodes = g.getNodes();
-    Array<tNodesAndEdges>& groups = g.getConnectedGroups();
+    tNodeGroups& groups = g.getConnectedGroups();
 
     groups.clear();
 
