@@ -28,8 +28,7 @@ rm $re2_archive
 cd re2
 if [[ $os == "darwin" ]]; then
     num_jobs=`/usr/sbin/system_profiler -detailLevel full SPHardwareDataType | awk '/Total Number [Oo]f Cores/ {print $5};'`
-    make -e CXXFLAGS="-Wall -O3 -g -pthread -arch i386" -e LDFLAGS="-pthread -arch i386" -j$num_jobs
 else
     num_jobs=`grep -c 'model name' /proc/cpuinfo`
-    make -j$num_jobs
 fi
+make -j$num_jobs
