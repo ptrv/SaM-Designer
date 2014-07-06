@@ -5,14 +5,14 @@
               jucerVersion="3.1.0" defines="" includeBinaryInAppConfig="1">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" bigIcon="WodEAp"
-               documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2"
-               extraLinkerFlags="-L../../Libs/re2/obj -lre2">
+               documentExtensions=".mdl" extraCompilerFlags="-I../../Libs/re2 -stdlib=libc++"
+               extraLinkerFlags="-L../../Libs/re2/obj -lre2 -stdlib=libc++">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-Modeler-Designer"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        defines="UNIT_TESTS=1"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-Modeler-Designer"
-                       osxSDK="default" osxCompatibility="10.6 SDK" osxArchitecture="default"/>
+                       osxSDK="default" osxCompatibility="10.7 SDK" osxArchitecture="default"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_extra" path="../juce/modules"/>
