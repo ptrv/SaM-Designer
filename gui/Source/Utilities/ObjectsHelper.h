@@ -86,7 +86,13 @@ public:
                                             Array<ObjectComponent*>& selectedObjs);
 
     static void loadComponents(ObjController& objController, ObjectsHolder& objHolder,
-                               const MDLFile& mdlFile, int& numObjects, int& numZeroPos);
+                               const ValueTree& mdlRoot, int& numObjects, int& numZeroPos);
+
+private:
+
+    template<typename ObjType>
+    static ObjType* addComp(ObjController& objController, ObjectsHolder& objHolder,
+                            ObjType* const obj);
 
 };
 

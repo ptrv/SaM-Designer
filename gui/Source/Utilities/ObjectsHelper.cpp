@@ -663,44 +663,42 @@ void ObjectsHelper::getSelectedObjectComponents(ObjController& objController,
 
 void ObjectsHelper::loadComponents(ObjController& objController,
                                    ObjectsHolder& objHolder,
-                                   const MDLFile& mdlFile,
+                                   const ValueTree& mdlRoot,
                                    int& numObjects, int& numZeroPos)
 {
-    const ValueTree& mdl = mdlFile.getMDLRoot();
     IdManager& idMgr = objController.getIdManager();
 
     // helper functions
 
-    auto fnAddObjectComponent = [&](const ValueTree& objTree)
+    auto fnObjectsCounter = [&numObjects, &numZeroPos](ValueTree objTree)
     {
-        ObjectComponent* objComp = new ObjectComponent(objController, objTree);
-        objController.addObjectComp(objComp);
-        objHolder.addAndMakeVisible(objComp);
-        SAM_LOG("Load " + objTree.getType().toString() + " " + objTree[Ids::identifier].toString());
         ++numObjects;
         if(float(objTree[Ids::posX]) < 0.00001f && float(objTree[Ids::posY]) < 0.00001f)
             ++numZeroPos;
     };
 
+    auto fnAddObjectComponent = [&](const ValueTree& objTree)
+    {
+        addComp(objController, objHolder, new ObjectComponent(objController, objTree));
+        fnObjectsCounter(objTree);
+    };
+
     auto fnAddLinkComponent = [&](const ValueTree& linkTree)
     {
-        LinkComponent* linkComp = new LinkComponent(objController, linkTree);
-        objController.addLinkComp(linkComp);
-        objHolder.addAndMakeVisible(linkComp);
-        linkComp->toBack();
-        SAM_LOG("Load " + linkTree.getType().toString() + " " + linkTree[Ids::identifier].toString());
+        addComp(objController, objHolder,
+                new LinkComponent(objController, linkTree))->toBack();
     };
 
     auto fnIterateObjectGroup = [&](const Identifier& groupId,
                                     const std::function<void(const ValueTree&)>& addFunctor)
     {
-        ValueTree objGroup = mdl.getChildWithName(groupId);
+        ValueTree objGroup = mdlRoot.getChildWithName(groupId);
         for (int i = 0; i < objGroup.getNumChildren(); ++i)
         {
             ValueTree obj = objGroup.getChild(i);
             const String& objName = obj[Ids::identifier].toString();
-            
-            if(idMgr.addId(obj.getType(), objName, nullptr))
+
+            if (idMgr.addId(obj.getType(), objName, nullptr))
             {
                 addFunctor(obj);
             }
@@ -724,10 +722,10 @@ void ObjectsHelper::loadComponents(ObjController& objController,
     fnIterateObjectGroup(Objects::audioobjects, [&](const ValueTree& aoTree)
     {
         fnAddObjectComponent(aoTree);
-        
+
         ObjectComponent* const audioOutComp =
             objController.getObjectForId(aoTree[Ids::identifier].toString());
-        
+
         ValueTree aoSources = aoTree.getChildWithName(Ids::sources);
         for (int j = 0; j < aoSources.getNumChildren(); ++j)
         {
@@ -748,15 +746,27 @@ void ObjectsHelper::loadComponents(ObjController& objController,
 
     fnIterateObjectGroup(Objects::comments, [&](const ValueTree& comment)
     {
-        CommentComponent* cComp = new CommentComponent(objController, comment);
-        objController.addCommentComp(cComp);
-        objHolder.addAndMakeVisible(cComp);
-        cComp->update();
-        SAM_LOG("Load " + comment.getType().toString() + " " + comment[Ids::identifier].toString());
-        ++numObjects;
-        if(float(comment[Ids::posX]) < 0.00001f && float(comment[Ids::posY]) < 0.00001f)
-            ++numZeroPos;
+        addComp(objController, objHolder,
+                new CommentComponent(objController, comment))->update();
+        fnObjectsCounter(comment);
     });
 }
+
+//------------------------------------------------------------------------------
+
+template <typename ObjType>
+ObjType* ObjectsHelper::addComp(ObjController& objController, ObjectsHolder& objHolder,
+                                ObjType* const obj)
+{
+    objController.addComp(obj);
+    objHolder.addAndMakeVisible(obj);
+    const ValueTree& objData = obj->getData();
+    SAM_LOG("Load " + objData.getType().toString() + " " + objData[Ids::identifier].toString());
+    return obj;
+}
+
+template ObjectComponent* ObjectsHelper::addComp<ObjectComponent>(ObjController&, ObjectsHolder&, ObjectComponent*);
+template LinkComponent* ObjectsHelper::addComp<LinkComponent>(ObjController&, ObjectsHolder&, LinkComponent*);
+template CommentComponent* ObjectsHelper::addComp<CommentComponent>(ObjController&, ObjectsHolder&, CommentComponent*);
 
 //------------------------------------------------------------------------------

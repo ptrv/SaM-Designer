@@ -184,7 +184,11 @@ public:
     int indexOfComment (CommentComponent* e) const throw() { return comments.indexOf (e); }
     int getNumComment() const { return comments.size(); }
     void addCommentComp(CommentComponent* c) { comments.add(c); }
-    
+
+    void addComp(ObjectComponent* o) { objects.add(o); }
+    void addComp(CommentComponent* c) { comments.add(c); }
+    void addComp(LinkComponent* l) { links.add(l); }
+
     void changed();
     
     ObjectComponent* getObjectForId(const String& idString) const;

@@ -509,25 +509,29 @@ void ObjController::removeComment(CommentComponent* commentComp,
 void ObjController::loadComponents(ObjectsHolder& holder)
 {
 
-    int numObjects = 0;
-    int numZeroPos = 0;
-
-    ObjectsHelper::loadComponents(*this, holder, *owner.getMDLFile(),
-                                  numObjects, numZeroPos);
-
-    setAudioConnectionVisibility(StoredSettings::getInstance()->getShowAudioConnections());
-
-    if(StoredSettings::getInstance()->getShouldRedrawOnLoad())
-        if(numZeroPos >= numObjects || numZeroPos > 1)
-            holder.redrawObjects(CommandIDs::redrawForceDirected);
-
-
-    auto fnObjectToFront = [](Component* const comp)
+    if (const MDLFile* const mdl = owner.getMDLFile())
     {
-        comp->toFront(false);
-    };
-    std::for_each(objects.begin(), objects.end(), fnObjectToFront);
-    std::for_each(comments.begin(), comments.end(), fnObjectToFront);
+        int numObjects = 0;
+        int numZeroPos = 0;
+
+        ObjectsHelper::loadComponents(
+            *this, holder, mdl->getMDLRoot(), numObjects, numZeroPos);
+
+        setAudioConnectionVisibility(
+            StoredSettings::getInstance()->getShowAudioConnections());
+
+        if(StoredSettings::getInstance()->getShouldRedrawOnLoad())
+            if(numZeroPos >= numObjects || numZeroPos > 1)
+                holder.redrawObjects(CommandIDs::redrawForceDirected);
+
+
+        auto fnObjectToFront = [](Component* const comp)
+        {
+            comp->toFront(false);
+        };
+        std::for_each(objects.begin(), objects.end(), fnObjectToFront);
+        std::for_each(comments.begin(), comments.end(), fnObjectToFront);
+    }
 
 }
 
