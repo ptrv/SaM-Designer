@@ -57,12 +57,12 @@ public:
 
     static String fixParameterValueIfNeeded(const String& paramVal);
 
-    static String getGainForSourceId(ValueTree& sources, const String& sourceId);
-    static void setGainForSourceId(ValueTree& sources, const String& sourceId,
+    static String getGainForSourceId(const ValueTree& sources, const String& sourceId);
+    static void setGainForSourceId(const ValueTree& sources, const String& sourceId,
                                    const String& gainVal, UndoManager* undoManager);
 
     static BaseObjectComponent* getBaseObjectFromSource(const ObjController& objController,
-                                                        ValueTree& source);
+                                                        const ValueTree& source);
 
     static const Identifier& getObjectGroup(const Identifier& ident);
 

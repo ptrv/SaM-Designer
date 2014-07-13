@@ -416,7 +416,7 @@ String ObjectsHelper::fixParameterValueIfNeeded(const String& paramVal)
 
 //------------------------------------------------------------------------------
 
-String ObjectsHelper::getGainForSourceId(ValueTree& sources, const String& sourceId)
+String ObjectsHelper::getGainForSourceId(const ValueTree& sources, const String& sourceId)
 {
     String gainStr;
     for (int i = 0; i < sources.getNumChildren(); ++i)
@@ -452,7 +452,7 @@ String ObjectsHelper::getGainForSourceId(ValueTree& sources, const String& sourc
     return gainStr;
 }
 
-void ObjectsHelper::setGainForSourceId(ValueTree& sources, const String& sourceId,
+void ObjectsHelper::setGainForSourceId(const ValueTree& sources, const String& sourceId,
                                        const String& gainVal, UndoManager* undoManager)
 {
     String gainStr;
@@ -483,9 +483,9 @@ void ObjectsHelper::setGainForSourceId(ValueTree& sources, const String& sourceI
 //------------------------------------------------------------------------------
 
 BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(const ObjController& objController,
-                                                            ValueTree& source)
+                                                            const ValueTree& source)
 {
-    String srcVal = source[Ids::value].toString();
+    const String& srcVal = source[Ids::value].toString();
     StringArray srcArray;
     srcArray.addTokens(srcVal, "*", "\"");
     for (const String& src : srcArray)
@@ -561,11 +561,12 @@ bool ObjectsHelper::containsStringInValueTree(const ValueTree& valTree,
 const Array<Identifier>& ObjectsHelper::getResonatorParamsIds()
 {
     static const Identifier resonatorParamIdsArr[] = {
-        Ids::resonatorsFreq,
-        Ids::resonatorsDecay,
-        Ids::resonatorsEqMass
+        Ids::resonatorsFreq, Ids::resonatorsDecay, Ids::resonatorsEqMass
     };
-    static const Array<Identifier> resonatorParamIds(resonatorParamIdsArr, 3);
+    static const int numAllResParams =
+        sizeof(resonatorParamIdsArr)/sizeof(resonatorParamIdsArr[0]);
+    static const Array<Identifier> resonatorParamIds(resonatorParamIdsArr,
+                                                     numAllResParams);
     return resonatorParamIds;
 }
 
@@ -574,22 +575,13 @@ const Array<Identifier>& ObjectsHelper::getResonatorParamsIds()
 const Array<Identifier>& ObjectsHelper::getAllObjectIds()
 {
     static const Identifier allObjectIdsArr[] = {
-        Ids::mass,
-        Ids::ground,
-        Ids::port,
-        Ids::resonators,
-        Ids::link,
-        Ids::touch,
-        Ids::pluck,
-        Ids::pulsetouch,
-        Ids::faustcode,
-        Ids::audioout,
-        Ids::waveguide,
-        Ids::termination,
-        Ids::junction,
-        Ids::comment
+        Ids::mass, Ids::ground, Ids::port, Ids::resonators, Ids::link, Ids::touch,
+        Ids::pluck, Ids::pulsetouch, Ids::faustcode, Ids::audioout, Ids::waveguide,
+        Ids::termination, Ids::junction, Ids::comment
     };
-    static const Array<Identifier> allObjectIds(allObjectIdsArr, 14);
+    static const int numAllObjects =
+        sizeof(allObjectIdsArr)/sizeof(allObjectIdsArr[0]);
+    static const Array<Identifier> allObjectIds(allObjectIdsArr, numAllObjects);
     return allObjectIds;
 }
 
@@ -680,7 +672,7 @@ void ObjectsHelper::loadComponents(ObjController& objController,
         ValueTree objGroup = mdlRoot.getChildWithName(groupId);
         for (int i = 0; i < objGroup.getNumChildren(); ++i)
         {
-            ValueTree obj = objGroup.getChild(i);
+            const ValueTree obj = objGroup.getChild(i);
             const String& objName = obj[Ids::identifier].toString();
 
             if (idMgr.addId(obj.getType(), objName, nullptr))
