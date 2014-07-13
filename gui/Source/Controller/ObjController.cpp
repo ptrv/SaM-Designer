@@ -562,7 +562,7 @@ void ObjController::selectObjectsIfContainsText(const String& selectionText)
 
     auto fnSelectIfContainsText = [&](const ValueTree& data_, SelectableObject* const obj)
     {
-        if (ObjectsHelper::containsStringInValueTree(data_, selectionText, true))
+        if (ObjectsHelper::containsStringInValueTree(data_, selectionText))
         {
             sObjects.addToSelection(obj);
         }

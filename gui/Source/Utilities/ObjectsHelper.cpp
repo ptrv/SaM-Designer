@@ -531,43 +531,28 @@ const Identifier& ObjectsHelper::getObjectGroup(const Identifier& ident)
 
 //------------------------------------------------------------------------------
 
-bool ObjectsHelper::containsStringInValueTree(ValueTree valTree,
-                                              const String& searchStr,
-                                              bool isRoot)
+bool ObjectsHelper::containsStringInValueTree(const ValueTree& valTree,
+                                              const String& stringToSearch)
 {
-    if (isRoot)
+    for (int i = 0; i < valTree.getNumProperties(); ++i)
     {
-        for (int k = 0; k < valTree.getNumProperties(); ++k)
-        {
-            if (valTree.getProperty(valTree.getPropertyName(k)).toString().containsWholeWord(searchStr))
-            {
-                return true;
-            }
-        }
-    }
-    else
-    {
-        for (int k = 0; k < valTree.getParent().getNumChildren(); ++k)
-        {
-            ValueTree c = valTree.getParent().getChild(k);
-            for (int j = 0; j < c.getNumProperties(); ++j)
-            {
-                if (c.getProperty(c.getPropertyName(j)).toString().containsWholeWord(searchStr))
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    for (int i = 0; i < valTree.getNumChildren(); ++i)
-    {
-        ValueTree c = valTree.getChild(i);
-        if (containsStringInValueTree(c, searchStr, false))
+        const Identifier& propName = valTree.getPropertyName(i);
+        const String& propString = valTree.getProperty(propName).toString();
+        if (propString.containsWholeWord(stringToSearch))
         {
             return true;
         }
-
     }
+
+    for (int i = 0; i < valTree.getNumChildren(); ++i)
+    {
+        const ValueTree& child = valTree.getChild(i);
+        if (containsStringInValueTree(child, stringToSearch))
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 

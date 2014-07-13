@@ -66,9 +66,8 @@ public:
 
     static const Identifier& getObjectGroup(const Identifier& ident);
 
-    static bool containsStringInValueTree(ValueTree valTree,
-                                          const String& searchStr,
-                                          bool isRoot);
+    static bool containsStringInValueTree(const ValueTree& valTree,
+                                          const String& stringToSearch);
 
     static const Array<Identifier>& getResonatorParamsIds();
     static const Array<Identifier>& getAllObjectIds();
