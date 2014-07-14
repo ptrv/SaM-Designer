@@ -49,67 +49,61 @@ const char* SAMRegex::commentObject = "\\A\\s*#\\s*(comment)";
 
 String SAMRegex::getVertexLine()
 {
-    String vertexLine;
-    vertexLine << "\\A\\s*" << vertex << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    vertexLine << label << "\\s*;";
-//    vertexLine << pos << "\\s*$";
-    vertexLine << "(.*)$";
+    static const String vertexLine =
+        String::formatted(
+            "\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;(.*)$",
+            vertex, params, label);
     return vertexLine;
 }
 
 String SAMRegex::getLinkLine()
 {
-    String linkLine;
-    linkLine << "\\A\\s*" << link << "\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    linkLine << label << "\\s*,\\s*" << label << "\\s*,\\s*" << label;
-    linkLine << "\\s*;.*$";
+    static const String linkLine =
+        String::formatted(
+            "\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*;.*$",
+            link, params, label, label, label);
     return linkLine;
 }
 
 String SAMRegex::getAudioOutLine()
 {
-    String aoLine;
-    aoLine << "\\A\\s*(audioout)\\s*,\\s*" << label << "\\s*,";
-    aoLine << audioOutDetails << ";";
-//    aoLine << pos << "\\s*$";
-    aoLine << "(.*)$";
+    static const String aoLine =
+        String::formatted("\\A\\s*(audioout)\\s*,\\s*%s\\s*,%s;(.*)$",
+                          label, audioOutDetails);
     return aoLine;
 }
 
 String SAMRegex::getFaustLine()
 {
-    String faustLine;
-    //faustLine << "\\A\\s*(faustcode):\\s*" << faustCode << "\\s*;\\s*$";
-    faustLine << "\\A\\s*(faustcode):\\s*" << faustCode << "\\s*$";
+    static const String faustLine =
+        String::formatted("\\A\\s*(faustcode):\\s*%s\\s*$", faustCode);
     return faustLine;
 }
 
 String SAMRegex::getTerminationLine()
 {
-    String termLine;
-    termLine << "\\A\\s*(termination)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    termLine << label << "\\s*;";
-//    termLine << pos << "\\s*$";
-    termLine << "(.*)$";
+    static const String termLine =
+        String::formatted(
+            "\\A\\s*(termination)\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;(.*)$",
+            params, label);
     return termLine;
 }
 
 String SAMRegex::getJunctionLine()
 {
-    String junctLine;
-    junctLine << "\\A\\s*(junction)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    junctLine << label << "\\s*;";
-//    junctLine << pos << "\\s*$";
-    junctLine << "(.*)$";
+    static const String junctLine =
+        String::formatted(
+            "\\A\\s*(junction)\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;(.*)$",
+            params, label);
     return junctLine;
 }
 
 String SAMRegex::getWaveguideLine()
 {
-    String waveguideLine;
-    waveguideLine << "\\A\\s*(waveguide)\\(\\s*" << params << "\\s*\\)\\s*,\\s*";
-    waveguideLine << label << "\\s*,\\s*";
-    waveguideLine << label << "\\s*,\\s*" << label << "\\s*;.*$";
+    static const String waveguideLine =
+        String::formatted(
+            "\\A\\s*(waveguide)\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*;.*$",
+            params, label, label, label);
     return waveguideLine;
 }
 
@@ -127,11 +121,9 @@ String SAMRegex::getParamsLine(int numParams)
 
 String SAMRegex::getCommentObjectLine()
 {
-    String commentObjectLine;
-    commentObjectLine << "\\A\\s*##\\s*(comment)\\(\\s*([!-~\\s]*)";
-    commentObjectLine << "\\s*\\)\\s*,\\s*" << label << "\\s*;\\s*";
-//    commentObjectLine << pos << "\\s*$";
-    commentObjectLine << "(.*)$";
-
+    static const String commentObjectLine =
+        String::formatted(
+            "\\A\\s*##\\s*(comment)\\(\\s*([!-~\\s]*)\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
+            label);
     return commentObjectLine;
 }
