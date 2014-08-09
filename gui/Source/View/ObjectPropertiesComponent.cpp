@@ -33,8 +33,8 @@ using namespace synthamodeler;
 const String multipleSelectionText = TRANS("(multiple selected)");
 
 ObjectPropertiesComponent::ObjectPropertiesComponent(ObjController& objController_,
-                                                     Array<ValueTree> datas_,
-                                                     UndoManager* undoManager_)
+                                                     const Array<ValueTree>& datas_,
+                                                     UndoManager* const undoManager_)
 :
 objController(objController_),
 datas(datas_),
@@ -46,6 +46,8 @@ isEditing(false),
 nameExistAlertActive(false),
 canceledEditing(false)
 {
+    jassert(datas.size() != 0);
+
     laName = new Label("laName", "Identifier");
     teName = new TextEditor("teName");
     addAndMakeVisible(teName);
@@ -69,10 +71,12 @@ void ObjectPropertiesComponent::resized()
 void ObjectPropertiesComponent::textEditorTextChanged(TextEditor& editor)
 {
     dataChanged = true;
-    for (int i = 0; i < editors.size(); ++i)
+    for (TextEditor* const ed : editors)
     {
-        if(&editor == editors[i])
+        if (&editor == ed)
+        {
             editorsModified.set(&editor, true);
+        }
     }
 }
 
@@ -112,17 +116,15 @@ void ObjectPropertiesComponent::applyEditing()
         }
         if (writeOk)
         {
-            for (int i = 0; i < datas.size(); ++i)
+            for (const ValueTree& data : datas)
             {
-                ValueTree data = datas[i];
-
                 SAM_LOG("Change " + data.getType().toString() + " " +
                         data[Ids::identifier].toString());
             }
 
             // read values to refresh display and show fixed values when
             // Utils::fixParameterValueIfNeeded has been applied
-            if(! multipleEdit)
+            if (!multipleEdit)
                 readValues();
 
             dataChanged = false;
@@ -142,10 +144,8 @@ void ObjectPropertiesComponent::applyEditing()
 void ObjectPropertiesComponent::cancelEditing()
 {
     canceledEditing = true;
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
         SAM_LOG("Cancel change " + data.getType().toString() + " " +
                 data[Ids::identifier].toString());
     }
@@ -172,36 +172,32 @@ bool ObjectPropertiesComponent::writeIdentifier()
         }
 
         // Change names in connected objects
-        if(data.getType() == Ids::mass || data.getType() == Ids::port
-            || data.getType() == Ids::ground || data.getType() == Ids::resonators)
+        if (data.getType() == Ids::mass || data.getType() == Ids::port ||
+            data.getType() == Ids::ground || data.getType() == Ids::resonators)
         {
-            ObjectsHelper::changeObjectNameInLink(objController,
-                                                  oldName, newName, undoManager);
-            ObjectsHelper::changeObjectNameInAudioSources(objController,
-                                                          oldName, newName,
-                                                          undoManager);
+            ObjectsHelper::changeObjectNameInLink(
+                objController, oldName, newName, undoManager);
+            ObjectsHelper::changeObjectNameInAudioSources(
+                objController, oldName, newName, undoManager);
         }
-        else if(data.getType() == Ids::link || data.getType() == Ids::touch
-            || data.getType() == Ids::pluck || data.getType() == Ids::pulsetouch)
+        else if (data.getType() == Ids::link || data.getType() == Ids::touch ||
+                 data.getType() == Ids::pluck || data.getType() == Ids::pulsetouch)
         {
-            ObjectsHelper::changeObjectNameInAudioSources(objController,
-                                                          oldName, newName,
-                                                          undoManager);
+            ObjectsHelper::changeObjectNameInAudioSources(
+                objController, oldName, newName, undoManager);
         }
-        else if(data.getType() == Ids::junction)
+        else if (data.getType() == Ids::junction)
         {
-            ObjectsHelper::changeObjectNameInLink(objController,
-                                                  oldName, newName, undoManager);
+            ObjectsHelper::changeObjectNameInLink(
+                objController, oldName, newName, undoManager);
 
-            ObjectsHelper::changeObjectNameInAudioSources(objController,
-                                                          oldName, newName,
-                                                          undoManager);
+            ObjectsHelper::changeObjectNameInAudioSources(
+                objController, oldName, newName, undoManager);
         }
-        else if(data.getType() == Ids::termination)
+        else if (data.getType() == Ids::termination)
         {
-            ObjectsHelper::changeObjectNameInAudioSources(objController,
-                                                          oldName, newName,
-                                                          undoManager);
+            ObjectsHelper::changeObjectNameInAudioSources(
+                objController, oldName, newName, undoManager);
         }
 
         data.setProperty(Ids::identifier, newName, undoManager);
@@ -212,14 +208,15 @@ bool ObjectPropertiesComponent::writeIdentifier()
 
 void ObjectPropertiesComponent::readValues()
 {
-    if(multipleEdit)
+    if (multipleEdit)
     {
         teName->setReadOnly(true);
         teName->setTextToShowWhenEmpty(multipleSelectionText, Colours::darkgrey);
         teName->setText(String::empty, false);
         teName->setWantsKeyboardFocus(false);
 
-        propertiesWindow->setName(TRANS("Properties") + ": " + String(multipleSelectionText));
+        propertiesWindow->setName(
+            TRANS("Properties") + ": " + String(multipleSelectionText));
     }
     else
     {
@@ -228,33 +225,31 @@ void ObjectPropertiesComponent::readValues()
         teName->setText(datas[0][Ids::identifier].toString(), false);
         teName->setWantsKeyboardFocus(true);
 
-        if(datas[0].getType() == Ids::mass
-            || datas[0].getType() == Ids::port
-            || datas[0].getType() == Ids::resonators
-            || datas[0].getType() == Ids::ground
-            || datas[0].getType() == Ids::termination
-            || datas[0].getType() == Ids::junction
-            || datas[0].getType() == Ids::audioout
-            || datas[0].getType() == Ids::comment)
+        if (datas[0].getType() == Ids::mass ||
+            datas[0].getType() == Ids::port ||
+            datas[0].getType() == Ids::resonators ||
+            datas[0].getType() == Ids::ground ||
+            datas[0].getType() == Ids::termination ||
+            datas[0].getType() == Ids::junction ||
+            datas[0].getType() == Ids::audioout ||
+            datas[0].getType() == Ids::comment)
         {
-            propertiesWindow->setName(TRANS("Properties") + ": " + teName->getText() + " ("
-                                      + datas[0][Ids::posX].toString() + String(", ")
-                                      + datas[0][Ids::posY].toString() + ")");
+            propertiesWindow->setName(
+                TRANS("Properties") + ": " + teName->getText() + " ("
+                + datas[0][Ids::posX].toString() + String(", ")
+                + datas[0][Ids::posY].toString() + ")");
         }
         else
         {
-            propertiesWindow->setName(TRANS("Properties") + ": " + teName->getText());
+            propertiesWindow->setName(
+                TRANS("Properties") + ": " + teName->getText());
         }
     }
 }
 
 bool ObjectPropertiesComponent::writeValues()
 {
-    if (!multipleEdit && !writeIdentifier())
-    {
-        return false;
-    }
-    return true;
+    return multipleEdit || writeIdentifier();
 }
 
 TextEditor* ObjectPropertiesComponent::createEditor(const String& name,
@@ -266,7 +261,7 @@ TextEditor* ObjectPropertiesComponent::createEditor(const String& name,
     Label* la = new Label("la" + name, text);
 
     te->setReadOnly(isReadOnly);
-    if(isReadOnly)
+    if (isReadOnly)
     {
         te->setColour(TextEditor::textColourId, Colours::darkgrey);
         te->setWantsKeyboardFocus(false);
@@ -288,35 +283,30 @@ TextEditor* ObjectPropertiesComponent::createEditor(const String& name,
 void ObjectPropertiesComponent::readEditorsMultipleSelection(const Array<TextEditor*>& editors_,
                                                              const Colour c)
 {
-    for (int i = 0; i < editors_.size(); ++i)
+    for (TextEditor* const editor : editors_)
     {
-        TextEditor* editor = editors_[i];
         editor->setText(String::empty, false);
         editor->setTextToShowWhenEmpty(multipleSelectionText, c);
     }
-
 }
 
 void ObjectPropertiesComponent::readEditorsSingleSelection(const Array<TextEditor*>& editors_,
                                                            const StringArray& params,
                                                            const Colour c)
 {
-    for (int i = 0; i < editors_.size(); ++i)
+    int paramIndex = 0;
+    for (TextEditor* const editor : editors_)
     {
-        TextEditor* editor = editors_[i];
-
-        editor->setText(params[i], false);
+        editor->setText(params[paramIndex++], false);
         editor->setTextToShowWhenEmpty(String::empty, c);
     }
 }
 
-void ObjectPropertiesComponent::writeEditors(const Array<TextEditor*>& editors_,
-                                             ValueTree params_,
-                                             const bool fixValues)
+void ObjectPropertiesComponent::writeEditors(ValueTree params_, const bool fixValues)
 {
-    for (int i = 0; i < editors_.size(); ++i)
+    for (int i = 0; i < editors.size(); ++i)
     {
-        TextEditor* editor = editors_[i];
+        TextEditor* const editor = editors[i];
 
         if(! editorsModified[editor])
             continue;
@@ -334,17 +324,16 @@ void ObjectPropertiesComponent::writeEditors(const Array<TextEditor*>& editors_,
 
 void ObjectPropertiesComponent::resetEditorsModifiedState()
 {
-    for (int i = 0; i < editors.size(); ++i)
+    for (TextEditor* const editor : editors)
     {
-        editorsModified.set(editors[i], false);
+        editorsModified.set(editor, false);
     }
 }
 
-StringArray ObjectPropertiesComponent::getParamsStrings(const int numParams,
-                                                        const ValueTree params)
+StringArray ObjectPropertiesComponent::getParamsStrings(const ValueTree& params)
 {
     StringArray res;
-    for (int i = 0; i < numParams; ++i)
+    for (int i = 0; i < editors.size(); ++i)
     {
         res.add(params.getChild(i)[Ids::value].toString());
     }
@@ -352,8 +341,8 @@ StringArray ObjectPropertiesComponent::getParamsStrings(const int numParams,
 }
 
 MassPropertiesComponent::MassPropertiesComponent(ObjController& objController_,
-                                                 Array<ValueTree> datas_,
-                                                 UndoManager* undoManager_)
+                                                 const Array<ValueTree>& datas_,
+                                                 UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("Mass", "Mass (kg)", true));
@@ -385,7 +374,7 @@ void MassPropertiesComponent::readValues()
 
     ObjectPropertiesComponent::readValues();
 
-    if(multipleEdit)
+    if (multipleEdit)
     {
         readEditorsMultipleSelection(editors);
     }
@@ -393,8 +382,8 @@ void MassPropertiesComponent::readValues()
     {
         ValueTree data = datas[0];
 
-        StringArray params = getParamsStrings(editors.size(),
-                                              data.getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(
+            data.getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors, params);
     }
 }
@@ -406,22 +395,20 @@ bool MassPropertiesComponent::writeValues()
         return false;
     }
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-        
-        writeEditors(editors, paramsTree, true);
+        writeEditors(paramsTree, true);
     }
+
     resetEditorsModifiedState();
 
     return true;
 }
 
 PortPropertiesComponent::PortPropertiesComponent(ObjController& objController_,
-                                                 Array<ValueTree> datas_,
-                                                 UndoManager* undoManager_)
+                                                 const Array<ValueTree>& datas_,
+                                                 UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     readValues();
@@ -450,8 +437,8 @@ bool PortPropertiesComponent::writeValues()
 }
 
 ResonatorPropertiesComponent::ResonatorPropertiesComponent(ObjController& objController_,
-                                                           Array<ValueTree> datas_,
-                                                           UndoManager* undoManager_)
+                                                           const Array<ValueTree>& datas_,
+                                                           UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("Freq", "Frequency (Hz)", true));
@@ -512,21 +499,20 @@ bool ResonatorPropertiesComponent::writeValues()
         return false;
     }
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        for (int k = 0; k < editors.size(); ++k)
+        for (int i = 0; i < editors.size(); ++i)
         {
-            if (editorsModified[editors[k]])
+            TextEditor* const editor = editors[i];
+            if (editorsModified[editor])
             {
-                String val = editors[k]->getText();
+                String val = editor->getText();
                 StringArray vals;
                 vals.addTokens(val, ",", "\"");
 
-                ValueTree param = paramsTree.getChild(k);
+                ValueTree param = paramsTree.getChild(i);
                 param.removeAllChildren(undoManager);
                 for (int j = 0; j < vals.size(); ++j)
                 {
@@ -534,7 +520,7 @@ bool ResonatorPropertiesComponent::writeValues()
                     if(StoredSettings::getInstance()->getAutoCorrectValues())
                         pVal = ObjectsHelper::fixParameterValueIfNeeded(pVal);
 
-                    ValueTree pa(ObjectsHelper::getResonatorParamsIds()[k]);
+                    ValueTree pa(ObjectsHelper::getResonatorParamsIds()[i]);
                     pa.setProperty(Ids::value, pVal, undoManager);
                     param.addChild(pa, -1, undoManager);
                 }
@@ -547,8 +533,8 @@ bool ResonatorPropertiesComponent::writeValues()
 }
 
 GroundPropertiesComponent::GroundPropertiesComponent(ObjController& objController_,
-                                                     Array<ValueTree> datas_,
-                                                     UndoManager* undoManager_)
+                                                     const Array<ValueTree>& datas_,
+                                                     UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("Pos", "Position (m)", true));
@@ -580,22 +566,21 @@ void GroundPropertiesComponent::readValues()
     }
     else
     {
-        StringArray params = getParamsStrings(editors.size(),
-                                              datas[0].getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(
+            datas[0].getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors,params);
     }
 }
 
 bool GroundPropertiesComponent::writeValues()
 {
-    if(! ObjectPropertiesComponent::writeValues())
+    if (!ObjectPropertiesComponent::writeValues())
         return false;
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        if(editorsModified[editors[0]])
+        if (editorsModified[editors[0]])
         {
-            ValueTree data = datas[i];
             ValueTree paramsTree = data.getChildWithName(Ids::parameters);
             ValueTree param = paramsTree.getChild(0);
             param.setProperty(Ids::value, editors[0]->getText(), undoManager);
@@ -607,19 +592,19 @@ bool GroundPropertiesComponent::writeValues()
 }
 
 LinkPropertiesComponent::LinkPropertiesComponent(ObjController& objController_,
-                                                 Array<ValueTree> datas_,
-                                                 UndoManager* undoManager_)
+                                                 const Array<ValueTree>& datas_,
+                                                 UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("Stiff", "Stiffness (N/m)", true));
     editors.add(createEditor("Damp", "Damping (N/(m/s))", true));
-    if(datas[0].getType() == Ids::pluck)
+    if (datas[0].getType() == Ids::pluck)
     {
         editors.add(createEditor("MinDisplace", "Minimum displace diff", true));
 //        editors.add(createRow("Pos", "Position offset (m)", true));
     }
     editors.add(createEditor("Pos", "Position offset (m)", true));
-    if(datas[0].getType() == Ids::pulsetouch)
+    if (datas[0].getType() == Ids::pulsetouch)
     {
 //        editors.add(createRow("Pos", "Position offset (m)", true));
         editors.add(createEditor("PulseMult", "Pulse multiplier", true));
@@ -629,7 +614,7 @@ LinkPropertiesComponent::LinkPropertiesComponent(ObjController& objController_,
 
     vertices.add(createEditor("StartVertex", "Start vertex", false, true));
     vertices.add(createEditor("EndVertex", "End vertex", false, true));
-    
+
     readValues();
 }
 
@@ -678,8 +663,8 @@ void LinkPropertiesComponent::readValues()
     {
         ValueTree data = datas[0];
 
-        StringArray params = getParamsStrings(editors.size(),
-                                              data.getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(
+            data.getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors, params);
 
         StringArray vertexVals;
@@ -691,16 +676,13 @@ void LinkPropertiesComponent::readValues()
 
 bool LinkPropertiesComponent::writeValues()
 {
-    if(! ObjectPropertiesComponent::writeValues())
+    if (!ObjectPropertiesComponent::writeValues())
         return false;
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-
-        writeEditors(editors, paramsTree, true);
+        writeEditors(paramsTree, true);
     }
     resetEditorsModifiedState();
 
@@ -708,8 +690,8 @@ bool LinkPropertiesComponent::writeValues()
 }
 
 AudiooutPropertiesComponent::AudiooutPropertiesComponent(ObjController& objController_,
-                                                         Array<ValueTree> datas_,
-                                                         UndoManager* undoManager_)
+                                                         const Array<ValueTree>& datas_,
+                                                         UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("Source", "Source", true, true));
@@ -776,13 +758,12 @@ bool AudiooutPropertiesComponent::writeValues()
         return false;
     }
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
-        if(editorsModified[editors[0]])
+        TextEditor* editor = editors[0];
+        if (editorsModified[editor])
         {
-            String sourceText = editors[0]->getText();
+            String sourceText = editor->getText();
             StringArray sourcesList;
             sourcesList.addTokens(sourceText, "+", "\"");
             ValueTree sourcesTree = data.getChildWithName(Ids::sources);
@@ -794,19 +775,20 @@ bool AudiooutPropertiesComponent::writeValues()
                 sourcesTree.addChild(source, -1, undoManager);
             }
         }
-        if(editorsModified[editors[1]])
+        editor = editors[1];
+        if (editorsModified[editor])
         {
-            data.setProperty(Ids::optional, editors[1]->getText(), undoManager);
+            data.setProperty(Ids::optional, editor->getText(), undoManager);
         }
     }
     resetEditorsModifiedState();
-    
+
     return true;
 }
 
 WaveguidePropertiesComponent::WaveguidePropertiesComponent(ObjController& objController_,
-                                                           Array<ValueTree> datas_,
-                                                           UndoManager* undoManager_)
+                                                           const Array<ValueTree>& datas_,
+                                                           UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("WaveImp", "Wave impedance (N/(m/s))", true));
@@ -839,7 +821,7 @@ void WaveguidePropertiesComponent::readValues()
 
     ObjectPropertiesComponent::readValues();
 
-    if(multipleEdit)
+    if (multipleEdit)
     {
         readEditorsMultipleSelection(editors);
         readEditorsMultipleSelection(vertices, Colours::darkgrey);
@@ -848,8 +830,8 @@ void WaveguidePropertiesComponent::readValues()
     {
         ValueTree data = datas[0];
 
-        StringArray params = getParamsStrings(editors.size(),
-                                              data.getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(
+            data.getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors, params);
 
         StringArray vertexVals;
@@ -864,12 +846,11 @@ bool WaveguidePropertiesComponent::writeValues()
     if(! ObjectPropertiesComponent::writeValues())
         return false;
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
 
-        if(editorsModified[editors[0]])
+        if (editorsModified[editors[0]])
         {
             String val = editors[0]->getText();
             if(StoredSettings::getInstance()->getAutoCorrectValues())
@@ -891,8 +872,8 @@ bool WaveguidePropertiesComponent::writeValues()
 }
 
 TerminationPropertiesComponent::TerminationPropertiesComponent(ObjController& objController_,
-                                                               Array<ValueTree> datas_,
-                                                               UndoManager* undoManager_)
+                                                               const Array<ValueTree>& datas_,
+                                                               UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("TermType", "Type", true));
@@ -918,30 +899,27 @@ void TerminationPropertiesComponent::readValues()
 
     ObjectPropertiesComponent::readValues();
 
-    if(multipleEdit)
+    if (multipleEdit)
     {
         readEditorsMultipleSelection(editors);
     }
     else
     {
-        StringArray params = getParamsStrings(editors.size(),
-                                              datas[0].getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(
+            datas[0].getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors, params);
     }
 }
 
 bool TerminationPropertiesComponent::writeValues()
 {
-    if(! ObjectPropertiesComponent::writeValues())
+    if (!ObjectPropertiesComponent::writeValues())
         return false;
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-
-        writeEditors(editors, paramsTree, false);
+        writeEditors(paramsTree, false);
     }
     resetEditorsModifiedState();
 
@@ -949,8 +927,8 @@ bool TerminationPropertiesComponent::writeValues()
 }
 
 JunctionPropertiesComponent::JunctionPropertiesComponent(ObjController& objController_,
-                                                         Array<ValueTree> datas_,
-                                                         UndoManager* undoManager_)
+                                                         const Array<ValueTree>& datas_,
+                                                         UndoManager* const undoManager_)
 : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
     editors.add(createEditor("Pos", "Displacement (m)", true));
@@ -978,14 +956,14 @@ void JunctionPropertiesComponent::readValues()
 
     ObjectPropertiesComponent::readValues();
 
-    if(multipleEdit)
+    if (multipleEdit)
     {
         readEditorsMultipleSelection(editors);
     }
     else
     {
-        StringArray params = getParamsStrings(editors.size(),
-                                              datas[0].getChildWithName(Ids::parameters));
+        StringArray params = getParamsStrings(
+            datas[0].getChildWithName(Ids::parameters));
         readEditorsSingleSelection(editors, params);
     }
 }
@@ -997,13 +975,10 @@ bool JunctionPropertiesComponent::writeValues()
         return false;
     }
 
-    for (int i = 0; i < datas.size(); ++i)
+    for (const ValueTree& data : datas)
     {
-        ValueTree data = datas[i];
-
         ValueTree paramsTree = data.getChildWithName(Ids::parameters);
-
-        writeEditors(editors, paramsTree, false);
+        writeEditors(paramsTree, false);
     }
     resetEditorsModifiedState();
 
@@ -1011,8 +986,8 @@ bool JunctionPropertiesComponent::writeValues()
 }
 
 GainComponent::GainComponent(const StringArray& sourceIds_,
-                             Array<ValueTree> datas_,
-                             UndoManager* undoManager_)
+                             const Array<ValueTree>& datas_,
+                             UndoManager* const undoManager_)
 :
 laGain(nullptr),
 teGain(nullptr),
@@ -1021,9 +996,11 @@ datas(datas_),
 undoManager(undoManager_),
 dataChanged(false)
 {
+    jassert(datas.size() > 0);
+
     teGain = new TextEditor("teGain");
     laGain = new Label("laGain", "Gain");
-    
+
     teGain->setText("", false);
     teGain->addListener(this);
     addAndMakeVisible(teGain);
