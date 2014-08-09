@@ -426,6 +426,40 @@ void StoredSettings::setLastOpenDirectory(const File& lastOpenDir)
     props->setValue("lastOpenDirectory", lastOpenDir.getFullPathName());
 }
 
+void StoredSettings::initExporters()
+{
+    if(getExporters().getAllProperties().size() == 0)
+    {
+        XmlDocument xml(String::createStringFromData(BinaryData::default_exporters_xml,
+                                                     BinaryData::default_exporters_xmlSize));
+        ScopedPointer<XmlElement> elem(xml.getDocumentElement());
+        for (int i = 0; i < elem->getNumChildElements(); ++i)
+        {
+            XmlElement* c = elem->getChildElement(i);
+            getExporters().setValue(c->getStringAttribute("name"), c->getStringAttribute("val"));
+
+        }
+        String currentExporter = getExporters().getAllProperties().getAllKeys()[0];
+        setCurrentExporter(currentExporter);
+    }
+}
+
+void StoredSettings::initDefaultPropertiesFile()
+{
+    XmlDocument defaultValuesXml(String::createStringFromData(BinaryData::default_values_xml,
+                                                              BinaryData::default_values_xmlSize));
+    ScopedPointer<XmlElement> elem(defaultValuesXml.getDocumentElement());
+
+    if (getDefaultValues().getAllProperties().size() != elem->getNumChildElements())
+    {
+        for (int i = 0; i < elem->getNumChildElements(); ++i)
+        {
+            XmlElement* c = elem->getChildElement(i);
+            getDefaultValues().setValue(c->getStringAttribute("name"), c->getStringAttribute("val"));
+        }
+    }
+}
+
 File StoredSettings::getDirectory(const String& dirPath) const
 {
     File aDir = dirPath;

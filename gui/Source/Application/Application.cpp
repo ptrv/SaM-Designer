@@ -131,40 +131,12 @@ void SAMApplication::initialise (const String& commandLine)
 		for (int i = 0; i < mdlsArr.size(); ++ i)
 			openFile (mdlsArr.getReference(i));
 	}
-    // get all exporters
-    if(StoredSettings::getInstance()->getExporters().getAllProperties().size() == 0)
-    {
-        XmlDocument xml(String::createStringFromData(BinaryData::default_exporters_xml,
-                                                     BinaryData::default_exporters_xmlSize));
-        ScopedPointer<XmlElement> elem(xml.getDocumentElement());
-        for (int i = 0; i < elem->getNumChildElements(); ++i)
-        {
-            XmlElement* c = elem->getChildElement(i);
-            StoredSettings::getInstance()->getExporters().setValue(c->getStringAttribute("name"),
-                                                                   c->getStringAttribute("val"));
 
-        }
-        elem = nullptr;
-        String currentExporter = StoredSettings::getInstance()->getExporters().getAllProperties().getAllKeys()[0];
-        StoredSettings::getInstance()->setCurrentExporter(currentExporter);
-    }
+    // get all exporters
+    StoredSettings::getInstance()->initExporters();
 
     // create default values properties file if not present
-    XmlDocument defaultValuesXml(String::createStringFromData(BinaryData::default_values_xml,
-                                                              BinaryData::default_values_xmlSize));
-    ScopedPointer<XmlElement> elem(defaultValuesXml.getDocumentElement());
-
-    if(StoredSettings::getInstance()->getDefaultValues().getAllProperties().size()
-        != elem->getNumChildElements())
-    {
-        for (int i = 0; i < elem->getNumChildElements(); ++i)
-        {
-            XmlElement* c = elem->getChildElement(i);
-            StoredSettings::getInstance()->getDefaultValues().setValue(c->getStringAttribute("name"),
-                                                                       c->getStringAttribute("val"));
-        }
-    }
-    elem = nullptr;
+    StoredSettings::getInstance()->initDefaultPropertiesFile();
 
     if (mainWindows.size() == 0)
         createNewMainWindow()->makeVisible();

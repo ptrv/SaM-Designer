@@ -125,6 +125,9 @@ public:
     void setLastOpenDirectory(const File& lastOpenDir);
     const File getLastOpenDirectory() const;
 
+    void initExporters();
+    void initDefaultPropertiesFile();
+
 private:
 
     File getDirectory(const String& dirPath) const;
