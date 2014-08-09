@@ -78,6 +78,9 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
 AudioOutConnector::~AudioOutConnector()
 {
     owner.getSelectedObjects().removeChangeListener(this);
+
+    audioOutComp->removeChangeListener(this);
+
     if (objectComp)
     {
         objectComp->removeChangeListener(this);
