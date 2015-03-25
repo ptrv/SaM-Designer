@@ -72,8 +72,10 @@ public:
     void valueTreeChildAdded(ValueTree& parentTree,
                              ValueTree& childWhichHasBeenAdded);
     void valueTreeChildRemoved(ValueTree& parentTree,
-                               ValueTree& childWhichHasBeenRemoved);
-    void valueTreeChildOrderChanged(ValueTree& parentTreeWhoseChildrenHaveMoved);
+                               ValueTree& childWhichHasBeenRemoved,
+                               int indexFromWhichChildWasRemoved);
+    void valueTreeChildOrderChanged(ValueTree& parentTree,
+                                    int oldIndex, int newIndex);
     void valueTreeParentChanged(ValueTree& treeWhoseParentHasChanged);
 
     void setOldPos(const Point<int>& p) { oldPos = p; }

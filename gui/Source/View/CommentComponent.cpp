@@ -306,12 +306,15 @@ void CommentComponent::valueTreeChildAdded(ValueTree& /*parentTree*/,
 {
 
 }
-void CommentComponent::valueTreeChildRemoved(ValueTree& /*parentTree*/,
-                                             ValueTree& /*childWhichHasBeenRemoved*/)
+void CommentComponent::valueTreeChildRemoved (ValueTree& /*parentTree*/,
+                                              ValueTree& /*childWhichHasBeenRemoved*/,
+                                              int /*indexFromWhichChildWasRemoved*/)
 {
 
 }
-void CommentComponent::valueTreeChildOrderChanged(ValueTree& /*parentTreeWhoseChildrenHaveMoved*/)
+
+void CommentComponent::valueTreeChildOrderChanged (ValueTree& /*parentTree*/,
+                                                   int /*oldIndex*/, int /*newIndex*/)
 {
 
 }

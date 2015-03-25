@@ -29,11 +29,13 @@
  using namespace juce;
 #endif
 
+#if ! JUCE_DONT_DECLARE_PROJECTINFO
 namespace ProjectInfo
 {
     const char* const  projectName    = "Synth-A-Modeler-Designer";
     const char* const  versionString  = "0.4.0dev";
     const int          versionNumber  = 0x400;
 }
+#endif
 
 #endif   // __APPHEADERFILE_VKFX9M__

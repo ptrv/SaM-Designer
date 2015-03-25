@@ -51,8 +51,8 @@ public:
 
     void valueTreePropertyChanged (ValueTree& tree, const Identifier& property);
     void valueTreeChildAdded (ValueTree& parentTree, ValueTree& childWhichHasBeenAdded);
-    void valueTreeChildRemoved (ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved);
-    void valueTreeChildOrderChanged (ValueTree& parentTree);
+    void valueTreeChildRemoved(ValueTree& parentTree, ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved);
+    void valueTreeChildOrderChanged(ValueTree& parentTree, int oldIndex, int newIndex);
     void valueTreeParentChanged (ValueTree& tree);
 
     void setCurrentActiveWindow(MainAppWindow& maw);

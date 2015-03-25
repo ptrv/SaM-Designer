@@ -262,12 +262,12 @@ void MDLFile::valueTreeChildAdded (ValueTree& /*parentTree*/, ValueTree& /*child
 	mdlChanged();
 }
 
-void MDLFile::valueTreeChildRemoved (ValueTree& /*parentTree*/, ValueTree& /*childWhichHasBeenRemoved*/)
+void MDLFile::valueTreeChildRemoved (ValueTree& /*parentTree*/, ValueTree& /*childWhichHasBeenRemoved*/, int /*indexFromWhichChildWasRemoved*/)
 {
 	mdlChanged();
 }
 
-void MDLFile::valueTreeChildOrderChanged (ValueTree& /*parentTree*/)
+void MDLFile::valueTreeChildOrderChanged (ValueTree& /*parentTree*/, int /*oldIndex*/, int /*newIndex*/)
 {
 	mdlChanged();
 }

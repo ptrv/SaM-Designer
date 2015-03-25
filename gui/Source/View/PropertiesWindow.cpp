@@ -362,12 +362,14 @@ void PropertiesWindow::valueTreeChildAdded (ValueTree& /*parentTree*/,
 }
 
 void PropertiesWindow::valueTreeChildRemoved (ValueTree& /*parentTree*/,
-                                              ValueTree& /*childWhichHasBeenRemoved*/)
+                                              ValueTree& /*childWhichHasBeenRemoved*/,
+                                              int /*indexFromWhichChildWasRemoved*/)
 {
 	mdlChanged();
 }
 
-void PropertiesWindow::valueTreeChildOrderChanged (ValueTree& /*parentTree*/)
+void PropertiesWindow::valueTreeChildOrderChanged (ValueTree& /*parentTree*/,
+                                                   int /*oldIndex*/, int /*newIndex*/)
 {
 	mdlChanged();
 }

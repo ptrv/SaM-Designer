@@ -18,12 +18,11 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing -std=c++11
+  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
+  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
-  LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
+
   TARGET := Synth-A-Modeler-Designer
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
@@ -39,12 +38,11 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing -std=c++11
+  CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
+  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
-  LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
+
   TARGET := Synth-A-Modeler-Designer
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
   CLEANCMD = rm -rf $(OUTDIR)/$(TARGET) $(OBJDIR)
@@ -112,7 +110,7 @@ OBJECTS := \
 
 .PHONY: clean
 
-$(OUTDIR)/$(TARGET): $(OBJECTS) $(LDDEPS) $(RESOURCES)
+$(OUTDIR)/$(TARGET): $(OBJECTS) $(RESOURCES)
 	@echo Linking Synth-A-Modeler-Designer
 	-@mkdir -p $(BINDIR)
 	-@mkdir -p $(LIBDIR)
