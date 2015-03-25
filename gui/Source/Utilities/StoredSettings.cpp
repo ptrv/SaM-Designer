@@ -468,3 +468,13 @@ File StoredSettings::getDirectory(const String& dirPath) const
         ? aDir
         : File::nonexistent;
 }
+
+bool StoredSettings::getReopenLastModelsOnStartup() const
+{
+    return props->getBoolValue("reopenLastModels", false);
+}
+
+void StoredSettings::setReopenLastModelsOnStartup(bool reopenLastModels)
+{
+    props->setValue("reopenLastModels", reopenLastModels);
+}

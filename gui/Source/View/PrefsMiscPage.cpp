@@ -7,7 +7,7 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Introjucer version: 3.1.0
+  Created with Introjucer version: 3.1.1
 
   ------------------------------------------------------------------------------
 
@@ -30,10 +30,13 @@ using namespace synthamodeler;
 
 //==============================================================================
 MiscPage::MiscPage ()
-    : Component ("MiscPage")
 {
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
+    setName ("MiscPage");
     addAndMakeVisible (laDatDir = new Label ("laDatDir",
-                                             "Data Directory"));
+                                             TRANS("Data Directory")));
     laDatDir->setFont (Font (15.00f, Font::plain));
     laDatDir->setJustificationType (Justification::centredLeft);
     laDatDir->setEditable (false, false, false);
@@ -47,7 +50,7 @@ MiscPage::MiscPage ()
     fcDataDir->setName ("fcDataDir");
 
     addAndMakeVisible (laFaustDir = new Label ("laFaustDir",
-                                               "FAUST Directory"));
+                                               TRANS("FAUST Directory")));
     laFaustDir->setFont (Font (15.00f, Font::plain));
     laFaustDir->setJustificationType (Justification::centredLeft);
     laFaustDir->setEditable (false, false, false);
@@ -62,7 +65,7 @@ MiscPage::MiscPage ()
     fcFaustDir->setName ("fcFaustDir");
 
     addAndMakeVisible (laExternalEditor = new Label ("laExternalEditor",
-                                                     "External Editor"));
+                                                     TRANS("External Editor")));
     laExternalEditor->setFont (Font (15.00f, Font::plain));
     laExternalEditor->setJustificationType (Justification::centredLeft);
     laExternalEditor->setEditable (false, false, false);
@@ -76,28 +79,32 @@ MiscPage::MiscPage ()
     fcExternalEditor->setName ("fcExternalEditor");
 
     addAndMakeVisible (tbAutoCorrect = new ToggleButton ("tbAutoCorrect"));
-    tbAutoCorrect->setButtonText ("Autocorrect parameter values");
+    tbAutoCorrect->setButtonText (TRANS("Autocorrect parameter values"));
     tbAutoCorrect->addListener (this);
 
     addAndMakeVisible (tbRunSAMBeforeExternal = new ToggleButton ("tbRunSAMBeforeExternal"));
-    tbRunSAMBeforeExternal->setButtonText ("Compile before generating binary");
+    tbRunSAMBeforeExternal->setButtonText (TRANS("Compile before generating binary"));
     tbRunSAMBeforeExternal->addListener (this);
 
     addAndMakeVisible (tbConfirmBeforeGeneration = new ToggleButton ("tbConfirmBeforeGeneration"));
-    tbConfirmBeforeGeneration->setButtonText ("Confirm before generating code");
+    tbConfirmBeforeGeneration->setButtonText (TRANS("Confirm before generating code"));
     tbConfirmBeforeGeneration->addListener (this);
 
     addAndMakeVisible (tbUseMDLX = new ToggleButton ("tbUseMDLX"));
-    tbUseMDLX->setButtonText ("Use MDLX format");
+    tbUseMDLX->setButtonText (TRANS("Use MDLX format"));
     tbUseMDLX->addListener (this);
 
     addAndMakeVisible (tbLogging = new ToggleButton ("tbLogging"));
-    tbLogging->setButtonText ("Logging (After change, restart required)");
+    tbLogging->setButtonText (TRANS("Logging (After change, restart required)"));
     tbLogging->addListener (this);
 
     addAndMakeVisible (tbRedrawWhenNoPos = new ToggleButton ("tbRedrawWhenNoPos"));
-    tbRedrawWhenNoPos->setButtonText ("Redraw model when no position data present");
+    tbRedrawWhenNoPos->setButtonText (TRANS("Redraw model when no position data present"));
     tbRedrawWhenNoPos->addListener (this);
+
+    addAndMakeVisible (tbReopenLastModels = new ToggleButton ("tbReopenLastModels"));
+    tbReopenLastModels->setButtonText (TRANS("Reopen last models on startup"));
+    tbReopenLastModels->addListener (this);
 
 
     //[UserPreSize]
@@ -132,6 +139,7 @@ MiscPage::~MiscPage()
     tbUseMDLX = nullptr;
     tbLogging = nullptr;
     tbRedrawWhenNoPos = nullptr;
+    tbReopenLastModels = nullptr;
 
 
     //[Destructor]. You can add your own custom destruction code here..
@@ -152,6 +160,9 @@ void MiscPage::paint (Graphics& g)
 
 void MiscPage::resized()
 {
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     laDatDir->setBounds (8, 8, 150, 24);
     fcDataDir->setBounds (8, 32, getWidth() - 16, 24);
     laFaustDir->setBounds (8, 64, 150, 24);
@@ -164,6 +175,7 @@ void MiscPage::resized()
     tbUseMDLX->setBounds (8, 288, getWidth() - 16, 24);
     tbLogging->setBounds (8, 320, getWidth() - 16, 24);
     tbRedrawWhenNoPos->setBounds (8, 352, getWidth() - 16, 24);
+    tbReopenLastModels->setBounds (8, 384, getWidth() - 16, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
 }
@@ -208,6 +220,12 @@ void MiscPage::buttonClicked (Button* buttonThatWasClicked)
         //[UserButtonCode_tbRedrawWhenNoPos] -- add your button handler code here..
         StoredSettings::getInstance()->setShouldRedrawOnLoad(tbRedrawWhenNoPos->getToggleState());
         //[/UserButtonCode_tbRedrawWhenNoPos]
+    }
+    else if (buttonThatWasClicked == tbReopenLastModels)
+    {
+        //[UserButtonCode_tbReopenLastModels] -- add your button handler code here..
+        StoredSettings::getInstance()->setReopenLastModelsOnStartup(tbReopenLastModels->getToggleState());
+        //[/UserButtonCode_tbReopenLastModels]
     }
 
     //[UserbuttonClicked_Post]
@@ -254,6 +272,8 @@ void MiscPage::readValues()
                               dontSendNotification);
     tbRedrawWhenNoPos->setToggleState(StoredSettings::getInstance()->getShouldRedrawOnLoad(),
                                       dontSendNotification);
+    tbReopenLastModels->setToggleState(StoredSettings::getInstance()->getReopenLastModelsOnStartup(),
+                                       dontSendNotification);
 }
 //[/MiscUserCode]
 
@@ -270,7 +290,7 @@ BEGIN_JUCER_METADATA
 <JUCER_COMPONENT documentType="Component" className="MiscPage" componentName="MiscPage"
                  parentClasses="public Component, public FilenameComponentListener"
                  constructorParams="" variableInitialisers="" snapPixels="8" snapActive="1"
-                 snapShown="1" overlayOpacity="0.33" fixedSize="0" initialWidth="600"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="600"
                  initialHeight="400">
   <BACKGROUND backgroundColour="ffffffff"/>
   <LABEL name="laDatDir" id="484351012dae21b6" memberName="laDatDir" virtualName=""
@@ -314,6 +334,9 @@ BEGIN_JUCER_METADATA
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
   <TOGGLEBUTTON name="tbRedrawWhenNoPos" id="580755024d1dbf83" memberName="tbRedrawWhenNoPos"
                 virtualName="" explicitFocusOrder="0" pos="8 352 16M 24" buttonText="Redraw model when no position data present"
+                connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
+  <TOGGLEBUTTON name="tbReopenLastModels" id="20d6f6a51d2af72e" memberName="tbReopenLastModels"
+                virtualName="" explicitFocusOrder="0" pos="8 384 16M 24" buttonText="Reopen last models on startup"
                 connectedEdges="0" needsCallback="1" radioGroupId="0" state="0"/>
 </JUCER_COMPONENT>
 

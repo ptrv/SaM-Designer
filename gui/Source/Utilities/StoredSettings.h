@@ -128,6 +128,9 @@ public:
     void initExporters();
     void initDefaultPropertiesFile();
 
+    bool getReopenLastModelsOnStartup() const;
+    void setReopenLastModelsOnStartup(bool reopenLastModels);
+
 private:
 
     File getDirectory(const String& dirPath) const;

@@ -115,22 +115,15 @@ void SAMApplication::initialise (const String& commandLine)
 
     propertiesWindow = new PropertiesWindow();
 
-    Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
+    if (StoredSettings::getInstance()->getReopenLastModelsOnStartup())
+    {
+        Array<File> mdls (StoredSettings::getInstance()->getLastFiles());
 
-    for (int i = 0; i < mdls.size(); ++ i)
-        openFile (mdls.getReference(i));
-
-	if (commandLine.trim().isNotEmpty() && ! commandLine.trim().startsWithChar ('-'))
-	{
-		 DBG(commandLine);
-		 anotherInstanceStarted (commandLine);
-	}
-	else
-	{
-		Array<File> mdlsArr (StoredSettings::getInstance()->getLastFiles());
-		for (int i = 0; i < mdlsArr.size(); ++ i)
-			openFile (mdlsArr.getReference(i));
-	}
+        for (int i = 0; i < mdls.size(); ++ i)
+        {
+            openFile (mdls.getReference(i));
+        }
+    }
 
     // get all exporters
     StoredSettings::getInstance()->initExporters();
