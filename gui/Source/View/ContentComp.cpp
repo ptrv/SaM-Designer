@@ -89,8 +89,12 @@ public:
         if (e.mods.isCtrlDown() || e.mods.isAltDown())
         {
             const double factor = (wheel.deltaY > 0) ? 2.0 : 0.5;
+            const double newZoom = panel->getZoom() * factor;
 
-            panel->setZoom(panel->getZoom() * factor, wheel.deltaX, wheel.deltaY);
+            if (newZoom > 0.125)
+            {
+                panel->setZoom(newZoom, wheel.deltaX, wheel.deltaY);
+            }
         }
         else
         {
