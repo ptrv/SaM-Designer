@@ -514,6 +514,11 @@ bool ResonatorPropertiesComponent::writeValues()
 
                 ValueTree param = paramsTree.getChild(i);
                 param.removeAllChildren(undoManager);
+                if (vals.size() == 0)
+                {
+                    vals.add("0.0");
+                }
+
                 for (int j = 0; j < vals.size(); ++j)
                 {
                     String pVal = vals[j];
