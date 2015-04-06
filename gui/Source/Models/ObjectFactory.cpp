@@ -380,20 +380,19 @@ ValueTree ObjectFactory::createAudioSourceTree(const String& srcName,
 
 ValueTree ObjectFactory::createResonatorParamsTree(StringArray p)
 {
+    jassert(p.size() == 3);
 
     ValueTree paramsTree(Ids::parameters);
 
-    if (p.size() != 3)
+    for (int i = 0; i < 3; ++i)
     {
-        for (int i = 0; i < 3; ++i)
-        {
-            ValueTree value(Ids::parameter);
-            ValueTree subval(ObjectsHelper::getResonatorParamsIds()[i]);
-            subval.setProperty(Ids::value, p[i].trim(), nullptr);
-            value.addChild(subval, -1, nullptr);
-            paramsTree.addChild(value, -1, nullptr);
-        }
+        ValueTree value(Ids::parameter);
+        ValueTree subval(ObjectsHelper::getResonatorParamsIds()[i]);
+        subval.setProperty(Ids::value, p[i].trim(), nullptr);
+        value.addChild(subval, -1, nullptr);
+        paramsTree.addChild(value, -1, nullptr);
     }
+
     return paramsTree;
 }
 
