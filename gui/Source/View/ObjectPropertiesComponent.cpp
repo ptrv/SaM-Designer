@@ -156,7 +156,7 @@ bool ObjectPropertiesComponent::writeIdentifier()
     ValueTree data = datas[0];
     String newName = teName->getText();
     String oldName = data[Ids::identifier];
-    if (newName != oldName)
+    if (newName != oldName && newName.isNotEmpty())
     {
         if (objController.checkIfIdExists(data.getType(), newName))
         {
