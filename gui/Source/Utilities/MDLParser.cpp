@@ -133,24 +133,30 @@ bool MDLParser::parseMDL(const File& f)
                     reResStr << "\\s*" << SAMRegex::paramsDetailRes << "\\s*[,]*";
                     RegularExpression reRes(reResStr);
                     reRes.findAndConsume(params, paramsArray);
-                    if(paramsArray.size() % 3 == 0)
+                    static const int NUM_RES_PARAMS = 3;
+                    if(paramsArray.size() % NUM_RES_PARAMS == 0)
                     {
                         ValueTree paramsTree(Ids::parameters);
                         Array<ValueTree> valuesArr;
-                        valuesArr.add(ValueTree(Ids::parameter));
-                        valuesArr.add(ValueTree(Ids::parameter));
-                        valuesArr.add(ValueTree(Ids::parameter));
+                        for (int np = 0; np < NUM_RES_PARAMS; ++np)
+                        {
+                            valuesArr.add(ValueTree(Ids::parameter));
+                        }
 
                         for (int n = 0; n < paramsArray.size(); ++n)
                         {
-                            ValueTree subVal(ObjectsHelper::getResonatorParamsIds()[n % 3]);
+                            const int paramIdx = n % NUM_RES_PARAMS;
+                            ValueTree subVal(ObjectsHelper::getResonatorParamsIds()[paramIdx]);
                             subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
 
-                            valuesArr[n % 3].addChild(subVal, -1, nullptr);
+                            valuesArr[paramIdx].addChild(subVal, -1, nullptr);
                         }
-                        paramsTree.addChild(valuesArr[0], -1, nullptr);
-                        paramsTree.addChild(valuesArr[1], -1, nullptr);
-                        paramsTree.addChild(valuesArr[2], -1, nullptr);
+
+                        for (int np = 0; np < NUM_RES_PARAMS; ++np)
+                        {
+                            paramsTree.addChild(valuesArr[np], -1, nullptr);
+                        }
+
                         newTree.addChild(paramsTree, -1, nullptr);
                     }
                 }
