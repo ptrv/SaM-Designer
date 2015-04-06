@@ -210,7 +210,7 @@ void PropertiesWindow::updateProperties()
     {
         Array<ValueTree> datas;
         StringArray audioSourceIds;
-        const Array<SelectableObject*>& selectedItems = currentSelection->getItemArray();
+        const Array<SelectableObject*> selectedItems = currentSelection->getItemArray();
         Identifier selectedId;
         for (SelectableObject* const selectedItem : selectedItems)
         {
