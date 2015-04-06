@@ -656,7 +656,9 @@ void ObjectsHelper::loadComponents(ObjController& objController,
 
     auto fnAddObjectComponent = [&](const ValueTree& objTree)
     {
-        addComp(objController, objHolder, new ObjectComponent(objController, objTree));
+        ObjectComponent* const oc = new ObjectComponent(objController, objTree);
+        addComp(objController, objHolder, oc);
+        objHolder.checkExtent(oc->getBounds());
         fnObjectsCounter(objTree);
     };
 
@@ -717,6 +719,7 @@ void ObjectsHelper::loadComponents(ObjController& objController,
                 objController.addAudioConnectionComp(aoc);
                 objHolder.addAndMakeVisible(aoc);
                 aoc->update();
+                objHolder.checkExtent(aoc->getBounds());
             }
         }
     });
