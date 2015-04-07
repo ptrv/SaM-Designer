@@ -622,11 +622,10 @@ template CommentComponent* ObjectsHelper::getComment(Component*);
 
 //------------------------------------------------------------------------------
 
-void ObjectsHelper::getSelectedObjectComponents(ObjController& objController,
-                                                Array<ObjectComponent*>& selectedObjs)
+Array<ObjectComponent*> ObjectsHelper::getSelectedObjectComponents(ObjController& objController)
 {
     const SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
-    selectedObjs.clear();
+    Array<ObjectComponent*> selectedObjs;
     for (SelectableObject* const selectedItem : sis.getItemArray())
     {
         if (ObjectComponent* const oc = getObject(selectedItem))
@@ -634,6 +633,39 @@ void ObjectsHelper::getSelectedObjectComponents(ObjController& objController,
             selectedObjs.add(oc);
         }
     }
+
+    return selectedObjs;
+}
+
+//------------------------------------------------------------------------------
+
+Array<LinkComponent*> ObjectsHelper::getSelectedLinkComponents(ObjController& objController)
+{
+    const SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
+    Array<LinkComponent*> selectedLinks;
+    for (SelectableObject* const selectedItem : sis.getItemArray())
+    {
+        if (LinkComponent* const lc = getLink(selectedItem))
+        {
+            selectedLinks.add(lc);
+        }
+    }
+
+    return selectedLinks;
+}
+
+//------------------------------------------------------------------------------
+
+bool ObjectsHelper::allObjectsSelected(ObjController& objController)
+{
+    const int numSelected = objController.getSelectedObjects().getNumSelected();
+    const int numAllObjects =
+        objController.getNumObjects() +
+        objController.getNumLinks() +
+        objController.getNumAudioConnections() +
+        objController.getNumComment();
+
+    return numSelected == numAllObjects;
 }
 
 //------------------------------------------------------------------------------
@@ -748,5 +780,27 @@ ObjType* ObjectsHelper::addComp(ObjController& objController, ObjectsHolder& obj
 template ObjectComponent* ObjectsHelper::addComp<ObjectComponent>(ObjController&, ObjectsHolder&, ObjectComponent*);
 template LinkComponent* ObjectsHelper::addComp<LinkComponent>(ObjController&, ObjectsHolder&, LinkComponent*);
 template CommentComponent* ObjectsHelper::addComp<CommentComponent>(ObjController&, ObjectsHolder&, CommentComponent*);
+
+//------------------------------------------------------------------------------
+
+bool ObjectsHelper::canObjectsBeConnected(const ObjectComponent& oc1,
+                                          const ObjectComponent& oc2,
+                                          const juce::Identifier& linkType)
+{
+    return oc1.canBeConnected(linkType) && oc2.canBeConnected(linkType);
+}
+
+//------------------------------------------------------------------------------
+
+bool ObjectsHelper::canSelectedObjectsBeConnected(ObjController& objController,
+                                                  const Identifier& linkType)
+{
+    const Array<ObjectComponent*> selectedObjects =
+        ObjectsHelper::getSelectedObjectComponents(objController);
+
+    return selectedObjects.size() == 2 &&
+        ObjectsHelper::canObjectsBeConnected(
+            *selectedObjects[0], *selectedObjects[1], linkType);
+}
 
 //------------------------------------------------------------------------------

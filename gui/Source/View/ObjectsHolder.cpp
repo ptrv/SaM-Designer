@@ -276,8 +276,8 @@ Point<int> ObjectsHolder::getMouseXYRelativeViewport()
 
 bool ObjectsHolder::getStartEndObjects(String& startId, String& endId)
 {
-    Array<ObjectComponent*> selectedObjects;
-    ObjectsHelper::getSelectedObjectComponents(objController, selectedObjects);
+    Array<ObjectComponent*> selectedObjects =
+        ObjectsHelper::getSelectedObjectComponents(objController);
 
     if(selectedObjects.size() == 2)
     {
@@ -413,22 +413,27 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
     case StandardApplicationCommandIDs::cut:
         result.setInfo(TRANS("Cut"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('x', ModifierKeys::commandModifier);
+        result.setActive(objController.getSelectedObjects().getNumSelected() != 0);
         break;
     case StandardApplicationCommandIDs::copy:
         result.setInfo(TRANS("Copy"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('c', ModifierKeys::commandModifier);
+        result.setActive(objController.getSelectedObjects().getNumSelected() != 0);
         break;
     case StandardApplicationCommandIDs::paste:
         result.setInfo(TRANS("Paste"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('v', ModifierKeys::commandModifier);
+        result.setActive(ObjectsClipboard::canPaste());
         break;
     case StandardApplicationCommandIDs::selectAll:
         result.setInfo(TRANS("Select All"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('a', ModifierKeys::commandModifier);
+        result.setActive(!ObjectsHelper::allObjectsSelected(objController));
         break;
     case StandardApplicationCommandIDs::deselectAll:
         result.setInfo(TRANS("Deselect All"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('a', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        result.setActive(objController.getSelectedObjects().getNumSelected() != 0);
         break;
     case StandardApplicationCommandIDs::del:
         result.setInfo(TRANS("Delete"), "", CommandCategories::editing, 0);
@@ -445,6 +450,7 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Reverse Direction"), "",
                        CommandCategories::editing, 0);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier);
+        result.setActive(ObjectsHelper::getSelectedLinkComponents(objController).size() != 0);
         break;
     case CommandIDs::defineFaustcode:
         result.setInfo(TRANS("Define FAUST Code"), "",
@@ -490,19 +496,23 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
     case CommandIDs::insertLink:
         result.setInfo(TRANS("Linear Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('5', ModifierKeys::commandModifier);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::link));
         break;
     case CommandIDs::insertTouch:
         result.setInfo(TRANS("Touch Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('6', ModifierKeys::commandModifier);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::touch));
         break;
     case CommandIDs::insertPulsetouch:
         result.setInfo(TRANS("Pulsetouch Link"), "",
                        CommandCategories::inserting, 0);
 //        result.addDefaultKeypress('6', ModifierKeys::commandModifier);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::pulsetouch));
         break;
     case CommandIDs::insertPluck:
         result.setInfo(TRANS("Pluck Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('7', ModifierKeys::commandModifier);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::pluck));
         break;
 
     case CommandIDs::insertAudioOutput:
@@ -513,10 +523,13 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Audio Connection"), "",
                        CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
+        result.setActive(ObjectsHelper::getSelectedObjectComponents(objController).size() == 1 ||
+                         ObjectsHelper::getSelectedLinkComponents(objController).size() == 1);
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo(TRANS("Waveguide"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('9', ModifierKeys::commandModifier);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::waveguide));
         break;
     case CommandIDs::insertTermination:
         result.setInfo(TRANS("Termination"), "", CommandCategories::inserting, 0);

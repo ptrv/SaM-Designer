@@ -39,6 +39,8 @@ public:
     static void copySelected(ObjController& objController);
     static void paste(ObjController& objController, ObjectsHolder& holder);
     static void cut(ObjController& objController, ObjectsHolder& holder);
+
+    static bool canPaste();
 };
 
 }

@@ -341,7 +341,7 @@ Point<int> ObjectComponent::getPinOffset() const
     return pinPos;
 }
 
-bool ObjectComponent::canBeConnected(const Identifier& objId)
+bool ObjectComponent::canBeConnected(const Identifier& objId) const
 {
     if(objId == Ids::link || objId == Ids::touch ||
         objId == Ids::pluck || objId == Ids::pulsetouch)
@@ -357,7 +357,7 @@ bool ObjectComponent::canBeConnected(const Identifier& objId)
         return false;
     }
 }
-bool ObjectComponent::canBeConnectedToLinks()
+bool ObjectComponent::canBeConnectedToLinks() const
 {
     if(data.getType() == Ids::mass || data.getType() == Ids::ground ||
         data.getType() == Ids::port || data.getType() == Ids::resonators)
@@ -381,7 +381,7 @@ bool ObjectComponent::canBeConnectedToLinks()
         return false;
     }
 }
-bool ObjectComponent::canBeConnectedToWaveguides()
+bool ObjectComponent::canBeConnectedToWaveguides() const
 {
     if(data.getType() == Ids::termination || data.getType() == Ids::junction)
     {

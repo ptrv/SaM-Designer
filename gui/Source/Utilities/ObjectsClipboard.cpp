@@ -287,3 +287,11 @@ void ObjectsClipboard::cut(ObjController& objController, ObjectsHolder& holder)
     ObjectsClipboard::copySelected(objController);
     objController.removeSelectedObjects(holder);
 }
+
+bool ObjectsClipboard::canPaste()
+{
+    XmlDocument clip(SystemClipboard::getTextFromClipboard());
+    ScopedPointer<XmlElement> doc(clip.getDocumentElement());
+
+    return doc != 0 && doc->hasTagName(clipboardXmlTag);
+}

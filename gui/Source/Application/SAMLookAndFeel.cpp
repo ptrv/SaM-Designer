@@ -45,80 +45,171 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
                                        const Drawable* icon,
                                        const Colour * const textColourToUse)
 {
-    ScopedPointer<Colour> textColour;
+    ScopedPointer<Colour> customTextColor;
     Drawable* objectIcon = nullptr;
 
     if (!isSeparator)
     {
         if (text.compare("Mass") == 0)
         {
-            textColour = new Colour(menuColourInsertMass);
+            customTextColor = new Colour(menuColourInsertMass);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::mass);
         }
         else if (text.compare("Ground") == 0)
         {
-            textColour = new Colour(menuColourInsertGround);
+            customTextColor = new Colour(menuColourInsertGround);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::ground);
         }
         else if (text.compare("Resonator") == 0)
         {
-            textColour = new Colour(menuColourInsertResonator);
+            customTextColor = new Colour(menuColourInsertResonator);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::resonators);
         }
         else if (text.compare("Port") == 0)
         {
-            textColour = new Colour(menuColourInsertPort);
+            customTextColor = new Colour(menuColourInsertPort);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::port);
         }
         else if (text.compare("Linear Link") == 0)
         {
-            textColour = new Colour(menuColourInsertLink);
+            customTextColor = new Colour(menuColourInsertLink);
             objectIcon = ResourceLoader::getInstance()->createSVGDrawable("link-no-connectors.svg");
         }
         else if (text.compare("Touch Link") == 0)
         {
-            textColour = new Colour(menuColourInsertTouch);
+            customTextColor = new Colour(menuColourInsertTouch);
             objectIcon = ResourceLoader::getInstance()->createSVGDrawable("touch-no-connectors.svg");
         }
         else if (text.compare("Pulsetouch Link") == 0)
         {
-            textColour = new Colour(menuColourInsertPulsetouch);
+            customTextColor = new Colour(menuColourInsertPulsetouch);
         }
         else if (text.compare("Pluck Link") == 0)
         {
-            textColour = new Colour(menuColourInsertPluck);
+            customTextColor = new Colour(menuColourInsertPluck);
             objectIcon = ResourceLoader::getInstance()->createSVGDrawable("pluck-no-connectors.svg");
         }
         else if (text.compare("Audio Out") == 0
             || text.compare("Audio Output") == 0)
         {
-            textColour = new Colour(menuColourInsertAudioOut);
+            customTextColor = new Colour(menuColourInsertAudioOut);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::audioout);
         }
         else if (text.compare("Audio Connection") == 0)
         {
-            textColour = new Colour(menuColourInsertAudioConnection);
+            customTextColor = new Colour(menuColourInsertAudioConnection);
         }
         else if (text.compare("Waveguide") == 0)
         {
-            textColour = new Colour(menuColourInsertWaveguide);
+            customTextColor = new Colour(menuColourInsertWaveguide);
             objectIcon = ResourceLoader::getInstance()->createSVGDrawable("waveguide-short.svg");
         }
         else if (text.compare("Junction") == 0)
         {
-            textColour = new Colour(menuColourInsertJunction);
+            customTextColor = new Colour(menuColourInsertJunction);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::junction);
         }
         else if (text.compare("Termination") == 0)
         {
-            textColour = new Colour(menuColourInsertTermination);
+            customTextColor = new Colour(menuColourInsertTermination);
             objectIcon = ResourceLoader::getInstance()->getDrawableForObjectId(Ids::termination);
         }
     }
 
-    LookAndFeel_V3::drawPopupMenuItem(g, area, isSeparator, isActive,
-                                      isHighlighted, isTicked, hasSubMenu, text,
-                                      shortcutKeyText,
-                                      objectIcon ? objectIcon : icon,
-                                      textColour ? textColour.get() : textColourToUse);
+    if (isSeparator)
+    {
+        Rectangle<int> r (area.reduced (5, 0));
+        r.removeFromTop (r.getHeight() / 2 - 1);
+
+        g.setColour (Colour (0x33000000));
+        g.fillRect (r.removeFromTop (1));
+
+        g.setColour (Colour (0x66ffffff));
+        g.fillRect (r.removeFromTop (1));
+    }
+    else
+    {
+        Colour textColour (findColour (PopupMenu::textColourId));
+
+        if (customTextColor != nullptr)
+        {
+            textColour = *customTextColor.get();
+        }
+        else if (textColourToUse != nullptr)
+        {
+            textColour = *textColourToUse;
+        }
+
+        Rectangle<int> r (area.reduced (1));
+
+        if (isHighlighted)
+        {
+            g.setColour (findColour (PopupMenu::highlightedBackgroundColourId));
+            g.fillRect (r);
+
+            g.setColour (findColour (PopupMenu::highlightedTextColourId));
+        }
+        else
+        {
+            g.setColour (textColour);
+        }
+
+        if (! isActive)
+            g.setOpacity (0.3f);
+
+        Font font (getPopupMenuFont());
+
+        const float maxFontHeight = area.getHeight() / 1.3f;
+
+        if (font.getHeight() > maxFontHeight)
+            font.setHeight (maxFontHeight);
+
+        g.setFont (font);
+
+        Rectangle<float> iconArea (r.removeFromLeft ((r.getHeight() * 5) / 4).reduced (3).toFloat());
+
+        if (objectIcon != nullptr)
+        {
+            objectIcon->drawWithin (g, iconArea, RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize,
+                                    isActive ? 1.0f : 0.3f);
+        }
+        else if (icon != nullptr)
+        {
+            icon->drawWithin (g, iconArea, RectanglePlacement::centred | RectanglePlacement::onlyReduceInSize, 1.0f);
+        }
+        else if (isTicked)
+        {
+            const Path tick (getTickShape (1.0f));
+            g.fillPath (tick, tick.getTransformToScaleToFit (iconArea, true));
+        }
+
+        if (hasSubMenu)
+        {
+            const float arrowH = 0.6f * getPopupMenuFont().getAscent();
+
+            const float x = (float) r.removeFromRight ((int) arrowH).getX();
+            const float halfH = (float) r.getCentreY();
+
+            Path p;
+            p.addTriangle (x, halfH - arrowH * 0.5f,
+                           x, halfH + arrowH * 0.5f,
+                           x + arrowH * 0.6f, halfH);
+
+            g.fillPath (p);
+        }
+
+        r.removeFromRight (3);
+        g.drawFittedText (text, r, Justification::centredLeft, 1);
+
+        if (shortcutKeyText.isNotEmpty())
+        {
+            Font f2 (font);
+            f2.setHeight (f2.getHeight() * 0.75f);
+            f2.setHorizontalScale (0.95f);
+            g.setFont (f2);
+
+            g.drawText (shortcutKeyText, r, Justification::centredRight, true);
+        }
+    }
+
 }

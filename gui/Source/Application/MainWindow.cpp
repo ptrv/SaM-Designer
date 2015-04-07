@@ -276,6 +276,9 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo(TRANS("Save"), TRANS("Save file"),
                        CommandCategories::general, 0);
         result.addDefaultKeypress ('s', ModifierKeys::commandModifier);
+        result.setActive(mdlController->getMDLFile() &&
+                         (mdlController->getMDLFile()->isUntiled() ||
+                          mdlController->getMDLFile()->hasChangedSinceSaved()));
         break;
     case CommandIDs::saveDocumentAs:
         result.setInfo(TRANS("Save As"), TRANS("Save file as"),
@@ -286,17 +289,20 @@ void MainAppWindow::getCommandInfo (const CommandID commandID, ApplicationComman
         result.setInfo(TRANS("Save As Image"), TRANS("Save patch as image"),
                        CommandCategories::general, 0);
 //        result.addDefaultKeypress ('s', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        result.setActive(mdlController->getMDLFile() && !mdlController->getMDLFile()->isEmpty());
         break;
     case CommandIDs::generateFaust:
         result.setInfo(TRANS("Generic Faust Code"),
                        TRANS("Generate generic FAUST code"),
                        CommandCategories::generation, 0);
     	result.addDefaultKeypress('g', ModifierKeys::commandModifier);
+        result.setActive(mdlController->getMDLFile() && !mdlController->getMDLFile()->isEmpty());
     	break;
     case CommandIDs::generateExternal:
         result.setInfo(TRANS("Binary"), TRANS("Generate binary file"),
                        CommandCategories::generation, 0);
     	result.addDefaultKeypress('e', ModifierKeys::commandModifier);
+        result.setActive(mdlController->getMDLFile() && !mdlController->getMDLFile()->isEmpty());
     	break;
     case CommandIDs::cleanDataDir:
         result.setInfo(TRANS("Clean Data Directory"),

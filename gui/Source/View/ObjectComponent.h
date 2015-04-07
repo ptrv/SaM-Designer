@@ -70,7 +70,7 @@ public:
     Point<int> getPinPos() const;
     Point<int> getPinOffset() const;
 
-    bool canBeConnected(const Identifier& objId);
+    bool canBeConnected(const Identifier& objId) const;
 
     void setOldPos(const Point<int>& p) { oldPos = p; }
     const Point<int>& getOldPos() const { return oldPos; }
@@ -80,8 +80,8 @@ private:
 
     void changeListenerCallback (ChangeBroadcaster*);
 
-    bool canBeConnectedToLinks();
-    bool canBeConnectedToWaveguides();
+    bool canBeConnectedToLinks() const;
+    bool canBeConnectedToWaveguides() const;
 
     IdLabel* createIdLabel() override;
 

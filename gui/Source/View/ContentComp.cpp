@@ -326,11 +326,13 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
         result.setInfo(TRANS("Undo"), TRANS("Undo last edit"),
                        CommandCategories::editing, 0);
         result.addDefaultKeypress('z', ModifierKeys::commandModifier);
+        result.setActive(mainWindow.getUndoManager().canUndo());
         break;
     case CommandIDs::redo:
         result.setInfo(TRANS("Redo"), TRANS("Undo last undo"),
                        CommandCategories::editing, 0);
         result.addDefaultKeypress('z', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        result.setActive(mainWindow.getUndoManager().canRedo());
         break;
 
     case CommandIDs::zoomIn:

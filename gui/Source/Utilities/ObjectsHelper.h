@@ -81,11 +81,20 @@ public:
     template<typename BaseCompType>
     static CommentComponent* getComment(BaseCompType* baseCompType);
 
-    static void getSelectedObjectComponents(ObjController& objController,
-                                            Array<ObjectComponent*>& selectedObjs);
+    static Array<ObjectComponent*> getSelectedObjectComponents(ObjController& objController);
+    static Array<LinkComponent*> getSelectedLinkComponents(ObjController& objController);
+
+    static bool allObjectsSelected(ObjController& objController);
 
     static void loadComponents(ObjController& objController, ObjectsHolder& objHolder,
                                const ValueTree& mdlRoot, int& numObjects, int& numZeroPos);
+
+    static bool canObjectsBeConnected(const ObjectComponent& oc1,
+                                      const ObjectComponent& oc2,
+                                      const Identifier& linkType);
+
+    static bool canSelectedObjectsBeConnected(ObjController& objController,
+                                              const Identifier& linkType);
 
 private:
 
