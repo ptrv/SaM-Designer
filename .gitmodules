@@ -5,3 +5,6 @@
 [submodule "SaM"]
 	path = SaM
 	url = git://github.com/eberdahl/SaM.git
+[submodule "gui/Libs/re2"]
+	path = gui/Libs/re2
+	url = https://github.com/google/re2.git

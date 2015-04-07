@@ -10,19 +10,12 @@ else
     scriptpath=`dirname $script`
 fi
 
-re2_url="https://re2.googlecode.com/files/re2-20140304.tgz"
-re2_archive="re2-20140304.tgz"
-
-# download re2
 cd $scriptpath
-if [[ $os == "darwin" ]]; then
-    curl -L $re2_url -o $re2_archive
-else
-    wget $re2_url -O $re2_archive
-fi
 
-tar -xvzf $re2_archive
-rm $re2_archive
+if [ ! -d re2 ]; then
+    echo "Submodule re2 is not checked out"
+    exit
+fi
 
 # compile
 cd re2

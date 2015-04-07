@@ -49,15 +49,16 @@ Without the switch you have to seperately get the submodule.
     git submodule update --init
 
 Also there is a dependency on [re2][2], the regular expression library
-used in this project.
+used in this project, which is also a submodule of this project.
 
 For Mac OS X and Windows there are already binaries of the library
 provided, on Linux consider the following steps to get and compile the
 library:
 
     cd SaM-Designer
+    git submodule update --init
     cd gui/Libs
-    ./get_and_compile_re2.sh
+    ./build_re2.sh
 
 ### Compiling Introjucer
 
