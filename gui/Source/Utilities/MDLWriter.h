@@ -26,6 +26,8 @@
 #ifndef __MDLWRITER_H_CB9D9CEF__
 #define __MDLWRITER_H_CB9D9CEF__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class MDLFile;

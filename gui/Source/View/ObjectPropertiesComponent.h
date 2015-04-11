@@ -27,8 +27,12 @@
 #define __OBJECTPROPERTIESCOMPONENT_H_C1992334__
 
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
+class ObjController;
+
 class ObjectPropertiesComponent : public Component,
                                   public TextEditor::Listener
 {

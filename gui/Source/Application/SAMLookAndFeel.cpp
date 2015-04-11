@@ -8,12 +8,12 @@
   ==============================================================================
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
-#include "../Models/ObjectIDs.h"
-#include "../Utilities/ResourceLoader.h"
-
 #include "SAMLookAndFeel.h"
+
+#include "Models/ObjectIDs.h"
+
+#include "Utilities/ResourceLoader.h"
+
 
 using namespace synthamodeler;
 

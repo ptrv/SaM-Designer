@@ -18,14 +18,17 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "../Application/CommonHeaders.h"
-#include "RedrawOptionsPanel.h"
 //[/Headers]
 
 #include "RedrawOptionsComponent.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+#include "Application/CommonHeaders.h"
+
+#include "RedrawOptionsPanel.h"
+
+
 using namespace synthamodeler;
 //[/MiscUserDefs]
 

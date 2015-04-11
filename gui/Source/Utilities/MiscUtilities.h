@@ -26,6 +26,8 @@
 #ifndef __MISCUTILITIES_H_64FF5DE5__
 #define __MISCUTILITIES_H_64FF5DE5__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class BaseObjectComponent;

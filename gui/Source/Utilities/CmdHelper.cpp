@@ -23,9 +23,10 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-
 #include "CmdHelper.h"
+
+#include "Application/CommonHeaders.h"
+
 
 using namespace synthamodeler;
 

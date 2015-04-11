@@ -26,6 +26,8 @@
 #ifndef __PREFSPANEL_H_87C5CC8A__
 #define __PREFSPANEL_H_87C5CC8A__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**

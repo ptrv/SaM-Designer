@@ -23,12 +23,14 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../Utilities/MDLParser.h"
-#include "../Utilities/MDLWriter.h"
-#include "../Utilities/MDLHelper.h"
-
 #include "MDLFile.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Utilities/MDLParser.h"
+#include "Utilities/MDLWriter.h"
+#include "Utilities/MDLHelper.h"
+
 
 using namespace synthamodeler;
 

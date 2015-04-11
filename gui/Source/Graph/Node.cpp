@@ -24,10 +24,10 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Models/ObjectIDs.h"
-
 #include "Node.h"
+
+#include "Models/ObjectIDs.h"
+
 
 using namespace synthamodeler;
 

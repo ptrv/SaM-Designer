@@ -28,13 +28,12 @@
 #define __FORCEDIRECTEDFLOWALGORITHM_H_F765C202__
 
 #include "DirectedGraph.h"
+#include "FlowAlgorithm.h"
 
 namespace synthamodeler
 {
 
 class Node;
-class FlowAlgorithm;
-class ObjController;
 
 class ForceDirectedFlowAlgorithm : public FlowAlgorithm
 {

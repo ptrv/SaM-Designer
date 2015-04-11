@@ -11,6 +11,8 @@
 #ifndef __SAMLOOKANDFEEL_H_F27BC606__
 #define __SAMLOOKANDFEEL_H_F27BC606__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

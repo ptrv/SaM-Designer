@@ -26,6 +26,8 @@
 #ifndef __MDLPARSER_H_DC928BC0__
 #define __MDLPARSER_H_DC928BC0__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class MDLFile;

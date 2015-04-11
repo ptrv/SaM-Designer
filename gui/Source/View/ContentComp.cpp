@@ -20,17 +20,22 @@
  */
 
 //[Headers] You can add your own extra header files here...
-#include "../Application/CommonHeaders.h"
-#include "../Application/MainWindow.h"
-#include "../Controller/ObjController.h"
-#include "ObjectsHolder.h"
-#include "../Models/MDLFile.h"
 //[/Headers]
 
 #include "ContentComp.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+#include "Application/CommonHeaders.h"
+#include "Application/MainWindow.h"
+
+#include "Controller/ObjController.h"
+
+#include "Models/MDLFile.h"
+
+#include "ObjectsHolder.h"
+
+
 using namespace synthamodeler;
 
 class ContentComp::MagnifierComponent : public Component

@@ -26,8 +26,11 @@
 #ifndef __SAMREGEX_H_36A909E0__
 #define __SAMREGEX_H_36A909E0__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
+
 class SAMRegex
 {
 private:

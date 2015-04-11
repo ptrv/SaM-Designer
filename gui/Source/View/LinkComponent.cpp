@@ -23,16 +23,18 @@
 
  */
 
-#include "../Application/CommonHeaders.h"
-#include "../Controller/ObjController.h"
-#include "../Graph/Node.h"
-#include "BaseObjectComponent.h"
-#include "SelectableObject.h"
+#include "LinkComponent.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Graph/Node.h"
+
 #include "ObjectComponent.h"
 #include "ObjectsHolder.h"
 #include "IdLabel.h"
 
-#include "LinkComponent.h"
 
 using namespace synthamodeler;
 

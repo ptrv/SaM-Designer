@@ -27,11 +27,15 @@
 #define __AUDIOOUTCONNECTOR_H_D0DAD273__
 
 
+#include "JuceHeader.h"
+#include "SelectableObject.h"
+
 namespace synthamodeler
 {
 class ObjController;
+class BaseObjectComponent;
 class ObjectComponent;
-class SelectableObject;
+class LinkComponent;
 
 class AudioOutConnector : public Component,
                           public ChangeListener,

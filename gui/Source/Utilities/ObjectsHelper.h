@@ -26,12 +26,15 @@
 #ifndef OBJECTSHELPER_H_INCLUDED
 #define OBJECTSHELPER_H_INCLUDED
 
+#include "JuceHeader.h"
 
 namespace synthamodeler
 {
 
 class ObjController;
+class ObjectsHolder;
 class DirectedGraph;
+class BaseObjectComponent;
 class ObjectComponent;
 class LinkComponent;
 class CommentComponent;

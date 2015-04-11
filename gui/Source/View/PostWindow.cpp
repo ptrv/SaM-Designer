@@ -22,12 +22,16 @@
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 */
-#include "../Application/CommonHeaders.h"
-#include "../Application/Application.h"
-#include "../View/TextConsole.h"
-#include "../Utilities/StoredSettings.h"
 
 #include "PostWindow.h"
+
+#include "Application/CommonHeaders.h"
+#include "Application/Application.h"
+
+#include "View/TextConsole.h"
+
+#include "Utilities/StoredSettings.h"
+
 
 using namespace synthamodeler;
 

@@ -26,6 +26,8 @@
 #ifndef __REGULAREXPRESSION_H_197041BB__
 #define __REGULAREXPRESSION_H_197041BB__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 //==============================================================================

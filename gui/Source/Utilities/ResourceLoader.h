@@ -26,6 +26,8 @@
 #ifndef __RESOURCELOADER_H_E0EF3E32__
 #define __RESOURCELOADER_H_E0EF3E32__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**

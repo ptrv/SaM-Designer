@@ -23,11 +23,12 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Controller/ObjController.h"
+#include "SnapGridPainter.h"
+
+#include "Controller/ObjController.h"
+
 #include "ObjectsHolder.h"
 
-#include "SnapGridPainter.h"
 
 using namespace synthamodeler;
 //==============================================================================

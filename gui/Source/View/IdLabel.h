@@ -26,7 +26,7 @@
 #ifndef IDLABEL_H_INCLUDED
 #define IDLABEL_H_INCLUDED
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+#include "JuceHeader.h"
 
 //==============================================================================
 /*

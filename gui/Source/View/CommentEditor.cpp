@@ -23,14 +23,16 @@
 
  */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Application/CommandIDs.h"
-#include "../Graph/Node.h"
+#include "CommentEditor.h"
+
+#include "Application/CommandIDs.h"
+
+#include "Graph/Node.h"
+
 #include "BaseObjectComponent.h"
 #include "SelectableObject.h"
 #include "CommentComponent.h"
 
-#include "CommentEditor.h"
 
 using namespace synthamodeler;
 

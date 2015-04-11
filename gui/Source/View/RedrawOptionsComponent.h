@@ -21,6 +21,8 @@
 #define __JUCE_HEADER_97501522CA0EB140__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class RedrawOptionsPanel;

@@ -23,24 +23,30 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../View/SelectableObject.h"
-#include "../Graph/Node.h"
-#include "../Graph/DirectedGraph.h"
-#include "../View/BaseObjectComponent.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
-#include "../View/AudioOutConnector.h"
-#include "../View/CommentComponent.h"
-#include "../View/ObjectsHolder.h"
-#include "../Controller/ObjController.h"
-#include "../Graph/GraphUtils.h"
-#include "../Models/MDLFile.h"
-#include "IdManager.h"
-
 #include "ObjectsHelper.h"
 
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Graph/Node.h"
+#include "Graph/DirectedGraph.h"
+#include "Graph/GraphUtils.h"
+
+#include "Models/MDLFile.h"
+
+#include "View/SelectableObject.h"
+#include "View/BaseObjectComponent.h"
+#include "View/ObjectComponent.h"
+#include "View/LinkComponent.h"
+#include "View/AudioOutConnector.h"
+#include "View/CommentComponent.h"
+#include "View/ObjectsHolder.h"
+
+#include "IdManager.h"
+
 #include <functional>
+
 
 using namespace synthamodeler;
 

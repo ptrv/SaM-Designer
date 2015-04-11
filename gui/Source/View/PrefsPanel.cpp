@@ -23,11 +23,12 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "../Utilities/StoredSettings.h"
+#include "PrefsPanel.h"
+
 #include "PrefsMiscPage.h"
 
-#include "PrefsPanel.h"
+#include "Utilities/StoredSettings.h"
+
 
 
 using namespace synthamodeler;

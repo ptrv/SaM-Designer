@@ -25,20 +25,26 @@
 
 */
 
+#include "MainWindow.h"
+
 #include "CommonHeaders.h"
+
 #include "Application.h"
 #include "CommandIDs.h"
-#include "../View/PostWindow.h"
-#include "../View/ContentComp.h"
-#include "../Controller/ObjController.h"
-#include "../Controller/MDLController.h"
-#include "../Models/MDLFile.h"
-#include "../View/SelectableObject.h"
-#include "../View/ObjectsHolder.h"
-#include "../View/MDLInformation.h"
-#include "../Utilities/MDLHelper.h"
 
-#include "MainWindow.h"
+#include "Controller/ObjController.h"
+#include "Controller/MDLController.h"
+
+#include "Models/MDLFile.h"
+
+#include "View/PostWindow.h"
+#include "View/ContentComp.h"
+#include "View/SelectableObject.h"
+#include "View/ObjectsHolder.h"
+#include "View/MDLInformation.h"
+
+#include "Utilities/MDLHelper.h"
+
 
 using namespace synthamodeler;
 

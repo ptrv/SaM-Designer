@@ -26,6 +26,8 @@
 #ifndef MDLHELPER_H_INCLUDED
 #define MDLHELPER_H_INCLUDED
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

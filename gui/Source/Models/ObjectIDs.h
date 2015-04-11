@@ -26,6 +26,8 @@
 #ifndef __OBJECTIDS_H_C7C4C1BC__
 #define __OBJECTIDS_H_C7C4C1BC__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**

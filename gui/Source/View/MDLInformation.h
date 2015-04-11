@@ -21,6 +21,8 @@
 #define __JUCE_HEADER_A710AFACBC9B1556__
 
 //[Headers]     -- You can add your own extra header files here --
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 //[/Headers]

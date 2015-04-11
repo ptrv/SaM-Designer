@@ -26,6 +26,11 @@
 #ifndef __OBJECTCOMPONENT_H_4AC10D4B__
 #define __OBJECTCOMPONENT_H_4AC10D4B__
 
+#include "JuceHeader.h"
+
+#include "BaseObjectComponent.h"
+#include "SelectableObject.h"
+
 namespace synthamodeler
 {
 class ObjectsHolder;

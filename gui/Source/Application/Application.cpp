@@ -23,17 +23,21 @@
 
 */
 
+#include "Application.h"
+
 #include "CommonHeaders.h"
-#include "../View/PrefsPanel.h"
-#include "../View/PostWindow.h"
-#include "../View/PropertiesWindow.h"
+
 #include "MainWindow.h"
-#include "../Models/MDLFile.h"
 #include "SAMLookAndFeel.h"
-#include "../View/ObjectsHolder.h"
 #include "CommandLine.h"
 
-#include "Application.h"
+#include "Models/MDLFile.h"
+
+#include "View/PrefsPanel.h"
+#include "View/PostWindow.h"
+#include "View/PropertiesWindow.h"
+#include "View/ObjectsHolder.h"
+
 
 using namespace synthamodeler;
 

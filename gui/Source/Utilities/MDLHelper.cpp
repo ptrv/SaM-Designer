@@ -23,12 +23,15 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../Models/MDLFile.h"
-#include "../View/ContentComp.h"
-#include "../View/ObjectsHolder.h"
-
 #include "MDLHelper.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Models/MDLFile.h"
+
+#include "View/ContentComp.h"
+#include "View/ObjectsHolder.h"
+
 
 using namespace synthamodeler;
 

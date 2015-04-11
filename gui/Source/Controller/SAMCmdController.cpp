@@ -7,12 +7,15 @@
 
   ==============================================================================
 */
-#include "../Application/CommonHeaders.h"
-#include "../Models/MDLFile.h"
-#include "../Models/SAMCmd.h"
-#include "../Utilities/CmdHelper.h"
-
 #include "SAMCmdController.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Models/MDLFile.h"
+#include "Models/SAMCmd.h"
+
+#include "Utilities/CmdHelper.h"
+
 
 using namespace synthamodeler;
 

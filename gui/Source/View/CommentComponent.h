@@ -27,12 +27,15 @@
 #define __COMMENTCOMPONENT_H_FE5F7A49__
 
 
+#include "JuceHeader.h"
+
+#include "BaseObjectComponent.h"
+#include "SelectableObject.h"
+
 namespace synthamodeler
 {
-class BaseObjectComponent;
 class ObjController;
 class CommentEditor;
-class SelectableObject;
 
 class CommentComponent : public BaseObjectComponent,
                          public ChangeListener,

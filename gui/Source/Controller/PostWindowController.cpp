@@ -8,11 +8,14 @@
   ==============================================================================
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../View/PostWindow.h"
-#include "../Models/SAMCmd.h"
-
 #include "PostWindowController.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Models/SAMCmd.h"
+
+#include "View/PostWindow.h"
+
 
 using namespace synthamodeler;
 

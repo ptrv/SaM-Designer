@@ -23,10 +23,12 @@
 
  */
 
-#include "../Application/CommonHeaders.h"
-#include "../View/ObjectsHolder.h"
-
 #include "ContextMenus.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "View/ObjectsHolder.h"
+
 
 using namespace synthamodeler;
 

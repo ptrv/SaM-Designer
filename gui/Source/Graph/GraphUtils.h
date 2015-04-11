@@ -27,6 +27,8 @@
 #ifndef __GRAPHUTILS_H_ECA0AD77__
 #define __GRAPHUTILS_H_ECA0AD77__
 
+#include "JuceHeader.h"
+
 #include "DirectedGraph.h"
 
 namespace synthamodeler

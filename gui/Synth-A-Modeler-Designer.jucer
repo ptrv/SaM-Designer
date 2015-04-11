@@ -25,7 +25,7 @@
       </MODULEPATHS>
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/Linux" bigIcon="WodEAp" extraLinkerFlags="-L../../Libs/re2/obj -lre2"
-                extraCompilerFlags="-I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing">
+                extraCompilerFlags="-I../../Source -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
                        targetName="Synth-A-Modeler-Designer" defines="UNIT_TESTS=1"/>

@@ -18,13 +18,14 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "../Application/CommonHeaders.h"
 //[/Headers]
 
 #include "PrefsMiscPage.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+#include "Application/CommonHeaders.h"
+
 using namespace synthamodeler;
 //[/MiscUserDefs]
 

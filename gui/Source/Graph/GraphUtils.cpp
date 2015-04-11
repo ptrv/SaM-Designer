@@ -24,9 +24,8 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
 #include "GraphUtils.h"
+
 #include "Node.h"
 
 #include <stack>

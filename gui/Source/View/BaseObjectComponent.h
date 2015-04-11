@@ -26,6 +26,9 @@
 #ifndef __BASEOBJECTCOMPONENT_H_ADAD1FA0__
 #define __BASEOBJECTCOMPONENT_H_ADAD1FA0__
 
+#include "JuceHeader.h"
+#include "Graph/Node.h"
+
 namespace synthamodeler
 {
 class ObjController;

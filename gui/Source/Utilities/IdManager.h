@@ -26,6 +26,8 @@
 #ifndef __IDMANAGER_H_C25241F9__
 #define __IDMANAGER_H_C25241F9__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class IdManager

@@ -11,6 +11,8 @@
 #ifndef __POSTWINDOWCONTROLLER_H_4E9C4940__
 #define __POSTWINDOWCONTROLLER_H_4E9C4940__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class PostWindow;

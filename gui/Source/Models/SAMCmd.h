@@ -26,6 +26,8 @@
 #ifndef __SAMCMD_H_1206E4C5__
 #define __SAMCMD_H_1206E4C5__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class MDLFile;

@@ -22,21 +22,28 @@
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
  */
-#include "../Application/CommonHeaders.h"
-#include "../Graph/Node.h"
-#include "../View/BaseObjectComponent.h"
-#include "../View/SelectableObject.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
-#include "../Controller/ObjController.h"
-#include "../Controller/MDLController.h"
-#include "../Models/SAMCmd.h"
-#include "../Models/MDLFile.h"
 
 #include "MiscUtilities.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+#include "Controller/MDLController.h"
+
+#include "Graph/Node.h"
+
+#include "Models/SAMCmd.h"
+#include "Models/MDLFile.h"
+
+#include "View/BaseObjectComponent.h"
+#include "View/SelectableObject.h"
+#include "View/ObjectComponent.h"
+#include "View/LinkComponent.h"
+
 #include "RegularExpression.h"
 
 #include <sys/time.h>
+
 
 using namespace synthamodeler;
 

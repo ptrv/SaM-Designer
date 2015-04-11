@@ -26,6 +26,8 @@
 #ifndef __OBJECTFACTORY_H_2132166E__
 #define __OBJECTFACTORY_H_2132166E__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

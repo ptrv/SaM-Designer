@@ -23,10 +23,10 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
 #include "StoredSettings.h"
+
 #include "MiscUtilities.h"
+
 
 using namespace synthamodeler;
 

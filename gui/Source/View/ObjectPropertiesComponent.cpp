@@ -22,11 +22,15 @@
   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 */
-#include "../Application/CommonHeaders.h"
-#include "../Controller/ObjController.h"
-#include "../Utilities/ObjectsHelper.h"
 
 #include "ObjectPropertiesComponent.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Utilities/ObjectsHelper.h"
+
 
 using namespace synthamodeler;
 

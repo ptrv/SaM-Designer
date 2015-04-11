@@ -26,11 +26,14 @@
 #ifndef __MDLCONTROLLER_H_8A72BC7D__
 #define __MDLCONTROLLER_H_8A72BC7D__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class MDLFile;
 class SAMCmdController;
 class MainAppWindow;
+class ObjectsHolder;
 
 /**
  * The MDLController controlls all actions for the MDLFile.

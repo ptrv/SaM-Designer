@@ -26,6 +26,8 @@
 #ifndef __OBJCOMP_H_F3604232__
 #define __OBJCOMP_H_F3604232__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class BaseObjectComponent;

@@ -23,31 +23,37 @@
 
  */
 
-#include "../Application/CommonHeaders.h"
-#include "../Models/MDLFile.h"
-#include "../Models/ObjectFactory.h"
+#include "ObjectsHolder.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Graph/FlowAlgorithm.h"
+#include "Graph/ForceDirectedFlowAlgorithm.h"
+#include "Graph/DirectedGraph.h"
+#include "Graph/Node.h"
+#include "Graph/GraphUtils.h"
+
+#include "Models/MDLFile.h"
+#include "Models/ObjectFactory.h"
+
 #include "SelectableObject.h"
-#include "../Graph/FlowAlgorithm.h"
-#include "../Graph/ForceDirectedFlowAlgorithm.h"
-#include "../Graph/DirectedGraph.h"
-#include "../Graph/Node.h"
-#include "../Graph/GraphUtils.h"
 #include "BaseObjectComponent.h"
 #include "ContentComp.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
-#include "../Controller/ObjController.h"
 #include "FaustcodePanel.h"
 #include "RedrawOptionsPanel.h"
 #include "SnapGridPainter.h"
 #include "AudioOutConnector.h"
 #include "CommentComponent.h"
 #include "PropertiesWindow.h"
-#include "../Utilities/ObjectsHelper.h"
-#include "../Utilities/ObjectsClipboard.h"
-#include "../Utilities/ContextMenus.h"
 
-#include "ObjectsHolder.h"
+#include "Utilities/ObjectsHelper.h"
+#include "Utilities/ObjectsClipboard.h"
+#include "Utilities/ContextMenus.h"
+
 
 using namespace synthamodeler;
 

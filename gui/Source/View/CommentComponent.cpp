@@ -23,17 +23,20 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../Graph/Node.h"
-#include "BaseObjectComponent.h"
-#include "SelectableObject.h"
+#include "CommentComponent.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Graph/Node.h"
+
+#include "Models/ObjectActions.h"
+
 #include "LinkComponent.h"
-#include "../Controller/ObjController.h"
 #include "ObjectsHolder.h"
-#include "../Models/ObjectActions.h"
 #include "CommentEditor.h"
 
-#include "CommentComponent.h"
 
 using namespace synthamodeler;
 

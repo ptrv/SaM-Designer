@@ -23,16 +23,18 @@
 
  */
 
-#include <vector>
-
-#include "../Application/CommonHeaders.h"
-#include "../Models/MDLFile.h"
-#include "../Models/ObjectFactory.h"
-#include "RegularExpression.h"
-#include "../Utilities/SAMRegex.h"
-#include "../Utilities/ObjectsHelper.h"
-
 #include "MDLParser.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Models/MDLFile.h"
+#include "Models/ObjectFactory.h"
+
+#include "RegularExpression.h"
+#include "SAMRegex.h"
+#include "ObjectsHelper.h"
+
+#include <vector>
 
 
 using namespace synthamodeler;

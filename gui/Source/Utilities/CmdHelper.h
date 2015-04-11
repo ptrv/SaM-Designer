@@ -26,6 +26,8 @@
 #ifndef CMDHELPER_H_INCLUDED
 #define CMDHELPER_H_INCLUDED
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

@@ -26,6 +26,8 @@
 #ifndef __POSTWINDOW_H_3A3F156F__
 #define __POSTWINDOW_H_3A3F156F__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class TextConsole;

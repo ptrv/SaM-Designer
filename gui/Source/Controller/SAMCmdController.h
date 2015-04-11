@@ -12,6 +12,8 @@
 #define __SAMCMDCONTROLLER_H_DE7E45EB__
 
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class MDLFile;

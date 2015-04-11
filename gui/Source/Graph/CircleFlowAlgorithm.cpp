@@ -24,17 +24,18 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "FlowAlgorithm.h"
+#include "CircleFlowAlgorithm.h"
+
+#include "Controller/ObjController.h"
+
 #include "DirectedGraph.h"
 #include "GraphUtils.h"
 #include "Node.h"
-#include "../Controller/ObjController.h"
-#include "../View/BaseObjectComponent.h"
-#include "../View/SelectableObject.h"
-#include "../View/ObjectComponent.h"
 
-#include "CircleFlowAlgorithm.h"
+#include "View/BaseObjectComponent.h"
+#include "View/SelectableObject.h"
+#include "View/ObjectComponent.h"
+
 
 using namespace synthamodeler;
 

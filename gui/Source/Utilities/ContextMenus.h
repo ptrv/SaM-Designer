@@ -26,6 +26,8 @@
 #ifndef CONTEXTMENUS_H
 #define	CONTEXTMENUS_H
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

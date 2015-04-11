@@ -26,6 +26,7 @@
 #ifndef __APPLICATION_H_BBAD6F5C__
 #define __APPLICATION_H_BBAD6F5C__
 
+#include "JuceHeader.h"
 
 namespace synthamodeler
 {

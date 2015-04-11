@@ -26,6 +26,8 @@
 #ifndef __COMMANDLINE_H_8CAFFA61__
 #define __COMMANDLINE_H_8CAFFA61__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

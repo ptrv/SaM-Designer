@@ -23,8 +23,6 @@
  
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
 #include "SAMRegex.h"
 
 using namespace synthamodeler;

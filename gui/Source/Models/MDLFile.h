@@ -26,6 +26,8 @@
 #ifndef __MDLFILE_H_70428F9D__
 #define __MDLFILE_H_70428F9D__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**

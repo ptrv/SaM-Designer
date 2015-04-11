@@ -26,8 +26,11 @@
 #ifndef __FAUSTCODEPANEL_H_684205E3__
 #define __FAUSTCODEPANEL_H_684205E3__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
+class ObjController;
 /**
  * Dialog window for editing defined variables.
  *

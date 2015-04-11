@@ -26,6 +26,8 @@
 #ifndef __PROPERTIESWINDOW_H_FBFE568F__
 #define __PROPERTIESWINDOW_H_FBFE568F__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class ContentComp;

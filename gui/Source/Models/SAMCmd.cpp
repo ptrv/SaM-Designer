@@ -23,11 +23,14 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../Models/MDLFile.h"
-#include "../Utilities/CmdHelper.h"
-
 #include "SAMCmd.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Models/MDLFile.h"
+
+#include "Utilities/CmdHelper.h"
+
 
 using namespace synthamodeler;
 

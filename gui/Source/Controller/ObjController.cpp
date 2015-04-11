@@ -23,24 +23,29 @@
 
  */
 
-#include "../Application/CommonHeaders.h"
-#include "../View/SelectableObject.h"
-#include "../Models/ObjectActions.h"
-#include "../Models/MDLFile.h"
-#include "../Models/ObjectFactory.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
-#include "../View/AudioOutConnector.h"
+#include "ObjController.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Graph/DirectedGraph.h"
+//#include "Graph/FlowAlgorithm.h"
+//#include "Graph/ForceDirectedFlowAlgorithm.h"
+
 #include "MDLController.h"
-#include "../Utilities/IdManager.h"
-#include "../View/CommentComponent.h"
-//#include "../Graph/FlowAlgorithm.h"
-//#include "../Graph/ForceDirectedFlowAlgorithm.h"
-#include "../Graph/DirectedGraph.h"
-#include "../Utilities/ObjectsHelper.h"
 #include "GraphReflowController.h"
 
-#include "ObjController.h"
+#include "Models/ObjectActions.h"
+#include "Models/MDLFile.h"
+#include "Models/ObjectFactory.h"
+
+#include "View/ObjectComponent.h"
+#include "View/LinkComponent.h"
+#include "View/AudioOutConnector.h"
+#include "View/SelectableObject.h"
+#include "View/CommentComponent.h"
+
+#include "Utilities/IdManager.h"
+#include "Utilities/ObjectsHelper.h"
 
 #include <algorithm>
 

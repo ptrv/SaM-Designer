@@ -26,6 +26,8 @@
 #ifndef __ALERTS_H_2AC9A37F__
 #define __ALERTS_H_2AC9A37F__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**

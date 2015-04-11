@@ -23,10 +23,12 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
+#include "RedrawOptionsPanel.h"
+
+#include "Application/CommonHeaders.h"
+
 #include "RedrawOptionsComponent.h"
 
-#include "RedrawOptionsPanel.h"
 
 using namespace synthamodeler;
 

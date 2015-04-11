@@ -27,6 +27,8 @@
 #define __SNAPGRIDPAINTER_H_EFB1F3E4__
 
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class ObjectsHolder;

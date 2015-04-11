@@ -7,26 +7,31 @@
 
   ==============================================================================
 */
-
-#include "../Application/CommonHeaders.h"
-#include "../Graph/Node.h"
-#include "../View/SelectableObject.h"
-#include "../View/BaseObjectComponent.h"
-#include "../View/ContentComp.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
-#include "../View/ObjectsHolder.h"
-#include "../Utilities/StoredSettings.h"
-#include "../Utilities/ObjectsHelper.h"
-#include "../Graph/DirectedGraph.h"
-#include "../Graph/GraphUtils.h"
-#include "../Graph/FlowAlgorithm.h"
-#include "../Graph/CircleFlowAlgorithm.h"
-#include "../Graph/ForceDirectedFlowAlgorithm.h"
-#include "../Controller/ObjController.h"
-
-
 #include "GraphReflowController.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "ObjController.h"
+
+#include "Graph/Node.h"
+#include "Graph/DirectedGraph.h"
+#include "Graph/GraphUtils.h"
+#include "Graph/FlowAlgorithm.h"
+#include "Graph/CircleFlowAlgorithm.h"
+#include "Graph/ForceDirectedFlowAlgorithm.h"
+
+#include "View/SelectableObject.h"
+#include "View/BaseObjectComponent.h"
+#include "View/ContentComp.h"
+#include "View/ObjectComponent.h"
+#include "View/LinkComponent.h"
+#include "View/ObjectsHolder.h"
+
+#include "Utilities/StoredSettings.h"
+#include "Utilities/ObjectsHelper.h"
+
+
+
 
 using namespace synthamodeler;
 

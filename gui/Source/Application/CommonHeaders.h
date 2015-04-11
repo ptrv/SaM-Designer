@@ -31,18 +31,23 @@
  * All common includes.
  */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
+// #include "JuceHeader.h"
 
-#include "../Utilities/StoredSettings.h"
 #include "CommandIDs.h"
-#include "../Models/ObjectIDs.h"
-#include "../Utilities/Alerts.h"
-#include "../Utilities/MiscUtilities.h"
-//#include "../Utilities/SAMRegex.h"
-#include "../Utilities/ResourceLoader.h"
-#include "../View/PropertiesWindow.h"
 #include "Application.h"
-#include "../Controller/PostWindowController.h"
+
+#include "Controller/PostWindowController.h"
+
+#include "Models/ObjectIDs.h"
+
+#include "View/PropertiesWindow.h"
+
+#include "Utilities/StoredSettings.h"
+#include "Utilities/Alerts.h"
+#include "Utilities/MiscUtilities.h"
+//#include "Utilities/SAMRegex.h"
+#include "Utilities/ResourceLoader.h"
+
 
 namespace synthamodeler
 {

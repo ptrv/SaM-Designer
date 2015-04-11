@@ -26,6 +26,8 @@
 
 #ifndef __NODE_H_FB030B36__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

@@ -26,6 +26,8 @@
 #ifndef __TEXTCONSOLE_H_16CA25D5__
 #define __TEXTCONSOLE_H_16CA25D5__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**

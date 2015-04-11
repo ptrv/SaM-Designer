@@ -26,19 +26,24 @@
 #ifndef __OBJECTACTIONS_H_7C20FDA1__
 #define __OBJECTACTIONS_H_7C20FDA1__
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-#include "ObjectFactory.h"
-#include "../Graph/Node.h"
-#include "../View/BaseObjectComponent.h"
-#include "../View/ObjectComponent.h"
-#include "../View/LinkComponent.h"
-#include "../View/AudioOutConnector.h"
-#include "../View/ObjectsHolder.h"
-#include "../Controller/ObjController.h"
-#include "../View/SelectableObject.h"
-#include "../View/CommentComponent.h"
-#include "../Utilities/ObjectsHelper.h"
+#include "JuceHeader.h"
+
+#include "Controller/ObjController.h"
+
+#include "Graph/Node.h"
+
 #include "ObjectIDs.h"
+#include "ObjectFactory.h"
+
+#include "View/BaseObjectComponent.h"
+#include "View/ObjectComponent.h"
+#include "View/LinkComponent.h"
+#include "View/AudioOutConnector.h"
+#include "View/ObjectsHolder.h"
+#include "View/SelectableObject.h"
+#include "View/CommentComponent.h"
+
+#include "Utilities/ObjectsHelper.h"
 
 namespace synthamodeler
 {

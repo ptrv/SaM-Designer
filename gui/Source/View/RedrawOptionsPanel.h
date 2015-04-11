@@ -26,6 +26,8 @@
 #ifndef __REDRAWOPTIONSPANEL_H_E7478E88__
 #define __REDRAWOPTIONSPANEL_H_E7478E88__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 //==============================================================================

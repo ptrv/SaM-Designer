@@ -23,9 +23,8 @@
 
 */
 
-#include "../../JuceLibraryCode/JuceHeader.h"
-
 #include "Alerts.h"
+
 
 using namespace synthamodeler;
 

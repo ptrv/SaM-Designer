@@ -27,6 +27,8 @@
 #define __COMMENTEDITOR_H_D81136D5__
 
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 class CommentComponent;

@@ -23,17 +23,21 @@
 
  */
 
-#include "../Application/CommonHeaders.h"
-#include "../View/SelectableObject.h"
-#include "../Graph/Node.h"
+#include "AudioOutConnector.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Graph/Node.h"
+
 #include "BaseObjectComponent.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
-#include "../Controller/ObjController.h"
 #include "ObjectsHolder.h"
-#include "../Utilities/ObjectsHelper.h"
 
-#include "AudioOutConnector.h"
+#include "Utilities/ObjectsHelper.h"
+
 
 using namespace synthamodeler;
 

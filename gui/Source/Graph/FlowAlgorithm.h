@@ -27,6 +27,8 @@
 #ifndef __FLOWALGORITHM_H_95F25A21__
 #define __FLOWALGORITHM_H_95F25A21__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

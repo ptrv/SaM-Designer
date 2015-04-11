@@ -18,13 +18,15 @@
 */
 
 //[Headers] You can add your own extra header files here...
-#include "JuceHeader.h"
 //[/Headers]
 
 #include "MDLInformation.h"
 
 
 //[MiscUserDefs] You can add your own user definitions and misc code here...
+#include "JuceHeader.h"
+
+
 using namespace synthamodeler;
 //[/MiscUserDefs]
 

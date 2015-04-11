@@ -27,10 +27,13 @@
 #define __LINKCOMPONENT_H_4CCE4B86__
 
 
+#include "JuceHeader.h"
+
+#include "BaseObjectComponent.h"
+#include "SelectableObject.h"
+
 namespace synthamodeler
 {
-class SelectableObject;
-class BaseObjectComponent;
 class ObjController;
 class ObjectComponent;
 class IdLabel;

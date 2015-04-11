@@ -28,11 +28,13 @@
 #ifndef __MAINWINDOW_H_3C77CBD5__
 #define __MAINWINDOW_H_3C77CBD5__
 
+#include "JuceHeader.h"
 
 namespace synthamodeler
 {
 class ContentComp;
 class ObjController;
+class ObjectsHolder;
 class MDLFile;
 class MDLController;
 class MDLInformation;

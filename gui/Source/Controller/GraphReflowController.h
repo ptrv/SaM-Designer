@@ -11,6 +11,8 @@
 #ifndef GRAPHREFLOWCONTROLLER_H_INCLUDED
 #define GRAPHREFLOWCONTROLLER_H_INCLUDED
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 

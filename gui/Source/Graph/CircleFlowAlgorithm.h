@@ -27,6 +27,9 @@
 #ifndef __CIRCLEFLOWALGORITHM_H_6B9B5EB1__
 #define __CIRCLEFLOWALGORITHM_H_6B9B5EB1__
 
+#include "JuceHeader.h"
+
+#include "FlowAlgorithm.h"
 
 namespace synthamodeler
 {

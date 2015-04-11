@@ -23,11 +23,14 @@
 
 */
 
-#include "../Application/CommonHeaders.h"
-#include "../Controller/ObjController.h"
-#include "../Utilities/IdManager.h"
-
 #include "FaustcodePanel.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Controller/ObjController.h"
+
+#include "Utilities/IdManager.h"
+
 
 using namespace synthamodeler;
 

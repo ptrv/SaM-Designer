@@ -23,10 +23,12 @@
 
  */
 
-#include "../Application/CommonHeaders.h"
-#include "../Utilities/ObjectsHelper.h"
-
 #include "IdManager.h"
+
+#include "Application/CommonHeaders.h"
+
+#include "Utilities/ObjectsHelper.h"
+
 
 using namespace synthamodeler;
 

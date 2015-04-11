@@ -26,6 +26,8 @@
 #ifndef __STOREDSETTINGS_H_7CF20172__
 #define __STOREDSETTINGS_H_7CF20172__
 
+#include "JuceHeader.h"
+
 namespace synthamodeler
 {
 /**
