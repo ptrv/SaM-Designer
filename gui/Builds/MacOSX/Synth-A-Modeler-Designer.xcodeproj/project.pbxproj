@@ -1830,7 +1830,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Libs/re2 -stdlib=libc++";
+				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Testsuite -I../../Libs/re2 -stdlib=libc++";
 				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2 -stdlib=libc++";
 				SDKROOT_ppc = macosx10.5; }; name = Debug; };
 		04205668AD9AC3C13C4B3679 = {isa = XCBuildConfiguration; buildSettings = {
@@ -1854,7 +1854,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Libs/re2 -stdlib=libc++";
+				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Testsuite -I../../Libs/re2 -stdlib=libc++";
 				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2 -stdlib=libc++";
 				SDKROOT_ppc = macosx10.5; }; name = Release; };
 		CB7D49DC606871A43686D7A5 = {isa = XCBuildConfiguration; buildSettings = {

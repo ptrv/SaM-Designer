@@ -294,6 +294,6 @@ const String SAMCmd::getOutPath(const String& inPath_)
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../../Testsuite/SAMCmd_test.h"
+#include "SAMCmd_test.h"
 
 #endif

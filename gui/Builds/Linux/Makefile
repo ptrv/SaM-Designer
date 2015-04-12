@@ -19,7 +19,7 @@ ifeq ($(CONFIG),Debug)
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -I../../Source -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
+  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -I../../Source -I../../Libs/re2 -I../../Testsuite -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
 
@@ -39,7 +39,7 @@ ifeq ($(CONFIG),Release)
   endif
 
   CPPFLAGS := $(DEPFLAGS) -std=c++11 -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.0dev" -D "JUCE_APP_VERSION_HEX=0x400" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
-  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os -I../../Source -I../../Libs/re2 -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
+  CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os -I../../Source -I../../Libs/re2 -I../../Testsuite -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
   CXXFLAGS += $(CFLAGS)
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -L../../Libs/re2/obj -lre2
 

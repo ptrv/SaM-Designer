@@ -26,7 +26,13 @@
 #ifndef __SAMCMD_TEST_H_E0BDB8A1__
 #define __SAMCMD_TEST_H_E0BDB8A1__
 
+#include "JuceHeader.h"
+
 #include "TestUtils.h"
+
+#include "Utilities/CmdHelper.h"
+
+
 namespace synthamodeler
 {
 class SAMCmdTest : public UnitTest {

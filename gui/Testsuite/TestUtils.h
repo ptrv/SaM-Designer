@@ -26,8 +26,6 @@
 #ifndef __TESTUTILS_H_D0F1300A__
 #define __TESTUTILS_H_D0F1300A__
 
-#include "../JuceLibraryCode/JuceHeader.h"
-
 namespace synthamodeler
 {
 #if JUCE_MAC

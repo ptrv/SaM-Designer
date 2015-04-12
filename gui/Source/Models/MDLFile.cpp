@@ -298,7 +298,7 @@ bool MDLFile::checkIfChecksumChanged()
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../../Testsuite/MDLFile_test.h"
+#include "MDLFile_test.h"
 
 #endif
 

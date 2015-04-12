@@ -444,6 +444,6 @@ bool MDLParser::parseMDLX(const File& f, bool onlyExtras)
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../../Testsuite/MDLParser_test.h"
+#include "MDLParser_test.h"
 
 #endif

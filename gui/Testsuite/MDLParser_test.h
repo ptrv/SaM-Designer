@@ -26,7 +26,13 @@
 #ifndef __MDLPARSER_TEST_H_E5DA3686__
 #define __MDLPARSER_TEST_H_E5DA3686__
 
-#include "TestUtils.h"
+#include "JuceHeader.h"
+
+// #include "TestUtils.h"
+
+#include "Utilities/RegularExpression.h"
+#include "Utilities/SAMRegex.h"
+
 
 namespace synthamodeler
 {

@@ -26,7 +26,13 @@
 #ifndef __MDLFILE_TEST_H_234EF909__
 #define __MDLFILE_TEST_H_234EF909__
 
+#include "JuceHeader.h"
+
 #include "TestUtils.h"
+
+#include "Models/ObjectIDs.h"
+#include "Models/MDLFile.h"
+
 
 namespace synthamodeler
 {

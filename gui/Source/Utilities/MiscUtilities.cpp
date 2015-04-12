@@ -379,6 +379,6 @@ void Utils::cleanDataDirAll()
 //==============================================================================
 #if UNIT_TESTS
 
-#include "../../Testsuite/MiscUtilities_test.h"
+#include "MiscUtilities_test.h"
 
 #endif

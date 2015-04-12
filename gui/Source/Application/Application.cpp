@@ -45,7 +45,7 @@ ScopedPointer<PropertiesWindow> synthamodeler::propertiesWindow;
 ScopedPointer<PostWindowController> synthamodeler::postWindow;
 
 #if UNIT_TESTS
-#include "../../Testsuite/TestRunner.h"
+#include "TestRunner.h"
 #endif
 
 static const int snapSizes[] = { 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32 };

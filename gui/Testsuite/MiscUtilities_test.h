@@ -26,7 +26,13 @@
 #ifndef __MISCUTILITIES_TEST_H_C3534391__
 #define __MISCUTILITIES_TEST_H_C3534391__
 
-#include "TestUtils.h"
+#include "JuceHeader.h"
+
+// #include "TestUtils.h"
+
+#include "Utilities/MiscUtilities.h"
+
+
 namespace synthamodeler
 {
 class MiscUtilitiesTest : public UnitTest {
