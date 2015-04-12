@@ -878,7 +878,7 @@ void SAMApplication::togglePropertiesWindowAlwaysOnTop()
 {
     StoredSettings* settings = StoredSettings::getInstance();
 
-    bool shouldStayOnTop = ! settings->getIsPropertiesWindowAlwaysOnTop();
+    const bool shouldStayOnTop = !settings->getIsPropertiesWindowAlwaysOnTop();
 
     propertiesWindow->setAlwaysOnTop(shouldStayOnTop);
 
@@ -909,7 +909,7 @@ void SAMApplication::switchToPreviousWindow()
 
 void SAMApplication::mainWindowActivityChanged (MainAppWindow* mainWin)
 {
-    int idx = activeWindowsList.indexOf(mainWin);
+    const int idx = activeWindowsList.indexOf(mainWin);
     activeWindowsList.remove(idx);
     activeWindowsList.insert(0, mainWin);
 }

@@ -148,7 +148,7 @@ void ObjController::addNewLink(ObjectsHolder* holder, ValueTree linkValues)
     addLink(holder, linkValues, -1, true);
 }
 
-bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
+bool ObjController::checkIfLinkExitsts(const ValueTree& linkTree) const
 {
     return std::any_of(links.begin(), links.end(), [&](const LinkComponent* const lc)
     {
@@ -156,8 +156,8 @@ bool ObjController::checkIfLinkExitsts(ValueTree linkTree)
     });
 }
 
-bool ObjController::checkIfAudioConnectionExitsts(ValueTree source,
-                                                  ValueTree audioOut)
+bool ObjController::checkIfAudioConnectionExitsts(const ValueTree& source,
+                                                  const ValueTree& audioOut) const
 {
     auto fnCompareAudioConnections = [&](const AudioOutConnector* const aoc)
     {
@@ -723,7 +723,7 @@ void ObjController::reverseLinkDirection()
     owner.getUndoManager().beginNewTransaction();
 }
 
-Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
+Array<int> ObjController::checkIfObjectHasLinks(const ValueTree& objTree) const
 {
     Array<int> linkIndices;
     for (int i = 0; i < links.size(); i++)
@@ -740,7 +740,7 @@ Array<int> ObjController::checkIfObjectHasLinks(ValueTree objTree)
     return linkIndices;
 }
 
-Array<int> ObjController::checkIfObjectHasAudioConnections(ValueTree objTree)
+Array<int> ObjController::checkIfObjectHasAudioConnections(const ValueTree& objTree) const
 {
     Array<int> aocIndices;
     for (int i = 0; i < audioConnections.size(); ++i)
@@ -761,7 +761,7 @@ Array<int> ObjController::checkIfObjectHasAudioConnections(ValueTree objTree)
 
 //==============================================================================
 
-bool ObjController::checkIfIdExists(const Identifier& objId, const String& idStr)
+bool ObjController::checkIfIdExists(const Identifier& objId, const String& idStr) const
 {
     return idMgr->contains(objId, idStr);
 }

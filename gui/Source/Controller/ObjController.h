@@ -199,7 +199,7 @@ public:
     
     void reverseLinkDirection();
     
-    bool checkIfIdExists(const Identifier& objId, const String& idStr);
+    bool checkIfIdExists(const Identifier& objId, const String& idStr) const;
     bool renameId(const Identifier& objId, const String& oldId,
                   const String& newId, UndoManager* undoManager_);
     
@@ -224,10 +224,11 @@ public:
 
 private:
     
-    bool checkIfLinkExitsts(ValueTree linkTree);
-    bool checkIfAudioConnectionExitsts(ValueTree source, ValueTree audioOut);
-    Array<int> checkIfObjectHasLinks(ValueTree objTree);
-    Array<int> checkIfObjectHasAudioConnections(ValueTree objTree);
+    bool checkIfLinkExitsts(const ValueTree& linkTree) const;
+    bool checkIfAudioConnectionExitsts(const ValueTree& source,
+                                       const ValueTree& audioOut) const;
+    Array<int> checkIfObjectHasLinks(const ValueTree& objTree) const;
+    Array<int> checkIfObjectHasAudioConnections(const ValueTree& objTree) const;
     MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
