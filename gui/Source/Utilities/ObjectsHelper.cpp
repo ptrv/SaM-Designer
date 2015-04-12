@@ -810,3 +810,10 @@ bool ObjectsHelper::canSelectedObjectsBeConnected(ObjController& objController,
 }
 
 //------------------------------------------------------------------------------
+
+bool ObjectsHelper::equivalentById(const ValueTree& lhs, const ValueTree& rhs)
+{
+    return lhs[Ids::identifier] == rhs[Ids::identifier];
+}
+
+//------------------------------------------------------------------------------

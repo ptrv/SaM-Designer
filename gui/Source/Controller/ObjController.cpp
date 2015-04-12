@@ -159,16 +159,14 @@ bool ObjController::checkIfLinkExitsts(const ValueTree& linkTree) const
 bool ObjController::checkIfAudioConnectionExitsts(const ValueTree& source,
                                                   const ValueTree& audioOut) const
 {
-    auto fnCompareAudioConnections = [&](const AudioOutConnector* const aoc)
-    {
-        const ValueTree& sourceComp = aoc->getSourceObject()->getData();
-        const ValueTree& aoComp = aoc->getAudioObject()->getData();
-
-        return sourceComp[Ids::identifier] == source[Ids::identifier]
-            && aoComp[Ids::identifier] == audioOut[Ids::identifier];
-    };
     return std::any_of(audioConnections.begin(), audioConnections.end(),
-                       fnCompareAudioConnections);
+                       [&](const AudioOutConnector* const aoc)
+                       {
+                           return ObjectsHelper::equivalentById(
+                               source, aoc->getSourceObject()->getData()) &&
+                                  ObjectsHelper::equivalentById(
+                                      audioOut, aoc->getAudioObject()->getData());
+                       });
 }
 
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
@@ -253,51 +251,42 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
 
         if(oc1 != nullptr && oc2 != nullptr)
         {
-            if (oc1->getData().getType() == Ids::audioout
-                && oc2->getData().getType() != Ids::audioout)
+            if (oc1->getData().getType() == Ids::audioout &&
+                oc2->getData().getType() != Ids::audioout &&
+                !checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
             {
-                if(! checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
-                {
-                    ValueTree src = ObjectFactory::createAudioSourceTree(
-                        oc2->getData()[Ids::identifier].toString(), "*1.0");
-//                    ValueTree sources = oc1->getData().getOrCreateChildWithName(Ids::sources)
-                    addAudioConnection(holder, oc2, oc1, src, -1, true);
-                }
+                ValueTree src = ObjectFactory::createAudioSourceTree(
+                    oc2->getData()[Ids::identifier].toString(), "*1.0");
+                addAudioConnection(holder, oc2, oc1, src, -1, true);
             }
-            else if (oc1->getData().getType() != Ids::audioout
-                && oc2->getData().getType() == Ids::audioout)
+            else if (oc1->getData().getType() != Ids::audioout &&
+                     oc2->getData().getType() == Ids::audioout &&
+                     !checkIfAudioConnectionExitsts(oc1->getData(), oc2->getData()))
             {
-                if(! checkIfAudioConnectionExitsts(oc1->getData(), oc2->getData()))
-                {
-                    ValueTree src = ObjectFactory::createAudioSourceTree(
-                        oc1->getData()[Ids::identifier].toString(), "*1.0");
-                    addAudioConnection(holder, oc1, oc2, src, -1, true);
-                }
+                ValueTree src = ObjectFactory::createAudioSourceTree(
+                    oc1->getData()[Ids::identifier].toString(), "*1.0");
+                addAudioConnection(holder, oc1, oc2, src, -1, true);
             }
             else
             {
                 SAM_CONSOLE("Cannot create audio connection", PostLevel::ERROR);
             }
         }
-        else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr
-            && lc1->getData().getType() != Ids::waveguide)
+        else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr &&
+                lc1->getData().getType() != Ids::waveguide &&
+                !checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
         {
-            if( ! checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
-            {
-                ValueTree src = ObjectFactory::createAudioSourceTree(
-                    lc1->getData()[Ids::identifier].toString(), "*1.0");
-                addAudioConnection(holder, lc1, oc2, src, -1, true);
-            }
+            ValueTree src = ObjectFactory::createAudioSourceTree(
+                lc1->getData()[Ids::identifier].toString(), "*1.0");
+            addAudioConnection(holder, lc1, oc2, src, -1, true);
         }
-        else if(oc2 == nullptr && oc1 != nullptr && lc2 != nullptr
-            && lc2->getData().getType() != Ids::waveguide)
+        else if(oc2 == nullptr && oc1 != nullptr && lc2 != nullptr &&
+                lc2->getData().getType() != Ids::waveguide &&
+                !checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
         {
-            if( ! checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
-            {
-                ValueTree src = ObjectFactory::createAudioSourceTree(
-                    lc2->getData()[Ids::identifier].toString(), "*1.0");
-                addAudioConnection(holder, lc2, oc1, src, -1, true);
-            }
+            ValueTree src = ObjectFactory::createAudioSourceTree(
+                lc2->getData()[Ids::identifier].toString(), "*1.0");
+            addAudioConnection(holder, lc2, oc1, src, -1, true);
         }
         else
         {
@@ -747,11 +736,8 @@ Array<int> ObjController::checkIfObjectHasAudioConnections(const ValueTree& objT
     {
         const AudioOutConnector* const aoc = audioConnections.getUnchecked(i);
 
-        const ValueTree aocSource = aoc->getSourceObject()->getData();
-        const ValueTree aocAudioObject = aoc->getAudioObject()->getData();
-
-        if(aocSource[Ids::identifier] == objTree[Ids::identifier] ||
-           aocAudioObject[Ids::identifier] == objTree[Ids::identifier])
+        if (ObjectsHelper::equivalentById(objTree, aoc->getSourceObject()->getData()) ||
+            ObjectsHelper::equivalentById(objTree, aoc->getAudioObject()->getData()))
         {
             aocIndices.add(i);
         }

@@ -99,6 +99,8 @@ public:
     static bool canSelectedObjectsBeConnected(ObjController& objController,
                                               const Identifier& linkType);
 
+    static bool equivalentById(const ValueTree& lhs, const ValueTree& rhs);
+
 private:
 
     template<typename ObjType>
