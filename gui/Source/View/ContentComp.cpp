@@ -96,7 +96,7 @@ public:
             const double factor = (wheel.deltaY > 0) ? 2.0 : 0.5;
             const double newZoom = panel->getZoom() * factor;
 
-            if (newZoom > 0.125)
+            if (newZoom >= 0.25 && newZoom <= 4)
             {
                 panel->setZoom(newZoom, wheel.deltaX, wheel.deltaY);
             }
@@ -343,14 +343,17 @@ void ContentComp::getCommandInfo(CommandID commandID, ApplicationCommandInfo& re
     case CommandIDs::zoomIn:
         result.setInfo(TRANS("Zoom In"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('9', ModifierKeys::altModifier);
+        result.setActive(getZoom() < 4.0);
         break;
     case CommandIDs::zoomOut:
         result.setInfo(TRANS("Zoom Out"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('8', ModifierKeys::altModifier);
+        result.setActive(getZoom() > 0.25);
         break;
     case CommandIDs::zoomNormal:
         result.setInfo(TRANS("Zoom Normal"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('0', ModifierKeys::altModifier);
+        result.setActive(getZoom() != 1.0);
         break;
     case CommandIDs::spaceBarDrag:
         result.setInfo(TRANS("Scroll while dragging mouse"),
