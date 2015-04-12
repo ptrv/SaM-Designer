@@ -44,9 +44,9 @@ using namespace synthamodeler;
 ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_), dragging(false), mouseDownSelectStatus(false)
 {
-    shadow.setShadowProperties (
-            DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
-    setComponentEffect (&shadow);
+    // shadow.setShadowProperties (
+    //         DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
+    // setComponentEffect (&shadow);
 
     if(data.getType() == Ids::mass)
         setSize(35, 35);

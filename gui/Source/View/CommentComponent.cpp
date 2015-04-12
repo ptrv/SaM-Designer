@@ -43,9 +43,9 @@ using namespace synthamodeler;
 CommentComponent::CommentComponent(ObjController& owner_, ValueTree data_)
 : BaseObjectComponent(owner_, data_)
 {
-    shadow.setShadowProperties (
-			DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
-	setComponentEffect (&shadow);
+    // shadow.setShadowProperties (
+    //         DropShadow (Colours::black.withAlpha (0.5f), 3, Point<int> (0, 1)));
+    // setComponentEffect (&shadow);
 
     const String commentColorStr = data.getProperty(Ids::commentColour, Colours::black.toString());
     commentColor = Colour::fromString(commentColorStr);
