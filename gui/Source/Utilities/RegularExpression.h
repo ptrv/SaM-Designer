@@ -31,29 +31,79 @@
 namespace synthamodeler
 {
 //==============================================================================
+/*
+    This class is designed around PCRE library for regular expression
+    parsing and evaluating
+
+    e.g. @code
+    RegularExpression re("\\d{3}");
+    int found = re.match("123.345");
+
+    if ( found >= 0 )
+    {
+        int o, e;
+        for( int i=0; i<found; i++ )
+        {
+            String s = "";
+            String result = re.getStringOffsetSize(i,o,e);
+
+            s << "'" << result << "' - (" << o << "," << e << ")" ;
+            AlertWindow::showMessageBox(AlertWindow::WarningIcon,T(""),s);
+        }
+    }
+    else
+        AlertWindow::showMessageBox(AlertWindow::WarningIcon,T(""),T("not found anything"))
+ */
 class RegularExpression
 {
 public:
 
-	RegularExpression();
-	RegularExpression( const String& pattern_);
-	~RegularExpression();
+    enum {
+        OVECOUNT = 30,
+        compileFailed = -100,
+        bufferSizeError = -101,
+        matchNotFound = -102,
+        matchFindError = -103
+    };
+
+    RegularExpression();
+    RegularExpression( const String& pattern_);
+    ~RegularExpression();
 
     bool fullMatch(const String& subject);
     bool fullMatch(const String& pattern, const String& subject);
     bool fullMatchValues(const String& subject, StringArray& result, int numResults);
     bool fullMatchValues(const String& pattern, const String& subject,
                          StringArray& result, int numResults);
-    bool partialMatch(const String& subject);
-    bool partialMatch(const String& pattern, const String& subject);
+    // bool partialMatch(const String& subject);
+    // bool partialMatch(const String& pattern, const String& subject);
     void findAndConsume(const String& subject, StringArray& result);
     void findAndConsume(const String& pattern, const String& subject,
                         StringArray& result);
+
+    int match( const String& subject );
+    int match( const String& pattern, const String& subject );
+    String getStringOffsetSize( int num, int& start, int& end );
+
 private:
 
-	String pattern;
-	String subject;
+    class ExpressionIndex
+    {
+    public:
+        ExpressionIndex(int s, int e)
+            : start(s), end(e) { }
+        int start;
+        int end;
+    };
 
+    int numSubStrings;
+
+    OwnedArray<ExpressionIndex> index;
+
+    String pattern;
+    String subject;
+
+    RegularExpression(const RegularExpression& other);
 };
 }
 

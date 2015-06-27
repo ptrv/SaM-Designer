@@ -37,30 +37,30 @@ private:
     SAMRegex(){}
     ~SAMRegex(){}
 public:
-    static const char* pos;
-    static const char* label;
-    static const char* labels;
-    static const char* param;
-    static const char* params;
-    static const char* vertex;
-    static const char* link;
-    static const char* audioOutDetails;
-    static const char* faustName;
-    static const char* faustCode;
-    static const char* paramsDetail;
-    static const char* paramsDetailRes;
-    static const char* word;
-    static const char* commentObject;
-    
-    static String getVertexLine();
-    static String getLinkLine();
-    static String getAudioOutLine();
-    static String getFaustLine();
-    static String getTerminationLine();
-    static String getJunctionLine();
-    static String getWaveguideLine();
-    static String getParamsLine(int numParams);
-    static String getCommentObjectLine();
+
+    static const char* myLabel;
+    static const char* myLabels;
+    static const char* myParam;
+    static const char* myParams;
+    static const char* myVertex;
+    static const String getVertexLine();
+    static const char* myLink;
+    static const String getLinkLine();
+    static const char* myAudioOutDetails;
+    static const String getAudioOutLine();
+    static const char* myFaustCode;
+    static const String getFaustCodeLine();
+    static const String getInternalFaustCodeLine();
+    static const char* myAdjustIndex;
+    static const String getAdjustLine();
+    static const String getTerminationLine();
+    static const String getWaveguideLine();
+    static const char* myJunctionInteraction;
+    static const String getJunctionInteractionLine();
+    static const String getJunctionLine();
+    static const char* myDisplayAttach;
+    static const String getDisplayAttachLine();
+    static const String getCommentObjectLine();
 };
 }
 

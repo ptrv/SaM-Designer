@@ -30,6 +30,7 @@
 
 // #include "TestUtils.h"
 
+#include "Utilities/MDLParser.h"
 #include "Utilities/RegularExpression.h"
 #include "Utilities/SAMRegex.h"
 
@@ -65,7 +66,7 @@ public:
         expect(re.fullMatch(SAMRegex::getAudioOutLine(),
                             "audioout,a3,(bounceme*1.0):filter;"));
         // test 7
-        expect(re.fullMatch(SAMRegex::getFaustLine(),
+        expect(re.fullMatch(SAMRegex::getFaustCodeLine(),
                             "faustcode: frequencyScaler = 0.3;"));
         // test 8
         expect(re.fullMatch(SAMRegex::getTerminationLine(),
@@ -101,28 +102,28 @@ public:
         expect(re.fullMatch(SAMRegex::getVertexLine(),
                             "resonators(200.0,1.5,0.01),r0;"));
         // test 19
-        expect(re.fullMatch(SAMRegex::getParamsLine(3),
-                            "200.0,1.5,0.01"));
+        expect(MDLParser::getParamsFromString("200.0,1.5,0.01").size() == 3);
+
         // test 20
-        expect(re.fullMatch(SAMRegex::getParamsLine(3),
-                            "200.0*adjStiffness,1.5,0.01"));
+        expect(MDLParser::getParamsFromString("200.0*adjStiffness,1.5,0.01").size() == 3);
+
         // test 21
-        expect(re.fullMatch(SAMRegex::getParamsLine(2),
-                            "8.0,simpleString(1.0,0.001)"));
+        expect(MDLParser::getParamsFromString("8.0,simpleString(1.0,0.001)").size() == 2);
+
         // test 22
-        expect(re.fullMatch(SAMRegex::getParamsLine(1),
-                            "simpleString(1.0,0.001,0.1)"));
+        expect(MDLParser::getParamsFromString("simpleString(1.0,0.001,0.1)").size() == 1);
+
         // test 23
-        expect(re.fullMatch(SAMRegex::getParamsLine(1),
-                            "1.0"));
+        expect(MDLParser::getParamsFromString("1.0").size() == 1);
+
         // test 24
-        expect(re.fullMatch(SAMRegex::getParamsLine(2),
-                            "simpleString(1.0, 0.001,3.0) , 8.0"));
+        expect(MDLParser::getParamsFromString("simpleString(1.0, 0.001,3.0) , 8.0").size() == 2);
+
         // test 25
-        StringArray paramsArray;
-        expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
-                                  "(1.0 + randomTweak * (-0.799939)),0.0,0.0",
-                                  paramsArray, 3));
+        StringArray paramsArray = MDLParser::getParamsFromString(
+            "(1.0 + randomTweak * (-0.799939)),0.0,0.0");
+        expect(paramsArray.size() == 3);
+
         // test 26
         expect(paramsArray[0].compare("(1.0 + randomTweak * (-0.799939))") == 0 &&
                paramsArray[1].compare("0.0") == 0 &&
@@ -131,7 +132,7 @@ public:
 //            DBG(paramsArray[i]);
 //        }
         // test 27
-        expect(re.partialMatch("\\A\\s*(faustcode):.*",
+        expect(re.fullMatch("\\A\\s*(faustcode):.*",
                                "faustcode: adjStiffness=hslider(\"stiffness\", 2200.0, 500.0, 100.0, 4000.0);"));
         // test28
         StringArray vals;
@@ -139,15 +140,15 @@ public:
                                   "mass(0.003,0.0,0.0),mass;",
                                   vals, 3));
         // test 29
-        expect(re.fullMatch(SAMRegex::params, "0.5, simpleString(0.033, 0.033*frequencyScaler)"));
+        expect(re.fullMatch(SAMRegex::myParams, "0.5, simpleString(0.033, 0.033*frequencyScaler)"));
 
         // test 30
         StringArray vals2;
         expect(re.fullMatchValues(SAMRegex::getWaveguideLine(), "waveguide(0.5, simpleString(0.033, 0.033*frequencyScaler)),w3,t3 ,junct1;",
-                                  vals2, 5));
+                                  vals2, 4));
         // test 31
-        expect(vals2[0].compare("waveguide") == 0 &&
-               vals2[1].compare("0.5, simpleString(0.033, 0.033*frequencyScaler)") == 0 &&
+        expect(vals2[0].compare("0.5") == 0 &&
+               vals2[1].compare("simpleString(0.033, 0.033*frequencyScaler)") == 0 &&
                vals2[2].compare("w3") == 0 &&
                vals2[3].compare("t3") == 0 &&
                vals2[4].compare("junct1") == 0);
@@ -163,10 +164,9 @@ public:
                vals3[3].compare("") == 0);
 
         // test 34
-        StringArray vals4;
-        expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
-                                  "massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0",
-                                  vals4, 3));
+        StringArray vals4 = MDLParser::getParamsFromString("massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0");
+        expect(vals4.size() == 3);
+
         // test 35
         expect(vals4[0].compare("massMembrane*(1.0 + randomTweak*(-0.799939))") == 0 &&
                vals4[1].compare("0.0") == 0 &&
@@ -189,10 +189,8 @@ public:
                commentVals[3].compare("# pos 200, 100") == 0);
 
         // test 39
-        StringArray commentParams;
-        expect(re.fullMatchValues(SAMRegex::getParamsLine(3),
-                                  "\"Test\", 16, ff000000",
-                                  commentParams, 3));
+        StringArray commentParams = MDLParser::getParamsFromString("\"Test\", 16, ff000000");
+        expect(commentParams.size() == 3);
 
         // test 40
         expect(commentParams[0].removeCharacters("\\\"").compare("Test") == 0 &&
@@ -200,19 +198,14 @@ public:
                commentParams[2].compare("ff000000") == 0);
 
         // test 41
-        StringArray resonatorsParams;
-        String reResStr;
-        reResStr << "\\s*" << SAMRegex::paramsDetailRes << "\\s*[,]*";
-        RegularExpression reResonators(reResStr);
-        reResonators.findAndConsume("0.001, 0.3, 0.1,0.001, 0.3, 0.1,200.0,decayTime*1.0,0.01",
-                                    resonatorsParams);
+        StringArray resonatorsParams =
+            MDLParser::getParamsFromString(
+                "0.001, 0.3, 0.1,0.001, 0.3, 0.1,200.0,decayTime*1.0,0.01");
         expect(resonatorsParams.size() == 9);
 
         // test 41
         expect(re.fullMatch(SAMRegex::getVertexLine(),
                             "resonators(200.0,1.5,0.01,220.0,2.0,0.02),r0; # pos 223,385"));
-
-
     }
 };
 

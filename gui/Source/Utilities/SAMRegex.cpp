@@ -27,101 +27,109 @@
 
 using namespace synthamodeler;
 
-const char* SAMRegex::pos = "(\\s*#\\s*pos\\s*\\d+,\\s*\\d+\\s*)?";
-const char* SAMRegex::label = "([a-zA-Z\\d]*)";
-const char* SAMRegex::labels = "([a-zA-Z,\\d\\s]*)";
-const char* SAMRegex::param = "(\\s*[^\\n\\r\\a\\033\\f,]*\\s*)";
-const char* SAMRegex::params = "(\\s*[^\\n\\r\\a\\033\\f]*\\s*)";
-const char* SAMRegex::vertex = "(mass|port|ground|resonators)";
-const char* SAMRegex::link = "(link|pluck|touch|pulsetouch)";
-const char* SAMRegex::audioOutDetails = "(.+)";
-const char* SAMRegex::faustName = "\\A\\s*(faustcode):.*";
-//const char* SAMRegex::faustCode = "(.+)\\s*=\\s*(.+)";
-const char* SAMRegex::faustCode = "(.+)";
-//const char* SAMRegex::paramsDetail = "([-\\+\\.a-zA-Z\\d\\*]+|[a-zA-Z]*\\([a-zA-Z\\.\\d,\\s*]*\\))"";
-const char* SAMRegex::paramsDetail = "([\\d\\.]*|[\\d\\.\\*a-zA-Z]*|[\\(\\)\\*\\+\\-a-zA-Z\\.\\d,/:\\s*]*|[\\w\\\\\"\\s[:graph:]]*)";
-// resonators paramsDetail
-const char* SAMRegex::paramsDetailRes = "([\\d\\.\\*a-zA-Z]*)";
-const char* SAMRegex::word = "(\\w+)";
-const char* SAMRegex::commentObject = "\\A\\s*#\\s*(comment)";
+const char* SAMRegex::myLabel = "([a-zA-Z\\d]*)";
+const char* SAMRegex::myLabels = "([a-zA-Z,\\d\\s]*)";
+const char* SAMRegex::myParam = "(\\s*[^\\n\\r\\a\\e\\f,]*\\s*)";
+const char* SAMRegex::myParams = "(\\s*[^\\n\\r\\a\\e\\f]*\\s*)";
 
-String SAMRegex::getVertexLine()
+const char* SAMRegex::myLink = "(link|pluck|touch|linkCA|BUT|pulseTouch|pulseTouchGeneral|pulseTouchTable|detent|stiffeninglink|softeninglink)";
+
+const String SAMRegex::getLinkLine()
 {
-    static const String vertexLine =
-        String::formatted(
-            "\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;(.*)$",
-            vertex, params, label);
-    return vertexLine;
+    static const String myLinkLine =
+        String::formatted("\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*;\\s*$",
+                          myLink, myParams, myLabel, myLabel, myLabel);
+    return myLinkLine;
 }
 
-String SAMRegex::getLinkLine()
+const char* SAMRegex::myVertex = "(mass|port|ground|resonators|massCA)";
+
+const String SAMRegex::getVertexLine()
 {
-    static const String linkLine =
-        String::formatted(
-            "\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*;.*$",
-            link, params, label, label, label);
-    return linkLine;
+    static const String myVertexLine =
+        String::formatted("\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
+                          myVertex, myParams, myLabel);
+    return myVertexLine;
 }
 
-String SAMRegex::getAudioOutLine()
+const char* SAMRegex::myAudioOutDetails = "(.+)";
+
+const String SAMRegex::getAudioOutLine()
 {
-    static const String aoLine =
-        String::formatted("\\A\\s*(audioout)\\s*,\\s*%s\\s*,%s;(.*)$",
-                          label, audioOutDetails);
-    return aoLine;
+    static const String myAudioOutLine =
+        String::formatted("\\A\\s*audioout\\s*,\\s*%s\\s*,%s;\\s*(.*)$", myLabel, myAudioOutDetails);
+    return myAudioOutLine;
 }
 
-String SAMRegex::getFaustLine()
+const char* SAMRegex::myFaustCode = "(.+)";
+
+const String SAMRegex::getFaustCodeLine()
 {
-    static const String faustLine =
-        String::formatted("\\A\\s*(faustcode):\\s*%s\\s*$", faustCode);
-    return faustLine;
+    static const String myFaustCodeLine =
+        String::formatted("\\A\\s*faustcode:\\s*%s$", myFaustCode);
+    return myFaustCodeLine;
 }
 
-String SAMRegex::getTerminationLine()
+const char* SAMRegex::myAdjustIndex = "([\\d]+)";
+
+const String SAMRegex::getAdjustLine()
 {
-    static const String termLine =
-        String::formatted(
-            "\\A\\s*(termination)\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;(.*)$",
-            params, label);
-    return termLine;
+    static const String myAdjustLine =
+        String::formatted("\\A\\s*controladjust\\s*,\\s*%s\\s*,\\s*%s\\s*:\\s*%s\\s*;\\s*$",
+                          myLabel, myLabel, myAdjustIndex);
+    return myAdjustLine;
 }
 
-String SAMRegex::getJunctionLine()
+const String SAMRegex::getTerminationLine()
 {
-    static const String junctLine =
-        String::formatted(
-            "\\A\\s*(junction)\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;(.*)$",
-            params, label);
-    return junctLine;
+    static const String myTerminationLine =
+        String::formatted("\\A\\s*termination\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
+                          myParams, myLabel);
+    return myTerminationLine;
 }
 
-String SAMRegex::getWaveguideLine()
+const String SAMRegex::getWaveguideLine()
 {
-    static const String waveguideLine =
-        String::formatted(
-            "\\A\\s*(waveguide)\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*;.*$",
-            params, label, label, label);
-    return waveguideLine;
+    static const String myWaveguideLine =
+        String::formatted("\\A\\s*waveguide\\(\\s*%s\\s*,\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*,\\s*%s\\s*;\\s*$",
+                          myParam, myParams, myLabel, myLabel, myLabel);
+    return myWaveguideLine;
 }
 
-String SAMRegex::getParamsLine(int numParams)
+
+const char* SAMRegex::myJunctionInteraction = "(junctionlink|junctionlinkUnderneath|junctiontouch|junctiontouchUnderneath|junctionpluck|junctionpluckUnderneath)";
+
+const String SAMRegex::getJunctionInteractionLine()
 {
-    String paramsLine;
-    for (int i = 0; i < numParams; ++i)
-    {
-        paramsLine << "\\s*" << paramsDetail << "\\s*";
-        if(i != numParams - 1)
-            paramsLine << ",";
-    }
-    return paramsLine;
+    static const String myJunctionInteractionLine =
+        String::formatted("\\A\\s*%s\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*;\\s*$",
+                          myJunctionInteraction, myParams, myLabel, myLabel);
+    return myJunctionInteractionLine;
 }
 
-String SAMRegex::getCommentObjectLine()
+const String SAMRegex::getJunctionLine()
+{
+    static const String myJunctionLine =
+        String::formatted("\\A\\s*junction\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
+                          myParams, myLabel);
+    return myJunctionLine;
+}
+
+const char* SAMRegex::myDisplayAttach = "(display)";
+
+const String SAMRegex::getDisplayAttachLine()
+{
+    static const String myDisplayAttachLine =
+        String::formatted("\\A\\s*display\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*;\\s*$",
+                          myParams, myLabel, myLabel);
+    return myDisplayAttachLine;
+}
+
+const String SAMRegex::getCommentObjectLine()
 {
     static const String commentObjectLine =
         String::formatted(
             "\\A\\s*##\\s*(comment)\\(\\s*([!-~\\s]*)\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
-            label);
+            myLabel);
     return commentObjectLine;
 }

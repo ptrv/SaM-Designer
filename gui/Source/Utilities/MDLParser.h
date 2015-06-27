@@ -46,6 +46,9 @@ public:
 	 */
 	bool parseMDL(const File& f);
     bool parseMDLX(const File& f, bool onlyExtras=false);
+
+    static const StringArray getParamsFromString(const String& params);
+
 private:
 	MDLFile& mdlFile;
 };

@@ -70,7 +70,6 @@ bool MDLParser::parseMDL(const File& f)
 {
     RegularExpression re;
     RegularExpression reComment("\\A\\s*#[^#].*$");
-    RegularExpression reParams(SAMRegex::paramsDetail);
     
     const File& in = f;//mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
@@ -126,15 +125,10 @@ bool MDLParser::parseMDL(const File& f)
 
             if(newTree.getType() != Ids::port && newTree.getType() != Ids::ground)
             {
-                String params = values[1];
-                StringArray paramsArray;
+                StringArray paramsArray = getParamsFromString(values[1]);
 
                 if(newTree.getType() == Ids::resonators)
                 {
-                    String reResStr;
-                    reResStr << "\\s*" << SAMRegex::paramsDetailRes << "\\s*[,]*";
-                    RegularExpression reRes(reResStr);
-                    reRes.findAndConsume(params, paramsArray);
                     static const int NUM_RES_PARAMS = 3;
                     if(paramsArray.size() % NUM_RES_PARAMS == 0)
                     {
@@ -164,8 +158,6 @@ bool MDLParser::parseMDL(const File& f)
                 }
                 else
                 {
-                    reParams.fullMatchValues(SAMRegex::getParamsLine(3),
-                                             params, paramsArray, 3);
                     newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                      -1, nullptr);
                 }
@@ -213,15 +205,9 @@ bool MDLParser::parseMDL(const File& f)
                 DBG("Something went really wrong!");
                 return false;
             }
-            String params = values[1];
-            StringArray paramsArray;
 
-            int numParams = 3;
-            if(linkTree.getType() == Ids::pluck ||
-                linkTree.getType() == Ids::pulsetouch)
-                numParams = 4;
-            reParams.fullMatchValues(SAMRegex::getParamsLine(numParams),
-                                     params, paramsArray, numParams);
+            StringArray paramsArray = getParamsFromString(values[1]);
+
             linkTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                               -1, nullptr);
 
@@ -232,38 +218,38 @@ bool MDLParser::parseMDL(const File& f)
             ValueTree linksTree = mdlTree.getOrCreateChildWithName(Objects::links, nullptr);
             linksTree.addChild(linkTree, -1, nullptr);
         }
-        else if(re.fullMatch(SAMRegex::getFaustLine(), line))
+        else if(re.fullMatch(SAMRegex::getFaustCodeLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 2);
+            re.fullMatchValues(line, values, 1);
             ValueTree faustcodeTree(Ids::faustcode);
-            faustcodeTree.setProperty(Ids::value, values[1].trim(), nullptr);
+            faustcodeTree.setProperty(Ids::value, values[0].trim(), nullptr);
             ValueTree fcbTree = mdlTree.getOrCreateChildWithName(Objects::faustcodeblock, nullptr);
             fcbTree.addChild(faustcodeTree, -1, nullptr);
         }
         else if(re.fullMatch(SAMRegex::getAudioOutLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 4);
+            re.fullMatchValues(line, values, 3);
 
             Point<int> pos = getPos(line);
             ValueTree audioTree(Ids::audioout);
             audioTree.setProperty(Ids::posX, pos.x, nullptr);
             audioTree.setProperty(Ids::posY, pos.y, nullptr);
-            audioTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
+            audioTree.setProperty(Ids::identifier, values[0].trim(), nullptr);
 
             // split everything from line starting with first colon
-            int posColon = values[2].indexOf(":");
+            int posColon = values[1].indexOf(":");
             String audioLine;
             if(posColon > 0)
             {
-                audioLine = values[2].substring(0, posColon);
-                audioTree.setProperty(Ids::optional,values[2].substring(posColon+1), nullptr);
+                audioLine = values[1].substring(0, posColon);
+                audioTree.setProperty(Ids::optional,values[1].substring(posColon+1), nullptr);
             }
             else
             {
                 audioTree.setProperty(Ids::optional, "", nullptr);
-                audioLine = values[2];
+                audioLine = values[1];
             }
 
             // add outputDSP to optional values if not present
@@ -310,11 +296,8 @@ bool MDLParser::parseMDL(const File& f)
 
             ValueTree waveguideTree(Ids::waveguide);
 
-            String params = values[1];
-            StringArray paramsArray;
+            StringArray paramsArray(values.begin(), 2);
 
-            reParams.fullMatchValues(SAMRegex::getParamsLine(2),
-                                     params, paramsArray, 2);
             waveguideTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                    -1, nullptr);
 
@@ -337,11 +320,8 @@ bool MDLParser::parseMDL(const File& f)
             terminationTree.setProperty(Ids::posX, pos.x, nullptr);
             terminationTree.setProperty(Ids::posY, pos.y, nullptr);
 
-            String params = values[1];
-            StringArray paramsArray;
+            StringArray paramsArray = getParamsFromString(values[1]);
 
-            reParams.fullMatchValues(SAMRegex::getParamsLine(1),
-                                     params, paramsArray, 1);
             terminationTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                      -1, nullptr);
 
@@ -387,11 +367,7 @@ bool MDLParser::parseMDL(const File& f)
 
             newTree.setProperty(Ids::identifier, values[2], nullptr);
 
-            String params = values[1];
-            StringArray paramsArray;
-
-            reParams.fullMatchValues(SAMRegex::getParamsLine(3),
-                                     params, paramsArray, 3);
+            StringArray paramsArray = getParamsFromString(values[1]);
 
             StringArray commVal;
             commVal.addTokens(paramsArray[0].unquoted(), "|" , "\"");
@@ -407,6 +383,38 @@ bool MDLParser::parseMDL(const File& f)
 //    DBG(mdlTree.toXmlString());
     mdlFile.mdlRoot = mdlTree;
 	return true;
+}
+
+const StringArray MDLParser::getParamsFromString(const String& params)
+{
+    StringArray results;
+
+    int posLastDelim = -1;
+    int numOpenPar = 0;
+    int numClosePar = 0;
+    for (int i = 0; i < params.length(); ++i)
+    {
+        const bool isLastChar = (i == params.length() - 1);
+        if ((params[i] == ',' && numOpenPar == numClosePar) || isLastChar)
+        {
+            String param = isLastChar ?
+                params.substring(posLastDelim + 1) :
+                params.substring(posLastDelim + 1, i);
+            results.add(param.trim());
+            posLastDelim = i;
+            numOpenPar = numClosePar = 0;
+        }
+        else if (params[i] == '(')
+        {
+            ++numOpenPar;
+        }
+        else if (params[i] == ')')
+        {
+            ++numClosePar;
+        }
+    }
+
+    return results;
 }
 
 bool MDLParser::parseMDLX(const File& f, bool onlyExtras)
