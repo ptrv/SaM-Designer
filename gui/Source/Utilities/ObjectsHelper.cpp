@@ -769,3 +769,9 @@ bool ObjectsHelper::equivalentById(const ValueTree& lhs, const ValueTree& rhs)
 }
 
 //------------------------------------------------------------------------------
+
+#if UNIT_TESTS
+
+#include "ObjectsHelper_test.h"
+
+#endif
