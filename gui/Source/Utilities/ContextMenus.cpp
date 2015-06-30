@@ -101,10 +101,13 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
     m.addItem(2, TRANS("Touch Link"));
     m.addItem(3, TRANS("Pluck Link"));
     m.addItem(4, TRANS("Pulsetouch Link"));
+    m.addItem(5, TRANS("Detent"));
+    m.addItem(6, TRANS("Softening Link"));
+    m.addItem(7, TRANS("Stiffening Link"));
     m.addSeparator();
-    m.addItem(5, TRANS("Waveguide"));
+    m.addItem(8, TRANS("Waveguide"));
     m.addSeparator();
-    m.addItem(6, TRANS("Audio Connection"));
+    m.addItem(9, TRANS("Audio Connection"));
     const int r = m.show();
 
     if (r == 1)
@@ -129,11 +132,26 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
     }
     else if (r == 5)
     {
+        DBG("Add detent");
+        objectsHolder.insertNewLink(Ids::detent, so, eo);
+    }
+    else if (r == 6)
+    {
+        DBG("Add softening link");
+        objectsHolder.insertNewLink(Ids::softeninglink, so, eo);
+    }
+    else if (r == 7)
+    {
+        DBG("Add stiffening link");
+        objectsHolder.insertNewLink(Ids::stiffeninglink, so, eo);
+    }
+    else if (r == 8)
+    {
         DBG("Add waveguide");
         objectsHolder.getStartEndObjectsLeftRight(so, eo);
         objectsHolder.insertNewLink(Ids::waveguide, so, eo);
     }
-    else if (r == 6)
+    else if (r == 9)
     {
         DBG("Add audio connection");
         objectsHolder.insertNewAudioConnection();

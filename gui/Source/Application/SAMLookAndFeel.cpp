@@ -89,6 +89,18 @@ void SAMLookAndFeel::drawPopupMenuItem(Graphics& g,
             customTextColor = new Colour(menuColourInsertPluck);
             objectIcon = ResourceLoader::getInstance()->createSVGDrawable("pluck-no-connectors.svg");
         }
+        else if (text.compare("Detent") == 0)
+        {
+            customTextColor = new Colour(Colours::darkseagreen);
+        }
+        else if (text.compare("Softening Link") == 0)
+        {
+            customTextColor = new Colour(Colours::mediumspringgreen);
+        }
+        else if (text.compare("Stiffening Link") == 0)
+        {
+            customTextColor = new Colour(Colours::springgreen);
+        }
         else if (text.compare("Audio Out") == 0
             || text.compare("Audio Output") == 0)
         {
