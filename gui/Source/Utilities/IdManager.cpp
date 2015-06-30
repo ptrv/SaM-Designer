@@ -258,6 +258,12 @@ String IdManager::getObjNamePrefix(const Identifier& objId)
         return "pt";
     else if(objId == Ids::pluck)
         return "p";
+    else if(objId == Ids::detent)
+        return "d";
+    else if(objId == Ids::softeninglink)
+        return "softl";
+    else if(objId == Ids::stiffeninglink)
+        return "stifl";
     else if(objId == Ids::audioout)
         return "a";
     else if (objId == Ids::waveguide)

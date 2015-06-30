@@ -347,8 +347,7 @@ Point<int> ObjectComponent::getPinOffset() const
 
 bool ObjectComponent::canBeConnected(const Identifier& objId) const
 {
-    if(objId == Ids::link || objId == Ids::touch ||
-        objId == Ids::pluck || objId == Ids::pulsetouch)
+    if (ObjectsHelper::isLink(objId))
     {
         return canBeConnectedToLinks();
     }
@@ -363,8 +362,7 @@ bool ObjectComponent::canBeConnected(const Identifier& objId) const
 }
 bool ObjectComponent::canBeConnectedToLinks() const
 {
-    if(data.getType() == Ids::mass || data.getType() == Ids::ground ||
-        data.getType() == Ids::port || data.getType() == Ids::resonators)
+    if(ObjectsHelper::isMass(data.getType()))
     {
         return true;
     }

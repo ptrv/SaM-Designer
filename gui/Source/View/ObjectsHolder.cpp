@@ -389,6 +389,9 @@ void ObjectsHolder::getAllCommands(Array<CommandID>& commands)
         CommandIDs::insertTouch,
         CommandIDs::insertPulsetouch,
         CommandIDs::insertPluck,
+        CommandIDs::insertDetent,
+        CommandIDs::insertSofteningLink,
+        CommandIDs::insertStiffeningLink,
         CommandIDs::insertAudioOutput,
         CommandIDs::insertAudioConnection,
         CommandIDs::insertWaveguide,
@@ -519,6 +522,18 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Pluck Link"), "", CommandCategories::inserting, 0);
         result.addDefaultKeypress('7', ModifierKeys::commandModifier);
         result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::pluck));
+        break;
+    case CommandIDs::insertDetent:
+        result.setInfo(TRANS("Detent"), "", CommandCategories::inserting, 0);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::detent));
+        break;
+    case CommandIDs::insertSofteningLink:
+        result.setInfo(TRANS("Softening Link"), "", CommandCategories::inserting, 0);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::softeninglink));
+        break;
+    case CommandIDs::insertStiffeningLink:
+        result.setInfo(TRANS("Stiffening Link"), "", CommandCategories::inserting, 0);
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::stiffeninglink));
         break;
 
     case CommandIDs::insertAudioOutput:
@@ -690,6 +705,15 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         break;
     case CommandIDs::insertPluck:
         insertNewLink(Ids::pluck);
+        break;
+    case CommandIDs::insertDetent:
+        insertNewLink(Ids::detent);
+        break;
+    case CommandIDs::insertSofteningLink:
+        insertNewLink(Ids::softeninglink);
+        break;
+    case CommandIDs::insertStiffeningLink:
+        insertNewLink(Ids::stiffeninglink);
         break;
     case CommandIDs::insertWaveguide:
         insertNewLink(Ids::waveguide);

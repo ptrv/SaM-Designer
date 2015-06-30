@@ -92,6 +92,9 @@ public:
 
     static bool equivalentById(const ValueTree& lhs, const ValueTree& rhs);
 
+    static bool isMass(const Identifier& id);
+    static bool isLink(const Identifier& id);
+
 private:
 
     template<typename ObjType>

@@ -290,10 +290,7 @@ void PropertiesWindow::updateProperties()
         {
             comp = new GroundPropertiesComponent(objCtrl, datas, undoManager_);
         }
-        else if (selectedId == Ids::link
-            || selectedId == Ids::touch
-            || selectedId == Ids::pluck
-            || selectedId == Ids::pulsetouch)
+        else if (ObjectsHelper::isLink(selectedId))
         {
             comp = new LinkPropertiesComponent(objCtrl, datas, undoManager_);
         }

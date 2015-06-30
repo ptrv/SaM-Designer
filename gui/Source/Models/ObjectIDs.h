@@ -84,6 +84,9 @@ namespace Ids
     DECLARE_ID (commentColour);
     DECLARE_ID (pulsetouch);
     DECLARE_ID (audioconnector);
+    DECLARE_ID (detent);
+    DECLARE_ID (softeninglink);
+    DECLARE_ID (stiffeninglink);
 
     const Identifier class_ ("class");
 

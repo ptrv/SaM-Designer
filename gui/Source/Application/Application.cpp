@@ -713,6 +713,9 @@ PopupMenu SAMApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex,
     	menu.addCommandItem(commandManager, CommandIDs::insertTouch);
     	menu.addCommandItem(commandManager, CommandIDs::insertPluck);
     	menu.addCommandItem(commandManager, CommandIDs::insertPulsetouch);
+    	menu.addCommandItem(commandManager, CommandIDs::insertDetent);
+    	menu.addCommandItem(commandManager, CommandIDs::insertSofteningLink);
+    	menu.addCommandItem(commandManager, CommandIDs::insertStiffeningLink);
     	menu.addSeparator();
     	menu.addCommandItem(commandManager, CommandIDs::insertAudioOutput);
         menu.addCommandItem(commandManager, CommandIDs::insertAudioConnection);

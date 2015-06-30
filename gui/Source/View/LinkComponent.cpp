@@ -316,9 +316,10 @@ void LinkComponent::drawPath(Graphics& g)
     float x2 = curOutputX;
     float y2 = curOutputY;
     g.setColour(currentColor);
-    if(data.getType() == Ids::link)
+    if (data.getType() == Ids::link || data.getType() == Ids::detent ||
+        data.getType() == Ids::softeninglink || data.getType() == Ids::stiffeninglink)
     {
-        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::link,
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(data.getType(),
                                                                    0,
                                                                    0,
                                                                    iconWidth*0.7,
@@ -356,6 +357,34 @@ void LinkComponent::drawPath(Graphics& g)
         PathStrokeType stroke2(0.4f);
         stroke2.createStrokedPath(iconPath, iconPath);
         linePath.addPath(iconPath);
+
+        if (data.getType() == Ids::detent)
+        {
+            Colour c = currentColor;
+            g.setColour(Colours::darkred);
+
+            Path curve;
+            float stepW = iconWidth/6.f;
+            curve.startNewSubPath(0.f, iconHeight/2.f);
+            curve.lineTo(stepW, iconHeight/2.f);
+            curve.lineTo(stepW*3.f, iconHeight);
+            curve.lineTo(stepW*4.f, 0.f);
+            curve.lineTo(stepW*5.f, iconHeight/2.f);
+            curve.lineTo(iconWidth, iconHeight/2.f);
+
+            curve.applyTransform(AffineTransform::translation((-iconWidth/2),
+                                                              -iconHeight/4));
+            curve.applyTransform(AffineTransform::identity
+                                 .rotated(rotateVal)
+                                 .translated((x1 + x2) * 0.5f,
+                                             (y1 + y2) * 0.5f));
+            PathStrokeType stroke2(1.0f);
+            stroke2.createStrokedPath(curve, curve);
+            g.fillPath(curve);
+
+            g.setColour(c);
+
+        }
     }
     else if(data.getType() == Ids::pluck)
     {
@@ -519,16 +548,16 @@ void LinkComponent::drawPath(Graphics& g)
             outlineRect.applyTransform(AffineTransform::translation((-iconWidth/2),
                                                                     -iconHeight/2));
             outlineRect.applyTransform(AffineTransform::identity
-                                    .rotated(rotateVal)
-                                    .translated((x1 + x2) * 0.5f,
-                                                (y1 + y2) * 0.5f));
+                                       .rotated(rotateVal)
+                                       .translated((x1 + x2) * 0.5f,
+                                                   (y1 + y2) * 0.5f));
             PathStrokeType stroke2(6.0f);
             stroke2.createStrokedPath(outlineRect, outlineRect);
             g.fillPath(outlineRect);
 
             g.setColour(c);
         }
-   }
+    }
     else if(data.getType() == Ids::waveguide)
     {
         linePath.clear();

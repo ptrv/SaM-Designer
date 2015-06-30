@@ -74,6 +74,15 @@ private:
     static ValueTree createNewPluckTree(const String& newName,
                                         const String& startObject,
                                         const String& endObject);
+    static ValueTree createNewDetentTree(const String& newName,
+                                         const String& startObject,
+                                         const String& endObject);
+    static ValueTree createNewSofteningLinkTree(const String& newName,
+                                                const String& startObject,
+                                                const String& endObject);
+    static ValueTree createNewStiffeningLinkTree(const String& newName,
+                                                 const String& startObject,
+                                                 const String& endObject);
     static ValueTree createNewWaveguideTree(const String& newName,
                                             const String& startObject,
                                             const String& endObject);

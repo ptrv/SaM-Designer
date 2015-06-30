@@ -176,16 +176,14 @@ bool ObjectPropertiesComponent::writeIdentifier()
         }
 
         // Change names in connected objects
-        if (data.getType() == Ids::mass || data.getType() == Ids::port ||
-            data.getType() == Ids::ground || data.getType() == Ids::resonators)
+        if (ObjectsHelper::isMass(data.getType()))
         {
             ObjectsHelper::changeObjectNameInLink(
                 objController, oldName, newName, undoManager);
             ObjectsHelper::changeObjectNameInAudioSources(
                 objController, oldName, newName, undoManager);
         }
-        else if (data.getType() == Ids::link || data.getType() == Ids::touch ||
-                 data.getType() == Ids::pluck || data.getType() == Ids::pulsetouch)
+        else if (ObjectsHelper::isLink(data.getType()))
         {
             ObjectsHelper::changeObjectNameInAudioSources(
                 objController, oldName, newName, undoManager);
@@ -229,10 +227,7 @@ void ObjectPropertiesComponent::readValues()
         teName->setText(datas[0][Ids::identifier].toString(), false);
         teName->setWantsKeyboardFocus(true);
 
-        if (datas[0].getType() == Ids::mass ||
-            datas[0].getType() == Ids::port ||
-            datas[0].getType() == Ids::resonators ||
-            datas[0].getType() == Ids::ground ||
+        if (ObjectsHelper::isMass(datas[0].getType()) ||
             datas[0].getType() == Ids::termination ||
             datas[0].getType() == Ids::junction ||
             datas[0].getType() == Ids::audioout ||
@@ -603,22 +598,39 @@ bool GroundPropertiesComponent::writeValues()
 LinkPropertiesComponent::LinkPropertiesComponent(ObjController& objController_,
                                                  const Array<ValueTree>& datas_,
                                                  UndoManager* const undoManager_)
-: ObjectPropertiesComponent(objController_, datas_, undoManager_)
+    : ObjectPropertiesComponent(objController_, datas_, undoManager_)
 {
-    editors.add(createEditor("Stiff", "Stiffness (N/m)", true));
-    editors.add(createEditor("Damp", "Damping (N/(m/s))", true));
-    if (datas[0].getType() == Ids::pluck)
+    if (datas[0].getType() == Ids::detent)
     {
-        editors.add(createEditor("MinDisplace", "Minimum displace diff", true));
-//        editors.add(createRow("Pos", "Position offset (m)", true));
+        editors.add(createEditor("HalfWidth", "Half of the width in m", true));
+        editors.add(createEditor("Strength", "Strength/depth in N", true));
+        editors.add(createEditor("FocusParam", "Focus parameter", true));
+        editors.add(createEditor("Damp", "Damping (N/(m/s))", true));
+        editors.add(createEditor("Pos", "Position offset (m)", true));
     }
-    editors.add(createEditor("Pos", "Position offset (m)", true));
-    if (datas[0].getType() == Ids::pulsetouch)
+    else
     {
+        editors.add(createEditor("Stiff", "Stiffness (N/m)", true));
+        editors.add(createEditor("Damp", "Damping (N/(m/s))", true));
+        if (datas[0].getType() == Ids::pluck)
+        {
+            editors.add(createEditor("MinDisplace", "Minimum displace diff", true));
 //        editors.add(createRow("Pos", "Position offset (m)", true));
-        editors.add(createEditor("PulseMult", "Pulse multiplier", true));
-        editors.add(createEditor("PulseTau", "Pulse tau", true));
-        editors.add(createEditor("PulseLen", "Pulse length", true));
+        }
+        editors.add(createEditor("Pos", "Position offset (m)", true));
+        if (datas[0].getType() == Ids::pulsetouch)
+        {
+//        editors.add(createRow("Pos", "Position offset (m)", true));
+            editors.add(createEditor("PulseMult", "Pulse multiplier", true));
+            editors.add(createEditor("PulseTau", "Pulse tau", true));
+            editors.add(createEditor("PulseLen", "Pulse length", true));
+        }
+        else if (datas[0].getType() == Ids::stiffeninglink ||
+                 datas[0].getType() == Ids::softeninglink)
+        {
+            editors.add(createEditor("MaxIncrease", "Max increase in stiffness", true));
+            editors.add(createEditor("BetaParam", "Beta parameter", true));
+        }
     }
 
     vertices.add(createEditor("StartVertex", "Start vertex", false, true));
@@ -633,6 +645,7 @@ LinkPropertiesComponent::~LinkPropertiesComponent()
 
 void LinkPropertiesComponent::resized()
 {
+    const int offsetValue = 60;
     ObjectPropertiesComponent::resized();
     int offset = 0;
     editors[0]->setBounds(100, 40, getWidth() - 110, 50);
@@ -640,16 +653,24 @@ void LinkPropertiesComponent::resized()
     int idOffset = 0;
     if (datas[0].getType() == Ids::pluck)
     {
-        editors[2]->setBounds(100, 160, getWidth() - 110, 50);
-        offset = 60;
+        editors[2]->setBounds(100, 100 + offsetValue, getWidth() - 110, 50);
+        offset = offsetValue;
         ++idOffset;
     }
     else if (datas[0].getType() == Ids::pulsetouch)
     {
-        editors[3]->setBounds(100, 160, getWidth() - 110, 50);
-        editors[4]->setBounds(100, 220, getWidth() - 110, 50);
-        editors[5]->setBounds(100, 280, getWidth() - 110, 50);
-        offset = 180;
+        editors[3]->setBounds(100, 100 + offsetValue, getWidth() - 110, 50);
+        editors[4]->setBounds(100, 100 + offsetValue * 2, getWidth() - 110, 50);
+        editors[5]->setBounds(100, 100 + offsetValue * 3, getWidth() - 110, 50);
+        offset = offsetValue * 3;
+    }
+    else if (datas[0].getType() == Ids::softeninglink ||
+             datas[0].getType() == Ids::stiffeninglink ||
+             datas[0].getType() == Ids::detent)
+    {
+        editors[3]->setBounds(100, 100 + offsetValue, getWidth() - 110, 50);
+        editors[4]->setBounds(100, 100 + offsetValue * 2, getWidth() - 110, 50);
+        offset = offsetValue * 2;
     }
     editors[2+idOffset]->setBounds(100, 160 + offset, getWidth() - 110, 50);
     vertices[0]->setBounds(100, 220 + offset, getWidth() - 110, 22);

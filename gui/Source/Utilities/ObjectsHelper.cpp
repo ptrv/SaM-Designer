@@ -512,23 +512,21 @@ BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(const ObjController&
 
 const Identifier& ObjectsHelper::getObjectGroup(const Identifier& ident)
 {
-    if(ident == Ids::mass || ident == Ids::port
-            || ident == Ids::ground	|| ident == Ids::resonators)
+    if (ObjectsHelper::isMass(ident))
         return Objects::masses;
-    else if(ident == Ids::link || ident == Ids::touch
-            || ident == Ids::pluck || ident == Ids::pulsetouch)
+    else if (ObjectsHelper::isLink(ident))
         return Objects::links;
-    else if(ident == Ids::audioout)
+    else if (ident == Ids::audioout)
         return Objects::audioobjects;
-    else if(ident == Ids::waveguide)
+    else if (ident == Ids::waveguide)
         return Objects::waveguides;
-    else if(ident == Ids::termination)
+    else if (ident == Ids::termination)
         return Objects::terminations;
-    else if(ident == Ids::junction)
+    else if (ident == Ids::junction)
         return Objects::junctions;
-    else if(ident == Ids::faustcode)
+    else if (ident == Ids::faustcode)
         return Objects::faustcodeblock;
-    else if(ident == Ids::comment)
+    else if (ident == Ids::comment)
         return Objects::comments;
 
     else
@@ -583,7 +581,8 @@ const Array<Identifier>& ObjectsHelper::getAllObjectIds()
     static const Identifier allObjectIdsArr[] = {
         Ids::mass, Ids::ground, Ids::port, Ids::resonators, Ids::link, Ids::touch,
         Ids::pluck, Ids::pulsetouch, Ids::faustcode, Ids::audioout, Ids::waveguide,
-        Ids::termination, Ids::junction, Ids::comment
+        Ids::termination, Ids::junction, Ids::comment, Ids::detent,
+        Ids::softeninglink, Ids::stiffeninglink
     };
     static const int numAllObjects =
         sizeof(allObjectIdsArr)/sizeof(allObjectIdsArr[0]);
@@ -720,6 +719,23 @@ void ObjectsHelper::loadComponents(ObjController& objController,
                 new CommentComponent(objController, comment))->update();
         fnObjectsCounter(comment);
     });
+}
+
+//------------------------------------------------------------------------------
+
+bool ObjectsHelper::isMass(const Identifier& id)
+{
+    return id == Ids::mass || id == Ids::ground ||
+        id == Ids::port || id == Ids::resonators;
+}
+
+//------------------------------------------------------------------------------
+
+bool ObjectsHelper::isLink(const Identifier& id)
+{
+    return id == Ids::link || id == Ids::touch || id == Ids::pluck ||
+        id == Ids::pulsetouch || id == Ids::detent ||
+        id == Ids::softeninglink || id == Ids::stiffeninglink;
 }
 
 //------------------------------------------------------------------------------

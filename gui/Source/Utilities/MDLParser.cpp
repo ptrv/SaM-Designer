@@ -200,6 +200,18 @@ bool MDLParser::parseMDL(const File& f)
             {
                 linkTree = ValueTree(Ids::pluck);
             }
+            else if (values[0].compare("detent") == 0)
+            {
+                linkTree = ValueTree(Ids::detent);
+            }
+            else if (values[0].compare("softeninglink") == 0)
+            {
+                linkTree = ValueTree(Ids::softeninglink);
+            }
+            else if (values[0].compare("stiffeninglink") == 0)
+            {
+                linkTree = ValueTree(Ids::stiffeninglink);
+            }
             else
             {
                 DBG("Something went really wrong!");

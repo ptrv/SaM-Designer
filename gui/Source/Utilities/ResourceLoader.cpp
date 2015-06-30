@@ -154,7 +154,8 @@ Path ResourceLoader::getPathForTouch(float /*x*/, float /*y*/, float w, float h)
 }
 Path ResourceLoader::getPathForLinkId(const Identifier& linkId, float x, float y, float w, float h)
 {
-    if(linkId == Ids::link)
+    if(linkId == Ids::link || linkId == Ids::detent ||
+       linkId == Ids::softeninglink || linkId == Ids::stiffeninglink)
     {
         return getPathForLink(x, y, w, h);
     }

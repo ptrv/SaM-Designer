@@ -139,7 +139,8 @@ ValueTree ObjectFactory::createNewLinkLikeTree(const Identifier& linkType,
 {
     if (linkType != Ids::link && linkType != Ids::touch
         && linkType != Ids::pluck && linkType != Ids::pulsetouch
-        && linkType != Ids::waveguide)
+        && linkType != Ids::detent && linkType != Ids::softeninglink
+        && linkType != Ids::waveguide && linkType != Ids::stiffeninglink)
     {
         return ValueTree();
     }
@@ -230,6 +231,57 @@ ValueTree ObjectFactory::createNewPluckTree(const String& newName,
 
     return createNewLinkLikeTree(Ids::pluck, newName, startObject, endObject,
                                  defaultValues);
+}
+
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewDetentTree(const String& newName,
+                                             const String& startObject,
+                                             const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("detent_halfwidth", "0.008");
+    defaultValues.set("detent_strength", "0.4");
+    defaultValues.set("detent_focus", "0.2");
+    defaultValues.set("detent_damping", "0.3");
+    defaultValues.set("detent_restposition", "0.0");
+
+    return createNewLinkLikeTree(Ids::detent, newName, startObject, endObject,
+                                 defaultValues);
+}
+
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewSofteningLinkTree(const String& newName,
+                                                    const String& startObject,
+                                                    const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("softeninglink_stiffness", "350.0");
+    defaultValues.set("softeninglink_damping", "0.02");
+    defaultValues.set("softeninglink_restposition", "0.0");
+    defaultValues.set("softeninglink_maxincrease", "10.0");
+    defaultValues.set("softeninglink_beta", "0.004");
+
+    return createNewLinkLikeTree(Ids::softeninglink, newName, startObject,
+                                 endObject, defaultValues);
+}
+
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewStiffeningLinkTree(const String& newName,
+                                                     const String& startObject,
+                                                     const String& endObject)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("stiffeninglink_stiffness", "350.0");
+    defaultValues.set("stiffeninglink_damping", "0.02");
+    defaultValues.set("stiffeninglink_restposition", "0.0");
+    defaultValues.set("stiffeninglink_maxincrease", "10.0");
+    defaultValues.set("stiffeninglink_beta", "0.004");
+
+    return createNewLinkLikeTree(Ids::stiffeninglink, newName, startObject,
+                                 endObject, defaultValues);
 }
 
 //------------------------------------------------------------------------------
@@ -339,16 +391,22 @@ ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
 {
     if(linkType == Ids::link)
         return createNewLinkTree(newName, startObject, endObject);
-	else if(linkType == Ids::touch)
-		return createNewTouchTree(newName, startObject, endObject);
-	else if(linkType == Ids::pulsetouch)
-		return createNewPulsetouchTree(newName, startObject, endObject);
-	else if(linkType == Ids::pluck)
-		return createNewPluckTree(newName, startObject, endObject);
-	else if(linkType == Ids::waveguide)
-		return createNewWaveguideTree(newName, startObject, endObject);
+    else if(linkType == Ids::touch)
+        return createNewTouchTree(newName, startObject, endObject);
+    else if(linkType == Ids::pulsetouch)
+        return createNewPulsetouchTree(newName, startObject, endObject);
+    else if(linkType == Ids::pluck)
+        return createNewPluckTree(newName, startObject, endObject);
+    else if(linkType == Ids::detent)
+        return createNewDetentTree(newName, startObject, endObject);
+    else if(linkType == Ids::softeninglink)
+        return createNewSofteningLinkTree(newName, startObject, endObject);
+    else if(linkType == Ids::stiffeninglink)
+        return createNewStiffeningLinkTree(newName, startObject, endObject);
+    else if(linkType == Ids::waveguide)
+        return createNewWaveguideTree(newName, startObject, endObject);
     else
-		return ValueTree::invalid;
+        return ValueTree::invalid;
 }
 
 //------------------------------------------------------------------------------
