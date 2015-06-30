@@ -593,48 +593,14 @@ const Array<Identifier>& ObjectsHelper::getAllObjectIds()
 
 //------------------------------------------------------------------------------
 
-template <typename BaseCompType>
-ObjectComponent* ObjectsHelper::getObject(BaseCompType* baseCompType)
-{
-    return dynamic_cast<ObjectComponent*>(baseCompType);
-}
-
-template ObjectComponent* ObjectsHelper::getObject(BaseObjectComponent*);
-template ObjectComponent* ObjectsHelper::getObject(SelectableObject*);
-template ObjectComponent* ObjectsHelper::getObject(Component*);
-
-//------------------------------------------------------------------------------
-
-template <typename BaseCompType>
-LinkComponent* ObjectsHelper::getLink(BaseCompType* baseCompType)
-{
-    return dynamic_cast<LinkComponent*>(baseCompType);
-}
-
-template LinkComponent* ObjectsHelper::getLink(BaseObjectComponent*);
-template LinkComponent* ObjectsHelper::getLink(SelectableObject*);
-
-//------------------------------------------------------------------------------
-
-template <typename BaseCompType>
-CommentComponent* ObjectsHelper::getComment(BaseCompType* baseCompType)
-{
-    return dynamic_cast<CommentComponent*>(baseCompType);
-}
-
-template CommentComponent* ObjectsHelper::getComment(BaseObjectComponent*);
-template CommentComponent* ObjectsHelper::getComment(SelectableObject*);
-template CommentComponent* ObjectsHelper::getComment(Component*);
-
-//------------------------------------------------------------------------------
-
-Array<ObjectComponent*> ObjectsHelper::getSelectedObjectComponents(ObjController& objController)
+template <typename ObjType>
+Array<ObjType*> ObjectsHelper::getSelectedComponents(ObjController& objController)
 {
     const SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
-    Array<ObjectComponent*> selectedObjs;
+    Array<ObjType*> selectedObjs;
     for (SelectableObject* const selectedItem : sis.getItemArray())
     {
-        if (ObjectComponent* const oc = getObject(selectedItem))
+        if (ObjType* const oc = dynamic_cast<ObjType*>(selectedItem))
         {
             selectedObjs.add(oc);
         }
@@ -643,22 +609,8 @@ Array<ObjectComponent*> ObjectsHelper::getSelectedObjectComponents(ObjController
     return selectedObjs;
 }
 
-//------------------------------------------------------------------------------
-
-Array<LinkComponent*> ObjectsHelper::getSelectedLinkComponents(ObjController& objController)
-{
-    const SelectedItemSet<SelectableObject*>& sis = objController.getSelectedObjects();
-    Array<LinkComponent*> selectedLinks;
-    for (SelectableObject* const selectedItem : sis.getItemArray())
-    {
-        if (LinkComponent* const lc = getLink(selectedItem))
-        {
-            selectedLinks.add(lc);
-        }
-    }
-
-    return selectedLinks;
-}
+template Array<ObjectComponent*> ObjectsHelper::getSelectedComponents(ObjController& objController);
+template Array<LinkComponent*> ObjectsHelper::getSelectedComponents(ObjController& objController);
 
 //------------------------------------------------------------------------------
 
@@ -802,7 +754,7 @@ bool ObjectsHelper::canSelectedObjectsBeConnected(ObjController& objController,
                                                   const Identifier& linkType)
 {
     const Array<ObjectComponent*> selectedObjects =
-        ObjectsHelper::getSelectedObjectComponents(objController);
+        ObjectsHelper::getSelectedComponents<ObjectComponent>(objController);
 
     return selectedObjects.size() == 2 &&
         ObjectsHelper::canObjectsBeConnected(

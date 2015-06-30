@@ -393,12 +393,12 @@ public:
     objController(objController_),
     sourceTree(sourceTree_.createCopy())
 	{
-        if(ObjectComponent* const oc = ObjectsHelper::getObject(source))
+        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(source))
         {
             sourceIsLink = false;
             indexSource = objController->indexOfObject(oc);
         }
-        else if(LinkComponent* const lc = ObjectsHelper::getLink(source))
+        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(source))
         {
             sourceIsLink = true;
             indexSource = objController->indexOfLink(lc);
@@ -473,13 +473,13 @@ public:
     {
         oldIndex = objController->indexOfAudioConnector(aocToRemove);
         String srcName;
-        if(ObjectComponent* const oc = ObjectsHelper::getObject(aocToRemove->getSourceObject()))
+        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject()))
         {
             sourceIsLink = false;
             oldIndexSource = objController->indexOfObject(oc);
             srcName = oc->getData()[Ids::identifier];
         }
-        else if(LinkComponent* const lc = ObjectsHelper::getLink(aocToRemove->getSourceObject()))
+        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject()))
         {
             sourceIsLink = true;
             oldIndexSource = objController->indexOfLink(lc);

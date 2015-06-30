@@ -75,17 +75,8 @@ public:
     static const Array<Identifier>& getResonatorParamsIds();
     static const Array<Identifier>& getAllObjectIds();
 
-    template<typename BaseCompType>
-    static ObjectComponent* getObject(BaseCompType* baseCompType);
-
-    template<typename BaseCompType>
-    static LinkComponent* getLink(BaseCompType* baseCompType);
-
-    template<typename BaseCompType>
-    static CommentComponent* getComment(BaseCompType* baseCompType);
-
-    static Array<ObjectComponent*> getSelectedObjectComponents(ObjController& objController);
-    static Array<LinkComponent*> getSelectedLinkComponents(ObjController& objController);
+    template<typename ObjType>
+    static Array<ObjType*> getSelectedComponents(ObjController& objController);
 
     static bool allObjectsSelected(ObjController& objController);
 

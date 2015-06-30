@@ -283,7 +283,7 @@ Point<int> ObjectsHolder::getMouseXYRelativeViewport()
 bool ObjectsHolder::getStartEndObjects(String& startId, String& endId)
 {
     Array<ObjectComponent*> selectedObjects =
-        ObjectsHelper::getSelectedObjectComponents(objController);
+        ObjectsHelper::getSelectedComponents<ObjectComponent>(objController);
 
     if(selectedObjects.size() == 2)
     {
@@ -456,7 +456,7 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Reverse Direction"), "",
                        CommandCategories::editing, 0);
         result.addDefaultKeypress('r', ModifierKeys::commandModifier);
-        result.setActive(ObjectsHelper::getSelectedLinkComponents(objController).size() != 0);
+        result.setActive(ObjectsHelper::getSelectedComponents<LinkComponent>(objController).size() != 0);
         break;
     case CommandIDs::defineFaustcode:
         result.setInfo(TRANS("Define FAUST Code"), "",
@@ -529,8 +529,8 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Audio Connection"), "",
                        CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
-        result.setActive(ObjectsHelper::getSelectedObjectComponents(objController).size() == 1 ||
-                         ObjectsHelper::getSelectedLinkComponents(objController).size() == 1);
+        result.setActive(ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 1 ||
+                         ObjectsHelper::getSelectedComponents<LinkComponent>(objController).size() == 1);
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo(TRANS("Waveguide"), "", CommandCategories::inserting, 0);
@@ -766,7 +766,7 @@ void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results,
     {
         SelectableObject* const e = dynamic_cast <SelectableObject*> (getChildComponent (i));
         bool isIntersecting;
-        if (LinkComponent * const lc = ObjectsHelper::getLink (e))
+        if (LinkComponent * const lc = dynamic_cast<LinkComponent*>(e))
         {
             isIntersecting = lasso.contains(lc->getIntersectioBounds());
         }
@@ -840,8 +840,8 @@ const Rectangle<int> ObjectsHolder::getObjectsBounds() const
     for (int i = 0; i < getNumChildComponents(); ++i)
     {
         Component* const comp = getChildComponent(i);
-        ObjectComponent* const oc = ObjectsHelper::getObject(comp);
-        CommentComponent* const cc = ObjectsHelper::getComment(comp);
+        ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(comp);
+        CommentComponent* const cc = dynamic_cast<CommentComponent*>(comp);
         if(oc != nullptr || cc != nullptr)
         {
             Rectangle<int> rect = comp->getBounds();

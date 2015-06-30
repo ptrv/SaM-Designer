@@ -251,11 +251,11 @@ void PropertiesWindow::updateProperties()
                 }
 
                 String sourceId;
-                if (ObjectComponent * const oc = ObjectsHelper::getObject (aoc->getSourceObject()))
+                if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(aoc->getSourceObject()))
                 {
                     sourceId = oc->getData()[Ids::identifier].toString();
                 }
-                else if (LinkComponent * const lc = ObjectsHelper::getLink (aoc->getSourceObject()))
+                else if (LinkComponent * const lc = dynamic_cast<LinkComponent*>(aoc->getSourceObject()))
                 {
                     sourceId = lc->getData()[Ids::identifier].toString();
                 }

@@ -172,7 +172,7 @@ bool ObjController::checkIfAudioConnectionExitsts(const ValueTree& source,
 void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkValues)
 {
     Array<ObjectComponent*> selectedObjects =
-        ObjectsHelper::getSelectedObjectComponents(*this);
+        ObjectsHelper::getSelectedComponents<ObjectComponent>(*this);
 
     if(selectedObjects.size() == 2)
     {
@@ -244,10 +244,10 @@ void ObjController::addNewAudioConnection(ObjectsHolder* holder)
             setAudioConnectionVisibility(true);
         }
 
-        ObjectComponent* oc1 = ObjectsHelper::getObject(sObjects.getSelectedItem(0));
-        LinkComponent* lc1 = ObjectsHelper::getLink(sObjects.getSelectedItem(0));
-        ObjectComponent* oc2 = ObjectsHelper::getObject(sObjects.getSelectedItem(1));
-        LinkComponent* lc2 = ObjectsHelper::getLink(sObjects.getSelectedItem(1));
+        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
+        LinkComponent* lc1 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(0));
+        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
+        LinkComponent* lc2 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(1));
 
         if(oc1 != nullptr && oc2 != nullptr)
         {
@@ -385,7 +385,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder& holder)
         // first remove all selected links
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            if(LinkComponent* lc = ObjectsHelper::getLink(temp.getSelectedItem(i)))
+            if(LinkComponent* lc = dynamic_cast<LinkComponent*>(temp.getSelectedItem(i)))
             {
                 temp.deselect(lc);
                 removeLink(lc, true, &holder);
@@ -403,11 +403,11 @@ void ObjController::removeSelectedObjects(ObjectsHolder& holder)
         }
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            if(ObjectComponent* oc = ObjectsHelper::getObject(temp.getSelectedItem(i)))
+            if(ObjectComponent* oc = dynamic_cast<ObjectComponent*>(temp.getSelectedItem(i)))
             {
                 removeObject(oc, true, &holder);
             }
-            else if(CommentComponent* cc = ObjectsHelper::getComment(temp.getSelectedItem(i)))
+            else if(CommentComponent* cc = dynamic_cast<CommentComponent*>(temp.getSelectedItem(i)))
             {
                 removeComment(cc, true, &holder);
             }
@@ -583,11 +583,11 @@ void ObjController::startDragging()
 
     for (SelectableObject* const obj : sObjects.getItemArray())
     {
-        if (ObjectComponent * const oc = ObjectsHelper::getObject(obj))
+        if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(obj))
         {
             fnSetDragStart(oc);
         }
-        else if(CommentComponent* const cc = ObjectsHelper::getComment(obj))
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(obj))
         {
             fnSetDragStart(cc);
         }
@@ -602,7 +602,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 
     for (SelectableObject* const selectedItem : sObjects.getItemArray())
     {
-        if (ObjectComponent * const c = ObjectsHelper::getObject(selectedItem))
+        if (ObjectComponent * const c = dynamic_cast<ObjectComponent*>(selectedItem))
         {
             const int startX = c->getProperties() ["xDragStart"];
             const int startY = c->getProperties() ["yDragStart"];
@@ -610,7 +610,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
             c->setActualPosition(Point<int>(holder.snapPosition(startX + dx),
                                             holder.snapPosition(startY + dy)));
         }
-        else if(CommentComponent* const cc = ObjectsHelper::getComment(selectedItem))
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(selectedItem))
         {
             const int startX = cc->getProperties() ["xDragStart"];
             const int startY = cc->getProperties() ["yDragStart"];
@@ -632,12 +632,12 @@ void ObjController::endDragging()
 
     std::for_each(sObjects.begin(), sObjects.end(), [&holder](SelectableObject* obj)
     {
-        if(ObjectComponent * const c = ObjectsHelper::getObject(obj))
+        if(ObjectComponent * const c = dynamic_cast<ObjectComponent*>(obj))
         {
             c->setPosition(c->getActualPos(), true);
             holder.checkExtent(c->getBounds());
         }
-        else if(CommentComponent* const cc = ObjectsHelper::getComment(obj))
+        else if(CommentComponent* const cc = dynamic_cast<CommentComponent*>(obj))
         {
             cc->setPosition(cc->getActualPos(), true);
             holder.checkExtent(cc->getBounds());
@@ -701,7 +701,7 @@ void ObjController::reverseLinkDirection()
 
     for (SelectableObject* const selectedItem : sObjects.getItemArray())
     {
-        if(LinkComponent* lc = ObjectsHelper::getLink(selectedItem))
+        if(LinkComponent* lc = dynamic_cast<LinkComponent*>(selectedItem))
         {
             ReverseLinkDirectionAction* action = new ReverseLinkDirectionAction(lc,this);
             owner.getUndoManager().perform(action, "reverse link direction");

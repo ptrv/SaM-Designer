@@ -63,12 +63,12 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
 
     audioOutComp->addChangeListener(this);
 
-    if (ObjectComponent* oc = ObjectsHelper::getObject(sourceComp.get()))
+    if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp.get()))
     {
         objectComp = oc;
         objectComp->addChangeListener(this);
     }
-    else if (LinkComponent* lc = ObjectsHelper::getLink(sourceComp.get()))
+    else if (LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp.get()))
     {
         linkComp = lc;
         linkComp->addChangeListener(this);
