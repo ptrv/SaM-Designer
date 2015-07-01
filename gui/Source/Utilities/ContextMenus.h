@@ -44,6 +44,32 @@ public:
 
     static void showAudioConnectionPopupMenu(ObjectsHolder& objectsHolder);
 
+private:
+
+    enum tMassMenuItem
+    {
+        MENU_ITEM_MASS =  1,
+        MENU_ITEM_GROUND,
+        MENU_ITEM_RESONATORS,
+        MENU_ITEM_PORT,
+        MENU_ITEM_AUDIO_OUT,
+        MENU_ITEM_JUNCTION,
+        MENU_ITEM_TERMINATION,
+        MENU_ITEM_COMMENT
+    };
+
+    enum tLinkMenuItem
+    {
+        MENU_ITEM_LINK = 1,
+        MENU_ITEM_TOUCH,
+        MENU_ITEM_PLUCK,
+        MENU_ITEM_PULSETOUCH,
+        MENU_ITEM_DETENT,
+        MENU_ITEM_SOFTENINGLINK,
+        MENU_ITEM_STIFFENINGLINK,
+        MENU_ITEM_WAVEGUIDE,
+        MENU_ITEM_AUDIOCONNECTION
+    };
 };
 
 }

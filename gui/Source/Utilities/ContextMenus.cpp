@@ -39,54 +39,47 @@ void ContextMenus::showObjectsMenu(ObjectsHolder& objectsHolder,
 {
     PopupMenu m;
     m.addSectionHeader(TRANS("Insert") + "...");
-    m.addItem(1, TRANS("Mass"));
-    m.addItem(2, TRANS("Ground"));
-    m.addItem(3, TRANS("Resonator"));
-    m.addItem(4, TRANS("Port"));
+    m.addItem(MENU_ITEM_MASS, TRANS("Mass"));
+    m.addItem(MENU_ITEM_GROUND, TRANS("Ground"));
+    m.addItem(MENU_ITEM_RESONATORS, TRANS("Resonator"));
+    m.addItem(MENU_ITEM_PORT, TRANS("Port"));
     m.addSeparator();
-    m.addItem(5, TRANS("Audio Out"));
+    m.addItem(MENU_ITEM_AUDIO_OUT, TRANS("Audio Out"));
     m.addSeparator();
-    m.addItem(6, TRANS("Junction"));
-    m.addItem(7, TRANS("Termination"));
+    m.addItem(MENU_ITEM_JUNCTION, TRANS("Junction"));
+    m.addItem(MENU_ITEM_TERMINATION, TRANS("Termination"));
     m.addSeparator();
     //    bool commentEnabled = StoredSettings::getInstance()->getIsUsingMDLX();
     //    bool isUsingMDLX = mdlFile != nullptr ? mdlFile->getFile().hasFileExtension(".mdlx") : false;
     //    m.addItem(8, "Comment", (commentEnabled || isUsingMDLX));
     m.addItem(8, TRANS("Comment"));
 
-    const int r = m.show();
-
-    if (r == 1)
+    switch (m.show())
     {
+    case MENU_ITEM_MASS:
         objectsHolder.insertNewObject(Ids::mass, pos);
-    }
-    else if (r == 2)
-    {
+        break;
+    case MENU_ITEM_GROUND:
         objectsHolder.insertNewObject(Ids::ground, pos);
-    }
-    else if (r == 3)
-    {
+        break;
+    case MENU_ITEM_RESONATORS:
         objectsHolder.insertNewObject(Ids::resonators, pos);
-    }
-    else if (r == 4)
-    {
+        break;
+    case MENU_ITEM_PORT:
         objectsHolder.insertNewObject(Ids::port, pos);
-    }
-    else if (r == 5)
-    {
+        break;
+    case MENU_ITEM_AUDIO_OUT:
         objectsHolder.insertNewObject(Ids::audioout, pos);
-    }
-    else if (r == 6)
-    {
+        break;
+    case MENU_ITEM_JUNCTION:
         objectsHolder.insertNewObject(Ids::junction, pos);
-    }
-    else if (r == 7)
-    {
+        break;
+    case MENU_ITEM_TERMINATION:
         objectsHolder.insertNewObject(Ids::termination, pos);
-    }
-    else if (r == 8)
-    {
+        break;
+    case MENU_ITEM_COMMENT:
         objectsHolder.insertNewObject(Ids::comment, pos);
+        break;
     }
 }
 
@@ -97,64 +90,57 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
 {
     PopupMenu m;
     m.addSectionHeader(TRANS("Add") + "...");
-    m.addItem(1, TRANS("Linear Link"));
-    m.addItem(2, TRANS("Touch Link"));
-    m.addItem(3, TRANS("Pluck Link"));
-    m.addItem(4, TRANS("Pulsetouch Link"));
-    m.addItem(5, TRANS("Detent"));
-    m.addItem(6, TRANS("Softening Link"));
-    m.addItem(7, TRANS("Stiffening Link"));
+    m.addItem(MENU_ITEM_LINK, TRANS("Linear Link"));
+    m.addItem(MENU_ITEM_TOUCH, TRANS("Touch Link"));
+    m.addItem(MENU_ITEM_PLUCK, TRANS("Pluck Link"));
+    m.addItem(MENU_ITEM_PULSETOUCH, TRANS("Pulsetouch Link"));
+    m.addItem(MENU_ITEM_DETENT, TRANS("Detent"));
+    m.addItem(MENU_ITEM_SOFTENINGLINK, TRANS("Softening Link"));
+    m.addItem(MENU_ITEM_STIFFENINGLINK, TRANS("Stiffening Link"));
     m.addSeparator();
-    m.addItem(8, TRANS("Waveguide"));
+    m.addItem(MENU_ITEM_WAVEGUIDE, TRANS("Waveguide"));
     m.addSeparator();
-    m.addItem(9, TRANS("Audio Connection"));
-    const int r = m.show();
+    m.addItem(MENU_ITEM_AUDIOCONNECTION, TRANS("Audio Connection"));
 
-    if (r == 1)
+    switch (m.show())
     {
+    case MENU_ITEM_LINK:
         DBG("Add link");
         objectsHolder.insertNewLink(Ids::link, so, eo);
-    }
-    else if (r == 2)
-    {
+        break;
+    case MENU_ITEM_TOUCH:
         DBG("Add touch");
         objectsHolder.insertNewLink(Ids::touch, so, eo);
-    }
-    else if (r == 3)
-    {
+        break;
+    case MENU_ITEM_PLUCK:
         DBG("Add pluck");
         objectsHolder.insertNewLink(Ids::pluck, so, eo);
-    }
-    else if (r == 4)
-    {
+        break;
+    case MENU_ITEM_PULSETOUCH:
         DBG("Add pulsetouch");
         objectsHolder.insertNewLink(Ids::pulsetouch, so, eo);
-    }
-    else if (r == 5)
-    {
+        break;
+    case MENU_ITEM_DETENT:
         DBG("Add detent");
         objectsHolder.insertNewLink(Ids::detent, so, eo);
-    }
-    else if (r == 6)
-    {
+        break;
+    case MENU_ITEM_SOFTENINGLINK:
         DBG("Add softening link");
         objectsHolder.insertNewLink(Ids::softeninglink, so, eo);
-    }
-    else if (r == 7)
-    {
+        break;
+    case MENU_ITEM_STIFFENINGLINK:
         DBG("Add stiffening link");
         objectsHolder.insertNewLink(Ids::stiffeninglink, so, eo);
-    }
-    else if (r == 8)
-    {
+        break;
+    case MENU_ITEM_WAVEGUIDE:
         DBG("Add waveguide");
         objectsHolder.getStartEndObjectsLeftRight(so, eo);
         objectsHolder.insertNewLink(Ids::waveguide, so, eo);
-    }
-    else if (r == 9)
-    {
+        break;
+    case MENU_ITEM_AUDIOCONNECTION:
         DBG("Add audio connection");
         objectsHolder.insertNewAudioConnection();
+        break;
     }
 }
 
@@ -165,8 +151,7 @@ void ContextMenus::showAudioConnectionPopupMenu(ObjectsHolder& objectsHolder)
     PopupMenu m;
     m.addSectionHeader(TRANS("Add") + "...");
     m.addItem(1, TRANS("Audio Connection"));
-    const int r = m.show();
-    if (r == 1)
+    if (m.show() == 1)
     {
         objectsHolder.insertNewAudioConnection();
     }
