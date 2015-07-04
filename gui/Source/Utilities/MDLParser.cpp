@@ -34,6 +34,8 @@
 #include "SAMRegex.h"
 #include "ObjectsHelper.h"
 
+#include "MDLHelper.h"
+
 #include <vector>
 
 
@@ -125,7 +127,7 @@ bool MDLParser::parseMDL(const File& f)
 
             if(newTree.getType() != Ids::port && newTree.getType() != Ids::ground)
             {
-                StringArray paramsArray = getParamsFromString(values[1]);
+                StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
 
                 if(newTree.getType() == Ids::resonators)
                 {
@@ -218,7 +220,7 @@ bool MDLParser::parseMDL(const File& f)
                 return false;
             }
 
-            StringArray paramsArray = getParamsFromString(values[1]);
+            StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
 
             linkTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                               -1, nullptr);
@@ -332,7 +334,7 @@ bool MDLParser::parseMDL(const File& f)
             terminationTree.setProperty(Ids::posX, pos.x, nullptr);
             terminationTree.setProperty(Ids::posY, pos.y, nullptr);
 
-            StringArray paramsArray = getParamsFromString(values[1]);
+            StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
 
             terminationTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                      -1, nullptr);
@@ -379,7 +381,7 @@ bool MDLParser::parseMDL(const File& f)
 
             newTree.setProperty(Ids::identifier, values[2], nullptr);
 
-            StringArray paramsArray = getParamsFromString(values[1]);
+            StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
 
             StringArray commVal;
             commVal.addTokens(paramsArray[0].unquoted(), "|" , "\"");
@@ -395,38 +397,6 @@ bool MDLParser::parseMDL(const File& f)
 //    DBG(mdlTree.toXmlString());
     mdlFile.mdlRoot = mdlTree;
 	return true;
-}
-
-const StringArray MDLParser::getParamsFromString(const String& params)
-{
-    StringArray results;
-
-    int posLastDelim = -1;
-    int numOpenPar = 0;
-    int numClosePar = 0;
-    for (int i = 0; i < params.length(); ++i)
-    {
-        const bool isLastChar = (i == params.length() - 1);
-        if ((params[i] == ',' && numOpenPar == numClosePar) || isLastChar)
-        {
-            String param = isLastChar ?
-                params.substring(posLastDelim + 1) :
-                params.substring(posLastDelim + 1, i);
-            results.add(param.trim());
-            posLastDelim = i;
-            numOpenPar = numClosePar = 0;
-        }
-        else if (params[i] == '(')
-        {
-            ++numOpenPar;
-        }
-        else if (params[i] == ')')
-        {
-            ++numClosePar;
-        }
-    }
-
-    return results;
 }
 
 bool MDLParser::parseMDLX(const File& f, bool onlyExtras)

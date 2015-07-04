@@ -102,25 +102,25 @@ public:
         expect(re.fullMatch(SAMRegex::getVertexLine(),
                             "resonators(200.0,1.5,0.01),r0;"));
         // test 19
-        expect(MDLParser::getParamsFromString("200.0,1.5,0.01").size() == 3);
+        expect(MDLHelper::getParamsFromString("200.0,1.5,0.01").size() == 3);
 
         // test 20
-        expect(MDLParser::getParamsFromString("200.0*adjStiffness,1.5,0.01").size() == 3);
+        expect(MDLHelper::getParamsFromString("200.0*adjStiffness,1.5,0.01").size() == 3);
 
         // test 21
-        expect(MDLParser::getParamsFromString("8.0,simpleString(1.0,0.001)").size() == 2);
+        expect(MDLHelper::getParamsFromString("8.0,simpleString(1.0,0.001)").size() == 2);
 
         // test 22
-        expect(MDLParser::getParamsFromString("simpleString(1.0,0.001,0.1)").size() == 1);
+        expect(MDLHelper::getParamsFromString("simpleString(1.0,0.001,0.1)").size() == 1);
 
         // test 23
-        expect(MDLParser::getParamsFromString("1.0").size() == 1);
+        expect(MDLHelper::getParamsFromString("1.0").size() == 1);
 
         // test 24
-        expect(MDLParser::getParamsFromString("simpleString(1.0, 0.001,3.0) , 8.0").size() == 2);
+        expect(MDLHelper::getParamsFromString("simpleString(1.0, 0.001,3.0) , 8.0").size() == 2);
 
         // test 25
-        StringArray paramsArray = MDLParser::getParamsFromString(
+        StringArray paramsArray = MDLHelper::getParamsFromString(
             "(1.0 + randomTweak * (-0.799939)),0.0,0.0");
         expect(paramsArray.size() == 3);
 
@@ -164,7 +164,7 @@ public:
                vals3[3].compare("") == 0);
 
         // test 34
-        StringArray vals4 = MDLParser::getParamsFromString("massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0");
+        StringArray vals4 = MDLHelper::getParamsFromString("massMembrane*(1.0 + randomTweak*(-0.799939)),0.0,0.0");
         expect(vals4.size() == 3);
 
         // test 35
@@ -189,7 +189,7 @@ public:
                commentVals[3].compare("# pos 200, 100") == 0);
 
         // test 39
-        StringArray commentParams = MDLParser::getParamsFromString("\"Test\", 16, ff000000");
+        StringArray commentParams = MDLHelper::getParamsFromString("\"Test\", 16, ff000000");
         expect(commentParams.size() == 3);
 
         // test 40
@@ -199,7 +199,7 @@ public:
 
         // test 41
         StringArray resonatorsParams =
-            MDLParser::getParamsFromString(
+            MDLHelper::getParamsFromString(
                 "0.001, 0.3, 0.1,0.001, 0.3, 0.1,200.0,decayTime*1.0,0.01");
         expect(resonatorsParams.size() == 9);
 

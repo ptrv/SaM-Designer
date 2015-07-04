@@ -48,6 +48,10 @@ public:
     static void saveMDLFileAsImage(const MDLFile& mdlFile,
                                    const ContentComp * const contentComp);
     static bool saveMDLFileAsXml(const MDLFile& mdlFile);
+
+    static const StringArray getParamsFromString(const String& params);
+
+    static const StringArray tokenize(const String& stringToTokenize, const char delimiter);
 };
 
 }

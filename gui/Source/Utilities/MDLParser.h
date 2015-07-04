@@ -37,20 +37,18 @@ class MDLFile;
 class MDLParser
 {
 public:
-	MDLParser(MDLFile& mdlFile_);
+    MDLParser(MDLFile& mdlFile_);
 
-	/**
-	 * Parses the MDLFile
-	 *
-	 * @return		true if parsing succeeded
-	 */
-	bool parseMDL(const File& f);
+    /**
+     * Parses the MDLFile
+     *
+     * @return		true if parsing succeeded
+     */
+    bool parseMDL(const File& f);
     bool parseMDLX(const File& f, bool onlyExtras=false);
 
-    static const StringArray getParamsFromString(const String& params);
-
 private:
-	MDLFile& mdlFile;
+    MDLFile& mdlFile;
 };
 }
 

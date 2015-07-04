@@ -266,3 +266,42 @@ bool MDLHelper::saveMDLFileAsXml(const MDLFile& mdlFile)
     return saveOk;
 
 }
+
+const StringArray MDLHelper::getParamsFromString(const String& params)
+{
+    return tokenize(params, ',');
+}
+
+const StringArray MDLHelper::tokenize(const String& stringToTokenize, const char delimiter)
+{
+    StringArray results;
+
+    int posLastDelim = -1;
+    int numOpenPar = 0;
+    int numClosePar = 0;
+    for (int i = 0; i < stringToTokenize.length(); ++i)
+    {
+        if (stringToTokenize[i] == delimiter && numOpenPar == numClosePar)
+        {
+            String param = stringToTokenize.substring(posLastDelim + 1, i);
+            results.add(param.trim());
+            posLastDelim = i;
+            numOpenPar = numClosePar = 0;
+        }
+        else if (i == stringToTokenize.length() - 1)
+        {
+            String param = stringToTokenize.substring(posLastDelim + 1);
+            results.add(param.trim());
+        }
+        else if (stringToTokenize[i] == '(')
+        {
+            ++numOpenPar;
+        }
+        else if (stringToTokenize[i] == ')')
+        {
+            ++numClosePar;
+        }
+    }
+
+    return results;
+}
