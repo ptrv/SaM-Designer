@@ -331,11 +331,9 @@ void LinkComponent::drawPath(Graphics& g)
     if (data.getType() == Ids::link || data.getType() == Ids::detent ||
         data.getType() == Ids::softeninglink || data.getType() == Ids::stiffeninglink)
     {
-        iconPath = ResourceLoader::getInstance()->getPathForLinkId(data.getType(),
-                                                                   0,
-                                                                   0,
-                                                                   iconWidth*0.7,
-                                                                   iconHeight*0.7);
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(
+            data.getType(), 0, 0, iconWidth*0.7, iconHeight*0.7);
+
         float rotateVal;
         if(segmented)
         {
@@ -396,8 +394,7 @@ void LinkComponent::drawPath(Graphics& g)
 
             g.setColour(c);
         }
-        else if (data.getType() == Ids::softeninglink ||
-                 data.getType() == Ids::stiffeninglink)
+        else if (data.getType() == Ids::softeninglink)
         {
             Colour c = currentColor;
             g.setColour(Colours::darkred);
@@ -418,6 +415,27 @@ void LinkComponent::drawPath(Graphics& g)
             g.fillPath(curve);
             g.setColour(c);
         }
+        else if (data.getType() == Ids::stiffeninglink)
+        {
+            Colour c = currentColor;
+            g.setColour(Colours::darkred);
+
+            Path curve;
+            curve.startNewSubPath(0, iconHeight);
+            curve.quadraticTo(0.f, iconHeight/4.f*3, iconWidth/2.f, iconHeight/2.f);
+            curve.quadraticTo(iconWidth/4.f*3.f, iconHeight/2.f, iconWidth, 0);
+
+            curve.applyTransform(AffineTransform::translation((-iconWidth/2),
+                                                              -iconHeight/4));
+            curve.applyTransform(AffineTransform::identity
+                                 .rotated(rotateVal)
+                                 .translated((x1 + x2) * 0.5f,
+                                             (y1 + y2) * 0.5f));
+            PathStrokeType stroke2(1.0f);
+            stroke2.createStrokedPath(curve, curve);
+            g.fillPath(curve);
+            g.setColour(c);
+        }
     }
     else if(data.getType() == Ids::pluck)
     {
@@ -426,11 +444,10 @@ void LinkComponent::drawPath(Graphics& g)
             x2 = x1 + 1;
             y2 = y2 + 1;
         }
-        iconPath = ResourceLoader::getInstance()->getPathForLinkId(Ids::pluck,
-                                                                   0,
-                                                                   0,
-                                                                   iconWidth,
-                                                                   iconHeight / 2);
+
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(
+            Ids::pluck, 0, 0, iconWidth, iconHeight / 2);
+
         float rotateVal;
         if(segmented)
         {
@@ -476,7 +493,6 @@ void LinkComponent::drawPath(Graphics& g)
             linePath.lineTo(x2, y2);
 
             rotateVal = float_Pi * 0.5f - (float) atan2(x2 - x1, y2 - y1);
-            
         }
         PathStrokeType wideStroke(8.0f);
         wideStroke.createStrokedPath(hitPath, linePath);
@@ -500,12 +516,10 @@ void LinkComponent::drawPath(Graphics& g)
             x2 = x1 + 1;
             y2 = y2 + 1;
         }
-        iconPath = ResourceLoader::getInstance()->getPathForLinkId(data.getType(),
-                                                                   0,
-                                                                   0,
-                                                                   iconWidth,
-                                                                   iconHeight);
-       
+
+        iconPath = ResourceLoader::getInstance()->getPathForLinkId(
+            data.getType(), 0, 0, iconWidth, iconHeight);
+
         float rotateVal;
         if (segmented)
         {
@@ -570,7 +584,7 @@ void LinkComponent::drawPath(Graphics& g)
         {
             Colour c = currentColor;
             g.setColour(Colours::indigo);
-            
+
             Path outlineRect;
 
             outlineRect.addRectangle(0 - (iconWidth * 0.15),
