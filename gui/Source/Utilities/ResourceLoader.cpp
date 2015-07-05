@@ -55,6 +55,7 @@ void ResourceLoader::initObjectIconMap()
 	objectIcons.set(Ids::waveguide, "waveguide.svg");
 	objectIcons.set(Ids::junction, "junction.svg");
     objectIcons.set(Ids::audioout, "audioout.svg");
+    objectIcons.set(Ids::display, "display.svg");
 }
 Drawable* ResourceLoader::getDrawableForObjectId(const Identifier& objId)
 {

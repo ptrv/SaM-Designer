@@ -84,6 +84,8 @@ namespace CommandIDs
     static const int insertTermination		= 0x2030c2;
     static const int insertJunction 		= 0x2030c3;
     static const int insertComment          = 0x2030c4;
+    static const int insertDisplay          = 0x203100;
+    static const int insertDisplayConnection = 0x203101;
 
     static const int generateFaust			= 0x2030c5;
     static const int generateExternal		= 0x2030c6;

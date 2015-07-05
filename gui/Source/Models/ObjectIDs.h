@@ -87,6 +87,7 @@ namespace Ids
     DECLARE_ID (detent);
     DECLARE_ID (softeninglink);
     DECLARE_ID (stiffeninglink);
+    DECLARE_ID (display);
 
     const Identifier class_ ("class");
 
@@ -107,6 +108,7 @@ namespace Objects
     DECLARE_ID(junctions);
     DECLARE_ID(invalid);
     DECLARE_ID(comments);
+    DECLARE_ID(displays);
 
     #undef DECLARE_ID
 };

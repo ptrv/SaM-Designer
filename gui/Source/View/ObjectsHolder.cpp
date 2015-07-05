@@ -394,6 +394,8 @@ void ObjectsHolder::getAllCommands(Array<CommandID>& commands)
         CommandIDs::insertStiffeningLink,
         CommandIDs::insertAudioOutput,
         CommandIDs::insertAudioConnection,
+        CommandIDs::insertDisplay,
+        CommandIDs::insertDisplayConnection,
         CommandIDs::insertWaveguide,
         CommandIDs::insertTermination,
         CommandIDs::insertJunction,
@@ -546,6 +548,12 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
         result.setActive(ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 1 ||
                          ObjectsHelper::getSelectedComponents<LinkComponent>(objController).size() == 1);
+        break;
+    case CommandIDs::insertDisplay:
+        result.setInfo(TRANS("Display"), "", CommandCategories::inserting, 0);
+        break;
+    case CommandIDs::insertDisplayConnection:
+        result.setInfo(TRANS("Display Connection"), "", CommandCategories::inserting, 0);
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo(TRANS("Waveguide"), "", CommandCategories::inserting, 0);
@@ -725,6 +733,13 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
     case CommandIDs::insertAudioConnection:
         objController.addNewAudioConnection(this);
         break;
+    case CommandIDs::insertDisplay:
+        insertNewObject(Ids::display);
+        break;
+    case CommandIDs::insertDisplayConnection:
+        // objController.addNewDisplayConnection(this);
+        break;
+
     case CommandIDs::insertJunction:
         insertNewObject(Ids::junction);
         break;

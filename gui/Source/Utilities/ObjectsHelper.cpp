@@ -548,6 +548,8 @@ const Identifier& ObjectsHelper::getObjectGroup(const Identifier& ident)
         return Objects::faustcodeblock;
     else if (ident == Ids::comment)
         return Objects::comments;
+    else if (ident == Ids::display)
+        return Objects::displays;
 
     else
         return Objects::invalid;
@@ -602,7 +604,7 @@ const Array<Identifier>& ObjectsHelper::getAllObjectIds()
         Ids::mass, Ids::ground, Ids::port, Ids::resonators, Ids::link, Ids::touch,
         Ids::pluck, Ids::pulsetouch, Ids::faustcode, Ids::audioout, Ids::waveguide,
         Ids::termination, Ids::junction, Ids::comment, Ids::detent,
-        Ids::softeninglink, Ids::stiffeninglink
+        Ids::softeninglink, Ids::stiffeninglink, Ids::display
     };
     static const int numAllObjects =
         sizeof(allObjectIdsArr)/sizeof(allObjectIdsArr[0]);

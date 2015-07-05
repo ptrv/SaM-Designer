@@ -160,6 +160,17 @@ public:
 	bool writeValues();
 };
 
+class DisplayPropertiesComponent : public ObjectPropertiesComponent {
+public:
+    DisplayPropertiesComponent(ObjController& objController_,
+                               const Array<ValueTree>& datas_,
+                               UndoManager* undoManager_);
+    virtual ~DisplayPropertiesComponent();
+    void resized();
+    void readValues();
+    bool writeValues();
+};
+
 class WaveguidePropertiesComponent : public ObjectPropertiesComponent {
 public:
     WaveguidePropertiesComponent(ObjController& objController_,

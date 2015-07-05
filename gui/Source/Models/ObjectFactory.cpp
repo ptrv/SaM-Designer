@@ -42,13 +42,14 @@ using namespace synthamodeler;
 // Mass-like objects
 //------------------------------------------------------------------------------
 
-ValueTree ObjectFactory::createMewMassLikeTree(const Identifier& massType,
+ValueTree ObjectFactory::createNewMassLikeTree(const Identifier& massType,
                                                const String& newName, int x, int y,
                                                const StringPairArray& paramsStringPairs)
 {
     if (massType != Ids::mass && massType != Ids::ground
         && massType != Ids::resonators && massType != Ids::termination
-        && massType != Ids::junction && massType != Ids::port)
+        && massType != Ids::junction && massType != Ids::port
+        && massType != Ids::display)
     {
         return ValueTree();
     }
@@ -94,14 +95,14 @@ ValueTree ObjectFactory::createNewMassTree(const String& newName, int x, int y)
     defaultValues.set("mass_init_position", "0.0");
     defaultValues.set("mass_init_velocity", "0.0");
 
-    return createMewMassLikeTree(Ids::mass, newName, x, y, defaultValues);
+    return createNewMassLikeTree(Ids::mass, newName, x, y, defaultValues);
 }
 
 //------------------------------------------------------------------------------
 
 ValueTree ObjectFactory::createNewPortTree(const String& newName, int x, int y)
 {
-    return createMewMassLikeTree(Ids::port, newName, x, y, StringPairArray());
+    return createNewMassLikeTree(Ids::port, newName, x, y, StringPairArray());
 }
 
 //------------------------------------------------------------------------------
@@ -111,7 +112,7 @@ ValueTree ObjectFactory::createNewGroundTree(const String& newName, int x, int y
     StringPairArray defaultValues;
     defaultValues.set("ground_init_position", "0.0");
 
-    return createMewMassLikeTree(Ids::ground, newName, x, y, defaultValues);
+    return createNewMassLikeTree(Ids::ground, newName, x, y, defaultValues);
 }
 
 //------------------------------------------------------------------------------
@@ -124,7 +125,7 @@ ValueTree ObjectFactory::createNewResonatorsTree(const String& newName,
     defaultValues.set("resonators_decay_time", "1.5");
     defaultValues.set("resonators_eq_mass", "0.01");
 
-    return createMewMassLikeTree(Ids::resonators, newName, x, y, defaultValues);
+    return createNewMassLikeTree(Ids::resonators, newName, x, y, defaultValues);
 }
 
 //------------------------------------------------------------------------------
@@ -308,7 +309,7 @@ ValueTree ObjectFactory::createNewTerminationTree(const String& newName,
     StringPairArray defaultValues;
     defaultValues.set("term_type", "simpleStringTerm(-0.996, 20)");
 
-    return createMewMassLikeTree(Ids::termination, newName, x, y, defaultValues);
+    return createNewMassLikeTree(Ids::termination, newName, x, y, defaultValues);
 }
 
 //------------------------------------------------------------------------------
@@ -319,7 +320,7 @@ ValueTree ObjectFactory::createNewJunctionTree(const String& newName,
     StringPairArray defaultValues;
     defaultValues.set("junct_displacement", "0.0");
 
-    return createMewMassLikeTree(Ids::junction, newName, x, y, defaultValues);
+    return createNewMassLikeTree(Ids::junction, newName, x, y, defaultValues);
 }
 
 //------------------------------------------------------------------------------
@@ -355,6 +356,21 @@ ValueTree ObjectFactory::createNewCommentTree(const String& newName, int x, int 
 }
 
 //------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::createNewDisplayTree(const String& newName, int x, int y)
+{
+    StringPairArray defaultValues;
+    defaultValues.set("display_label", "");
+    defaultValues.set("display_min_val", "-0.1");
+    defaultValues.set("display_max_val", "0.1");
+
+    ValueTree newTree = createNewMassLikeTree(Ids::display, newName, x, y, defaultValues);
+    newTree.setProperty(Ids::value, "", nullptr);
+
+    return newTree;
+}
+
+//------------------------------------------------------------------------------
 // Public functions
 //------------------------------------------------------------------------------
 
@@ -378,6 +394,8 @@ ValueTree ObjectFactory::createNewObjectTree(const Identifier& objType,
         return createNewTerminationTree(newName, x, y);
     else if(objType == Ids::comment)
         return createNewCommentTree(newName, x, y);
+    else if(objType == Ids::display)
+        return createNewDisplayTree(newName, x, y);
 	else
 		return ValueTree::invalid;
 }

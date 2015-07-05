@@ -47,7 +47,7 @@ public:
                                            const String& srcVal);
 
 private:
-    static ValueTree createMewMassLikeTree(const Identifier& massType,
+    static ValueTree createNewMassLikeTree(const Identifier& massType,
                                            const String& newName, int x, int y,
                                            const StringPairArray& paramsStringPairs);
     
@@ -92,6 +92,8 @@ private:
 
     static ValueTree createNewAudioOutTree(const String& newName, int x, int y);
     static ValueTree createNewCommentTree(const String& newName, int x, int y);
+
+    static ValueTree createNewDisplayTree(const String& newName, int x, int y);
 
     static ValueTree createResonatorParamsTree(StringArray p);
 };

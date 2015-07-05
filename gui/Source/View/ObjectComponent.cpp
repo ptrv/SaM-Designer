@@ -58,6 +58,8 @@ ObjectComponent::ObjectComponent(ObjController& owner_, ValueTree data_)
         setSize(55,55);
     else if(data.getType() == Ids::junction)
         setSize(25,25);
+    else if(data.getType() == Ids::display)
+        setSize(60,60);
     else
         setSize(50, 50);
 

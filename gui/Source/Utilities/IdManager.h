@@ -28,6 +28,8 @@
 
 #include "JuceHeader.h"
 
+#include <map>
+
 namespace synthamodeler
 {
 class IdManager
@@ -57,6 +59,9 @@ private:
 
     SortedSet<String> allIds;
     Array<SortedSet<String> > theIds;
+
+    static const std::map<const char*, String> objNamePrefixMap;
+
 };
 }
 

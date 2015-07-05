@@ -314,6 +314,10 @@ void PropertiesWindow::updateProperties()
         {
             comp = new GainComponent(audioSourceIds, datas, undoManager_);
         }
+        else if (selectedId == Ids::display)
+        {
+            comp = new DisplayPropertiesComponent(objCtrl, datas, undoManager_);
+        }
         else
         {
             comp = new EmptyComponent();

@@ -303,8 +303,14 @@ void ObjectPropertiesComponent::readEditorsSingleSelection(const Array<TextEdito
 
 void ObjectPropertiesComponent::writeEditors(ValueTree params_, const bool fixValues)
 {
-    for (int i = 0; i < editors.size(); ++i)
+    int numParams = params_.getNumChildren();
+    for (int i = 0; i < numParams; ++i)
     {
+        if (numParams >= editors.size())
+        {
+            continue;
+        }
+
         TextEditor* const editor = editors[i];
 
         if(! editorsModified[editor])
@@ -332,7 +338,7 @@ void ObjectPropertiesComponent::resetEditorsModifiedState()
 StringArray ObjectPropertiesComponent::getParamsStrings(const ValueTree& params)
 {
     StringArray res;
-    for (int i = 0; i < editors.size(); ++i)
+    for (int i = 0; i < params.getNumChildren(); ++i)
     {
         res.add(params.getChild(i)[Ids::value].toString());
     }
@@ -809,6 +815,90 @@ bool AudiooutPropertiesComponent::writeValues()
         if (editorsModified[editor])
         {
             data.setProperty(Ids::optional, editor->getText(), undoManager);
+        }
+    }
+    resetEditorsModifiedState();
+
+    return true;
+}
+
+
+
+
+
+
+
+DisplayPropertiesComponent::DisplayPropertiesComponent(ObjController& objController_,
+                                                       const Array<ValueTree>& datas_,
+                                                       UndoManager* const undoManager_)
+: ObjectPropertiesComponent(objController_, datas_, undoManager_)
+{
+    editors.add(createEditor("Label", "Label", true));
+    editors.add(createEditor("MinVal", "Min value", false));
+    editors.add(createEditor("MaxVal", "Max value", false));
+    editors.add(createEditor("Source", "Source", true, true));
+
+    readValues();
+}
+
+DisplayPropertiesComponent::~DisplayPropertiesComponent()
+{
+}
+
+void DisplayPropertiesComponent::resized()
+{
+    ObjectPropertiesComponent::resized();
+
+    editors[0]->setBounds(100, 40, getWidth() - 110, 50);
+    editors[1]->setBounds(100, 100, getWidth() - 110, 50);
+    editors[2]->setBounds(100, 160, getWidth() - 110, 50);
+    editors[3]->setBounds(100, 220, getWidth() - 110, 50);
+
+}
+
+void DisplayPropertiesComponent::readValues()
+{
+    if (isEditing)
+    {
+        return;
+    }
+
+    ObjectPropertiesComponent::readValues();
+
+    if(multipleEdit)
+    {
+        readEditorsMultipleSelection(editors);
+    }
+    else
+    {
+        ValueTree data = datas[0];
+        StringArray vals = getParamsStrings(
+            data.getChildWithName(Ids::parameters));
+
+        vals.add(data[Ids::value].toString());
+
+        readEditorsSingleSelection(editors, vals);
+        // editors[0]->setTextToShowWhenEmpty("0.0", Colours::darkgrey);
+    }
+}
+
+bool DisplayPropertiesComponent::writeValues()
+{
+    if (!ObjectPropertiesComponent::writeValues())
+    {
+        return false;
+    }
+
+    for (ValueTree& data : datas)
+    {
+        ValueTree paramsTree = data.getChildWithName(Ids::parameters);
+        writeEditors(paramsTree, false);
+
+        TextEditor* const editor = editors[3];
+        if (editor && editorsModified[editor])
+        {
+            const String text = editor->getText();
+            data.setProperty(Ids::value, text, undoManager);
         }
     }
     resetEditorsModifiedState();

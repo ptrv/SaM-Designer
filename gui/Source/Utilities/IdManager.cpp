@@ -240,43 +240,31 @@ String IdManager::getNextId(const Identifier& objId)
     }
 }
 
+const std::map<const char*, String> IdManager::objNamePrefixMap =
+{
+    {Ids::mass.getCharPointer(), "m"},
+    {Ids::ground.getCharPointer(), "g"},
+    {Ids::port.getCharPointer(), "dev"},
+    {Ids::resonators.getCharPointer(), "r"},
+    {Ids::link.getCharPointer(), "l"},
+    {Ids::pluck.getCharPointer(), "p"},
+    {Ids::touch.getCharPointer(), "t"},
+    {Ids::pulsetouch.getCharPointer(), "pt"},
+    {Ids::detent.getCharPointer(), "d"},
+    {Ids::softeninglink.getCharPointer(), "softl"},
+    {Ids::stiffeninglink.getCharPointer(), "stifl"},
+    {Ids::audioout.getCharPointer(), "a"},
+    {Ids::waveguide.getCharPointer(), "wg"},
+    {Ids::termination.getCharPointer(), "term"},
+    {Ids::junction.getCharPointer(), "junct"},
+    {Ids::comment.getCharPointer(), "comment"},
+    {Ids::display.getCharPointer(), "dply"}
+};
+
 String IdManager::getObjNamePrefix(const Identifier& objId)
 {
-    if (objId == Ids::mass)
-        return "m";
-    else if(objId == Ids::ground)
-        return "g";
-    else if(objId == Ids::port)
-        return "dev";
-    else if(objId == Ids::resonators)
-        return "r";
-    else if(objId == Ids::link)
-        return "l";
-    else if(objId == Ids::touch)
-        return "t";
-    else if(objId == Ids::pulsetouch)
-        return "pt";
-    else if(objId == Ids::pluck)
-        return "p";
-    else if(objId == Ids::detent)
-        return "d";
-    else if(objId == Ids::softeninglink)
-        return "softl";
-    else if(objId == Ids::stiffeninglink)
-        return "stifl";
-    else if(objId == Ids::audioout)
-        return "a";
-    else if (objId == Ids::waveguide)
-        return "wg";
-    else if(objId == Ids::termination)
-        return "term";
-    else if(objId == Ids::junction)
-        return "junct";
-    else if(objId == Ids::comment)
-        return "comment";
-
-    else
-        return String::empty;
+    auto it = objNamePrefixMap.find(objId.getCharPointer());
+    return it != objNamePrefixMap.end() ? it->second : String("n/a");
 }
 
 String IdManager::getObjNameForPaste(const Identifier& objId,
