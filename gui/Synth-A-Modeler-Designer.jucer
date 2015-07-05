@@ -42,26 +42,6 @@
         <MODULEPATH id="juce_core" path="../juce/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
-    <VS2013 targetFolder="Builds/VisualStudio2013" extraCompilerFlags="/I ..\..\Libs\re2win\include"
-            extraLinkerFlags="re2.lib" bigIcon="WodEAp">
-      <CONFIGURATIONS>
-        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="Synth-A-Modeler-Designer"
-                       libraryPath="..\..\Libs\re2win\lib\debug"/>
-        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="0" optimisation="2" targetName="Synth-A-Modeler-Designer"
-                       libraryPath="..\..\Libs\re2win\lib\release"/>
-      </CONFIGURATIONS>
-      <MODULEPATHS>
-        <MODULEPATH id="juce_gui_extra" path="../juce/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../juce/modules"/>
-        <MODULEPATH id="juce_graphics" path="../juce/modules"/>
-        <MODULEPATH id="juce_events" path="../juce/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../juce/modules"/>
-        <MODULEPATH id="juce_cryptography" path="../juce/modules"/>
-        <MODULEPATH id="juce_core" path="../juce/modules"/>
-      </MODULEPATHS>
-    </VS2013>
   </EXPORTFORMATS>
   <MAINGROUP id="RyljMx" name="Synth-A-Modeler-Designer">
     <GROUP id="{05695969-79FE-6300-20E9-CEDC12251429}" name="BinaryData">
