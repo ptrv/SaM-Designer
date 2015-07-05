@@ -219,17 +219,16 @@ void MDLWriter::getMDLString(String& mdlContent)
         {
             mdlContent << "0.0";
         }
+
+        StringArray audioSources;
         for (int q = 0; q < sources.getNumChildren(); ++q)
         {
             ValueTree source = sources.getChild(q);
-            if(source.getProperty(Ids::value).toString() == String::empty)
-                mdlContent << "0.0";
-            else
-                mdlContent << source.getProperty(Ids::value).toString();
-
-            if(q != sources.getNumChildren()-1)
-				mdlContent << "+";
+            String sourceStr = source.getProperty(Ids::value).toString();
+            audioSources.add(sourceStr.isNotEmpty() ? sourceStr : "0.0");
         }
+        mdlContent << audioSources.joinIntoString("+");
+
         if(isOpt)
         {
             mdlContent << ")";

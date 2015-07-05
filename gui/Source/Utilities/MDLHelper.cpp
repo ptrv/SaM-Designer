@@ -305,3 +305,68 @@ const StringArray MDLHelper::tokenize(const String& stringToTokenize, const char
 
     return results;
 }
+
+String MDLHelper::removeSurroundingParentheses(const String& s, bool recursive)
+{
+    String result = s.trim();
+
+    while (result.startsWithChar('(') && result.endsWithChar(')'))
+    {
+        result = result.substring(1, result.length() - 1).trim();
+        if (!recursive)
+        {
+            return result;
+        }
+    }
+
+    return result;
+}
+
+String MDLHelper::removeUnbalancedParentheses(const String& s)
+{
+    String result;
+
+    auto countStr = [&](const String& stringToCount)
+    {
+        int count = 0;
+        int startIndex = 0;
+        while (startIndex != -1)
+        {
+            startIndex = s.indexOf(startIndex, stringToCount);
+            if (startIndex >= 0)
+            {
+                ++count;
+                ++startIndex;
+            }
+        }
+        return count;
+    };
+
+    std::pair<int, int> numPars(countStr("("), countStr(")"));
+
+    if (numPars.first != numPars.second)
+    {
+        if (numPars.first > numPars.second)
+        {
+            int diff = numPars.first - numPars.second;
+            for (int i = 0; i < diff; ++i)
+            {
+                result = s.fromFirstOccurrenceOf("(", false, false);
+            }
+        }
+        else
+        {
+            int diff = numPars.second - numPars.first;
+            for (int i = 0; i < diff; ++i)
+            {
+                result = s.upToLastOccurrenceOf(")", false, false);
+            }
+        }
+    }
+    else
+    {
+        result = s;
+    }
+
+    return result;
+}

@@ -48,6 +48,9 @@ public:
                                  int timesPasted,
                                  bool groupPaste);
 
+    String getAllIdsRegex() const;
+    String getAllIdsFilteredRegex(const StringArray& filter) const;
+
 private:
     SortedSet<String>* getSet(const Identifier& objId);
     String getObjNamePrefix(const Identifier& objId);

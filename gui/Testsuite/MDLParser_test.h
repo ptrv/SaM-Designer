@@ -203,9 +203,21 @@ public:
                 "0.001, 0.3, 0.1,0.001, 0.3, 0.1,200.0,decayTime*1.0,0.01");
         expect(resonatorsParams.size() == 9);
 
-        // test 41
+        // test 42
         expect(re.fullMatch(SAMRegex::getVertexLine(),
                             "resonators(200.0,1.5,0.01,220.0,2.0,0.02),r0; # pos 223,385"));
+
+        // test 43
+        expect(MDLHelper::removeSurroundingParentheses("((bla, bla))").compare("bla, bla") == 0);
+
+        // test 44
+        expect(MDLHelper::removeSurroundingParentheses("(bla, (bla))").compare("bla, (bla)") == 0);
+
+        // test 45
+        expect(MDLHelper::removeUnbalancedParentheses("((bla, bla)").compare("(bla, bla)") == 0);
+
+        // test 46
+        expect(MDLHelper::removeUnbalancedParentheses("(bla, bla))").compare("(bla, bla)") == 0);
     }
 };
 

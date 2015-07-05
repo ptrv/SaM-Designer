@@ -43,6 +43,8 @@
 #include "View/CommentComponent.h"
 #include "View/ObjectsHolder.h"
 
+#include "Utilities/RegularExpression.h"
+
 #include "IdManager.h"
 
 #include <functional>
@@ -492,20 +494,38 @@ BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(const ObjController&
                                                             const ValueTree& source)
 {
     const String& srcVal = source[Ids::value].toString();
-    StringArray srcArray;
-    srcArray.addTokens(srcVal, "*", "\"");
-    for (const String& src : srcArray)
+
+    String sourceName = getObjectNameFromSource(
+        objController.getIdManager().getAllIdsRegex(), srcVal);
+
+    if (ObjectComponent* oc = objController.getObjectForId(sourceName))
     {
-        if (ObjectComponent* oc = objController.getObjectForId(src))
-        {
-            return oc;
-        }
-        else if(LinkComponent* lc = objController.getLinkForId(src))
-        {
-            return lc;
-        }
+        return oc;
     }
+    else if(LinkComponent* lc = objController.getLinkForId(sourceName))
+    {
+        return lc;
+    }
+
     return nullptr;
+}
+
+//------------------------------------------------------------------------------
+
+String ObjectsHelper::getObjectNameFromSource(const String& regex, const String& source)
+{
+    String result;
+
+    RegularExpression re(regex);
+    int found = re.match(source);
+
+    if (found > 0)
+    {
+        int start, end;
+        result = re.getStringOffsetSize(1, start, end);
+    }
+
+    return result;
 }
 
 //------------------------------------------------------------------------------

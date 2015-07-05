@@ -52,6 +52,10 @@ public:
     static const StringArray getParamsFromString(const String& params);
 
     static const StringArray tokenize(const String& stringToTokenize, const char delimiter);
+
+    static String removeSurroundingParentheses(const String& s, bool recursive = true);
+
+    static String removeUnbalancedParentheses(const String& s);
 };
 
 }

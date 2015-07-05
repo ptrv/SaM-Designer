@@ -206,6 +206,7 @@ public:
     String getNewNameForObject(const Identifier& objId);
 
     IdManager& getIdManager() { return *idMgr; }
+    const IdManager& getIdManager() const { return *idMgr; }
 
     void setLinksSegmented(bool isSegmented);
 

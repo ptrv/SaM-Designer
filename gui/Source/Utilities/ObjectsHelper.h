@@ -66,6 +66,7 @@ public:
 
     static BaseObjectComponent* getBaseObjectFromSource(const ObjController& objController,
                                                         const ValueTree& source);
+    static String getObjectNameFromSource(const String& regex, const String& source);
 
     static const Identifier& getObjectGroup(const Identifier& ident);
 

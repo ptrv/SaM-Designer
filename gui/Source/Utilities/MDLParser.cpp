@@ -258,6 +258,7 @@ bool MDLParser::parseMDL(const File& f)
             if(posColon > 0)
             {
                 audioLine = values[1].substring(0, posColon);
+                audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);
                 audioTree.setProperty(Ids::optional,values[1].substring(posColon+1), nullptr);
             }
             else
@@ -277,17 +278,16 @@ bool MDLParser::parseMDL(const File& f)
                 String aoOpt2 = "outputDSP" + aoOpt;
                 audioTree.setProperty(Ids::optional, aoOpt2, nullptr);
             }
+
+            // remove unbalanced parentheses
+            audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);
+
             // remove surrounding paranthese if there are some.
-            String audioLineClean = audioLine.trim();
-            if(audioLineClean.startsWithChar('(') &&
-               audioLineClean.endsWithChar(')'))
-            {
-                audioLineClean = audioLineClean.trimCharactersAtStart("(");
-                audioLineClean = audioLineClean.trimCharactersAtEnd(")");
-            }
-            
+            String audioLineClean = MDLHelper::removeSurroundingParentheses(audioLine);
+
             StringArray audioOutSourcesList;
             audioOutSourcesList.addTokens(audioLineClean, "+", "\"");
+
             ValueTree audioSources(Ids::sources);
             for (int l = 0; l < audioOutSourcesList.size(); ++l)
             {

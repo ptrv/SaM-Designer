@@ -308,3 +308,30 @@ String IdManager::getObjNameForPaste(const Identifier& objId,
         return getNextId(objId);
     }
 }
+
+String IdManager::getAllIdsRegex() const
+{
+    StringArray result;
+
+    for (const String& id : allIds)
+    {
+        result.add(id);
+    }
+
+    return "(" + result.joinIntoString("|", 0, allIds.size()) + ")";
+}
+
+String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
+{
+    StringArray result;
+
+    for (const String& id : allIds)
+    {
+        if (!filters.contains(id, false))
+        {
+            result.add(id);
+        }
+    }
+
+    return "(" + result.joinIntoString("|", 0, allIds.size()) + ")";
+}

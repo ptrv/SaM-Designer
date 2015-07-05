@@ -29,6 +29,10 @@ public:
         expectEquals(ObjectsHelper::fixParameterValueIfNeeded("1*1"), String("1.0*1.0"));
         expectEquals(ObjectsHelper::fixParameterValueIfNeeded("1*(-1)"), String("1.0*(-1.0)"));
 
+        beginTest("get base comp from audio source");
+
+        String actual = ObjectsHelper::getObjectNameFromSource("(m1|m2|l1|l2)", "m1*dummy*fc*l1");
+        expectEquals(actual, String("m1"));
     }
 };
 
