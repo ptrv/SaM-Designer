@@ -40,7 +40,6 @@
 
 #include "View/ObjectComponent.h"
 #include "View/LinkComponent.h"
-#include "View/BaseConnector.h"
 #include "View/AudioOutConnector.h"
 #include "View/SelectableObject.h"
 #include "View/CommentComponent.h"
@@ -810,7 +809,6 @@ void ObjController::setAsFromtmostLink(T& t)
 
 template void ObjController::setAsFromtmostLink<LinkComponent>(LinkComponent& t);
 template void ObjController::setAsFromtmostLink<AudioOutConnector>(AudioOutConnector& t);
-template void ObjController::setAsFromtmostLink<BaseConnector>(BaseConnector& t);
 
 void ObjController::startReflow(ObjectsHolder& objHolder, const int cmdId)
 {
