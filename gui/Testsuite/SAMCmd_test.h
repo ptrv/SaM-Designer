@@ -37,22 +37,23 @@ namespace synthamodeler
 {
 class SAMCmdTest : public UnitTest {
 public:
-	SAMCmdTest() : UnitTest("OutputCmdTest") {}
+    SAMCmdTest() : UnitTest("OutputCmdTest") {}
 
-	void runTest()
-	{
-		String inPath = String(TESTSUITE_DATA_PATH) + "test.mdl";
-		String expectedPath = String(TESTSUITE_DATA_PATH) + "test_expected.dsp";
-		String outPath = String(TESTSUITE_DATA_PATH) + "test.dsp";
+    void runTest()
+    {
+        const String dataPath = TestUtils::getTestsuiteDataPath();
+        const String inPath = dataPath + "test.mdl";
+        const String expectedPath = dataPath + "test_expected.dsp";
+        const String outPath = dataPath + "test.dsp";
 
 //		SAMCmd cmd(inPath, SAMCmd::NONE);
-		beginTest("isPerlAvailable");
-		expect(CmdHelper::isPerlAvailable(), "");
-		beginTest("isSAMpreprocessorCmdAvailable");
-		expect(CmdHelper::isSAMpreprocessorCmdAvailable(), "");
-		beginTest("isSynthAModelerCmdAvailable");
-		expect(CmdHelper::isSynthAModelerCmdAvailable(), "");
-		beginTest("generateFaustCode");
+        beginTest("isPerlAvailable");
+        expect(CmdHelper::isPerlAvailable(), "");
+        beginTest("isSAMpreprocessorCmdAvailable");
+        expect(CmdHelper::isSAMpreprocessorCmdAvailable(), "");
+        beginTest("isSynthAModelerCmdAvailable");
+        expect(CmdHelper::isSynthAModelerCmdAvailable(), "");
+        beginTest("generateFaustCode");
 //		String inPathFull = File::getCurrentWorkingDirectory().getChildFile(inPath).getFullPathName();
 //		String outPathFull = File::getCurrentWorkingDirectory().getChildFile(outPath).getFullPathName();
 //		String result = cmd.generateFaustCode(inPathFull, outPathFull, false);
@@ -66,7 +67,7 @@ public:
 //				"actual and expected files differ");
 //		outFile.deleteFile();
 
-	}
+    }
 };
 
 static SAMCmdTest samCmdTest;

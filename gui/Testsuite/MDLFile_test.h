@@ -43,7 +43,7 @@ public:
 
 	void runTest()
 	{
-		String mdlPath = String(TESTSUITE_DATA_PATH) + "test.mdl";
+		const String mdlPath = TestUtils::getTestsuiteDataPath() + "test.mdl";
 		ScopedPointer<MDLFile> mdlFile;
 		mdlFile = new MDLFile();
 

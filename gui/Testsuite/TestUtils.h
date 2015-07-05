@@ -28,11 +28,19 @@
 
 namespace synthamodeler
 {
+class TestUtils
+{
+public:
+    static const String getTestsuiteDataPath()
+    {
 #if JUCE_MAC
-static const char* TESTSUITE_DATA_PATH = "../../../../Testsuite/data/";
+        static const String TESTSUITE_DATA_PATH = "../../../../Testsuite/data/";
 #else
-static const char* TESTSUITE_DATA_PATH = "../../../Testsuite/data/";
+        static const String TESTSUITE_DATA_PATH = "../../../Testsuite/data/";
 #endif
+        return TESTSUITE_DATA_PATH;
+    }
+};
 }
 
 #endif  // __TESTUTILS_H_D0F1300A__

@@ -388,8 +388,8 @@ void LinkComponent::drawPath(Graphics& g)
                                  .rotated(rotateVal)
                                  .translated((x1 + x2) * 0.5f,
                                              (y1 + y2) * 0.5f));
-            PathStrokeType stroke2(1.0f);
-            stroke2.createStrokedPath(curve, curve);
+            PathStrokeType stroke3(1.0f);
+            stroke3.createStrokedPath(curve, curve);
             g.fillPath(curve);
 
             g.setColour(c);
@@ -410,8 +410,8 @@ void LinkComponent::drawPath(Graphics& g)
                                  .rotated(rotateVal)
                                  .translated((x1 + x2) * 0.5f,
                                              (y1 + y2) * 0.5f));
-            PathStrokeType stroke2(1.0f);
-            stroke2.createStrokedPath(curve, curve);
+            PathStrokeType stroke3(1.0f);
+            stroke3.createStrokedPath(curve, curve);
             g.fillPath(curve);
             g.setColour(c);
         }
@@ -431,8 +431,8 @@ void LinkComponent::drawPath(Graphics& g)
                                  .rotated(rotateVal)
                                  .translated((x1 + x2) * 0.5f,
                                              (y1 + y2) * 0.5f));
-            PathStrokeType stroke2(1.0f);
-            stroke2.createStrokedPath(curve, curve);
+            PathStrokeType stroke3(1.0f);
+            stroke3.createStrokedPath(curve, curve);
             g.fillPath(curve);
             g.setColour(c);
         }
