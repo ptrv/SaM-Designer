@@ -29,6 +29,7 @@
 
 #include "JuceHeader.h"
 #include "SelectableObject.h"
+#include "BaseConnector.h"
 
 namespace synthamodeler
 {
@@ -37,9 +38,7 @@ class BaseObjectComponent;
 class ObjectComponent;
 class LinkComponent;
 
-class AudioOutConnector : public Component,
-                          public ChangeListener,
-                          public SelectableObject
+class AudioOutConnector : public BaseConnector
 {
 public:
     AudioOutConnector(ObjController& owner_,
@@ -47,53 +46,21 @@ public:
                       ObjectComponent* audioOutComp_);
     virtual ~AudioOutConnector();
 
-    void resized();
-    void paint(Graphics& g);
+    virtual void getPoints(float& x1, float& y1, float& x2, float& y2) const override;
 
-    void update();
-    
-    void resizeToFit();
-
-    bool hitTest(int x, int y);
-    
-    void getPoints(float& x1, float& y1, float& x2, float& y2) const;
-
-    void changeListenerCallback (ChangeBroadcaster* source);
-    
-    void mouseDown(const MouseEvent& e);
-    void mouseDrag(const MouseEvent& e);
-    void mouseUp(const MouseEvent& e);
+    virtual void changeListenerCallback (ChangeBroadcaster* source) override;
 
     BaseObjectComponent* getSourceObject()             { return sourceComp; }
     const BaseObjectComponent* getSourceObject() const { return sourceComp; }
     ObjectComponent* getAudioObject()                  { return audioOutComp; }
     const ObjectComponent* getAudioObject() const      { return audioOutComp; }
-    
-    Rectangle<int> getIntersectioBounds();
-
-    void setSegmented(bool isSegmented) { segmented = isSegmented; resized(); }
 private:
-    ObjController& owner;
-    float lastInputX, lastInputY, lastOutputX, lastOutputY;
-    Path linePath, hitPath;
-
-    bool segmented;
-    bool mouseDownSelectStatus;
     WeakReference<BaseObjectComponent> sourceComp;
     WeakReference<ObjectComponent> audioOutComp;
 
     WeakReference<ObjectComponent> objectComp;
     WeakReference<LinkComponent> linkComp;
-    
-    void getDistancesFromEnds (int x, int y, double& distanceFromStart, double& distanceFromEnd) const
-    {
-        float x1, y1, x2, y2;
-        getPoints (x1, y1, x2, y2);
 
-        distanceFromStart = juce_hypot (x - (x1 - getX()), y - (y1 - getY()));
-        distanceFromEnd = juce_hypot (x - (x2 - getX()), y - (y2 - getY()));
-    }
-    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioOutConnector);
 };
 }

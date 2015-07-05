@@ -81,6 +81,7 @@ OBJECTS := \
   $(OBJDIR)/ObjectFactory_a170b74f.o \
   $(OBJDIR)/SAMCmd_cf7547a1.o \
   $(OBJDIR)/MDLFile_5f0f8395.o \
+  $(OBJDIR)/BaseConnector_332c8afb.o \
   $(OBJDIR)/PrefsMiscPage_4541cf6a.o \
   $(OBJDIR)/RedrawOptionsComponent_e3ca6541.o \
   $(OBJDIR)/MDLInformation_73c962e2.o \
@@ -283,6 +284,11 @@ $(OBJDIR)/SAMCmd_cf7547a1.o: ../../Source/Models/SAMCmd.cpp
 $(OBJDIR)/MDLFile_5f0f8395.o: ../../Source/Models/MDLFile.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling MDLFile.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/BaseConnector_332c8afb.o: ../../Source/View/BaseConnector.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling BaseConnector.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/PrefsMiscPage_4541cf6a.o: ../../Source/View/PrefsMiscPage.cpp
