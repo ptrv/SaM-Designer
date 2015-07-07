@@ -260,7 +260,11 @@ void ObjectComponent::setActualPosition(Point<int> pos, NotificationType n)
 
     if (n == sendNotification)
     {
-        sendChangeMessage();
+        // sendChangeMessage();
+        for (LinkComponent* const link : connectedLinks)
+        {
+            link->updateAll();
+        }
     }
 
     if (idLabel)
@@ -308,13 +312,13 @@ void ObjectComponent::changeListenerCallback (ChangeBroadcaster*)
 void ObjectComponent::addLinkToObject(LinkComponent* link)
 {
     connectedLinks.add(link);
-    addChangeListener(link);
+    // addChangeListener(link);
 }
 
 void ObjectComponent::removeLinkFromObject(LinkComponent* link)
 {
     connectedLinks.removeAllInstancesOf(link);
-    removeChangeListener(link);
+    // removeChangeListener(link);
 }
 
 Point<int> ObjectComponent::getPinPos() const

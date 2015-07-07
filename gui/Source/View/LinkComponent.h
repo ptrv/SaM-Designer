@@ -52,6 +52,7 @@ public:
     void paint(Graphics& g);
     
     void update();
+    void updateAll();
     
     void mouseDown(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);

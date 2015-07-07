@@ -133,6 +133,17 @@ void LinkComponent::update()
     }
 }
 
+void LinkComponent::updateAll()
+{
+    update();
+
+    if (idLabel)
+    {
+        const Rectangle<int> area(getCenter().x, getCenter().y, 5, 5);
+        idLabel->updatePosition(area, getObjectsHolder()->getLocalBounds());
+    }
+}
+
 void LinkComponent::resizeToFit()
 {
     float x1, y1, x2, y2;
@@ -273,13 +284,7 @@ void LinkComponent::changeListenerCallback (ChangeBroadcaster* const source)
 {
     if (source == startComp || source == endComp)
     {
-        update();
-
-        if (idLabel)
-        {
-            const Rectangle<int> area(getCenter().x, getCenter().y, 5, 5);
-            idLabel->updatePosition(area, getObjectsHolder()->getLocalBounds());
-        }
+        updateAll();
 
         if (numListener > 0)
         {
