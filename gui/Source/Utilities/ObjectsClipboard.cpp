@@ -35,7 +35,7 @@
 #include "View/BaseObjectComponent.h"
 #include "View/ObjectComponent.h"
 #include "View/LinkComponent.h"
-#include "View/AudioOutConnector.h"
+#include "View/Connector.h"
 #include "View/CommentComponent.h"
 
 #include "IdManager.h"
@@ -275,12 +275,12 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 if (sourceComp != nullptr)
                 {
                     sources.removeChild(source, nullptr);
-                    AudioOutConnector* aoc =
+                    Connector* conn =
                         objController.addAudioConnection(&holder, sourceComp,
                                                          newObjectComp, source,
                                                          -1, true);
-                    if (aoc != nullptr)
-                        selectedObjects.addToSelection(aoc);
+                    if (conn != nullptr)
+                        selectedObjects.addToSelection(conn);
                 }
             }
         }

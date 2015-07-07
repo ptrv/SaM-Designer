@@ -39,7 +39,7 @@
 #include "View/BaseObjectComponent.h"
 #include "View/ObjectComponent.h"
 #include "View/LinkComponent.h"
-#include "View/AudioOutConnector.h"
+#include "View/Connector.h"
 #include "View/CommentComponent.h"
 #include "View/ObjectsHolder.h"
 
@@ -90,9 +90,9 @@ void ObjectsHelper::changeObjectNameInAudioSources(const ObjController& objContr
     const int numAudioConnections = objController.getNumAudioConnections();
     for (int i = 0; i < numAudioConnections; ++i)
     {
-        AudioOutConnector* aoc = objController.getAudioConnector(i);
+        Connector* conn = objController.getAudioConnector(i);
 
-        ValueTree aoData = aoc->getAudioObject()->getData();
+        ValueTree aoData = conn->getTargetObject()->getData();
         ValueTree sources = aoData.getChildWithName(Ids::sources);
 
         for (int j = 0; j < sources.getNumChildren(); ++j)
@@ -725,12 +725,12 @@ void ObjectsHelper::loadComponents(ObjController& objController,
 
             if (sourceComp != nullptr)
             {
-                AudioOutConnector* aoc = new AudioOutConnector(
+                Connector* conn = new Connector(
                     objController, sourceComp, audioOutComp);
-                objController.addAudioConnectionComp(aoc);
-                objHolder.addAndMakeVisible(aoc);
-                aoc->update();
-                objHolder.checkExtent(aoc->getBounds());
+                objController.addAudioConnectionComp(conn);
+                objHolder.addAndMakeVisible(conn);
+                conn->update();
+                objHolder.checkExtent(conn->getBounds());
             }
         }
     });

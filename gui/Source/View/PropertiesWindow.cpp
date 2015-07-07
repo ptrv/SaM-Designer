@@ -39,7 +39,7 @@
 #include "SelectableObject.h"
 #include "ObjectComponent.h"
 #include "LinkComponent.h"
-#include "AudioOutConnector.h"
+#include "Connector.h"
 
 #include "Utilities/ObjectsHelper.h"
 
@@ -237,7 +237,7 @@ void PropertiesWindow::updateProperties()
                     return;
                 }
             }
-            else if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(selectedItem))
+            else if(Connector* conn = dynamic_cast<Connector*>(selectedItem))
             {
                 if (datas.size() == 0)
                 {
@@ -251,17 +251,17 @@ void PropertiesWindow::updateProperties()
                 }
 
                 String sourceId;
-                if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(aoc->getSourceObject()))
+                if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(conn->getSourceObject()))
                 {
                     sourceId = oc->getData()[Ids::identifier].toString();
                 }
-                else if (LinkComponent * const lc = dynamic_cast<LinkComponent*>(aoc->getSourceObject()))
+                else if (LinkComponent * const lc = dynamic_cast<LinkComponent*>(conn->getSourceObject()))
                 {
                     sourceId = lc->getData()[Ids::identifier].toString();
                 }
 
                 audioSourceIds.add(sourceId);
-                datas.add(aoc->getAudioObject()->getData());
+                datas.add(conn->getTargetObject()->getData());
             }
         }
 

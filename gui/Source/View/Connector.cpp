@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    AudioOutConnector.cpp
+    Connector.cpp
     Created: 27 Aug 2012 2:11:55pm
     Author:  Peter Vasil
 
@@ -23,7 +23,7 @@
 
  */
 
-#include "AudioOutConnector.h"
+#include "Connector.h"
 
 #include "Application/CommonHeaders.h"
 
@@ -41,27 +41,19 @@
 
 using namespace synthamodeler;
 
-AudioOutConnector::AudioOutConnector(ObjController& owner_,
-                                     BaseObjectComponent* objComp_,
-                                     ObjectComponent* audioOutComp_)
+Connector::Connector(ObjController& owner_,
+                     BaseObjectComponent* objComp_,
+                     ObjectComponent* targetComp_)
     :
     owner(owner_),
     mouseDownSelectStatus(false),
     sourceComp(objComp_),
-    audioOutComp(audioOutComp_)
+    targetComp(targetComp_)
 {
-//    audioOutComp
-//    ValueTree auSources = audioOutComp->getData().getChildWithName(Ids::sources);
-//    ValueTree source(Ids::audiosource);
-//    source.setProperty(Ids::value, objComp->getData()[Ids::identifier], nullptr);
-//    source.setProperty(Ids::gain, "1.0", nullptr);
-//    auSources.addChild(source, -1, nullptr);
-
     segmented = StoredSettings::getInstance()->getIsSegmentedConnectors();
     owner.getSelectedObjects().addChangeListener(this);
-//    owner.getSelectedAudioConnections().addChangeListener(this);
 
-    audioOutComp->addChangeListener(this);
+    targetComp->addChangeListener(this);
 
     if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp.get()))
     {
@@ -74,16 +66,16 @@ AudioOutConnector::AudioOutConnector(ObjController& owner_,
         linkComp->addChangeListener(this);
     }
 
-    setComponentID("aoc_"
+    setComponentID("conn_"
         + sourceComp->getData()[Ids::identifier].toString()
-        + audioOutComp->getData()[Ids::identifier].toString());
+        + targetComp->getData()[Ids::identifier].toString());
 }
 
-AudioOutConnector::~AudioOutConnector()
+Connector::~Connector()
 {
     owner.getSelectedObjects().removeChangeListener(this);
 
-    audioOutComp->removeChangeListener(this);
+    targetComp->removeChangeListener(this);
 
     if (objectComp)
     {
@@ -95,7 +87,7 @@ AudioOutConnector::~AudioOutConnector()
     }
 }
 
-void AudioOutConnector::resized()
+void Connector::resized()
 {
     float x1, y1, x2, y2;
     getPoints(x1, y1, x2, y2);
@@ -155,7 +147,7 @@ void AudioOutConnector::resized()
 
 }
 
-void AudioOutConnector::paint(Graphics& g)
+void Connector::paint(Graphics& g)
 {
     if(! isVisible())
         return;
@@ -172,7 +164,7 @@ void AudioOutConnector::paint(Graphics& g)
     g.fillPath(linePath);
 }
 
-void AudioOutConnector::update()
+void Connector::update()
 {
     float x1, y1, x2, y2;
     getPoints(x1, y1, x2, y2);
@@ -186,7 +178,7 @@ void AudioOutConnector::update()
     }
 }
 
-void AudioOutConnector::resizeToFit()
+void Connector::resizeToFit()
 {
     float x1, y1, x2, y2;
     getPoints(x1, y1, x2, y2);
@@ -205,7 +197,7 @@ void AudioOutConnector::resizeToFit()
     
 }
 
-bool AudioOutConnector::hitTest(int x, int y)
+bool Connector::hitTest(int x, int y)
 {
     if (hitPath.contains((float) x, (float) y))
     {
@@ -219,7 +211,7 @@ bool AudioOutConnector::hitTest(int x, int y)
     return false;
 }
 
-void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) const
+void Connector::getPoints(float& x1, float& y1, float& x2, float& y2) const
 {
     x1 = lastInputX;
     y1 = lastInputY;
@@ -237,17 +229,17 @@ void AudioOutConnector::getPoints(float& x1, float& y1, float& x2, float& y2) co
         y1 = startPos.y;
     }
 
-    if (!audioOutComp.wasObjectDeleted())
+    if (!targetComp.wasObjectDeleted())
     {
-        Point<int> endPos = audioOutComp->getPinPos();
+        Point<int> endPos = targetComp->getPinPos();
         x2 = endPos.x;
         y2 = endPos.y;
     }
 }
 
-void AudioOutConnector::changeListenerCallback (ChangeBroadcaster* const source)
+void Connector::changeListenerCallback (ChangeBroadcaster* const source)
 {
-    if (source == objectComp || source == linkComp || source == audioOutComp)
+    if (source == objectComp || source == linkComp || source == targetComp)
     {
         update();
     }
@@ -263,19 +255,19 @@ void AudioOutConnector::changeListenerCallback (ChangeBroadcaster* const source)
     }
 }
 
-void AudioOutConnector::mouseDown(const MouseEvent& e)
+void Connector::mouseDown(const MouseEvent& e)
 {
     owner.setAsFromtmostLink(*this);
 
     mouseDownSelectStatus = owner.getSelectedObjects().addToSelectionOnMouseDown (this, e.mods);
 }
 
-void AudioOutConnector::mouseDrag(const MouseEvent& /*e*/)
+void Connector::mouseDrag(const MouseEvent& /*e*/)
 {
     
 }
 
-void AudioOutConnector::mouseUp(const MouseEvent& e)
+void Connector::mouseUp(const MouseEvent& e)
 {
     if (e.mouseWasClicked() && e.getNumberOfClicks() == 2)
 	{
@@ -287,7 +279,7 @@ void AudioOutConnector::mouseUp(const MouseEvent& e)
     update();
 }
 
-Rectangle<int> AudioOutConnector::getIntersectioBounds()
+Rectangle<int> Connector::getIntersectioBounds()
 {
     const Rectangle<int> intersectionBounds((int) jmin(lastInputX, lastOutputX),
                                             (int) jmin(lastInputY, lastOutputY),

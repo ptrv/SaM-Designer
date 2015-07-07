@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    AudioOutConnector.h
+    Connector.h
     Created: 27 Aug 2012 2:11:55pm
     Author:  Peter Vasil
 
@@ -23,8 +23,8 @@
 
 */
 
-#ifndef __AUDIOOUTCONNECTOR_H_D0DAD273__
-#define __AUDIOOUTCONNECTOR_H_D0DAD273__
+#ifndef __CONNECTOR_H_D0DAD273__
+#define __CONNECTOR_H_D0DAD273__
 
 
 #include "JuceHeader.h"
@@ -37,15 +37,15 @@ class BaseObjectComponent;
 class ObjectComponent;
 class LinkComponent;
 
-class AudioOutConnector : public Component,
-                          public ChangeListener,
-                          public SelectableObject
+class Connector : public Component,
+                  public ChangeListener,
+                  public SelectableObject
 {
 public:
-    AudioOutConnector(ObjController& owner_,
-                      BaseObjectComponent* objComp_,
-                      ObjectComponent* audioOutComp_);
-    virtual ~AudioOutConnector();
+    Connector(ObjController& owner_,
+              BaseObjectComponent* objComp_,
+              ObjectComponent* targetComp_);
+    virtual ~Connector();
 
     void resized();
     void paint(Graphics& g);
@@ -66,8 +66,8 @@ public:
 
     BaseObjectComponent* getSourceObject()             { return sourceComp; }
     const BaseObjectComponent* getSourceObject() const { return sourceComp; }
-    ObjectComponent* getAudioObject()                  { return audioOutComp; }
-    const ObjectComponent* getAudioObject() const      { return audioOutComp; }
+    ObjectComponent* getTargetObject()                 { return targetComp; }
+    const ObjectComponent* getTargetObject() const     { return targetComp; }
     
     Rectangle<int> getIntersectioBounds();
 
@@ -80,7 +80,7 @@ private:
     bool segmented;
     bool mouseDownSelectStatus;
     WeakReference<BaseObjectComponent> sourceComp;
-    WeakReference<ObjectComponent> audioOutComp;
+    WeakReference<ObjectComponent> targetComp;
 
     WeakReference<ObjectComponent> objectComp;
     WeakReference<LinkComponent> linkComp;
@@ -94,9 +94,9 @@ private:
         distanceFromEnd = juce_hypot (x - (x2 - getX()), y - (y2 - getY()));
     }
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioOutConnector);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Connector);
 };
 }
 
 
-#endif  // __AUDIOOUTCONNECTOR_H_D0DAD273__
+#endif  // __CONNECTOR_H_D0DAD273__

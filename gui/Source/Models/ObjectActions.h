@@ -38,7 +38,7 @@
 #include "View/BaseObjectComponent.h"
 #include "View/ObjectComponent.h"
 #include "View/LinkComponent.h"
-#include "View/AudioOutConnector.h"
+#include "View/Connector.h"
 #include "View/ObjectsHolder.h"
 #include "View/SelectableObject.h"
 #include "View/CommentComponent.h"
@@ -425,12 +425,10 @@ public:
         {
             sourceComp = objController->getObject(indexSource);
         }
-        AudioOutConnector* aocComp = objController->addAudioConnection(holderComp, 
-                                                                       sourceComp,
-                                                                       objController->getObject(indexAudioOut),
-                                                                       sourceTree,
-                                                                       -1, false);
-        indexAdded = objController->indexOfAudioConnector(aocComp);
+        Connector* conn = objController->addAudioConnection(
+            holderComp, sourceComp, objController->getObject(indexAudioOut),
+            sourceTree, -1, false);
+        indexAdded = objController->indexOfAudioConnector(conn);
 
 //        String logText = "Add ";
 //        logText << linkTree.getType().toString();// << " number " << mdlSubTree.getNumChildren();
@@ -465,29 +463,29 @@ class RemoveAudioConnectionAction : public UndoableAction
 {
 public:
     RemoveAudioConnectionAction(ObjectsHolder* objHolderComp_,
-                                AudioOutConnector* aocToRemove,
+                                Connector* connToRemove,
                                 ObjController* objController_)
     : holderComp(objHolderComp_),
       objController(objController_),
       oldIndex(-1)
     {
-        oldIndex = objController->indexOfAudioConnector(aocToRemove);
+        oldIndex = objController->indexOfAudioConnector(connToRemove);
         String srcName;
-        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(aocToRemove->getSourceObject()))
+        if(ObjectComponent* const oc = dynamic_cast<ObjectComponent*>(connToRemove->getSourceObject()))
         {
             sourceIsLink = false;
             oldIndexSource = objController->indexOfObject(oc);
             srcName = oc->getData()[Ids::identifier];
         }
-        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(aocToRemove->getSourceObject()))
+        else if(LinkComponent* const lc = dynamic_cast<LinkComponent*>(connToRemove->getSourceObject()))
         {
             sourceIsLink = true;
             oldIndexSource = objController->indexOfLink(lc);
             srcName = lc->getData()[Ids::identifier];
         }
-        oldIndexAudioOut = objController->indexOfObject(aocToRemove->getAudioObject());
+        oldIndexAudioOut = objController->indexOfObject(connToRemove->getTargetObject());
 
-        ValueTree sources = aocToRemove->getAudioObject()->getData().getOrCreateChildWithName(Ids::sources, nullptr);
+        ValueTree sources = connToRemove->getTargetObject()->getData().getOrCreateChildWithName(Ids::sources, nullptr);
         for (int i = 0; i < sources.getNumChildren(); ++i)
         {
             ValueTree src = sources.getChild(i);
@@ -506,13 +504,13 @@ public:
             return false;
         }
 
-        AudioOutConnector* aoc = objController->getAudioConnector(oldIndex);
+        Connector* conn = objController->getAudioConnector(oldIndex);
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedObjects().selectOnly(aoc);
+            objController->getSelectedObjects().selectOnly(conn);
         }
 
-        objController->removeAudioConnection(aoc, false, holderComp);
+        objController->removeAudioConnection(conn, false, holderComp);
 		return true;
 	}
 
@@ -530,14 +528,12 @@ public:
             sourceComp = objController->getLink(oldIndexSource);
         else
             sourceComp = objController->getObject(oldIndexSource);
-        AudioOutConnector* aoc = objController->addAudioConnection(holderComp,
-                                                                   sourceComp,
-                                                                   objController->getObject(oldIndexAudioOut),
-                                                                   sourceTree,
-                                                                   oldIndex, false);
+        Connector* conn = objController->addAudioConnection(
+            holderComp, sourceComp, objController->getObject(oldIndexAudioOut),
+            sourceTree, oldIndex, false);
         if(objController->getSelectedObjects().getNumSelected() == 0)
         {
-            objController->getSelectedObjects().selectOnly(aoc);
+            objController->getSelectedObjects().selectOnly(conn);
         }
         
 		return true;

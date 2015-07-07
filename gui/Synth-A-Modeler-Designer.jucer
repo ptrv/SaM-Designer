@@ -214,10 +214,8 @@
               file="Source/View/SnapGridPainter.h"/>
         <FILE id="dyIiqP" name="SelectableObject.h" compile="0" resource="0"
               file="Source/View/SelectableObject.h"/>
-        <FILE id="En21se" name="AudioOutConnector.cpp" compile="1" resource="0"
-              file="Source/View/AudioOutConnector.cpp"/>
-        <FILE id="SN3jZa" name="AudioOutConnector.h" compile="0" resource="0"
-              file="Source/View/AudioOutConnector.h"/>
+        <FILE id="En21se" name="Connector.cpp" compile="1" resource="0" file="Source/View/Connector.cpp"/>
+        <FILE id="SN3jZa" name="Connector.h" compile="0" resource="0" file="Source/View/Connector.h"/>
         <FILE id="Ly1X8r" name="BaseObjectComponent.cpp" compile="1" resource="0"
               file="Source/View/BaseObjectComponent.cpp"/>
         <FILE id="uKPkvg" name="BaseObjectComponent.h" compile="0" resource="0"

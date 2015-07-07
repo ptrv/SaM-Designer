@@ -35,7 +35,7 @@ class BaseObjectComponent;
 class ObjectComponent;
 class ObjectsHolder;
 class LinkComponent;
-class AudioOutConnector;
+class Connector;
 class SelectableObject;
 class IdManager;
 class CommentComponent;
@@ -44,7 +44,7 @@ class GraphReflowController;
 
 typedef OwnedArray<ObjectComponent> tObjects;
 typedef OwnedArray<LinkComponent> tLinks;
-typedef OwnedArray<AudioOutConnector> tAudioConnections;
+typedef OwnedArray<Connector> tAudioConnections;
 typedef OwnedArray<CommentComponent> tComments;
 
 /**
@@ -92,18 +92,18 @@ public:
     
     void addNewLink(ObjectsHolder* holder, ValueTree linkValues);
     
-    AudioOutConnector* addAudioConnection(ObjectsHolder* holder,
-                                          BaseObjectComponent* objComp,
-                                          ObjectComponent* audioOutComp,
-                                          ValueTree source,
-                                          int index,
-                                          bool undoable);
+    Connector* addAudioConnection(ObjectsHolder* holder,
+                                  BaseObjectComponent* objComp,
+                                  ObjectComponent* audioOutComp,
+                                  ValueTree source,
+                                  int index,
+                                  bool undoable);
     
     void addNewAudioConnection(ObjectsHolder* holder);
     
     void removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder);
     
-    void removeAudioConnection(AudioOutConnector* aocComp,
+    void removeAudioConnection(Connector* aocComp,
                                bool undoable,
                                ObjectsHolder* holder);
 
@@ -169,9 +169,9 @@ public:
     tLinks& getLinks() { return links; }
     const tLinks& getLinks() const { return links; }
 
-    AudioOutConnector* getAudioConnector(int index) const throw() 
+    Connector* getAudioConnector(int index) const throw() 
     { return audioConnections[index]; }
-    int indexOfAudioConnector (AudioOutConnector* e) const throw()
+    int indexOfAudioConnector (Connector* e) const throw()
     {
         return audioConnections.indexOf(e);
     }
@@ -179,7 +179,7 @@ public:
     {
         return audioConnections.size();
     }
-    void addAudioConnectionComp(AudioOutConnector* a) { audioConnections.add(a); }
+    void addAudioConnectionComp(Connector* a) { audioConnections.add(a); }
 
     CommentComponent* getComment(int index) const throw() { return comments[index]; }
     CommentComponent* getCommentUnchecked(int index) const throw() { return comments.getUnchecked(index); }
@@ -233,7 +233,7 @@ private:
     MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
-    OwnedArray<AudioOutConnector> audioConnections;
+    OwnedArray<Connector> audioConnections;
     OwnedArray<CommentComponent> comments;
     SelectedItemSet<SelectableObject*> sObjects;
     ScopedPointer<IdManager> idMgr;

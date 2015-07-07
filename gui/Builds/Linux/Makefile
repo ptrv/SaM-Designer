@@ -90,7 +90,7 @@ OBJECTS := \
   $(OBJDIR)/CommentEditor_abeb432b.o \
   $(OBJDIR)/CommentComponent_3199b309.o \
   $(OBJDIR)/SnapGridPainter_bcfdcdba.o \
-  $(OBJDIR)/AudioOutConnector_995cd494.o \
+  $(OBJDIR)/Connector_c9a67b4c.o \
   $(OBJDIR)/BaseObjectComponent_eac867ec.o \
   $(OBJDIR)/LinkComponent_6a391d22.o \
   $(OBJDIR)/FaustcodePanel_375377a7.o \
@@ -330,9 +330,9 @@ $(OBJDIR)/SnapGridPainter_bcfdcdba.o: ../../Source/View/SnapGridPainter.cpp
 	@echo "Compiling SnapGridPainter.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/AudioOutConnector_995cd494.o: ../../Source/View/AudioOutConnector.cpp
+$(OBJDIR)/Connector_c9a67b4c.o: ../../Source/View/Connector.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling AudioOutConnector.cpp"
+	@echo "Compiling Connector.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BaseObjectComponent_eac867ec.o: ../../Source/View/BaseObjectComponent.cpp

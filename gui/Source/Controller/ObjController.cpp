@@ -40,7 +40,7 @@
 
 #include "View/ObjectComponent.h"
 #include "View/LinkComponent.h"
-#include "View/AudioOutConnector.h"
+#include "View/Connector.h"
 #include "View/SelectableObject.h"
 #include "View/CommentComponent.h"
 
@@ -160,12 +160,12 @@ bool ObjController::checkIfAudioConnectionExitsts(const ValueTree& source,
                                                   const ValueTree& audioOut) const
 {
     return std::any_of(audioConnections.begin(), audioConnections.end(),
-                       [&](const AudioOutConnector* const aoc)
+                       [&](const Connector* const conn)
                        {
                            return ObjectsHelper::equivalentById(
-                               source, aoc->getSourceObject()->getData()) &&
+                               source, conn->getSourceObject()->getData()) &&
                                   ObjectsHelper::equivalentById(
-                                      audioOut, aoc->getAudioObject()->getData());
+                                      audioOut, conn->getTargetObject()->getData());
                        });
 }
 
@@ -204,12 +204,12 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     }
 }
 
-AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
-                                                     BaseObjectComponent* objComp,
-                                                     ObjectComponent* audioOutComp,
-                                                     ValueTree source,
-                                                     int index,
-                                                     bool undoable)
+Connector* ObjController::addAudioConnection(ObjectsHolder* holder,
+                                             BaseObjectComponent* objComp,
+                                             ObjectComponent* audioOutComp,
+                                             ValueTree source,
+                                             int index,
+                                             bool undoable)
 {
     if(undoable)
     {
@@ -221,15 +221,15 @@ AudioOutConnector* ObjController::addAudioConnection(ObjectsHolder* holder,
     }
     else
     {
-        AudioOutConnector* aoc = new AudioOutConnector(*this, objComp, audioOutComp);
-        ValueTree sources = aoc->getAudioObject()->getData().getChildWithName(Ids::sources);
+        Connector* conn = new Connector(*this, objComp, audioOutComp);
+        ValueTree sources = conn->getTargetObject()->getData().getChildWithName(Ids::sources);
         if(! sources.getChildWithProperty(Ids::value, source[Ids::value]).isValid())
             sources.addChild(source, -1, nullptr);
-        audioConnections.insert(index, aoc);
-        holder->addAndMakeVisible(aoc);
-        aoc->update();
-        aoc->toBack();
-        return aoc;
+        audioConnections.insert(index, conn);
+        holder->addAndMakeVisible(conn);
+        conn->update();
+        conn->toBack();
+        return conn;
     }
     return nullptr;
 }
@@ -394,10 +394,10 @@ void ObjController::removeSelectedObjects(ObjectsHolder& holder)
         // then objects and remaining links connected to the objects
         for (int i = temp.getNumSelected(); --i >= 0;)
         {
-            if(AudioOutConnector* aoc = dynamic_cast<AudioOutConnector*>(temp.getSelectedItem(i)))
+            if(Connector* conn = dynamic_cast<Connector*>(temp.getSelectedItem(i)))
             {
-                temp.deselect(aoc);
-                removeAudioConnection(aoc, true, &holder);
+                temp.deselect(conn);
+                removeAudioConnection(conn, true, &holder);
                 continue;
             }
         }
@@ -422,7 +422,7 @@ void ObjController::removeSelectedObjects(ObjectsHolder& holder)
     }
 }
 
-void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
+void ObjController::removeAudioConnection(Connector* aocComp,
                                           bool undoable,
                                           ObjectsHolder* holder)
 {
@@ -434,7 +434,7 @@ void ObjController::removeAudioConnection(AudioOutConnector* aocComp,
     {
         sObjects.deselect(aocComp);
         sObjects.changed(true);
-        ValueTree sources = aocComp->getAudioObject()->getData().getChildWithName(Ids::sources);
+        ValueTree sources = aocComp->getTargetObject()->getData().getChildWithName(Ids::sources);
         ValueTree source;
         for (int i = 0; i < sources.getNumChildren(); ++i)
         {
@@ -734,10 +734,10 @@ Array<int> ObjController::checkIfObjectHasAudioConnections(const ValueTree& objT
     Array<int> aocIndices;
     for (int i = 0; i < audioConnections.size(); ++i)
     {
-        const AudioOutConnector* const aoc = audioConnections.getUnchecked(i);
+        const Connector* const conn = audioConnections.getUnchecked(i);
 
-        if (ObjectsHelper::equivalentById(objTree, aoc->getSourceObject()->getData()) ||
-            ObjectsHelper::equivalentById(objTree, aoc->getAudioObject()->getData()))
+        if (ObjectsHelper::equivalentById(objTree, conn->getSourceObject()->getData()) ||
+            ObjectsHelper::equivalentById(objTree, conn->getTargetObject()->getData()))
         {
             aocIndices.add(i);
         }
@@ -770,9 +770,9 @@ void ObjController::setLinksSegmented(bool isSegmented)
         lc->setSegmented(isSegmented);
     });
     std::for_each(audioConnections.begin(), audioConnections.end(),
-                  [=](AudioOutConnector* const aoc)
+                  [=](Connector* const conn)
     {
-        aoc->setSegmented(isSegmented);
+        conn->setSegmented(isSegmented);
     });
 }
 
@@ -789,9 +789,9 @@ void ObjController::destroy()
 
 void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
 {
-    for (AudioOutConnector* const aoc : audioConnections)
+    for (Connector* const conn : audioConnections)
     {
-        aoc->setVisible(shouldBeVisible);
+        conn->setVisible(shouldBeVisible);
     }
 }
 
@@ -808,7 +808,7 @@ void ObjController::setAsFromtmostLink(T& t)
 }
 
 template void ObjController::setAsFromtmostLink<LinkComponent>(LinkComponent& t);
-template void ObjController::setAsFromtmostLink<AudioOutConnector>(AudioOutConnector& t);
+template void ObjController::setAsFromtmostLink<Connector>(Connector& t);
 
 void ObjController::startReflow(ObjectsHolder& objHolder, const int cmdId)
 {

@@ -46,7 +46,7 @@
 #include "FaustcodePanel.h"
 #include "RedrawOptionsPanel.h"
 #include "SnapGridPainter.h"
-#include "AudioOutConnector.h"
+#include "Connector.h"
 #include "CommentComponent.h"
 #include "PropertiesWindow.h"
 
@@ -809,9 +809,9 @@ void ObjectsHolder::findLassoItemsInArea (Array <SelectableObject*>& results,
         {
             isIntersecting = lasso.contains(lc->getIntersectioBounds());
         }
-        else if (AudioOutConnector * const aoc = dynamic_cast<AudioOutConnector*> (e))
+        else if (Connector * const conn = dynamic_cast<Connector*> (e))
         {
-            isIntersecting = lasso.contains(aoc->getIntersectioBounds());
+            isIntersecting = lasso.contains(conn->getIntersectioBounds());
         }
         else
         {
