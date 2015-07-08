@@ -34,6 +34,7 @@
 #include "ObjectComponent.h"
 #include "ObjectsHolder.h"
 #include "IdLabel.h"
+#include "Connector.h"
 
 
 using namespace synthamodeler;
@@ -141,6 +142,11 @@ void LinkComponent::updateAll()
     {
         const Rectangle<int> area(getCenter().x, getCenter().y, 5, 5);
         idLabel->updatePosition(area, getObjectsHolder()->getLocalBounds());
+    }
+
+    for (Connector* const connector : connectors)
+    {
+        connector->update();
     }
 }
 
@@ -282,24 +288,13 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
 
 void LinkComponent::changeListenerCallback (ChangeBroadcaster* const source)
 {
-    if (source == startComp || source == endComp)
-    {
-        updateAll();
 
-        if (numListener > 0)
-        {
-            sendChangeMessage();
-        }
-    }
-    else if (source == &owner.getSelectedObjects())
-    {
-        const bool nowSelected = owner.getSelectedObjects().isSelected (this);
+    const bool nowSelected = owner.getSelectedObjects().isSelected (this);
 
-        if (selected != nowSelected)
-        {
-            selected = nowSelected;
-            repaint();
-        }
+    if (selected != nowSelected)
+    {
+        selected = nowSelected;
+        repaint();
     }
 }
 

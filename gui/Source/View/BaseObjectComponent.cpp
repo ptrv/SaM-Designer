@@ -29,6 +29,7 @@
 
 #include "ObjectsHolder.h"
 #include "IdLabel.h"
+#include "Connector.h"
 
 
 using namespace synthamodeler;
@@ -70,6 +71,16 @@ IdLabelComp& BaseObjectComponent::getIdLabelComp()
         idLabelComp = new IdLabelComp(getData()[Ids::identifier].toString());
     }
     return *idLabelComp;
+}
+
+void BaseObjectComponent::addConnector(Connector* connector)
+{
+    connectors.add(connector);
+}
+
+void BaseObjectComponent::removeConnector(Connector* connector)
+{
+    connectors.removeAllInstancesOf(connector);
 }
 
 ObjectsHolder* BaseObjectComponent::getObjectsHolder() const noexcept

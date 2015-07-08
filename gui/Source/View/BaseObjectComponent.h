@@ -36,6 +36,7 @@ class ObjectsHolder;
 class Node;
 class IdLabel;
 class IdLabelComp;
+class Connector;
 
 class BaseObjectComponent : public Component,
                             public Node
@@ -52,6 +53,9 @@ public:
     void setIdLabelVisible(bool visible);
     bool getIsIdLabelVisible() const { return isIdLabelVisible; }
 
+    void addConnector(Connector* connector);
+    void removeConnector(Connector* connector);
+
 protected:
     ObjectsHolder* getObjectsHolder() const noexcept;
     void showContextMenu();
@@ -64,6 +68,8 @@ protected:
     bool isIdLabelVisible;
 
     IdLabelComp& getIdLabelComp();
+
+    Array<Connector*> connectors;
 
 private:
     ScopedPointer<IdLabelComp> idLabelComp;

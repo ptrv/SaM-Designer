@@ -53,17 +53,17 @@ Connector::Connector(ObjController& owner_,
     segmented = StoredSettings::getInstance()->getIsSegmentedConnectors();
     owner.getSelectedObjects().addChangeListener(this);
 
-    targetComp->addChangeListener(this);
+    targetComp->addConnector(this);
 
     if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp.get()))
     {
         objectComp = oc;
-        objectComp->addChangeListener(this);
+        objectComp->addConnector(this);
     }
     else if (LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp.get()))
     {
         linkComp = lc;
-        linkComp->addChangeListener(this);
+        linkComp->addConnector(this);
     }
 
     setComponentID("conn_"
