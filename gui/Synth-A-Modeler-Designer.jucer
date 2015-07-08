@@ -5,14 +5,15 @@
               jucerVersion="3.1.1" defines="" includeBinaryInAppConfig="1">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="QkUudd" bigIcon="WodEAp"
-               documentExtensions=".mdl" extraCompilerFlags="-I../../Source -I../../Testsuite -I../../Libs/re2 -stdlib=libc++"
-               extraLinkerFlags="-L../../Libs/re2/obj -lre2 -stdlib=libc++">
+               documentExtensions=".mdl" extraCompilerFlags="-I../../Source -I../../Testsuite -I/usr/local/include"
+               extraLinkerFlags="/usr/local/lib/libpcre.a">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="Synth-A-Modeler-Designer"
-                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"
-                       defines="UNIT_TESTS=1"/>
-        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="Synth-A-Modeler-Designer"
-                       osxSDK="default" osxCompatibility="10.7 SDK" osxArchitecture="default"/>
+                       osxSDK="10.9 SDK" osxCompatibility="default" osxArchitecture="default"
+                       defines="UNIT_TESTS=1" cppLanguageStandard="c++11" cppLibType="libc++"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="Synth-A-Modeler-Designer"
+                       osxSDK="10.9 SDK" osxCompatibility="10.7 SDK" osxArchitecture="default"
+                       cppLanguageStandard="c++11" cppLibType="libc++"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_extra" path="../juce/modules"/>

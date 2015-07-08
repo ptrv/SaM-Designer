@@ -1812,6 +1812,8 @@
 					55DF8A775DCED3F5C5AEC2CD, ); name = Source; sourceTree = "<group>"; };
 		65EFC12CA30797BDFA86FBAA = {isa = XCBuildConfiguration; buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
@@ -1830,17 +1832,20 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Testsuite -I../../Libs/re2 -stdlib=libc++";
-				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2 -stdlib=libc++";
+				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Testsuite -I/usr/local/include";
+				OTHER_LDFLAGS = "/usr/local/lib/libpcre.a";
+				SDKROOT = macosx10.9;
 				SDKROOT_ppc = macosx10.5; }; name = Debug; };
 		04205668AD9AC3C13C4B3679 = {isa = XCBuildConfiguration; buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/build/$(CONFIGURATION)";
 				DEAD_CODE_STRIPPING = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_NDEBUG=1",
 					"NDEBUG=1",
@@ -1854,8 +1859,9 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.4;
-				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Testsuite -I../../Libs/re2 -stdlib=libc++";
-				OTHER_LDFLAGS = "-L../../Libs/re2/obj -lre2 -stdlib=libc++";
+				OTHER_CPLUSPLUSFLAGS = "-I../../Source -I../../Testsuite -I/usr/local/include";
+				OTHER_LDFLAGS = "/usr/local/lib/libpcre.a";
+				SDKROOT = macosx10.9;
 				SDKROOT_ppc = macosx10.5; }; name = Release; };
 		CB7D49DC606871A43686D7A5 = {isa = XCBuildConfiguration; buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
