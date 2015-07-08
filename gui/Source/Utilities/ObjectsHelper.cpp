@@ -34,6 +34,7 @@
 #include "Graph/GraphUtils.h"
 
 #include "Models/MDLFile.h"
+#include "Models/ObjectFactory.h"
 
 #include "View/SelectableObject.h"
 #include "View/BaseObjectComponent.h"
@@ -804,6 +805,46 @@ bool ObjectsHelper::canSelectedObjectsBeConnected(ObjController& objController,
 bool ObjectsHelper::equivalentById(const ValueTree& lhs, const ValueTree& rhs)
 {
     return lhs[Ids::identifier] == rhs[Ids::identifier];
+}
+
+//------------------------------------------------------------------------------
+
+ObjectsHelper::tSourceTargetPair ObjectsHelper::getSourceTargetPairFromSelection(
+    SelectableObject* obj1, SelectableObject* obj2, const Identifier& targetType)
+{
+    ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(obj1);
+    LinkComponent* lc1 = dynamic_cast<LinkComponent*>(obj1);
+    ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(obj2);
+    LinkComponent* lc2 = dynamic_cast<LinkComponent*>(obj2);
+
+    if (oc1 && oc2)
+    {
+        const ValueTree& data1 = oc1->getData();
+        const ValueTree& data2 = oc2->getData();
+
+        if (data1.getType() == targetType && data2.getType() != targetType)
+        {
+            return tSourceTargetPair(oc2, oc1);
+        }
+        else if (data1.getType() != targetType && data2.getType() == targetType)
+        {
+            return tSourceTargetPair(oc1, oc2);
+        }
+    }
+    else if (oc1 && lc2 && !oc2 && !lc1 &&
+             oc1->getData().getType() == targetType &&
+             lc2->getData().getType() != Ids::waveguide)
+    {
+        return tSourceTargetPair(lc2, oc1);
+    }
+    else if (oc2 && lc1 && !oc1 && !lc2 &&
+             oc2->getData().getType() == targetType &&
+             lc1->getData().getType() != Ids::waveguide)
+    {
+        return tSourceTargetPair(lc1, oc2);
+    }
+
+    return tSourceTargetPair(nullptr,nullptr);
 }
 
 //------------------------------------------------------------------------------

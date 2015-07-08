@@ -39,6 +39,7 @@ class ObjectComponent;
 class LinkComponent;
 class CommentComponent;
 class MDLFile;
+class SelectableObject;
 
 class ObjectsHelper
 {
@@ -95,6 +96,11 @@ public:
 
     static bool isMass(const Identifier& id);
     static bool isLink(const Identifier& id);
+
+    using tSourceTargetPair = std::pair<BaseObjectComponent*, ObjectComponent*>;
+    static tSourceTargetPair getSourceTargetPairFromSelection(SelectableObject* obj1,
+                                                              SelectableObject* obj2,
+                                                              const Identifier& targetType);
 
 private:
 

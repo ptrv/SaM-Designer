@@ -92,14 +92,14 @@ public:
     
     void addNewLink(ObjectsHolder* holder, ValueTree linkValues);
     
-    Connector* addAudioConnection(ObjectsHolder* holder,
-                                  BaseObjectComponent* objComp,
-                                  ObjectComponent* audioOutComp,
-                                  ValueTree source,
-                                  int index,
-                                  bool undoable);
+    Connector* addConnector(ObjectsHolder* holder,
+                            BaseObjectComponent* objComp,
+                            ObjectComponent* audioOutComp,
+                            ValueTree source,
+                            int index,
+                            bool undoable);
     
-    void addNewAudioConnection(ObjectsHolder* holder);
+    void addNewConnector(ObjectsHolder* holder);
     
     void removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder);
     

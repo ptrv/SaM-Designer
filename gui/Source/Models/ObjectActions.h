@@ -158,7 +158,7 @@ public:
                         ObjectsHelper::getBaseObjectFromSource(*objController.get(), src);
 
 //                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
-                    objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
+                    objController->addConnector(holderComp, boc, oc, src, -1, false);
 //                    if(aoc != nullptr)
 //                        aoc->repaint();
                 }
@@ -425,7 +425,7 @@ public:
         {
             sourceComp = objController->getObject(indexSource);
         }
-        Connector* conn = objController->addAudioConnection(
+        Connector* conn = objController->addConnector(
             holderComp, sourceComp, objController->getObject(indexAudioOut),
             sourceTree, -1, false);
         indexAdded = objController->indexOfAudioConnector(conn);
@@ -528,7 +528,7 @@ public:
             sourceComp = objController->getLink(oldIndexSource);
         else
             sourceComp = objController->getObject(oldIndexSource);
-        Connector* conn = objController->addAudioConnection(
+        Connector* conn = objController->addConnector(
             holderComp, sourceComp, objController->getObject(oldIndexAudioOut),
             sourceTree, oldIndex, false);
         if(objController->getSelectedObjects().getNumSelected() == 0)

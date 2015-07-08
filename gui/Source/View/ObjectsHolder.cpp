@@ -261,7 +261,7 @@ void ObjectsHolder::insertNewLink(const Identifier& linkType,
 
 void ObjectsHolder::insertNewAudioConnection()
 {
-    objController.addNewAudioConnection(this);
+    objController.addNewConnector(this);
 }
 
 Point<int> ObjectsHolder::getMouseXYRelativeViewport()
@@ -731,13 +731,13 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         insertNewObject(Ids::audioout);
         break;
     case CommandIDs::insertAudioConnection:
-        objController.addNewAudioConnection(this);
+        objController.addNewConnector(this);
         break;
     case CommandIDs::insertDisplay:
         insertNewObject(Ids::display);
         break;
     case CommandIDs::insertDisplayConnection:
-        // objController.addNewDisplayConnection(this);
+        objController.addNewConnector(this);
         break;
 
     case CommandIDs::insertJunction:

@@ -276,9 +276,9 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 {
                     sources.removeChild(source, nullptr);
                     Connector* conn =
-                        objController.addAudioConnection(&holder, sourceComp,
-                                                         newObjectComp, source,
-                                                         -1, true);
+                        objController.addConnector(&holder, sourceComp,
+                                                   newObjectComp, source,
+                                                   -1, true);
                     if (conn != nullptr)
                         selectedObjects.addToSelection(conn);
                 }

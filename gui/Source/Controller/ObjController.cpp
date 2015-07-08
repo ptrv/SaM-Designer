@@ -204,12 +204,12 @@ void ObjController::addNewLinkIfPossible(ObjectsHolder* holder, ValueTree linkVa
     }
 }
 
-Connector* ObjController::addAudioConnection(ObjectsHolder* holder,
-                                             BaseObjectComponent* objComp,
-                                             ObjectComponent* audioOutComp,
-                                             ValueTree source,
-                                             int index,
-                                             bool undoable)
+Connector* ObjController::addConnector(ObjectsHolder* holder,
+                                       BaseObjectComponent* objComp,
+                                       ObjectComponent* audioOutComp,
+                                       ValueTree source,
+                                       int index,
+                                       bool undoable)
 {
     if(undoable)
     {
@@ -234,63 +234,37 @@ Connector* ObjController::addAudioConnection(ObjectsHolder* holder,
     return nullptr;
 }
 
-void ObjController::addNewAudioConnection(ObjectsHolder* holder)
+void ObjController::addNewConnector(ObjectsHolder* holder)
 {
-    if(sObjects.getNumSelected() == 2)
+    if (sObjects.getNumSelected() == 2)
     {
-        if(! StoredSettings::getInstance()->getShowAudioConnections())
+        if (!StoredSettings::getInstance()->getShowAudioConnections())
         {
             StoredSettings::getInstance()->setShowAudioConnections(true);
             setAudioConnectionVisibility(true);
         }
 
-        ObjectComponent* oc1 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(0));
-        LinkComponent* lc1 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(0));
-        ObjectComponent* oc2 = dynamic_cast<ObjectComponent*>(sObjects.getSelectedItem(1));
-        LinkComponent* lc2 = dynamic_cast<LinkComponent*>(sObjects.getSelectedItem(1));
+        auto sourceTargetPair =
+            ObjectsHelper::getSourceTargetPairFromSelection(
+                sObjects.getSelectedItem(0),
+                sObjects.getSelectedItem(1),
+                Ids::audioout);
 
-        if(oc1 != nullptr && oc2 != nullptr)
-        {
-            if (oc1->getData().getType() == Ids::audioout &&
-                oc2->getData().getType() != Ids::audioout &&
-                !checkIfAudioConnectionExitsts(oc2->getData(), oc1->getData()))
-            {
-                ValueTree src = ObjectFactory::createAudioSourceTree(
-                    oc2->getData()[Ids::identifier].toString(), "*1.0");
-                addAudioConnection(holder, oc2, oc1, src, -1, true);
-            }
-            else if (oc1->getData().getType() != Ids::audioout &&
-                     oc2->getData().getType() == Ids::audioout &&
-                     !checkIfAudioConnectionExitsts(oc1->getData(), oc2->getData()))
-            {
-                ValueTree src = ObjectFactory::createAudioSourceTree(
-                    oc1->getData()[Ids::identifier].toString(), "*1.0");
-                addAudioConnection(holder, oc1, oc2, src, -1, true);
-            }
-            else
-            {
-                SAM_CONSOLE("Cannot create audio connection", PostLevel::ERROR);
-            }
-        }
-        else if(oc1 == nullptr && oc2 != nullptr && lc1 != nullptr &&
-                lc1->getData().getType() != Ids::waveguide &&
-                !checkIfAudioConnectionExitsts(lc1->getData(), oc2->getData()))
-        {
-            ValueTree src = ObjectFactory::createAudioSourceTree(
-                lc1->getData()[Ids::identifier].toString(), "*1.0");
-            addAudioConnection(holder, lc1, oc2, src, -1, true);
-        }
-        else if(oc2 == nullptr && oc1 != nullptr && lc2 != nullptr &&
-                lc2->getData().getType() != Ids::waveguide &&
-                !checkIfAudioConnectionExitsts(lc2->getData(), oc1->getData()))
-        {
-            ValueTree src = ObjectFactory::createAudioSourceTree(
-                lc2->getData()[Ids::identifier].toString(), "*1.0");
-            addAudioConnection(holder, lc2, oc1, src, -1, true);
-        }
-        else
+        auto srcComp = sourceTargetPair.first;
+        auto targetComp = sourceTargetPair.second;
+
+        if (!srcComp || !targetComp)
         {
             SAM_CONSOLE("Cannot create audio connection", PostLevel::ERROR);
+            return;
+        }
+
+        if (!checkIfAudioConnectionExitsts(srcComp->getData(), targetComp->getData()))
+        {
+            const String& srcName = srcComp->getData()[Ids::identifier];
+            const String& srcVal = "*1.0";
+            ValueTree src = ObjectFactory::createAudioSourceTree(srcName, srcVal);
+            addConnector(holder, srcComp, targetComp, src, -1, true);
         }
     }
 }
