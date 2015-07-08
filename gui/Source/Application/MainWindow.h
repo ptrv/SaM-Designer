@@ -90,6 +90,12 @@ public:
     void showMDLProperties();
 
     static int mainAppWindowNum;
+
+    StringArray getRenderingEngines() const;
+    int getActiveRenderingEngine() const;
+    void setRenderingEngine (int index);
+    void setOpenGLRenderingEngine();
+
 private:
     String getProjectWindowPosName() const;
     String getProjectWindowZoomName() const;
@@ -106,6 +112,10 @@ private:
     void saveDocumentAs();
 //    void generateFaust();
 //    void generateExternal();
+
+    OpenGLContext openGLContext;
+    ScopedPointer<ContentComp> contentComponent;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainAppWindow)
 

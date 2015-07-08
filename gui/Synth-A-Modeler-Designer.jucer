@@ -23,6 +23,7 @@
         <MODULEPATH id="juce_data_structures" path="../juce/modules"/>
         <MODULEPATH id="juce_cryptography" path="../juce/modules"/>
         <MODULEPATH id="juce_core" path="../juce/modules"/>
+        <MODULEPATH id="juce_opengl" path="../juce/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <LINUX_MAKE targetFolder="Builds/Linux" bigIcon="WodEAp" extraLinkerFlags="-lpcre"
@@ -41,6 +42,7 @@
         <MODULEPATH id="juce_data_structures" path="../juce/modules"/>
         <MODULEPATH id="juce_cryptography" path="../juce/modules"/>
         <MODULEPATH id="juce_core" path="../juce/modules"/>
+        <MODULEPATH id="juce_opengl" path="../juce/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
   </EXPORTFORMATS>
@@ -253,6 +255,7 @@
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
   </MODULES>
   <JUCEOPTIONS/>
 </JUCERPROJECT>

@@ -106,6 +106,8 @@ MainAppWindow::~MainAppWindow()
     mdlInfoComp = nullptr;
 
     --mainAppWindowNum;
+
+    openGLContext.detach();
 }
 
 void MainAppWindow::createMDLFileContentCompIfNeeded()
@@ -113,7 +115,8 @@ void MainAppWindow::createMDLFileContentCompIfNeeded()
     if (getMDLFileContentComponent() == nullptr)
     {
         clearContentComponent();
-        setContentOwned (new ContentComp(*this, *objController), false);
+        contentComponent = new ContentComp(*this, *objController);
+        setContentNonOwned(contentComponent, false);
     }
 }
 
@@ -529,4 +532,57 @@ void MainAppWindow::showMDLProperties()
     mdlInfoComp->setContent(MDLHelper::getMDLInfoString(*getMDLFile()));
     DialogWindow::showModalDialog(TRANS("MDL Information"),
                                   mdlInfoComp, nullptr, color, true);
+}
+
+static const char* openGLRendererName = "OpenGL Renderer";
+
+StringArray MainAppWindow::getRenderingEngines() const
+{
+    StringArray renderingEngines;
+
+    if (ComponentPeer* peer = getPeer())
+        renderingEngines = peer->getAvailableRenderingEngines();
+
+   #if JUCE_OPENGL
+    renderingEngines.add (openGLRendererName);
+   #endif
+
+    return renderingEngines;
+}
+
+void MainAppWindow::setRenderingEngine (int index)
+{
+    // showMessageBubble (getRenderingEngines()[index]);
+
+   // #if JUCE_OPENGL
+    if (getRenderingEngines()[index] == openGLRendererName
+          && contentComponent != nullptr)
+    {
+        openGLContext.attachTo (*getTopLevelComponent());
+        return;
+    }
+
+    openGLContext.detach();
+   // #endif
+
+    if (ComponentPeer* peer = getPeer())
+        peer->setCurrentRenderingEngine (index);
+}
+
+void MainAppWindow::setOpenGLRenderingEngine()
+{
+    setRenderingEngine (getRenderingEngines().indexOf (openGLRendererName));
+}
+
+int MainAppWindow::getActiveRenderingEngine() const
+{
+   #if JUCE_OPENGL
+    if (openGLContext.isAttached())
+        return getRenderingEngines().indexOf (openGLRendererName);
+   #endif
+
+    if (ComponentPeer* peer = getPeer())
+        return peer->getCurrentRenderingEngine();
+
+    return 0;
 }

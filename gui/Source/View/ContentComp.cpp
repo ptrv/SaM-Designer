@@ -217,6 +217,7 @@ objectsHolder(0)
 
     ++contentCompNum;
     setComponentID("ContentComp_" + String(contentCompNum));
+    mainWindow.setOpenGLRenderingEngine();
     //[/Constructor]
 }
 

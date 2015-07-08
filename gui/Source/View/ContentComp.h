@@ -85,6 +85,7 @@ public:
         return objectsHolder;
     }
 
+    MainAppWindow& getMainAppWindow() { return mainWindow; }
     const MainAppWindow* getMainAppWindow() const { return &mainWindow; }
 
     int getViewWidth() const;
