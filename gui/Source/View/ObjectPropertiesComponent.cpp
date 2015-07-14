@@ -231,6 +231,7 @@ void ObjectPropertiesComponent::readValues()
             datas[0].getType() == Ids::termination ||
             datas[0].getType() == Ids::junction ||
             datas[0].getType() == Ids::audioout ||
+            datas[0].getType() == Ids::display ||
             datas[0].getType() == Ids::comment)
         {
             propertiesWindow->setName(
@@ -343,6 +344,30 @@ StringArray ObjectPropertiesComponent::getParamsStrings(const ValueTree& params)
         res.add(params.getChild(i)[Ids::value].toString());
     }
     return res;
+}
+
+void ObjectPropertiesComponent::writeSources(ValueTree& sourcesTree, const String& sourcesText)
+{
+    StringArray sourcesList;
+    sourcesList.addTokens(sourcesText, "+", "\"");
+    sourcesTree.removeAllChildren(undoManager);
+    for (int j = 0; j < sourcesList.size(); ++j)
+    {
+        ValueTree source(Ids::audiosource);
+        source.setProperty(Ids::value, sourcesList[j], undoManager);
+        sourcesTree.addChild(source, -1, undoManager);
+    }
+}
+
+String ObjectPropertiesComponent::readSources(const ValueTree& sourcesTree)
+{
+    StringArray sourcesText;
+    for (int i = 0; i < sourcesTree.getNumChildren(); ++i)
+    {
+        ValueTree source = sourcesTree.getChild(i);
+        sourcesText.add(source[Ids::value].toString());
+    }
+    return sourcesText.joinIntoString("+");
 }
 
 MassPropertiesComponent::MassPropertiesComponent(ObjController& objController_,
@@ -767,17 +792,17 @@ void AudiooutPropertiesComponent::readValues()
     else
     {
         ValueTree data = datas[0];
-        String sourceText;
         ValueTree sourcesTree = data.getChildWithName(Ids::sources);
-        for (int i = 0; i < sourcesTree.getNumChildren(); ++i)
-        {
-            ValueTree source = sourcesTree.getChild(i);
-            sourceText << source[Ids::value].toString();
-            if (i != sourcesTree.getNumChildren() - 1)
-            {
-                sourceText << "+";
-            }
-        }
+        String sourceText = readSources(sourcesTree);
+        // for (int i = 0; i < sourcesTree.getNumChildren(); ++i)
+        // {
+        //     ValueTree source = sourcesTree.getChild(i);
+        //     sourceText << source[Ids::value].toString();
+        //     if (i != sourcesTree.getNumChildren() - 1)
+        //     {
+        //         sourceText << "+";
+        //     }
+        // }
 
         StringArray vals;
         vals.add(sourceText);
@@ -799,17 +824,18 @@ bool AudiooutPropertiesComponent::writeValues()
         TextEditor* editor = editors[0];
         if (editorsModified[editor])
         {
-            String sourceText = editor->getText();
-            StringArray sourcesList;
-            sourcesList.addTokens(sourceText, "+", "\"");
+            String sourcesText = editor->getText();
             ValueTree sourcesTree = data.getChildWithName(Ids::sources);
-            sourcesTree.removeAllChildren(undoManager);
-            for (int j = 0; j < sourcesList.size(); ++j)
-            {
-                ValueTree source(Ids::audiosource);
-                source.setProperty(Ids::value, sourcesList[j], undoManager);
-                sourcesTree.addChild(source, -1, undoManager);
-            }
+            writeSources(sourcesTree, sourcesText);
+            // StringArray sourcesList;
+            // sourcesList.addTokens(sourceText, "+", "\"");
+            // sourcesTree.removeAllChildren(undoManager);
+            // for (int j = 0; j < sourcesList.size(); ++j)
+            // {
+            //     ValueTree source(Ids::audiosource);
+            //     source.setProperty(Ids::value, sourcesList[j], undoManager);
+            //     sourcesTree.addChild(source, -1, undoManager);
+            // }
         }
         editor = editors[1];
         if (editorsModified[editor])
@@ -837,6 +863,7 @@ DisplayPropertiesComponent::DisplayPropertiesComponent(ObjController& objControl
     editors.add(createEditor("MinVal", "Min value", false));
     editors.add(createEditor("MaxVal", "Max value", false));
     editors.add(createEditor("Source", "Source", true, true));
+    editors.add(createEditor("Optional", "Optional", true, true));
 
     readValues();
 }
@@ -853,6 +880,7 @@ void DisplayPropertiesComponent::resized()
     editors[1]->setBounds(100, 100, getWidth() - 110, 50);
     editors[2]->setBounds(100, 160, getWidth() - 110, 50);
     editors[3]->setBounds(100, 220, getWidth() - 110, 50);
+    editors[3]->setBounds(100, 280, getWidth() - 110, 50);
 
 }
 
@@ -875,7 +903,11 @@ void DisplayPropertiesComponent::readValues()
         StringArray vals = getParamsStrings(
             data.getChildWithName(Ids::parameters));
 
-        vals.add(data[Ids::value].toString());
+        ValueTree sourcesTree = data.getChildWithName(Ids::sources);
+        String sourcesText = readSources(sourcesTree);
+
+        vals.add(sourcesText);
+        vals.add(data.getProperty(Ids::optional).toString());
 
         readEditorsSingleSelection(editors, vals);
         // editors[0]->setTextToShowWhenEmpty("0.0", Colours::darkgrey);
@@ -898,6 +930,7 @@ bool DisplayPropertiesComponent::writeValues()
         if (editor && editorsModified[editor])
         {
             const String text = editor->getText();
+            StringArray sourcesList;
             data.setProperty(Ids::value, text, undoManager);
         }
     }

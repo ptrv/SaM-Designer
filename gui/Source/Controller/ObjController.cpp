@@ -63,7 +63,7 @@ ObjController::ObjController(MDLController& owner_)
 
 ObjController::~ObjController()
 {
-    audioConnections.clear(true);
+    connections.clear(true);
     links.clear(true);
     objects.clear(true);
     comments.clear(true);
@@ -156,16 +156,16 @@ bool ObjController::checkIfLinkExitsts(const ValueTree& linkTree) const
     });
 }
 
-bool ObjController::checkIfAudioConnectionExitsts(const ValueTree& source,
-                                                  const ValueTree& audioOut) const
+bool ObjController::checkIfConnectionExitsts(const ValueTree& source,
+                                             const ValueTree& target) const
 {
-    return std::any_of(audioConnections.begin(), audioConnections.end(),
+    return std::any_of(connections.begin(), connections.end(),
                        [&](const Connector* const conn)
                        {
                            return ObjectsHelper::equivalentById(
                                source, conn->getSourceObject()->getData()) &&
                                   ObjectsHelper::equivalentById(
-                                      audioOut, conn->getTargetObject()->getData());
+                                      target, conn->getTargetObject()->getData());
                        });
 }
 
@@ -217,7 +217,7 @@ Connector* ObjController::addConnector(ObjectsHolder* holder,
             this, objComp, source, audioOutComp, holder);
         owner.getUndoManager().perform(action, "Add new audio connection");
 
-        return audioConnections[action->indexAdded];
+        return connections[action->indexAdded];
     }
     else
     {
@@ -225,7 +225,7 @@ Connector* ObjController::addConnector(ObjectsHolder* holder,
         ValueTree sources = conn->getTargetObject()->getData().getChildWithName(Ids::sources);
         if(! sources.getChildWithProperty(Ids::value, source[Ids::value]).isValid())
             sources.addChild(source, -1, nullptr);
-        audioConnections.insert(index, conn);
+        connections.insert(index, conn);
         holder->addAndMakeVisible(conn);
         conn->update();
         conn->toBack();
@@ -234,7 +234,7 @@ Connector* ObjController::addConnector(ObjectsHolder* holder,
     return nullptr;
 }
 
-void ObjController::addNewConnector(ObjectsHolder* holder)
+void ObjController::addNewConnector(ObjectsHolder* holder, const Identifier& targetType)
 {
     if (sObjects.getNumSelected() == 2)
     {
@@ -248,7 +248,7 @@ void ObjController::addNewConnector(ObjectsHolder* holder)
             ObjectsHelper::getSourceTargetPairFromSelection(
                 sObjects.getSelectedItem(0),
                 sObjects.getSelectedItem(1),
-                Ids::audioout);
+                targetType);
 
         auto srcComp = sourceTargetPair.first;
         auto targetComp = sourceTargetPair.second;
@@ -259,11 +259,11 @@ void ObjController::addNewConnector(ObjectsHolder* holder)
             return;
         }
 
-        if (!checkIfAudioConnectionExitsts(srcComp->getData(), targetComp->getData()))
+        if (!checkIfConnectionExitsts(srcComp->getData(), targetComp->getData()))
         {
             const String& srcName = srcComp->getData()[Ids::identifier];
-            const String& srcVal = "*1.0";
-            ValueTree src = ObjectFactory::createAudioSourceTree(srcName, srcVal);
+            // const String& srcVal = "*1.0";
+            ValueTree src = ObjectFactory::createAudioSourceTree(srcName, String::empty);
             addConnector(holder, srcComp, targetComp, src, -1, true);
         }
     }
@@ -421,7 +421,7 @@ void ObjController::removeAudioConnection(Connector* aocComp,
             }
         }
         sources.removeChild(source, nullptr);
-        audioConnections.removeObject(aocComp);
+        connections.removeObject(aocComp);
     }
 }
 
@@ -516,7 +516,7 @@ void ObjController::selectAll(bool shouldBeSelected)
 
         std::for_each(objects.begin(), objects.end(), fnAddToSelection);
         std::for_each(links.begin(), links.end(), fnAddToSelection);
-        std::for_each(audioConnections.begin(), audioConnections.end(), fnAddToSelection);
+        std::for_each(connections.begin(), connections.end(), fnAddToSelection);
         std::for_each(comments.begin(), comments.end(), fnAddToSelection);
     }
 }
@@ -706,9 +706,9 @@ Array<int> ObjController::checkIfObjectHasLinks(const ValueTree& objTree) const
 Array<int> ObjController::checkIfObjectHasAudioConnections(const ValueTree& objTree) const
 {
     Array<int> aocIndices;
-    for (int i = 0; i < audioConnections.size(); ++i)
+    for (int i = 0; i < connections.size(); ++i)
     {
-        const Connector* const conn = audioConnections.getUnchecked(i);
+        const Connector* const conn = connections.getUnchecked(i);
 
         if (ObjectsHelper::equivalentById(objTree, conn->getSourceObject()->getData()) ||
             ObjectsHelper::equivalentById(objTree, conn->getTargetObject()->getData()))
@@ -743,7 +743,7 @@ void ObjController::setLinksSegmented(bool isSegmented)
     {
         lc->setSegmented(isSegmented);
     });
-    std::for_each(audioConnections.begin(), audioConnections.end(),
+    std::for_each(connections.begin(), connections.end(),
                   [=](Connector* const conn)
     {
         conn->setSegmented(isSegmented);
@@ -753,7 +753,7 @@ void ObjController::setLinksSegmented(bool isSegmented)
 void ObjController::destroy()
 {
     links.clear();
-    audioConnections.clear();
+    connections.clear();
     objects.clear();
     sObjects.deselectAll();
     idMgr = nullptr;
@@ -763,7 +763,7 @@ void ObjController::destroy()
 
 void ObjController::setAudioConnectionVisibility(bool shouldBeVisible)
 {
-    for (Connector* const conn : audioConnections)
+    for (Connector* const conn : connections)
     {
         conn->setVisible(shouldBeVisible);
     }
@@ -778,7 +778,7 @@ void ObjController::setAsFromtmostLink(T& t)
     };
 
     std::for_each(links.begin(), links.end(), fnToBehind);
-    std::for_each(audioConnections.begin(), audioConnections.end(), fnToBehind);
+    std::for_each(connections.begin(), connections.end(), fnToBehind);
 }
 
 template void ObjController::setAsFromtmostLink<LinkComponent>(LinkComponent& t);

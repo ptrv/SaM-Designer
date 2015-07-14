@@ -55,14 +55,12 @@ Connector::Connector(ObjController& owner_,
 
     targetComp->addConnector(this);
 
-    if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(sourceComp.get()))
+    if ((objectComp = dynamic_cast<ObjectComponent*>(sourceComp.get())))
     {
-        objectComp = oc;
         objectComp->addConnector(this);
     }
-    else if (LinkComponent* lc = dynamic_cast<LinkComponent*>(sourceComp.get()))
+    else if ((linkComp = dynamic_cast<LinkComponent*>(sourceComp.get())))
     {
-        linkComp = lc;
         linkComp->addConnector(this);
     }
 

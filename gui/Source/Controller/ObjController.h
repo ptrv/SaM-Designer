@@ -99,7 +99,7 @@ public:
                             int index,
                             bool undoable);
     
-    void addNewConnector(ObjectsHolder* holder);
+    void addNewConnector(ObjectsHolder* holder, const Identifier& targetType);
     
     void removeLink(LinkComponent* linkComp, bool undoable, ObjectsHolder* holder);
     
@@ -170,16 +170,16 @@ public:
     const tLinks& getLinks() const { return links; }
 
     Connector* getAudioConnector(int index) const throw() 
-    { return audioConnections[index]; }
+    { return connections[index]; }
     int indexOfAudioConnector (Connector* e) const throw()
     {
-        return audioConnections.indexOf(e);
+        return connections.indexOf(e);
     }
     int getNumAudioConnections() const
     {
-        return audioConnections.size();
+        return connections.size();
     }
-    void addAudioConnectionComp(Connector* a) { audioConnections.add(a); }
+    void addAudioConnectionComp(Connector* a) { connections.add(a); }
 
     CommentComponent* getComment(int index) const throw() { return comments[index]; }
     CommentComponent* getCommentUnchecked(int index) const throw() { return comments.getUnchecked(index); }
@@ -226,14 +226,14 @@ public:
 private:
     
     bool checkIfLinkExitsts(const ValueTree& linkTree) const;
-    bool checkIfAudioConnectionExitsts(const ValueTree& source,
-                                       const ValueTree& audioOut) const;
+    bool checkIfConnectionExitsts(const ValueTree& source,
+                                  const ValueTree& target) const;
     Array<int> checkIfObjectHasLinks(const ValueTree& objTree) const;
     Array<int> checkIfObjectHasAudioConnections(const ValueTree& objTree) const;
     MDLController& owner;
 	OwnedArray<ObjectComponent> objects;
     OwnedArray<LinkComponent> links;
-    OwnedArray<Connector> audioConnections;
+    OwnedArray<Connector> connections;
     OwnedArray<CommentComponent> comments;
     SelectedItemSet<SelectableObject*> sObjects;
     ScopedPointer<IdManager> idMgr;

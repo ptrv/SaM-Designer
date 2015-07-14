@@ -45,6 +45,7 @@ void ContextMenus::showObjectsMenu(ObjectsHolder& objectsHolder,
     m.addItem(MENU_ITEM_PORT, TRANS("Port"));
     m.addSeparator();
     m.addItem(MENU_ITEM_AUDIO_OUT, TRANS("Audio Out"));
+    m.addItem(MENU_ITEM_DISPLAY, TRANS("Display"));
     m.addSeparator();
     m.addItem(MENU_ITEM_JUNCTION, TRANS("Junction"));
     m.addItem(MENU_ITEM_TERMINATION, TRANS("Termination"));
@@ -70,6 +71,9 @@ void ContextMenus::showObjectsMenu(ObjectsHolder& objectsHolder,
         break;
     case MENU_ITEM_AUDIO_OUT:
         objectsHolder.insertNewObject(Ids::audioout, pos);
+        break;
+    case MENU_ITEM_DISPLAY:
+        objectsHolder.insertNewObject(Ids::display, pos);
         break;
     case MENU_ITEM_JUNCTION:
         objectsHolder.insertNewObject(Ids::junction, pos);
@@ -101,6 +105,7 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
     m.addItem(MENU_ITEM_WAVEGUIDE, TRANS("Waveguide"));
     m.addSeparator();
     m.addItem(MENU_ITEM_AUDIOCONNECTION, TRANS("Audio Connection"));
+    m.addItem(MENU_ITEM_DISPLAYCONNECTION, TRANS("Display Connection"));
 
     switch (m.show())
     {
@@ -139,7 +144,11 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
         break;
     case MENU_ITEM_AUDIOCONNECTION:
         DBG("Add audio connection");
-        objectsHolder.insertNewAudioConnection();
+        objectsHolder.insertNewConnection(Ids::audioout);
+        break;
+    case MENU_ITEM_DISPLAYCONNECTION:
+        DBG("Add display connection");
+        objectsHolder.insertNewConnection(Ids::display);
         break;
     }
 }
@@ -153,7 +162,7 @@ void ContextMenus::showAudioConnectionPopupMenu(ObjectsHolder& objectsHolder)
     m.addItem(1, TRANS("Audio Connection"));
     if (m.show() == 1)
     {
-        objectsHolder.insertNewAudioConnection();
+        objectsHolder.insertNewConnection(Ids::audioout);
     }
 }
 

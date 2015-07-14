@@ -68,6 +68,9 @@ protected:
     void writeEditors(ValueTree params, bool fixValues);
     StringArray getParamsStrings(const ValueTree& params);
 
+    void writeSources(ValueTree& sourcesTree, const String& sourcesText);
+    String readSources(const ValueTree& sourcesTree);
+
     ObjController& objController;
 	Array<ValueTree> datas;
     UndoManager* undoManager;

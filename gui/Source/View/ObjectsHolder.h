@@ -140,7 +140,7 @@ private:
     void insertNewLink(const Identifier& linkType,
                        const String& startId,
                        const String& endId);
-    void insertNewAudioConnection();
+    void insertNewConnection(const Identifier& targetType);
 
     Point<int> getMouseXYRelativeViewport();
     bool getStartEndObjects(String& startId, String& endId);
