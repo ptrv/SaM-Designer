@@ -676,8 +676,15 @@ void ObjectsHelper::loadComponents(ObjController& objController,
 
     auto fnAddLinkComponent = [&](const ValueTree& linkTree)
     {
-        addComp(objController, objHolder,
-                new LinkComponent(objController, linkTree))->toBack();
+        try
+        {
+            addComp(objController, objHolder,
+                    new LinkComponent(objController, linkTree))->toBack();
+        }
+        catch (const std::exception& e)
+        {
+            SAM_CONSOLE(e.what(), PostLevel::ERROR);
+        }
     };
 
     auto fnIterateObjectGroup = [&](const Identifier& groupId,

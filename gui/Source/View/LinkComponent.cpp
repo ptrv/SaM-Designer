@@ -51,11 +51,15 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
 
-    if (startComp.get() != nullptr && endComp.get() != nullptr)
+    if (!startComp.get() || !startComp.get())
     {
-        startComp->addLinkToObject(this);
-        endComp->addLinkToObject(this);
+        String errMsg;
+        errMsg << "Could not create: " << linkTree[Ids::identifier].toString();
+        throw std::runtime_error(errMsg.getCharPointer());
     }
+
+    startComp->addLinkToObject(this);
+    endComp->addLinkToObject(this);
 
     owner.getSelectedObjects().addChangeListener(this);
 
