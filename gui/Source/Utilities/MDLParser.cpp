@@ -326,7 +326,7 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getTerminationLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 4);
+            re.fullMatchValues(line, values, 2);
 
             Point<int> pos = getPos(line);
 
@@ -334,12 +334,12 @@ bool MDLParser::parseMDL(const File& f)
             terminationTree.setProperty(Ids::posX, pos.x, nullptr);
             terminationTree.setProperty(Ids::posY, pos.y, nullptr);
 
-            StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
+            StringArray paramsArray = MDLHelper::getParamsFromString(values[0]);
 
             terminationTree.addChild(ObjectFactory::createParamsTree(paramsArray),
                                      -1, nullptr);
 
-            terminationTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
+            terminationTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
 
             ValueTree terminations = mdlTree.getOrCreateChildWithName(Objects::terminations, nullptr);
             terminations.addChild(terminationTree, -1, nullptr);
@@ -348,7 +348,7 @@ bool MDLParser::parseMDL(const File& f)
         else if(re.fullMatch(SAMRegex::getJunctionLine(), line))
         {
             StringArray values;
-            re.fullMatchValues(line, values, 4);
+            re.fullMatchValues(line, values, 2);
 
             Point<int> pos = getPos(line);
 
@@ -358,11 +358,11 @@ bool MDLParser::parseMDL(const File& f)
 
             ValueTree junctParams(Ids::parameters);
             ValueTree junctParam(Ids::parameter);
-            junctParam.setProperty(Ids::value, values[1].trim(), nullptr);
+            junctParam.setProperty(Ids::value, values[0].trim(), nullptr);
             junctParams.addChild(junctParam, -1, nullptr);
             junctTree.addChild(junctParams, -1, nullptr);
 
-            junctTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
+            junctTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
             
             ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
             junctsTree.addChild(junctTree, -1, nullptr);
