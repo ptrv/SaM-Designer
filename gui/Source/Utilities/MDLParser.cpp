@@ -126,6 +126,10 @@ bool MDLParser::parseMDL(const File& f)
             {
                 addTree(mdlTree, getCommentTree(line, re));
             }
+            else if (re.fullMatch(SAMRegex::getDisplayAttachLine(), line))
+            {
+                addTree(mdlTree, getDisplayTree(line, re));
+            }
         }
         catch (const std::exception& e)
         {
@@ -412,6 +416,63 @@ ValueTree MDLParser::getCommentTree(const String& line, RegularExpression& re)
     newTree.setProperty(Ids::value, commVal.joinIntoString("\n"), nullptr);
     newTree.setProperty(Ids::fontSize, paramsArray[1], nullptr);
     newTree.setProperty(Ids::commentColour, paramsArray[2], nullptr);
+
+    return newTree;
+}
+
+//------------------------------------------------------------------------------
+// values: params, identifier, sources
+ValueTree MDLParser::getDisplayTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 3);
+
+    const Point<int> pos = getPos(line);
+
+    ValueTree newTree(Ids::display);
+    newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+    newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+
+    StringArray paramsArray = MDLHelper::getParamsFromString(values[0]);
+    paramsArray.set(0, paramsArray[0].unquoted());
+    newTree.addChild(ObjectFactory::createParamsTree(paramsArray), -1, nullptr);
+
+    newTree.setProperty(Ids::identifier, values[1], nullptr);
+
+    int posColon = values[2].indexOf(":");
+    String sourcesLine;
+    if(posColon > 0)
+    {
+        sourcesLine = values[2].substring(0, posColon);
+        sourcesLine = MDLHelper::removeUnbalancedParentheses(sourcesLine);
+        newTree.setProperty(Ids::optional, values[2].substring(posColon+1), nullptr);
+    }
+    else
+    {
+        newTree.setProperty(Ids::optional, "", nullptr);
+        sourcesLine = values[2];
+    }
+
+        // remove unbalanced parentheses
+    sourcesLine = MDLHelper::removeUnbalancedParentheses(sourcesLine);
+
+    // remove surrounding paranthese if there are some.
+    sourcesLine = MDLHelper::removeSurroundingParentheses(sourcesLine);
+
+    StringArray sourcesList;
+    sourcesList.addTokens(sourcesLine, "+", "\"");
+
+    ValueTree displaySources(Ids::sources);
+    for (int l = 0; l < sourcesList.size(); ++l)
+    {
+        if (sourcesList[l].trim().compare("0.0") != 0)
+        {
+            ValueTree displaySource(Ids::audiosource);
+            displaySource.setProperty(Ids::value, sourcesList[l].trim(), nullptr);
+            displaySources.addChild(displaySource, -1, nullptr);
+        }
+    }
+    newTree.addChild(displaySources, -1, nullptr);
 
     return newTree;
 }

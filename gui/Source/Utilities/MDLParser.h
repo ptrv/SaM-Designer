@@ -60,6 +60,7 @@ private:
     ValueTree getTerminationTree(const String& line, RegularExpression& re);
     ValueTree getJunctionTree(const String& line, RegularExpression& re);
     ValueTree getCommentTree(const String& line, RegularExpression& re);
+    ValueTree getDisplayTree(const String& line, RegularExpression& re);
 
     MDLFile& mdlFile;
 };

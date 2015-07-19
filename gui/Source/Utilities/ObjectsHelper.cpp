@@ -717,31 +717,34 @@ void ObjectsHelper::loadComponents(ObjController& objController,
 
     // audio objects and comments
 
-    fnIterateObjectGroup(Objects::audioobjects, [&](const ValueTree& aoTree)
+    auto fnAddAudioOutAndDisplayComponents = [&](const ValueTree& tree)
     {
-        fnAddObjectComponent(aoTree);
+        fnAddObjectComponent(tree);
 
-        ObjectComponent* const audioOutComp =
-            objController.getObjectForId(aoTree[Ids::identifier].toString());
+        ObjectComponent* const targetComp =
+            objController.getObjectForId(tree[Ids::identifier].toString());
 
-        ValueTree aoSources = aoTree.getChildWithName(Ids::sources);
-        for (int j = 0; j < aoSources.getNumChildren(); ++j)
+        ValueTree sources = tree.getChildWithName(Ids::sources);
+        for (int j = 0; j < sources.getNumChildren(); ++j)
         {
-            ValueTree source = aoSources.getChild(j);
+            ValueTree source = sources.getChild(j);
             BaseObjectComponent* sourceComp =
                 ObjectsHelper::getBaseObjectFromSource(objController, source);
 
             if (sourceComp != nullptr)
             {
                 Connector* conn = new Connector(
-                    objController, sourceComp, audioOutComp);
+                    objController, sourceComp, targetComp);
                 objController.addAudioConnectionComp(conn);
                 objHolder.addAndMakeVisible(conn);
                 conn->update();
                 objHolder.checkExtent(conn->getBounds());
             }
         }
-    });
+    };
+
+    fnIterateObjectGroup(Objects::audioobjects, fnAddAudioOutAndDisplayComponents);
+    fnIterateObjectGroup(Objects::displays, fnAddAudioOutAndDisplayComponents);
 
     fnIterateObjectGroup(Objects::comments, [&](const ValueTree& comment)
     {
