@@ -51,6 +51,17 @@ public:
 
 private:
     void getMDLString(String& mdlContent);
+
+    String getMassesString();
+    String getLinksString();
+    String getWaveguidesString();
+    String getTerminationsString();
+    String getJunctionsString();
+    String getFaustCodeString();
+    String getAudioOutsString();
+    String getCommentsString();
+    String getDisplaysString();
+
     const MDLFile& mdlFile;
 };
 }

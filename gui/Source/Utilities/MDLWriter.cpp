@@ -37,23 +37,64 @@ MDLWriter::MDLWriter(const MDLFile& mdlFile_)
 {
 }
 
+//-----------------------------------------------------------------------------
+
 void MDLWriter::getMDLString(String& mdlContent)
 {
     String mdlHeader(BinaryData::mdl_file_header_txt);
 
-	mdlContent = String::empty;
-	mdlContent << mdlHeader;
+    mdlContent = String::empty;
+    mdlContent << mdlHeader;
 
-	// ------------------------------------------------------------------------
-	// write masses
-	mdlContent << "\n\n";
-	ValueTree masses = mdlFile.mdlRoot.getChildWithName(Objects::masses);
-	for (int mIdx = 0; mIdx < masses.getNumChildren(); ++mIdx)
-	{
-		ValueTree mo = masses.getChild(mIdx);
-		mdlContent << mo.getType().toString();
-		mdlContent << "(";
-		ValueTree massParams = mo.getChildWithName(Ids::parameters);
+    auto fnWriteContent = [&mdlContent](const String& content)
+    {
+        if (content.isNotEmpty())
+        {
+            mdlContent << "\n\n";
+        }
+        mdlContent << content;
+    };
+    // ------------------------------------------------------------------------
+    // write masses
+    fnWriteContent(getMassesString());
+
+    // write links
+    fnWriteContent(getLinksString());
+
+    // write waveguides
+    fnWriteContent(getWaveguidesString());
+
+    // write terminations
+    fnWriteContent(getTerminationsString());
+
+    // write junctions
+    fnWriteContent(getJunctionsString());
+
+    // write variables
+    fnWriteContent(getFaustCodeString());
+
+    // write audioouts
+    fnWriteContent(getAudioOutsString());
+
+    // write comments
+    fnWriteContent(getCommentsString());
+
+    // write displays
+    fnWriteContent(getDisplaysString());
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getMassesString()
+{
+    String massString;
+    ValueTree masses = mdlFile.mdlRoot.getChildWithName(Objects::masses);
+    for (int mIdx = 0; mIdx < masses.getNumChildren(); ++mIdx)
+    {
+        ValueTree mo = masses.getChild(mIdx);
+        massString << mo.getType().toString();
+        massString << "(";
+        ValueTree massParams = mo.getChildWithName(Ids::parameters);
         if (mo.getType() == Ids::resonators)
         {
             if(massParams.getNumChildren() == 3)
@@ -74,7 +115,7 @@ void MDLWriter::getMDLString(String& mdlContent)
                         vals.add(resParams[m].getChild(n)[Ids::value].toString());
                 }
 
-                mdlContent << vals.joinIntoString(",");
+                massString << vals.joinIntoString(",");
 
                 for (int n = 0; n < 3; ++n)
                 {
@@ -88,136 +129,171 @@ void MDLWriter::getMDLString(String& mdlContent)
             for (int i = 0; i < massParams.getNumChildren(); ++i)
             {
                 ValueTree massParam = massParams.getChild(i);
-                mdlContent << massParam.getProperty(Ids::value).toString();
+                massString << massParam.getProperty(Ids::value).toString();
 
                 if (i != massParams.getNumChildren() - 1)
-                    mdlContent << ",";
+                    massString << ",";
             }
         }
 
-		mdlContent << "),";
-		mdlContent << mo[Ids::identifier].toString();
-		mdlContent << ";";
-		mdlContent << " # pos " << mo.getProperty(Ids::posX, "0").toString() << "," << mo.getProperty(Ids::posY, "0").toString();
-		mdlContent << "\n";
-	}
+        massString << "),";
+        massString << mo[Ids::identifier].toString();
+        massString << ";";
+        massString << " # pos " << mo.getProperty(Ids::posX, "0").toString() << "," << mo.getProperty(Ids::posY, "0").toString();
+        massString << "\n";
+    }
 
-	// write links
-	mdlContent << "\n\n";
-	ValueTree links = mdlFile.mdlRoot.getChildWithName(Objects::links);
-	for (int lIdx = 0; lIdx < links.getNumChildren(); ++lIdx)
-	{
-		ValueTree li = links.getChild(lIdx);
-		mdlContent << li.getType().toString();
-		mdlContent << "(";
-		ValueTree linkParams = li.getChildWithName(Ids::parameters);
-		for (int k = 0; k < linkParams.getNumChildren(); ++k) {
+    return massString;
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getLinksString()
+{
+    String linkString;
+    ValueTree links = mdlFile.mdlRoot.getChildWithName(Objects::links);
+    for (int lIdx = 0; lIdx < links.getNumChildren(); ++lIdx)
+    {
+        ValueTree li = links.getChild(lIdx);
+        linkString << li.getType().toString();
+        linkString << "(";
+        ValueTree linkParams = li.getChildWithName(Ids::parameters);
+        for (int k = 0; k < linkParams.getNumChildren(); ++k) {
             ValueTree link = linkParams.getChild(k);
-            mdlContent << link.getProperty(Ids::value).toString();
+            linkString << link.getProperty(Ids::value).toString();
 
-			if(k != linkParams.getNumChildren()-1)
-				mdlContent << ",";
-		}
-		mdlContent << "),";
-		mdlContent << li[Ids::identifier].toString();
-		mdlContent << ",";
-		mdlContent << li[Ids::startVertex].toString();
-		mdlContent << ",";
-		mdlContent << li[Ids::endVertex].toString();
-		mdlContent << ";";
-		mdlContent << "\n";
-	}
+            if(k != linkParams.getNumChildren()-1)
+                linkString << ",";
+        }
+        linkString << "),";
+        linkString << li[Ids::identifier].toString();
+        linkString << ",";
+        linkString << li[Ids::startVertex].toString();
+        linkString << ",";
+        linkString << li[Ids::endVertex].toString();
+        linkString << ";";
+        linkString << "\n";
+    }
 
-	// write waveguides
-	mdlContent << "\n\n";
-	ValueTree waveObjs = mdlFile.mdlRoot.getChildWithName(Objects::waveguides);
-	for (int wavIdx = 0; wavIdx < waveObjs.getNumChildren(); ++wavIdx) {
-		ValueTree wo = waveObjs.getChild(wavIdx);
-		mdlContent << wo.getType().toString();
-		mdlContent << "(";
-		ValueTree waveParams = wo.getChildWithName(Ids::parameters);
+    return linkString;
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getWaveguidesString()
+{
+    String waveguideString;
+    ValueTree waveObjs = mdlFile.mdlRoot.getChildWithName(Objects::waveguides);
+    for (int wavIdx = 0; wavIdx < waveObjs.getNumChildren(); ++wavIdx) {
+        ValueTree wo = waveObjs.getChild(wavIdx);
+        waveguideString << wo.getType().toString();
+        waveguideString << "(";
+        ValueTree waveParams = wo.getChildWithName(Ids::parameters);
 
         ValueTree waveParam = waveParams.getChild(0);
-        mdlContent << waveParam.getProperty(Ids::value).toString();
-        mdlContent << ",";
+        waveguideString << waveParam.getProperty(Ids::value).toString();
+        waveguideString << ",";
 
         ValueTree string = waveParams.getChild(1);
-        mdlContent << string[Ids::value].toString();
+        waveguideString << string[Ids::value].toString();
 
-		mdlContent << "),";
-		mdlContent << wo[Ids::identifier].toString();
-		mdlContent << ",";
-		mdlContent << wo[Ids::startVertex].toString();
-		mdlContent << ",";
-		mdlContent << wo[Ids::endVertex].toString();
-		mdlContent << ";";
-		mdlContent << "\n";
+        waveguideString << "),";
+        waveguideString << wo[Ids::identifier].toString();
+        waveguideString << ",";
+        waveguideString << wo[Ids::startVertex].toString();
+        waveguideString << ",";
+        waveguideString << wo[Ids::endVertex].toString();
+        waveguideString << ";";
+        waveguideString << "\n";
 
-	}
+    }
 
-	// write terminations
-	mdlContent << "\n\n";
-	ValueTree termObjs = mdlFile.mdlRoot.getChildWithName(Objects::terminations);
-	for (int termIdx = 0; termIdx < termObjs.getNumChildren(); ++termIdx) {
-		ValueTree to = termObjs.getChild(termIdx);
-		mdlContent << to.getType().toString();
-		mdlContent << "(";
-		ValueTree termParams = to.getChildWithName(Ids::parameters);
+    return waveguideString;
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getTerminationsString()
+{
+    String terminationString;
+    ValueTree termObjs = mdlFile.mdlRoot.getChildWithName(Objects::terminations);
+    for (int termIdx = 0; termIdx < termObjs.getNumChildren(); ++termIdx) {
+        ValueTree to = termObjs.getChild(termIdx);
+        terminationString << to.getType().toString();
+        terminationString << "(";
+        ValueTree termParams = to.getChildWithName(Ids::parameters);
 
         ValueTree term = termParams.getChild(0);
-        mdlContent << term[Ids::value].toString();
+        terminationString << term[Ids::value].toString();
 
-		mdlContent << "),";
-		mdlContent << to[Ids::identifier].toString();
-		mdlContent << ";";
-		mdlContent << " # pos " << to.getProperty(Ids::posX, "0").toString() << "," << to.getProperty(Ids::posY, "0").toString();
-		mdlContent << "\n";
+        terminationString << "),";
+        terminationString << to[Ids::identifier].toString();
+        terminationString << ";";
+        terminationString << " # pos " << to.getProperty(Ids::posX, "0").toString() << "," << to.getProperty(Ids::posY, "0").toString();
+        terminationString << "\n";
 
-	}
+    }
 
-	// write junctions
-	mdlContent << "\n\n";
-	ValueTree junctObjs = mdlFile.mdlRoot.getChildWithName(Objects::junctions);
-	for (int junctIdx = 0; junctIdx < junctObjs.getNumChildren(); ++junctIdx) {
-		ValueTree jo = junctObjs.getChild(junctIdx);
-		mdlContent << jo.getType().toString();
-		mdlContent << "(";
+    return terminationString;
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getJunctionsString()
+{
+    String junctionsString;
+    ValueTree junctObjs = mdlFile.mdlRoot.getChildWithName(Objects::junctions);
+    for (int junctIdx = 0; junctIdx < junctObjs.getNumChildren(); ++junctIdx) {
+        ValueTree jo = junctObjs.getChild(junctIdx);
+        junctionsString << jo.getType().toString();
+        junctionsString << "(";
         ValueTree junctP = jo.getChildWithName(Ids::parameters).getChild(0);
-		mdlContent << junctP.getProperty(Ids::value).toString();
-		mdlContent << "),";
-		mdlContent << jo[Ids::identifier].toString();
-		mdlContent << ";";
-		mdlContent << " # pos " << jo.getProperty(Ids::posX, "0").toString() << "," << jo.getProperty(Ids::posY, "0").toString();
-		mdlContent << "\n";
+        junctionsString << junctP.getProperty(Ids::value).toString();
+        junctionsString << "),";
+        junctionsString << jo[Ids::identifier].toString();
+        junctionsString << ";";
+        junctionsString << " # pos " << jo.getProperty(Ids::posX, "0").toString() << "," << jo.getProperty(Ids::posY, "0").toString();
+        junctionsString << "\n";
 
-	}
+    }
 
-	// write variables
-	mdlContent << "\n\n";
-	ValueTree faustcodeblockTree = mdlFile.mdlRoot.getChildWithName(Objects::faustcodeblock);
-	for (int varIdx = 0; varIdx < faustcodeblockTree.getNumChildren(); ++varIdx) {
-		ValueTree la = faustcodeblockTree.getChild(varIdx);
-		mdlContent << "faustcode: ";
-		mdlContent << la.getProperty(Ids::value).toString();
-		mdlContent << "\n";
-	}
+    return junctionsString;
+}
 
-	// write audioouts
-	mdlContent << "\n\n";
-	ValueTree audioTree = mdlFile.mdlRoot.getChildWithName(Objects::audioobjects);
-	for (int aIdx = 0; aIdx < audioTree.getNumChildren(); ++aIdx) {
-		ValueTree ao = audioTree.getChild(aIdx);
-		mdlContent << ao.getType().toString();
-		mdlContent << ",";
-		mdlContent << ao[Ids::identifier].toString();
-		mdlContent << ",";
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getFaustCodeString()
+{
+    String faustCodeString;
+    ValueTree faustcodeblockTree = mdlFile.mdlRoot.getChildWithName(Objects::faustcodeblock);
+    for (int varIdx = 0; varIdx < faustcodeblockTree.getNumChildren(); ++varIdx) {
+        ValueTree la = faustcodeblockTree.getChild(varIdx);
+        faustCodeString << "faustcode: ";
+        faustCodeString << la.getProperty(Ids::value).toString();
+        faustCodeString << "\n";
+    }
+    return faustCodeString;
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getAudioOutsString()
+{
+    String audioOutsString;
+    ValueTree audioTree = mdlFile.mdlRoot.getChildWithName(Objects::audioobjects);
+    for (int aIdx = 0; aIdx < audioTree.getNumChildren(); ++aIdx) {
+        ValueTree ao = audioTree.getChild(aIdx);
+        audioOutsString << ao.getType().toString();
+        audioOutsString << ",";
+        audioOutsString << ao[Ids::identifier].toString();
+        audioOutsString << ",";
         ValueTree sources = ao.getChildWithName(Ids::sources);
         bool isOpt = ao[Ids::optional].toString() != String::empty;
         if(isOpt)
-            mdlContent << "(";
+            audioOutsString << "(";
         if(sources.getNumChildren() == 0)
         {
-            mdlContent << "0.0";
+            audioOutsString << "0.0";
         }
 
         StringArray audioSources;
@@ -227,50 +303,118 @@ void MDLWriter::getMDLString(String& mdlContent)
             String sourceStr = source.getProperty(Ids::value).toString();
             audioSources.add(sourceStr.isNotEmpty() ? sourceStr : "0.0");
         }
-        mdlContent << audioSources.joinIntoString("+");
+        audioOutsString << audioSources.joinIntoString("+");
 
         if(isOpt)
         {
-            mdlContent << ")";
+            audioOutsString << ")";
             if(! ao[Ids::optional].toString().contains("outputDSP"))
             {
-                mdlContent << ":outputDSP";
+                audioOutsString << ":outputDSP";
             }
-            mdlContent << ":" << ao[Ids::optional].toString();
+            audioOutsString << ":" << ao[Ids::optional].toString();
         }
 
-		mdlContent << ";";
-		mdlContent << " # pos " << ao.getProperty(Ids::posX, "0").toString() << "," << ao.getProperty(Ids::posY, "0").toString();
-		mdlContent << "\n";
+        audioOutsString << ";";
+        audioOutsString << " # pos " << ao.getProperty(Ids::posX, "0").toString() << "," << ao.getProperty(Ids::posY, "0").toString();
+        audioOutsString << "\n";
 
-	}
-    // write comments
+    }
+
+    return audioOutsString;
+}
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getCommentsString()
+{
+    String commentsString;
     ValueTree commentTree = mdlFile.mdlRoot.getChildWithName(Objects::comments);
     for (int commIdx = 0; commIdx < commentTree.getNumChildren(); ++commIdx)
     {
         ValueTree comm = commentTree.getChild(commIdx);
-        mdlContent << "## ";
-        mdlContent << comm.getType().toString();
-        mdlContent << "(";
+        commentsString << "## ";
+        commentsString << comm.getType().toString();
+        commentsString << "(";
         StringArray commVal;
         commVal.addTokens(comm[Ids::value].toString(),"\n" ,"\"");
-        mdlContent << commVal.joinIntoString("|").quoted();
-        mdlContent << ",";
-        mdlContent << comm[Ids::fontSize].toString();
-        mdlContent << ",";
-        mdlContent << comm[Ids::commentColour].toString();
-        mdlContent << "),";
-        mdlContent << comm[Ids::identifier].toString();
-		mdlContent << ";";
-		mdlContent << " # pos " << comm.getProperty(Ids::posX, "0").toString();
-        mdlContent << ",";
-        mdlContent << comm.getProperty(Ids::posY, "0").toString();
-		mdlContent << "\n";
+        commentsString << commVal.joinIntoString("|").quoted();
+        commentsString << ",";
+        commentsString << comm[Ids::fontSize].toString();
+        commentsString << ",";
+        commentsString << comm[Ids::commentColour].toString();
+        commentsString << "),";
+        commentsString << comm[Ids::identifier].toString();
+        commentsString << ";";
+        commentsString << " # pos " << comm.getProperty(Ids::posX, "0").toString();
+        commentsString << ",";
+        commentsString << comm.getProperty(Ids::posY, "0").toString();
+        commentsString << "\n";
     }
+    return commentsString;
 }
+
+//-----------------------------------------------------------------------------
+
+String MDLWriter::getDisplaysString()
+{
+    String displaysString;
+    ValueTree displaysTree = mdlFile.mdlRoot.getChildWithName(Objects::displays);
+    for (int dIdx = 0; dIdx < displaysTree.getNumChildren(); ++dIdx) {
+        ValueTree display = displaysTree.getChild(dIdx);
+        displaysString << display.getType().toString();
+        displaysString << "(";
+        const ValueTree& params = display.getChildWithName(Ids::parameters);
+        if (params.isValid())
+        {
+            StringArray paramsArray;
+            for (int pIdx = 0; pIdx < params.getNumChildren(); ++pIdx)
+            {
+                paramsArray.add(params.getChild(pIdx).getProperty(Ids::value, "0.0"));
+            }
+            displaysString << paramsArray.joinIntoString(",");
+        }
+        displaysString << "),";
+        displaysString << display[Ids::identifier].toString();
+        displaysString << ",";
+        ValueTree sources = display.getChildWithName(Ids::sources);
+        bool isOpt = display[Ids::optional].toString() != String::empty;
+        if(isOpt)
+            displaysString << "(";
+        if(sources.getNumChildren() == 0)
+        {
+            displaysString << "0.0";
+        }
+
+        StringArray audioSources;
+        for (int q = 0; q < sources.getNumChildren(); ++q)
+        {
+            ValueTree source = sources.getChild(q);
+            String sourceStr = source.getProperty(Ids::value).toString();
+            audioSources.add(sourceStr.isNotEmpty() ? sourceStr : "0.0");
+        }
+        displaysString << audioSources.joinIntoString("+");
+
+        if(isOpt)
+        {
+            displaysString << ")";
+            displaysString << ":" << display[Ids::optional].toString();
+        }
+
+        displaysString << ";";
+        displaysString << " # pos " << display.getProperty(Ids::posX, "0").toString() << "," << display.getProperty(Ids::posY, "0").toString();
+        displaysString << "\n";
+
+    }
+
+    return displaysString;
+}
+
+//-----------------------------------------------------------------------------
+
 bool MDLWriter::writeMDL(const File& saveFile)
 {
-	const File& outFile = saveFile;//(savePath);
+    const File& outFile = saveFile;//(savePath);
 
     String mdlContent;
     getMDLString(mdlContent);
@@ -278,13 +422,15 @@ bool MDLWriter::writeMDL(const File& saveFile)
     return Utils::writeStringToFile(mdlContent, outFile);
 }
 
+//-----------------------------------------------------------------------------
+
 bool MDLWriter::writeMDLX(const File& saveFile)
 {
-	const File& outFile = saveFile;//(savePath);
+    const File& outFile = saveFile;//(savePath);
 
     ValueTree mdlxTree = mdlFile.mdlRoot.createCopy();
     mdlxTree.setProperty(Ids::mdlName, outFile.getFileName(), nullptr);
-	mdlxTree.setProperty(Ids::mdlPath, outFile.getFullPathName(), nullptr);
+    mdlxTree.setProperty(Ids::mdlPath, outFile.getFullPathName(), nullptr);
 
     String mdlContent = mdlxTree.toXmlString();
     // ------------------------------------------------------------------------
