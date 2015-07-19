@@ -71,7 +71,8 @@ static Point<int> getPos(const String& posStr)
 bool MDLParser::parseMDL(const File& f)
 {
     RegularExpression re;
-    RegularExpression reComment("\\A\\s*#[^#].*$");
+    RegularExpression reComment("\\A\\s*#[^#]+.*$|\\A\\s*#\\s*$");
+    RegularExpression reEmptyLine("\\A\\s*$");
     
     const File& in = f;//mdlFile.getFile();
 	String mdlContent = in.loadFileAsString();
@@ -87,7 +88,9 @@ bool MDLParser::parseMDL(const File& f)
     {
         String line = lines[i];
 
-        if(reComment.fullMatch(line) || line.isEmpty())
+        if (line.isEmpty() ||
+            reComment.fullMatch(line) ||
+            reEmptyLine.fullMatch(line))
         {
             continue;
         }
