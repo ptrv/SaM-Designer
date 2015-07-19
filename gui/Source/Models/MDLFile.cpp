@@ -164,7 +164,7 @@ Result MDLFile::loadDocument (const File& file)
         isUntitledFile = false;
         md5 = MD5(file);
 
-        MDLHelper::addOutputDSPVarIfNotExists(*this);
+        // MDLHelper::addOutputDSPVarIfNotExists(*this);
 
         return Result::ok();
     }
@@ -178,7 +178,7 @@ Result MDLFile::loadDocument (const File& file)
 }
 Result MDLFile::saveDocument (const File& file)
 {
-    MDLHelper::addOutputDSPVarIfNotExists(*this);
+    // MDLHelper::addOutputDSPVarIfNotExists(*this);
 
     bool saveOk;
     String errorMsg;

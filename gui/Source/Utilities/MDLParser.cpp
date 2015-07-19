@@ -291,16 +291,16 @@ ValueTree MDLParser::getAudioOutTree(const String& line, RegularExpression& re)
     }
 
     // add outputDSP to optional values if not present
-    if(! audioTree[Ids::optional].toString().contains("outputDSP"))
-    {
-        String aoOpt = audioTree[Ids::optional].toString();
-        if(aoOpt.isNotEmpty())
-        {
-            aoOpt = ":" + aoOpt;
-        }
-        String aoOpt2 = "outputDSP" + aoOpt;
-        audioTree.setProperty(Ids::optional, aoOpt2, nullptr);
-    }
+    // if(! audioTree[Ids::optional].toString().contains("outputDSP"))
+    // {
+    //     String aoOpt = audioTree[Ids::optional].toString();
+    //     if(aoOpt.isNotEmpty())
+    //     {
+    //         aoOpt = ":" + aoOpt;
+    //     }
+    //     String aoOpt2 = "outputDSP" + aoOpt;
+    //     audioTree.setProperty(Ids::optional, aoOpt2, nullptr);
+    // }
 
     // remove unbalanced parentheses
     audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);

@@ -308,10 +308,10 @@ String MDLWriter::getAudioOutsString()
         if(isOpt)
         {
             audioOutsString << ")";
-            if(! ao[Ids::optional].toString().contains("outputDSP"))
-            {
-                audioOutsString << ":outputDSP";
-            }
+            // if(! ao[Ids::optional].toString().contains("outputDSP"))
+            // {
+            //     audioOutsString << ":outputDSP";
+            // }
             audioOutsString << ":" << ao[Ids::optional].toString();
         }
 
