@@ -30,6 +30,8 @@ public:
 
 private:
 
+    void makeGraph(bool includeMiscObjects);
+
     void startTimer(int intervalInMilliseconds);
     void stopTimer();
     void timerCallback();

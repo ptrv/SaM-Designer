@@ -46,6 +46,7 @@ typedef OwnedArray<ObjectComponent> tObjects;
 typedef OwnedArray<LinkComponent> tLinks;
 typedef OwnedArray<Connector> tAudioConnections;
 typedef OwnedArray<CommentComponent> tComments;
+typedef OwnedArray<Connector> tConnectors;
 
 /**
  * The ObjController controlls all ObjectComponents.
@@ -180,6 +181,8 @@ public:
         return connections.size();
     }
     void addAudioConnectionComp(Connector* a) { connections.add(a); }
+    tConnectors& getConnectors() { return connections; }
+    const tConnectors& getConnectors() const { return connections; }
 
     CommentComponent* getComment(int index) const throw() { return comments[index]; }
     CommentComponent* getCommentUnchecked(int index) const throw() { return comments.getUnchecked(index); }

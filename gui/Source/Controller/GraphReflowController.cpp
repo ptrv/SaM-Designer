@@ -26,6 +26,7 @@
 #include "View/ObjectComponent.h"
 #include "View/LinkComponent.h"
 #include "View/ObjectsHolder.h"
+#include "View/Connector.h"
 
 #include "Utilities/StoredSettings.h"
 #include "Utilities/ObjectsHelper.h"
@@ -38,6 +39,76 @@ using namespace synthamodeler;
 GraphReflowController::GraphReflowController(ObjController& objCtrl)
     : objController(objCtrl), objHolder(nullptr)
 {
+}
+
+void GraphReflowController::makeGraph(const bool includeMiscObjects)
+{
+    if (!graph)
+    {
+        return;
+    }
+
+    // add nodes
+    for (const LinkComponent* const l : objController.getLinks())
+    {
+        ObjectComponent* const ocStart =
+            objController.getObjectForId(l->getData()[Ids::startVertex].toString());
+        ObjectComponent* const ocEnd =
+            objController.getObjectForId(l->getData()[Ids::endVertex].toString());
+
+        graph->addNode(ocStart);
+        graph->addNode(ocEnd);
+    }
+
+    if (includeMiscObjects)
+    {
+        for (Connector* const conn : objController.getConnectors())
+        {
+            graph->addNode(conn->getSourceObject());
+            graph->addNode(conn->getTargetObject());
+        }
+    }
+
+    tNodes& nodes = graph->getNodes();
+
+    graph->init(nodes.size());
+
+    // link nodes
+    for (const LinkComponent* const l : objController.getLinks())
+    {
+        ObjectComponent* const ocStart =
+            objController.getObjectForId(l->getData()[Ids::startVertex].toString());
+        ObjectComponent* const ocEnd =
+            objController.getObjectForId(l->getData()[Ids::endVertex].toString());
+
+        graph->linkNodes(ocStart, ocEnd);
+    }
+
+    if (includeMiscObjects)
+    {
+        for (Connector* const conn : objController.getConnectors())
+        {
+            graph->linkNodes(conn->getSourceObject(), conn->getTargetObject());
+        }
+    }
+
+    // init node data
+    std::for_each(nodes.begin(), nodes.end(),
+                  [](Node* const n) { n->initNodeData(); });
+
+    // find combined groups in graph
+    GraphUtils::calculateConnectedGroups(*graph);
+
+    // String outStr;
+    // for (int i = 0; i < graph.edges.size(); ++i)
+    // {
+    //     for (int j = 0; j < graph.edges[i].size(); ++j)
+    //     {
+    //         outStr << (graph.edges[i][j] ? "1" : "0");
+    //     }
+    //     outStr << newLine;
+    // }
+    // DBG(outStr);
 }
 
 void GraphReflowController::startTimer(int intervalInMilliseconds)
@@ -89,7 +160,7 @@ void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int 
         .getDoubleValue("redrawparam_timestep", 60);
 
     graph = new DirectedGraph();
-    ObjectsHelper::makeGraph(objController, *graph.get());
+    makeGraph(false);
 
     if(cmdId == CommandIDs::redrawForceDirected)
     {

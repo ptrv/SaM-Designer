@@ -57,8 +57,6 @@ public:
 
     static void tidyUpObjects(ObjController& objController);
 
-    static void makeGraph(const ObjController& objController, DirectedGraph& graph);
-
     static String fixParameterValueIfNeeded(const String& paramVal);
 
     static String getGainForSourceId(const ValueTree& sources, const String& sourceId);

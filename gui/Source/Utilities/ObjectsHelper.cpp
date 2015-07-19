@@ -251,56 +251,6 @@ void ObjectsHelper::tidyUpObjects(ObjController& objController)
 
 //------------------------------------------------------------------------------
 
-void ObjectsHelper::makeGraph(const ObjController& objController, DirectedGraph& graph)
-{
-    // add nodes
-    for (const LinkComponent* const l : objController.getLinks())
-    {
-        ObjectComponent* const ocStart =
-            objController.getObjectForId(l->getData()[Ids::startVertex].toString());
-        ObjectComponent* const ocEnd =
-            objController.getObjectForId(l->getData()[Ids::endVertex].toString());
-
-        graph.addNode(ocStart);
-        graph.addNode(ocEnd);
-    }
-
-    tNodes& nodes = graph.getNodes();
-
-    graph.init(nodes.size());
-
-    // link nodes
-    for (const LinkComponent* const l : objController.getLinks())
-    {
-        ObjectComponent* const ocStart =
-            objController.getObjectForId(l->getData()[Ids::startVertex].toString());
-        ObjectComponent* const ocEnd =
-            objController.getObjectForId(l->getData()[Ids::endVertex].toString());
-
-        graph.linkNodes(ocStart, ocEnd);
-    }
-
-    // init node data
-    std::for_each(nodes.begin(), nodes.end(),
-                  [](Node* const n) { n->initNodeData(); });
-
-    // find combined groups in graph
-    GraphUtils::calculateConnectedGroups(graph);
-
-    // String outStr;
-    // for (int i = 0; i < graph.edges.size(); ++i)
-    // {
-    //     for (int j = 0; j < graph.edges[i].size(); ++j)
-    //     {
-    //         outStr << (graph.edges[i][j] ? "1" : "0");
-    //     }
-    //     outStr << newLine;
-    // }
-    // DBG(outStr);
-}
-
-//------------------------------------------------------------------------------
-
 String fixValue(const String& val)
 {
     String tmpVal = val.trim();

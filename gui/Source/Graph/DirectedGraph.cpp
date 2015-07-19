@@ -29,8 +29,6 @@
 #include "Controller/ObjController.h"
 
 #include "FlowAlgorithm.h"
-//#include "ForceDirectedFlowAlgorithm.h"
-#include "CircleFlowAlgorithm.h"
 #include "GraphUtils.h"
 
 #include "View/BaseObjectComponent.h"
@@ -41,8 +39,8 @@
 using namespace synthamodeler;
 
 DirectedGraph::DirectedGraph()
+    : flower(nullptr)
 {
-    flower = new CircleFlowAlgorithm();
 }
 
 DirectedGraph::~DirectedGraph()
@@ -118,7 +116,7 @@ bool DirectedGraph::reflow(const Rectangle<int>& area,
                            ObjController& objController,
                            float deltaTime)
 {
-    return flower->reflow(*this, area, objController, deltaTime);
+    return flower ? flower->reflow(*this, area, objController, deltaTime) : false;
 }
 
 String DirectedGraph::toString()
