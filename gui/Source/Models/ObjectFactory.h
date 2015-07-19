@@ -46,6 +46,9 @@ public:
     static ValueTree createAudioSourceTree(const String& srcName,
                                            const String& srcVal);
 
+    static ValueTree getMassTreeFromStringId(const String& id);
+    static ValueTree getLinkTreeFromStringId(const String& id);
+
 private:
     static ValueTree createNewMassLikeTree(const Identifier& massType,
                                            const String& newName, int x, int y,

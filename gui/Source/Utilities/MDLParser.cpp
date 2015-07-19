@@ -83,321 +83,340 @@ bool MDLParser::parseMDL(const File& f)
 
 	StringArray lines;
 	lines.addTokens(mdlContent, "\n", "\"");
-	for (int i = 0; i < lines.size(); ++i) {
-		String line = lines[i];
+	for (int i = 0; i < lines.size(); ++i)
+    {
+        String line = lines[i];
 
         if(reComment.fullMatch(line) || line.isEmpty())
         {
             continue;
         }
 
-        if(re.fullMatch(SAMRegex::getVertexLine(), line))
+        try
         {
-
-            StringArray values;
-            re.fullMatchValues(line, values, 4);
-
-            ValueTree newTree;
-            if (values[0].compare("mass") == 0)
+            if(re.fullMatch(SAMRegex::getVertexLine(), line))
             {
-                newTree = ValueTree(Ids::mass);
+                addTree(mdlTree, getMassTree(line, re));
             }
-            else if (values[0].compare("port") == 0)
+            else if(re.fullMatch(SAMRegex::getLinkLine(), line))
             {
-                newTree = ValueTree(Ids::port);
+                addTree(mdlTree, getLinkTree(line, re));
             }
-            else if (values[0].compare("ground") == 0)
+            else if(re.fullMatch(SAMRegex::getFaustCodeLine(), line))
             {
-                newTree = ValueTree(Ids::ground);
+                addTree(mdlTree, getFaustCodeTree(line, re));
             }
-            else if (values[0].compare("resonators") == 0)
+            else if(re.fullMatch(SAMRegex::getAudioOutLine(), line))
             {
-                newTree = ValueTree(Ids::resonators);
+                addTree(mdlTree, getAudioOutTree(line, re));
             }
-            else
+            else if(re.fullMatch(SAMRegex::getWaveguideLine(), line))
             {
-                DBG("Something went really wrong!");
-                return false;
+                addTree(mdlTree, getWaveguideTree(line, re));
             }
-
-            Point<int> pos = getPos(line);
-            newTree.setProperty(Ids::posX, pos.getX(), nullptr);
-            newTree.setProperty(Ids::posY, pos.getY(), nullptr);
-
-
-            if(newTree.getType() != Ids::port && newTree.getType() != Ids::ground)
+            else if(re.fullMatch(SAMRegex::getTerminationLine(), line))
             {
-                StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
-
-                if(newTree.getType() == Ids::resonators)
-                {
-                    static const int NUM_RES_PARAMS = 3;
-                    if(paramsArray.size() % NUM_RES_PARAMS == 0)
-                    {
-                        ValueTree paramsTree(Ids::parameters);
-                        Array<ValueTree> valuesArr;
-                        for (int np = 0; np < NUM_RES_PARAMS; ++np)
-                        {
-                            valuesArr.add(ValueTree(Ids::parameter));
-                        }
-
-                        for (int n = 0; n < paramsArray.size(); ++n)
-                        {
-                            const int paramIdx = n % NUM_RES_PARAMS;
-                            ValueTree subVal(ObjectsHelper::getResonatorParamsIds()[paramIdx]);
-                            subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
-
-                            valuesArr[paramIdx].addChild(subVal, -1, nullptr);
-                        }
-
-                        for (int np = 0; np < NUM_RES_PARAMS; ++np)
-                        {
-                            paramsTree.addChild(valuesArr[np], -1, nullptr);
-                        }
-
-                        newTree.addChild(paramsTree, -1, nullptr);
-                    }
-                }
-                else
-                {
-                    newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
-                                     -1, nullptr);
-                }
+                addTree(mdlTree, getTerminationTree(line, re));
             }
-            if(newTree.getType() == Ids::ground)
+            else if(re.fullMatch(SAMRegex::getJunctionLine(), line))
             {
-                ValueTree paramsTree(Ids::parameters);
-                ValueTree param(Ids::parameter);
-                param.setProperty(Ids::value, values[1].trim(), nullptr);
-                paramsTree.addChild(param, -1, nullptr);
-                newTree.addChild(paramsTree, -1, nullptr);
+                addTree(mdlTree, getJunctionTree(line, re));
             }
-
-            newTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
-
-            ValueTree masses = mdlTree.getOrCreateChildWithName(Objects::masses, nullptr);
-            masses.addChild(newTree, -1, nullptr);
-
-
+            else if(re.fullMatch(SAMRegex::getCommentObjectLine(), line))
+            {
+                addTree(mdlTree, getCommentTree(line, re));
+            }
         }
-        else if(re.fullMatch(SAMRegex::getLinkLine(), line))
+        catch (const std::exception& e)
         {
-            StringArray values;
-            re.fullMatchValues(line, values, 5);
-
-            ValueTree linkTree;
-            if (values[0].compare("link") == 0)
-            {
-                linkTree = ValueTree(Ids::link);
-            }
-            else if (values[0].compare("touch") == 0)
-            {
-                linkTree = ValueTree(Ids::touch);
-            }
-            else if (values[0].compare("pulsetouch") == 0)
-            {
-                linkTree = ValueTree(Ids::pulsetouch);
-            }
-            else if (values[0].compare("pluck") == 0)
-            {
-                linkTree = ValueTree(Ids::pluck);
-            }
-            else if (values[0].compare("detent") == 0)
-            {
-                linkTree = ValueTree(Ids::detent);
-            }
-            else if (values[0].compare("softeninglink") == 0)
-            {
-                linkTree = ValueTree(Ids::softeninglink);
-            }
-            else if (values[0].compare("stiffeninglink") == 0)
-            {
-                linkTree = ValueTree(Ids::stiffeninglink);
-            }
-            else
-            {
-                DBG("Something went really wrong!");
-                return false;
-            }
-
-            StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
-
-            linkTree.addChild(ObjectFactory::createParamsTree(paramsArray),
-                              -1, nullptr);
-
-            linkTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
-            linkTree.setProperty(Ids::startVertex, values[3].trim(), nullptr);
-            linkTree.setProperty(Ids::endVertex, values[4].trim(), nullptr);
-
-            ValueTree linksTree = mdlTree.getOrCreateChildWithName(Objects::links, nullptr);
-            linksTree.addChild(linkTree, -1, nullptr);
+            DBG("Something went really wrong! "+String(e.what()));
         }
-        else if(re.fullMatch(SAMRegex::getFaustCodeLine(), line))
-        {
-            StringArray values;
-            re.fullMatchValues(line, values, 1);
-            ValueTree faustcodeTree(Ids::faustcode);
-            faustcodeTree.setProperty(Ids::value, values[0].trim(), nullptr);
-            ValueTree fcbTree = mdlTree.getOrCreateChildWithName(Objects::faustcodeblock, nullptr);
-            fcbTree.addChild(faustcodeTree, -1, nullptr);
-        }
-        else if(re.fullMatch(SAMRegex::getAudioOutLine(), line))
-        {
-            StringArray values;
-            re.fullMatchValues(line, values, 3);
-
-            Point<int> pos = getPos(line);
-            ValueTree audioTree(Ids::audioout);
-            audioTree.setProperty(Ids::posX, pos.x, nullptr);
-            audioTree.setProperty(Ids::posY, pos.y, nullptr);
-            audioTree.setProperty(Ids::identifier, values[0].trim(), nullptr);
-
-            // split everything from line starting with first colon
-            int posColon = values[1].indexOf(":");
-            String audioLine;
-            if(posColon > 0)
-            {
-                audioLine = values[1].substring(0, posColon);
-                audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);
-                audioTree.setProperty(Ids::optional,values[1].substring(posColon+1), nullptr);
-            }
-            else
-            {
-                audioTree.setProperty(Ids::optional, "", nullptr);
-                audioLine = values[1];
-            }
-
-            // add outputDSP to optional values if not present
-            if(! audioTree[Ids::optional].toString().contains("outputDSP"))
-            {
-                String aoOpt = audioTree[Ids::optional].toString();
-                if(aoOpt.isNotEmpty())
-                {
-                    aoOpt = ":" + aoOpt;
-                }
-                String aoOpt2 = "outputDSP" + aoOpt;
-                audioTree.setProperty(Ids::optional, aoOpt2, nullptr);
-            }
-
-            // remove unbalanced parentheses
-            audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);
-
-            // remove surrounding paranthese if there are some.
-            String audioLineClean = MDLHelper::removeSurroundingParentheses(audioLine);
-
-            StringArray audioOutSourcesList;
-            audioOutSourcesList.addTokens(audioLineClean, "+", "\"");
-
-            ValueTree audioSources(Ids::sources);
-            for (int l = 0; l < audioOutSourcesList.size(); ++l)
-            {
-                if(audioOutSourcesList[l].trim().compare("0.0") != 0)
-                {
-                    ValueTree aoSource(Ids::audiosource);
-                    aoSource.setProperty(Ids::value, audioOutSourcesList[l].trim(), nullptr);
-                    audioSources.addChild(aoSource, -1, nullptr);
-                }
-            }
-            audioTree.addChild(audioSources, -1, nullptr);
-            ValueTree audioObjectsTree = mdlTree.getOrCreateChildWithName(Objects::audioobjects, nullptr);
-            audioObjectsTree.addChild(audioTree, -1, nullptr);
-
-        }
-        else if(re.fullMatch(SAMRegex::getWaveguideLine(), line))
-        {
-            StringArray values;
-            re.fullMatchValues(line, values, 5);
-
-            ValueTree waveguideTree(Ids::waveguide);
-
-            StringArray paramsArray(values.begin(), 2);
-
-            waveguideTree.addChild(ObjectFactory::createParamsTree(paramsArray),
-                                   -1, nullptr);
-
-            waveguideTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
-            waveguideTree.setProperty(Ids::startVertex, values[3].trim(), nullptr);
-            waveguideTree.setProperty(Ids::endVertex, values[4].trim(), nullptr);
-
-			ValueTree wavesTree = mdlTree.getOrCreateChildWithName(Objects::waveguides, nullptr);
-            wavesTree.addChild(waveguideTree, -1, nullptr);
-
-        }
-        else if(re.fullMatch(SAMRegex::getTerminationLine(), line))
-        {
-            StringArray values;
-            re.fullMatchValues(line, values, 2);
-
-            Point<int> pos = getPos(line);
-
-            ValueTree terminationTree(Ids::termination);
-            terminationTree.setProperty(Ids::posX, pos.x, nullptr);
-            terminationTree.setProperty(Ids::posY, pos.y, nullptr);
-
-            StringArray paramsArray = MDLHelper::getParamsFromString(values[0]);
-
-            terminationTree.addChild(ObjectFactory::createParamsTree(paramsArray),
-                                     -1, nullptr);
-
-            terminationTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
-
-            ValueTree terminations = mdlTree.getOrCreateChildWithName(Objects::terminations, nullptr);
-            terminations.addChild(terminationTree, -1, nullptr);
-
-        }
-        else if(re.fullMatch(SAMRegex::getJunctionLine(), line))
-        {
-            StringArray values;
-            re.fullMatchValues(line, values, 2);
-
-            Point<int> pos = getPos(line);
-
-            ValueTree junctTree(Ids::junction);
-            junctTree.setProperty(Ids::posX, pos.x, nullptr);
-            junctTree.setProperty(Ids::posY, pos.y, nullptr);
-
-            ValueTree junctParams(Ids::parameters);
-            ValueTree junctParam(Ids::parameter);
-            junctParam.setProperty(Ids::value, values[0].trim(), nullptr);
-            junctParams.addChild(junctParam, -1, nullptr);
-            junctTree.addChild(junctParams, -1, nullptr);
-
-            junctTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
-            
-            ValueTree junctsTree = mdlTree.getOrCreateChildWithName(Objects::junctions, nullptr);
-            junctsTree.addChild(junctTree, -1, nullptr);
-        }
-        else if(re.fullMatch(SAMRegex::getCommentObjectLine(), line))
-        {
-            StringArray values;
-            if(! re.fullMatchValues(line, values, 3))
-            {
-                DBG("Error reading comment object!");
-            }
-            ValueTree newTree(Ids::comment);
-            Point<int> pos = getPos(line);
-            newTree.setProperty(Ids::posX, pos.getX(), nullptr);
-            newTree.setProperty(Ids::posY, pos.getY(), nullptr);
-
-            newTree.setProperty(Ids::identifier, values[2], nullptr);
-
-            StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
-
-            StringArray commVal;
-            commVal.addTokens(paramsArray[0].unquoted(), "|" , "\"");
-            newTree.setProperty(Ids::value, commVal.joinIntoString("\n"), nullptr);
-            newTree.setProperty(Ids::fontSize, paramsArray[1], nullptr);
-            newTree.setProperty(Ids::commentColour, paramsArray[2], nullptr);
-
-            ValueTree comments = mdlTree.getOrCreateChildWithName(Objects::comments, nullptr);
-            comments.addChild(newTree, -1, nullptr);
-        }
-
     }
 //    DBG(mdlTree.toXmlString());
     mdlFile.mdlRoot = mdlTree;
 	return true;
 }
+
+//------------------------------------------------------------------------------
+
+void MDLParser::addTree(ValueTree& rootTree, const ValueTree& newTree)
+{
+    const Identifier& groupId = ObjectsHelper::getObjectGroup(newTree.getType());
+    ValueTree group = rootTree.getOrCreateChildWithName(groupId, nullptr);
+    group.addChild(newTree, -1, nullptr);
+}
+
+//------------------------------------------------------------------------------
+//values: mass-type, parameters, identifier
+ValueTree MDLParser::getMassTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 3);
+
+    ValueTree newTree = ObjectFactory::getMassTreeFromStringId(values[0]);
+
+    if (!newTree.isValid())
+    {
+        throw std::runtime_error("Cannot parse mass-like object");
+    }
+
+    const Point<int> pos = getPos(line);
+    newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+    newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+
+
+    if (newTree.getType() != Ids::port && newTree.getType() != Ids::ground)
+    {
+        StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
+
+        if (newTree.getType() == Ids::resonators)
+        {
+            static const int NUM_RES_PARAMS = 3;
+            if(paramsArray.size() % NUM_RES_PARAMS == 0)
+            {
+                ValueTree paramsTree(Ids::parameters);
+                Array<ValueTree> valuesArr;
+                for (int np = 0; np < NUM_RES_PARAMS; ++np)
+                {
+                    valuesArr.add(ValueTree(Ids::parameter));
+                }
+
+                for (int n = 0; n < paramsArray.size(); ++n)
+                {
+                    const int paramIdx = n % NUM_RES_PARAMS;
+                    ValueTree subVal(ObjectsHelper::getResonatorParamsIds()[paramIdx]);
+                    subVal.setProperty(Ids::value, paramsArray[n].trim(), nullptr);
+
+                    valuesArr[paramIdx].addChild(subVal, -1, nullptr);
+                }
+
+                for (int np = 0; np < NUM_RES_PARAMS; ++np)
+                {
+                    paramsTree.addChild(valuesArr[np], -1, nullptr);
+                }
+
+                newTree.addChild(paramsTree, -1, nullptr);
+            }
+        }
+        else
+        {
+            newTree.addChild(ObjectFactory::createParamsTree(paramsArray),
+                             -1, nullptr);
+        }
+    }
+    else if (newTree.getType() == Ids::ground)
+    {
+        ValueTree paramsTree(Ids::parameters);
+        ValueTree param(Ids::parameter);
+        param.setProperty(Ids::value, values[1].trim(), nullptr);
+        paramsTree.addChild(param, -1, nullptr);
+        newTree.addChild(paramsTree, -1, nullptr);
+    }
+
+    newTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
+
+    return newTree;
+}
+
+//------------------------------------------------------------------------------
+// values: link-type, parameters, identifier, startVertex, endVertex
+ValueTree MDLParser::getLinkTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 5);
+
+    ValueTree linkTree = ObjectFactory::getLinkTreeFromStringId(values[0]);
+
+    if (!linkTree.isValid())
+    {
+        throw std::runtime_error("Could not parse link-like object");
+    }
+
+    StringArray paramsArray = MDLHelper::getParamsFromString(values[1]);
+
+    linkTree.addChild(ObjectFactory::createParamsTree(paramsArray),
+                      -1, nullptr);
+
+    linkTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
+    linkTree.setProperty(Ids::startVertex, values[3].trim(), nullptr);
+    linkTree.setProperty(Ids::endVertex, values[4].trim(), nullptr);
+
+    return linkTree;
+}
+
+//------------------------------------------------------------------------------
+// values: faustcode
+ValueTree MDLParser::getFaustCodeTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 1);
+
+    ValueTree faustcodeTree(Ids::faustcode);
+    faustcodeTree.setProperty(Ids::value, values[0].trim(), nullptr);
+
+    return faustcodeTree;
+}
+
+//------------------------------------------------------------------------------
+// values: identifier, sources
+ValueTree MDLParser::getAudioOutTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 2);
+
+    const Point<int> pos = getPos(line);
+
+    ValueTree audioTree(Ids::audioout);
+    audioTree.setProperty(Ids::posX, pos.x, nullptr);
+    audioTree.setProperty(Ids::posY, pos.y, nullptr);
+    audioTree.setProperty(Ids::identifier, values[0].trim(), nullptr);
+
+    // split everything from line starting with first colon
+    int posColon = values[1].indexOf(":");
+    String audioLine;
+    if(posColon > 0)
+    {
+        audioLine = values[1].substring(0, posColon);
+        audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);
+        audioTree.setProperty(Ids::optional,values[1].substring(posColon+1), nullptr);
+    }
+    else
+    {
+        audioTree.setProperty(Ids::optional, "", nullptr);
+        audioLine = values[1];
+    }
+
+    // add outputDSP to optional values if not present
+    if(! audioTree[Ids::optional].toString().contains("outputDSP"))
+    {
+        String aoOpt = audioTree[Ids::optional].toString();
+        if(aoOpt.isNotEmpty())
+        {
+            aoOpt = ":" + aoOpt;
+        }
+        String aoOpt2 = "outputDSP" + aoOpt;
+        audioTree.setProperty(Ids::optional, aoOpt2, nullptr);
+    }
+
+    // remove unbalanced parentheses
+    audioLine = MDLHelper::removeUnbalancedParentheses(audioLine);
+
+    // remove surrounding paranthese if there are some.
+    String audioLineClean = MDLHelper::removeSurroundingParentheses(audioLine);
+
+    StringArray audioOutSourcesList;
+    audioOutSourcesList.addTokens(audioLineClean, "+", "\"");
+
+    ValueTree audioSources(Ids::sources);
+    for (int l = 0; l < audioOutSourcesList.size(); ++l)
+    {
+        if(audioOutSourcesList[l].trim().compare("0.0") != 0)
+        {
+            ValueTree aoSource(Ids::audiosource);
+            aoSource.setProperty(Ids::value, audioOutSourcesList[l].trim(), nullptr);
+            audioSources.addChild(aoSource, -1, nullptr);
+        }
+    }
+    audioTree.addChild(audioSources, -1, nullptr);
+
+    return audioTree;
+}
+
+//------------------------------------------------------------------------------
+// values: param1, param2, identifier, startVertex, endVertex
+ValueTree MDLParser::getWaveguideTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 5);
+
+    ValueTree waveguideTree(Ids::waveguide);
+
+    StringArray paramsArray(values.begin(), 2);
+
+    waveguideTree.addChild(ObjectFactory::createParamsTree(paramsArray),
+                           -1, nullptr);
+
+    waveguideTree.setProperty(Ids::identifier, values[2].trim(), nullptr);
+    waveguideTree.setProperty(Ids::startVertex, values[3].trim(), nullptr);
+    waveguideTree.setProperty(Ids::endVertex, values[4].trim(), nullptr);
+
+    return waveguideTree;
+}
+
+//------------------------------------------------------------------------------
+// values: param, identifier
+ValueTree MDLParser::getTerminationTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 2);
+
+    const Point<int> pos = getPos(line);
+
+    ValueTree terminationTree(Ids::termination);
+    terminationTree.setProperty(Ids::posX, pos.x, nullptr);
+    terminationTree.setProperty(Ids::posY, pos.y, nullptr);
+
+    StringArray paramsArray = MDLHelper::getParamsFromString(values[0]);
+
+    terminationTree.addChild(ObjectFactory::createParamsTree(paramsArray),
+                             -1, nullptr);
+
+    terminationTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
+
+    return terminationTree;
+}
+
+//------------------------------------------------------------------------------
+// values: param1, identifier
+ValueTree MDLParser::getJunctionTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 2);
+
+    const Point<int> pos = getPos(line);
+
+    ValueTree junctTree(Ids::junction);
+    junctTree.setProperty(Ids::posX, pos.x, nullptr);
+    junctTree.setProperty(Ids::posY, pos.y, nullptr);
+
+    ValueTree junctParams(Ids::parameters);
+    ValueTree junctParam(Ids::parameter);
+    junctParam.setProperty(Ids::value, values[0].trim(), nullptr);
+    junctParams.addChild(junctParam, -1, nullptr);
+    junctTree.addChild(junctParams, -1, nullptr);
+
+    junctTree.setProperty(Ids::identifier, values[1].trim(), nullptr);
+
+    return junctTree;
+}
+
+//------------------------------------------------------------------------------
+// values: param, identifier
+ValueTree MDLParser::getCommentTree(const String& line, RegularExpression& re)
+{
+    StringArray values;
+    re.fullMatchValues(line, values, 2);
+
+    const Point<int> pos = getPos(line);
+
+    ValueTree newTree(Ids::comment);
+    newTree.setProperty(Ids::posX, pos.getX(), nullptr);
+    newTree.setProperty(Ids::posY, pos.getY(), nullptr);
+
+    newTree.setProperty(Ids::identifier, values[1], nullptr);
+
+    StringArray paramsArray = MDLHelper::getParamsFromString(values[0]);
+
+    StringArray commVal;
+    commVal.addTokens(paramsArray[0].unquoted(), "|" , "\"");
+    newTree.setProperty(Ids::value, commVal.joinIntoString("\n"), nullptr);
+    newTree.setProperty(Ids::fontSize, paramsArray[1], nullptr);
+    newTree.setProperty(Ids::commentColour, paramsArray[2], nullptr);
+
+    return newTree;
+}
+
+//------------------------------------------------------------------------------
 
 bool MDLParser::parseMDLX(const File& f, bool onlyExtras)
 {

@@ -31,6 +31,7 @@
 namespace synthamodeler
 {
 class MDLFile;
+class RegularExpression;
 /**
  * MDL parser class.
  */
@@ -48,6 +49,18 @@ public:
     bool parseMDLX(const File& f, bool onlyExtras=false);
 
 private:
+
+    void addTree(ValueTree& rootTree, const ValueTree& newTree);
+
+    ValueTree getMassTree(const String& line, RegularExpression& re);
+    ValueTree getLinkTree(const String& line, RegularExpression& re);
+    ValueTree getFaustCodeTree(const String& line, RegularExpression& re);
+    ValueTree getAudioOutTree(const String& line, RegularExpression& re);
+    ValueTree getWaveguideTree(const String& line, RegularExpression& re);
+    ValueTree getTerminationTree(const String& line, RegularExpression& re);
+    ValueTree getJunctionTree(const String& line, RegularExpression& re);
+    ValueTree getCommentTree(const String& line, RegularExpression& re);
+
     MDLFile& mdlFile;
 };
 }

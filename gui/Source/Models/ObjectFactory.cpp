@@ -455,6 +455,71 @@ ValueTree ObjectFactory::createAudioSourceTree(const String& srcName,
 }
 
 //------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::getMassTreeFromStringId(const String& id)
+{
+    if (id.compare("mass") == 0)
+    {
+        return ValueTree(Ids::mass);
+    }
+    else if (id.compare("port") == 0)
+    {
+        return ValueTree(Ids::port);
+    }
+    else if (id.compare("ground") == 0)
+    {
+        return ValueTree(Ids::ground);
+    }
+    else if (id.compare("resonators") == 0)
+    {
+        return ValueTree(Ids::resonators);
+    }
+    else
+    {
+        return ValueTree::invalid;
+    }
+
+}
+
+//------------------------------------------------------------------------------
+
+ValueTree ObjectFactory::getLinkTreeFromStringId(const String& id)
+{
+    if (id.compare("link") == 0)
+    {
+        return ValueTree(Ids::link);
+    }
+    else if (id.compare("touch") == 0)
+    {
+        return ValueTree(Ids::touch);
+    }
+    else if (id.compare("pulsetouch") == 0)
+    {
+        return ValueTree(Ids::pulsetouch);
+    }
+    else if (id.compare("pluck") == 0)
+    {
+        return ValueTree(Ids::pluck);
+    }
+    else if (id.compare("detent") == 0)
+    {
+        return ValueTree(Ids::detent);
+    }
+    else if (id.compare("softeninglink") == 0)
+    {
+        return ValueTree(Ids::softeninglink);
+    }
+    else if (id.compare("stiffeninglink") == 0)
+    {
+        return ValueTree(Ids::stiffeninglink);
+    }
+    else
+    {
+        return ValueTree::invalid;
+    }
+}
+
+//------------------------------------------------------------------------------
 // Helper
 //------------------------------------------------------------------------------
 

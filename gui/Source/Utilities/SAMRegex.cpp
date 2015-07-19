@@ -129,7 +129,7 @@ const String SAMRegex::getCommentObjectLine()
 {
     static const String commentObjectLine =
         String::formatted(
-            "\\A\\s*##\\s*(comment)\\(\\s*([!-~\\s]*)\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
+            "\\A\\s*##\\s*comment\\(\\s*([!-~\\s]*)\\s*\\)\\s*,\\s*%s\\s*;\\s*(.*)$",
             myLabel);
     return commentObjectLine;
 }
