@@ -51,7 +51,7 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     startComp = owner.getObjectForId(data.getProperty(Ids::startVertex).toString());
     endComp = owner.getObjectForId(data.getProperty(Ids::endVertex).toString());
 
-    if (!startComp.get() || !startComp.get())
+    if (!startComp.get() || !endComp.get())
     {
         String errMsg;
         errMsg << "Could not create: " << linkTree[Ids::identifier].toString();
