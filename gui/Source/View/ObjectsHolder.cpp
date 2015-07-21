@@ -474,7 +474,7 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
         break;
     case CommandIDs::toggleRedrawIncludeMisc:
-        result.setInfo(TRANS("Include audioout and diplay objects"), "", CommandCategories::editing, 0);
+        result.setInfo(TRANS("Include audioout and display objects"), "", CommandCategories::editing, 0);
         result.setActive(mdlFile != nullptr ? (!mdlFile->isEmpty()) : false);
         result.setTicked(StoredSettings::getInstance()->getProps()
                          .getBoolValue("redrawparam_include_misc_objects", true));
