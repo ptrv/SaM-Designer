@@ -259,7 +259,10 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
             for (Node* const u : neighbours)
             {
                 const int inIdx = nodes.indexOf(u);
-                ed.set(inIdx, true);
+                if (inIdx >= 0)
+                {
+                    ed.set(inIdx, true);
+                }
             }
         }
     }
