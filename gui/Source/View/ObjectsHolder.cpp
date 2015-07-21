@@ -378,6 +378,7 @@ void ObjectsHolder::getAllCommands(Array<CommandID>& commands)
         CommandIDs::reverseDirection,
         CommandIDs::defineFaustcode,
         CommandIDs::tidyObjects,
+        CommandIDs::toggleRedrawIncludeMisc,
         CommandIDs::redrawCircle,
         CommandIDs::redrawForceDirected,
         CommandIDs::showRedrawOptions,
@@ -471,6 +472,12 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
     case CommandIDs::tidyObjects:
         result.setInfo(TRANS("Tidy Up"), "", CommandCategories::editing, 0);
         result.addDefaultKeypress('t', ModifierKeys::commandModifier | ModifierKeys::shiftModifier);
+        break;
+    case CommandIDs::toggleRedrawIncludeMisc:
+        result.setInfo(TRANS("Include audioout and diplay objects"), "", CommandCategories::editing, 0);
+        result.setActive(mdlFile != nullptr ? (!mdlFile->isEmpty()) : false);
+        result.setTicked(StoredSettings::getInstance()->getProps()
+                         .getBoolValue("redrawparam_include_misc_objects", true));
         break;
     case CommandIDs::redrawCircle:
         result.setInfo(TRANS("Circle"), "", CommandCategories::editing, 0);
@@ -680,6 +687,9 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         break;
     case CommandIDs::tidyObjects:
         ObjectsHelper::tidyUpObjects(objController);
+        break;
+    case CommandIDs::toggleRedrawIncludeMisc:
+        toggleRedrawIncludeMiscObjects();
         break;
     case CommandIDs::redrawCircle:
         redrawObjects(CommandIDs::redrawCircle);
@@ -974,6 +984,14 @@ void ObjectsHolder::redrawObjects(const int cmdId)
     grabKeyboardFocus();
     DBG("redraw objects");
     objController.startReflow(*this, cmdId);
+}
+
+void ObjectsHolder::toggleRedrawIncludeMiscObjects()
+{
+    PropertiesFile& props = StoredSettings::getInstance()->getProps();
+    const bool includeMiscObjects =
+        props.getBoolValue("redrawparam_include_misc_objects", true);
+    props.setValue("redrawparam_include_misc_objects", !includeMiscObjects);
 }
 
 //==============================================================================

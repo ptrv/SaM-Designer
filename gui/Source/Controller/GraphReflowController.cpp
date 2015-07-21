@@ -160,7 +160,8 @@ void GraphReflowController::startReflow(ObjectsHolder& objectsHolder, const int 
         .getDoubleValue("redrawparam_timestep", 60);
 
     graph = new DirectedGraph();
-    makeGraph(true);
+    makeGraph(StoredSettings::getInstance()->getProps()
+              .getBoolValue("redrawparam_include_misc_objects", true));
 
     if(cmdId == CommandIDs::redrawForceDirected)
     {

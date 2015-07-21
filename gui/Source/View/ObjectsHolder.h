@@ -111,6 +111,7 @@ public:
 
 private:
 
+    void toggleRedrawIncludeMiscObjects();
     void showRedrawOptions();
 
     ObjController& objController;

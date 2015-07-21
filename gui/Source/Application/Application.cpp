@@ -696,6 +696,8 @@ PopupMenu SAMApplication::MainMenuModel::getMenuForIndex (int topLevelMenuIndex,
         menu.addSeparator();
 
         PopupMenu redrawModelMenu;
+        redrawModelMenu.addCommandItem(commandManager, CommandIDs::toggleRedrawIncludeMisc);
+        redrawModelMenu.addSeparator();
         redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawCircle);
         redrawModelMenu.addSeparator();
         redrawModelMenu.addCommandItem(commandManager, CommandIDs::redrawForceDirected);

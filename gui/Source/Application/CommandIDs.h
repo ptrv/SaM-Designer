@@ -107,6 +107,7 @@ namespace CommandIDs
     static const int redrawForceDirected    = 0x202172;
     static const int showRedrawOptions      = 0x202173;
     static const int showMDLProperties      = 0x202174;
+    static const int toggleRedrawIncludeMisc = 0x202175;
 
     static const int moveUp                 = 0x202200;
     static const int moveDown               = 0x202210;
