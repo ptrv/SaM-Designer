@@ -140,7 +140,9 @@ void DirectedGraph::setPositions()
 {
     for (Node* const n : nodes)
     {
-        ObjectComponent* oc = static_cast<ObjectComponent*>(n);
-        oc->setPosition(oc->getActualPos(), true);
+        if (ObjectComponent* oc = dynamic_cast<ObjectComponent*>(n))
+        {
+            oc->setPosition(oc->getActualPos(), true);
+        }
     }
 }
