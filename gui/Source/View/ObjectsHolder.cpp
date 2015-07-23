@@ -728,6 +728,7 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         break;
     case CommandIDs::insertTouch:
         insertNewLink(Ids::touch);
+        break;
     case CommandIDs::insertPulsetouch:
         insertNewLink(Ids::pulsetouch);
         break;
