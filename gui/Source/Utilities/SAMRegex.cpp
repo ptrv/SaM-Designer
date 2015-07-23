@@ -120,7 +120,7 @@ const char* SAMRegex::myDisplayAttach = "(display)";
 const String SAMRegex::getDisplayAttachLine()
 {
     static const String myDisplayAttachLine =
-        String::formatted("\\A\\s*display\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*;\\s*$",
+        String::formatted("\\A\\s*display\\(\\s*%s\\s*\\)\\s*,\\s*%s\\s*,\\s*%s\\s*;\\s*(.*)$",
                           myParams, myLabel, myLabel);
     return myDisplayAttachLine;
 }
