@@ -43,6 +43,7 @@ IdManager::IdManager()
 IdManager::~IdManager()
 {
     allIds.clear();
+    allIdsSorted.clear();
     std::for_each(theIds.begin(), theIds.end(),
                   [](SortedSet<String>& s) { s.clear(); });
 }
@@ -92,7 +93,7 @@ bool IdManager::addId(const Identifier& objId, const String& objName,
         SortedSet<String>* theSet = getSet(objId);
         if (theSet != nullptr && objName != String::empty)
         {
-            if (allIds.add(objName))
+            if (addToAllIds(objName))
             {
                 if (theSet->add(objName))
                 {
@@ -103,7 +104,7 @@ bool IdManager::addId(const Identifier& objId, const String& objName,
                     // This line should never be reached, because if adding new
                     // name to allId ssucceeds, adding to theSet should also
                     // succeed
-                    allIds.removeValue(objName);
+                    removeFromAllIds(objName);
                 }
             }
         }
@@ -149,7 +150,7 @@ void IdManager::removeId(const Identifier& objId, const String& objName,
         if (theSet != nullptr)
             theSet->removeValue(objName);
 
-        allIds.removeValue(objName);
+        removeFromAllIds(objName);
     }
 }
 
@@ -200,8 +201,8 @@ bool IdManager::renameId(const Identifier& objId, const String& oldName,
         if (theSet != nullptr)
         {
             theSet->removeValue(oldName);
-            allIds.removeValue(oldName);
-            if (allIds.add(newName))
+            removeFromAllIds(oldName);
+            if (addToAllIds(newName))
             {
                 if (theSet->add(newName))
                 {
@@ -212,7 +213,7 @@ bool IdManager::renameId(const Identifier& objId, const String& oldName,
                     // This line should never be reached, because if adding new
                     // name to allId ssucceeds, adding to theSet should also
                     // succeed
-                    allIds.removeValue(newName);
+                    removeFromAllIds(newName);
                 }
             }
         }
@@ -299,21 +300,14 @@ String IdManager::getObjNameForPaste(const Identifier& objId,
 
 String IdManager::getAllIdsRegex() const
 {
-    StringArray result;
-
-    for (const String& id : allIds)
-    {
-        result.add(id);
-    }
-
-    return "(" + result.joinIntoString("|", 0, allIds.size()) + ")";
+    return "(" + allIdsSorted.joinIntoString("|", 0, allIds.size()) + ")";
 }
 
 String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
 {
     StringArray result;
 
-    for (const String& id : allIds)
+    for (const String& id : allIdsSorted)
     {
         if (!filters.contains(id, false))
         {
@@ -322,4 +316,30 @@ String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
     }
 
     return "(" + result.joinIntoString("|", 0, allIds.size()) + ")";
+}
+
+bool sortIds(const String& lhs, const String& rhs)
+{
+    return lhs.length() > rhs.length();
+}
+
+bool IdManager::addToAllIds(const String& objId)
+{
+    if (allIds.add(objId))
+    {
+        allIdsSorted.addIfNotAlreadyThere(objId);
+
+        std::sort(allIdsSorted.begin(), allIdsSorted.end(), sortIds);
+
+        return true;
+    }
+
+    return false;
+}
+
+void IdManager::removeFromAllIds(const String& objId)
+{
+    allIds.removeValue(objId);
+    allIdsSorted.removeString(objId);
+    std::sort(allIdsSorted.begin(), allIdsSorted.end(), sortIds);
 }

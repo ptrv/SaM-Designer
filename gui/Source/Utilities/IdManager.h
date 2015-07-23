@@ -46,9 +46,9 @@ public:
                   const String& newName, UndoManager* undoManager);
     String getNextId(const Identifier& objId);
     String getObjNameForPaste(const Identifier& objId,
-                                 const String& objName,
-                                 int timesPasted,
-                                 bool groupPaste);
+                              const String& objName,
+                              int timesPasted,
+                              bool groupPaste);
 
     String getAllIdsRegex() const;
     String getAllIdsFilteredRegex(const StringArray& filter) const;
@@ -57,7 +57,10 @@ private:
     SortedSet<String>* getSet(const Identifier& objId);
     String getObjNamePrefix(const Identifier& objId);
 
+    bool addToAllIds(const String& objId);
+    void removeFromAllIds(const String& objId);
     SortedSet<String> allIds;
+    StringArray allIdsSorted;
     Array<SortedSet<String> > theIds;
 
     static const std::map<const char*, String> objNamePrefixMap;
