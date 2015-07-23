@@ -307,7 +307,7 @@ void ObjectPropertiesComponent::writeEditors(ValueTree params_, const bool fixVa
     int numParams = params_.getNumChildren();
     for (int i = 0; i < numParams; ++i)
     {
-        if (numParams >= editors.size())
+        if (i >= editors.size())
         {
             continue;
         }
