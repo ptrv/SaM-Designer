@@ -370,7 +370,15 @@ String MDLWriter::getDisplaysString()
             StringArray paramsArray;
             for (int pIdx = 0; pIdx < params.getNumChildren(); ++pIdx)
             {
-                paramsArray.add(params.getChild(pIdx).getProperty(Ids::value, "0.0"));
+                if (pIdx == 0)
+                {
+                    String labelValue = params.getChild(pIdx).getProperty(Ids::value, "");
+                    paramsArray.add(labelValue.quoted());
+                }
+                else
+                {
+                    paramsArray.add(params.getChild(pIdx).getProperty(Ids::value, "0.0"));
+                }
             }
             displaysString << paramsArray.joinIntoString(",");
         }
