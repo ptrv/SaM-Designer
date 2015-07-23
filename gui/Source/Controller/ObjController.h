@@ -226,6 +226,8 @@ public:
     void startReflow(ObjectsHolder& objHolder, int cmdId);
     void stopReflow();
 
+    void addListener(ChangeListener* listener);
+
 private:
     
     bool checkIfLinkExitsts(const ValueTree& linkTree) const;

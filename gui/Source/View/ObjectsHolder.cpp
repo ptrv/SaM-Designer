@@ -77,6 +77,8 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
 
 	addKeyListener(commandManager->getKeyMappings());
 
+    objController.addListener(this);
+
     ++objectsHolderNum;
     setComponentID("ObjectsHolder_" + String(objectsHolderNum));
 }
@@ -109,8 +111,12 @@ void ObjectsHolder::resized()
         repaint();
 }
 
-void ObjectsHolder::changeListenerCallback(ChangeBroadcaster*)
+void ObjectsHolder::changeListenerCallback(ChangeBroadcaster* source)
 {
+    if (source == &objController.getSelectedObjects())
+    {
+        commandManager->commandStatusChanged();
+    }
 }
 
 void ObjectsHolder::mouseDrag(const MouseEvent& e)
@@ -553,14 +559,18 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Audio Connection"), "",
                        CommandCategories::inserting, 0);
         result.addDefaultKeypress('8', ModifierKeys::commandModifier | ModifierKeys::altModifier);
-        result.setActive(ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 1 ||
-                         ObjectsHelper::getSelectedComponents<LinkComponent>(objController).size() == 1);
+        result.setActive(ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 2 ||
+                         (ObjectsHelper::getSelectedComponents<LinkComponent>(objController).size() == 1 &&
+                          ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 1));
         break;
     case CommandIDs::insertDisplay:
         result.setInfo(TRANS("Display"), "", CommandCategories::inserting, 0);
         break;
     case CommandIDs::insertDisplayConnection:
         result.setInfo(TRANS("Display Connection"), "", CommandCategories::inserting, 0);
+        result.setActive(ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 2 ||
+                         (ObjectsHelper::getSelectedComponents<LinkComponent>(objController).size() == 1 &&
+                          ObjectsHelper::getSelectedComponents<ObjectComponent>(objController).size() == 1));
         break;
     case CommandIDs::insertWaveguide:
         result.setInfo(TRANS("Waveguide"), "", CommandCategories::inserting, 0);

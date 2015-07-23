@@ -793,3 +793,8 @@ void ObjController::stopReflow()
 {
     reflowController->stopReflow();
 }
+
+void ObjController::addListener(ChangeListener* listener)
+{
+    sObjects.addChangeListener(listener);
+}

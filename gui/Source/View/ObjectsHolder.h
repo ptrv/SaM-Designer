@@ -56,7 +56,7 @@ public:
     void paint(Graphics& g);
     void resized();
 
-    void changeListenerCallback(ChangeBroadcaster*);
+    void changeListenerCallback(ChangeBroadcaster* source);
 
     void mouseDown(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);
