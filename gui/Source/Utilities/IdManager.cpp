@@ -300,7 +300,7 @@ String IdManager::getObjNameForPaste(const Identifier& objId,
 
 String IdManager::getAllIdsRegex() const
 {
-    return "(" + allIdsSorted.joinIntoString("|", 0, allIds.size()) + ")";
+    return "(" + allIdsSorted.joinIntoString("|") + ")";
 }
 
 String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
