@@ -168,12 +168,10 @@ void ObjectComponent::mouseDown (const MouseEvent& e)
                 ContextMenus::showAudioConnectionPopupMenu(*getObjectsHolder());
             }
         }
-        return;
     }
     else if (e.mods.isPopupMenu())
     {
         showContextMenu();
-        return; // this may be deleted now..
     }
 
 //    if(! e.mods.isAnyModifierKeyDown())
