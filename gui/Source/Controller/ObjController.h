@@ -226,7 +226,7 @@ public:
     void startReflow(ObjectsHolder& objHolder, int cmdId);
     void stopReflow();
 
-    void addListener(ChangeListener* listener);
+    void addSelectedObjectsListener(ChangeListener* listener);
 
 private:
     

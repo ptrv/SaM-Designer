@@ -77,7 +77,7 @@ ObjectsHolder::ObjectsHolder(ObjController& objController_)
 
 	addKeyListener(commandManager->getKeyMappings());
 
-    objController.addListener(this);
+    objController.addSelectedObjectsListener(this);
 
     ++objectsHolderNum;
     setComponentID("ObjectsHolder_" + String(objectsHolderNum));
