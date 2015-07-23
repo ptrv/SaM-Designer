@@ -184,7 +184,7 @@ void ObjectsHolder::setMDLFile(MDLFile* newMDLFile)
     {
         fcPanel = nullptr;
         mdlFile = newMDLFile;
-        mdlFile->addChangeListener(this);
+        // mdlFile->addChangeListener(this);
         objController.loadComponents(*this);
     }
 }
