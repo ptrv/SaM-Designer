@@ -155,7 +155,7 @@ public:
                 {
                     ValueTree src = sources.getChild(i);
                     BaseObjectComponent* boc =
-                        ObjectsHelper::getBaseObjectFromSource(*objController.get(), src);
+                        ObjectsHelper::getBaseObjectFromSource(*objController, src);
 
 //                    AudioOutConnector* aoc = objController->addAudioConnection(holderComp, boc, oc, src, -1, false);
                     objController->addConnector(holderComp, boc, oc, src, -1, false);

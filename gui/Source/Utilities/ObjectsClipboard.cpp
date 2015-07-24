@@ -270,7 +270,6 @@ void ObjectsClipboard::paste(ObjController& objController, ObjectsHolder& holder
                 ValueTree source = sources.getChild(j);
                 BaseObjectComponent* sourceComp =
                     ObjectsHelper::getBaseObjectFromSource(objController, source);
-                sourceComp = ObjectsHelper::getBaseObjectFromSource(objController, source);
 
                 if (sourceComp != nullptr)
                 {

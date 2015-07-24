@@ -50,7 +50,7 @@ public:
                               int timesPasted,
                               bool groupPaste);
 
-    String getAllIdsRegex() const;
+    const String& getAllIdsRegex();
     String getAllIdsFilteredRegex(const StringArray& filter) const;
 
 private:
@@ -59,6 +59,7 @@ private:
 
     bool addToAllIds(const String& objId);
     StringArray allIds;
+    String allIdsRegex;
     Array<SortedSet<String>> theIds;
 
     static const std::map<const char*, String> objNamePrefixMap;

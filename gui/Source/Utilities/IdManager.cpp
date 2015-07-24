@@ -33,6 +33,7 @@
 using namespace synthamodeler;
 
 IdManager::IdManager()
+: allIdsRegex(String::empty)
 {
     for (int i = 0; i < ObjectsHelper::getAllObjectIds().size(); ++i)
     {
@@ -297,9 +298,13 @@ String IdManager::getObjNameForPaste(const Identifier& objId,
     }
 }
 
-String IdManager::getAllIdsRegex() const
+const String& IdManager::getAllIdsRegex()
 {
-    return "(" + allIds.joinIntoString("|") + ")";
+    if (allIdsRegex.isEmpty())
+    {
+        allIdsRegex << "(" << allIds.joinIntoString("|") << ")";
+    }
+    return allIdsRegex;
 }
 
 String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
@@ -351,6 +356,7 @@ bool IdManager::addToAllIds(const String& newId)
     }
 
     allIds.insert(s, newId);
+    allIdsRegex = String::empty;
     return true;
 
 }

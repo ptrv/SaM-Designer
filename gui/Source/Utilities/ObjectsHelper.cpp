@@ -441,7 +441,7 @@ void ObjectsHelper::setGainForSourceId(const ValueTree& sources, const String& s
 
 //------------------------------------------------------------------------------
 
-BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(const ObjController& objController,
+BaseObjectComponent* ObjectsHelper::getBaseObjectFromSource(ObjController& objController,
                                                             const ValueTree& source)
 {
     const String& srcVal = source[Ids::value].toString();
