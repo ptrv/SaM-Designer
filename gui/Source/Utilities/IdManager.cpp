@@ -43,7 +43,6 @@ IdManager::IdManager()
 IdManager::~IdManager()
 {
     allIds.clear();
-    allIdsSorted.clear();
     std::for_each(theIds.begin(), theIds.end(),
                   [](SortedSet<String>& s) { s.clear(); });
 }
@@ -104,7 +103,7 @@ bool IdManager::addId(const Identifier& objId, const String& objName,
                     // This line should never be reached, because if adding new
                     // name to allId ssucceeds, adding to theSet should also
                     // succeed
-                    removeFromAllIds(objName);
+                    allIds.removeString(objName);
                 }
             }
         }
@@ -150,7 +149,7 @@ void IdManager::removeId(const Identifier& objId, const String& objName,
         if (theSet != nullptr)
             theSet->removeValue(objName);
 
-        removeFromAllIds(objName);
+        allIds.removeString(objName);
     }
 }
 
@@ -201,7 +200,7 @@ bool IdManager::renameId(const Identifier& objId, const String& oldName,
         if (theSet != nullptr)
         {
             theSet->removeValue(oldName);
-            removeFromAllIds(oldName);
+            allIds.removeString(oldName);
             if (addToAllIds(newName))
             {
                 if (theSet->add(newName))
@@ -213,7 +212,7 @@ bool IdManager::renameId(const Identifier& objId, const String& oldName,
                     // This line should never be reached, because if adding new
                     // name to allId ssucceeds, adding to theSet should also
                     // succeed
-                    removeFromAllIds(newName);
+                    allIds.removeString(newName);
                 }
             }
         }
@@ -300,14 +299,14 @@ String IdManager::getObjNameForPaste(const Identifier& objId,
 
 String IdManager::getAllIdsRegex() const
 {
-    return "(" + allIdsSorted.joinIntoString("|") + ")";
+    return "(" + allIds.joinIntoString("|") + ")";
 }
 
 String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
 {
     StringArray result;
 
-    for (const String& id : allIdsSorted)
+    for (const String& id : allIds)
     {
         if (!filters.contains(id, false))
         {
@@ -315,31 +314,43 @@ String IdManager::getAllIdsFilteredRegex(const StringArray& filters) const
         }
     }
 
-    return "(" + result.joinIntoString("|", 0, allIds.size()) + ")";
+    return "(" + result.joinIntoString("|") + ")";
 }
 
-bool sortIds(const String& lhs, const String& rhs)
+bool IdManager::addToAllIds(const String& newId)
 {
-    return lhs.length() > rhs.length();
-}
+    const Array<String>::ScopedLockType lock (allIds.strings.getLock());
 
-bool IdManager::addToAllIds(const String& objId)
-{
-    if (allIds.add(objId))
+    int s = 0;
+    int e = allIds.size();
+
+    while (s < e)
     {
-        allIdsSorted.addIfNotAlreadyThere(objId);
+        String& elem = allIds.getReference (s);
+        if (newId == elem)
+        {
+            elem = newId; // force an update in case operator== permits differences.
+            return false;
+        }
 
-        std::sort(allIdsSorted.begin(), allIdsSorted.end(), sortIds);
+        const int halfway = (s + e) / 2;
+        const bool isBeforeHalfway = (newId.length() > allIds.getReference (halfway).length());
 
-        return true;
+        if (halfway == s)
+        {
+            if (! isBeforeHalfway)
+                ++s;
+
+            break;
+        }
+
+        if (isBeforeHalfway)
+            e = halfway;
+        else
+            s = halfway;
     }
 
-    return false;
-}
+    allIds.insert(s, newId);
+    return true;
 
-void IdManager::removeFromAllIds(const String& objId)
-{
-    allIds.removeValue(objId);
-    allIdsSorted.removeString(objId);
-    std::sort(allIdsSorted.begin(), allIdsSorted.end(), sortIds);
 }
