@@ -172,9 +172,21 @@ void GraphUtils::shuffleNodes(DirectedGraph& g)
 
 void GraphUtils::initEdgesMatrix(tEdgesMatrix& edgesMatrix, int numNodes)
 {
-    Array<bool> row;
-    row.insertMultiple(0, false, numNodes);
-    edgesMatrix.insertMultiple(0, row, numNodes);
+    clearEdgesMatrix(edgesMatrix);
+    edgesMatrix = tEdgesMatrix(numNodes);
+    for (auto& edge : edgesMatrix)
+    {
+        edge = std::vector<bool>(numNodes, false);
+    }
+}
+
+void GraphUtils::clearEdgesMatrix(tEdgesMatrix& edgesMatrix)
+{
+    for (auto edge : edgesMatrix)
+    {
+        edge.clear();
+    }
+    edgesMatrix.clear();
 }
 
 void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
@@ -223,7 +235,7 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
                 }
             }
 
-            groups.add(ne);
+            groups.push_back(ne);
         }
     }
 
@@ -254,14 +266,13 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
         for (int i = 0; i < numNodes; ++i)
         {
             const Node* const n = nodes.getUnchecked(i);
-            Array<bool>& ed = edges.getReference(i);
             const tNodes& neighbours = n->getNeighbours();
             for (Node* const u : neighbours)
             {
                 const int inIdx = nodes.indexOf(u);
                 if (inIdx >= 0)
                 {
-                    ed.set(inIdx, true);
+                    edges[i][inIdx] = true;
                 }
             }
         }

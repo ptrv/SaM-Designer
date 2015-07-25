@@ -47,6 +47,7 @@ public:
     static void shuffleNodes(DirectedGraph& g);
 
     static void initEdgesMatrix(tEdgesMatrix& edgesMatrix, int numNodes);
+    static void clearEdgesMatrix(tEdgesMatrix& edgesMatrix);
 
     static void calculateConnectedGroups(DirectedGraph& g);
 

@@ -35,9 +35,9 @@ class FlowAlgorithm;
 class Node;
 class ObjController;
 
-typedef Array<Array<bool> > tEdgesMatrix;
+typedef std::vector<std::vector<bool>> tEdgesMatrix;
 typedef std::pair<tNodes, tEdgesMatrix> tNodesAndEdges;
-typedef Array<tNodesAndEdges> tNodeGroups;
+typedef std::vector<tNodesAndEdges> tNodeGroups;
 
 class DirectedGraph
 {

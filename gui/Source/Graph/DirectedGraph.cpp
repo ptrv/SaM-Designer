@@ -48,6 +48,11 @@ DirectedGraph::~DirectedGraph()
     flower = nullptr;
     nodes.clear();
     connectedGroups.clear();
+    // edges.clear();
+    for (auto edge : edges)
+    {
+        edge.clear();
+    }
     edges.clear();
 }
 
@@ -77,10 +82,8 @@ bool DirectedGraph::linkNodes(Node* n1, Node* n2)
         n2->addIncomingLink(n1);
         const int nodeIndex1 = nodes.indexOf(n1);
         const int nodeIndex2 = nodes.indexOf(n2);
-        Array<bool>& edgesA = edges.getReference(nodeIndex1);
-        Array<bool>& edgesB = edges.getReference(nodeIndex2);
-        edgesA.set(nodeIndex2, true);
-        edgesB.set(nodeIndex1, true);
+        edges[nodeIndex1][nodeIndex2] = true;
+        edges[nodeIndex2][nodeIndex1] = true;
         return true;
     }
     return false;
