@@ -105,7 +105,7 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
     const int numNodes = group.size();
     for (int i = 0; i < numNodes; ++i)
     {
-        Node* const v = group.getUnchecked(i);
+        Node* const v = group[i];
         Point<float>& force = v->getForce();
         force = Point<float>();
 
@@ -117,7 +117,7 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
             if (i == j)
                 continue;
 
-            Node* const u = group.getUnchecked(j);
+            Node* const u = group[j];
 
             float ux = u->getPosF().x;
             float uy = u->getPosF().y;
@@ -138,7 +138,7 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
             if (!edges[i][j])
                 continue;
 
-            Node* const u = group.getUnchecked(j);
+            Node* const u = group[j];
 
             float ux = u->getPosF().x;
             float uy = u->getPosF().y;

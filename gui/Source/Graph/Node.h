@@ -32,7 +32,7 @@ namespace synthamodeler
 {
 
 class Node;
-typedef Array<Node*> tNodes;
+typedef std::vector<Node*> tNodes;
 
 class Node
 {
@@ -50,7 +50,7 @@ public:
     tNodes& getOutgoingLinks() { return outLinks; }
     int getOutgoingLinksCount() const { return outLinks.size(); }
 
-    void setNeighbours(const Array<Node*>& n);
+    void setNeighbours(const tNodes& n);
     const tNodes& getNeighbours() const;
     void addNeighbour(Node* n);
     float getShortestLinkLength();

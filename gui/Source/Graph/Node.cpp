@@ -77,27 +77,33 @@ void Node::initNodeData()
 
 void Node::addIncomingLink(Node* const n)
 {
-    inLinks.addIfNotAlreadyThere(n);
+    if (std::find(inLinks.begin(), inLinks.end(), n) == inLinks.end())
+    {
+        inLinks.push_back(n);
+    }
 }
 
 void Node::addOutgoingLink(Node* const n)
 {
-    outLinks.addIfNotAlreadyThere(n);
+    if (std::find(outLinks.begin(), outLinks.end(), n) == outLinks.end())
+    {
+        outLinks.push_back(n);
+    }
 }
 
-void Node::setNeighbours(const Array<Node*>& n)
+void Node::setNeighbours(const tNodes& n)
 {
     neighbours = n;
 }
 
-const Array<Node*>& Node::getNeighbours() const
+const tNodes& Node::getNeighbours() const
 {
     return neighbours;
 }
 
 void Node::addNeighbour(Node* n)
 {
-    neighbours.add(n);
+    neighbours.push_back(n);
 }
 
 float Node::getShortestLinkLength()

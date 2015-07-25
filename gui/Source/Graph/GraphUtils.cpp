@@ -163,10 +163,9 @@ void GraphUtils::shuffleNodes(DirectedGraph& g)
         long int k = lrand48();
         k = k % numNodes;
         numNodes2--;
-        nodes.swap(numNodes2, k);
-//        Node* temp = nodes[numNodes2];
-//        nodes[numNodes2] = nodes[k];
-//        nodes[k] = temp;
+       Node* temp = nodes[numNodes2];
+       nodes[numNodes2] = nodes[k];
+       nodes[k] = temp;
     }
 }
 
@@ -182,7 +181,7 @@ void GraphUtils::initEdgesMatrix(tEdgesMatrix& edgesMatrix, int numNodes)
 
 void GraphUtils::clearEdgesMatrix(tEdgesMatrix& edgesMatrix)
 {
-    for (auto edge : edgesMatrix)
+    for (auto& edge : edgesMatrix)
     {
         edge.clear();
     }
@@ -196,7 +195,7 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 
     groups.clear();
 
-    Array<int> visitedNodes;
+    std::vector<int> visitedNodes;
 
     for (Node* const v : allNodes)
     {
@@ -204,7 +203,9 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
             std::any_of(groups.begin(), groups.end(),
                         [&v](const tNodesAndEdges& group)
         {
-            return group.first.contains(v);
+            auto itBegin = group.first.begin();
+            auto itEnd = group.first.end();
+            return std::find(itBegin, itEnd, v) != itEnd;
         });
 
         if (!isNodeInAnyGroup)
@@ -221,12 +222,14 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
                 Node* aNode = S.top();
                 S.pop();
 
-                int aNodeIndex = allNodes.indexOf(aNode);
-                if (!visitedNodes.contains(aNodeIndex))
+                auto itFound = std::find(allNodes.begin(), allNodes.end(), aNode);
+                int aNodeIndex = itFound - allNodes.begin();
+                auto itIndexFound = std::find(visitedNodes.begin(), visitedNodes.end(), aNodeIndex);
+                if (itIndexFound == visitedNodes.end())
                 {
-                    visitedNodes.add(aNodeIndex);
+                    visitedNodes.push_back(aNodeIndex);
 
-                    group.add(aNode);
+                    group.push_back(aNode);
 
                     for (Node* const x : aNode->getNeighbours())
                     {
@@ -265,11 +268,12 @@ void GraphUtils::calculateConnectedGroups(DirectedGraph& g)
 
         for (int i = 0; i < numNodes; ++i)
         {
-            const Node* const n = nodes.getUnchecked(i);
+            const Node* const n = nodes[i];
             const tNodes& neighbours = n->getNeighbours();
             for (Node* const u : neighbours)
             {
-                const int inIdx = nodes.indexOf(u);
+                auto itFound = std::find(nodes.begin(), nodes.end(), u);
+                const int inIdx = itFound - nodes.begin();
                 if (inIdx >= 0)
                 {
                     edges[i][inIdx] = true;
