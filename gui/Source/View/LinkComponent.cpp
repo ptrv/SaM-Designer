@@ -55,7 +55,7 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     {
         String errMsg;
         errMsg << "Could not create: " << linkTree[Ids::identifier].toString();
-        throw std::runtime_error(errMsg.getCharPointer());
+        throw std::runtime_error(std::string(errMsg.getCharPointer()));
     }
 
     startComp->addLinkToObject(this);
