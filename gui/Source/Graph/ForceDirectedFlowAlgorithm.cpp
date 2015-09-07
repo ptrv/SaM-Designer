@@ -164,7 +164,8 @@ void ForceDirectedFlowAlgorithm::applyForces(Point<float>& totalEnergy,
             }
             else
             {
-                velocity = (velocity + force) * damp;
+                velocity = velocity*damp;
+                velocity += force/mass;
 
                 totalEnergy = totalEnergy + (velocity * velocity);
 
