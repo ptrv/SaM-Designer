@@ -135,7 +135,7 @@ String DirectedGraph::toString()
     for (Node* const n : nodes)
     {
         s << n->getLabel() << "\n";
-        for (int j = 0; j < n->getOutgoingLinks().size(); ++j)
+        for (size_t j = 0; j < n->getOutgoingLinks().size(); ++j)
         {
             Node* o = n->getOutgoingLinks()[j];
 

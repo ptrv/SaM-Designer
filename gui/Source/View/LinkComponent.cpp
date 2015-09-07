@@ -290,9 +290,8 @@ void LinkComponent::getPoints(float& x1, float& y1, float& x2, float& y2) const
     }
 }
 
-void LinkComponent::changeListenerCallback (ChangeBroadcaster* const source)
+void LinkComponent::changeListenerCallback (ChangeBroadcaster* /*const source*/)
 {
-
     const bool nowSelected = owner.getSelectedObjects().isSelected (this);
 
     if (selected != nowSelected)
