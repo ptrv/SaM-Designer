@@ -7,12 +7,12 @@
   the "//[xyz]" and "//[/xyz]" sections will be retained when the file is loaded
   and re-saved.
 
-  Created with Introjucer version: 3.1.0
+  Created with Introjucer version: 3.2.0
 
   ------------------------------------------------------------------------------
 
   The Introjucer is part of the JUCE library - "Jules' Utility Class Extensions"
-  Copyright 2004-13 by Raw Material Software Ltd.
+  Copyright (c) 2015 - ROLI Ltd.
 
   ==============================================================================
 */
@@ -36,6 +36,9 @@ using namespace synthamodeler;
 RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     : rop(rop_), pf(StoredSettings::getInstance()->getProps())
 {
+    //[Constructor_pre] You can add your own custom stuff here..
+    //[/Constructor_pre]
+
     addAndMakeVisible (laAlpha = new Label ("laAlpha",
                                             TRANS("Mass")));
     laAlpha->setFont (Font (15.00f, Font::plain));
@@ -45,7 +48,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laAlpha->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slAlpha = new Slider ("slAlpha"));
-    slAlpha->setRange (0.1, 10, 0.1);
+    slAlpha->setRange (0.002, 10, 0.002);
     slAlpha->setSliderStyle (Slider::LinearHorizontal);
     slAlpha->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slAlpha->addListener (this);
@@ -59,7 +62,7 @@ RedrawOptionsComponent::RedrawOptionsComponent (RedrawOptionsPanel* rop_)
     laBeta->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (slBeta = new Slider ("slBeta"));
-    slBeta->setRange (100, 2000, 1);
+    slBeta->setRange (100, 10000, 1);
     slBeta->setSliderStyle (Slider::LinearHorizontal);
     slBeta->setTextBoxStyle (Slider::TextBoxLeft, false, 80, 20);
     slBeta->addListener (this);
@@ -186,6 +189,9 @@ void RedrawOptionsComponent::paint (Graphics& g)
 
 void RedrawOptionsComponent::resized()
 {
+    //[UserPreResize] Add your own custom resize code here..
+    //[/UserPreResize]
+
     laAlpha->setBounds (12, 52, 104, 24);
     slAlpha->setBounds (122, 52, 250, 24);
     laBeta->setBounds (12, 92, 104, 24);
@@ -198,8 +204,8 @@ void RedrawOptionsComponent::resized()
     slEnergy->setBounds (122, 212, 250, 24);
     laTimestep->setBounds (14, 252, 104, 24);
     slTimestep->setBounds (122, 252, 250, 24);
-    btOk->setBounds ((getWidth() / 2) + -40 - ((60) / 2), getHeight() - 20 - 20, 60, 20);
-    btCancel->setBounds ((getWidth() / 2) + 40 - ((60) / 2), getHeight() - 20 - 20, 60, 20);
+    btOk->setBounds ((getWidth() / 2) + -40 - (60 / 2), getHeight() - 20 - 20, 60, 20);
+    btCancel->setBounds ((getWidth() / 2) + 40 - (60 / 2), getHeight() - 20 - 20, 60, 20);
     btToggleRandomize->setBounds (14, 16, 348, 24);
     //[UserResized] Add your own custom resize handling here..
     //[/UserResized]
@@ -278,12 +284,12 @@ void RedrawOptionsComponent::buttonClicked (Button* buttonThatWasClicked)
 //[MiscUserCode] You can add your own definitions of your custom methods or any other code here...
 void RedrawOptionsComponent::readOptions()
 {
-    slAlpha->setValue(pf.getDoubleValue("redrawparam_alpha", 1.0));
+    slAlpha->setValue(pf.getDoubleValue("redrawparam_alpha", 0.100));
     slBeta->setValue(pf.getDoubleValue("redrawparam_beta", 1000));
-    slK->setValue(pf.getDoubleValue("redrawparam_k", 0.02));
-    slDamp->setValue(pf.getDoubleValue("redrawparam_damp", 0.85));
-    slEnergy->setValue(pf.getDoubleValue("redrawparam_energy", 0.01));
-    slTimestep->setValue(pf.getDoubleValue("redrawparam_timestep", 0.5));
+    slK->setValue(pf.getDoubleValue("redrawparam_k", 0.012));
+    slDamp->setValue(pf.getDoubleValue("redrawparam_damp", 0.67));
+    slEnergy->setValue(pf.getDoubleValue("redrawparam_energy", 0.038));
+    slTimestep->setValue(pf.getDoubleValue("redrawparam_timestep", 200));
     btToggleRandomize->setToggleState(pf.getBoolValue("redrawparam_randomize", true), dontSendNotification);
 }
 
@@ -321,8 +327,8 @@ BEGIN_JUCER_METADATA
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slAlpha" id="a0467824d6e9c8e7" memberName="slAlpha" virtualName=""
-          explicitFocusOrder="0" pos="122 52 250 24" min="0.10000000000000000555"
-          max="10" int="0.10000000000000000555" style="LinearHorizontal"
+          explicitFocusOrder="0" pos="122 52 250 24" min="0.0020000000000000000416"
+          max="10" int="0.0020000000000000000416" style="LinearHorizontal"
           textBoxPos="TextBoxLeft" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laBeta" id="afe5e0051dcb27a9" memberName="laBeta" virtualName=""
@@ -331,7 +337,7 @@ BEGIN_JUCER_METADATA
          focusDiscardsChanges="0" fontname="Default font" fontsize="15"
          bold="0" italic="0" justification="33"/>
   <SLIDER name="slBeta" id="ba31f1fe67c537d6" memberName="slBeta" virtualName=""
-          explicitFocusOrder="0" pos="122 92 250 24" min="100" max="2000"
+          explicitFocusOrder="0" pos="122 92 250 24" min="100" max="10000"
           int="1" style="LinearHorizontal" textBoxPos="TextBoxLeft" textBoxEditable="1"
           textBoxWidth="80" textBoxHeight="20" skewFactor="1"/>
   <LABEL name="laK" id="b7409306b3a8c462" memberName="laK" virtualName=""
