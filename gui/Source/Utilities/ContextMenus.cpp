@@ -123,7 +123,7 @@ void ContextMenus::showLinkPopupMenu(ObjectsHolder& objectsHolder,
         break;
     case MENU_ITEM_PULSETOUCH:
         DBG("Add pulsetouch");
-        objectsHolder.insertNewLink(Ids::pulsetouch, so, eo);
+        objectsHolder.insertNewLink(Ids::pulseTouch, so, eo);
         break;
     case MENU_ITEM_DETENT:
         DBG("Add detent");

@@ -89,7 +89,7 @@ const String MDLHelper::getMDLInfoString(const MDLFile& mdlFile)
             {
                 ++numPlucks;
             }
-            else if (links.getChild(i).getType() == Ids::pulsetouch)
+            else if (links.getChild(i).getType() == Ids::pulseTouch)
             {
                 ++numPulsetouchs;
             }

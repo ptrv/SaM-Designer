@@ -82,7 +82,7 @@ namespace Ids
     DECLARE_ID (comment);
     DECLARE_ID (fontSize);
     DECLARE_ID (commentColour);
-    DECLARE_ID (pulsetouch);
+    DECLARE_ID (pulseTouch);
     DECLARE_ID (audioconnector);
     DECLARE_ID (detent);
     DECLARE_ID (softeninglink);

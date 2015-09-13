@@ -79,7 +79,7 @@ LinkComponent::LinkComponent(ObjController& owner_, ValueTree linkTree)
     {
         color = Colour(0xff006f00);
     }
-    else if(data.getType() == Ids::pulsetouch)
+    else if(data.getType() == Ids::pulseTouch)
     {
         color = Colour(0xff006f00);
     }
@@ -512,7 +512,7 @@ void LinkComponent::drawPath(Graphics& g)
         linePath.addPath(iconPath);
     }
     else if(data.getType() == Ids::touch ||
-            data.getType() == Ids::pulsetouch)
+            data.getType() == Ids::pulseTouch)
     {
         if (x1 == x2 && y1 == y2)
         {
@@ -583,7 +583,7 @@ void LinkComponent::drawPath(Graphics& g)
                                             (y1 + y2) * 0.5f));
         linePath.addPath(iconPath);
 
-        if(data.getType() == Ids::pulsetouch)
+        if(data.getType() == Ids::pulseTouch)
         {
             Colour c = currentColor;
             g.setColour(Colours::indigo);

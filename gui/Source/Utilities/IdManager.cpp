@@ -250,7 +250,7 @@ const std::map<const char*, String> IdManager::objNamePrefixMap =
     {Ids::link.getCharPointer(), "l"},
     {Ids::pluck.getCharPointer(), "p"},
     {Ids::touch.getCharPointer(), "t"},
-    {Ids::pulsetouch.getCharPointer(), "pt"},
+    {Ids::pulseTouch.getCharPointer(), "pt"},
     {Ids::detent.getCharPointer(), "d"},
     {Ids::softeninglink.getCharPointer(), "softl"},
     {Ids::stiffeninglink.getCharPointer(), "stifl"},

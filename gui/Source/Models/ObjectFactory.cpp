@@ -139,7 +139,7 @@ ValueTree ObjectFactory::createNewLinkLikeTree(const Identifier& linkType,
                                                const StringPairArray& paramsStringPairs)
 {
     if (linkType != Ids::link && linkType != Ids::touch
-        && linkType != Ids::pluck && linkType != Ids::pulsetouch
+        && linkType != Ids::pluck && linkType != Ids::pulseTouch
         && linkType != Ids::detent && linkType != Ids::softeninglink
         && linkType != Ids::waveguide && linkType != Ids::stiffeninglink)
     {
@@ -214,7 +214,7 @@ ValueTree ObjectFactory::createNewPulsetouchTree(const String& newName,
     defaultValues.set("pulsetouch_pulsetau", "0.0");
     defaultValues.set("pulsetouch_pulselen", "0.0");
 
-    return createNewLinkLikeTree(Ids::pulsetouch, newName, startObject, endObject,
+    return createNewLinkLikeTree(Ids::pulseTouch, newName, startObject, endObject,
                                  defaultValues);
 }
 
@@ -411,7 +411,7 @@ ValueTree ObjectFactory::createNewLinkObjectTree(const Identifier& linkType,
         return createNewLinkTree(newName, startObject, endObject);
     else if(linkType == Ids::touch)
         return createNewTouchTree(newName, startObject, endObject);
-    else if(linkType == Ids::pulsetouch)
+    else if(linkType == Ids::pulseTouch)
         return createNewPulsetouchTree(newName, startObject, endObject);
     else if(linkType == Ids::pluck)
         return createNewPluckTree(newName, startObject, endObject);
@@ -493,9 +493,9 @@ ValueTree ObjectFactory::getLinkTreeFromStringId(const String& id)
     {
         return ValueTree(Ids::touch);
     }
-    else if (id.compare("pulsetouch") == 0)
+    else if (id.compare("pulseTouch") == 0)
     {
-        return ValueTree(Ids::pulsetouch);
+        return ValueTree(Ids::pulseTouch);
     }
     else if (id.compare("pluck") == 0)
     {

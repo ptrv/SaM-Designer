@@ -531,7 +531,7 @@ void ObjectsHolder::getCommandInfo(CommandID commandID,
         result.setInfo(TRANS("Pulsetouch Link"), "",
                        CommandCategories::inserting, 0);
 //        result.addDefaultKeypress('6', ModifierKeys::commandModifier);
-        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::pulsetouch));
+        result.setActive(ObjectsHelper::canSelectedObjectsBeConnected(objController, Ids::pulseTouch));
         break;
     case CommandIDs::insertPluck:
         result.setInfo(TRANS("Pluck Link"), "", CommandCategories::inserting, 0);
@@ -730,7 +730,7 @@ bool ObjectsHolder::perform(const InvocationInfo& info)
         insertNewLink(Ids::touch);
         break;
     case CommandIDs::insertPulsetouch:
-        insertNewLink(Ids::pulsetouch);
+        insertNewLink(Ids::pulseTouch);
         break;
     case CommandIDs::insertPluck:
         insertNewLink(Ids::pluck);

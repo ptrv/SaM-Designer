@@ -649,7 +649,7 @@ LinkPropertiesComponent::LinkPropertiesComponent(ObjController& objController_,
 //        editors.add(createRow("Pos", "Position offset (m)", true));
         }
         editors.add(createEditor("Pos", "Position offset (m)", true));
-        if (datas[0].getType() == Ids::pulsetouch)
+        if (datas[0].getType() == Ids::pulseTouch)
         {
 //        editors.add(createRow("Pos", "Position offset (m)", true));
             editors.add(createEditor("PulseMult", "Pulse multiplier", true));
@@ -688,7 +688,7 @@ void LinkPropertiesComponent::resized()
         offset = offsetValue;
         ++idOffset;
     }
-    else if (datas[0].getType() == Ids::pulsetouch)
+    else if (datas[0].getType() == Ids::pulseTouch)
     {
         editors[3]->setBounds(100, 100 + offsetValue, getWidth() - 110, 50);
         editors[4]->setBounds(100, 100 + offsetValue * 2, getWidth() - 110, 50);

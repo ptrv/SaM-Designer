@@ -553,7 +553,7 @@ const Array<Identifier>& ObjectsHelper::getAllObjectIds()
 {
     static const Identifier allObjectIdsArr[] = {
         Ids::mass, Ids::ground, Ids::port, Ids::resonators, Ids::link, Ids::touch,
-        Ids::pluck, Ids::pulsetouch, Ids::faustcode, Ids::audioout, Ids::waveguide,
+        Ids::pluck, Ids::pulseTouch, Ids::faustcode, Ids::audioout, Ids::waveguide,
         Ids::termination, Ids::junction, Ids::comment, Ids::detent,
         Ids::softeninglink, Ids::stiffeninglink, Ids::display
     };
@@ -717,7 +717,7 @@ bool ObjectsHelper::isMass(const Identifier& id)
 bool ObjectsHelper::isLink(const Identifier& id)
 {
     return id == Ids::link || id == Ids::touch || id == Ids::pluck ||
-        id == Ids::pulsetouch || id == Ids::detent ||
+        id == Ids::pulseTouch || id == Ids::detent ||
         id == Ids::softeninglink || id == Ids::stiffeninglink;
 }
 
