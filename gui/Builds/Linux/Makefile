@@ -18,7 +18,7 @@ ifeq ($(CONFIG),Debug)
     TARGET_ARCH := -march=native
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.1" -D "JUCE_APP_VERSION_HEX=0x401" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "UNIT_TESTS=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.2" -D "JUCE_APP_VERSION_HEX=0x402" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -I../../Source -I../../Testsuite -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
   CXXFLAGS += $(CFLAGS) -std=c++11
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lpcre
@@ -38,7 +38,7 @@ ifeq ($(CONFIG),Release)
     TARGET_ARCH := -march=native
   endif
 
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.1" -D "JUCE_APP_VERSION_HEX=0x401" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -D "JUCE_APP_VERSION=0.4.2" -D "JUCE_APP_VERSION_HEX=0x402" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../juce/modules
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os -I../../Source -I../../Testsuite -W -Wall -Wshadow -Wno-missing-field-initializers -Wshadow -Wstrict-aliasing
   CXXFLAGS += $(CFLAGS) -std=c++11
   LDFLAGS += $(TARGET_ARCH) -L$(BINDIR) -L$(LIBDIR) -fvisibility=hidden -L/usr/X11R6/lib/ -lX11 -lXext -lXinerama -ldl -lfreetype -lpthread -lrt -lpcre

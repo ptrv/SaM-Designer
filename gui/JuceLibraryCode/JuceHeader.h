@@ -33,8 +33,8 @@
 namespace ProjectInfo
 {
     const char* const  projectName    = "Synth-A-Modeler-Designer";
-    const char* const  versionString  = "0.4.1";
-    const int          versionNumber  = 0x401;
+    const char* const  versionString  = "0.4.2";
+    const int          versionNumber  = 0x402;
 }
 #endif
 
