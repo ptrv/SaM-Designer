@@ -178,15 +178,13 @@ public:
 
         // test 37
         StringArray commentVals;
-        expect(re.fullMatchValues(SAMRegex::getCommentObjectLine(),
-                                  "## comment(\"Test\", 16, ff000000),comment1; # pos 200, 100",
-                                  commentVals, 4));
+        const String expected = "## comment(\"Test\", 16, ff000000),comment1; # pos 200, 100";
+        expect(re.fullMatchValues(SAMRegex::getCommentObjectLine(), expected, commentVals, 4));
 
         // test 38
-        expect(commentVals[0].compare("comment") == 0 &&
-               commentVals[1].compare("\"Test\", 16, ff000000") == 0 &&
-               commentVals[2].compare("comment1") == 0 &&
-               commentVals[3].compare("# pos 200, 100") == 0);
+        expect(commentVals[0].compare("\"Test\", 16, ff000000") == 0 &&
+               commentVals[1].compare("comment1") == 0 &&
+               commentVals[2].compare("# pos 200, 100") == 0);
 
         // test 39
         StringArray commentParams = MDLHelper::getParamsFromString("\"Test\", 16, ff000000");
