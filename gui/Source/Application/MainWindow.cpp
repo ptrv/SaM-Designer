@@ -482,8 +482,8 @@ void MainAppWindow::updateTitle ()
     else
     {
         mdlFilePath = mdlController->getMDLFile()->getFilePath();
-        mdlFilePathUnique = SAMApplication::getApp()
-            ->getUniqueMDLPath(mdlFilePath);
+        mdlFilePathUnique =
+            SAMApplication::getApp()->getUniqueMDLPath(mdlFilePath);
     }
     bool mdlStatus = mdlController->getMDLFile()->hasChangedSinceSaved();
 	title << " - " << (mdlStatus ? mdlFilePathUnique + "*" : mdlFilePathUnique);

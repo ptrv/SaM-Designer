@@ -162,10 +162,10 @@ bool ObjController::checkIfConnectionExitsts(const ValueTree& source,
     return std::any_of(connections.begin(), connections.end(),
                        [&](const Connector* const conn)
                        {
-                           return ObjectsHelper::equivalentById(
-                               source, conn->getSourceObject()->getData()) &&
-                                  ObjectsHelper::equivalentById(
-                                      target, conn->getTargetObject()->getData());
+                           const auto sourceData = conn->getSourceObject()->getData();
+                           const auto targetData = conn->getTargetObject()->getData();
+                           return ObjectsHelper::equivalentById(source, sourceData) &&
+                                  ObjectsHelper::equivalentById(target, targetData);
                        });
 }
 
@@ -555,7 +555,7 @@ void ObjController::startDragging()
         boc->getProperties().set("yDragStart", r.getY());
     };
 
-    for (SelectableObject* const obj : sObjects.getItemArray())
+    for (SelectableObject* const obj : sObjects)
     {
         if (ObjectComponent * const oc = dynamic_cast<ObjectComponent*>(obj))
         {
@@ -574,7 +574,7 @@ void ObjController::dragSelectedComps(int dx, int dy)
 {
     const ObjectsHolder& holder = *owner.getHolderComponent();
 
-    for (SelectableObject* const selectedItem : sObjects.getItemArray())
+    for (SelectableObject* const selectedItem : sObjects)
     {
         if (ObjectComponent * const c = dynamic_cast<ObjectComponent*>(selectedItem))
         {
@@ -604,7 +604,7 @@ void ObjController::endDragging()
 
     ObjectsHolder& holder = *owner.getHolderComponent();
 
-    std::for_each(sObjects.begin(), sObjects.end(), [&holder](SelectableObject* obj)
+    for (SelectableObject* obj : sObjects)
     {
         if(ObjectComponent * const c = dynamic_cast<ObjectComponent*>(obj))
         {
@@ -616,7 +616,7 @@ void ObjController::endDragging()
             cc->setPosition(cc->getActualPos(), true);
             holder.checkExtent(cc->getBounds());
         }
-    });
+    }
 
     changed();
 
@@ -673,7 +673,7 @@ void ObjController::reverseLinkDirection()
 {
     owner.getUndoManager().beginNewTransaction();
 
-    for (SelectableObject* const selectedItem : sObjects.getItemArray())
+    for (SelectableObject* const selectedItem : sObjects)
     {
         if(LinkComponent* lc = dynamic_cast<LinkComponent*>(selectedItem))
         {
@@ -739,15 +739,14 @@ String ObjController::getNewNameForObject(const Identifier& objId)
 
 void ObjController::setLinksSegmented(bool isSegmented)
 {
-    std::for_each(links.begin(), links.end(), [=](LinkComponent* const lc)
+    for(LinkComponent* const lc : links)
     {
         lc->setSegmented(isSegmented);
-    });
-    std::for_each(connections.begin(), connections.end(),
-                  [=](Connector* const conn)
+    }
+    for(Connector* const conn : connections)
     {
         conn->setSegmented(isSegmented);
-    });
+    }
 }
 
 void ObjController::destroy()

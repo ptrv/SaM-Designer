@@ -49,7 +49,7 @@ const char* const ObjectsClipboard::clipboardXmlTag = "SAMOBJECTS";
 static int timesPasted = 0;
 void ObjectsClipboard::copySelected(ObjController& objController)
 {
-    SelectedItemSet <SelectableObject*>& selectedObjects =
+    SelectedItemSet<SelectableObject*>& selectedObjects =
         objController.getSelectedObjects();
 
     if (selectedObjects.getNumSelected() == 0)

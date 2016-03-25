@@ -46,7 +46,7 @@
 
 using namespace synthamodeler;
 
-typedef ObjectPropertiesComponent OPC;
+typedef ObjectPropertiesComponent ObjPropsComp;
 
 class EmptyComponent : public Component
 {
@@ -138,7 +138,7 @@ void PropertiesWindow::makeVisible(bool shouldBeVisible)
             setWantsKeyboardFocus(false);
         }
 
-        if (OPC * const opc = dynamic_cast<OPC*> (cc))
+        if (ObjPropsComp * const opc = dynamic_cast<ObjPropsComp*> (cc))
         {
             if (opc->canceledEditing)
             {
@@ -335,7 +335,7 @@ void PropertiesWindow::mdlChanged()
 {
     if (isVisible())
     {
-        if (OPC * opc = dynamic_cast<OPC*> (getContentComponent()))
+        if (ObjPropsComp * opc = dynamic_cast<ObjPropsComp*> (getContentComponent()))
         {
             opc->readValues();
         }

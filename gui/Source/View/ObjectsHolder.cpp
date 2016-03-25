@@ -101,7 +101,7 @@ void ObjectsHolder::paint(Graphics& g)
 
     if (objController.getIsReflowing())
     {
-        g.drawSingleLineText("Redrawing...", 5, 10);
+        g.drawSingleLineText("Redrawing... Press ESC to stop", 5, 10);
     }
 }
 

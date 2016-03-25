@@ -92,9 +92,10 @@ void GraphReflowController::makeGraph(const bool includeMiscObjects)
         }
     }
 
-    // init node data
-    std::for_each(nodes.begin(), nodes.end(),
-                  [](Node* const n) { n->initNodeData(); });
+    for (Node* const n : nodes)
+    {
+        n->initNodeData();
+    }
 
     // find combined groups in graph
     GraphUtils::calculateConnectedGroups(*graph);
