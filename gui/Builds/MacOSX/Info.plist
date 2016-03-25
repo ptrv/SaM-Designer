@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string>Icon.icns</string>
     <key>CFBundleIdentifier</key>
-    <string>net.petervasil.SynthAModelerDesigner</string>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleName</key>
     <string>Synth-A-Modeler-Designer</string>
     <key>CFBundlePackageType</key>
@@ -34,6 +34,8 @@
         <string>mdl</string>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
+        <key>CFBundleTypeIconFile</key>
+        <string>Icon</string>
         <key>NSPersistentStoreTypeKey</key>
         <string>XML</string>
       </dict>
