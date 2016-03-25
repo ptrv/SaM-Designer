@@ -111,7 +111,7 @@ public:
 
     void removeFromFileList(const File& f);
 
-    void updateOpenFilesList(bool updateQuick = true);
+    void updateOpenFilesList();
     void addToFileList(const File& newFile);
 
 private:

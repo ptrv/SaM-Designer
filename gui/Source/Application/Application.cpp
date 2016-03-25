@@ -573,30 +573,14 @@ void SAMApplication::addToFileList(const File& newFile)
         mainWindows[i]->updateTitle();
 }
 
-void SAMApplication::updateOpenFilesList(bool updateQuick)
+void SAMApplication::updateOpenFilesList()
 {
-    if (updateQuick)
+    openFilesList.clear();
+    for (const auto win : mainWindows)
     {
-        HashMap<String, String> tmp;
-        for (HashMap<String, String>::Iterator it(openFilesList); it.next();)
-        {
-            tmp.set(it.getKey(), File::createFileWithoutCheckingPath(it.getValue()).getFileName());
-        }
-        for (HashMap<String, String>::Iterator it(tmp); it.next();)
-        {
-            openFilesList.set(it.getKey(), it.getValue());
-        }
+        File tmpMdl = win->getMDLFile()->getFile();
+        openFilesList.set(tmpMdl.getFullPathName(), tmpMdl.getFileName());
     }
-    else
-    {
-        openFilesList.clear();
-        for (int i = 0; i < mainWindows.size(); ++i)
-        {
-            File tmpMdl = mainWindows[i]->getMDLFile()->getFile();
-            openFilesList.set(tmpMdl.getFullPathName(), tmpMdl.getFileName());
-        }
-    }
-
 
     Utils::uniquifyPaths(openFilesList);
 }
