@@ -326,41 +326,23 @@ String MDLHelper::removeUnbalancedParentheses(const String& s)
 {
     String result;
 
-    auto countStr = [&](const String& stringToCount)
+    auto countStr = [&s](const char charToCount)
     {
-        int count = 0;
-        int startIndex = 0;
-        while (startIndex != -1)
-        {
-            startIndex = s.indexOf(startIndex, stringToCount);
-            if (startIndex >= 0)
-            {
-                ++count;
-                ++startIndex;
-            }
-        }
-        return count;
+        const std::string theString = s.getCharPointer().getAddress();
+        return std::count(theString.begin(), theString.end(), charToCount);
     };
 
-    std::pair<int, int> numPars(countStr("("), countStr(")"));
+    const auto numPars = std::make_pair(countStr('('), countStr(')'));
 
     if (numPars.first != numPars.second)
     {
-        if (numPars.first > numPars.second)
+        result = s;
+        const int diff = std::abs(numPars.first - numPars.second);
+        for (int i = 0; i < diff; ++i)
         {
-            int diff = numPars.first - numPars.second;
-            for (int i = 0; i < diff; ++i)
-            {
-                result = s.fromFirstOccurrenceOf("(", false, false);
-            }
-        }
-        else
-        {
-            int diff = numPars.second - numPars.first;
-            for (int i = 0; i < diff; ++i)
-            {
-                result = s.upToLastOccurrenceOf(")", false, false);
-            }
+            result = numPars.first > numPars.second
+                ? result.fromFirstOccurrenceOf("(", false, false)
+                : result.upToLastOccurrenceOf(")", false, false);
         }
     }
     else

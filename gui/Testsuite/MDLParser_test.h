@@ -216,7 +216,13 @@ public:
 
         // test 46
         expect(MDLHelper::removeUnbalancedParentheses("(bla, bla))").compare("(bla, bla)") == 0);
-    }
+
+            // test 47
+        expect(MDLHelper::removeUnbalancedParentheses("(((bla, bla)").compare("(bla, bla)") == 0);
+
+        // test 48
+        expect(MDLHelper::removeUnbalancedParentheses("(bla, bla)))").compare("(bla, bla)") == 0);
+}
 };
 
 static MDLParserTest mdlParserTest;
